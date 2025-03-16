@@ -24,6 +24,9 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> serverConfigLocked;
 		public static ConfigEntry<bool> testJumpEnabled;
 
+		public static ConfigEntry<bool> cheaperGearEnabled;
+		public static ConfigEntry<bool> altGearRecipesEnabled;
+
 		public static void Init(ConfigFile configFile)
 		{
 			Config = configFile;
@@ -31,7 +34,10 @@ namespace MarsarahTweaks
 			serverConfigLocked = CreateConfig("1 - Main Mod", "Lock Configuration", true, "If on, only server admins can change the configuration.");
 			_ = configSync.AddLockingConfigEntry(serverConfigLocked);
 
-			testJumpEnabled = CreateConfig("2 - Test", "Test Jump", true, "Enable the test jump modification");
+			// ===== Grindyness Reduction
+			cheaperGearEnabled = CreateConfig("2 - Grindyness Reduction", "Cheaper Gear Recipes", true, "Reduces costs for crafting and upgrading gear (especially metal)");
+
+			altGearRecipesEnabled = CreateConfig("3 - Features", "Alt Gear Recipes", true, "Modifies gear recipe materials for some items (more materials from current biomes)");
 
 			SetupWatcher();
 		}
