@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>6c7d827b-f1a0-4efd-961c-4280526feb0c</ProjectGuid>
+    <ProjectGuid>831fc141-e3fa-4e67-9d2f-5e56cf6f3935</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MarsarahTweaks</RootNamespace>
