@@ -23,9 +23,12 @@ namespace MarsarahTweaks
 
 		private readonly Harmony harmony = new Harmony(ModGUID);
 
+		public static ConfigManager configManager;
+
 		void Awake()
 		{
-			ConfigManager.ReadConfigFile();
+			configManager = new ConfigManager(this);
+			configManager.ReadConfigFile();
 
 			harmony.PatchAll();
 			SetupWatcher();

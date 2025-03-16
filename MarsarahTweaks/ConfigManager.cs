@@ -9,10 +9,17 @@ using System.Threading.Tasks;
 
 namespace MarsarahTweaks
 {
-	internal class ConfigManager
+	public class ConfigManager
 	{
+		private readonly BaseUnityPlugin plugin;
+
+		public ConfigManager(BaseUnityPlugin plugin)
+		{
+			this.plugin = plugin;
+		}
+
 		private static readonly ConfigSync configSync = new ServerSync.ConfigSync(MarsarahTweaks.ModGUID) { DisplayName = MarsarahTweaks.ModName, CurrentVersion = MarsarahTweaks.ModVersion, MinimumRequiredVersion = MarsarahTweaks.ModVersion };
-		public static ConfigFile configBase = new ConfigFile(MarsarahTweaks.ConfigFileFullPath, saveOnInit: true);
+		//public static ConfigFile configBase = new ConfigFile(MarsarahTweaks.ConfigFileFullPath, saveOnInit: true); // Not sure about this one
 
 		private static ConfigEntry<bool> serverConfigLocked;
 
@@ -78,7 +85,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> hideOnlineIndicatorWhenSolo;
 
 		// Read Config File =================================================
-		public static void ReadConfigFile()
+		public void ReadConfigFile()
 		{
 			serverConfigLocked = config("1 - Main", "Lock Configuration", true, "If on, only server admins can change the configuration.");
 			_ = configSync.AddLockingConfigEntry<bool>(serverConfigLocked);
@@ -150,11 +157,11 @@ namespace MarsarahTweaks
 		}
 
 		// Config Template =================================================
-		static ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description, bool synchronizedSetting = true)
+		ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description, bool synchronizedSetting = true)
 		{
 			ConfigDescription extendedDescription = new ConfigDescription(description.Description + (synchronizedSetting ? " [Synced with Server] " : " [Not Synced with Server] "), description.AcceptableValues, description.Tags);
 
-			ConfigEntry<T> configEntry = configBase.Bind(group, name, value, extendedDescription);
+			ConfigEntry<T> configEntry = plugin.Config.Bind(group, name, value, extendedDescription);
 
 			SyncedConfigEntry<T> syncedConfigEntry = configSync.AddConfigEntry(configEntry);
 			syncedConfigEntry.SynchronizedConfig = synchronizedSetting;
@@ -162,6 +169,7 @@ namespace MarsarahTweaks
 			return configEntry;
 		}
 
-		static ConfigEntry<T> config<T>(string group, string name, T value, string description, bool synchronizedSetting = true) => config(group, name, value, new ConfigDescription(description), synchronizedSetting);
+		ConfigEntry<T> config<T>(string group, string name, T value, string description, bool synchronizedSetting = true) => config(group, name, value, new ConfigDescription(description), synchronizedSetting);
+
 	}
 }
