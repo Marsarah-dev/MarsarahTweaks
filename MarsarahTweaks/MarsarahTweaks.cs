@@ -25,25 +25,6 @@ namespace MarsarahTweaks
 			Config.Save();
 		}
 
-		// Test Jump Patch ============================================================
-		[HarmonyPatch(typeof(Character), nameof(Character.Jump))]
-		class TestJump_Patch
-		{
-			static void Prefix(ref float ___m_jumpForce)
-			{
-				if (ConfigManager.testJumpEnabled.Value)
-				{
-					___m_jumpForce = 15;
-					MLog("Modified jump force: " + ___m_jumpForce);
-				}
-				else
-				{
-					___m_jumpForce = 8;
-					MLog("Default jump force: " + ___m_jumpForce);
-				}
-			}
-		}
-
 		// Logger =====================================================================
 		public static void MLog(string log, bool header = false, bool footer = false)
 		{

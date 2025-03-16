@@ -16,15 +16,18 @@ namespace MarsarahTweaks
 			MinimumRequiredVersion = MarsarahTweaks.ModVersion
 		};
 
+		// Config file stuff
 		private static string ConfigFileName => MarsarahTweaks.ModGUID + ".cfg";
 		private static string ConfigFileFullPath => Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;
 
+		// Config entries
 		public static ConfigEntry<bool> serverConfigLocked;
 		public static ConfigEntry<bool> testJumpEnabled;
 
 		public static void Init(ConfigFile configFile)
 		{
 			Config = configFile;
+
 			serverConfigLocked = CreateConfig("1 - Main Mod", "Lock Configuration", true, "If on, only server admins can change the configuration.");
 			_ = configSync.AddLockingConfigEntry(serverConfigLocked);
 
