@@ -1,9 +1,6 @@
 ﻿using HarmonyLib;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 
 namespace MarsarahTweaks.Patches
 {
@@ -14,2325 +11,1090 @@ namespace MarsarahTweaks.Patches
 		{
 			static void Postfix(ref ObjectDB __instance)
 			{
-				// Chearper Gear Recipes ===================================================================
-				if (ConfigManager.cheaperGearEnabled.Value && __instance != null)
-				{
-					ApplyCheaperGearRecipeChanges(ref __instance);
-				}
+				if (__instance == null) return;
 
-				// Alternate Gear Recipes ==================================================================
-				if (ConfigManager.altGearRecipesEnabled.Value && __instance != null)
-				{
-					ApplyAlternateGearRecipeChanges(ref __instance);
-				}
+				ModifyGearRecipes(ref __instance);
 			}
 
-			// Apply Recipe Changes =============================================
-			private static void ApplyCheaperGearRecipeChanges(ref ObjectDB objDB)
+			private static void ModifyGearRecipes(ref ObjectDB objDB)
 			{
-				foreach (Recipe recipe in objDB.m_recipes)
+				// cheaperGearChanges Dictionary ============================================
+				var cheaperGearChanges = new Dictionary<string, Dictionary<string, (int? amount, int? amountPerLevel)>>()
 				{
-					switch (recipe.name)
+					// == weapons, projeciles & shields ==
+					// Wood
+					{ "Recipe_Club", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (null, 2) }, // 6, 2
+							{ "BoneFragments", (null, 2) } // 0, 5
+						}
+					},
+					{ "Recipe_SledgeStagbreaker", new Dictionary<string, (int?, int?)>
+						{
+							{ "BoneFragments", (2, 8) } // 0, 10
+						}
+					},
+					{ "Recipe_Bow", new Dictionary<string, (int?, int?)>
+						{
+							{ "LeatherScraps", (null, 3) } // 8, 4
+						}
+					},
+					{ "Recipe_ShieldWood", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (8, null) }, // 10, 5
+							{ "Resin", (0, 0) } // 4, 2
+						}
+					},
+					{ "Recipe_ArrowWood", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (5, null) } // 8, null
+						}
+					},
+					{ "Recipe_ArrowFire", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (5, null) }, // 8, null
+							{ "Resin", (5, null) } // 8, null
+						}
+					},
+
+					// Early tools
+					{ "Recipe_AxeStone", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (null, 1) } // 5, 0
+						}
+					},
+
+					// Flint
+					{ "Recipe_KnifeFlint", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (null, 1) } // 2, 0
+						}
+					},
+					{ "Recipe_SpearFlint", new Dictionary<string, (int?, int?)>
+						{
+							{ "Flint", (8, null) } // 10, 5
+						}
+					},
+					{ "Recipe_AxeFlint", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (null, 1) }, // 4, 0
+							{ "LeatherScraps", (1, 1) } // 0, 2
+						}
+					},
+					{ "Recipe_ArrowFlint", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (5, null) } // 8, null
+						}
+					},
+
+					// Copper
+					{ "Recipe_KnifeCopper", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (null, 1) }, // 2, 0
+							{ "Copper", (null, 3) }, // 8, 4
+							{ "GreydwarfEye", (null, 6) } // 0, 8
+						}
+					},
+
+					// Bronze
+					{ "Recipe_MaceBronze", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (null, 1) }, // 4, 0
+							{ "LeatherScraps", (null, 1) }, // 3, 0
+							{ "Bronze", (null, 3) } // 8, 4
+						}
+					},
+					{ "Recipe_SwordBronze", new Dictionary<string, (int?, int?)>
+						{
+							{ "Bronze", (null, 3) }, // 8, 4
+							{ "LeatherScraps", (4, null) } // 2, 1
+						}
+					},
+					{ "Recipe_AxeBronze", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (null, 1) }, // 4, 0
+							{ "Bronze", (null, 3) } // 8, 4
+						}
+					},
+					{ "Recipe_AtgeirBronze", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (8, 2) }, // 10, 0
+							{ "LeatherScraps", (null, 1) } // 2, 0
+						}
+					},
+					{ "Recipe_ShieldBronzeBuckler", new Dictionary<string, (int?, int?)>
+						{
+							{ "Bronze", (null, 4) } // 10, 5
+						}
+					},
+					{ "Recipe_PickaxeBronze", new Dictionary<string, (int?, int?)>
+						{
+							{ "Bronze", (7, 4) } // 10, 5
+						}
+					},
+					{ "Recipe_ArrowBronze", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (5, null) } // 8, null
+						}
+					},
+
+					// Iron
+					{ "Recipe_MaceIron", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (null, 2) }, // 4, 0
+							{ "Iron", (10, 5) }, // 20, 10
+							{ "LeatherScraps", (null, 1) } // 3, 0
+						}
+					},
+					{ "Recipe_SledgeIron", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (15, 7) }, // 30, 15
+							{ "YmirRemains", (6, 0) } // 4, 2
+						}
+					},
+					{ "Recipe_Battleaxe", new Dictionary<string, (int?, int?)>
+						{
+							{ "ElderBark", (20, null) }, // 30, 5
+							{ "Iron", (18, 7) }, // 35, 15
+							{ "LeatherScraps", (null, 1) } // 4, 0
+						}
+					},
+					{ "Recipe_SwordIron", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (null, 2) }, // 2, 1
+							{ "Iron", (10, 5) } // 20, 10
+						}
+					},
+					{ "Recipe_AxeIron", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (null, 2) }, // 4, 0
+							{ "Iron", (10, 5) }, // 20, 10
+							{ "LeatherScraps", (null, 2) } // 2, 1
+						}
+					},
+					{ "Recipe_AtgeirIron", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (null, 3) }, // 10, 0
+							{ "Iron", (15, 7) } // 30, 15
+						}
+					},
+					{ "Recipe_BowHuntsman", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (10, 5) } // 20, 10
+						}
+					},
+					{ "Recipe_ShieldIronBuckler", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (6, 3) } // 10, 5
+						}
+					},
+					{ "Recipe_PickaxeIron", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (10, 5) } // 20, 10
+						}
+					},
+					{ "Recipe_ArrowIron", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (5, null) } // 8, null
+						}
+					},
+
+					// Silver & Obsidian
+					{ "Recipe_KnifeSilver", new Dictionary<string, (int?, int?)>
+						{
+							{ "Silver", (7, 4) } // 10, 5
+						}
+					},
+					{ "Recipe_MaceSilver", new Dictionary<string, (int?, int?)>
+						{
+							{ "ElderBark", (15, 3) }, // 10, 0
+							{ "Silver", (20, 7) } // 30, 15
+						}
+					},
+					{ "Recipe_SwordSilver", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (15, 3) }, // 2, 1
+							{ "Silver", (20, 7) }, // 40, 20
+							{ "LeatherScraps", (5, null) }, // 3, 1
+							{ "Iron", (3, 1) } // 5, 3
+						}
+					},
+					{ "Recipe_BowDraugrFang", new Dictionary<string, (int?, int?)>
+						{
+							{ "Silver", (10, 5) }, // 20, 10
+							{ "Guck", (7, null) } // 10, 2
+						}
+					},
+					{ "Recipe_Battleaxe_Crystal", new Dictionary<string, (int?, int?)>
+						{
+							{ "Silver", (15, 7) }, // 30, 15
+							{ "Crystal", (3, 1) } // 10, 0
+						}
+					},
+					{ "Recipe_FistFenrirClaw", new Dictionary<string, (int?, int?)>
+						{
+							{ "Silver", (5, null) } // 10, 1
+						}
+					},
+					{ "Recipe_ArrowObsidian", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (5, null) }, // 8, null
+							{ "Obsidian", (3, null) } // 4, null
+						}
+					},
+					{ "Recipe_ArrowFrost", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (5, null) }, // 8, null
+							{ "Obsidian", (3, null) } // 4, null
+						}
+					},
+					{ "Recipe_ArrowPoison", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (5, null) }, // 8, null
+							{ "Obsidian", (3, null) } // 4, null
+						}
+					},
+					{ "Recipe_ArrowSilver", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (5, null) } // 8, null
+						}
+					},
+
+					// Ocean
+					{ "Recipe_KnifeChitin", new Dictionary<string, (int?, int?)>
+						{
+							{ "FineWood", (null, 2) }, // 4, 0
+							{ "Chitin", (10, 5) }, // 20, 10
+							{ "LeatherScraps", (null, 1) } // 2, 0
+						}
+					},
+					{ "Recipe_SpearChitin", new Dictionary<string, (int?, int?)>
+						{
+							{ "Chitin", (15, null) } // 30, null
+						}
+					},
+					{ "Recipe_ShieldSerpentscale", new Dictionary<string, (int?, int?)>
+						{
+							{ "FineWood", (20, null) }, // 10, 10
+							{ "Iron", (3, 1) } // 4, 2
+						}
+					},
+
+					// Plains
+					{ "Recipe_MaceNeedle", new Dictionary<string, (int?, int?)>
+						{
+							{ "FineWood", (4, 2) }, // 5, 0
+							{ "Iron", (10, null) }, // 20, 2
+							{ "LinenThread", (5, 5) } // 10, 0
+						}
+					},
+					{ "Recipe_KnifeBlackmetal", new Dictionary<string, (int?, int?)>
+						{
+							{ "FineWood", (null, 1) } // 4, 0
+						}
+					},
+					{ "Recipe_SwordBlackmetal", new Dictionary<string, (int?, int?)>
+						{
+							{ "FineWood", (3, 2) }, // 2, 0
+							{ "BlackMetal", (10, 5) } // 20, 10
+						}
+					},
+					{ "Recipe_AtgeirBlackmetal", new Dictionary<string, (int?, int?)>
+						{
+							{ "FineWood", (null, 3) }, // 10, 0
+							{ "BlackMetal", (15, 7) } // 30, 15
+						}
+					},
+					{ "Recipe_AxeBlackMetal", new Dictionary<string, (int?, int?)>
+						{
+							{ "FineWood", (null, 2) }, // 6, 0
+							{ "BlackMetal", (10, 5) } // 20, 10
+						}
+					},
+					{ "Recipe_PickaxeBlackMetal", new Dictionary<string, (int?, int?)>
+						{
+							{ "BlackMetal", (10, 5) } // 25, 15
+						}
+					},
+					{ "Recipe_ShieldBlackmetal", new Dictionary<string, (int?, int?)>
+						{
+							{ "Chain", (null, 0) } // 5, 2
+						}
+					},
+					{ "Recipe_ShieldBlackmetalTower", new Dictionary<string, (int?, int?)>
+						{
+							{ "Chain", (6, 0) } // 7, 2
+						}
+					},
+					{ "Recipe_ArrowNeedle", new Dictionary<string, (int?, int?)>
+						{
+							{ "Needle", (3, null) } // 4, null
+						}
+					},
+
+					// Mistlands
 					{
-						// == weapons, projeciles & shields ==
-						// wood
-						case "Recipe_Club":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amountPerLevel = 2;
-										break;
-									case "BoneFragments":
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+						"Recipe_AxeJotunBane", new Dictionary<string, (int?, int?)>
+						{
+							{ "YggdrasilWood", (null, 1) }, // 5, 0
+							{ "Iron", (10, 5) }, // 15, 10
+							{ "Eitr", (null, 2) } // 10, 1
+						}
+					},
+					{
+						"Recipe_SpearCarapace", new Dictionary<string, (int?, int?)>
+						{
+							{ "YggdrasilWood", (null, 2) } // 10, 5
+						}
+					},
+					{
+						"Recipe_SwordMistwalker", new Dictionary<string, (int?, int?)>
+						{
+							{ "FineWood", (5, 1) }, // 3, 0
+							{ "Iron", (10, 5) }, // 15, 10
+							{ "Eitr", (null, 2) } // 10, 5
+						}
+					},
+					{
+						"Recipe_AtgeirHimminAfl", new Dictionary<string, (int?, int?)>
+						{
+							{ "YggdrasilWood", (null, 2) }, // 10, 0
+							{ "Eitr", (10, 5) } // 15, 15
+						}
+					},
+					{
+						"Recipe_KnifeSkollAndHati", new Dictionary<string, (int?, int?)>
+						{
+							{ "FineWood", (5, 1) } // 4, 0
+						}
+					},
+					{
+						"Recipe_SledgeDemolisher", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (10, 5) } // 20, 15
+						}
+					},
+					{
+						"Recipe_SwordKrom", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (15, 5) }, // 30, 15
+							{ "Bronze", (10, 5) } // 20, 10
+						}
+					},
+					{
+						"Recipe_ShieldCarapace", new Dictionary<string, (int?, int?)>
+						{
+							{ "Eitr", (null, 2) } // 10, 3
+						}
+					},
+					{
+						"Recipe_ShieldCarapaceBuckler", new Dictionary<string, (int?, int?)>
+						{
+							{ "Carapace", (15, 7) }, // 16, 8
+							{ "Eitr", (null, 2) } // 10, 3
+						}
+					},
+					{
+						"Recipe_BowSpineSnap", new Dictionary<string, (int?, int?)>
+						{
+							{ "BoneFragments", (30, 15) }, // 40, 20
+							{ "Eitr", (null, 2) } // 10, 0
+						}
+					},
+					{
+						"Recipe_ArrowCarapace", new Dictionary<string, (int?, int?)>
+						{
+							{ "Carapace", (2, null) }, // 4, null
+							{ "Wood", (5, null) } // 8, null
+						}
+					},
+					{
+						"Recipe_BoltBlackmetal", new Dictionary<string, (int?, int?)>
+						{
+							{ "BlackMetal", (1, null) }, // 2, null
+							{ "Wood", (5, null) } // 8, null
+						}
+					},
+					{
+						"Recipe_BoltBone", new Dictionary<string, (int?, int?)>
+						{
+							{ "BoneFragments", (5, null) } // 8, null
+						}
+					},
+					{
+						"Recipe_BoltCarapace", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (5, null) } // 8, null
+						}
+					},
+					{
+						"Recipe_BoltIron", new Dictionary<string, (int?, int?)>
+						{
+							{ "Wood", (5, null) } // 8, null
+						}
+					},
+					{
+						"Recipe_StaffSkeleton", new Dictionary<string, (int?, int?)>
+						{
+							{ "Eitr", (15, 5) } // 16, 8
+						}
+					},
+					{
+						"Recipe_StaffFireball", new Dictionary<string, (int?, int?)>
+						{
+							{ "YggdrasilWood", (15, null) }, // 20, 10
+							{ "Eitr", (15, 5) } // 16, 8
+						}
+					},
+					{
+						"Recipe_StaffIceShards", new Dictionary<string, (int?, int?)>
+						{
+							{ "YggdrasilWood", (15, null) }, // 20, 10
+							{ "Eitr", (15, 5) } // 16, 8
+						}
+					},
+					{
+						"Recipe_StaffShield", new Dictionary<string, (int?, int?)>
+						{
+							{ "YggdrasilWood", (15, null) }, // 20, 10
+							{ "Eitr", (15, 5) } // 16, 8
+						}
+					},
 
-						case "Recipe_SledgeStagbreaker":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "BoneFragments":
-										req.m_amount = 2;
-										req.m_amountPerLevel = 8;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+					// Ashlands
+					{
+						"Recipe_MaceEldner", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (10, 5) } // 15, 8
+						}
+					},
+					{
+						"Recipe_MaceEldner_Blood", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 5) } // 8, 8
+						}
+					},
+					{
+						"Recipe_MaceEldner_Lightning", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 5) } // 8, 8
+						}
+					},
+					{
+						"Recipe_MaceEldner_Nature", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 5) } // 8, 8
+						}
+					},
+					{
+						"Recipe_SpearSplitner", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (10, 5) }, // 6, 6
+							{ "BonemawSerpentTooth", (null, 2) } // 3, 3
+						}
+					},
+					{
+						"Recipe_SpearSplitner_Blood", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 5) } // 6, 6
+						}
+					},
+					{
+						"Recipe_SpearSplitner_Lightning", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 5) } // 6, 6
+						}
+					},
+					{
+						"Recipe_SpearSplitner_Nature", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 5) } // 6, 6
+						}
+					},
+					{
+						"Recipe_SwordNiedhogg", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (10, 5) }, // 12, 10
+							{ "CharredBone", (null, 1) } // 3, 0
+						}
+					},
+					{
+						"Recipe_SwordNiedhogg_Blood", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 5) } // 6, 6
+						}
+					},
+					{
+						"Recipe_SwordNiedhogg_Lightning", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 5) } // 6, 6
+						}
+					},
+					{
+						"Recipe_SwordNiedhogg_Nature", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 5) } // 6, 6
+						}
+					},
+					{
+						"Recipe_SwordSlayer", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (15, 7) }, // 30, 15
+							{ "AskHide", (null, 4) } // 5, 5
+						}
+					},
+					{
+						"Recipe_SwordSlayer_Blood", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 7) } // 15, 15
+						}
+					},
+					{
+						"Recipe_SwordSlayer_Lightning", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 7) } // 15, 15
+						}
+					},
+					{
+						"Recipe_SwordSlayer_Nature", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 7) } // 15, 15
+						}
+					},
+					{
+						"Recipe_AxeBerzerkr", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (15, 7) }, // 24, 15
+							{ "CharredBone", (null, 2) } // 15, 0
+						}
+					},
+					{
+						"Recipe_BowAshlands", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (8, 4) }, // 5, 5
+							{ "CharredBone", (15, null) }, // 16, 10
+							{ "BonemawSerpentTooth", (4, 4) } // 5, 5
+						}
+					},
+					{
+						"Recipe_CrossbowRipper_Blood", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 5) } // 8, 8
+						}
+					},
+					{
+						"Recipe_CrossbowRipper_Lightning", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 5) } // 8, 8
+						}
+					},
+					{
+						"Recipe_CrossbowRipper_Nature", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 5) } // 8, 8
+						}
+					},
+					{
+						"Recipe_ArrowCharred", new Dictionary<string, (int?, int?)>
+						{
+							{ "Blackwood", (5, null) } // 8, null
+						}
+					},
+					{
+						"Recipe_BoltCharred", new Dictionary<string, (int?, int?)>
+						{
+							{ "Blackwood", (5, null) } // 8, null
+						}
+					},
+					{
+						"Recipe_StaffGreenRoots", new Dictionary<string, (int?, int?)>
+						{
+							{ "CelestialFeather", (null, 2) } // 3, 3
+						}
+					},
+					{
+						"Recipe_StaffLightning", new Dictionary<string, (int?, int?)>
+						{
+							{ "CelestialFeather", (null, 2) } // 3, 3
+						}
+					},
+					{
+						"Recipe_StaffRedTroll", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (null, 2) } // 3, 3
+						}
+					},
 
-						case "Recipe_Bow":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "LeatherScraps":
-										req.m_amountPerLevel = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+					// == Armor ==
+					// Rag
+					{
+						"Recipe_ArmorRagsChest", new Dictionary<string, (int?, int?)>
+						{
+							{ "LeatherScraps", (6, 4) } // 5, 5
+						}
+					},
+					{
+						"Recipe_ArmorRagsLegs", new Dictionary<string, (int?, int?)>
+						{
+							{ "LeatherScraps", (6, 4) } // 5, 5
+						}
+					},
 
-						case "Recipe_ShieldWood":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 8;
-										break;
-									case "Resin":
-										req.m_amount = 0;
-										req.m_amountPerLevel = 0;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+					// Leather
+					{
+						"Recipe_HelmetLeather", new Dictionary<string, (int?, int?)>
+						{
+							{ "DeerHide", (7, 5) }, // 6, 6
+							{ "BoneFragments", (null, 4) } // 0, 5
+						}
+					},
+					{
+						"Recipe_ArmorLeatherChest", new Dictionary<string, (int?, int?)>
+						{
+							{ "DeerHide", (7, 5) }, // 6, 6
+							{ "BoneFragments", (null, 4) } // 0, 5
+						}
+					},
+					{
+						"Recipe_ArmorLeatherLegs", new Dictionary<string, (int?, int?)>
+						{
+							{ "DeerHide", (7, 5) }, // 6, 6
+							{ "BoneFragments", (null, 4) } // 0, 5
+						}
+					},
+					{
+						"Recipe_CapeDeerHide", new Dictionary<string, (int?, int?)>
+						{
+							{ "DeerHide", (5, 3) }, // 4, 4
+							{ "BoneFragments", (0, 2) } // 5, 5
+						}
+					},
 
-						case "Recipe_ArrowWood":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+					// Troll
+					{
+						"Recipe_HelmetTrollLeather", new Dictionary<string, (int?, int?)>
+						{
+							{ "TrollHide", (null, 3) }, // 5, 2
+							{ "BoneFragments", (0, 0) } // 3, 1
+						}
+					},
+					{
+						"Recipe_ArmorTrollLeatherChest", new Dictionary<string, (int?, int?)>
+						{
+							{ "TrollHide", (6, 3) } // 5, 2
+						}
+					},
+					{
+						"Recipe_ArmorTrollLeatherLegs", new Dictionary<string, (int?, int?)>
+						{
+							{ "TrollHide", (6, 3) } // 5, 2
+						}
+					},
+					{
+						"Recipe_CapeTrollHide", new Dictionary<string, (int?, int?)>
+						{
+							{ "TrollHide", (4, 3) }, // 10, 5
+							{ "BoneFragments", (5, 3) } // 10, 5
+						}
+					},
 
-						case "Recipe_ArrowFire":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-									case "Resin":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+					// Root
+					{
+						"Recipe_HelmetRoot", new Dictionary<string, (int?, int?)>
+						{
+							{ "Root", (5, null) }, // 10, 2
+							{ "ElderBark", (null, 4) } // 10, 5
+						}
+					},
+					{
+						"Recipe_ArmorRootChest", new Dictionary<string, (int?, int?)>
+						{
+							{ "Root", (5, null) }, // 10, 2
+							{ "ElderBark", (null, 4) } // 10, 5
+						}
+					},
+					{
+						"Recipe_ArmorRootLegs", new Dictionary<string, (int?, int?)>
+						{
+							{ "Root", (5, null) }, // 10, 2
+							{ "ElderBark", (null, 4) } // 10, 5
+						}
+					},
 
-						// early tools
-						case "Recipe_AxeStone":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+					// Iron
+					{
+						"Recipe_HelmetIron", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (10, 4) } // 20, 5
+						}
+					},
+					{
+						"Recipe_ArmorIronChest", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (10, 4) } // 20, 5
+						}
+					},
+					{
+						"Recipe_ArmorIronLegs", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (10, 4) } // 20, 5
+						}
+					},
 
-						// flint
-						case "Recipe_KnifeFlint":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SpearFlint":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Flint":
-										req.m_amount = 8;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_AxeFlint":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amountPerLevel = 1;
-										break;
-									case "LeatherScraps":
-										req.m_amount = 1;
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArrowFlint":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+					// Fenris
+					{
+						"Recipe_HelmetFenrir", new Dictionary<string, (int?, int?)>
+						{
+							{ "WolfHairBundle", (10, 4) }, // 20, 5
+							{ "WolfPelt", (3, 1) } // 2, 4
+						}
+					},
+					{
+						"Recipe_ArmorFenrirChest", new Dictionary<string, (int?, int?)>
+						{
+							{ "WolfHairBundle", (10, 4) }, // 20, 5
+							{ "WolfPelt", (4, 2) }, // 5, 3
+							{ "LeatherScraps", (7, 3) } // 10, 4
+						}
+					},
+					{
+						"Recipe_ArmorFenrirLegs", new Dictionary<string, (int?, int?)>
+						{
+							{ "WolfHairBundle", (10, 4) }, // 20, 5
+							{ "WolfPelt", (4, 2) }, // 5, 3
+							{ "LeatherScraps", (7, 3) } // 10, 4
+						}
+					},
 
-						// tin
+					// Silver armor
+					{
+						"Recipe_HelmetDrake", new Dictionary<string, (int?, int?)>
+						{
+							{ "Silver", (10, 4) }, // 20, 5
+							{ "WolfPelt", (null, 1) }, // 2, 0
+							{ "TrophyHatchling", (1, null) } // 2, 0
+						}
+					},
+					{
+						"Recipe_ArmorWolfChest", new Dictionary<string, (int?, int?)>
+						{
+							{ "Silver", (10, 4) }, // 20, 5
+							{ "WolfPelt", (null, 1) } // 5, 2
+						}
+					},
+					{
+						"Recipe_ArmorWolfLegs", new Dictionary<string, (int?, int?)>
+						{
+							{ "Silver", (10, 4) }, // 20, 5
+							{ "WolfPelt", (null, 1) }, // 5, 2
+							{ "WolfFang", (null, 0) } // 4, 1
+						}
+					},
+					{
+						"Recipe_CapeWolf", new Dictionary<string, (int?, int?)>
+						{
+							{ "Silver", (2, 1) }, // 4, 2
+							{ "WolfPelt", (5, 1) } // 6, 4
+						}
+					},
 
-						// copper
-						case "Recipe_KnifeCopper":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amountPerLevel = 1;
-										break;
-									case "Copper":
-										req.m_amountPerLevel = 3;
-										break;
-									case "GreydwarfEye":
-										req.m_amountPerLevel = 6;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+					// Linen armor
+					{
+						"Recipe_HelmetPadded", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (5, 3) } // 10, 5
+						}
+					},
+					{
+						"Recipe_ArmorPaddedCuirass", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (5, null) } // 10, 3
+						}
+					},
+					{
+						"Recipe_ArmorPaddedGreaves", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (5, null) } // 10, 3
+						}
+					},
+					{
+						"Recipe_CapeLinen", new Dictionary<string, (int?, int?)>
+						{
+							{ "LinenThread", (10, 2) } // 20, 4
+						}
+					},
 
-						// bronze
-						case "Recipe_MaceBronze":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-									case "LeatherScraps":
-										req.m_amountPerLevel = 1;
-										break;
-									case "Bronze":
-										req.m_amountPerLevel = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SwordBronze":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Bronze":
-										req.m_amountPerLevel = 3;
-										break;
-									case "LeatherScraps":
-										req.m_amount = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_AxeBronze":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amountPerLevel = 1;
-										break;
-									case "Bronze":
-										req.m_amountPerLevel = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_AtgeirBronze":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 8;
-										req.m_amountPerLevel = 2;
-										break;
-									case "LeatherScraps":
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ShieldBronzeBuckler":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Bronze":
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_PickaxeBronze":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Bronze":
-										req.m_amount = 7;
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArrowBronze":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+					// Other Plains Armor
+					{
+						"Recipe_CapeLox", new Dictionary<string, (int?, int?)>
+						{
+							{ "LoxPelt", (5, null) } // 6, 2
+						}
+					},
 
-						// iron
-						case "Recipe_MaceIron":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amountPerLevel = 2;
-										break;
-									case "Iron":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									case "LeatherScraps":
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SledgeIron":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 7;
-										break;
-									case "YmirRemains":
-										req.m_amount = 6;
-										req.m_amountPerLevel = 0;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_Battleaxe":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "ElderBark":
-										req.m_amount = 20;
-										break;
-									case "Iron":
-										req.m_amount = 18;
-										req.m_amountPerLevel = 7;
-										break;
-									case "LeatherScraps":
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SwordIron":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amountPerLevel = 2;
-										break;
-									case "Iron":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_AxeIron":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amountPerLevel = 2;
-										break;
-									case "Iron":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									case "LeatherScraps":
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_AtgeirIron":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amountPerLevel = 3;
-										break;
-									case "Iron":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 7;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_BowHuntsman":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ShieldIronBuckler":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 6;
-										req.m_amountPerLevel = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_PickaxeIron":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArrowIron":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+					// Mistlands armor
+					{
+						"Recipe_HelmetMage", new Dictionary<string, (int?, int?)>
+						{
+							{ "LinenThread", (15, 5) }, // 16, 8
+							{ "Iron", (0, null) } // 2, 0
+						}
+					},
+					{
+						"Recipe_ArmorMageChest", new Dictionary<string, (int?, int?)>
+						{
+							{ "Eitr", (15, null) } // 20, 5
+						}
+					},
+					{
+						"Recipe_ArmorMageLegs", new Dictionary<string, (int?, int?)>
+						{
+							{ "Eitr", (15, null) } // 20, 5
+						}
+					},
+					{
+						"Recipe_HelmetCarapace", new Dictionary<string, (int?, int?)>
+						{
+							{ "Carapace", (15, 5) } // 16, 8
+						}
+					},
 
-						// silver & obsidian
-						case "Recipe_KnifeSilver":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Silver":
-										req.m_amount = 7;
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_MaceSilver":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "ElderBark":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 3;
-										break;
-									case "Silver":
-										req.m_amount = 20;
-										req.m_amountPerLevel = 7;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SwordSilver":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 3;
-										break;
-									case "Silver":
-										req.m_amount = 20;
-										req.m_amountPerLevel = 7;
-										break;
-									case "LeatherScraps":
-										req.m_amount = 5;
-										break;
-									case "Iron":
-										req.m_amount = 3;
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_BowDraugrFang":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Silver":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									case "Guck":
-										req.m_amount = 7;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_Battleaxe_Crystal":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Silver":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 7;
-										break;
-									case "Crystal":
-										req.m_amount = 3;
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_FistFenrirClaw":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Silver":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArrowObsidian":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 5;
-										break;
-									case "Obsidian":
-										req.m_amount = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArrowFrost":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 5;
-										break;
-									case "Obsidian":
-										req.m_amount = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArrowPoison":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 5;
-										break;
-									case "Obsidian":
-										req.m_amount = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArrowSilver":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+					// Other Mistlands
+					{
+						"Recipe_CapeFeather", new Dictionary<string, (int?, int?)>
+						{
+							{ "ScaleHide", (7, 3) }, // 5, 5
+							{ "Eitr", (10, null) } // 20, 3
+						}
+					},
+					{
+						"Recipe_Lantern", new Dictionary<string, (int?, int?)>
+						{
+							{ "Bronze", (1, null) } // 2, null
+						}
+					},
+					{
+						"Recipe_MechanicalSpring", new Dictionary<string, (int?, int?)>
+						{
+							{ "Iron", (1, null) } // 3, null
+						}
+					},
 
-						// ocean
-						case "Recipe_KnifeChitin":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FineWood":
-										req.m_amountPerLevel = 2;
-										break;
-									case "Chitin":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									case "LeatherScraps":
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SpearChitin":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Chitin":
-										req.m_amount = 15;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ShieldSerpentscale":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FineWood":
-										req.m_amount = 20;
-										break;
-									case "Iron":
-										req.m_amount = 3;
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
+					// Ashlands armor
+					{
+						"Recipe_HelmetMage_Ashlands", new Dictionary<string, (int?, int?)>
+						{
+							{ "LinenThread", (15, 5) } // 16, 8
+						}
+					},
+					{
+						"Recipe_ArmorMageChest_Ashlands", new Dictionary<string, (int?, int?)>
+						{
+							{ "Eitr", (15, null) }, // 20, 5
+							{ "FlametalNew", (0, 0) } // 5, 2
+						}
+					},
+					{
+						"Recipe_ArmorMageLegs_Ashlands", new Dictionary<string, (int?, int?)>
+						{
+							{ "Eitr", (15, null) } // 20, 5
+						}
+					},
+					{
+						"Recipe_HelmetMedium_Ashlands", new Dictionary<string, (int?, int?)>
+						{
+							{ "AskHide", (null, 4) } // 10, 5
+						}
+					},
+					{
+						"Recipe_ArmorMediumChest_Ashlands", new Dictionary<string, (int?, int?)>
+						{
+							{ "AskHide", (null, 4) } // 10, 5
+						}
+					},
+					{
+						"Recipe_ArmorMediumLegs_Ashlands", new Dictionary<string, (int?, int?)>
+						{
+							{ "AskHide", (null, 4) } // 10, 5
+						}
+					},
+					{
+						"Recipe_HelmetFlametal", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (10, 5) }, // 16, 8
+							{ "CharredBone", (3, 1) }, // 2, 0
+							{ "Eitr", (null, 0) } // 4, 2
+						}
+					},
+					{
+						"Recipe_ArmorFlametalChest", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (10, 5) }, // 20, 10
+							{ "CharredBone", (null, 1) } // 5, 0
+						}
+					},
+					{
+						"Recipe_ArmorFlametalLegs", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (10, 5) }, // 20, 10
+							{ "CharredBone", (null, 1) } // 5, 0
+						}
+					},
 
-						// black metal & linen
-						case "Recipe_MaceNeedle":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FineWood":
-										req.m_amount = 4;
-										req.m_amountPerLevel = 2;
-										break;
-									case "Iron":
-										req.m_amount = 10;
-										break;
-									case "LinenThread":
-										req.m_amount = 5;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_KnifeBlackmetal":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FineWood":
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SwordBlackmetal":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FineWood":
-										req.m_amount = 3;
-										req.m_amountPerLevel = 2;
-										break;
-									case "BlackMetal":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_AtgeirBlackmetal":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FineWood":
-										req.m_amountPerLevel = 3;
-										break;
-									case "BlackMetal":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 7;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_AxeBlackMetal":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FineWood":
-										req.m_amountPerLevel = 2;
-										break;
-									case "BlackMetal":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_PickaxeBlackMetal":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "BlackMetal":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ShieldBlackmetal":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Chain":
-										req.m_amountPerLevel = 0;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ShieldBlackmetalTower":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Chain":
-										req.m_amount = 6;
-										req.m_amountPerLevel = 0;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArrowNeedle":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Needle":
-										req.m_amount = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// mistlands
-						case "Recipe_AxeJotunBane":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "YggdrasilWood":
-										req.m_amountPerLevel = 1;
-										break;
-									case "Iron":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									case "Eitr":
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SpearCarapace":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "YggdrasilWood":
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SwordMistwalker":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FineWood":
-										req.m_amount = 5;
-										req.m_amountPerLevel = 1;
-										break;
-									case "Iron":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									case "Eitr":
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_AtgeirHimminAfl":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "YggdrasilWood":
-										req.m_amountPerLevel = 2;
-										break;
-									case "Eitr":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_KnifeSkollAndHati":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FineWood":
-										req.m_amount = 5;
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SledgeDemolisher":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SwordKrom":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 5;
-										break;
-									case "Bronze":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ShieldCarapace":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Eitr":
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ShieldCarapaceBuckler":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Carapace":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 7;
-										break;
-									case "Eitr":
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_BowSpineSnap":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "BoneFragments":
-										req.m_amount = 30;
-										req.m_amountPerLevel = 15;
-										break;
-									case "Eitr":
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArrowCarapace":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Carapace":
-										req.m_amount = 2;
-										break;
-									case "Wood":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_BoltBlackmetal":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "BlackMetal":
-										req.m_amount = 1;
-										break;
-									case "Wood":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_BoltBone":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "BoneFragments":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_BoltCarapace":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_BoltIron":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_StaffSkeleton":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Eitr":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_StaffFireball":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "YggdrasilWood":
-										req.m_amount = 15;
-										break;
-									case "Eitr":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_StaffIceShards":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "YggdrasilWood":
-										req.m_amount = 15;
-										break;
-									case "Eitr":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_StaffShield":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "YggdrasilWood":
-										req.m_amount = 15;
-										break;
-									case "Eitr":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// ashlands
-						case "Recipe_MaceEldner":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_MaceEldner_Blood":
-						case "Recipe_MaceEldner_Lightning":
-						case "Recipe_MaceEldner_Nature":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SpearSplitner":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									case "BonemawSerpentTooth":
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SpearSplitner_Blood":
-						case "Recipe_SpearSplitner_Lightning":
-						case "Recipe_SpearSplitner_Nature":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SwordNiedhogg":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									case "CharredBone":
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SwordNiedhogg_Blood":
-						case "Recipe_SwordNiedhogg_Lightning":
-						case "Recipe_SwordNiedhogg_Nature":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SwordSlayer":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 7;
-										break;
-									case "AskHide":
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_SwordSlayer_Blood":
-						case "Recipe_SwordSlayer_Lightning":
-						case "Recipe_SwordSlayer_Nature":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amountPerLevel = 7;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_AxeBerzerkr":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 7;
-										break;
-									case "CharredBone":
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_BowAshlands":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amount = 8;
-										req.m_amountPerLevel = 4;
-										break;
-									case "CharredBone":
-										req.m_amount = 15;
-										break;
-									case "BonemawSerpentTooth":
-										req.m_amount = 4;
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_CrossbowRipper_Blood":
-						case "Recipe_CrossbowRipper_Lightning":
-						case "Recipe_CrossbowRipper_Nature":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArrowCharred":
-						case "Recipe_BoltCharred":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Blackwood":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_StaffGreenRoots":
-						case "Recipe_StaffLightning":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "CelestialFeather":
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_StaffRedTroll":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// == armor ==
-						// rag
-						case "Recipe_ArmorRagsChest":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "LeatherScraps":
-										req.m_amount = 6;
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorRagsLegs":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "LeatherScraps":
-										req.m_amount = 6;
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// leather
-						case "Recipe_HelmetLeather":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "DeerHide":
-										req.m_amountPerLevel = 5;
-										break;
-									case "BoneFragments":
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorLeatherChest":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "DeerHide":
-										req.m_amountPerLevel = 5;
-										break;
-									case "BoneFragments":
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorLeatherLegs":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "DeerHide":
-										req.m_amountPerLevel = 5;
-										break;
-									case "BoneFragments":
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_CapeDeerHide":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "DeerHide":
-										req.m_amountPerLevel = 3;
-										break;
-									case "BoneFragments":
-										req.m_amount = 0;
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// troll
-						case "Recipe_HelmetTrollLeather":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "TrollHide":
-										req.m_amountPerLevel = 3;
-										break;
-									case "BoneFragments":
-										req.m_amount = 0;
-										req.m_amountPerLevel = 0;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorTrollLeatherChest":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "TrollHide":
-										req.m_amount = 6;
-										req.m_amountPerLevel = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorTrollLeatherLegs":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "TrollHide":
-										req.m_amount = 6;
-										req.m_amountPerLevel = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_CapeTrollHide":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "TrollHide":
-										req.m_amount = 4;
-										req.m_amountPerLevel = 3;
-										break;
-									case "BoneFragments":
-										req.m_amount = 5;
-										req.m_amountPerLevel = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// root
-						case "Recipe_HelmetRoot":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Root":
-										req.m_amount = 5;
-										break;
-									case "ElderBark":
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						case "Recipe_ArmorRootChest":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Root":
-										req.m_amount = 5;
-										break;
-									case "ElderBark":
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						case "Recipe_ArmorRootLegs":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Root":
-										req.m_amount = 5;
-										break;
-									case "ElderBark":
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// iron
-						case "Recipe_HelmetIron":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorIronChest":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorIronLegs":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// fenris
-						case "Recipe_HelmetFenrir":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "WolfHairBundle":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 4;
-										break;
-									case "WolfPelt":
-										req.m_amount = 3;
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorFenrirChest":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "WolfHairBundle":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 4;
-										break;
-									case "WolfPelt":
-										req.m_amount = 4;
-										req.m_amountPerLevel = 2;
-										break;
-									case "LeatherScraps":
-										req.m_amount = 7;
-										req.m_amountPerLevel = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorFenrirLegs":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "WolfHairBundle":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 4;
-										break;
-									case "WolfPelt":
-										req.m_amount = 4;
-										req.m_amountPerLevel = 2;
-										break;
-									case "LeatherScraps":
-										req.m_amount = 7;
-										req.m_amountPerLevel = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// silver
-						case "Recipe_HelmetDrake":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Silver":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 4;
-										break;
-									case "WolfPelt":
-										req.m_amountPerLevel = 1;
-										break;
-									case "TrophyHatchling":
-										req.m_amount = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorWolfChest":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Silver":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 4;
-										break;
-									case "WolfPelt":
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorWolfLegs":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Silver":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 4;
-										break;
-									case "WolfPelt":
-										req.m_amountPerLevel = 1;
-										break;
-									case "WolfFang":
-										req.m_amountPerLevel = 0;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_CapeWolf":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Silver":
-										req.m_amount = 2;
-										req.m_amountPerLevel = 1;
-										break;
-									case "WolfPelt":
-										req.m_amount = 5;
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// linen
-						case "Recipe_HelmetPadded":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 5;
-										req.m_amountPerLevel = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorPaddedCuirass":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 5;
-										req.m_amountPerLevel = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorPaddedGreaves":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 5;
-										req.m_amountPerLevel = 3;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_CapeLinen":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "LinenThread":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 2;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// other armor
-						case "Recipe_CapeLox":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "LoxPelt":
-										req.m_amount = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// Mistlands Armor
-						case "Recipe_HelmetMage":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "LinenThread":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 5;
-										break;
-									case "Iron":
-										req.m_amount = 0;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorMageChest":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Eitr":
-										req.m_amount = 15;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorMageLegs":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Eitr":
-										req.m_amount = 15;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_HelmetCarapace":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Carapace":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// other mistlands
-						case "Recipe_CapeFeather":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "ScaleHide":
-										req.m_amount = 7;
-										req.m_amountPerLevel = 3;
-										break;
-									case "Eitr":
-										req.m_amount = 10;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_Lantern":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Bronze":
-										req.m_amount = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_MechanicalSpring":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// ashlands armor
-						case "Recipe_HelmetMage_Ashlands":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "LinenThread":
-										req.m_amount = 15;
-										req.m_amountPerLevel = 5;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorMageChest_Ashlands":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Eitr":
-										req.m_amount = 15;
-										break;
-									case "FlametalNew":
-										req.m_amount = 0;
-										req.m_amountPerLevel = 0;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorMageLegs_Ashlands":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Eitr":
-										req.m_amount = 15;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_HelmetMedium_Ashlands":
-						case "Recipe_ArmorMediumChest_Ashlands":
-						case "Recipe_ArmorMediumLegs_Ashlands":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "AskHide":
-										req.m_amountPerLevel = 4;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_HelmetFlametal":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									case "CharredBone":
-										req.m_amount = 3;
-										req.m_amountPerLevel = 1;
-										break;
-									case "Eitr":
-										req.m_amountPerLevel = 0;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorFlametalChest":
-						case "Recipe_ArmorFlametalLegs":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 5;
-										break;
-									case "CharredBone":
-										req.m_amountPerLevel = 1;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						// other
-						case "Recipe_CapeAsh":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amount = 0;
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						default:
-							break;
+					// Other Ashlands
+					{
+						"Recipe_CapeAsh", new Dictionary<string, (int?, int?)>
+						{
+							{ "FlametalNew", (0, null) } // 5, 0
+						}
 					}
-				}
-			}
+				};
 
-			// Apply Recipe Changes =============================================
-			private static void ApplyAlternateGearRecipeChanges(ref ObjectDB objDB)
-			{
+				// alternateGearChanges Dictionary ==========================================
+				var alternateGearRecipes = new Dictionary<string, Dictionary<string, (string newResItem, int? amount, int? amountPerLevel)>>()
+				{
+					{
+						"Recipe_Club", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "BoneFragments", ("LeatherScraps", null, null) }
+						}
+					},
+					{
+						"Recipe_KnifeCopper", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "GreydwarfEye", ("LeatherScraps", null, 2) }
+						}
+					},
+					{
+						"Recipe_KnifeSilver", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "Wood", ("FineWood", null, null) },
+							{ "Iron", ("Obsidian", null, null) }
+						}
+					},
+					{
+						"Recipe_SwordSilver", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "Wood", ("FineWood", 10, 2) },
+							{ "Iron", ("Obsidian", 4, 2) }
+						}
+					},
+					{
+						"Recipe_ShieldSerpentscale", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "Iron", ("Chitin", 4, 1) }
+						}
+					},
+					{
+						"Recipe_MaceNeedle", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "Iron", ("BlackMetal", null, null) }
+						}
+					},
+					{
+						"Recipe_ArmorWolfChest", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "Chain", ("WolfFang", 3, null) }
+						}
+					},
+					{
+						"Recipe_HelmetPadded", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "Iron", ("BlackMetal", 5, 3) }
+						}
+					},
+					{
+						"Recipe_ArmorPaddedCuirass", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "Iron", ("BlackMetal", 5, null) }
+						}
+					},
+					{
+						"Recipe_ArmorPaddedGreaves", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "Iron", ("BlackMetal", 5, null) }
+						}
+					},
+					{
+						"Recipe_CapeLinen", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "Silver", ("BlackMetal", null, null) }
+						}
+					},
+					{
+						"Recipe_CapeLox", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "Silver", ("BlackMetal", null, null) }
+						}
+					},
+					{
+						"Recipe_CrossbowArbalest", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "Wood", ("FineWood", null, null) }
+						}
+					},
+					{
+						"Recipe_HelmetMage", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "Iron", ("ScaleHide", 3, null) }
+						}
+					},
+					{
+						"Recipe_ArmorMageChest_Ashlands", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "FlametalNew", ("SulfurStone", 5, 2) }
+						}
+					},
+					{
+						"Recipe_CapeAsh", new Dictionary<string, (string, int?, int?)>
+						{
+							{ "FlametalNew", ("SulfurStone", 5, null) }
+						}
+					}
+				};
+
+				// Apply changes ============================================================
 				foreach (Recipe recipe in objDB.m_recipes)
 				{
-					switch (recipe.name)
+					// Apply cheaper gear modifications
+					if (ConfigManager.cheaperGearEnabled.Value && cheaperGearChanges.ContainsKey(recipe.name))
 					{
-						case "Recipe_Club":
-							foreach (Piece.Requirement req in recipe.m_resources)
+						foreach (Piece.Requirement req in recipe.m_resources)
+						{
+							if (cheaperGearChanges[recipe.name].TryGetValue(req.m_resItem.name, out (int? amount, int? amountPerLevel) values))
 							{
-								switch (req.m_resItem.name)
+								if (values.amount.HasValue)
 								{
-									case "BoneFragments":
-										req.m_resItem = objDB.GetItemPrefab("LeatherScraps").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
+									req.m_amount = values.amount.Value;
+								}
+								if (values.amountPerLevel.HasValue)
+								{
+									req.m_amountPerLevel = values.amountPerLevel.Value;
 								}
 							}
-							break;
+						}
+					}
 
-						case "Recipe_KnifeCopper":
-							foreach (Piece.Requirement req in recipe.m_resources)
+					// Apply alternate gear modifications
+					if (ConfigManager.altGearRecipesEnabled.Value && alternateGearRecipes.ContainsKey(recipe.name))
+					{
+						foreach (Piece.Requirement req in recipe.m_resources)
+						{
+							if (alternateGearRecipes[recipe.name].TryGetValue(req.m_resItem.name, out (string newResItem, int? amount, int? amountPerLevel) values))
 							{
-								switch (req.m_resItem.name)
+								if (values.amount.HasValue)
 								{
-									case "GreydwarfEye":
-										req.m_amountPerLevel = 2;
-										req.m_resItem = objDB.GetItemPrefab("LeatherScraps").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
+									req.m_amount = values.amount.Value;
 								}
-							}
-							break;
+								if (values.amountPerLevel.HasValue)
+								{
+									req.m_amountPerLevel = values.amountPerLevel.Value;
+								}
 
-						case "Recipe_KnifeSilver":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_resItem = objDB.GetItemPrefab("FineWood").GetComponent<ItemDrop>();
-										break;
-									case "Iron":
-										req.m_resItem = objDB.GetItemPrefab("Obsidian").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
+								// Change resource type
+								req.m_resItem = objDB.GetItemPrefab(values.newResItem).GetComponent<ItemDrop>();
 							}
-							break;
-
-						case "Recipe_SwordSilver":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_amount = 10;
-										req.m_amountPerLevel = 2;
-										req.m_resItem = objDB.GetItemPrefab("FineWood").GetComponent<ItemDrop>();
-										break;
-									case "Iron":
-										req.m_amount = 4;
-										req.m_amountPerLevel = 2;
-										req.m_resItem = objDB.GetItemPrefab("Obsidian").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						case "Recipe_ShieldSerpentscale":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_resItem = objDB.GetItemPrefab("Chitin").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						case "Recipe_MaceNeedle":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_resItem = objDB.GetItemPrefab("BlackMetal").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						case "Recipe_ArmorWolfChest":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Chain":
-										req.m_amount = 3;
-										req.m_resItem = objDB.GetItemPrefab("WolfFang").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						case "Recipe_HelmetPadded":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_resItem = objDB.GetItemPrefab("BlackMetal").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						case "Recipe_ArmorPaddedCuirass":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_resItem = objDB.GetItemPrefab("BlackMetal").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						case "Recipe_ArmorPaddedGreaves":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_resItem = objDB.GetItemPrefab("BlackMetal").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						case "Recipe_CapeLinen":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Silver":
-										req.m_resItem = objDB.GetItemPrefab("BlackMetal").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						case "Recipe_CapeLox":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Silver":
-										req.m_resItem = objDB.GetItemPrefab("BlackMetal").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						case "Recipe_CrossbowArbalest":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Wood":
-										req.m_resItem = objDB.GetItemPrefab("FineWood").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						case "Recipe_HelmetMage":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "Iron":
-										req.m_amount = 3;
-										req.m_resItem = objDB.GetItemPrefab("ScaleHide").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_ArmorMageChest_Ashlands":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amount = 5;
-										req.m_amountPerLevel = 2;
-										req.m_resItem = objDB.GetItemPrefab("SulfurStone").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-						case "Recipe_CapeAsh":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "FlametalNew":
-										req.m_amount = 5;
-										req.m_amountPerLevel = 0;
-										req.m_resItem = objDB.GetItemPrefab("SulfurStone").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						default:
-							break;
+						}
 					}
 				}
 			}
