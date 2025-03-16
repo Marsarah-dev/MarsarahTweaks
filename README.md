@@ -1,2 +1,2 @@
-# Marsarah-s-Tweaks
+# MarsarahTweaks
 Mod for Valheim
