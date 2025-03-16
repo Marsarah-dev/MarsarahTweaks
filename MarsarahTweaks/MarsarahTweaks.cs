@@ -25,7 +25,53 @@ namespace MarsarahTweaks
 
 		void Awake()
 		{
+			ConfigManager.ReadConfigFile();
+
 			harmony.PatchAll();
+			SetupWatcher();
+		}
+		private void SetupWatcher()
+		{
+			FileSystemWatcher watcher = new FileSystemWatcher(Paths.ConfigPath, ConfigFileName);
+			watcher.Changed += ReadConfigValues;
+			watcher.Created += ReadConfigValues;
+			watcher.Renamed += ReadConfigValues;
+			watcher.IncludeSubdirectories = true;
+			watcher.SynchronizingObject = ThreadingHelper.SynchronizingObject;
+			watcher.EnableRaisingEvents = true;
+		}
+
+		private void ReadConfigValues(object sender, FileSystemEventArgs e)
+		{
+			if (!File.Exists(ConfigFileFullPath))
+			{
+				return;
+			}
+			try
+			{
+				MTLog("ReadConfigValues called");
+				((BaseUnityPlugin)this).Config.Reload();
+			}
+			catch
+			{
+				MTLog("There was an issue loading " + ConfigFileName);
+			}
+		}
+
+		// Marsarah Tweaks Log =====================================================================
+		public static void MTLog(string log, bool header = false, bool footer = false)
+		{
+			if (header)
+			{
+				Debug.Log("===================================================");
+			}
+
+			Debug.Log($"[Marsarah Tweaks] : " + log);
+
+			if (footer)
+			{
+				Debug.Log("===================================================");
+			}
 		}
 	}
 }
