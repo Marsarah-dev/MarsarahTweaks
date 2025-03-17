@@ -37,7 +37,7 @@ namespace MarsarahTweaks
 				Debug.Log("===================================================");
 			}
 
-			Debug.Log($"[Marsarah Tweaks] : " + log);
+			Debug.Log($"[Marsarah Tweaks] : {log}");
 
 			if (footer)
 			{

@@ -9,39 +9,37 @@ namespace MarsarahTweaks.Patches
 {
 	internal class OtherPatches
 	{
-		[HarmonyPatch(typeof(ObjectDB), "Awake")]
+		private static bool stuffApplied = false;
+
+		[HarmonyPatch(typeof(ZNetScene), "Update")]
 		class OthersSection_Patch
 		{
-			static void Prefix(ref ObjectDB __instance)
+			static void Prefix(ZNetScene __instance)
 			{
-				if (__instance == null) return;
-
-				// Only run on the server or if playing in a local world
-				if (ZNet.instance == null || ZNet.instance.IsServer())
+				if (!stuffApplied)
 				{
-					SetOtherModifications(__instance);
+					if (!ZNet.instance.IsServer())
+					{
+						MarsarahTweaks.MLog("ZNetScene Update: Before checking ObjectDB...");
+						if (ObjectDB.instance == null) return;
+
+						MarsarahTweaks.MLog("ZNetScene Update: Applying recipe modifications...");
+						SetOtherModifications(ObjectDB.instance);
+						stuffApplied = true;
+					}
+					else
+					{
+						MarsarahTweaks.MLog("ZNetScene Update: I am a server. Not applying ObjDB stuff...");
+						stuffApplied = true;
+					}
 				}
 			}
 		}
 
 		public static void SetOtherModifications(ObjectDB objDB)
 		{
-			// Original Dictionaries ====================================================
-			var doubleBronzeOriginals = new Dictionary<string, int>();
-
-			if (!ConfigManager.doubleBronzeEnabled.Value && doubleBronzeOriginals.Count == 0)
-			{
-				// Store original values before modifying them
-				foreach (Recipe recipe in objDB.m_recipes)
-				{
-					if (!doubleBronzeOriginals.ContainsKey(recipe.name))
-					{
-						doubleBronzeOriginals[recipe.name] = recipe.m_amount;
-					}
-				}
-			}
-
 			// Dictionaries =============================================================
+			var doubleBronzeOriginals = new Dictionary<string, int>();
 			var doubleBronzeChanges = new Dictionary<string, int>()
 			{
 				{ "Recipe_Bronze", 2 },
@@ -56,14 +54,23 @@ namespace MarsarahTweaks.Patches
 					// Apply double bronze modifications
 					if (doubleBronzeChanges.TryGetValue(recipe.name, out int newAmount))
 					{
+						doubleBronzeOriginals[recipe.name] = recipe.m_amount;
 						recipe.m_amount = newAmount;
+						MarsarahTweaks.MLog($"{recipe.name} new amount set to: {newAmount}");
 					}
 				}
-				else if (originalRecipeAmounts.TryGetValue(recipe.name, out int defaultAmount))
+				else if (doubleBronzeOriginals.Count != 0)
 				{
-					// Restore default values when feature is turned off
-					recipe.m_amount = defaultAmount;
+					if (doubleBronzeOriginals.TryGetValue(recipe.name, out int defaultAmount))
+					{
+						recipe.m_amount = defaultAmount;
+						MarsarahTweaks.MLog($"{recipe.name} default amount set to: {defaultAmount}");
+					}
 				}
+			}
+			if (doubleBronzeOriginals.Count == 0)
+			{
+				MarsarahTweaks.MLog("Double Bronze was originally false. No originals set.");
 			}
 		}
 	}

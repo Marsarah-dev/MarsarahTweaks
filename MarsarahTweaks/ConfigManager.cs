@@ -90,7 +90,7 @@ namespace MarsarahTweaks
 			}
 			catch
 			{
-				MarsarahTweaks.MLog("There was an issue loading " + ConfigFileName);
+				MarsarahTweaks.MLog($"There was an issue loading {ConfigFileName}");
 			}
 		}
 	}
