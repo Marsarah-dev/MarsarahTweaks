@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace MarsarahTweaks.Patches
 {
 	internal class OtherPatches
 	{
 		private static Dictionary<string, int> doubleBronzeOriginals = new Dictionary<string, int>();
+		private static Dictionary<string, float> lighterMetalWeightOriginals = new Dictionary<string, float>();
 
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class OthersSection_Patch
@@ -18,10 +20,15 @@ namespace MarsarahTweaks.Patches
 
 				if (ZNet.instance != null)
 				{
-					if (!ZNet.instance.IsServer())
+					bool isDedicatedServer = ZNet.instance.IsDedicated();
+					//bool isLocalWorld = ZNet.instance.IsServer() && !isDedicatedServer;
+					if (!isDedicatedServer)
 					{
 						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.ConfigEntryName.DoubleBronzeCrafting}...");
 						UpdateDoubleBronzeCrafting(__instance);
+
+						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.ConfigEntryName.LighterMetalWeight}...");
+						UpdateLighterMetalWeight(__instance);
 					}
 					else
 					{
@@ -35,6 +42,7 @@ namespace MarsarahTweaks.Patches
 			}
 		}
 
+		// Double Bronze Crafting ==================================================================
 		public static void UpdateDoubleBronzeCrafting(ObjectDB objDB)
 		{
 			var doubleBronzeChanges = new Dictionary<string, int>()
@@ -43,40 +51,114 @@ namespace MarsarahTweaks.Patches
 				{ "Recipe_Bronze5", 10 }
 			};
 
-			// Iterate only over the recipes we care about
-			foreach (var recipeName in doubleBronzeChanges.Keys)
+			if (ConfigManager.doubleBronzeEnabled.Value)
 			{
-				Recipe recipe = objDB.m_recipes.Find(r => r.name == recipeName);
-				if (recipe == null) continue; // Skip if the recipe doesn't exist
-
-				if (ConfigManager.doubleBronzeEnabled.Value)
+				// Apply changes only if enabled
+				foreach (var recipeName in doubleBronzeChanges.Keys)
 				{
-					// Store the original amount *only once*
+					Recipe recipe = objDB.m_recipes.Find(r => r.name == recipeName);
+					if (recipe == null) continue;
+
+					// Store the original amount only once
 					if (!doubleBronzeOriginals.ContainsKey(recipe.name))
 					{
 						doubleBronzeOriginals[recipe.name] = recipe.m_amount;
 					}
 
-					// Apply new values
+					// Apply the modified amount
 					recipe.m_amount = doubleBronzeChanges[recipe.name];
 					MarsarahTweaks.MLog($"{recipe.name} new amount set to: {recipe.m_amount}");
 				}
-				else
+			}
+			else
+			{
+				// Revert changes only if we have stored originals
+				foreach (var recipeName in doubleBronzeOriginals.Keys)
 				{
-					// Revert changes if we have a stored original
-					if (doubleBronzeOriginals.TryGetValue(recipe.name, out int defaultAmount))
+					Recipe recipe = objDB.m_recipes.Find(r => r.name == recipeName);
+					if (recipe == null) continue;
+
+					recipe.m_amount = doubleBronzeOriginals[recipe.name];
+					MarsarahTweaks.MLog($"{recipe.name} reverted to original amount: {recipe.m_amount}");
+				}
+
+				// Clear stored originals when disabling to free memory
+				doubleBronzeOriginals.Clear();
+				MarsarahTweaks.MLog("Double Bronze Crafting disabled. Reverted changes.");
+			}
+		}
+
+		// Lighter Metal Weight" ===================================================================
+		public static void UpdateLighterMetalWeight(ObjectDB objDB)
+		{
+			var lighterMetalChanges = new Dictionary<string, int>()
+			{
+				{ "TinOre", 8 },
+				{ "Tin", 8 },
+				{ "CopperOre", 8 },
+				{ "Copper", 8 },
+				{ "Bronze", 8 },
+				{ "IronOre", 8 },
+				{ "IronScrap", 8 },
+				{ "Iron", 8 },
+				{ "SilverOre", 8 },
+				{ "Silver", 8 },
+				{ "BlackMetalScrap", 8 },
+				{ "BlackMetal", 8 },
+				{ "CopperScrap", 8 },
+				{ "BronzeScrap", 8 },
+				{ "Flametal", 8 },
+				{ "FlametalNew", 8 },
+				{ "FlametalOre", 8 },
+				{ "FlametalOreNew", 8 }
+			};
+
+			if (ConfigManager.lighterMetalWeightEnabled.Value)
+			{
+				// Apply weight reduction
+				foreach (var itemName in lighterMetalChanges.Keys)
+				{
+					GameObject item = objDB.m_items.Find(i => i.name == itemName);
+					if (item == null) continue;
+
+					ItemDrop itemDrop = item.GetComponent<ItemDrop>();
+					if (itemDrop == null) continue;
+
+					// Store the original weight (only once)
+					if (!lighterMetalWeightOriginals.ContainsKey(item.name))
 					{
-						recipe.m_amount = defaultAmount;
-						MarsarahTweaks.MLog($"{recipe.name} reverted to original amount: {defaultAmount}");
+						lighterMetalWeightOriginals[item.name] = itemDrop.m_itemData.m_shared.m_weight;
+					}
+
+					// Set the reduced weight
+					if (lighterMetalChanges.TryGetValue(item.name, out int newWeight))
+					{
+						itemDrop.m_itemData.m_shared.m_weight = newWeight;
+						MarsarahTweaks.MLog($"{item.name} weight set to: {newWeight}");
 					}
 				}
 			}
-
-			// Clear the dictionary when disabling to save memory
-			if (!ConfigManager.doubleBronzeEnabled.Value)
+			else
 			{
-				doubleBronzeOriginals.Clear();
-				MarsarahTweaks.MLog("Double Bronze Crafting disabled. Reverted changes.");
+				// Restore original weights
+				foreach (var itemName in lighterMetalWeightOriginals.Keys)
+				{
+					GameObject item = objDB.m_items.Find(i => i.name == itemName);
+					if (item == null) continue;
+
+					ItemDrop itemDrop = item.GetComponent<ItemDrop>();
+					if (itemDrop == null) continue;
+
+					if (lighterMetalWeightOriginals.TryGetValue(item.name, out float originalWeight))
+					{
+						itemDrop.m_itemData.m_shared.m_weight = originalWeight;
+						MarsarahTweaks.MLog($"{item.name} weight reverted to: {originalWeight}");
+					}
+				}
+
+				// Clear the dictionary when disabling to save memory
+				lighterMetalWeightOriginals.Clear();
+				MarsarahTweaks.MLog("Lighter Metal Weight disabled. Reverted changes.");
 			}
 		}
 	}

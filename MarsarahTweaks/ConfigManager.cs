@@ -26,7 +26,10 @@ namespace MarsarahTweaks
 		{
 			public const string DoubleBronzeCrafting = "Double Bronze Crafting";
 			public const string GearRecipeAmountsModifications = "Gear Recipe Amounts Modification";
+
 			public const string GearRecipeMaterialsModifications = "Gear Recipe Materials Modifications";
+
+			public const string LighterMetalWeight = "Lighter Metal Weight";
 		}
 
 		// Config entries
@@ -37,6 +40,8 @@ namespace MarsarahTweaks
 		//public static ConfigEntry<bool> gearRecipeAmountsEnabled;
 
 		//public static ConfigEntry<bool> gearRecipeMaterialsEnabled;
+
+		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -53,6 +58,9 @@ namespace MarsarahTweaks
 			// ===== Features
 			//gearRecipeMaterialsEnabled = CreateConfig("3 - Features", "Gear Recipe Materials Modifications", true, "Modifies gear recipe materials for some items (more materials from current respective biomes)");
 
+			// ===== QOL
+			lighterMetalWeightEnabled = CreateConfig("4 - QOL", ConfigEntryName.LighterMetalWeight, true, "All metal (ore and bars) weight decreased to 8 (equal to Tin Ore)");
+
 			SetupWatcher();
 		}
 
@@ -63,7 +71,6 @@ namespace MarsarahTweaks
 			SyncedConfigEntry<T> syncedConfigEntry = configSync.AddConfigEntry(configEntry);
 			syncedConfigEntry.SynchronizedConfig = synchronizedSetting;
 
-			//configEntry.SettingChanged += (_, __) => Config.Save();
 			configEntry.SettingChanged += (_, __) => OnConfigChanged(name);
 
 			return configEntry;
@@ -103,27 +110,31 @@ namespace MarsarahTweaks
 			MarsarahTweaks.MLog($"Config setting '{configName}' changed!");
 			Config.Save();
 
-			switch (configName)
+			if (ObjectDB.instance == null) return;
+
+			if (ZNet.instance != null)
 			{
-				case ConfigEntryName.DoubleBronzeCrafting:
-					if (ObjectDB.instance != null)
+				bool isDedicatedServer = ZNet.instance.IsDedicated();
+
+				if (!isDedicatedServer)
+				{
+					MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+					switch (configName)
 					{
-						if (ZNet.instance != null && !ZNet.instance.IsServer())
-						{
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {ConfigEntryName.DoubleBronzeCrafting}...");
+						case ConfigEntryName.DoubleBronzeCrafting:
 							OtherPatches.UpdateDoubleBronzeCrafting(ObjectDB.instance);
-						}
-						else
-						{
-							MarsarahTweaks.MLog($"ConfigManager: I am a server. No changes made to {ConfigManager.ConfigEntryName.DoubleBronzeCrafting}...");
-						}
+							break;
+
+						case ConfigEntryName.LighterMetalWeight:
+							OtherPatches.UpdateLighterMetalWeight(ObjectDB.instance);
+							break;
 					}
-					else
-					{
-						MarsarahTweaks.MLog("ObjectDB is not initialized yet.");
-					}
-					break;
-			}
+				}
+                else
+                {
+					MarsarahTweaks.MLog($"ConfigManager: I am a server. No changes made to {configName}...");
+				}
+            }
 		}
 
 	}
