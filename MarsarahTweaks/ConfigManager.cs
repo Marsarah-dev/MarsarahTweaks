@@ -21,6 +21,14 @@ namespace MarsarahTweaks
 		private static string ConfigFileName => MarsarahTweaks.ModGUID + ".cfg";
 		private static string ConfigFileFullPath => Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;
 
+		// Config entry names
+		public static class ConfigEntryName
+		{
+			public const string DoubleBronzeCrafting = "Double Bronze Crafting";
+			public const string GearRecipeAmountsModifications = "Gear Recipe Amounts Modification";
+			public const string GearRecipeMaterialsModifications = "Gear Recipe Materials Modifications";
+		}
+
 		// Config entries
 		public static ConfigEntry<bool> serverConfigLocked;
 		//public static ConfigEntry<bool> testJumpEnabled;
@@ -39,7 +47,7 @@ namespace MarsarahTweaks
 			//testJumpEnabled = CreateConfig("1 - Main", "Test Jump", true, "Test Jump Patch");
 
 			// ===== Grind Reduction
-			doubleBronzeEnabled = CreateConfig("2 - Grind Reduction", "Double Bronze Crafting", true, "Doubles the amount of crafted Bronze at the Forge");
+			doubleBronzeEnabled = CreateConfig("2 - Grind Reduction", ConfigEntryName.DoubleBronzeCrafting, true, "Doubles the amount of crafted Bronze at the Forge");
 			//gearRecipeAmountsEnabled = CreateConfig("2 - Grind Reduction", "Gear Recipe Amounts Modifications", true, "Reduces costs for crafting and upgrading gear for metal. Balances other resources amounts");
 
 			// ===== Features
@@ -55,14 +63,10 @@ namespace MarsarahTweaks
 			SyncedConfigEntry<T> syncedConfigEntry = configSync.AddConfigEntry(configEntry);
 			syncedConfigEntry.SynchronizedConfig = synchronizedSetting;
 
-			configEntry.SettingChanged += (_, __) => SaveConfig();
+			//configEntry.SettingChanged += (_, __) => Config.Save();
+			configEntry.SettingChanged += (_, __) => OnConfigChanged(name);
 
 			return configEntry;
-		}
-
-		private static void SaveConfig()
-		{
-			Config.Save();
 		}
 
 		private static void SetupWatcher()
@@ -93,5 +97,34 @@ namespace MarsarahTweaks
 				MarsarahTweaks.MLog($"There was an issue loading {ConfigFileName}");
 			}
 		}
+
+		private static void OnConfigChanged(string configName)
+		{
+			MarsarahTweaks.MLog($"Config setting '{configName}' changed!");
+			Config.Save();
+
+			switch (configName)
+			{
+				case ConfigEntryName.DoubleBronzeCrafting:
+					if (ObjectDB.instance != null)
+					{
+						if (ZNet.instance != null && !ZNet.instance.IsServer())
+						{
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {ConfigEntryName.DoubleBronzeCrafting}...");
+							OtherPatches.UpdateDoubleBronzeCrafting(ObjectDB.instance);
+						}
+						else
+						{
+							MarsarahTweaks.MLog($"ConfigManager: I am a server. No changes made to {ConfigManager.ConfigEntryName.DoubleBronzeCrafting}...");
+						}
+					}
+					else
+					{
+						MarsarahTweaks.MLog("ObjectDB is not initialized yet.");
+					}
+					break;
+			}
+		}
+
 	}
 }

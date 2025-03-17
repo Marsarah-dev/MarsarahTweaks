@@ -2,75 +2,81 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarsarahTweaks.Patches
 {
 	internal class OtherPatches
 	{
-		private static bool stuffApplied = false;
+		private static Dictionary<string, int> doubleBronzeOriginals = new Dictionary<string, int>();
 
-		[HarmonyPatch(typeof(ZNetScene), "Update")]
+		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class OthersSection_Patch
 		{
-			static void Prefix(ZNetScene __instance)
+			static void Postfix(ref ObjectDB __instance)
 			{
-				if (!stuffApplied)
+				if (__instance == null) return;
+
+				if (ZNet.instance != null)
 				{
 					if (!ZNet.instance.IsServer())
 					{
-						MarsarahTweaks.MLog("ZNetScene Update: Before checking ObjectDB...");
-						if (ObjectDB.instance == null) return;
-
-						MarsarahTweaks.MLog("ZNetScene Update: Applying recipe modifications...");
-						SetOtherModifications(ObjectDB.instance);
-						stuffApplied = true;
+						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.ConfigEntryName.DoubleBronzeCrafting}...");
+						UpdateDoubleBronzeCrafting(__instance);
 					}
 					else
 					{
-						MarsarahTweaks.MLog("ZNetScene Update: I am a server. Not applying ObjDB stuff...");
-						stuffApplied = true;
+						MarsarahTweaks.MLog($"ObjectDB Awake: I am a server. No changes made to {ConfigManager.ConfigEntryName.DoubleBronzeCrafting}...");
 					}
+				}
+				else
+				{
+					MarsarahTweaks.MLog($"ObjectDB Awake: Too early to do anything. No changes made to {ConfigManager.ConfigEntryName.DoubleBronzeCrafting}...");
 				}
 			}
 		}
 
-		public static void SetOtherModifications(ObjectDB objDB)
+		public static void UpdateDoubleBronzeCrafting(ObjectDB objDB)
 		{
-			// Dictionaries =============================================================
-			var doubleBronzeOriginals = new Dictionary<string, int>();
 			var doubleBronzeChanges = new Dictionary<string, int>()
 			{
 				{ "Recipe_Bronze", 2 },
 				{ "Recipe_Bronze5", 10 }
 			};
 
-			// Apply changes ============================================================
-			foreach (Recipe recipe in objDB.m_recipes)
+			// Iterate only over the recipes we care about
+			foreach (var recipeName in doubleBronzeChanges.Keys)
 			{
+				Recipe recipe = objDB.m_recipes.Find(r => r.name == recipeName);
+				if (recipe == null) continue; // Skip if the recipe doesn't exist
+
 				if (ConfigManager.doubleBronzeEnabled.Value)
 				{
-					// Apply double bronze modifications
-					if (doubleBronzeChanges.TryGetValue(recipe.name, out int newAmount))
+					// Store the original amount *only once*
+					if (!doubleBronzeOriginals.ContainsKey(recipe.name))
 					{
 						doubleBronzeOriginals[recipe.name] = recipe.m_amount;
-						recipe.m_amount = newAmount;
-						MarsarahTweaks.MLog($"{recipe.name} new amount set to: {newAmount}");
 					}
+
+					// Apply new values
+					recipe.m_amount = doubleBronzeChanges[recipe.name];
+					MarsarahTweaks.MLog($"{recipe.name} new amount set to: {recipe.m_amount}");
 				}
-				else if (doubleBronzeOriginals.Count != 0)
+				else
 				{
+					// Revert changes if we have a stored original
 					if (doubleBronzeOriginals.TryGetValue(recipe.name, out int defaultAmount))
 					{
 						recipe.m_amount = defaultAmount;
-						MarsarahTweaks.MLog($"{recipe.name} default amount set to: {defaultAmount}");
+						MarsarahTweaks.MLog($"{recipe.name} reverted to original amount: {defaultAmount}");
 					}
 				}
 			}
-			if (doubleBronzeOriginals.Count == 0)
+
+			// Clear the dictionary when disabling to save memory
+			if (!ConfigManager.doubleBronzeEnabled.Value)
 			{
-				MarsarahTweaks.MLog("Double Bronze was originally false. No originals set.");
+				doubleBronzeOriginals.Clear();
+				MarsarahTweaks.MLog("Double Bronze Crafting disabled. Reverted changes.");
 			}
 		}
 	}
