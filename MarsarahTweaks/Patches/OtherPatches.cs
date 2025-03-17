@@ -9,7 +9,7 @@ namespace MarsarahTweaks.Patches
 	internal class OtherPatches
 	{
 		private static Dictionary<string, int> doubleBronzeOriginals = new Dictionary<string, int>();
-		private static Dictionary<string, float> lighterMetalWeightOriginals = new Dictionary<string, float>();
+		private static Dictionary<string, float> metalWeightOriginals = new Dictionary<string, float>();
 
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class OthersSection_Patch
@@ -91,7 +91,7 @@ namespace MarsarahTweaks.Patches
 		// Lighter Metal Weight" ===================================================================
 		public static void UpdateLighterMetalWeight(ObjectDB objDB)
 		{
-			var lighterMetalChanges = new Dictionary<string, int>()
+			var metalWeightChanges = new Dictionary<string, float>()
 			{
 				{ "TinOre", 8 },
 				{ "Tin", 8 },
@@ -116,7 +116,7 @@ namespace MarsarahTweaks.Patches
 			if (ConfigManager.lighterMetalWeightEnabled.Value)
 			{
 				// Apply weight reduction
-				foreach (var itemName in lighterMetalChanges.Keys)
+				foreach (var itemName in metalWeightChanges.Keys)
 				{
 					GameObject item = objDB.m_items.Find(i => i.name == itemName);
 					if (item == null) continue;
@@ -125,13 +125,13 @@ namespace MarsarahTweaks.Patches
 					if (itemDrop == null) continue;
 
 					// Store the original weight (only once)
-					if (!lighterMetalWeightOriginals.ContainsKey(item.name))
+					if (!metalWeightOriginals.ContainsKey(item.name))
 					{
-						lighterMetalWeightOriginals[item.name] = itemDrop.m_itemData.m_shared.m_weight;
+						metalWeightOriginals[item.name] = itemDrop.m_itemData.m_shared.m_weight;
 					}
 
 					// Set the reduced weight
-					if (lighterMetalChanges.TryGetValue(item.name, out int newWeight))
+					if (metalWeightChanges.TryGetValue(item.name, out float newWeight))
 					{
 						itemDrop.m_itemData.m_shared.m_weight = newWeight;
 						MarsarahTweaks.MLog($"{item.name} weight set to: {newWeight}");
@@ -141,7 +141,7 @@ namespace MarsarahTweaks.Patches
 			else
 			{
 				// Restore original weights
-				foreach (var itemName in lighterMetalWeightOriginals.Keys)
+				foreach (var itemName in metalWeightOriginals.Keys)
 				{
 					GameObject item = objDB.m_items.Find(i => i.name == itemName);
 					if (item == null) continue;
@@ -149,15 +149,15 @@ namespace MarsarahTweaks.Patches
 					ItemDrop itemDrop = item.GetComponent<ItemDrop>();
 					if (itemDrop == null) continue;
 
-					if (lighterMetalWeightOriginals.TryGetValue(item.name, out float originalWeight))
+					if (metalWeightOriginals.TryGetValue(item.name, out float originalWeight))
 					{
 						itemDrop.m_itemData.m_shared.m_weight = originalWeight;
 						MarsarahTweaks.MLog($"{item.name} weight reverted to: {originalWeight}");
 					}
 				}
 
-				// Clear the dictionary when disabling to save memory
-				lighterMetalWeightOriginals.Clear();
+				// Clear stored originals when disabling to save memory
+				metalWeightOriginals.Clear();
 				MarsarahTweaks.MLog("Lighter Metal Weight disabled. Reverted changes.");
 			}
 		}

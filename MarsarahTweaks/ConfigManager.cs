@@ -59,7 +59,7 @@ namespace MarsarahTweaks
 			//gearRecipeMaterialsEnabled = CreateConfig("3 - Features", "Gear Recipe Materials Modifications", true, "Modifies gear recipe materials for some items (more materials from current respective biomes)");
 
 			// ===== QOL
-			lighterMetalWeightEnabled = CreateConfig("4 - QOL", ConfigEntryName.LighterMetalWeight, true, "All metal (ore and bars) weight decreased to 8 (equal to Tin Ore)");
+			lighterMetalWeightEnabled = CreateConfig("4 - QOL", ConfigEntryName.LighterMetalWeight, true, "All metal (ore and bars) weight decreased to 8 (Config toggle requires client relog to take effect)");
 
 			SetupWatcher();
 		}
@@ -136,6 +136,5 @@ namespace MarsarahTweaks
 				}
             }
 		}
-
 	}
 }
