@@ -47,7 +47,7 @@ namespace MarsarahTweaks
 
 		private void OnDestroy()
 		{
-			Config.Save();
+			((BaseUnityPlugin)this).Config.Save();
 		}
 
 		private void SetupWatcher()
@@ -74,7 +74,7 @@ namespace MarsarahTweaks
 			try
 			{
 				MarsarahTweaks.MLog("ReadConfigValues called");
-				Config.Reload();
+				((BaseUnityPlugin)this).Config.Reload();
 			}
 			catch
 			{
