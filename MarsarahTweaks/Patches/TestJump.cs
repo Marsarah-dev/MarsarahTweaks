@@ -8,7 +8,7 @@ namespace MarsarahTweaks.Patches
 	{
 		static void Prefix(ref float ___m_jumpForce)
 		{
-			if (ConfigManager.testJumpEnabled.Value)
+			if (MarsarahTweaks.testJumpEnabled.Value)
 			{
 				___m_jumpForce = 15;
 				MarsarahTweaks.MLog("Modified jump force: " + ___m_jumpForce);
