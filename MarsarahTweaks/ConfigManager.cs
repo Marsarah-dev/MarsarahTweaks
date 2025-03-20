@@ -2,7 +2,9 @@
 using BepInEx.Configuration;
 using MarsarahTweaks.Patches;
 using ServerSync;
+using System.Collections.Generic;
 using System.IO;
+using System.Security.AccessControl;
 using UnityEngine;
 
 namespace MarsarahTweaks
@@ -22,14 +24,52 @@ namespace MarsarahTweaks
 		private static string ConfigFileFullPath => Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;
 
 		// Config entry names
-		public static class ConfigEntryName
+		/*public static class ConfigEntryName
 		{
 			public const string DoubleBronzeCrafting = "Double Bronze Crafting";
-			public const string GearRecipeAmountsModifications = "Gear Recipe Amounts Modifications";
-
-			public const string GearRecipeMaterialsModifications = "Gear Recipe Materials Modifications";
+			public const string GearRecipeAmountsModifications = "Cheaper Gear Recipe Amounts";
+			public const string GearRecipeMaterialsModifications = "Alternate Gear Recipe Materials";
+			public const string BuildPiecesAmountsModifications = "Cheaper Build Pieces Amounts";
+			public const string BuildPiecesMaterialsModifications = "Alternate Build Pieces Materials";
 
 			public const string LighterMetalWeight = "Lighter Metal Weight";
+		}*/
+
+		// Struct for Config Sections
+		public static class ConfigSections
+		{
+			public const string Main = "1 - Main";
+			public const string GrindReduction = "2 - Grind Reduction";
+			public const string Features = "3 - Features";
+			public const string QOL = "4 - QOL";
+			public const string UI = "5 - UI";
+		}
+
+		// Struct for Config Metadata
+		public struct ConfigMetadata
+		{
+			public string Name;
+			public string Description;
+
+			public ConfigMetadata(string name, string description)
+			{
+				Name = name;
+				Description = description;
+			}
+		}
+
+		// Grouped Config Metadata (for easy expansion)
+		public static class Configs
+		{
+			public static readonly ConfigMetadata ServerConfig = new ConfigMetadata("Lock Configuration", "If on, only server admins can change the configuration.");
+
+			public static readonly ConfigMetadata DoubleBronzeCrafting = new ConfigMetadata("1 - Double Bronze Crafting", "Doubles the amount of crafted Bronze at the Forge");
+			public static readonly ConfigMetadata GearRecipeAmounts = new ConfigMetadata("2 - Cheaper Gear Recipe Amounts", "Reduces costs for crafting and upgrading gear for metal. Balances other resources amounts");
+			public static readonly ConfigMetadata GearRecipeMaterials = new ConfigMetadata("3 - Alternate Gear Recipe Materials", "Modifies gear recipe materials for some items (more materials from current respective biomes)");
+			public static readonly ConfigMetadata BuildPiecesAmounts = new ConfigMetadata("4 - Cheaper Build Pieces Amounts", "Reduces costs for build pieces");
+			public static readonly ConfigMetadata BuildPiecesMaterials = new ConfigMetadata("5 - Alternate Build Pieces Materials", "Modifies build pieces materials");
+
+			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "All metal (ore and bars) weight decreased to 8 (Toggling this mid-game requires client relog to take effect)");
 		}
 
 		// Config entries
@@ -38,8 +78,9 @@ namespace MarsarahTweaks
 
 		public static ConfigEntry<bool> doubleBronzeEnabled;
 		public static ConfigEntry<bool> gearRecipeAmountsEnabled;
-
 		public static ConfigEntry<bool> gearRecipeMaterialsEnabled;
+		public static ConfigEntry<bool> buildPiecesAmountsEnabled;
+		public static ConfigEntry<bool> buildPiecesMaterialsEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -47,19 +88,22 @@ namespace MarsarahTweaks
 		{
 			Config = configFile;
 
-			serverConfigLocked = CreateConfig("1 - Main", "Lock Configuration", true, "If on, only server admins can change the configuration.");
+			serverConfigLocked = CreateConfig(ConfigSections.Main, Configs.ServerConfig.Name, true, Configs.ServerConfig.Description);
 			_ = configSync.AddLockingConfigEntry(serverConfigLocked);
 			//testJumpEnabled = CreateConfig("1 - Main", "Test Jump", true, "Test Jump Patch");
 
 			// ===== Grind Reduction
-			doubleBronzeEnabled = CreateConfig("2 - Grind Reduction", ConfigEntryName.DoubleBronzeCrafting, true, "Doubles the amount of crafted Bronze at the Forge");
-			gearRecipeAmountsEnabled = CreateConfig("2 - Grind Reduction", ConfigEntryName.GearRecipeAmountsModifications, true, "Reduces costs for crafting and upgrading gear for metal. Balances other resources amounts");
+			doubleBronzeEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.DoubleBronzeCrafting.Name, true, Configs.DoubleBronzeCrafting.Description);
+			gearRecipeAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeAmounts.Name, true, Configs.GearRecipeAmounts.Description);
+			gearRecipeMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeMaterials.Name, true, Configs.GearRecipeMaterials.Description);
+			buildPiecesAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPiecesAmounts.Name, true, Configs.BuildPiecesAmounts.Description);
+			buildPiecesMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPiecesMaterials.Name, true, Configs.BuildPiecesMaterials.Description);
 
 			// ===== Features
-			gearRecipeMaterialsEnabled = CreateConfig("3 - Features", ConfigEntryName.GearRecipeMaterialsModifications, true, "Modifies gear recipe materials for some items (more materials from current respective biomes)");
+
 
 			// ===== QOL
-			lighterMetalWeightEnabled = CreateConfig("4 - QOL", ConfigEntryName.LighterMetalWeight, true, "All metal (ore and bars) weight decreased to 8 (Toggling this mid game requires client relog to take effect)");
+			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
 
 			SetupWatcher();
 		}
@@ -121,19 +165,19 @@ namespace MarsarahTweaks
 					MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 					switch (configName)
 					{
-						case ConfigEntryName.DoubleBronzeCrafting:
+						case var name when name == Configs.DoubleBronzeCrafting.Name:
 							OtherPatches.UpdateDoubleBronzeCrafting(ObjectDB.instance);
 							break;
 
-						case ConfigEntryName.LighterMetalWeight:
+						case var name when name == Configs.LighterMetalWeight.Name:
 							OtherPatches.UpdateLighterMetalWeight(ObjectDB.instance);
 							break;
 
-						case ConfigEntryName.GearRecipeAmountsModifications:
+						case var name when name == Configs.GearRecipeAmounts.Name:
 							GearRecipeChanges.ModifyGearRecipes(ObjectDB.instance, true, false);
 							break;
 
-						case ConfigEntryName.GearRecipeMaterialsModifications:
+						case var name when name == Configs.GearRecipeMaterials.Name:
 							GearRecipeChanges.ModifyGearRecipes(ObjectDB.instance, false, true);
 							break;
 					}

@@ -32,12 +32,12 @@ namespace MarsarahTweaks.Patches
 					}
 					else
 					{
-						MarsarahTweaks.MLog($"ObjectDB Awake: I am a server. No changes made to {ConfigManager.ConfigEntryName.GearRecipeAmountsModifications}...");
+						MarsarahTweaks.MLog($"ObjectDB Awake: I am a server. No changes made to Gear Recipes...");
 					}
 				}
 				else
 				{
-					MarsarahTweaks.MLog($"ObjectDB Awake: Too early to do anything. No changes made to {ConfigManager.ConfigEntryName.GearRecipeAmountsModifications}...");
+					MarsarahTweaks.MLog($"ObjectDB Awake: Too early to do anything. No changes made to Gear Recipes...");
 				}
 			}
 		}

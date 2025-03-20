@@ -24,20 +24,20 @@ namespace MarsarahTweaks.Patches
 					//bool isLocalWorld = ZNet.instance.IsServer() && !isDedicatedServer;
 					if (!isDedicatedServer)
 					{
-						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.ConfigEntryName.DoubleBronzeCrafting}...");
+						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.Configs.DoubleBronzeCrafting.Name}...");
 						UpdateDoubleBronzeCrafting(__instance);
 
-						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.ConfigEntryName.LighterMetalWeight}...");
+						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.Configs.LighterMetalWeight.Name}...");
 						UpdateLighterMetalWeight(__instance);
 					}
 					else
 					{
-						MarsarahTweaks.MLog($"ObjectDB Awake: I am a server. No changes made to {ConfigManager.ConfigEntryName.DoubleBronzeCrafting}...");
+						MarsarahTweaks.MLog($"ObjectDB Awake: I am a server. No changes made to {ConfigManager.Configs.DoubleBronzeCrafting.Name}...");
 					}
 				}
 				else
 				{
-					MarsarahTweaks.MLog($"ObjectDB Awake: Too early to do anything. No changes made to {ConfigManager.ConfigEntryName.DoubleBronzeCrafting}...");
+					MarsarahTweaks.MLog($"ObjectDB Awake: Too early to do anything. No changes made to {ConfigManager.Configs.DoubleBronzeCrafting.Name}...");
 				}
 			}
 		}
