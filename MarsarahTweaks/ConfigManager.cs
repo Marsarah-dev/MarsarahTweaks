@@ -25,7 +25,7 @@ namespace MarsarahTweaks
 		public static class ConfigEntryName
 		{
 			public const string DoubleBronzeCrafting = "Double Bronze Crafting";
-			public const string GearRecipeAmountsModifications = "Gear Recipe Amounts Modification";
+			public const string GearRecipeAmountsModifications = "Gear Recipe Amounts Modifications";
 
 			public const string GearRecipeMaterialsModifications = "Gear Recipe Materials Modifications";
 
@@ -37,9 +37,9 @@ namespace MarsarahTweaks
 		//public static ConfigEntry<bool> testJumpEnabled;
 
 		public static ConfigEntry<bool> doubleBronzeEnabled;
-		//public static ConfigEntry<bool> gearRecipeAmountsEnabled;
+		public static ConfigEntry<bool> gearRecipeAmountsEnabled;
 
-		//public static ConfigEntry<bool> gearRecipeMaterialsEnabled;
+		public static ConfigEntry<bool> gearRecipeMaterialsEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -53,13 +53,13 @@ namespace MarsarahTweaks
 
 			// ===== Grind Reduction
 			doubleBronzeEnabled = CreateConfig("2 - Grind Reduction", ConfigEntryName.DoubleBronzeCrafting, true, "Doubles the amount of crafted Bronze at the Forge");
-			//gearRecipeAmountsEnabled = CreateConfig("2 - Grind Reduction", "Gear Recipe Amounts Modifications", true, "Reduces costs for crafting and upgrading gear for metal. Balances other resources amounts");
+			gearRecipeAmountsEnabled = CreateConfig("2 - Grind Reduction", ConfigEntryName.GearRecipeAmountsModifications, true, "Reduces costs for crafting and upgrading gear for metal. Balances other resources amounts");
 
 			// ===== Features
-			//gearRecipeMaterialsEnabled = CreateConfig("3 - Features", "Gear Recipe Materials Modifications", true, "Modifies gear recipe materials for some items (more materials from current respective biomes)");
+			gearRecipeMaterialsEnabled = CreateConfig("3 - Features", ConfigEntryName.GearRecipeMaterialsModifications, true, "Modifies gear recipe materials for some items (more materials from current respective biomes)");
 
 			// ===== QOL
-			lighterMetalWeightEnabled = CreateConfig("4 - QOL", ConfigEntryName.LighterMetalWeight, true, "All metal (ore and bars) weight decreased to 8 (Config toggle requires client relog to take effect)");
+			lighterMetalWeightEnabled = CreateConfig("4 - QOL", ConfigEntryName.LighterMetalWeight, true, "All metal (ore and bars) weight decreased to 8 (Toggling this mid game requires client relog to take effect)");
 
 			SetupWatcher();
 		}
@@ -127,6 +127,14 @@ namespace MarsarahTweaks
 
 						case ConfigEntryName.LighterMetalWeight:
 							OtherPatches.UpdateLighterMetalWeight(ObjectDB.instance);
+							break;
+
+						case ConfigEntryName.GearRecipeAmountsModifications:
+							GearRecipeChanges.ModifyGearRecipes(ObjectDB.instance, true, false);
+							break;
+
+						case ConfigEntryName.GearRecipeMaterialsModifications:
+							GearRecipeChanges.ModifyGearRecipes(ObjectDB.instance, false, true);
 							break;
 					}
 				}

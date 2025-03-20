@@ -67,7 +67,6 @@ namespace MarsarahTweaks.Patches
 
 					// Apply the modified amount
 					recipe.m_amount = doubleBronzeChanges[recipe.name];
-					MarsarahTweaks.MLog($"{recipe.name} new amount set to: {recipe.m_amount}");
 				}
 			}
 			else
@@ -79,12 +78,10 @@ namespace MarsarahTweaks.Patches
 					if (recipe == null) continue;
 
 					recipe.m_amount = doubleBronzeOriginals[recipe.name];
-					MarsarahTweaks.MLog($"{recipe.name} reverted to original amount: {recipe.m_amount}");
 				}
 
 				// Clear stored originals when disabling to free memory
 				doubleBronzeOriginals.Clear();
-				MarsarahTweaks.MLog("Double Bronze Crafting disabled. Reverted changes.");
 			}
 		}
 
@@ -134,7 +131,6 @@ namespace MarsarahTweaks.Patches
 					if (metalWeightChanges.TryGetValue(item.name, out float newWeight))
 					{
 						itemDrop.m_itemData.m_shared.m_weight = newWeight;
-						MarsarahTweaks.MLog($"{item.name} weight set to: {newWeight}");
 					}
 				}
 			}
@@ -152,13 +148,11 @@ namespace MarsarahTweaks.Patches
 					if (metalWeightOriginals.TryGetValue(item.name, out float originalWeight))
 					{
 						itemDrop.m_itemData.m_shared.m_weight = originalWeight;
-						MarsarahTweaks.MLog($"{item.name} weight reverted to: {originalWeight}");
 					}
 				}
 
 				// Clear stored originals when disabling to save memory
 				metalWeightOriginals.Clear();
-				MarsarahTweaks.MLog("Lighter Metal Weight disabled. Reverted changes.");
 			}
 		}
 	}
