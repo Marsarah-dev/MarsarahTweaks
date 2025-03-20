@@ -79,8 +79,8 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> doubleBronzeEnabled;
 		public static ConfigEntry<bool> gearRecipeAmountsEnabled;
 		public static ConfigEntry<bool> gearRecipeMaterialsEnabled;
-		public static ConfigEntry<bool> buildPiecesAmountsEnabled;
-		public static ConfigEntry<bool> buildPiecesMaterialsEnabled;
+		public static ConfigEntry<bool> buildPieceAmountsEnabled;
+		public static ConfigEntry<bool> buildPieceMaterialsEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -96,8 +96,8 @@ namespace MarsarahTweaks
 			doubleBronzeEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.DoubleBronzeCrafting.Name, true, Configs.DoubleBronzeCrafting.Description);
 			gearRecipeAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeAmounts.Name, true, Configs.GearRecipeAmounts.Description);
 			gearRecipeMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeMaterials.Name, true, Configs.GearRecipeMaterials.Description);
-			buildPiecesAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPiecesAmounts.Name, true, Configs.BuildPiecesAmounts.Description);
-			buildPiecesMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPiecesMaterials.Name, true, Configs.BuildPiecesMaterials.Description);
+			buildPieceAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPiecesAmounts.Name, true, Configs.BuildPiecesAmounts.Description);
+			buildPieceMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPiecesMaterials.Name, true, Configs.BuildPiecesMaterials.Description);
 
 			// ===== Features
 
@@ -154,7 +154,7 @@ namespace MarsarahTweaks
 			MarsarahTweaks.MLog($"Config setting '{configName}' changed!");
 			Config.Save();
 
-			if (ObjectDB.instance == null) return;
+			if (ObjectDB.instance == null || ZNetScene.instance == null) return;
 
 			if (ZNet.instance != null)
 			{
@@ -179,6 +179,14 @@ namespace MarsarahTweaks
 
 						case var name when name == Configs.GearRecipeMaterials.Name:
 							GearRecipeChanges.ModifyGearRecipes(ObjectDB.instance, false, true);
+							break;
+
+						case var name when name == Configs.BuildPiecesAmounts.Name:
+							BuildPieceChanges.ModifyBuildPieces(ZNetScene.instance, true, false);
+							break;
+
+						case var name when name == Configs.BuildPiecesMaterials.Name:
+							BuildPieceChanges.ModifyBuildPieces(ZNetScene.instance, false, true);
 							break;
 					}
 				}

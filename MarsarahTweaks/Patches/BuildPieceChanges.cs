@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using JetBrains.Annotations;
+using MarsarahTweaks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,1420 +8,1325 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace MarsarahMod
+namespace MarsarahTweaks
 {
 	internal class BuildPieceChanges
 	{
-		// Build Piece Modifications ===============================================================
-		[HarmonyPatch(typeof(PieceTable), nameof(PieceTable.UpdateAvailable))]
-		class BuildPiecesModifications_Patch
-		{
-			static void Postfix(ref List<GameObject> ___m_pieces)
-			{
-				foreach (GameObject piece in ___m_pieces)
-				{
-					Piece component = piece.GetComponent<Piece>();
-					Piece.Requirement[] requirements = component.m_resources;
-					string pieceName = component.m_name;
+		private static readonly Dictionary<string, Dictionary<string, (string originalResItem, string newResItem, int amount)>> defaultBuildPieceRequirements 
+			= new Dictionary<string, Dictionary<string, (string originalResItem, string newResItem, int amount)>>();
 
-					if (MarsarahMod.cheaperBuildPiecesEnabled.Value)
+		[HarmonyPatch(typeof(ZNetScene), "Awake")]
+		class BuildPiecesModifications_StartupPatch
+		{
+			static void Postfix(ref ZNetScene __instance)
+			{
+				if (__instance == null) return;
+
+				if (ZNet.instance != null)
+				{
+					bool isDedicatedServer = ZNet.instance.IsDedicated();
+					if (!isDedicatedServer)
 					{
-						updateBuildPiecesAmounts(ref requirements, ref pieceName);
+						MarsarahTweaks.MLog($"ZNetScene Awake: Updating BuildPiecesModifications...");
+
+						if (!ConfigManager.buildPieceAmountsEnabled.Value && !ConfigManager.buildPieceMaterialsEnabled.Value) return;
+
+						ModifyBuildPieces(__instance, false, false);
 					}
-					if (MarsarahMod.altBuildPiecesMaterialsEnabled.Value && MMShared.itemDropSuccess)
+					else
 					{
-						updateBuildPiecesMaterials(ref requirements, ref pieceName);
+						MarsarahTweaks.MLog($"ZNetScene Awake: I am a server. No changes made to Build Pieces...");
 					}
+				}
+				else
+				{
+					MarsarahTweaks.MLog($"ZNetScene Awake: Too early to do anything. No changes made to Build Pieces...");
 				}
 			}
 		}
 
-		// Build Piece Return ======================================================================
-		[HarmonyPatch(typeof(Piece), nameof(Piece.DropResources))]
-		class BuildPieceReturn_Patch
+		// Modify Build Pieces =========================================================================
+		public static void ModifyBuildPieces(ZNetScene zNetScene, bool amountsWasChanged, bool materialsWasChanged)
 		{
-			static void Prefix([NotNull] ref Piece.Requirement[] ___m_resources, [NotNull] ref string ___m_name)
+			// New Piece Amounts Dictionary ================================================
+			var newPieceAmounts = new Dictionary<string, Dictionary<string, int>>()
 			{
-				if (MarsarahMod.cheaperBuildPiecesEnabled.Value)
+				{ "$piece_preptable", new Dictionary<string, int>
+					{
+						{ "FineWood", 10 }, // 20
+						{ "LeatherScraps", 10 } // 15
+					}
+				},
+				{ "$piece_cookingstation_iron", new Dictionary<string, int>
+					{
+						{ "Iron", 2 }, // 3
+						{ "Chain", 2 } // 3
+					}
+				},
+				{ "$piece_itemstand", new Dictionary<string, int>
+					{
+						{ "FineWood", 2 } // 4
+					}
+				},
+				{ "$piece_blastfurnace", new Dictionary<string, int>
+					{
+						{ "Iron", 5 } // 10
+					}
+				},
+				{ "$piece_oven", new Dictionary<string, int>
+					{
+						{ "Iron", 5 } // 15
+					}
+				},
+				{ "$piece_forge_ext3", new Dictionary<string, int> // grinding wheel
+					{
+						{ "Wood", 15 } // 25
+					}
+				},
+				{ "$piece_forge_ext4", new Dictionary<string, int> // smith's anvil
+					{
+						{ "Iron", 7 } // 20
+					}
+				},
+				{ "$piece_forge_ext5", new Dictionary<string, int> // forge cooler
+					{
+						{ "FineWood", 10 } // 25
+					}
+				},
+				{ "$piece_forge_ext6", new Dictionary<string, int> // forge toolrack
+					{
+						{ "Iron", 5 } // 15
+					}
+				},
+				{ "$piece_woodwindowshutter", new Dictionary<string, int>
+					{
+						{ "Wood", 2 } // 4
+					}
+				},
+				{ "$piece_darkwoodgate", new Dictionary<string, int>
+					{
+						{ "Iron", 3 } // 4
+					}
+				},
+				{ "$piece_irongate", new Dictionary<string, int>
+					{
+						{ "Iron", 3 } // 4
+					}
+				},
+				{ "$piece_chest", new Dictionary<string, int>
+					{
+						{ "Iron", 1 } // 2
+					}
+				},
+				{ "$piece_chestprivate", new Dictionary<string, int>
+					{
+						{ "Iron", 4 } // 8
+					}
+				},
+				{ "$piece_chestblackmetal", new Dictionary<string, int>
+					{
+						{ "BlackMetal", 4 } // 6
+					}
+				},
+				{ "$piece_brazierceiling01", new Dictionary<string, int>
+					{
+						{ "Bronze", 3 } // 5
+					}
+				},
+				{ "$piece_sconce", new Dictionary<string, int>
+					{
+						{ "Copper", 1 } // 2
+					}
+				},
+				{ "$piece_groundtorchwood", new Dictionary<string, int>
+					{
+						{ "Wood", 1 } // 2
+					}
+				},
+				{ "$piece_groundtorch", new Dictionary<string, int>
+					{
+						{ "Iron", 1 } // 2
+					}
+				},
+				{ "$piece_groundtorchgreen", new Dictionary<string, int>
+					{
+						{ "Iron", 1 } // 2
+					}
+				},
+				{ "$piece_groundtorchblue", new Dictionary<string, int>
+					{
+						{ "Iron", 1 } // 2
+					}
+				},
+				{ "$piece_portal", new Dictionary<string, int>
+					{
+						{ "FineWood", 10 } // 20
+					}
+				},
+				{ "$piece_portal_stone", new Dictionary<string, int>
+					{
+						{ "Grausten", 10 } // 30
+					}
+				},
+				{ "$piece_rug_lox", new Dictionary<string, int>
+					{
+						{ "LoxPelt", 3 } // 4
+					}
+				},
+				{ "$piece_rug_wolf", new Dictionary<string, int>
+					{
+						{ "WolfPelt", 3 } // 4
+					}
+				},
+				{ "$piece_rug_deer", new Dictionary<string, int>
+					{
+						{ "DeerHide", 3 } // 4
+					}
+				},
+				{ "$piece_banner01", new Dictionary<string, int>
+					{
+						{ "LeatherScraps", 5 } // 6
+					}
+				},
+				{ "$piece_fermenter", new Dictionary<string, int>
+					{
+						{ "FineWood", 15 } // 30
+					}
+				},
+				{ "$piece_bathtub", new Dictionary<string, int>
+					{
+						{ "Iron", 5 } // 10
+					}
+				},
+				{ "$piece_crystalwall1x1", new Dictionary<string, int>
+					{
+						{ "Crystal", 1 } // 2
+					}
+				},
+				{ "$piece_incinerator", new Dictionary<string, int>
+					{
+						{ "Iron", 5 } // 8
+					}
+				},
+				{ "$piece_stonewall1x1", new Dictionary<string, int>
+					{
+						{ "Stone", 2 } // 3
+					}
+				},
+				{ "$piece_stonewall2x1", new Dictionary<string, int>
+					{
+						{ "Stone", 3 } // 4
+					}
+				},
+				{ "$piece_stonepillar", new Dictionary<string, int>
+					{
+						{ "Stone", 3 } // 5
+					}
+				},
+				{ "$piece_stonearch", new Dictionary<string, int>
+					{
+						{ "Stone", 3 } // 4
+					}
+				},
+				{ "$piece_stonefloor2x2", new Dictionary<string, int>
+					{
+						{ "Stone", 4 } // 6
+					}
+				},
+				{ "$piece_stonestair", new Dictionary<string, int>
+					{
+						{ "Stone", 3 } // 8
+					}
+				},
+				{ "$piece_blackmarble2x1x1", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 3 } // 4
+					}
+				},
+				{ "$piece_blackmarble_stair", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 3 } // 8
+					}
+				},
+				{ "$piece_blackmarble_base1", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 4 } // 5
+					}
+				},
+				{ "$piece_blackmarble_basecorner", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 5 } // 6
+					}
+				},
+				{ "$piece_blackmarble_out1", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 4 } // 5
+					}
+				},
+				{ "$piece_blackmarble_outcorner", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 5 } // 6
+					}
+				},
+				{ "$piece_blackmarble_arch", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 4 } // 5
+					}
+				},
+				{ "$piece_dvergr_stake_wall", new Dictionary<string, int>
+					{
+						{ "YggdrasilWood", 4 }, // 8
+						{ "Iron", 2 } // 8
+					}
+				},
+				{ "$piece_sharpstakes", new Dictionary<string, int>
+					{
+						{ "Wood", 4 }, // 6
+						{ "RoundLog", 2 } // 4
+					}
+				},
+				{ "$piece_dvergr_sharpstakes", new Dictionary<string, int>
+					{
+						{ "YggdrasilWood", 4 }, // 5
+						{ "Iron", 1 } // 2
+					}
+				},
+				{ "$piece_trap", new Dictionary<string, int>
+					{
+						{ "BlackMetal", 3 }, // 5
+						{ "BronzeNails", 5 } // 10
+					}
+				},
+				{ "$piece_turret", new Dictionary<string, int>
+					{
+						{ "BlackMetal", 7 }, // 10
+						{ "YggdrasilWood", 7 }, // 10
+						{ "MechanicalSpring", 2 } // 3
+					}
+				},
+				{ "$piece_eitrrefinery", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 10 } // 20
+					}
+				},
+				{ "$piece_blackforge_ext2", new Dictionary<string, int>
+					{
+						{ "Copper", 5 } // 8
+					}
+				},
+				{ "$piece_sapcollector", new Dictionary<string, int>
+					{
+						{ "YggdrasilWood", 5 }, // 10
+						{ "BlackMetal", 3 } // 5
+					}
+				},
+				{ "$piece_magetable", new Dictionary<string, int>
+					{
+						{ "YggdrasilWood", 10 }, // 20
+						{ "BlackMetal", 5 } // 10
+					}
+				},
+				{ "$piece_magetable_ext", new Dictionary<string, int> // Rune Table
+					{
+						{ "BlackMarble", 5 }, // 10
+						{ "Eitr", 5 } // 10
+					}
+				},
+				{ "$piece_magetable_ext2", new Dictionary<string, int> // Unfading Candles
+					{
+						{ "BlackMarble", 5 }, // 10
+						{ "Eitr", 5 } // 10
+					}
+				},
+				{ "$piece_magetable_ext3", new Dictionary<string, int> // Feathery Wreath
+					{
+						{ "Eitr", 5 } // 10
+					}
+				},
+				{ "$piece_hexagonalgate", new Dictionary<string, int>
+					{
+						{ "Copper", 4 } // 8
+					}
+				},
+				{ "$piece_dvergr_spiralstair", new Dictionary<string, int>
+					{
+						{ "YggdrasilWood", 3 }, // 5
+						{ "Copper", 1 } // 2
+					}
+				},
+				{ "$piece_dvergr_spiralstair_right", new Dictionary<string, int>
+					{
+						{ "YggdrasilWood", 3 }, // 5
+						{ "Copper", 1 } // 2
+					}
+				},
+				{ "$piece_blackmarble_bench", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 5 }, // 6
+						{ "Copper", 2 } // 3
+					}
+				},
+				{ "$piece_table_round", new Dictionary<string, int>
+					{
+						{ "IronNails", 10 } // 20
+					}
+				},
+				{ "$piece_blackmarble_table", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 5 }, // 6
+						{ "Copper", 2 } // 6
+					}
+				},
+				{ "$piece_brazierfloor01", new Dictionary<string, int>
+					{
+						{ "Bronze", 3 } // 5
+					}
+				},
+				{ "$piece_brazierfloor02", new Dictionary<string, int>
+					{
+						{ "Bronze", 3 }, // 5
+						{ "GreydwarfEye", 2 } // 5
+					}
+				},
+				{ "$piece_jute_carpet", new Dictionary<string, int>
+					{
+						{ "JuteRed", 3 } // 4
+					}
+				},
+				{ "$piece_juteblue_carpet", new Dictionary<string, int>
+					{
+						{ "JuteBlue", 3 } // 4
+					}
+				},
+				{ "$piece_rug_hare", new Dictionary<string, int>
+					{
+						{ "ScaleHide", 2 } // 4
+					}
+				},
+				{ "$piece_dvergr_lantern", new Dictionary<string, int>
+					{
+						{ "Copper", 1 } // 2
+					}
+				},
+				{ "$piece_dvergr_lantern_pole", new Dictionary<string, int>
+					{
+						{ "Copper", 2 } // 3
+					}
+				},
+				{ "$piece_clothdoor", new Dictionary<string, int> // Red Jute Curtain
+					{
+						{ "JuteRed", 3 } // 4 
+					}
+				},
+				{ "$piece_hanging_cloth_blue1", new Dictionary<string, int> // Blue Jute Drapes
+					{
+						{ "JuteBlue", 3 } // 4
+					}
+				},
+				{ "$piece_hanging_cloth_blue2", new Dictionary<string, int> // Blue Jute Curtain
+					{
+						{ "JuteBlue", 3 } // 4
+					}
+				},
+				{ "$piece_ashwood_archedwall", new Dictionary<string, int>
+					{
+						{ "Blackwood", 1 } // 2
+					}
+				},
+				{ "$piece_ashwood_floor_2x2", new Dictionary<string, int>
+					{
+						{ "Blackwood", 2 } // 4
+					}
+				},
+				{ "$piece_ashwood_floor_1x1", new Dictionary<string, int>
+					{
+						{ "Blackwood", 1 } // 2
+					}
+				},
+				{ "$piece_ashwood_floor_deco", new Dictionary<string, int>
+					{
+						{ "Blackwood", 2 } // 4
+					}
+				},
+				{ "$piece_ashwood_beam_1m", new Dictionary<string, int>
+					{
+						{ "Blackwood", 1 } // 2
+					}
+				},
+				{ "$piece_ashwood_beam_2m", new Dictionary<string, int>
+					{
+						{ "Blackwood", 2 } // 4
+					}
+				},
+				{ "$piece_ashwood_pole_1m", new Dictionary<string, int>
+					{
+						{ "Blackwood", 1 } // 2
+					}
+				},
+				{ "$piece_ashwood_pole_2m", new Dictionary<string, int>
+					{
+						{ "Blackwood", 2 } // 4
+					}
+				},
+				{ "$piece_ashwoodstair", new Dictionary<string, int>
+					{
+						{ "Blackwood", 1 } // 2
+					}
+				},
+				{ "$piece_grausten_stoneladder", new Dictionary<string, int>
+					{
+						{ "Grausten", 3 } // 5
+					}
+				},
+				{ "$piece_grausten_stair", new Dictionary<string, int>
+					{
+						{ "Grausten", 3 } // 8
+					}
+				},
+				{ "$piece_grausten_floor1x1", new Dictionary<string, int>
+					{
+						{ "Grausten", 1 } // 2
+					}
+				},
+				{ "$piece_grausten_pillarmedium", new Dictionary<string, int>
+					{
+						{ "Grausten", 2 } // 3
+					}
+				},
+				{ "$piece_grausten_pillartapered", new Dictionary<string, int>
+					{
+						{ "Grausten", 4 } // 5
+					}
+				},
+				{ "$piece_grausten_pillartaperedinverted", new Dictionary<string, int>
+					{
+						{ "Grausten", 4 } // 5
+					}
+				},
+				{ "$piece_grausten_beammedium", new Dictionary<string, int>
+					{
+						{ "Grausten", 2 } // 3
+					}
+				},
+				{ "$piece_grausten_wall1x2", new Dictionary<string, int>
+					{
+						{ "Grausten", 2 } // 4
+					}
+				},
+				{ "$piece_grausten_wall2x2", new Dictionary<string, int>
+					{
+						{ "Grausten", 4 } // 6
+					}
+				},
+				{ "$piece_grausten_wall4x2", new Dictionary<string, int>
+					{
+						{ "Grausten", 8 } // 12
+					}
+				},
+				{ "$piece_grausten_window4x2", new Dictionary<string, int>
+					{
+						{ "Grausten", 8 } // 10
+					}
+				},
+				{ "$piece_grausten_roof45_corner", new Dictionary<string, int>
+					{
+						{ "Grausten", 4 } // 5
+					}
+				},
+				{ "$piece_grausten_roof45_corner2", new Dictionary<string, int>
+					{
+						{ "Grausten", 4 } // 5
+					}
+				},
+				{ "$piece_grausten_roof45_archcorner", new Dictionary<string, int>
+					{
+						{ "Grausten", 4 } // 5
+					}
+				},
+				{ "$piece_grausten_roof45_archcorner2", new Dictionary<string, int>
+					{
+						{ "Grausten", 4 } // 5
+					}
+				},
+				{ "$piece_flametalgate", new Dictionary<string, int>
+					{
+						{ "FlametalNew", 8 } // 16
+					}
+				},
+				{ "$piece_rug_asksvin", new Dictionary<string, int>
+					{
+						{ "AskHide", 3 } // 4
+					}
+				}
+			};
+
+			// New Piece Materials Dictionary ==============================================
+			var newPieceMaterials = new Dictionary<string, Dictionary<string, string>>()
+			{
 				{
-					updateBuildPiecesAmounts(ref ___m_resources, ref ___m_name);
+					"$piece_workbench_ext4", new Dictionary<string, string> // tool rack
+					{
+						{ "Obsidian", "Coal" }
+					}
+				},
+				{
+					"$piece_darkwoodgate", new Dictionary<string, string>
+					{
+						{ "Iron", "BlackMetal" }
+					}
+				},
+				{
+					"$piece_bathtub", new Dictionary<string, string>
+					{
+						{ "Iron", "BlackMetal" }
+					}
+				}
+			};
+
+			foreach (GameObject piece in zNetScene.m_prefabs)
+			{
+				Piece actualPiece = piece.GetComponent<Piece>();
+				if (actualPiece == null) continue;
+
+				Piece.Requirement[] requirements = actualPiece.m_resources;
+				string pieceName = actualPiece.m_name;
+
+				bool hasPieceAmountsChange = ConfigManager.buildPieceAmountsEnabled.Value && newPieceAmounts.ContainsKey(pieceName);
+				bool hasPieceMaterialsChange = ConfigManager.buildPieceMaterialsEnabled.Value && newPieceMaterials.ContainsKey(pieceName);
+
+				foreach (Piece.Requirement req in requirements)
+				{
+					// Apply piece amounts modifications
+					if (hasPieceAmountsChange && newPieceAmounts[pieceName].TryGetValue(req.m_resItem.name, out var amountValue))
+					{
+						CreateBackup(pieceName, req, null);
+
+						MarsarahTweaks.MLog($"(Piece Amounts) Applying amounts for {req.m_resItem.name}: {req.m_amount} -> {amountValue}");
+						ApplyChanges(req, (null, amountValue), modifyResItem: false);
+					}
+
+					// Apply piece materials modifications
+					if (hasPieceMaterialsChange && newPieceMaterials[pieceName].TryGetValue(req.m_resItem.name, out var materialValue))
+					{
+						CreateBackup(pieceName, req, materialValue);
+
+						MarsarahTweaks.MLog($"(Piece Amounts) Applying material for {req.m_resItem.name} -> {materialValue}");
+						ApplyChanges(req, (materialValue, null), modifyResItem: true);
+					}
+
+					// Restore backups when disabling features
+					if (!ConfigManager.gearRecipeAmountsEnabled.Value && newPieceAmounts.ContainsKey(pieceName) && amountsWasChanged)
+					{
+						//MarsarahTweaks.MLog($"(Gear Amounts) Was changed: {amountsWasChanged}");
+						if (RestoreBackup(pieceName, req, false))
+						{
+							// Remove backup unless materials modification still needs it
+							if (!hasPieceMaterialsChange || !newPieceMaterials[pieceName].ContainsKey(req.m_resItem.name))
+							{
+								MarsarahTweaks.MLog($"(Piece Amounts) Removing backup for: {pieceName} - {req.m_resItem.name}");
+								defaultBuildPieceRequirements[pieceName].Remove(req.m_resItem.name);
+							}
+						}
+					}
+
+					if (!ConfigManager.gearRecipeMaterialsEnabled.Value && newPieceMaterials.ContainsKey(pieceName) && materialsWasChanged)
+					{
+						//MarsarahTweaks.MLog($"(Gear Materials) Was changed: {materialsWasChanged}");
+						if (RestoreBackup(pieceName, req, true))
+						{
+							if (hasPieceAmountsChange && newPieceAmounts[pieceName].ContainsKey(req.m_resItem.name))
+							{
+								// Apply gear amounts modifications again after restoring
+								if (newPieceAmounts[pieceName].TryGetValue(req.m_resItem.name, out var restoredValue))
+								{
+									MarsarahTweaks.MLog($"(Piece Materials - Amounts) Re-applying changes for: {pieceName} - {req.m_resItem.name}");
+									ApplyChanges(req, (null, restoredValue), false);
+								}
+							}
+							else if (!hasPieceAmountsChange || !newPieceAmounts[pieceName].ContainsKey(req.m_resItem.name))
+							{
+								MarsarahTweaks.MLog($"(Piece Materials) Removing backup for: {pieceName} - {req.m_resItem.name}");
+								defaultBuildPieceRequirements[pieceName].Remove(req.m_resItem.name);
+							}
+						}
+					}
 				}
 
-				if (MarsarahMod.altBuildPiecesMaterialsEnabled.Value && MMShared.itemDropSuccess)
+				// Remove entire backup entry if empty
+				if (defaultBuildPieceRequirements.ContainsKey(pieceName) && defaultBuildPieceRequirements[pieceName].Count == 0)
 				{
-					updateBuildPiecesMaterials(ref ___m_resources, ref ___m_name);
+					MarsarahTweaks.MLog($"(Cleanup) Removing backup for: {pieceName}");
+					defaultBuildPieceRequirements.Remove(pieceName);
 				}
 			}
 		}
 
 		// Update Build Pieces Amounts =================================================================
-		private static void updateBuildPiecesAmounts(ref Piece.Requirement[] requirements, ref string name)
+		private static void updateBuildPiecesAmounts(ref Piece.Requirement[] requirements, ref string pieceName)
 		{
-			switch (name)
+			// New Piece Amounts Dictionary ================================================
+			var newPieceAmounts = new Dictionary<string, Dictionary<string, int>>()
 			{
-				case "$piece_preptable":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "FineWood":
-								req.m_amount = 10; // 20
-								break;
-							case "LeatherScraps":
-								req.m_amount = 10; // 15
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_cookingstation_iron":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_amount = 2; // 3
-								break;
-							case "Chain":
-								req.m_amount = 2; // 3
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_itemstand":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "FineWood":
-								req.m_amount = 2; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_blastfurnace":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_amount = 5; // 10
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_oven":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_amount = 5; // 15
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_forge_ext3": // grinding wheel
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Wood":
-								req.m_amount = 15; // 25
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_forge_ext4": // smith's anvil
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_amount = 7; // 20
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_forge_ext5": // forge cooler
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "FineWood":
-								req.m_amount = 10; // 25
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_forge_ext6": // forge toolrack
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_amount = 5; // 15
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_woodwindowshutter":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Wood":
-								req.m_amount = 2; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_darkwoodgate":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_irongate":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_chest":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_chestprivate":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_amount = 4; // 8
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_chestblackmetal":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMetal":
-								req.m_amount = 4; // 6
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_brazierceiling01":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Bronze":
-								req.m_amount = 3; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_sconce":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Copper":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_groundtorchwood":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Wood":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_groundtorch":
-				case "$piece_groundtorchgreen":
-				case "$piece_groundtorchblue":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_portal":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "FineWood":
-								req.m_amount = 10; // 20
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_portal_stone":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 10; // 30
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_rug_lox":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "LoxPelt":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_rug_wolf":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "WolfPelt":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_rug_deer":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "DeerHide":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_banner01":
-				case "$piece_banner02":
-				case "$piece_banner03":
-				case "$piece_banner04":
-				case "$piece_banner05":
-				case "$piece_banner06":
-				case "$piece_banner07":
-				case "$piece_banner08":
-				case "$piece_banner09":
-				case "$piece_banner10":
-				case "$piece_banner11":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "LeatherScraps":
-								req.m_amount = 5; // 6
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_fermenter":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "FineWood":
-								req.m_amount = 15; // 30
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_bathtub":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_amount = 5; // 10
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_crystalwall1x1":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Crystal":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_incinerator":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_amount = 5; // 8
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_stonewall1x1":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Stone":
-								req.m_amount = 2; // 3
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_stonewall2x1":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Stone":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_stonepillar":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Stone":
-								req.m_amount = 3; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_stonearch":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Stone":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_stonefloor2x2":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Stone":
-								req.m_amount = 4; // 6
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_stonestair":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Stone":
-								req.m_amount = 3; // 8
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_blackmarble2x1x1":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMarble":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_blackmarble_stair":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMarble":
-								req.m_amount = 3; // 8
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_blackmarble_base1": // Plinth
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMarble":
-								req.m_amount = 4; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_blackmarble_basecorner": // Plinth Corner
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMarble":
-								req.m_amount = 5; // 6
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_blackmarble_out1": // Cornice
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMarble":
-								req.m_amount = 4; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_blackmarble_outcorner": // Cornice Corner
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMarble":
-								req.m_amount = 5; // 6
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_blackmarble_arch":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMarble":
-								req.m_amount = 4; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_dvergr_stake_wall":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "YggdrasilWood":
-								req.m_amount = 4; // 8
-								break;
-							case "Iron":
-								req.m_amount = 2; // 8
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_sharpstakes":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Wood":
-								req.m_amount = 4; // 6
-								break;
-							case "RoundLog":
-								req.m_amount = 2; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_dvergr_sharpstakes":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "YggdrasilWood":
-								req.m_amount = 4; // 5
-								break;
-							case "Iron":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_trap":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMetal":
-								req.m_amount = 3; // 5
-								break;
-							case "BronzeNails":
-								req.m_amount = 5; // 10
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_turret":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMetal":
-								req.m_amount = 7; // 10
-								break;
-							case "YggdrasilWood":
-								req.m_amount = 7; // 10
-								break;
-							case "MechanicalSpring":
-								req.m_amount = 2; // 3
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_eitrrefinery":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMarble":
-								req.m_amount = 10; // 20
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_blackforge_ext2":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Copper":
-								req.m_amount = 5; // 8
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_sapcollector":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "YggdrasilWood":
-								req.m_amount = 5; // 10
-								break;
-							case "BlackMetal":
-								req.m_amount = 3; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_magetable":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "YggdrasilWood":
-								req.m_amount = 10; // 20
-								break;
-							case "BlackMetal":
-								req.m_amount = 5; // 10
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_magetable_ext": // Rune Table
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMarble":
-								req.m_amount = 5; // 10
-								break;
-							case "Eitr":
-								req.m_amount = 5; // 10
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_magetable_ext2": // Unfading Candles
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMarble":
-								req.m_amount = 5; // 10
-								break;
-							case "Eitr":
-								req.m_amount = 5; // 10
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_magetable_ext3": // Feathery Wreath
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Eitr":
-								req.m_amount = 5; // 10
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_hexagonalgate":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Copper":
-								req.m_amount = 4; // 8
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_dvergr_spiralstair":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "YggdrasilWood":
-								req.m_amount = 3; // 5
-								break;
-							case "Copper":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_dvergr_spiralstair_right":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "YggdrasilWood":
-								req.m_amount = 3; // 5
-								break;
-							case "Copper":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_blackmarble_bench":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMarble":
-								req.m_amount = 5; // 6
-								break;
-							case "Copper":
-								req.m_amount = 2; // 3
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_table_round":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "IronNails":
-								req.m_amount = 10; // 20
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_blackmarble_table":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "BlackMarble":
-								req.m_amount = 5; // 6
-								break;
-							case "Copper":
-								req.m_amount = 2; // 6
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_brazierfloor01":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Bronze":
-								req.m_amount = 3; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_brazierfloor02":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Bronze":
-								req.m_amount = 3; // 5
-								break;
-							case "GreydwarfEye":
-								req.m_amount = 2; // 5 // TODO: check with permanent lights (currently not working)
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_jute_carpet":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "JuteRed":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_juteblue_carpet":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "JuteBlue":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_rug_hare":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "ScaleHide":
-								req.m_amount = 2; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_dvergr_lantern":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Copper":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_dvergr_lantern_pole":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Copper":
-								req.m_amount = 2; // 3
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_clothdoor": // Red Jute Curtain
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "JuteRed":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_hanging_cloth_blue1": // Blue Jute Drapes
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "JuteBlue":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_hanging_cloth_blue2": // Blue Jute Curtain
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "JuteBlue":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_ashwood_archedwall":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Blackwood":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_ashwood_floor_2x2":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Blackwood":
-								req.m_amount = 2; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_ashwood_floor_1x1":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Blackwood":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_ashwood_floor_deco":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Blackwood":
-								req.m_amount = 2; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_ashwood_beam_1m":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Blackwood":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_ashwood_beam_2m":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Blackwood":
-								req.m_amount = 2; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_ashwood_pole_1m":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Blackwood":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_ashwood_pole_2m":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Blackwood":
-								req.m_amount = 2; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_ashwoodstair":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Blackwood":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_stoneladder":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 3; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_stair":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 3; // 8
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_floor1x1":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 1; // 2
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_pillarmedium":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 2; // 3
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_pillartapered":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 4; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_pillartaperedinverted":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 4; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_beammedium":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 2; // 3
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_wall1x2":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 2; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_wall2x2":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 4; // 6
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_wall4x2":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 8; // 12
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_window4x2":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 8; // 10
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_roof45_corner":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 4; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_roof45_corner2":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 4; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_roof45_archcorner":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 4; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_grausten_roof45_archcorner2":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Grausten":
-								req.m_amount = 4; // 5
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_flametalgate":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "FlametalNew":
-								req.m_amount = 8; // 16
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_rug_asksvin":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "AskHide":
-								req.m_amount = 3; // 4
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				default:
-					break;
+				{ "$piece_preptable", new Dictionary<string, int>
+					{
+						{ "FineWood", 10 }, // 20
+						{ "LeatherScraps", 10 } // 15
+					}
+				},
+				{ "$piece_cookingstation_iron", new Dictionary<string, int>
+					{
+						{ "Iron", 2 }, // 3
+						{ "Chain", 2 } // 3
+					}
+				},
+				{ "$piece_itemstand", new Dictionary<string, int>
+					{
+						{ "FineWood", 2 } // 4
+					}
+				},
+				{ "$piece_blastfurnace", new Dictionary<string, int>
+					{
+						{ "Iron", 5 } // 10
+					}
+				},
+				{ "$piece_oven", new Dictionary<string, int>
+					{
+						{ "Iron", 5 } // 15
+					}
+				},
+				{ "$piece_forge_ext3", new Dictionary<string, int> // grinding wheel
+					{
+						{ "Wood", 15 } // 25
+					}
+				},
+				{ "$piece_forge_ext4", new Dictionary<string, int> // smith's anvil
+					{
+						{ "Iron", 7 } // 20
+					}
+				},
+				{ "$piece_forge_ext5", new Dictionary<string, int> // forge cooler
+					{
+						{ "FineWood", 10 } // 25
+					}
+				},
+				{ "$piece_forge_ext6", new Dictionary<string, int> // forge toolrack
+					{
+						{ "Iron", 5 } // 15
+					}
+				},
+				{ "$piece_woodwindowshutter", new Dictionary<string, int>
+					{
+						{ "Wood", 2 } // 4
+					}
+				},
+				{ "$piece_darkwoodgate", new Dictionary<string, int>
+					{
+						{ "Iron", 3 } // 4
+					}
+				},
+				{ "$piece_irongate", new Dictionary<string, int>
+					{
+						{ "Iron", 3 } // 4
+					}
+				},
+				{ "$piece_chest", new Dictionary<string, int>
+					{
+						{ "Iron", 1 } // 2
+					}
+				},
+				{ "$piece_chestprivate", new Dictionary<string, int>
+					{
+						{ "Iron", 4 } // 8
+					}
+				},
+				{ "$piece_chestblackmetal", new Dictionary<string, int>
+					{
+						{ "BlackMetal", 4 } // 6
+					}
+				},
+				{ "$piece_brazierceiling01", new Dictionary<string, int>
+					{
+						{ "Bronze", 3 } // 5
+					}
+				},
+				{ "$piece_sconce", new Dictionary<string, int>
+					{
+						{ "Copper", 1 } // 2
+					}
+				},
+				{ "$piece_groundtorchwood", new Dictionary<string, int>
+					{
+						{ "Wood", 1 } // 2
+					}
+				},
+				{ "$piece_groundtorch", new Dictionary<string, int>
+					{
+						{ "Iron", 1 } // 2
+					}
+				},
+				{ "$piece_groundtorchgreen", new Dictionary<string, int>
+					{
+						{ "Iron", 1 } // 2
+					}
+				},
+				{ "$piece_groundtorchblue", new Dictionary<string, int>
+					{
+						{ "Iron", 1 } // 2
+					}
+				},
+				{ "$piece_portal", new Dictionary<string, int>
+					{
+						{ "FineWood", 10 } // 20
+					}
+				},
+				{ "$piece_portal_stone", new Dictionary<string, int>
+					{
+						{ "Grausten", 10 } // 30
+					}
+				},
+				{ "$piece_rug_lox", new Dictionary<string, int>
+					{
+						{ "LoxPelt", 3 } // 4
+					}
+				},
+				{ "$piece_rug_wolf", new Dictionary<string, int>
+					{
+						{ "WolfPelt", 3 } // 4
+					}
+				},
+				{ "$piece_rug_deer", new Dictionary<string, int>
+					{
+						{ "DeerHide", 3 } // 4
+					}
+				},
+				{ "$piece_banner01", new Dictionary<string, int>
+					{
+						{ "LeatherScraps", 5 } // 6
+					}
+				},
+				{ "$piece_fermenter", new Dictionary<string, int>
+					{
+						{ "FineWood", 15 } // 30
+					}
+				},
+				{ "$piece_bathtub", new Dictionary<string, int>
+					{
+						{ "Iron", 5 } // 10
+					}
+				},
+				{ "$piece_crystalwall1x1", new Dictionary<string, int>
+					{
+						{ "Crystal", 1 } // 2
+					}
+				},
+				{ "$piece_incinerator", new Dictionary<string, int>
+					{
+						{ "Iron", 5 } // 8
+					}
+				},
+				{ "$piece_stonewall1x1", new Dictionary<string, int>
+					{
+						{ "Stone", 2 } // 3
+					}
+				},
+				{ "$piece_stonewall2x1", new Dictionary<string, int>
+					{
+						{ "Stone", 3 } // 4
+					}
+				},
+				{ "$piece_stonepillar", new Dictionary<string, int>
+					{
+						{ "Stone", 3 } // 5
+					}
+				},
+				{ "$piece_stonearch", new Dictionary<string, int>
+					{
+						{ "Stone", 3 } // 4
+					}
+				},
+				{ "$piece_stonefloor2x2", new Dictionary<string, int>
+					{
+						{ "Stone", 4 } // 6
+					}
+				},
+				{ "$piece_stonestair", new Dictionary<string, int>
+					{
+						{ "Stone", 3 } // 8
+					}
+				},
+				{ "$piece_blackmarble2x1x1", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 3 } // 4
+					}
+				},
+				{ "$piece_blackmarble_stair", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 3 } // 8
+					}
+				},
+				{ "$piece_blackmarble_base1", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 4 } // 5
+					}
+				},
+				{ "$piece_blackmarble_basecorner", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 5 } // 6
+					}
+				},
+				{ "$piece_blackmarble_out1", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 4 } // 5
+					}
+				},
+				{ "$piece_blackmarble_outcorner", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 5 } // 6
+					}
+				},
+				{ "$piece_blackmarble_arch", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 4 } // 5
+					}
+				},
+				{ "$piece_dvergr_stake_wall", new Dictionary<string, int>
+					{
+						{ "YggdrasilWood", 4 }, // 8
+						{ "Iron", 2 } // 8
+					}
+				},
+				{ "$piece_sharpstakes", new Dictionary<string, int>
+					{
+						{ "Wood", 4 }, // 6
+						{ "RoundLog", 2 } // 4
+					}
+				},
+				{ "$piece_dvergr_sharpstakes", new Dictionary<string, int>
+					{
+						{ "YggdrasilWood", 4 }, // 5
+						{ "Iron", 1 } // 2
+					}
+				},
+				{ "$piece_trap", new Dictionary<string, int>
+					{
+						{ "BlackMetal", 3 }, // 5
+						{ "BronzeNails", 5 } // 10
+					}
+				},
+				{ "$piece_turret", new Dictionary<string, int>
+					{
+						{ "BlackMetal", 7 }, // 10
+						{ "YggdrasilWood", 7 }, // 10
+						{ "MechanicalSpring", 2 } // 3
+					}
+				},
+				{ "$piece_eitrrefinery", new Dictionary<string, int>
+					{
+						{ "BlackMarble", 10 } // 20
+					}
+				},
+				{ "$piece_blackforge_ext2", new Dictionary<string, int>
+					{
+						{ "Copper", 5 } // 8
+					}
+				},
+				{ "$piece_sapcollector", new Dictionary<string, int>
+					{
+						{ "YggdrasilWood", 5 }, // 10
+						{ "BlackMetal", 3 } // 5
+					}
+				},
+				{ "$piece_magetable", new Dictionary<string, int>
+					{
+						{ "YggdrasilWood", 10 }, // 20
+						{ "BlackMetal", 5 } // 10
+					}
+				},
+				{ "$piece_magetable_ext", new Dictionary<string, int> // Rune Table
+					{
+						{ "BlackMarble", 5 }, // 10
+						{ "Eitr", 5 } // 10
+					}
+				},
+				{ "$piece_magetable_ext2", new Dictionary<string, int> // Unfading Candles
+					{
+						{ "BlackMarble", 5 }, // 10
+						{ "Eitr", 5 } // 10
+					}
+				},
+				{ "$piece_magetable_ext3", new Dictionary<string, int> // Feathery Wreath
+					{ 
+						{ "Eitr", 5 } // 10
+					} 
+				}, 
+				{ "$piece_hexagonalgate", new Dictionary<string, int> 
+					{ 
+						{ "Copper", 4 } // 8
+					} 
+				}, 
+				{ "$piece_dvergr_spiralstair", new Dictionary<string, int> 
+					{ 
+						{ "YggdrasilWood", 3 }, // 5
+						{ "Copper", 1 } // 2
+					} 
+				},
+				{ "$piece_dvergr_spiralstair_right", new Dictionary<string, int> 
+					{ 
+						{ "YggdrasilWood", 3 }, // 5
+						{ "Copper", 1 } // 2
+					} 
+				},
+				{ "$piece_blackmarble_bench", new Dictionary<string, int> 
+					{ 
+						{ "BlackMarble", 5 }, // 6
+						{ "Copper", 2 } // 3
+					} 
+				},
+				{ "$piece_table_round", new Dictionary<string, int> 
+					{ 
+						{ "IronNails", 10 } // 20
+					} 
+				}, 
+				{ "$piece_blackmarble_table", new Dictionary<string, int> 
+					{ 
+						{ "BlackMarble", 5 }, // 6
+						{ "Copper", 2 } // 6
+					} 
+				},
+				{ "$piece_brazierfloor01", new Dictionary<string, int> 
+					{ 
+						{ "Bronze", 3 } // 5
+					} 
+				}, 
+				{ "$piece_brazierfloor02", new Dictionary<string, int> 
+					{ 
+						{ "Bronze", 3 }, // 5
+						{ "GreydwarfEye", 2 } // 5
+					} 
+				}, 
+				{ "$piece_jute_carpet", new Dictionary<string, int> 
+					{ 
+						{ "JuteRed", 3 } // 4
+					} 
+				}, 
+				{ "$piece_juteblue_carpet", new Dictionary<string, int> 
+					{ 
+						{ "JuteBlue", 3 } // 4
+					} 
+				}, 
+				{ "$piece_rug_hare", new Dictionary<string, int> 
+					{ 
+						{ "ScaleHide", 2 } // 4
+					} 
+				}, 
+				{ "$piece_dvergr_lantern", new Dictionary<string, int> 
+					{ 
+						{ "Copper", 1 } // 2
+					} 
+				}, 
+				{ "$piece_dvergr_lantern_pole", new Dictionary<string, int> 
+					{ 
+						{ "Copper", 2 } // 3
+					} 
+				}, 
+				{ "$piece_clothdoor", new Dictionary<string, int> // Red Jute Curtain
+					{ 
+						{ "JuteRed", 3 } // 4 
+					} 
+				}, 
+				{ "$piece_hanging_cloth_blue1", new Dictionary<string, int> // Blue Jute Drapes
+					{ 
+						{ "JuteBlue", 3 } // 4
+					} 
+				}, 
+				{ "$piece_hanging_cloth_blue2", new Dictionary<string, int> // Blue Jute Curtain
+					{ 
+						{ "JuteBlue", 3 } // 4
+					} 
+				}, 
+				{ "$piece_ashwood_archedwall", new Dictionary<string, int> 
+					{ 
+						{ "Blackwood", 1 } // 2
+					} 
+				}, 
+				{ "$piece_ashwood_floor_2x2", new Dictionary<string, int> 
+					{ 
+						{ "Blackwood", 2 } // 4
+					} 
+				}, 
+				{ "$piece_ashwood_floor_1x1", new Dictionary<string, int> 
+					{ 
+						{ "Blackwood", 1 } // 2
+					} 
+				}, 
+				{ "$piece_ashwood_floor_deco", new Dictionary<string, int> 
+					{ 
+						{ "Blackwood", 2 } // 4
+					} 
+				},
+				{ "$piece_ashwood_beam_1m", new Dictionary<string, int> 
+					{ 
+						{ "Blackwood", 1 } // 2
+					} 
+				}, 
+				{ "$piece_ashwood_beam_2m", new Dictionary<string, int> 
+					{ 
+						{ "Blackwood", 2 } // 4
+					} 
+				}, 
+				{ "$piece_ashwood_pole_1m", new Dictionary<string, int> 
+					{ 
+						{ "Blackwood", 1 } // 2
+					} 
+				}, 
+				{ "$piece_ashwood_pole_2m", new Dictionary<string, int> 
+					{ 
+						{ "Blackwood", 2 } // 4
+					} 
+				}, 
+				{ "$piece_ashwoodstair", new Dictionary<string, int> 
+					{ 
+						{ "Blackwood", 1 } // 2
+					} 
+				}, 
+				{ "$piece_grausten_stoneladder", new Dictionary<string, int>
+					{ 
+						{ "Grausten", 3 } // 5
+					} 
+				}, 
+				{ "$piece_grausten_stair", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 3 } // 8
+					} 
+				},
+				{ "$piece_grausten_floor1x1", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 1 } // 2
+					} 
+				},
+				{ "$piece_grausten_pillarmedium", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 2 } // 3
+					} 
+				}, 
+				{ "$piece_grausten_pillartapered", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 4 } // 5
+					} 
+				}, 
+				{ "$piece_grausten_pillartaperedinverted", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 4 } // 5
+					} 
+				}, 
+				{ "$piece_grausten_beammedium", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 2 } // 3
+					} 
+				}, 
+				{ "$piece_grausten_wall1x2", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 2 } // 4
+					} 
+				}, 
+				{ "$piece_grausten_wall2x2", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 4 } // 6
+					} 
+				}, 
+				{ "$piece_grausten_wall4x2", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 8 } // 12
+					} 
+				}, 
+				{ "$piece_grausten_window4x2", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 8 } // 10
+					} 
+				}, 
+				{ "$piece_grausten_roof45_corner", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 4 } // 5
+					} 
+				}, 
+				{ "$piece_grausten_roof45_corner2", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 4 } // 5
+					} 
+				},
+				{ "$piece_grausten_roof45_archcorner", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 4 } // 5
+					} 
+				}, 
+				{ "$piece_grausten_roof45_archcorner2", new Dictionary<string, int> 
+					{ 
+						{ "Grausten", 4 } // 5
+					} 
+				}, 
+				{ "$piece_flametalgate", new Dictionary<string, int> 
+					{ 
+						{ "FlametalNew", 8 } // 16
+					} 
+				}, 
+				{ "$piece_rug_asksvin", new Dictionary<string, int> 
+					{ 
+						{ "AskHide", 3 } // 4
+					} 
+				} 
+			};
+
+			foreach (Piece.Requirement req in requirements)
+			{
+				if (req?.m_resItem == null) continue;
+				//MarsarahTweaks.MLog($"(Piece Amounts) Processing {req.m_resItem.pieceName}");
+
+				if (!newPieceAmounts.ContainsKey(pieceName))
+				{
+					return;
+				}
+
+				if (newPieceAmounts[pieceName].TryGetValue(req.m_resItem.name, out var amountValues))
+				{
+					// Backup
+					CreateBackup(pieceName, req, null);
+
+					// Apply new values
+					MarsarahTweaks.MLog($"(Piece Amounts) Applying amounts for {req.m_resItem.name}: {req.m_amount} -> {amountValues}");
+					ApplyChanges(req, (null, amountValues), modifyResItem: false);
+					
+					//req.m_amount = amountValues;
+				}
+			}			
+		}
+
+		// Update Build Pieces Materials ===============================================================
+		private static void updateBuildPiecesMaterials(ref Piece.Requirement[] requirements, ref string pieceName)
+		{
+			// New Piece Materials Dictionary ==============================================
+			var newPieceMaterials = new Dictionary<string, Dictionary<string, string>>()
+			{
+				{
+					"$piece_workbench_ext4", new Dictionary<string, string> // tool rack
+					{
+						{ "Obsidian", "Coal" }
+					}
+				},
+				{
+					"$piece_darkwoodgate", new Dictionary<string, string>
+					{
+						{ "Iron", "BlackMetal" }
+					}
+				},
+				{
+					"$piece_bathtub", new Dictionary<string, string>
+					{
+						{ "Iron", "BlackMetal" }
+					}
+				}
+			};
+
+			//MarsarahTweaks.MLog($"(Piece Materials) Processig piece {pieceName}");
+
+			if (!newPieceMaterials.ContainsKey(pieceName))
+			{
+				//MarsarahTweaks.MLog($"(Piece Materials) Piece {pieceName} not found in dictionary. Returning.");
+				return;
+			}
+
+			foreach (Piece.Requirement req in requirements)
+			{
+				if (req?.m_resItem == null) continue;
+				//MarsarahTweaks.MLog($"(Piece Materials) Processing {req.m_resItem.pieceName}");
+
+				if (newPieceMaterials[pieceName].TryGetValue(req.m_resItem.name, out var newMaterial))
+				{
+					//MarsarahTweaks.MLog($"(Piece Materials) Applying material for {req.m_resItem.pieceName}: {req.m_resItem.pieceName} -> {newMaterial}");
+					req.m_resItem = ObjectDB.instance.GetItemPrefab(newMaterial).GetComponent<ItemDrop>();
+				}
 			}
 		}
 
-		// Update Build Pieces Materials ==========================================================
-		private static void updateBuildPiecesMaterials(ref Piece.Requirement[] requirements, ref string name)
+		// Apply Changes ================================================================================
+		private static void ApplyChanges(Piece.Requirement req, (string newResItem, int? amount) values, bool modifyResItem = false)
 		{
-			switch (name)
+			if (values.amount.HasValue)
 			{
-				case "$piece_workbench_ext4": // tool rack
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Obsidian":
-								req.m_resItem = MMShared.coalID;
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_darkwoodgate":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_resItem = MMShared.blackMetalID;
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				case "$piece_bathtub":
-					foreach (Piece.Requirement req in requirements)
-					{
-						switch (req.m_resItem.name)
-						{
-							case "Iron":
-								req.m_resItem = MMShared.blackMetalID;
-								break;
-							default:
-								break;
-						}
-					}
-					break;
-				default:
-					break;
+				req.m_amount = values.amount.Value;
 			}
+			if (modifyResItem && !string.IsNullOrEmpty(values.newResItem))
+			{
+				req.m_resItem = ObjectDB.instance.GetItemPrefab(values.newResItem).GetComponent<ItemDrop>();
+			}
+		}
+
+		// Create Backup ================================================================================
+		private static void CreateBackup(string pieceName, Piece.Requirement req, string newResItem)
+		{
+			// Check if we haven't backed up this piece yet
+			if (!defaultBuildPieceRequirements.TryGetValue(pieceName, out var pieceBackup))
+			{
+				pieceBackup = new Dictionary<string, (string originalResItem, string newResItem, int amount)>();
+				defaultBuildPieceRequirements[pieceName] = pieceBackup;
+			}
+
+			string currentResItem = req.m_resItem.name;
+
+			// If there's already a backup for this resource, don't overwrite it unless newResItem is missing
+			if (pieceBackup.TryGetValue(currentResItem, out var existingBackup))
+			{
+				if (newResItem != null && existingBackup.newResItem == null)
+				{
+					MarsarahTweaks.MLog($"Updating backup for {pieceName} - {currentResItem} with newResItem: {newResItem}");
+					pieceBackup[currentResItem] = (existingBackup.originalResItem, newResItem, existingBackup.amount);
+				}
+			}
+			else
+			{
+				// Create a new backup for this resource without affecting existing ones
+				MarsarahTweaks.MLog($"Creating new backup for {pieceName} - {currentResItem}");
+				pieceBackup[currentResItem] = (currentResItem, newResItem, req.m_amount);
+			}
+		}
+
+		// Restore Build Pieces Amounts =================================================================
+		private static bool RestoreBackup(string pieceName, Piece.Requirement req, bool restoreMaterials)
+		{
+			if (!defaultBuildPieceRequirements.TryGetValue(pieceName, out var recipeBackup))
+			{
+				//MarsarahTweaks.MLog("Restore backup first check.");
+				return false;
+			}
+
+			// Restoring original materials if any
+			MarsarahTweaks.MLog($"Restore backup - Recipe name: {pieceName}, Given requirement: {req.m_resItem.name}");
+			foreach (var kvp in recipeBackup)
+			{
+				var (originalMaterial, newMaterial, amount) = kvp.Value;
+				{
+					MarsarahTweaks.MLog($"Restore backup - values: {originalMaterial}, {newMaterial}, {restoreMaterials}");
+
+					if (req.m_resItem.name == newMaterial && restoreMaterials)
+					{
+						MarsarahTweaks.MLog($"Restoring original material for {pieceName} from {req.m_resItem.name} to {originalMaterial}");
+						req.m_resItem = ObjectDB.instance.GetItemPrefab(originalMaterial).GetComponent<ItemDrop>();
+						break;
+					}
+				}
+			}
+
+			if (recipeBackup.TryGetValue(req.m_resItem.name, out var originalValues))
+			{
+				MarsarahTweaks.MLog($"Restoring backup for: {pieceName} - {req.m_resItem.name}");
+
+				// Restore original values
+				req.m_amount = originalValues.amount;
+
+				return true;
+			}
+
+			MarsarahTweaks.MLog("Restore backup - we got to the end.");
+			return false; // No backup found
 		}
 	}
 }
