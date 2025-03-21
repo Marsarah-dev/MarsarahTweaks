@@ -385,7 +385,7 @@ namespace MarsarahTweaks.Patches
 					// Backup entry if it doesn't exist
 					if (!originalRecipeValues.ContainsKey(recipeName))
 					{
-						MarsarahTweaks.MLog($"Initial backup entry for {recipeName}");
+						//MarsarahTweaks.MLog($"Initial backup entry for {recipeName}");
 						originalRecipeValues[recipeName] = new RecipeModification()
 						{
 							ResourceChanges = new Dictionary<string, int>(),

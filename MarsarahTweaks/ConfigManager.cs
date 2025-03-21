@@ -68,6 +68,8 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata BuildPiecesMaterials = new ConfigMetadata("5 - Alternate Build Pieces Materials", "Modifies build pieces materials");
 			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "Modifies food and mead recipes costs, crafted amounts and stacks (Toggling this mid-game requires client relog to take effect for food stacks specifically)");
 
+			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("1 - Early Linen Cape", "Moves Linen Cape to the Swamp biome by replacing its crafting resources to Iron and Deer Hide and adds poison resist to it");
+
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "All metal (ore and bars) weight decreased to 8 (Toggling this mid-game requires client relog to take effect)");
 		}
 
@@ -81,6 +83,8 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> buildPieceAmountsEnabled;
 		public static ConfigEntry<bool> buildPieceMaterialsEnabled;
 		public static ConfigEntry<bool> foodAndMeadModificationsEnabled;
+
+		public static ConfigEntry<bool> earlyLinenCapeEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -101,7 +105,7 @@ namespace MarsarahTweaks
 			foodAndMeadModificationsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.FoodAndMeadModifications.Name, true, Configs.FoodAndMeadModifications.Description);
 
 			// ===== Features
-
+			earlyLinenCapeEnabled = CreateConfig(ConfigSections.Features, Configs.LinenCapeModifications.Name, true, Configs.LinenCapeModifications.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
@@ -167,11 +171,11 @@ namespace MarsarahTweaks
 					switch (configName)
 					{
 						case var name when name == Configs.DoubleBronzeCrafting.Name:
-							OtherPatches.UpdateDoubleBronzeCrafting(ObjectDB.instance);
+							DoubleBronze.UpdateDoubleBronzeCrafting(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.LighterMetalWeight.Name:
-							OtherPatches.UpdateLighterMetalWeight(ObjectDB.instance);
+							LighterMetalWeight.UpdateLighterMetalWeight(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.GearRecipeAmounts.Name:
