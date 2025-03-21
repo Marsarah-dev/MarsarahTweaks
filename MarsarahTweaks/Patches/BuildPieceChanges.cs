@@ -28,7 +28,7 @@ namespace MarsarahTweaks.Patches
 
 						if (!ConfigManager.buildPieceAmountsEnabled.Value && !ConfigManager.buildPieceMaterialsEnabled.Value) return;
 
-						ModifyBuildPieces(__instance, false, false);
+						UpdateBuildPieces(__instance, false, false);
 					}
 					else
 					{
@@ -580,7 +580,7 @@ namespace MarsarahTweaks.Patches
 		};
 
 		// Modify Build Pieces =========================================================================
-		public static void ModifyBuildPieces(ZNetScene znScene, bool amountsWasChanged, bool materialsWasChanged)
+		public static void UpdateBuildPieces(ZNetScene znScene, bool amountsWasChanged, bool materialsWasChanged)
 		{
 			foreach (GameObject piece in znScene.m_prefabs)
 			{

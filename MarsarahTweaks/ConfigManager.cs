@@ -179,23 +179,27 @@ namespace MarsarahTweaks
 							break;
 
 						case var name when name == Configs.GearRecipeAmounts.Name:
-							GearRecipeChanges.ModifyGearRecipes(ObjectDB.instance, true, false);
+							GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, true, false);
 							break;
 
 						case var name when name == Configs.GearRecipeMaterials.Name:
-							GearRecipeChanges.ModifyGearRecipes(ObjectDB.instance, false, true);
+							GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, false, true);
 							break;
 
 						case var name when name == Configs.BuildPiecesAmounts.Name:
-							BuildPieceChanges.ModifyBuildPieces(ZNetScene.instance, true, false);
+							BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, true, false);
 							break;
 
 						case var name when name == Configs.BuildPiecesMaterials.Name:
-							BuildPieceChanges.ModifyBuildPieces(ZNetScene.instance, false, true);
+							BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, false, true);
 							break;
 
 						case var name when name == Configs.FoodAndMeadModifications.Name:
-							FoodAndMeadModifications.ModifyFoodAndMead(ObjectDB.instance, true);
+							FoodAndMeadModifications.UpdateFoodAndMead(ObjectDB.instance, true);
+							break;
+
+						case var name when name == Configs.LinenCapeModifications.Name:
+							GearRecipeChanges.UpdateLinenCape(ObjectDB.instance, true);
 							break;
 					}
 				}

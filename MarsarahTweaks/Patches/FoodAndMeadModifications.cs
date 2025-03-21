@@ -25,7 +25,7 @@ namespace MarsarahTweaks.Patches
 					{
 						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.Configs.FoodAndMeadModifications.Name}...");
 
-						ModifyFoodAndMead(__instance, false);
+						UpdateFoodAndMead(__instance, false);
 					}
 					else
 					{
@@ -366,7 +366,7 @@ namespace MarsarahTweaks.Patches
 		private static Dictionary<string, int> originalFoodStacks = new Dictionary<string, int>();
 
 		// Update Food And Mead ====================================================================
-		public static void ModifyFoodAndMead (ObjectDB objDB, bool wasModified)
+		public static void UpdateFoodAndMead (ObjectDB objDB, bool wasModified)
 		{
 			// Get Dictionary for all recipe modifications
 			var recipeModifications = GetRecipeModifications();

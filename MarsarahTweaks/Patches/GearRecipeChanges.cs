@@ -23,9 +23,12 @@ namespace MarsarahTweaks.Patches
 					{
 						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.Configs.GearRecipeAmounts.Name}...");
 
-						if (!ConfigManager.gearRecipeAmountsEnabled.Value && !ConfigManager.gearRecipeMaterialsEnabled.Value) return;
+						if (ConfigManager.gearRecipeAmountsEnabled.Value || ConfigManager.gearRecipeMaterialsEnabled.Value)
+						{
+							UpdateGearRecipes(__instance, false, false);
+						}						
 
-						ModifyGearRecipes(__instance, false, false);
+						UpdateLinenCape(__instance, false);
 					}
 					else
 					{
@@ -1038,12 +1041,12 @@ namespace MarsarahTweaks.Patches
 					{ "Iron", ("BlackMetal", 5, null) }
 				}
 			},
-			{
+			/*{
 				"Recipe_CapeLinen", new Dictionary<string, (string, int?, int?)>
 				{
 					{ "Silver", ("BlackMetal", null, null) }
 				}
-			},
+			},*/
 			{
 				"Recipe_CapeLox", new Dictionary<string, (string, int?, int?)>
 				{
@@ -1077,45 +1080,14 @@ namespace MarsarahTweaks.Patches
 		};
 
 		// Modify Gear Recipes
-		public static void ModifyGearRecipes(ObjectDB objDB, bool amountsWasChanged, bool materialsWasChanged)
+		public static void UpdateGearRecipes(ObjectDB objDB, bool amountsWasChanged, bool materialsWasChanged)
 		{
-			/******************************************
-			 * Loop through original list
-			 If list 1 is enabled:
-				If item exists in list 1:
-					If item is NOT in backup list:
-						Store original value in backup list
-					Apply changes to item
-
-			 Else (list 1 is disabled):
-				If item exists in list 1:
-					If item exists in backup list:
-						Restore original value from backup list
-						Remove item from backup list
-
-			 If list 2 is enabled:
-				If item exists in list 2:
-					If item is NOT in backup list:
-						Store original value in backup list
-					Apply changes from list 2
-
-			 Else (list 2 is disabled):
-				If item exists in list 2:
-					If item exists in backup list:
-						Restore original value from backup list
-
-						If list 1 is enabled AND item exists in list 1:
-							Keep backup
-							Apply changes from list 1
-						Else:
-							Remove backup
-			 ******************************************/
-
 			// Apply changes ============================================================
 			foreach (Recipe recipe in objDB.m_recipes)
 			{
 				bool hasGearAmountsChange = ConfigManager.gearRecipeAmountsEnabled.Value && newGearRecipesAmounts.ContainsKey(recipe.name);
 				bool hasGearMaterialsChange = ConfigManager.gearRecipeMaterialsEnabled.Value && newGearRecipesMaterials.ContainsKey(recipe.name);
+				bool hasLinenCapeChange = ConfigManager.earlyLinenCapeEnabled.Value && recipe.name == "Recipe_CapeLinen";
 
 				/*if (newGearRecipesAmounts.ContainsKey(recipe.name)) MarsarahTweaks.MLog($"Is in Gear Amounts list: {recipe.name}");
 				if (newGearRecipesMaterials.ContainsKey(recipe.name)) MarsarahTweaks.MLog($"Is in Gear Material list: {recipe.name}");
@@ -1159,8 +1131,11 @@ namespace MarsarahTweaks.Patches
 							// Remove backup unless materials modification still needs it
 							if (!hasGearMaterialsChange || !newGearRecipesMaterials[recipe.name].ContainsKey(req.m_resItem.name))
 							{
-								//MarsarahTweaks.MLog($"(Gear Amounts) Removing backup for: {recipe.name} - {req.m_resItem.name}");
-								defaultGearRecipeValues[recipe.name].Remove(req.m_resItem.name);
+								if (!hasLinenCapeChange || !ConfigManager.earlyLinenCapeEnabled.Value)
+								{
+									//MarsarahTweaks.MLog($"(Gear Amounts) Removing backup for: {recipe.name} - {req.m_resItem.name}");
+									defaultGearRecipeValues[recipe.name].Remove(req.m_resItem.name);
+								}
 							}
 						}
 					}
@@ -1193,6 +1168,67 @@ namespace MarsarahTweaks.Patches
 				{
 					//MarsarahTweaks.MLog($"(Cleanup) Removing backup for: {recipe.name}");
 					defaultGearRecipeValues.Remove(recipe.name);
+				}
+			}
+		}
+
+		public static void UpdateLinenCape(ObjectDB objDB, bool wasChanged)
+		{
+			Recipe recipe = objDB.m_recipes.Find(r => r.name == "Recipe_CapeLinen");
+			if (recipe == null) return;
+
+			if (ConfigManager.earlyLinenCapeEnabled.Value)
+			{
+				foreach (Piece.Requirement req in recipe.m_resources)
+				{
+					switch (req.m_resItem.name)
+					{
+						case "LinenThread":
+							CreateBackup(recipe.name, req, "DeerHide");
+							ApplyChanges(req, ("DeerHide", 5, 2), objDB, modifyResItem: true);
+							break;
+						case "Silver":
+							CreateBackup(recipe.name, req, "Iron");
+							ApplyChanges(req, ("Iron", 1, 0), objDB, modifyResItem: true);
+							break;
+					}
+				}
+			}
+			else if (wasChanged)
+			{
+				//MarsarahTweaks.MLog("Early Linen Cape: Backup beginning");
+				bool hasGearAmountsChange = ConfigManager.gearRecipeAmountsEnabled.Value && newGearRecipesAmounts.ContainsKey(recipe.name);
+
+				foreach (Piece.Requirement req in recipe.m_resources)
+				{
+					if (RestoreBackup(recipe.name, req, objDB, true))
+					{
+						//MarsarahTweaks.MLog($"Early Linen Cape: Backup restored for {req.m_resItem.name}");
+
+						if (hasGearAmountsChange && newGearRecipesAmounts[recipe.name].ContainsKey(req.m_resItem.name))
+						{
+							// Apply gear amounts modifications again after restoring
+							if (newGearRecipesAmounts[recipe.name].TryGetValue(req.m_resItem.name, out var restoredValues))
+							{
+								//MarsarahTweaks.MLog($"Early Linen Cape: Re-applying changes for: {recipe.name} - {req.m_resItem.name}");
+								ApplyChanges(req, (null, restoredValues.amount, restoredValues.amountPerLevel), objDB, false);
+							}
+						}
+						else if (!hasGearAmountsChange || !newGearRecipesAmounts[recipe.name].ContainsKey(req.m_resItem.name))
+						{
+							//MarsarahTweaks.MLog($"Early Linen Cape: Removing backup for: {recipe.name} - {req.m_resItem.name}");
+							defaultGearRecipeValues[recipe.name].Remove(req.m_resItem.name);
+						}
+					}
+				}
+
+				if (!hasGearAmountsChange)
+				{
+					//MarsarahTweaks.MLog($"Early Linen Cape: Removing backup for {recipe.name}");
+					if (defaultGearRecipeValues.ContainsKey(recipe.name) && defaultGearRecipeValues[recipe.name].Count == 0)
+					{
+						defaultGearRecipeValues.Remove(recipe.name);
+					}
 				}
 			}
 		}
