@@ -601,7 +601,7 @@ namespace MarsarahTweaks
 					{
 						CreateBackup(pieceName, req, null);
 
-						MarsarahTweaks.MLog($"(Piece Amounts) Applying amounts for {req.m_resItem.name}: {req.m_amount} -> {amountValue}");
+						//MarsarahTweaks.MLog($"(Piece Amounts) Applying amounts for Piece {pieceName} - Resource {req.m_resItem.name}: {req.m_amount} -> {amountValue}");
 						ApplyChanges(req, (null, amountValue), modifyResItem: false);
 					}
 
@@ -610,12 +610,12 @@ namespace MarsarahTweaks
 					{
 						CreateBackup(pieceName, req, materialValue);
 
-						MarsarahTweaks.MLog($"(Piece Amounts) Applying material for {req.m_resItem.name} -> {materialValue}");
+						//MarsarahTweaks.MLog($"(Piece Materials) Applying material for Piece {pieceName} - Resource {req.m_resItem.name} -> {materialValue}");
 						ApplyChanges(req, (materialValue, null), modifyResItem: true);
 					}
 
 					// Restore backups when disabling features
-					if (!ConfigManager.gearRecipeAmountsEnabled.Value && newPieceAmounts.ContainsKey(pieceName) && amountsWasChanged)
+					if (!ConfigManager.buildPieceAmountsEnabled.Value && newPieceAmounts.ContainsKey(pieceName) && amountsWasChanged)
 					{
 						//MarsarahTweaks.MLog($"(Gear Amounts) Was changed: {amountsWasChanged}");
 						if (RestoreBackup(pieceName, req, false))
@@ -623,13 +623,13 @@ namespace MarsarahTweaks
 							// Remove backup unless materials modification still needs it
 							if (!hasPieceMaterialsChange || !newPieceMaterials[pieceName].ContainsKey(req.m_resItem.name))
 							{
-								MarsarahTweaks.MLog($"(Piece Amounts) Removing backup for: {pieceName} - {req.m_resItem.name}");
+								//MarsarahTweaks.MLog($"(Piece Amounts) Removing backup for: {pieceName} - {req.m_resItem.name}");
 								defaultBuildPieceRequirements[pieceName].Remove(req.m_resItem.name);
 							}
 						}
 					}
 
-					if (!ConfigManager.gearRecipeMaterialsEnabled.Value && newPieceMaterials.ContainsKey(pieceName) && materialsWasChanged)
+					if (!ConfigManager.buildPieceMaterialsEnabled.Value && newPieceMaterials.ContainsKey(pieceName) && materialsWasChanged)
 					{
 						//MarsarahTweaks.MLog($"(Gear Materials) Was changed: {materialsWasChanged}");
 						if (RestoreBackup(pieceName, req, true))
@@ -639,13 +639,13 @@ namespace MarsarahTweaks
 								// Apply gear amounts modifications again after restoring
 								if (newPieceAmounts[pieceName].TryGetValue(req.m_resItem.name, out var restoredValue))
 								{
-									MarsarahTweaks.MLog($"(Piece Materials - Amounts) Re-applying changes for: {pieceName} - {req.m_resItem.name}");
+									//MarsarahTweaks.MLog($"(Piece Materials - Amounts) Re-applying changes for: {pieceName} - {req.m_resItem.name}");
 									ApplyChanges(req, (null, restoredValue), false);
 								}
 							}
 							else if (!hasPieceAmountsChange || !newPieceAmounts[pieceName].ContainsKey(req.m_resItem.name))
 							{
-								MarsarahTweaks.MLog($"(Piece Materials) Removing backup for: {pieceName} - {req.m_resItem.name}");
+								//MarsarahTweaks.MLog($"(Piece Materials) Removing backup for: {pieceName} - {req.m_resItem.name}");
 								defaultBuildPieceRequirements[pieceName].Remove(req.m_resItem.name);
 							}
 						}
@@ -655,594 +655,8 @@ namespace MarsarahTweaks
 				// Remove entire backup entry if empty
 				if (defaultBuildPieceRequirements.ContainsKey(pieceName) && defaultBuildPieceRequirements[pieceName].Count == 0)
 				{
-					MarsarahTweaks.MLog($"(Cleanup) Removing backup for: {pieceName}");
+					//MarsarahTweaks.MLog($"(Cleanup) Removing backup for: {pieceName}");
 					defaultBuildPieceRequirements.Remove(pieceName);
-				}
-			}
-		}
-
-		// Update Build Pieces Amounts =================================================================
-		private static void updateBuildPiecesAmounts(ref Piece.Requirement[] requirements, ref string pieceName)
-		{
-			// New Piece Amounts Dictionary ================================================
-			var newPieceAmounts = new Dictionary<string, Dictionary<string, int>>()
-			{
-				{ "$piece_preptable", new Dictionary<string, int>
-					{
-						{ "FineWood", 10 }, // 20
-						{ "LeatherScraps", 10 } // 15
-					}
-				},
-				{ "$piece_cookingstation_iron", new Dictionary<string, int>
-					{
-						{ "Iron", 2 }, // 3
-						{ "Chain", 2 } // 3
-					}
-				},
-				{ "$piece_itemstand", new Dictionary<string, int>
-					{
-						{ "FineWood", 2 } // 4
-					}
-				},
-				{ "$piece_blastfurnace", new Dictionary<string, int>
-					{
-						{ "Iron", 5 } // 10
-					}
-				},
-				{ "$piece_oven", new Dictionary<string, int>
-					{
-						{ "Iron", 5 } // 15
-					}
-				},
-				{ "$piece_forge_ext3", new Dictionary<string, int> // grinding wheel
-					{
-						{ "Wood", 15 } // 25
-					}
-				},
-				{ "$piece_forge_ext4", new Dictionary<string, int> // smith's anvil
-					{
-						{ "Iron", 7 } // 20
-					}
-				},
-				{ "$piece_forge_ext5", new Dictionary<string, int> // forge cooler
-					{
-						{ "FineWood", 10 } // 25
-					}
-				},
-				{ "$piece_forge_ext6", new Dictionary<string, int> // forge toolrack
-					{
-						{ "Iron", 5 } // 15
-					}
-				},
-				{ "$piece_woodwindowshutter", new Dictionary<string, int>
-					{
-						{ "Wood", 2 } // 4
-					}
-				},
-				{ "$piece_darkwoodgate", new Dictionary<string, int>
-					{
-						{ "Iron", 3 } // 4
-					}
-				},
-				{ "$piece_irongate", new Dictionary<string, int>
-					{
-						{ "Iron", 3 } // 4
-					}
-				},
-				{ "$piece_chest", new Dictionary<string, int>
-					{
-						{ "Iron", 1 } // 2
-					}
-				},
-				{ "$piece_chestprivate", new Dictionary<string, int>
-					{
-						{ "Iron", 4 } // 8
-					}
-				},
-				{ "$piece_chestblackmetal", new Dictionary<string, int>
-					{
-						{ "BlackMetal", 4 } // 6
-					}
-				},
-				{ "$piece_brazierceiling01", new Dictionary<string, int>
-					{
-						{ "Bronze", 3 } // 5
-					}
-				},
-				{ "$piece_sconce", new Dictionary<string, int>
-					{
-						{ "Copper", 1 } // 2
-					}
-				},
-				{ "$piece_groundtorchwood", new Dictionary<string, int>
-					{
-						{ "Wood", 1 } // 2
-					}
-				},
-				{ "$piece_groundtorch", new Dictionary<string, int>
-					{
-						{ "Iron", 1 } // 2
-					}
-				},
-				{ "$piece_groundtorchgreen", new Dictionary<string, int>
-					{
-						{ "Iron", 1 } // 2
-					}
-				},
-				{ "$piece_groundtorchblue", new Dictionary<string, int>
-					{
-						{ "Iron", 1 } // 2
-					}
-				},
-				{ "$piece_portal", new Dictionary<string, int>
-					{
-						{ "FineWood", 10 } // 20
-					}
-				},
-				{ "$piece_portal_stone", new Dictionary<string, int>
-					{
-						{ "Grausten", 10 } // 30
-					}
-				},
-				{ "$piece_rug_lox", new Dictionary<string, int>
-					{
-						{ "LoxPelt", 3 } // 4
-					}
-				},
-				{ "$piece_rug_wolf", new Dictionary<string, int>
-					{
-						{ "WolfPelt", 3 } // 4
-					}
-				},
-				{ "$piece_rug_deer", new Dictionary<string, int>
-					{
-						{ "DeerHide", 3 } // 4
-					}
-				},
-				{ "$piece_banner01", new Dictionary<string, int>
-					{
-						{ "LeatherScraps", 5 } // 6
-					}
-				},
-				{ "$piece_fermenter", new Dictionary<string, int>
-					{
-						{ "FineWood", 15 } // 30
-					}
-				},
-				{ "$piece_bathtub", new Dictionary<string, int>
-					{
-						{ "Iron", 5 } // 10
-					}
-				},
-				{ "$piece_crystalwall1x1", new Dictionary<string, int>
-					{
-						{ "Crystal", 1 } // 2
-					}
-				},
-				{ "$piece_incinerator", new Dictionary<string, int>
-					{
-						{ "Iron", 5 } // 8
-					}
-				},
-				{ "$piece_stonewall1x1", new Dictionary<string, int>
-					{
-						{ "Stone", 2 } // 3
-					}
-				},
-				{ "$piece_stonewall2x1", new Dictionary<string, int>
-					{
-						{ "Stone", 3 } // 4
-					}
-				},
-				{ "$piece_stonepillar", new Dictionary<string, int>
-					{
-						{ "Stone", 3 } // 5
-					}
-				},
-				{ "$piece_stonearch", new Dictionary<string, int>
-					{
-						{ "Stone", 3 } // 4
-					}
-				},
-				{ "$piece_stonefloor2x2", new Dictionary<string, int>
-					{
-						{ "Stone", 4 } // 6
-					}
-				},
-				{ "$piece_stonestair", new Dictionary<string, int>
-					{
-						{ "Stone", 3 } // 8
-					}
-				},
-				{ "$piece_blackmarble2x1x1", new Dictionary<string, int>
-					{
-						{ "BlackMarble", 3 } // 4
-					}
-				},
-				{ "$piece_blackmarble_stair", new Dictionary<string, int>
-					{
-						{ "BlackMarble", 3 } // 8
-					}
-				},
-				{ "$piece_blackmarble_base1", new Dictionary<string, int>
-					{
-						{ "BlackMarble", 4 } // 5
-					}
-				},
-				{ "$piece_blackmarble_basecorner", new Dictionary<string, int>
-					{
-						{ "BlackMarble", 5 } // 6
-					}
-				},
-				{ "$piece_blackmarble_out1", new Dictionary<string, int>
-					{
-						{ "BlackMarble", 4 } // 5
-					}
-				},
-				{ "$piece_blackmarble_outcorner", new Dictionary<string, int>
-					{
-						{ "BlackMarble", 5 } // 6
-					}
-				},
-				{ "$piece_blackmarble_arch", new Dictionary<string, int>
-					{
-						{ "BlackMarble", 4 } // 5
-					}
-				},
-				{ "$piece_dvergr_stake_wall", new Dictionary<string, int>
-					{
-						{ "YggdrasilWood", 4 }, // 8
-						{ "Iron", 2 } // 8
-					}
-				},
-				{ "$piece_sharpstakes", new Dictionary<string, int>
-					{
-						{ "Wood", 4 }, // 6
-						{ "RoundLog", 2 } // 4
-					}
-				},
-				{ "$piece_dvergr_sharpstakes", new Dictionary<string, int>
-					{
-						{ "YggdrasilWood", 4 }, // 5
-						{ "Iron", 1 } // 2
-					}
-				},
-				{ "$piece_trap", new Dictionary<string, int>
-					{
-						{ "BlackMetal", 3 }, // 5
-						{ "BronzeNails", 5 } // 10
-					}
-				},
-				{ "$piece_turret", new Dictionary<string, int>
-					{
-						{ "BlackMetal", 7 }, // 10
-						{ "YggdrasilWood", 7 }, // 10
-						{ "MechanicalSpring", 2 } // 3
-					}
-				},
-				{ "$piece_eitrrefinery", new Dictionary<string, int>
-					{
-						{ "BlackMarble", 10 } // 20
-					}
-				},
-				{ "$piece_blackforge_ext2", new Dictionary<string, int>
-					{
-						{ "Copper", 5 } // 8
-					}
-				},
-				{ "$piece_sapcollector", new Dictionary<string, int>
-					{
-						{ "YggdrasilWood", 5 }, // 10
-						{ "BlackMetal", 3 } // 5
-					}
-				},
-				{ "$piece_magetable", new Dictionary<string, int>
-					{
-						{ "YggdrasilWood", 10 }, // 20
-						{ "BlackMetal", 5 } // 10
-					}
-				},
-				{ "$piece_magetable_ext", new Dictionary<string, int> // Rune Table
-					{
-						{ "BlackMarble", 5 }, // 10
-						{ "Eitr", 5 } // 10
-					}
-				},
-				{ "$piece_magetable_ext2", new Dictionary<string, int> // Unfading Candles
-					{
-						{ "BlackMarble", 5 }, // 10
-						{ "Eitr", 5 } // 10
-					}
-				},
-				{ "$piece_magetable_ext3", new Dictionary<string, int> // Feathery Wreath
-					{ 
-						{ "Eitr", 5 } // 10
-					} 
-				}, 
-				{ "$piece_hexagonalgate", new Dictionary<string, int> 
-					{ 
-						{ "Copper", 4 } // 8
-					} 
-				}, 
-				{ "$piece_dvergr_spiralstair", new Dictionary<string, int> 
-					{ 
-						{ "YggdrasilWood", 3 }, // 5
-						{ "Copper", 1 } // 2
-					} 
-				},
-				{ "$piece_dvergr_spiralstair_right", new Dictionary<string, int> 
-					{ 
-						{ "YggdrasilWood", 3 }, // 5
-						{ "Copper", 1 } // 2
-					} 
-				},
-				{ "$piece_blackmarble_bench", new Dictionary<string, int> 
-					{ 
-						{ "BlackMarble", 5 }, // 6
-						{ "Copper", 2 } // 3
-					} 
-				},
-				{ "$piece_table_round", new Dictionary<string, int> 
-					{ 
-						{ "IronNails", 10 } // 20
-					} 
-				}, 
-				{ "$piece_blackmarble_table", new Dictionary<string, int> 
-					{ 
-						{ "BlackMarble", 5 }, // 6
-						{ "Copper", 2 } // 6
-					} 
-				},
-				{ "$piece_brazierfloor01", new Dictionary<string, int> 
-					{ 
-						{ "Bronze", 3 } // 5
-					} 
-				}, 
-				{ "$piece_brazierfloor02", new Dictionary<string, int> 
-					{ 
-						{ "Bronze", 3 }, // 5
-						{ "GreydwarfEye", 2 } // 5
-					} 
-				}, 
-				{ "$piece_jute_carpet", new Dictionary<string, int> 
-					{ 
-						{ "JuteRed", 3 } // 4
-					} 
-				}, 
-				{ "$piece_juteblue_carpet", new Dictionary<string, int> 
-					{ 
-						{ "JuteBlue", 3 } // 4
-					} 
-				}, 
-				{ "$piece_rug_hare", new Dictionary<string, int> 
-					{ 
-						{ "ScaleHide", 2 } // 4
-					} 
-				}, 
-				{ "$piece_dvergr_lantern", new Dictionary<string, int> 
-					{ 
-						{ "Copper", 1 } // 2
-					} 
-				}, 
-				{ "$piece_dvergr_lantern_pole", new Dictionary<string, int> 
-					{ 
-						{ "Copper", 2 } // 3
-					} 
-				}, 
-				{ "$piece_clothdoor", new Dictionary<string, int> // Red Jute Curtain
-					{ 
-						{ "JuteRed", 3 } // 4 
-					} 
-				}, 
-				{ "$piece_hanging_cloth_blue1", new Dictionary<string, int> // Blue Jute Drapes
-					{ 
-						{ "JuteBlue", 3 } // 4
-					} 
-				}, 
-				{ "$piece_hanging_cloth_blue2", new Dictionary<string, int> // Blue Jute Curtain
-					{ 
-						{ "JuteBlue", 3 } // 4
-					} 
-				}, 
-				{ "$piece_ashwood_archedwall", new Dictionary<string, int> 
-					{ 
-						{ "Blackwood", 1 } // 2
-					} 
-				}, 
-				{ "$piece_ashwood_floor_2x2", new Dictionary<string, int> 
-					{ 
-						{ "Blackwood", 2 } // 4
-					} 
-				}, 
-				{ "$piece_ashwood_floor_1x1", new Dictionary<string, int> 
-					{ 
-						{ "Blackwood", 1 } // 2
-					} 
-				}, 
-				{ "$piece_ashwood_floor_deco", new Dictionary<string, int> 
-					{ 
-						{ "Blackwood", 2 } // 4
-					} 
-				},
-				{ "$piece_ashwood_beam_1m", new Dictionary<string, int> 
-					{ 
-						{ "Blackwood", 1 } // 2
-					} 
-				}, 
-				{ "$piece_ashwood_beam_2m", new Dictionary<string, int> 
-					{ 
-						{ "Blackwood", 2 } // 4
-					} 
-				}, 
-				{ "$piece_ashwood_pole_1m", new Dictionary<string, int> 
-					{ 
-						{ "Blackwood", 1 } // 2
-					} 
-				}, 
-				{ "$piece_ashwood_pole_2m", new Dictionary<string, int> 
-					{ 
-						{ "Blackwood", 2 } // 4
-					} 
-				}, 
-				{ "$piece_ashwoodstair", new Dictionary<string, int> 
-					{ 
-						{ "Blackwood", 1 } // 2
-					} 
-				}, 
-				{ "$piece_grausten_stoneladder", new Dictionary<string, int>
-					{ 
-						{ "Grausten", 3 } // 5
-					} 
-				}, 
-				{ "$piece_grausten_stair", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 3 } // 8
-					} 
-				},
-				{ "$piece_grausten_floor1x1", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 1 } // 2
-					} 
-				},
-				{ "$piece_grausten_pillarmedium", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 2 } // 3
-					} 
-				}, 
-				{ "$piece_grausten_pillartapered", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 4 } // 5
-					} 
-				}, 
-				{ "$piece_grausten_pillartaperedinverted", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 4 } // 5
-					} 
-				}, 
-				{ "$piece_grausten_beammedium", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 2 } // 3
-					} 
-				}, 
-				{ "$piece_grausten_wall1x2", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 2 } // 4
-					} 
-				}, 
-				{ "$piece_grausten_wall2x2", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 4 } // 6
-					} 
-				}, 
-				{ "$piece_grausten_wall4x2", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 8 } // 12
-					} 
-				}, 
-				{ "$piece_grausten_window4x2", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 8 } // 10
-					} 
-				}, 
-				{ "$piece_grausten_roof45_corner", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 4 } // 5
-					} 
-				}, 
-				{ "$piece_grausten_roof45_corner2", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 4 } // 5
-					} 
-				},
-				{ "$piece_grausten_roof45_archcorner", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 4 } // 5
-					} 
-				}, 
-				{ "$piece_grausten_roof45_archcorner2", new Dictionary<string, int> 
-					{ 
-						{ "Grausten", 4 } // 5
-					} 
-				}, 
-				{ "$piece_flametalgate", new Dictionary<string, int> 
-					{ 
-						{ "FlametalNew", 8 } // 16
-					} 
-				}, 
-				{ "$piece_rug_asksvin", new Dictionary<string, int> 
-					{ 
-						{ "AskHide", 3 } // 4
-					} 
-				} 
-			};
-
-			foreach (Piece.Requirement req in requirements)
-			{
-				if (req?.m_resItem == null) continue;
-				//MarsarahTweaks.MLog($"(Piece Amounts) Processing {req.m_resItem.pieceName}");
-
-				if (!newPieceAmounts.ContainsKey(pieceName))
-				{
-					return;
-				}
-
-				if (newPieceAmounts[pieceName].TryGetValue(req.m_resItem.name, out var amountValues))
-				{
-					// Backup
-					CreateBackup(pieceName, req, null);
-
-					// Apply new values
-					MarsarahTweaks.MLog($"(Piece Amounts) Applying amounts for {req.m_resItem.name}: {req.m_amount} -> {amountValues}");
-					ApplyChanges(req, (null, amountValues), modifyResItem: false);
-					
-					//req.m_amount = amountValues;
-				}
-			}			
-		}
-
-		// Update Build Pieces Materials ===============================================================
-		private static void updateBuildPiecesMaterials(ref Piece.Requirement[] requirements, ref string pieceName)
-		{
-			// New Piece Materials Dictionary ==============================================
-			var newPieceMaterials = new Dictionary<string, Dictionary<string, string>>()
-			{
-				{
-					"$piece_workbench_ext4", new Dictionary<string, string> // tool rack
-					{
-						{ "Obsidian", "Coal" }
-					}
-				},
-				{
-					"$piece_darkwoodgate", new Dictionary<string, string>
-					{
-						{ "Iron", "BlackMetal" }
-					}
-				},
-				{
-					"$piece_bathtub", new Dictionary<string, string>
-					{
-						{ "Iron", "BlackMetal" }
-					}
-				}
-			};
-
-			//MarsarahTweaks.MLog($"(Piece Materials) Processig piece {pieceName}");
-
-			if (!newPieceMaterials.ContainsKey(pieceName))
-			{
-				//MarsarahTweaks.MLog($"(Piece Materials) Piece {pieceName} not found in dictionary. Returning.");
-				return;
-			}
-
-			foreach (Piece.Requirement req in requirements)
-			{
-				if (req?.m_resItem == null) continue;
-				//MarsarahTweaks.MLog($"(Piece Materials) Processing {req.m_resItem.pieceName}");
-
-				if (newPieceMaterials[pieceName].TryGetValue(req.m_resItem.name, out var newMaterial))
-				{
-					//MarsarahTweaks.MLog($"(Piece Materials) Applying material for {req.m_resItem.pieceName}: {req.m_resItem.pieceName} -> {newMaterial}");
-					req.m_resItem = ObjectDB.instance.GetItemPrefab(newMaterial).GetComponent<ItemDrop>();
 				}
 			}
 		}
@@ -1250,12 +664,14 @@ namespace MarsarahTweaks
 		// Apply Changes ================================================================================
 		private static void ApplyChanges(Piece.Requirement req, (string newResItem, int? amount) values, bool modifyResItem = false)
 		{
-			if (values.amount.HasValue)
+			if (values.amount.HasValue && req.m_amount != values.amount.Value)
 			{
+				//MarsarahTweaks.MLog($"Applying amounts for Resource {req.m_resItem.name}: {req.m_amount} -> {values.amount.Value}");
 				req.m_amount = values.amount.Value;
 			}
-			if (modifyResItem && !string.IsNullOrEmpty(values.newResItem))
+			if (modifyResItem && !string.IsNullOrEmpty(values.newResItem) && req.m_resItem.name != values.newResItem)
 			{
+				//MarsarahTweaks.MLog($"Applying material for Resource {req.m_resItem.name} -> {values.newResItem}");
 				req.m_resItem = ObjectDB.instance.GetItemPrefab(values.newResItem).GetComponent<ItemDrop>();
 			}
 		}
@@ -1277,14 +693,14 @@ namespace MarsarahTweaks
 			{
 				if (newResItem != null && existingBackup.newResItem == null)
 				{
-					MarsarahTweaks.MLog($"Updating backup for {pieceName} - {currentResItem} with newResItem: {newResItem}");
+					//MarsarahTweaks.MLog($"Updating backup for {pieceName} - oldResItem: {currentResItem} with newResItem: {newResItem}");
 					pieceBackup[currentResItem] = (existingBackup.originalResItem, newResItem, existingBackup.amount);
 				}
 			}
 			else
 			{
 				// Create a new backup for this resource without affecting existing ones
-				MarsarahTweaks.MLog($"Creating new backup for {pieceName} - {currentResItem}");
+				//MarsarahTweaks.MLog($"Creating new backup for {pieceName} - {currentResItem}");
 				pieceBackup[currentResItem] = (currentResItem, newResItem, req.m_amount);
 			}
 		}
@@ -1299,16 +715,16 @@ namespace MarsarahTweaks
 			}
 
 			// Restoring original materials if any
-			MarsarahTweaks.MLog($"Restore backup - Recipe name: {pieceName}, Given requirement: {req.m_resItem.name}");
+			//MarsarahTweaks.MLog($"Restore backup - Recipe name: {pieceName}, Given requirement: {req.m_resItem.name}");
 			foreach (var kvp in recipeBackup)
 			{
 				var (originalMaterial, newMaterial, amount) = kvp.Value;
 				{
-					MarsarahTweaks.MLog($"Restore backup - values: {originalMaterial}, {newMaterial}, {restoreMaterials}");
+					//MarsarahTweaks.MLog($"Restore backup - values: {originalMaterial}, {newMaterial}, {restoreMaterials}");
 
 					if (req.m_resItem.name == newMaterial && restoreMaterials)
 					{
-						MarsarahTweaks.MLog($"Restoring original material for {pieceName} from {req.m_resItem.name} to {originalMaterial}");
+						//MarsarahTweaks.MLog($"Restoring original material for {pieceName} from {req.m_resItem.name} to {originalMaterial}");
 						req.m_resItem = ObjectDB.instance.GetItemPrefab(originalMaterial).GetComponent<ItemDrop>();
 						break;
 					}
@@ -1317,7 +733,7 @@ namespace MarsarahTweaks
 
 			if (recipeBackup.TryGetValue(req.m_resItem.name, out var originalValues))
 			{
-				MarsarahTweaks.MLog($"Restoring backup for: {pieceName} - {req.m_resItem.name}");
+				//MarsarahTweaks.MLog($"Restoring backup for: {pieceName} - {req.m_resItem.name}");
 
 				// Restore original values
 				req.m_amount = originalValues.amount;
@@ -1325,7 +741,7 @@ namespace MarsarahTweaks
 				return true;
 			}
 
-			MarsarahTweaks.MLog("Restore backup - we got to the end.");
+			//MarsarahTweaks.MLog("Restore backup - we got to the end.");
 			return false; // No backup found
 		}
 	}
