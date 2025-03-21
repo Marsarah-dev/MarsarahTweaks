@@ -38,12 +38,16 @@
     <Reference Include="0Harmony">
       <HintPath>Libs\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="assembly_guiutils">
+      <HintPath>Libs\assembly_guiutils.dll</HintPath>
+    </Reference>
     <Reference Include="assembly_valheim">
       <HintPath>Libs\assembly_valheim.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
       <HintPath>Libs\BepInEx.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="ServerSync">
       <HintPath>Libs\ServerSync.dll</HintPath>
     </Reference>

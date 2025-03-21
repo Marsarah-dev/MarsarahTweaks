@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
@@ -26,9 +28,9 @@ namespace MarsarahTweaks.Patches
 						if (ConfigManager.gearRecipeAmountsEnabled.Value || ConfigManager.gearRecipeMaterialsEnabled.Value)
 						{
 							UpdateGearRecipes(__instance, false, false);
-						}						
+						}
 
-						UpdateLinenCape(__instance, false);
+						UpdateLinenCapeRecipe(__instance, false);
 					}
 					else
 					{
@@ -1172,7 +1174,7 @@ namespace MarsarahTweaks.Patches
 			}
 		}
 
-		public static void UpdateLinenCape(ObjectDB objDB, bool wasChanged)
+		public static void UpdateLinenCapeRecipe(ObjectDB objDB, bool wasChanged)
 		{
 			Recipe recipe = objDB.m_recipes.Find(r => r.name == "Recipe_CapeLinen");
 			if (recipe == null) return;

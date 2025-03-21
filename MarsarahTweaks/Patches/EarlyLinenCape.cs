@@ -4,117 +4,119 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using System.Reflection;
 
 namespace MarsarahTweaks.Patches
 {
 	internal class EarlyLinenCape
 	{
-		[HarmonyPatch(typeof(ObjectDB), "Awake")]
+		[HarmonyPatch(typeof(ZNetScene), "Awake")]
 		class EarlyLinenCape_Patch
 		{
-			static void Postfix(ref ObjectDB __instance)
+			static void Postfix(ref ZNetScene __instance)
 			{
 				if (__instance == null) return;
 
 				if (ZNet.instance != null)
 				{
 					bool isDedicatedServer = ZNet.instance.IsDedicated();
-
 					if (!isDedicatedServer)
 					{
-						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.Configs.LinenCapeModifications.Name}...");
-						UpdateLinenCape(__instance, false);
+						MarsarahTweaks.MLog($"ZNetScene Awake: Updating {ConfigManager.Configs.LinenCapeModifications.Name}...");
+
+						UpdateLinenCapeStats(false);
 					}
 					else
 					{
-						MarsarahTweaks.MLog($"ObjectDB Awake: I am a server. No changes made to {ConfigManager.Configs.LinenCapeModifications.Name}...");
+						MarsarahTweaks.MLog($"ZNetScene Awake: I am a server. No changes made to {ConfigManager.Configs.LinenCapeModifications.Name}...");
 					}
 				}
 				else
 				{
-					MarsarahTweaks.MLog($"ObjectDB Awake: Too early to do anything. No changes made to {ConfigManager.Configs.LinenCapeModifications.Name}...");
+					MarsarahTweaks.MLog($"ZNetScene Awake: Too early to do anything. No changes made to {ConfigManager.Configs.LinenCapeModifications.Name}...");
 				}
 			}
+		}
 
-			public static void UpdateLinenCape(ObjectDB objDB, bool wasChanged)
-			{
-				if (ConfigManager.earlyLinenCapeEnabled.Value) 
-				{
-					
-				}
-			}
+		public static void UpdateLinenCapeStats(bool wasChanged)
+		{
+			//MarsarahTweaks.MLog("Updating Linen Cape Stats");
+			UpdatePoisonResist(wasChanged);
+			RenameLinenCape(wasChanged);
+		}
 
-			// Apply Recipe Changes =============================================
-			private static void ApplyRecipeChanges(ObjectDB objDB, bool wasChanged)
+		// Apply Poison Resist for Linen Cape
+		private static void UpdatePoisonResist(bool wasChanged)
+		{
+			GameObject item = ObjectDB.instance.m_items.FirstOrDefault(r => r.name == "CapeLinen");
+			if (item == null) return;
+
+			ItemDrop itemDrop = item.GetComponent<ItemDrop>();
+			if (itemDrop != null)
 			{
-				foreach (Recipe recipe in objDB.m_recipes)
+				if (ConfigManager.earlyLinenCapeEnabled.Value)
 				{
-					switch (recipe.name)
+					//MarsarahTweaks.MLog("Setting Linen Cape Poison Resist");
+					HitData.DamageModPair damageModPairPoison = new HitData.DamageModPair();
+					damageModPairPoison.m_modifier = HitData.DamageModifier.Resistant;
+					damageModPairPoison.m_type = HitData.DamageType.Poison;
+					if (!itemDrop.m_itemData.m_shared.m_damageModifiers.Contains(damageModPairPoison))
 					{
-						case "Recipe_CapeLinen":
-							foreach (Piece.Requirement req in recipe.m_resources)
-							{
-								switch (req.m_resItem.name)
-								{
-									case "LinenThread":
-										req.m_amount = 5;
-										req.m_amountPerLevel = 2;
-										req.m_resItem = objDB.GetItemPrefab("DeerHide").GetComponent<ItemDrop>();
-										break;
-									case "Silver":
-									case "BlackMetal":
-										req.m_amount = 1;
-										req.m_amountPerLevel = 0;
-										req.m_resItem = objDB.GetItemPrefab("Iron").GetComponent<ItemDrop>();
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-
-						default:
-							break;
+						itemDrop.m_itemData.m_shared.m_damageModifiers.Add(damageModPairPoison);
 					}
 				}
+				else if (wasChanged)
+				{
+					//MarsarahTweaks.MLog("Removing Linen Cape Poison Resist");
+					itemDrop.m_itemData.m_shared.m_damageModifiers.RemoveAll(mod => mod.m_type == HitData.DamageType.Poison);
+				}
 			}
+		}
 
-			// Apply Poison Resist ==============================================
-			private static void ApplyPoisonResist(ObjectDB objDB, bool wasChanged)
+		// Apply new name for Linen Cape
+		private static void RenameLinenCape(bool wasChanged)
+		{
+			//MarsarahTweaks.MLog("Renaming Linen Cape");
+
+			var localizationInstance = Localization.instance;
+
+			if (localizationInstance == null)
 			{
-				ItemDrop.ItemData.ItemType[] itemTypes = (ItemDrop.ItemData.ItemType[])Enum.GetValues(typeof(ItemDrop.ItemData.ItemType));
-				ItemDrop.ItemData.ItemType shoulderType = new ItemDrop.ItemData.ItemType();
-
-				foreach (ItemDrop.ItemData.ItemType itemType in itemTypes)
-				{
-					if (itemType.ToString() == "Shoulder")
-					{
-						shoulderType = itemType;
-						break;
-					}
-				}
-
-				List<ItemDrop> backItems = objDB.GetAllItems(shoulderType, "");
-
-				foreach (ItemDrop item in backItems)
-				{
-					switch (item.name)
-					{
-						case "CapeLinen":
-						case "CapeLox":
-							HitData.DamageModPair damageModPairPoison = new HitData.DamageModPair();
-							damageModPairPoison.m_modifier = HitData.DamageModifier.Resistant;
-							damageModPairPoison.m_type = HitData.DamageType.Poison;
-							if (!item.m_itemData.m_shared.m_damageModifiers.Contains(damageModPairPoison))
-							{
-								item.m_itemData.m_shared.m_damageModifiers.Add(damageModPairPoison);
-							}
-							break;
-						default:
-							break;
-					}
-				}
+				return;
 			}
+
+			// Access the private field 'm_translations' via reflection
+			FieldInfo translationsField = typeof(Localization).GetField("m_translations", BindingFlags.NonPublic | BindingFlags.Instance);
+			var translationsDict = translationsField?.GetValue(localizationInstance) as Dictionary<string, string>;
+
+			if (translationsDict != null)
+			{
+				// Modify the translation
+				if (ConfigManager.earlyLinenCapeEnabled.Value)
+				{
+					translationsDict["item_cape_linen"] = "Fine Cape";
+					translationsDict["item_cape_linen_description"] = "A finely crafted traveler's cape.";
+				}
+				else if (wasChanged)
+				{
+					translationsDict["item_cape_linen"] = "Linen Cape";
+					translationsDict["item_cape_linen_description"] = "A simple traveler's cape.";
+				}
+				//MarsarahTweaks.MLog("Updated translation!");
+			}
+
+			if (Player.m_localPlayer)
+			{
+				Localization.instance.ReLocalizeAll(Player.m_localPlayer.transform);
+			}
+
+			// Logging all entries
+			/*MarsarahTweaks.MLog("Checking existing localization keys...");
+			foreach (var entry in translationsDict)
+			{
+				MarsarahTweaks.MLog($"Key: {entry.Key} -> Value: {entry.Value}");
+			}*/
 		}
 	}
 }
