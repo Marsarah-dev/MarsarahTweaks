@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace MarsarahTweaks
+namespace MarsarahTweaks.Patches
 {
 	internal class BuildPieceChanges
 	{
@@ -16,7 +16,7 @@ namespace MarsarahTweaks
 			= new Dictionary<string, Dictionary<string, (string originalResItem, string newResItem, int amount)>>();
 
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
-		class BuildPiecesModifications_StartupPatch
+		class BuildPiecesModifications_Patch
 		{
 			static void Postfix(ref ZNetScene __instance)
 			{
@@ -46,7 +46,7 @@ namespace MarsarahTweaks
 		}
 
 		// Modify Build Pieces =========================================================================
-		public static void ModifyBuildPieces(ZNetScene zNetScene, bool amountsWasChanged, bool materialsWasChanged)
+		public static void ModifyBuildPieces(ZNetScene znScene, bool amountsWasChanged, bool materialsWasChanged)
 		{
 			// New Piece Amounts Dictionary ================================================
 			var newPieceAmounts = new Dictionary<string, Dictionary<string, int>>()
@@ -583,7 +583,7 @@ namespace MarsarahTweaks
 				}
 			};
 
-			foreach (GameObject piece in zNetScene.m_prefabs)
+			foreach (GameObject piece in znScene.m_prefabs)
 			{
 				Piece actualPiece = piece.GetComponent<Piece>();
 				if (actualPiece == null) continue;

@@ -1,4 +1,14 @@
-﻿using BepInEx;
+﻿
+/*
+ "Alternate Cooking Recipes" + "Alternate Mead Recipes" + "More Food Stacks" - "Food and Mead Modifications"
+Si
+"More Armor Stats" + "Mage Gear Eitr" - "More Armor Stats"
+Si
+"Better Death Raiser" + "Better Summoned Skeleton Gear" - "Better Death Raiser Summons" 
+ */
+
+
+using BepInEx;
 using BepInEx.Configuration;
 using MarsarahTweaks.Patches;
 using ServerSync;
@@ -22,18 +32,6 @@ namespace MarsarahTweaks
 		// Config file stuff
 		private static string ConfigFileName => MarsarahTweaks.ModGUID + ".cfg";
 		private static string ConfigFileFullPath => Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;
-
-		// Config entry names
-		/*public static class ConfigEntryName
-		{
-			public const string DoubleBronzeCrafting = "Double Bronze Crafting";
-			public const string GearRecipeAmountsModifications = "Cheaper Gear Recipe Amounts";
-			public const string GearRecipeMaterialsModifications = "Alternate Gear Recipe Materials";
-			public const string BuildPiecesAmountsModifications = "Cheaper Build Pieces Amounts";
-			public const string BuildPiecesMaterialsModifications = "Alternate Build Pieces Materials";
-
-			public const string LighterMetalWeight = "Lighter Metal Weight";
-		}*/
 
 		// Struct for Config Sections
 		public static class ConfigSections
@@ -68,6 +66,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata GearRecipeMaterials = new ConfigMetadata("3 - Alternate Gear Recipe Materials", "Modifies gear recipe materials for some items (more materials from current respective biomes)");
 			public static readonly ConfigMetadata BuildPiecesAmounts = new ConfigMetadata("4 - Cheaper Build Pieces Amounts", "Reduces costs for build pieces");
 			public static readonly ConfigMetadata BuildPiecesMaterials = new ConfigMetadata("5 - Alternate Build Pieces Materials", "Modifies build pieces materials");
+			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "Modifies food and mead recipes costs, crafted amounts and stacks (Toggling this mid-game requires client relog to take effect for food stacks specifically)");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "All metal (ore and bars) weight decreased to 8 (Toggling this mid-game requires client relog to take effect)");
 		}
@@ -81,6 +80,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> gearRecipeMaterialsEnabled;
 		public static ConfigEntry<bool> buildPieceAmountsEnabled;
 		public static ConfigEntry<bool> buildPieceMaterialsEnabled;
+		public static ConfigEntry<bool> foodAndMeadModificationsEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -98,6 +98,7 @@ namespace MarsarahTweaks
 			gearRecipeMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeMaterials.Name, true, Configs.GearRecipeMaterials.Description);
 			buildPieceAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPiecesAmounts.Name, true, Configs.BuildPiecesAmounts.Description);
 			buildPieceMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPiecesMaterials.Name, true, Configs.BuildPiecesMaterials.Description);
+			foodAndMeadModificationsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.FoodAndMeadModifications.Name, true, Configs.FoodAndMeadModifications.Description);
 
 			// ===== Features
 
@@ -187,6 +188,10 @@ namespace MarsarahTweaks
 
 						case var name when name == Configs.BuildPiecesMaterials.Name:
 							BuildPieceChanges.ModifyBuildPieces(ZNetScene.instance, false, true);
+							break;
+
+						case var name when name == Configs.FoodAndMeadModifications.Name:
+							FoodAndMeadModifications.ModifyFoodAndMead(ObjectDB.instance, true);
 							break;
 					}
 				}
