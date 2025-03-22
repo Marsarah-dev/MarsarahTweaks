@@ -69,6 +69,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "Modifies food and mead recipes costs, crafted amounts and stacks (Toggling this mid-game requires client relog to take effect for food stacks specifically)");
 
 			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("1 - Early Linen Cape", "Moves Linen Cape to the Swamp biome by replacing its crafting resources to Iron and Deer Hide and adds poison resist to it. Renames to Fine Cape");
+			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("2 - Gear Speed Modifiers", "No speed penalty for heavy and mage armors; Added light armor speed bonus (Toggling this mid-game requires client relog to take effect)");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "All metal (ore and bars) weight decreased to 8 (Toggling this mid-game requires client relog to take effect)");
 		}
@@ -85,6 +86,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> foodAndMeadModificationsEnabled;
 
 		public static ConfigEntry<bool> earlyLinenCapeEnabled;
+		public static ConfigEntry<bool> gearSpeedModifiersEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -106,6 +108,7 @@ namespace MarsarahTweaks
 
 			// ===== Features
 			earlyLinenCapeEnabled = CreateConfig(ConfigSections.Features, Configs.LinenCapeModifications.Name, true, Configs.LinenCapeModifications.Description);
+			gearSpeedModifiersEnabled = CreateConfig(ConfigSections.Features, Configs.GearSpeedModifications.Name, true, Configs.GearSpeedModifications.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
@@ -201,6 +204,10 @@ namespace MarsarahTweaks
 						case var name when name == Configs.LinenCapeModifications.Name:
 							GearRecipeChanges.UpdateLinenCapeRecipe(ObjectDB.instance, true);
 							EarlyLinenCape.UpdateLinenCapeStats(true);
+							break;
+
+						case var name when name == Configs.GearSpeedModifications.Name:
+							GearSpeedModifications.UpdateGearSpeed(ObjectDB.instance, true);
 							break;
 					}
 				}

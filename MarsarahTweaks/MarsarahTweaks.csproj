@@ -95,6 +95,7 @@
     <Compile Include="Patches\EarlyLinenCape.cs" />
     <Compile Include="Patches\FoodAndMeadModifications.cs" />
     <Compile Include="Patches\GearRecipeChanges.cs" />
+    <Compile Include="Patches\GearSpeedModifications.cs" />
     <Compile Include="Patches\LighterMetalWeight.cs" />
     <Compile Include="Patches\OtherPatches.cs" />
     <Compile Include="Patches\TestJump.cs" />
