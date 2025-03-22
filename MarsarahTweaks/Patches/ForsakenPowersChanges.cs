@@ -21,12 +21,12 @@ namespace MarsarahTweaks.Patches
 					}
 					else
 					{
-						MarsarahTweaks.MLog($"ObjectDB Awake: Server detected. No changes applied.");
+						MarsarahTweaks.MLog($"ObjectDB Awake: I am a server. No changes made to {ConfigManager.Configs.ForsakenPowersModifications.Name}...");
 					}
 				}
 				else
 				{
-					MarsarahTweaks.MLog($"ObjectDB Awake: Too early. No changes made.");
+					MarsarahTweaks.MLog($"ObjectDB Awake: Too early to do anything. No changes made to {ConfigManager.Configs.ForsakenPowersModifications.Name}...");
 				}
 			}
 		}

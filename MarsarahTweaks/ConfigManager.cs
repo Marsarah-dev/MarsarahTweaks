@@ -72,6 +72,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("2 - Gear Speed Modifications", "(Toggling requires client relog) Removes speed penalty for heavy and mage armors; adds speed bonus to light armor");
 			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("3 - Forsaken Powers Modifications", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)");
 			public static readonly ConfigMetadata CharacterSpeedModifications = new ConfigMetadata("4 - Faster Character Speed", "Faster character jog, walk, swim and crouch speeds (run excluded)");
+			public static readonly ConfigMetadata StatusEffectsModifications = new ConfigMetadata("5 - Shorter Wet Effect And Potion Cooldowns", "Wet effect and potions cooldown timers reduced");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling requires client relog) All metal (ore and bars) weight decreased to 8");
 		}
@@ -91,6 +92,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> gearSpeedModifiersEnabled;
 		public static ConfigEntry<bool> longerForsakenPowersEnabled;
 		public static ConfigEntry<bool> fasterCharacterSpeedEnabled;
+		public static ConfigEntry<bool> shorterStatusEffectsEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -115,6 +117,7 @@ namespace MarsarahTweaks
 			gearSpeedModifiersEnabled = CreateConfig(ConfigSections.Features, Configs.GearSpeedModifications.Name, true, Configs.GearSpeedModifications.Description);
 			longerForsakenPowersEnabled = CreateConfig(ConfigSections.Features, Configs.ForsakenPowersModifications.Name, true, Configs.ForsakenPowersModifications.Description);
 			fasterCharacterSpeedEnabled = CreateConfig(ConfigSections.Features, Configs.CharacterSpeedModifications.Name, true, Configs.CharacterSpeedModifications.Description);
+			shorterStatusEffectsEnabled = CreateConfig(ConfigSections.Features, Configs.StatusEffectsModifications.Name, true, Configs.StatusEffectsModifications.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
@@ -225,6 +228,10 @@ namespace MarsarahTweaks
 							{
 								CharacterSpeedChanges.UpdateCharacterSpeed(Player.m_localPlayer, true);								
 							}
+							break;
+
+						case var name when name == Configs.StatusEffectsModifications.Name:
+							StatusEffectChanges.UpdateStatusEffects(ObjectDB.instance, true);
 							break;
 					}
 				}
