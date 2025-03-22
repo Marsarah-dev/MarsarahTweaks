@@ -9,7 +9,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 namespace MarsarahTweaks.Patches
 {
-	internal class FoodAndMeadModifications
+	internal class FoodAndMeadChanges
 	{
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class FoodAndMeadChanges_Patch

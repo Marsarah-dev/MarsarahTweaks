@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace MarsarahTweaks.Patches
 {
-	internal class GearSpeedModifications
+	internal class GearSpeedChanges
 	{
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearSpeedChanges_Patch

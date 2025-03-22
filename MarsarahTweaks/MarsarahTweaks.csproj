@@ -91,11 +91,12 @@
     <Compile Include="ConfigManager.cs" />
     <Compile Include="MarsarahTweaks.cs" />
     <Compile Include="Patches\BuildPieceChanges.cs" />
-    <Compile Include="Patches\DoubleBronze.cs" />
+    <Compile Include="Patches\DoubleBronzeCrafting.cs" />
     <Compile Include="Patches\EarlyLinenCape.cs" />
-    <Compile Include="Patches\FoodAndMeadModifications.cs" />
+    <Compile Include="Patches\FoodAndMeadChanges.cs" />
+    <Compile Include="Patches\ForsakenPowersChanges.cs" />
     <Compile Include="Patches\GearRecipeChanges.cs" />
-    <Compile Include="Patches\GearSpeedModifications.cs" />
+    <Compile Include="Patches\GearSpeedChanges.cs" />
     <Compile Include="Patches\LighterMetalWeight.cs" />
     <Compile Include="Patches\OtherPatches.cs" />
     <Compile Include="Patches\TestJump.cs" />

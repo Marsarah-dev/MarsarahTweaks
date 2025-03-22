@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MarsarahTweaks.Patches
 {
-	internal class DoubleBronze
+	internal class DoubleBronzeCrafting
 	{
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class OthersSection_Patch

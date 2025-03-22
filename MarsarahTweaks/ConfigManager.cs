@@ -65,13 +65,14 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata GearRecipeAmounts = new ConfigMetadata("2 - Cheaper Gear Recipe Amounts", "Reduces costs for crafting and upgrading gear for metal. Balances other resources amounts");
 			public static readonly ConfigMetadata GearRecipeMaterials = new ConfigMetadata("3 - Alternate Gear Recipe Materials", "Modifies gear recipe materials for some items (more materials from current respective biomes)");
 			public static readonly ConfigMetadata BuildPiecesAmounts = new ConfigMetadata("4 - Cheaper Build Pieces Amounts", "Reduces costs for build pieces");
-			public static readonly ConfigMetadata BuildPiecesMaterials = new ConfigMetadata("5 - Alternate Build Pieces Materials", "Modifies build pieces materials");
-			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "Modifies food and mead recipes costs, crafted amounts and stacks (Toggling this mid-game requires client relog to take effect for food stacks specifically)");
+			public static readonly ConfigMetadata BuildPiecesMaterials = new ConfigMetadata("5 - Alternate Build Pieces Materials", "Modifies build pieces materials (This will move the Workbench Toolrack extension from Mountain to Swamp biome)");
+			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "(Requires client relog) Modifies food and mead recipes costs, crafted amounts and stacks");
 
-			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("1 - Early Linen Cape", "Moves Linen Cape to the Swamp biome by replacing its crafting resources to Iron and Deer Hide and adds poison resist to it. Renames to Fine Cape");
-			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("2 - Gear Speed Modifiers", "No speed penalty for heavy and mage armors; Added light armor speed bonus (Toggling this mid-game requires client relog to take effect)");
+			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("1 - Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it");
+			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("2 - Gear Speed Modifications", "(Requires client relog) Removes speed penalty for heavy and mage armors; adds speed bonus to light armor");
+			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("3 - Forsaken Powers Modifications", "Reduce Forsaken Powers cooldowns and increase durations (Different for each power)");
 
-			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "All metal (ore and bars) weight decreased to 8 (Toggling this mid-game requires client relog to take effect)");
+			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Requires client relog) All metal (ore and bars) weight decreased to 8");
 		}
 
 		// Config entries
@@ -87,6 +88,7 @@ namespace MarsarahTweaks
 
 		public static ConfigEntry<bool> earlyLinenCapeEnabled;
 		public static ConfigEntry<bool> gearSpeedModifiersEnabled;
+		public static ConfigEntry<bool> longerForsakenPowersEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -109,6 +111,7 @@ namespace MarsarahTweaks
 			// ===== Features
 			earlyLinenCapeEnabled = CreateConfig(ConfigSections.Features, Configs.LinenCapeModifications.Name, true, Configs.LinenCapeModifications.Description);
 			gearSpeedModifiersEnabled = CreateConfig(ConfigSections.Features, Configs.GearSpeedModifications.Name, true, Configs.GearSpeedModifications.Description);
+			longerForsakenPowersEnabled = CreateConfig(ConfigSections.Features, Configs.ForsakenPowersModifications.Name, true, Configs.ForsakenPowersModifications.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
@@ -174,7 +177,7 @@ namespace MarsarahTweaks
 					switch (configName)
 					{
 						case var name when name == Configs.DoubleBronzeCrafting.Name:
-							DoubleBronze.UpdateDoubleBronzeCrafting(ObjectDB.instance, true);
+							DoubleBronzeCrafting.UpdateDoubleBronzeCrafting(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.LighterMetalWeight.Name:
@@ -198,7 +201,7 @@ namespace MarsarahTweaks
 							break;
 
 						case var name when name == Configs.FoodAndMeadModifications.Name:
-							FoodAndMeadModifications.UpdateFoodAndMead(ObjectDB.instance, true);
+							FoodAndMeadChanges.UpdateFoodAndMead(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.LinenCapeModifications.Name:
@@ -207,7 +210,11 @@ namespace MarsarahTweaks
 							break;
 
 						case var name when name == Configs.GearSpeedModifications.Name:
-							GearSpeedModifications.UpdateGearSpeed(ObjectDB.instance, true);
+							GearSpeedChanges.UpdateGearSpeed(ObjectDB.instance, true);
+							break;
+
+						case var name when name == Configs.ForsakenPowersModifications.Name:
+							ForsakenPowersChanges.UpdateForsakenPowers(ObjectDB.instance, true);
 							break;
 					}
 				}
