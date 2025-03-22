@@ -98,10 +98,12 @@
     <Compile Include="Patches\ForsakenPowersChanges.cs" />
     <Compile Include="Patches\GearRecipeChanges.cs" />
     <Compile Include="Patches\GearSpeedChanges.cs" />
+    <Compile Include="Patches\LessStaminaChanges.cs" />
     <Compile Include="Patches\LighterMetalWeight.cs" />
     <Compile Include="Patches\OtherPatches.cs" />
     <Compile Include="Patches\StatusEffectChanges.cs" />
     <Compile Include="Patches\TestJump.cs" />
+    <Compile Include="Patches\WeaponStaminaChanges.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

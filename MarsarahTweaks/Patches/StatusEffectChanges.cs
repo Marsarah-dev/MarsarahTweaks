@@ -39,7 +39,7 @@ namespace MarsarahTweaks.Patches
 		private static Dictionary<string, float> originalDurations = new Dictionary<string, float>();
 		private static readonly Dictionary<string, float> customDurations = new Dictionary<string, float>()
 		{
-			{ "Potion_eitr_minor", 50f },
+			{ "Potion_eitr_minor", 60f },
 			{ "Potion_health_major", 75f },
 			{ "Potion_health_medium", 60f },
 			{ "Potion_health_minor", 45f },
