@@ -57,18 +57,18 @@ namespace MarsarahTweaks.Patches
 					if (!originalValues.ContainsKey(statusEffect.name))
 					{
 						originalValues[statusEffect.name] = (statusEffect.m_ttl, statusEffect.m_cooldown);
-						MarsarahTweaks.MLog($"Backed up {statusEffect.name}: TTL={statusEffect.m_ttl}, CD={statusEffect.m_cooldown}");
+						//MarsarahTweaks.MLog($"Backed up {statusEffect.name}: TTL={statusEffect.m_ttl}, CD={statusEffect.m_cooldown}");
 					}
 
 					if (statusEffect.m_ttl != newDuration)
 					{
-						MarsarahTweaks.MLog($"Updating {statusEffect.name} duration: {statusEffect.m_ttl} -> {newDuration}");
+						//MarsarahTweaks.MLog($"Updating {statusEffect.name} duration: {statusEffect.m_ttl} -> {newDuration}");
 						statusEffect.m_ttl = newDuration;
 					}
 
 					if (statusEffect.m_cooldown != newCooldown)
 					{
-						MarsarahTweaks.MLog($"Updating {statusEffect.name} cooldown: {statusEffect.m_cooldown} -> {newCooldown}");
+						//MarsarahTweaks.MLog($"Updating {statusEffect.name} cooldown: {statusEffect.m_cooldown} -> {newCooldown}");
 						statusEffect.m_cooldown = newCooldown;
 					}
 				}
@@ -76,13 +76,13 @@ namespace MarsarahTweaks.Patches
 				{
 					if (statusEffect.m_ttl != original.duration)
 					{
-						MarsarahTweaks.MLog($"Restoring {statusEffect.name} duration: {statusEffect.m_ttl} -> {original.duration}");
+						//MarsarahTweaks.MLog($"Restoring {statusEffect.name} duration: {statusEffect.m_ttl} -> {original.duration}");
 						statusEffect.m_ttl = original.duration;
 					}
 
 					if (statusEffect.m_cooldown != original.cooldown)
 					{
-						MarsarahTweaks.MLog($"Restoring {statusEffect.name} cooldown: {statusEffect.m_cooldown} -> {original.cooldown}");
+						//MarsarahTweaks.MLog($"Restoring {statusEffect.name} cooldown: {statusEffect.m_cooldown} -> {original.cooldown}");
 						statusEffect.m_cooldown = original.cooldown;
 					}
 

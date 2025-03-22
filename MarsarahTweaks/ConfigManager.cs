@@ -66,13 +66,14 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata GearRecipeMaterials = new ConfigMetadata("3 - Alternate Gear Recipe Materials", "Modifies gear recipe materials for some items (more materials from current respective biomes)");
 			public static readonly ConfigMetadata BuildPiecesAmounts = new ConfigMetadata("4 - Cheaper Build Pieces Amounts", "Reduces costs for build pieces");
 			public static readonly ConfigMetadata BuildPiecesMaterials = new ConfigMetadata("5 - Alternate Build Pieces Materials", "Modifies build pieces materials (This will move the Workbench Toolrack extension from Mountain to Swamp biome)");
-			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "(Requires client relog) Modifies food and mead recipes costs, crafted amounts and stacks");
+			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "(Toggling requires client relog) Modifies food and mead recipes costs, crafted amounts and stacks");
 
 			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("1 - Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it");
-			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("2 - Gear Speed Modifications", "(Requires client relog) Removes speed penalty for heavy and mage armors; adds speed bonus to light armor");
-			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("3 - Forsaken Powers Modifications", "Reduce Forsaken Powers cooldowns and increase durations (Different for each power)");
+			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("2 - Gear Speed Modifications", "(Toggling requires client relog) Removes speed penalty for heavy and mage armors; adds speed bonus to light armor");
+			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("3 - Forsaken Powers Modifications", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)");
+			public static readonly ConfigMetadata CharacterSpeedModifications = new ConfigMetadata("4 - Faster Character Speed", "Faster character jog, walk, swim and crouch speeds (run excluded)");
 
-			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Requires client relog) All metal (ore and bars) weight decreased to 8");
+			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling requires client relog) All metal (ore and bars) weight decreased to 8");
 		}
 
 		// Config entries
@@ -89,6 +90,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> earlyLinenCapeEnabled;
 		public static ConfigEntry<bool> gearSpeedModifiersEnabled;
 		public static ConfigEntry<bool> longerForsakenPowersEnabled;
+		public static ConfigEntry<bool> fasterCharacterSpeedEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -112,6 +114,7 @@ namespace MarsarahTweaks
 			earlyLinenCapeEnabled = CreateConfig(ConfigSections.Features, Configs.LinenCapeModifications.Name, true, Configs.LinenCapeModifications.Description);
 			gearSpeedModifiersEnabled = CreateConfig(ConfigSections.Features, Configs.GearSpeedModifications.Name, true, Configs.GearSpeedModifications.Description);
 			longerForsakenPowersEnabled = CreateConfig(ConfigSections.Features, Configs.ForsakenPowersModifications.Name, true, Configs.ForsakenPowersModifications.Description);
+			fasterCharacterSpeedEnabled = CreateConfig(ConfigSections.Features, Configs.CharacterSpeedModifications.Name, true, Configs.CharacterSpeedModifications.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
@@ -215,6 +218,13 @@ namespace MarsarahTweaks
 
 						case var name when name == Configs.ForsakenPowersModifications.Name:
 							ForsakenPowersChanges.UpdateForsakenPowers(ObjectDB.instance, true);
+							break;
+
+						case var name when name == Configs.CharacterSpeedModifications.Name:
+							if (Player.m_localPlayer != null)
+							{
+								CharacterSpeedChanges.UpdateCharacterSpeed(Player.m_localPlayer, true);								
+							}
 							break;
 					}
 				}

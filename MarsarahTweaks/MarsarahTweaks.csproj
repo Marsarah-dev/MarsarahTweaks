@@ -91,6 +91,7 @@
     <Compile Include="ConfigManager.cs" />
     <Compile Include="MarsarahTweaks.cs" />
     <Compile Include="Patches\BuildPieceChanges.cs" />
+    <Compile Include="Patches\CharacterSpeedChanges.cs" />
     <Compile Include="Patches\DoubleBronzeCrafting.cs" />
     <Compile Include="Patches\EarlyLinenCape.cs" />
     <Compile Include="Patches\FoodAndMeadChanges.cs" />
