@@ -76,6 +76,8 @@ namespace MarsarahTweaks
 			//public static readonly ConfigMetadata WeaponStaminaModifications = new ConfigMetadata("6 - Reduced Weapon Stamina Costs", "Weapon stamina swing costs reduced");
 			public static readonly ConfigMetadata LessStaminaModifications = new ConfigMetadata("6 - Less Stamina Usage", "Stamina use of all actions is reduced by 15%");
 			public static readonly ConfigMetadata ExtraArmorStatsModifications = new ConfigMetadata("7 - Extra Armor Stats", "Heavy armor provides extra HP, light armor provides extra stamina, mage armor provides extra base eitr");
+			public static readonly ConfigMetadata DeathRaiserModifications = new ConfigMetadata("8 - Better Death Raiser", "(Toggling requires client relog) Reduces HP cost and increases chance of summoning archers");
+			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("9 - Better Death Raiser Summons", "Increases summoned skeleton speed and add better looking gear (stats not affected)");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling requires client relog) All metal (ore and bars) weight decreased to 8");
 		}
@@ -99,6 +101,8 @@ namespace MarsarahTweaks
 		//public static ConfigEntry<bool> reducedWeaponStaminaEnabled;
 		public static ConfigEntry<bool> lessStaminaUsageEnabled;
 		public static ConfigEntry<bool> extraArmorStatsEnabled;
+		public static ConfigEntry<bool> betterDeathRaiserEnabled;
+		public static ConfigEntry<bool> betterDeathRaiserSummonsEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -127,6 +131,8 @@ namespace MarsarahTweaks
 			//reducedWeaponStaminaEnabled = CreateConfig(ConfigSections.Features, Configs.WeaponStaminaModifications.Name, true, Configs.WeaponStaminaModifications.Description);
 			lessStaminaUsageEnabled = CreateConfig(ConfigSections.Features, Configs.LessStaminaModifications.Name, true, Configs.LessStaminaModifications.Description);
 			extraArmorStatsEnabled = CreateConfig(ConfigSections.Features, Configs.ExtraArmorStatsModifications.Name, true, Configs.ExtraArmorStatsModifications.Description);
+			betterDeathRaiserEnabled = CreateConfig(ConfigSections.Features, Configs.DeathRaiserModifications.Name, true, Configs.DeathRaiserModifications.Description);
+			betterDeathRaiserSummonsEnabled = CreateConfig(ConfigSections.Features, Configs.DeathRaiserSummonsModifications.Name, true, Configs.DeathRaiserSummonsModifications.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
@@ -241,6 +247,10 @@ namespace MarsarahTweaks
 
 						case var name when name == Configs.StatusEffectsModifications.Name:
 							StatusEffectChanges.UpdateStatusEffects(ObjectDB.instance, true);
+							break;
+
+						case var name when name == Configs.DeathRaiserModifications.Name:
+							DeathRaiserChanges.UpdateDeathRaiser(ObjectDB.instance, true);
 							break;
 					}
 				}
