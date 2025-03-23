@@ -145,8 +145,7 @@ namespace MarsarahTweaks.Patches
 			{
 				MarsarahTweaks.MLog("GiveDefaultItems called");
 
-				if (__instance == null || __instance.name == null)
-					return;
+				if (__instance == null || __instance.name == null) return;
 
 				// Check if this is a friendly skeleton
 				if (__instance.name.Contains("Skeleton_Friendly"))
@@ -172,6 +171,12 @@ namespace MarsarahTweaks.Patches
 						{
 							__instance.EquipItem(newWeapon, triggerEquipEffects: false);
 							MarsarahTweaks.MLog($"[Marsarah Tweaks] Assigned {weaponPrefabName} to Skeleton_Friendly (Secondary Attack: {isSecondaryAttack})");
+
+							// Only melee skeletons get shields
+							if (!isSecondaryAttack)
+							{
+								AssignShield(__instance);
+							}
 						}
 						else
 						{
@@ -191,15 +196,29 @@ namespace MarsarahTweaks.Patches
 				return;
 			}
 
+			private static void AssignShield(Humanoid skeleton)
+			{
+				int roll = UnityEngine.Random.Range(0, 3); // 0 = No shield, 1 = Wood, 2 = Bronze
+				string shieldPrefabName = roll == 1 ? "ShieldWood" : roll == 2 ? "ShieldBronzeBuckler" : null;
+
+				if (shieldPrefabName != null)
+				{
+					var shieldPrefab = ObjectDB.instance.GetItemPrefab(shieldPrefabName);
+					if (shieldPrefab != null)
+					{
+						//skeleton.EquipItem(shieldPrefab.GetComponent<ItemDrop>().m_itemData, triggerEquipEffects: false);
+						giveItem(skeleton, shieldPrefab);
+						MarsarahTweaks.MLog($"Assigned {shieldPrefabName} to Skeleton_Friendly");
+					}
+				}
+			}
+
 			private static void giveItem(Humanoid human, GameObject prefab)
 			{
 				ItemDrop.ItemData itemData = human.PickupPrefab(prefab, 0, autoequip: false);
-				if (itemData != null)
+				if (itemData != null && !itemData.IsWeapon())
 				{
-					if (!itemData.IsWeapon())
-					{
-						human.EquipItem(itemData, triggerEquipEffects: false);
-					}
+					human.EquipItem(itemData, triggerEquipEffects: false);
 				}
 			}
 		}
