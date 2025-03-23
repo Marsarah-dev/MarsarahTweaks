@@ -36,7 +36,79 @@ namespace MarsarahTweaks.Patches
 					if (!isDedicatedServer)
 					{
 						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.Configs.DeathRaiserModifications.Name}...");
-						UpdateDeathRaiser(__instance, false);
+						//UpdateDeathRaiser(__instance, false);
+						GameObject item = __instance.m_items.FirstOrDefault(r => r.name == "StaffSkeleton");
+						if (item == null) return;
+
+						ItemDrop itemDrop = item.GetComponent<ItemDrop>();
+						if (itemDrop != null)
+						{
+							if (ConfigManager.betterDeathRaiserEnabled.Value)
+							{
+								if (itemDrop.m_itemData.m_shared.m_secondaryAttack != itemDrop.m_itemData.m_shared.m_attack)
+								{
+									itemDrop.m_itemData.m_shared.m_secondaryAttack = itemDrop.m_itemData.m_shared.m_attack;
+
+									/*Attack primaryAttack = itemDrop.m_itemData.m_shared.m_attack;
+									Attack secondaryAttack = new Attack
+									{
+										// Core values
+										m_attackType = primaryAttack.m_attackType,
+										m_attackAnimation = primaryAttack.m_attackAnimation,
+										m_attackChainLevels = primaryAttack.m_attackChainLevels,
+										m_attackRange = primaryAttack.m_attackRange,
+										m_attackAngle = primaryAttack.m_attackAngle,
+
+										// HP & Stamina Usage
+										m_attackHealthPercentage = 50, // Original 40
+										m_attackHealth = primaryAttack.m_attackHealth,
+										m_attackHealthReturnHit = primaryAttack.m_attackHealthReturnHit,
+										m_attackStamina = primaryAttack.m_attackStamina,
+
+										// Eitr Consumption
+										m_attackEitr = primaryAttack.m_attackEitr, // 100
+										m_reloadEitrDrain = primaryAttack.m_reloadEitrDrain,
+										m_drawEitrDrain = primaryAttack.m_drawEitrDrain,
+
+										// Damage & multipliers
+										m_damageMultiplier = primaryAttack.m_damageMultiplier,
+										m_damageMultiplierPerMissingHP = primaryAttack.m_damageMultiplierPerMissingHP,
+										m_damageMultiplierByTotalHealthMissing = primaryAttack.m_damageMultiplierByTotalHealthMissing,
+										m_forceMultiplier = primaryAttack.m_forceMultiplier,
+										m_staggerMultiplier = primaryAttack.m_staggerMultiplier,
+
+										// Projectile
+										m_attackProjectile = primaryAttack.m_attackProjectile,
+										m_projectileVel = primaryAttack.m_projectileVel,
+										m_projectileVelMin = primaryAttack.m_projectileVelMin,
+										m_projectiles = primaryAttack.m_projectiles,
+										m_projectileAccuracy = primaryAttack.m_projectileAccuracy,
+										m_projectileAccuracyMin = primaryAttack.m_projectileAccuracyMin,
+
+										// Attack behavior
+										m_hitThroughWalls = primaryAttack.m_hitThroughWalls,
+										m_multiHit = primaryAttack.m_multiHit,
+
+										// Effects
+										m_hitEffect = primaryAttack.m_hitEffect
+									};
+
+									// Assign secondary attack
+									itemDrop.m_itemData.m_shared.m_secondaryAttack = secondaryAttack;*/
+
+									//MarsarahTweaks.MLog($"Death Raiser attack HP percentage: {itemDrop.m_itemData.m_shared.m_attack.m_attackHealthPercentage}");
+									//MarsarahTweaks.MLog($"Death Raiser secondaryAttack HP percentage: {itemDrop.m_itemData.m_shared.m_secondaryAttack.m_attackHealthPercentage}");
+								}
+								
+								//itemDrop.m_itemData.m_shared.m_attack.m_attackHealthPercentage = 30; // default 40
+								//itemDrop.m_itemData.m_shared.m_attack.m_attackEitr = 75; // default 100
+								//MarsarahTweaks.MLog($"Death Raiser attack HP percentage: {itemDrop.m_itemData.m_shared.m_attack.m_attackHealthPercentage}");
+								//MarsarahTweaks.MLog($"Death Raiser secondaryAttack HP percentage: {itemDrop.m_itemData.m_shared.m_secondaryAttack.m_attackHealthPercentage}");
+
+								//MarsarahTweaks.MLog($"Death Raiser attack eitr consumption: {itemDrop.m_itemData.m_shared.m_attack.m_attackEitr}");
+								//MarsarahTweaks.MLog($"Death Raiser secondaryAttack eitr consumption: {itemDrop.m_itemData.m_shared.m_secondaryAttack.m_attackEitr}");
+							}
+						}
 					}
 					else
 					{
@@ -67,9 +139,9 @@ namespace MarsarahTweaks.Patches
 				if (currentWeapon != null && currentWeapon.m_shared?.m_name == "$item_staffskeleton")
 				{
 					ModState.LastAttackWasSecondary = secondaryAttack;
-					MarsarahTweaks.MLog($"Last attack was {(secondaryAttack ? "Secondary" : "Primary")}");
+					//MarsarahTweaks.MLog($"Last attack was {(secondaryAttack ? "Secondary" : "Primary")}");
 
-					if (!secondaryAttack && currentWeapon.m_shared.m_attack != null)
+					/*if (!secondaryAttack && currentWeapon.m_shared.m_attack != null)
 					{
 						MarsarahTweaks.MLog($"[Death Raiser] Primary Attack exists! {currentWeapon.m_shared.m_attack.m_attackType}");
 					}
@@ -83,12 +155,12 @@ namespace MarsarahTweaks.Patches
 							currentWeapon.m_shared.m_secondaryAttack = currentWeapon.m_shared.m_attack;
 							MarsarahTweaks.MLog($"[Death Raiser] New Secondary Attack: {currentWeapon.m_shared.m_secondaryAttack.m_attackType}");
 						}
-					}
+					}*/
 				}
 			}
 		}
 
-		[HarmonyPatch(typeof(SpawnAbility), "Spawn")]
+		/*[HarmonyPatch(typeof(SpawnAbility), "Spawn")]
 		public static class Patch_SpawnAbility_Spawn
 		{
 			static void Prefix(SpawnAbility __instance, ref GameObject[] ___m_spawnPrefab)
@@ -99,14 +171,14 @@ namespace MarsarahTweaks.Patches
 				{
 					MarsarahTweaks.MLog($"Possible spawn: {p.name}");
 
-					/*Component[] prefabComponents = p.GetComponents<Component>();
+					Component[] prefabComponents = p.GetComponents<Component>();
 					foreach (Component comp in prefabComponents)
 					{
 						MarsarahTweaks.MLog($"{p.name} - {comp}");
-					}*/
+					}
 				}
 			}
-		}
+		}*/
 
 		[HarmonyPatch(typeof(UnityEngine.Object), "Instantiate", new Type[] { typeof(UnityEngine.Object), typeof(Vector3), typeof(Quaternion) })]
 		public static class Patch_Object_Instantiate
@@ -119,21 +191,21 @@ namespace MarsarahTweaks.Patches
 					return;
 				}
 
-				if (__result is GameObject go && go.name == "staff_skeleton_spawn(Clone)")
+				/*if (__result is GameObject go && go.name == "staff_skeleton_spawn(Clone)")
 				{
 					MarsarahTweaks.MLog($"[Instantiate Patch] Spawned prefab: {go.name}");
 					//go.AddComponent<ComponentLogger>().StartLogging(go); // Attach logger
-				}
+				}*/
 
 				if (__result is GameObject gameObject && gameObject.name.Contains("Skeleton_Friendly"))
 				{
 					ModState.LastSpawnedSkeleton = gameObject;
-					MarsarahTweaks.MLog($"Captured instantiated skeleton: {gameObject.name}");
+					//MarsarahTweaks.MLog($"Captured instantiated skeleton: {gameObject.name}");
 
 					// Set attack type
 					SkeletonAttackType skeletonAttack = gameObject.AddComponent<SkeletonAttackType>();
 					skeletonAttack.IsSecondaryAttack = ModState.LastAttackWasSecondary;
-					MarsarahTweaks.MLog($"Set IsSecondaryAttack = {skeletonAttack.IsSecondaryAttack} for {gameObject.name}");
+					//MarsarahTweaks.MLog($"Set IsSecondaryAttack = {skeletonAttack.IsSecondaryAttack} for {gameObject.name}");
 				}
 			}
 		}
@@ -143,9 +215,13 @@ namespace MarsarahTweaks.Patches
 		{
 			private static void Prefix(Humanoid __instance, ref bool __runOriginal)
 			{
-				MarsarahTweaks.MLog("GiveDefaultItems called");
+				//MarsarahTweaks.MLog("GiveDefaultItems called");
 
-				if (__instance == null || __instance.name == null) return;
+				if (__instance == null || __instance.name == null)
+				{
+					__runOriginal = true;
+					return;
+				}
 
 				// Check if this is a friendly skeleton
 				if (__instance.name.Contains("Skeleton_Friendly"))
@@ -158,15 +234,24 @@ namespace MarsarahTweaks.Patches
 					string weaponPrefabName = isSecondaryAttack ? "skeleton_bow2" : "skeleton_sword2";
 					var weaponPrefab = ObjectDB.instance.GetItemPrefab(weaponPrefabName);
 
-					if (weaponPrefab == null)
+					/*if (weaponPrefab == null)
 					{
 						MarsarahTweaks.MLog($"[ERROR] Weapon prefab {weaponPrefabName} not found in ObjectDB!");
 						return;
-					}
+					}*/
 
 					if (weaponPrefab != null)
 					{
-						ItemDrop.ItemData newWeapon = __instance.PickupPrefab(weaponPrefab, 0, autoequip: false);
+						giveItem(__instance, weaponPrefab);
+						//MarsarahTweaks.MLog($"Assigned {weaponPrefabName} to Skeleton_Friendly (Secondary Attack: {isSecondaryAttack})");
+
+						// Only melee skeletons get shields
+						if (!isSecondaryAttack)
+						{
+							AssignShield(__instance);
+						}
+
+						/*ItemDrop.ItemData newWeapon = __instance.PickupPrefab(weaponPrefab, 0, autoequip: false);
 						if (newWeapon != null)
 						{
 							__instance.EquipItem(newWeapon, triggerEquipEffects: false);
@@ -181,12 +266,12 @@ namespace MarsarahTweaks.Patches
 						else
 						{
 							MarsarahTweaks.MLog($"[ERROR] Failed to create ItemData for {weaponPrefabName}.");
-						}
+						}*/
 					}
-					else
+					/*else
 					{
 						MarsarahTweaks.MLog($"[ERROR] Weapon prefab {weaponPrefabName} not found in ObjectDB.");
-					}
+					}*/
 
 					__runOriginal = false;
 					return;
@@ -208,7 +293,7 @@ namespace MarsarahTweaks.Patches
 					{
 						//skeleton.EquipItem(shieldPrefab.GetComponent<ItemDrop>().m_itemData, triggerEquipEffects: false);
 						giveItem(skeleton, shieldPrefab);
-						MarsarahTweaks.MLog($"Assigned {shieldPrefabName} to Skeleton_Friendly");
+						//MarsarahTweaks.MLog($"Assigned {shieldPrefabName} to Skeleton_Friendly");
 					}
 				}
 			}
@@ -225,126 +310,7 @@ namespace MarsarahTweaks.Patches
 
 
 
-		/*[HarmonyPatch(typeof(UnityEngine.Object), "Instantiate", new Type[] { typeof(UnityEngine.Object), typeof(Vector3), typeof(Quaternion) })]
-		public static class Patch_Instantiate
-		{
-			private static void Postfix(UnityEngine.Object __result)
-			{
-				if (__result == null)
-				{
-					MarsarahTweaks.MLog("[Instantiate Patch] Error: Instantiated object is null!");
-					return;
-				}
-
-				if (__result is GameObject go && go.name == "staff_skeleton_spawn(Clone)")
-				{
-					MarsarahTweaks.MLog($"[Instantiate Patch] Spawned prefab: {go.name}");
-					go.AddComponent<ComponentLogger>().StartLogging(go); // Attach logger
-				}
-
-				if (__result is GameObject gameObject && gameObject.name.Contains("Skeleton_Friendly"))
-				{
-					ModState.LastSpawnedSkeleton = gameObject;
-					//MarsarahTweaks.MLog($"[Marsarah Tweaks] Captured instantiated skeleton: {gameObject.name}");
-					ModState.LastSpawnedSkeleton = gameObject;
-					MarsarahTweaks.MLog($"Captured instantiated skeleton: {gameObject.name}");
-					gameObject.AddComponent<ComponentLogger>(); // Log all components
-				}
-			}
-		}
-
-
-		[HarmonyPatch(typeof(SpawnAbility), "Spawn")]
-		public static class Patch_SpawnAbility
-		{
-			private static IEnumerable<IEnumerator> Postfix(IEnumerable<IEnumerator> result, SpawnAbility __instance)
-			{
-				MarsarahTweaks.MLog("SpawnAbility.Spawn() was called");
-
-				foreach (IEnumerator item in result)
-				{
-					yield return item; // Preserve original coroutine execution
-
-					// Try to get the spawned skeleton each frame
-					GameObject lastSpawned = GetLastSpawnedSkeleton(__instance);
-					if (lastSpawned != null && lastSpawned.name.Contains("Skeleton_Friendly"))
-					{
-						// Update mod state so we can retrieve this skeleton later
-						ModState.LastSpawnedSkeleton = lastSpawned;
-
-						// Attach the SkeletonAttackType component
-						var attackType = lastSpawned.AddComponent<SkeletonAttackType>();
-
-						// Determine if the last attack was a secondary attack
-						attackType.IsSecondaryAttack = ModState.LastAttackWasSecondary;
-
-						MarsarahTweaks.MLog($"Stored last spawned skeleton: {lastSpawned.name}, Attack Type: {(ModState.LastAttackWasSecondary ? "Secondary" : "Primary")}");
-					}
-					else
-					{
-						MarsarahTweaks.MLog("No valid skeleton found in this iteration.");
-					}
-				}
-			}
-
-			private static GameObject GetLastSpawnedSkeleton(SpawnAbility instance)
-			{
-				return ModState.LastSpawnedSkeleton;
-			}
-		}
-		
-		[HarmonyPatch(typeof(Humanoid), nameof(Humanoid.GiveDefaultItems))]
-		public static class Patch_GiveDefaultItems
-		{
-			private static void Prefix(Humanoid __instance, ref bool __runOriginal)
-			{
-				MarsarahTweaks.MLog("GiveDefaultItems called");
-
-				if (__instance == null || __instance.name == null)
-					return;
-
-				// Check if this is a friendly skeleton
-				if (__instance.name.Contains("Skeleton_Friendly"))
-				{
-					// Check if it has a custom attack type assigned
-					var attackTypeComponent = __instance.GetComponent<SkeletonAttackType>();
-					bool isSecondaryAttack = attackTypeComponent != null && attackTypeComponent.IsSecondaryAttack;
-
-					// Assign new weapon based on attack type
-					string weaponPrefabName = isSecondaryAttack ? "skeleton_bow2" : "skeleton_sword2";
-					var newWeapon = ObjectDB.instance.GetItemPrefab(weaponPrefabName)?.GetComponent<ItemDrop>();
-
-					if (newWeapon != null)
-					{
-						__instance.EquipItem(newWeapon.m_itemData, triggerEquipEffects: false);
-						MarsarahTweaks.MLog($"[Marsarah Tweaks] Assigned {weaponPrefabName} to Skeleton_Friendly (Secondary Attack: {isSecondaryAttack})");
-					}
-
-					__runOriginal = false;
-					return;
-				}
-
-				__runOriginal = true;
-				return;
-			}
-		}
-		 
-		 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		public static void UpdateDeathRaiser(ObjectDB objDB, bool wasChanged)
+		/*public static void UpdateDeathRaiser(ObjectDB objDB, bool wasChanged)
 		{
 			SetAttackPercentage(objDB);
 		}
@@ -363,6 +329,6 @@ namespace MarsarahTweaks.Patches
 					itemDrop.m_itemData.m_shared.m_attack.m_attackHealthPercentage = 30; // default 40
 				}
 			}
-		}
+		}*/
 	}
 }

@@ -248,10 +248,6 @@ namespace MarsarahTweaks
 						case var name when name == Configs.StatusEffectsModifications.Name:
 							StatusEffectChanges.UpdateStatusEffects(ObjectDB.instance, true);
 							break;
-
-						case var name when name == Configs.DeathRaiserModifications.Name:
-							DeathRaiserChanges.UpdateDeathRaiser(ObjectDB.instance, true);
-							break;
 					}
 				}
                 else
