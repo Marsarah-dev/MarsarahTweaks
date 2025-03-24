@@ -43,17 +43,25 @@ namespace MarsarahTweaks.Patches
 		{
 			static bool Prefix(int quality, ref int ___m_minStationLevel, ref int __result, ref bool __runOriginal)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated())
+				{
+					// Run the original function on dedicated servers
+					__runOriginal = true;
+					return true;
+				}
+
 				if (ConfigManager.gearUpgradeUnlockEnabled.Value)
 				{
 					__runOriginal = false;
 					__result = Mathf.Max(0, ___m_minStationLevel) + (quality - 1);
 					return false;
 				}
+
 				__runOriginal = true;
-				__result = Mathf.Max(1, ___m_minStationLevel) + (quality - 1);
 				return true;
 			}
 		}
+
 
 		// Dictionaries
 		private static Dictionary<string, int> originalRecipeStationLevels = new Dictionary<string, int>();
@@ -112,12 +120,12 @@ namespace MarsarahTweaks.Patches
 					// Backup original value if not already stored
 					if (!originalRecipeStationLevels.ContainsKey(recipeName))
 					{
-						MarsarahTweaks.MLog($"Backing up {recipeName} min station level value: {recipe.m_minStationLevel}");
+						//MarsarahTweaks.MLog($"Backing up {recipeName} min station level value: {recipe.m_minStationLevel}");
 						originalRecipeStationLevels[recipeName] = recipe.m_minStationLevel;
 					}
 
 					// Apply new value
-					MarsarahTweaks.MLog($"Applying new min station level for {recipeName}: {newStationLevel}");
+					//MarsarahTweaks.MLog($"Applying new min station level for {recipeName}: {newStationLevel}");
 					recipe.m_minStationLevel = newStationLevel;
 				}
 			}
@@ -132,7 +140,7 @@ namespace MarsarahTweaks.Patches
 					if (recipe == null) continue;
 
 					// Restore original value
-					MarsarahTweaks.MLog($"Restoring {recipeName} min station level value: {originalLevel}");
+					//MarsarahTweaks.MLog($"Restoring {recipeName} min station level value: {originalLevel}");
 					recipe.m_minStationLevel = originalLevel;
 				}
 

@@ -671,7 +671,7 @@ namespace MarsarahTweaks.Patches
 			if (modifyResItem && !string.IsNullOrEmpty(values.newResItem) && req.m_resItem.name != values.newResItem)
 			{
 				//MarsarahTweaks.MLog($"Applying material for Resource {req.m_resItem.name} -> {values.newResItem}");
-				req.m_resItem = ObjectDB.instance.GetItemPrefab(values.newResItem).GetComponent<ItemDrop>();
+				req.m_resItem = ZNetScene.instance.GetPrefab(values.newResItem).GetComponent<ItemDrop>();
 			}
 		}
 
@@ -724,7 +724,7 @@ namespace MarsarahTweaks.Patches
 					if (req.m_resItem.name == newMaterial && restoreMaterials)
 					{
 						//MarsarahTweaks.MLog($"Restoring original material for {pieceName} from {req.m_resItem.name} to {originalMaterial}");
-						req.m_resItem = ObjectDB.instance.GetItemPrefab(originalMaterial).GetComponent<ItemDrop>();
+						req.m_resItem = ZNetScene.instance.GetPrefab(originalMaterial).GetComponent<ItemDrop>();
 						break;
 					}
 				}
