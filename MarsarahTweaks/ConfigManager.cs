@@ -76,8 +76,8 @@ namespace MarsarahTweaks
 			//public static readonly ConfigMetadata WeaponStaminaModifications = new ConfigMetadata("6 - Reduced Weapon Stamina Costs", "Weapon stamina swing costs reduced");
 			public static readonly ConfigMetadata LessStaminaModifications = new ConfigMetadata("6 - Less Stamina Usage", "Stamina use of all actions is reduced by 15%");
 			public static readonly ConfigMetadata ExtraArmorStatsModifications = new ConfigMetadata("7 - Extra Armor Stats", "Heavy armor provides extra HP, light armor provides extra stamina, mage armor provides extra base eitr");
-			public static readonly ConfigMetadata DeathRaiserModifications = new ConfigMetadata("8 - Better Death Raiser", "(Toggling requires client relog) Reduces HP cost and increases chance of summoning archers");
-			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("9 - Better Death Raiser Summons", "Increases summoned skeleton speed and add better looking gear (stats not affected)");
+			public static readonly ConfigMetadata DeathRaiserModifications = new ConfigMetadata("8 - Better Death Raiser", "Adds secondary attack that spawns archer skeletons. Primary attack will only spawn melee skeletons");
+			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("9 - Better Summoned Skeletons", "(Toggling requires client relog for speed changes) Increases summoned skeleton speed and add better looking gear (stats not affected) according to Death Raiser level");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling requires client relog) All metal (ore and bars) weight decreased to 8");
 		}
