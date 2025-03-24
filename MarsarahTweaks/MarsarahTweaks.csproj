@@ -104,6 +104,7 @@
     <Compile Include="Patches\FrostStaffChanges.cs" />
     <Compile Include="Patches\GearRecipeChanges.cs" />
     <Compile Include="Patches\GearSpeedChanges.cs" />
+    <Compile Include="Patches\GearUpgradeChanges.cs" />
     <Compile Include="Patches\LessStaminaChanges.cs" />
     <Compile Include="Patches\LighterMetalWeight.cs" />
     <Compile Include="Patches\OtherPatches.cs" />

@@ -1195,6 +1195,8 @@ namespace MarsarahTweaks.Patches
 							break;
 					}
 				}
+
+				recipe.m_minStationLevel = 1; // Originally 2
 			}
 			else if (wasChanged)
 			{
@@ -1232,6 +1234,8 @@ namespace MarsarahTweaks.Patches
 						defaultGearRecipeValues.Remove(recipe.name);
 					}
 				}
+
+				recipe.m_minStationLevel = 2; // Revert to original
 			}
 		}
 
