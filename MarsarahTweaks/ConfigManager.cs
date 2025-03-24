@@ -68,16 +68,17 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata BuildPiecesMaterials = new ConfigMetadata("5 - Alternate Build Pieces Materials", "Modifies build pieces materials (This will move the Workbench Toolrack extension from Mountain to Swamp biome)");
 			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "(Toggling requires client relog) Modifies food and mead recipes costs, crafted amounts and stacks");
 
-			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("1 - Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it");
-			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("2 - Gear Speed Modifications", "(Toggling requires client relog) Removes speed penalty for heavy and mage armors; adds speed bonus to light armor");
-			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("3 - Forsaken Powers Modifications", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)");
-			public static readonly ConfigMetadata CharacterSpeedModifications = new ConfigMetadata("4 - Faster Character Speed", "Faster character jog, walk, swim and crouch speeds (run excluded)");
-			public static readonly ConfigMetadata StatusEffectsModifications = new ConfigMetadata("5 - Shorter Wet Effect And Potion Cooldowns", "Wet effect and potions cooldown timers reduced");
+			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("01 - Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it");
+			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("02 - Gear Speed Modifications", "(Toggling requires client relog) Removes speed penalty for heavy and mage armors; adds speed bonus to light armor");
+			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("03 - Forsaken Powers Modifications", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)");
+			public static readonly ConfigMetadata CharacterSpeedModifications = new ConfigMetadata("04 - Faster Character Speed", "Faster character jog, walk, swim and crouch speeds (run excluded)");
+			public static readonly ConfigMetadata StatusEffectsModifications = new ConfigMetadata("05 - Shorter Wet Effect And Potion Cooldowns", "Wet effect and potions cooldown timers reduced");
 			//public static readonly ConfigMetadata WeaponStaminaModifications = new ConfigMetadata("6 - Reduced Weapon Stamina Costs", "Weapon stamina swing costs reduced");
-			public static readonly ConfigMetadata LessStaminaModifications = new ConfigMetadata("6 - Less Stamina Usage", "Stamina use of all actions is reduced by 15%");
-			public static readonly ConfigMetadata ExtraArmorStatsModifications = new ConfigMetadata("7 - Extra Armor Stats", "Heavy armor provides extra HP, light armor provides extra stamina, mage armor provides extra base eitr");
-			public static readonly ConfigMetadata DeathRaiserModifications = new ConfigMetadata("8 - Better Death Raiser", "Adds secondary attack that spawns archer skeletons. Primary attack will only spawn melee skeletons");
-			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("9 - Better Summoned Skeletons", "(Toggling requires client relog for speed changes) Increases summoned skeleton speed and add better looking gear (stats not affected) according to Death Raiser level");
+			public static readonly ConfigMetadata LessStaminaModifications = new ConfigMetadata("06 - Less Stamina Usage", "Stamina use of all actions is reduced by 15%");
+			public static readonly ConfigMetadata ExtraArmorStatsModifications = new ConfigMetadata("07 - Extra Armor Stats", "Heavy armor provides extra HP, light armor provides extra stamina, mage armor provides extra base eitr");
+			public static readonly ConfigMetadata DeathRaiserModifications = new ConfigMetadata("08 - Better Death Raiser", "Adds secondary attack that spawns archer skeletons. Primary attack will only spawn melee skeletons");
+			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("09 - Better Summoned Skeletons", "(Toggling requires client relog for speed changes) Increases summoned skeleton speed and add better looking gear (stats not affected) according to Death Raiser level");
+			public static readonly ConfigMetadata FrostStaffModifications = new ConfigMetadata("10 - Better Frost Staff Accuracy", "Improves Staff of Frost Accuracy");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling requires client relog) All metal (ore and bars) weight decreased to 8");
 		}
@@ -103,6 +104,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> extraArmorStatsEnabled;
 		public static ConfigEntry<bool> betterDeathRaiserEnabled;
 		public static ConfigEntry<bool> betterDeathRaiserSummonsEnabled;
+		public static ConfigEntry<bool> betterFrostStaffAccuracyEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -133,6 +135,7 @@ namespace MarsarahTweaks
 			extraArmorStatsEnabled = CreateConfig(ConfigSections.Features, Configs.ExtraArmorStatsModifications.Name, true, Configs.ExtraArmorStatsModifications.Description);
 			betterDeathRaiserEnabled = CreateConfig(ConfigSections.Features, Configs.DeathRaiserModifications.Name, true, Configs.DeathRaiserModifications.Description);
 			betterDeathRaiserSummonsEnabled = CreateConfig(ConfigSections.Features, Configs.DeathRaiserSummonsModifications.Name, true, Configs.DeathRaiserSummonsModifications.Description);
+			betterFrostStaffAccuracyEnabled = CreateConfig(ConfigSections.Features, Configs.FrostStaffModifications.Name, true, Configs.FrostStaffModifications.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);

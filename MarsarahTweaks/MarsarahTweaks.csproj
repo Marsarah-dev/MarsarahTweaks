@@ -99,6 +99,7 @@
     <Compile Include="Patches\EarlyLinenCape.cs" />
     <Compile Include="Patches\FoodAndMeadChanges.cs" />
     <Compile Include="Patches\ForsakenPowersChanges.cs" />
+    <Compile Include="Patches\FrostStaffChanges.cs" />
     <Compile Include="Patches\GearRecipeChanges.cs" />
     <Compile Include="Patches\GearSpeedChanges.cs" />
     <Compile Include="Patches\LessStaminaChanges.cs" />
