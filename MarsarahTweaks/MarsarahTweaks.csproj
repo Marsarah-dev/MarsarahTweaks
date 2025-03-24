@@ -94,6 +94,7 @@
     <Compile Include="Patches\BuildPieceChanges.cs" />
     <Compile Include="Patches\CharacterSpeedChanges.cs" />
     <Compile Include="Patches\ComponentLogger.cs" />
+    <Compile Include="Patches\CrossbowsChanges.cs" />
     <Compile Include="Patches\DeathRaiserChanges.cs" />
     <Compile Include="Patches\DoubleBronzeCrafting.cs" />
     <Compile Include="Patches\EarlyLinenCape.cs" />
