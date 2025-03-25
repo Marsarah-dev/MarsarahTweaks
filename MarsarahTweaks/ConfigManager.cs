@@ -73,7 +73,6 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("03 - Forsaken Powers Modifications", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)");
 			public static readonly ConfigMetadata CharacterSpeedModifications = new ConfigMetadata("04 - Faster Character Speed", "Faster character jog, walk, swim and crouch speeds (run excluded)");
 			public static readonly ConfigMetadata StatusEffectsModifications = new ConfigMetadata("05 - Shorter Wet Effect And Potion Cooldowns", "Wet effect and potions cooldown timers reduced");
-			//public static readonly ConfigMetadata WeaponStaminaModifications = new ConfigMetadata("6 - Reduced Weapon Stamina Costs", "Weapon stamina swing costs reduced");
 			public static readonly ConfigMetadata LessStaminaModifications = new ConfigMetadata("06 - Less Stamina Usage", "Stamina use of all actions is reduced by 15%");
 			public static readonly ConfigMetadata ExtraArmorStatsModifications = new ConfigMetadata("07 - Extra Armor Stats", "Heavy armor provides extra HP, light armor provides extra stamina, mage armor provides extra base eitr");
 			public static readonly ConfigMetadata DeathRaiserModifications = new ConfigMetadata("08 - Better Death Raiser", "Adds secondary attack that spawns archer skeletons. Primary attack will only spawn melee skeletons");
@@ -82,7 +81,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("11 - Reduced Crossbows Reload Time", "(Toggling requires CLIENT relog) Crossbows Reload Time Reduced by 1s");
 			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("12 - Less Ashlands Enemies", "(Toggling requires SERVER restart) Less Enemies in Ashlands");
 			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("13 - Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to max level within their respective biomes");
-			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("14 - Permanent Lights", "Makes all light sources permanent, but the build costs use max fuel type");
+			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("14 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use max fuel type");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling requires CLIENT relog) All metal (ore and bars) weight decreased to 8");
 		}
@@ -103,7 +102,6 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> longerForsakenPowersEnabled;
 		public static ConfigEntry<bool> fasterCharacterSpeedEnabled;
 		public static ConfigEntry<bool> shorterStatusEffectsEnabled;
-		//public static ConfigEntry<bool> reducedWeaponStaminaEnabled;
 		public static ConfigEntry<bool> lessStaminaUsageEnabled;
 		public static ConfigEntry<bool> extraArmorStatsEnabled;
 		public static ConfigEntry<bool> betterDeathRaiserEnabled;
@@ -138,7 +136,6 @@ namespace MarsarahTweaks
 			longerForsakenPowersEnabled = CreateConfig(ConfigSections.Features, Configs.ForsakenPowersModifications.Name, true, Configs.ForsakenPowersModifications.Description);
 			fasterCharacterSpeedEnabled = CreateConfig(ConfigSections.Features, Configs.CharacterSpeedModifications.Name, true, Configs.CharacterSpeedModifications.Description);
 			shorterStatusEffectsEnabled = CreateConfig(ConfigSections.Features, Configs.StatusEffectsModifications.Name, true, Configs.StatusEffectsModifications.Description);
-			//reducedWeaponStaminaEnabled = CreateConfig(ConfigSections.Features, Configs.WeaponStaminaModifications.Name, true, Configs.WeaponStaminaModifications.Description);
 			lessStaminaUsageEnabled = CreateConfig(ConfigSections.Features, Configs.LessStaminaModifications.Name, true, Configs.LessStaminaModifications.Description);
 			extraArmorStatsEnabled = CreateConfig(ConfigSections.Features, Configs.ExtraArmorStatsModifications.Name, true, Configs.ExtraArmorStatsModifications.Description);
 			betterDeathRaiserEnabled = CreateConfig(ConfigSections.Features, Configs.DeathRaiserModifications.Name, true, Configs.DeathRaiserModifications.Description);

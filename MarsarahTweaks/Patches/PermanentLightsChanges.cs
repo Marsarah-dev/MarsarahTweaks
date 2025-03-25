@@ -21,6 +21,7 @@ namespace MarsarahTweaks.Patches
 				{
 					if (ConfigManager.permanentLightsEnabled.Value)
 					{
+						//MarsarahTweaks.MLog($"Setting max fuel for {__instance.m_name}");
 						___m_nview.GetZDO().Set("fuel", __instance.m_maxFuel);
 					}
 					/*else
