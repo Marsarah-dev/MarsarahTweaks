@@ -83,6 +83,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("13 - Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to max level within their respective biomes");
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("14 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
 			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("15 - Clear Mistlands", "(Disabling mid-game requires SERVER restart) Clear Mistlands mist after defeating the Queen");
+			public static readonly ConfigMetadata CraftableChain = new ConfigMetadata("16 - Craftable Chain", "Chain craftable at Black Forge");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog) All metal ore and bars weight decreased to 8");
 		}
@@ -113,6 +114,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> gearUpgradeUnlockEnabled;
 		public static ConfigEntry<bool> permanentLightsEnabled;
 		public static ConfigEntry<bool> clearMistlandsEnabled;
+		public static ConfigEntry<bool> craftableChainEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -148,6 +150,7 @@ namespace MarsarahTweaks
 			gearUpgradeUnlockEnabled = CreateConfig(ConfigSections.Features, Configs.GearUpgradeModifications.Name, true, Configs.GearUpgradeModifications.Description);
 			permanentLightsEnabled = CreateConfig(ConfigSections.Features, Configs.PermanentLightsModifications.Name, true, Configs.PermanentLightsModifications.Description);
 			clearMistlandsEnabled = CreateConfig(ConfigSections.Features, Configs.ClearMistlands.Name, true, Configs.ClearMistlands.Description);
+			craftableChainEnabled = CreateConfig(ConfigSections.Features, Configs.CraftableChain.Name, true, Configs.CraftableChain.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
@@ -270,6 +273,10 @@ namespace MarsarahTweaks
 
 						case var name when name == Configs.PermanentLightsModifications.Name:
 							PermanentLightsChanges.UpdateLightBuildPiecesAmounts(ZNetScene.instance, true);
+							break;
+
+						case var name when name == Configs.CraftableChain.Name:
+							CraftableChain.UpdateChainRecipe(ObjectDB.instance, true);
 							break;
 					}
 				}

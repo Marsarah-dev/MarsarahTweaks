@@ -96,6 +96,7 @@
     <Compile Include="Patches\CharacterSpeedChanges.cs" />
     <Compile Include="Patches\ClearMistlandsChanges.cs" />
     <Compile Include="Patches\ComponentLogger.cs" />
+    <Compile Include="Patches\CraftableChain.cs" />
     <Compile Include="Patches\CrossbowsChanges.cs" />
     <Compile Include="Patches\DeathRaiserChanges.cs" />
     <Compile Include="Patches\DoubleBronzeCrafting.cs" />
