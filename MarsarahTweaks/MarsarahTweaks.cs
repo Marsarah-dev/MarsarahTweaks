@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+using MarsarahTweaks.Patches;
 using ServerSync;
 using System.IO;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace MarsarahTweaks
 		void Awake()
 		{
 			ConfigManager.Init(Config);
+			CustomConsoleCommandHandler.Init(); // Register new console commands
 
 			harmony.PatchAll();
 		}

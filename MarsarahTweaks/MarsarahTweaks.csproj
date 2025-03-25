@@ -99,6 +99,7 @@
     <Compile Include="Patches\ComponentLogger.cs" />
     <Compile Include="Patches\CraftableChain.cs" />
     <Compile Include="Patches\CrossbowsChanges.cs" />
+    <Compile Include="Patches\CustomConsoleCommandHandler.cs" />
     <Compile Include="Patches\DeathRaiserChanges.cs" />
     <Compile Include="Patches\DoubleBronzeCrafting.cs" />
     <Compile Include="Patches\EarlyLinenCape.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Patches\StatusEffectChanges.cs" />
     <Compile Include="Patches\TestJump.cs" />
     <Compile Include="Patches\WeaponStaminaChanges.cs" />
+    <Compile Include="Patches\WeatherChanges.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
