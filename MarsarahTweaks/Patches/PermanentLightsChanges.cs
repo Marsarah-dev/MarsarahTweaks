@@ -204,7 +204,7 @@ namespace MarsarahTweaks.Patches
 						{
 							if (originalCosts.TryGetValue(req.m_resItem.name, out int originalAmount))
 							{
-								MarsarahTweaks.MLog($"Restoring backup for {pieceName}");
+								//MarsarahTweaks.MLog($"Restoring backup for {pieceName}");
 								req.m_amount = originalAmount;
 								if (req.m_resItem.name == "Wood")
 								{
@@ -220,7 +220,7 @@ namespace MarsarahTweaks.Patches
 						component.m_resources = component.m_resources
 							.Where(req => !(req.m_resItem.name == "Wood" && req.m_amount == 20))
 							.ToArray();
-						MarsarahTweaks.MLog($"Removed Wood requirement for {pieceName}");
+						//MarsarahTweaks.MLog($"Removed Wood requirement for {pieceName}");
 					}
 				}
 

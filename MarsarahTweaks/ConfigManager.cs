@@ -62,28 +62,29 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata ServerConfig = new ConfigMetadata("Lock Configuration", "If on, only server admins can change the configuration.");
 
 			public static readonly ConfigMetadata DoubleBronzeCrafting = new ConfigMetadata("1 - Double Bronze Crafting", "Doubles the amount of crafted Bronze at the Forge");
-			public static readonly ConfigMetadata GearRecipeAmounts = new ConfigMetadata("2 - Cheaper Gear Recipe Amounts", "Reduces costs for crafting and upgrading gear for metal. Balances other resources amounts");
-			public static readonly ConfigMetadata GearRecipeMaterials = new ConfigMetadata("3 - Alternate Gear Recipe Materials", "Modifies gear recipe materials for some items (more materials from current respective biomes)");
-			public static readonly ConfigMetadata BuildPiecesAmounts = new ConfigMetadata("4 - Cheaper Build Pieces Amounts", "Reduces costs for build pieces");
-			public static readonly ConfigMetadata BuildPiecesMaterials = new ConfigMetadata("5 - Alternate Build Pieces Materials", "Modifies build pieces materials (This will move the Workbench Toolrack extension from Mountain to Swamp biome)");
-			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "(Toggling requires CLIENT relog for food stacks) Modifies food and mead recipes costs, crafted amounts and stacks");
+			public static readonly ConfigMetadata GearRecipeAmountsModifications = new ConfigMetadata("2 - Cheaper Gear Recipe Amounts", "Reduces costs for crafting and upgrading gear for metal. Balances other resources amounts");
+			public static readonly ConfigMetadata GearRecipeMaterialsModifications = new ConfigMetadata("3 - Alternate Gear Recipe Materials", "Modifies gear recipe materials for some items (more materials from current respective biomes)");
+			public static readonly ConfigMetadata BuildPieceAmountsModifications = new ConfigMetadata("4 - Cheaper Build Pieces Amounts", "Reduces costs for build pieces");
+			public static readonly ConfigMetadata BuildPieceMaterialsModifications = new ConfigMetadata("5 - Alternate Build Pieces Materials", "Modifies build pieces materials (This will move the Workbench Toolrack extension from Mountain to Swamp biome)");
+			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "(Toggling mid-game requires CLIENT relog for food stacks) Modifies food and mead recipes costs, crafted amounts and stacks");
 
 			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("01 - Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it");
-			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("02 - Gear Speed Modifications", "(Toggling requires CLIENT relog) Removes speed penalty for heavy and mage armors; adds speed bonus to light armor");
+			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("02 - Gear Speed Modifications", "(Toggling mid-game requires CLIENT relog) Removes speed penalty for heavy and mage armors; adds speed bonus to light armor");
 			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("03 - Forsaken Powers Modifications", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)");
 			public static readonly ConfigMetadata CharacterSpeedModifications = new ConfigMetadata("04 - Faster Character Speed", "Faster character jog, walk, swim and crouch speeds (run excluded)");
 			public static readonly ConfigMetadata StatusEffectsModifications = new ConfigMetadata("05 - Shorter Wet Effect And Potion Cooldowns", "Wet effect and potions cooldown timers reduced");
 			public static readonly ConfigMetadata LessStaminaModifications = new ConfigMetadata("06 - Less Stamina Usage", "Stamina use of all actions is reduced by 15%");
 			public static readonly ConfigMetadata ExtraArmorStatsModifications = new ConfigMetadata("07 - Extra Armor Stats", "Heavy armor provides extra HP, light armor provides extra stamina, mage armor provides extra base eitr");
 			public static readonly ConfigMetadata DeathRaiserModifications = new ConfigMetadata("08 - Better Death Raiser", "Adds secondary attack that spawns archer skeletons. Primary attack will only spawn melee skeletons");
-			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("09 - Better Summoned Skeletons", "(Toggling requires CLIENT relog for speed changes) Increases summoned skeleton speed and add better looking gear (stats not affected) according to Death Raiser level");
+			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("09 - Better Summoned Skeletons", "(Toggling mid-game requires CLIENT relog for speed changes) Increases summoned skeleton speed and add better looking gear according to Death Raiser level (stats not affected)");
 			public static readonly ConfigMetadata FrostStaffModifications = new ConfigMetadata("10 - Better Frost Staff Accuracy", "Improves Staff of Frost Accuracy");
-			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("11 - Reduced Crossbows Reload Time", "(Toggling requires CLIENT relog) Crossbows Reload Time Reduced by 1s");
-			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("12 - Less Ashlands Enemies", "(Toggling requires SERVER restart) Less Enemies in Ashlands");
+			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("11 - Reduced Crossbows Reload Time", "(Toggling mid-game requires CLIENT relog) Crossbows Reload Time Reduced by 1s");
+			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("12 - Less Ashlands Enemies", "(Toggling mid-game requires SERVER restart) Less Enemies in Ashlands");
 			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("13 - Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to max level within their respective biomes");
-			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("14 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use max fuel type");
+			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("14 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
+			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("15 - Clear Mistlands", "(Disabling mid-game requires SERVER restart) Clear Mistlands mist after defeating the Queen");
 
-			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling requires CLIENT relog) All metal (ore and bars) weight decreased to 8");
+			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog) All metal ore and bars weight decreased to 8");
 		}
 
 		// Config entries
@@ -111,6 +112,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> lessAshlandsEnemiesEnabled;
 		public static ConfigEntry<bool> gearUpgradeUnlockEnabled;
 		public static ConfigEntry<bool> permanentLightsEnabled;
+		public static ConfigEntry<bool> clearMistlandsEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -124,10 +126,10 @@ namespace MarsarahTweaks
 
 			// ===== Grind Reduction
 			doubleBronzeEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.DoubleBronzeCrafting.Name, true, Configs.DoubleBronzeCrafting.Description);
-			gearRecipeAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeAmounts.Name, true, Configs.GearRecipeAmounts.Description);
-			gearRecipeMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeMaterials.Name, true, Configs.GearRecipeMaterials.Description);
-			buildPieceAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPiecesAmounts.Name, true, Configs.BuildPiecesAmounts.Description);
-			buildPieceMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPiecesMaterials.Name, true, Configs.BuildPiecesMaterials.Description);
+			gearRecipeAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeAmountsModifications.Name, true, Configs.GearRecipeAmountsModifications.Description);
+			gearRecipeMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeMaterialsModifications.Name, true, Configs.GearRecipeMaterialsModifications.Description);
+			buildPieceAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPieceAmountsModifications.Name, true, Configs.BuildPieceAmountsModifications.Description);
+			buildPieceMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPieceMaterialsModifications.Name, true, Configs.BuildPieceMaterialsModifications.Description);
 			foodAndMeadModificationsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.FoodAndMeadModifications.Name, true, Configs.FoodAndMeadModifications.Description);
 
 			// ===== Features
@@ -145,6 +147,7 @@ namespace MarsarahTweaks
 			lessAshlandsEnemiesEnabled = CreateConfig(ConfigSections.Features, Configs.AshlandsEnemiesModifications.Name, true, Configs.AshlandsEnemiesModifications.Description);
 			gearUpgradeUnlockEnabled = CreateConfig(ConfigSections.Features, Configs.GearUpgradeModifications.Name, true, Configs.GearUpgradeModifications.Description);
 			permanentLightsEnabled = CreateConfig(ConfigSections.Features, Configs.PermanentLightsModifications.Name, true, Configs.PermanentLightsModifications.Description);
+			clearMistlandsEnabled = CreateConfig(ConfigSections.Features, Configs.ClearMistlands.Name, true, Configs.ClearMistlands.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
@@ -217,19 +220,19 @@ namespace MarsarahTweaks
 							LighterMetalWeight.UpdateLighterMetalWeight(ObjectDB.instance, true);
 							break;
 
-						case var name when name == Configs.GearRecipeAmounts.Name:
+						case var name when name == Configs.GearRecipeAmountsModifications.Name:
 							GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, true, false);
 							break;
 
-						case var name when name == Configs.GearRecipeMaterials.Name:
+						case var name when name == Configs.GearRecipeMaterialsModifications.Name:
 							GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, false, true);
 							break;
 
-						case var name when name == Configs.BuildPiecesAmounts.Name:
+						case var name when name == Configs.BuildPieceAmountsModifications.Name:
 							BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, true, false);
 							break;
 
-						case var name when name == Configs.BuildPiecesMaterials.Name:
+						case var name when name == Configs.BuildPieceMaterialsModifications.Name:
 							BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, false, true);
 							break;
 

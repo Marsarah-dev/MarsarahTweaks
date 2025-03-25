@@ -94,6 +94,7 @@
     <Compile Include="Patches\AshlandsEnemiesChanges.cs" />
     <Compile Include="Patches\BuildPieceChanges.cs" />
     <Compile Include="Patches\CharacterSpeedChanges.cs" />
+    <Compile Include="Patches\ClearMistlandsChanges.cs" />
     <Compile Include="Patches\ComponentLogger.cs" />
     <Compile Include="Patches\CrossbowsChanges.cs" />
     <Compile Include="Patches\DeathRaiserChanges.cs" />
