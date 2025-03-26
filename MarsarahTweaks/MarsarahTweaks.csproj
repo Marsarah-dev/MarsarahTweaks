@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="ConfigManager.cs" />
     <Compile Include="MarsarahTweaks.cs" />
+    <Compile Include="Patches\AIFleeChanges.cs" />
     <Compile Include="Patches\ArmorStatsChanges.cs" />
     <Compile Include="Patches\AshlandsEnemiesChanges.cs" />
     <Compile Include="Patches\BossStateChecker.cs" />

@@ -89,6 +89,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata CreatureUnleveler = new ConfigMetadata("19 - Creature Unleveler By Boss", "(Toggling requires SERVER restart) Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss");
 			public static readonly ConfigMetadata MinibossWeight = new ConfigMetadata("20 - Hildir Weight Rewards", "(Toggling mid-game requires CLIENT relog) Increases base carry weight by 25 when turning in Hildir chests (for each chest)");
 			public static readonly ConfigMetadata ExtensionsModifications = new ConfigMetadata("21 - Station Extensions Changes", "(Toggling mid-game requires CLIENT relog) Decreases space requirement for workstation extensions and increases build distance to workstations (This does not increase workstation radius)");
+			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("22 - Stop Running Away", "Boars and Necks won't flee when alerted");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog) All metal ore and bars weight decreased to 8");
 		}
@@ -125,6 +126,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> creatureUnlevelerEnabled;
 		public static ConfigEntry<bool> minibossWeightEnabled;
 		public static ConfigEntry<bool> extensionsChangesEnabled;
+		public static ConfigEntry<bool> noFleeEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -166,6 +168,7 @@ namespace MarsarahTweaks
 			creatureUnlevelerEnabled = CreateConfig(ConfigSections.Features, Configs.CreatureUnleveler.Name, true, Configs.CreatureUnleveler.Description);
 			minibossWeightEnabled = CreateConfig(ConfigSections.Features, Configs.MinibossWeight.Name, true, Configs.MinibossWeight.Description);
 			extensionsChangesEnabled = CreateConfig(ConfigSections.Features, Configs.ExtensionsModifications.Name, true, Configs.ExtensionsModifications.Description);
+			noFleeEnabled = CreateConfig(ConfigSections.Features, Configs.FleeAIModifications.Name, true, Configs.FleeAIModifications.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
