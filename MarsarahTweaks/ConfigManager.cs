@@ -87,6 +87,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata BrighterLanterns = new ConfigMetadata("17 - Brighter Lanterns", "(Toggling mid-game requires CLIENT relog) Dvergr lanterns are brighter"); // TODO: Test on server - disabling and relogging on local does not revert to default
 			public static readonly ConfigMetadata WeatherModifications = new ConfigMetadata("18 - Clearer Weather", "(Toggling requires SERVER restart) Reduces chance for mist and snowstorms");
 			public static readonly ConfigMetadata CreatureUnleveler = new ConfigMetadata("19 - Creature Unleveler By Boss", "(Toggling requires SERVER restart) Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss");
+			public static readonly ConfigMetadata MinibossWeight = new ConfigMetadata("20 - Hildir Weight Rewards", "(Toggling mid-game requires CLIENT relog) Increases base carry weight by 25 when turning in Hildir chests (for each chest)");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog) All metal ore and bars weight decreased to 8");
 		}
@@ -121,6 +122,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> brighterLanternsEnabled;
 		public static ConfigEntry<bool> clearerWeatherEnabled;
 		public static ConfigEntry<bool> creatureUnlevelerEnabled;
+		public static ConfigEntry<bool> minibossWeightEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -160,6 +162,7 @@ namespace MarsarahTweaks
 			brighterLanternsEnabled = CreateConfig(ConfigSections.Features, Configs.BrighterLanterns.Name, true, Configs.BrighterLanterns.Description);
 			clearerWeatherEnabled = CreateConfig(ConfigSections.Features, Configs.WeatherModifications.Name, true, Configs.WeatherModifications.Description);
 			creatureUnlevelerEnabled = CreateConfig(ConfigSections.Features, Configs.CreatureUnleveler.Name, true, Configs.CreatureUnleveler.Description);
+			minibossWeightEnabled = CreateConfig(ConfigSections.Features, Configs.MinibossWeight.Name, true, Configs.MinibossWeight.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);

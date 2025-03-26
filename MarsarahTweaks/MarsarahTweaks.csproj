@@ -113,6 +113,7 @@
     <Compile Include="Patches\GearUpgradeChanges.cs" />
     <Compile Include="Patches\LessStaminaChanges.cs" />
     <Compile Include="Patches\LighterMetalWeight.cs" />
+    <Compile Include="Patches\MinibossWeightChanges.cs" />
     <Compile Include="Patches\OtherPatches.cs" />
     <Compile Include="Patches\PermanentLightsChanges.cs" />
     <Compile Include="Patches\StatusEffectChanges.cs" />

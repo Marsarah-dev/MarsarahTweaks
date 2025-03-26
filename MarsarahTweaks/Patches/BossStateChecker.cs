@@ -17,7 +17,10 @@ namespace MarsarahTweaks.Patches
 			{ "defeated_dragon", false },
 			{ "defeated_goblinking", false },
 			{ "defeated_queen", false },
-			{ "defeated_fader", false }
+			{ "defeated_fader", false },
+			{ "hildir1", false }, // turning in Brenna chest
+			{ "hildir2", false }, // turning in Geirrhafa chest
+			{ "hildir3", false }  // turning in ThungrNZil chest
 		};
 
 		public static void UpdateDefeatedStates(ZoneSystem zoneSystem)
