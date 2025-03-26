@@ -16,7 +16,7 @@ namespace MarsarahTweaks.Patches
 			{
 				if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Prevent running on clients
 
-				if (ConfigManager.lessBadWeatherEnabled.Value)
+				if (ConfigManager.clearerWeatherEnabled.Value)
 				{
 					foreach (BiomeEnvSetup biome in __instance.m_biomes)
 					{

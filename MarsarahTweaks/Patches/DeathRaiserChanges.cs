@@ -159,8 +159,8 @@ namespace MarsarahTweaks.Patches
 								string weaponPrefabName = !string.IsNullOrEmpty(gear.weapon2) && UnityEngine.Random.value > 0.5f ? gear.weapon2 : gear.weapon1;
 								string shieldPrefabName = !string.IsNullOrEmpty(gear.shield2) && UnityEngine.Random.value > 0.5f ? gear.shield2 : gear.shield1;
 
-								MarsarahTweaks.MLog($"Selected Weapon: {weaponPrefabName}");
-								MarsarahTweaks.MLog($"Selected Shield: {shieldPrefabName}");
+								//MarsarahTweaks.MLog($"Selected Weapon: {weaponPrefabName}");
+								//MarsarahTweaks.MLog($"Selected Shield: {shieldPrefabName}");
 
 								var weaponPrefab = ObjectDB.instance.GetItemPrefab(weaponPrefabName);
 								GameObject shieldPrefab = null;
@@ -174,27 +174,27 @@ namespace MarsarahTweaks.Patches
 
 								if (weaponPrefab != null)
 								{
-									MarsarahTweaks.MLog($"Weapon Prefab: {weaponPrefab}");
+									//MarsarahTweaks.MLog($"Weapon Prefab: {weaponPrefab}");
 									giveItem(__instance, weaponPrefab, originalSkeletonWeaponData);
 								}
 								if (shieldPrefab != null && skeletonType == "Melee")
 								{
-									MarsarahTweaks.MLog($"Weapon Prefab: {shieldPrefab}");
+									//MarsarahTweaks.MLog($"Weapon Prefab: {shieldPrefab}");
 									giveItem(__instance, shieldPrefab);
 								}
 								if (chestPrefab != null)
 								{
-									MarsarahTweaks.MLog($"Weapon Prefab: {chestPrefab}");
+									//MarsarahTweaks.MLog($"Weapon Prefab: {chestPrefab}");
 									giveItem(__instance, chestPrefab);
 								}
 								if (legsPrefab != null)
 								{
-									MarsarahTweaks.MLog($"Weapon Prefab: {legsPrefab}");
+									//MarsarahTweaks.MLog($"Weapon Prefab: {legsPrefab}");
 									giveItem(__instance, legsPrefab);
 								}
 								if (capePrefab != null)
 								{
-									MarsarahTweaks.MLog($"Weapon Prefab: {capePrefab}");
+									//MarsarahTweaks.MLog($"Weapon Prefab: {capePrefab}");
 									giveItem(__instance, capePrefab);
 								}								
 							}

@@ -11,21 +11,17 @@ namespace MarsarahTweaks.Patches
 	{
 		private static bool queenDefeated = false;
 
-		// Check queen status on startup
+		// Check queen status 
 		[HarmonyPatch(typeof(ZoneSystem), "Update")]
 		class ClearMistlandsUpdate_Patch
 		{
 			static void Postfix(ZoneSystem __instance)
 			{
-				if (ConfigManager.clearMistlandsEnabled.Value)
-				{
-					List<string> globalKeys = __instance.GetGlobalKeys();
-					if (queenDefeated != globalKeys.Contains("defeated_queen"))
-					{
-						queenDefeated = globalKeys.Contains("defeated_queen");
-						//MarsarahTweaks.MLog($"ZoneSystem Update - Queen defeated: {queenDefeated}");
-					}
-				}
+				if (!ConfigManager.clearMistlandsEnabled.Value) return;
+
+				BossStateChecker.UpdateDefeatedStates(__instance);
+
+				queenDefeated = BossStateChecker.IsBossDefeated("defeated_queen");
 			}
 		}
 

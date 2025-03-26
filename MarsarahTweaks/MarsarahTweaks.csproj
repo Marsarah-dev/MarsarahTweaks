@@ -92,12 +92,14 @@
     <Compile Include="MarsarahTweaks.cs" />
     <Compile Include="Patches\ArmorStatsChanges.cs" />
     <Compile Include="Patches\AshlandsEnemiesChanges.cs" />
+    <Compile Include="Patches\BossStateChecker.cs" />
     <Compile Include="Patches\BrighterLanterns.cs" />
     <Compile Include="Patches\BuildPieceChanges.cs" />
     <Compile Include="Patches\CharacterSpeedChanges.cs" />
     <Compile Include="Patches\ClearMistlandsChanges.cs" />
     <Compile Include="Patches\ComponentLogger.cs" />
     <Compile Include="Patches\CraftableChain.cs" />
+    <Compile Include="Patches\CreatureUnleveler.cs" />
     <Compile Include="Patches\CrossbowsChanges.cs" />
     <Compile Include="Patches\CustomConsoleCommandHandler.cs" />
     <Compile Include="Patches\DeathRaiserChanges.cs" />

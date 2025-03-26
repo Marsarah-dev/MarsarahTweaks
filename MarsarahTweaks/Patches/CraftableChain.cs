@@ -17,17 +17,17 @@ namespace MarsarahTweaks.Patches
 					bool isDedicatedServer = ZNet.instance.IsDedicated();
 					if (!isDedicatedServer)
 					{
-						MarsarahTweaks.MLog($"ZNetScene Awake: Updating {ConfigManager.Configs.CraftableChain.Name}...");
+						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.Configs.CraftableChain.Name}...");
 						UpdateChainRecipe(__instance, false);
 					}
 					else
 					{
-						MarsarahTweaks.MLog($"ZNetScene Awake: I am a server. No changes made to {ConfigManager.Configs.CraftableChain.Name}...");
+						MarsarahTweaks.MLog($"ObjectDB Awake: I am a server. No changes made to {ConfigManager.Configs.CraftableChain.Name}...");
 					}
 				}
 				else
 				{
-					MarsarahTweaks.MLog($"ZNetScene Awake: Too early to do anything. No changes made to {ConfigManager.Configs.CraftableChain.Name}...");
+					MarsarahTweaks.MLog($"ObjectDB Awake: Too early to do anything. No changes made to {ConfigManager.Configs.CraftableChain.Name}...");
 				}
 			}
 		}

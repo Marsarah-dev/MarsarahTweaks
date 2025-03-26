@@ -79,13 +79,14 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("09 - Better Summoned Skeletons", "(Toggling mid-game requires CLIENT relog for speed changes) Increases summoned skeleton speed and add better looking gear according to Death Raiser level (stats not affected)");
 			public static readonly ConfigMetadata FrostStaffModifications = new ConfigMetadata("10 - Better Frost Staff Accuracy", "Improves Staff of Frost Accuracy");
 			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("11 - Reduced Crossbows Reload Time", "(Toggling mid-game requires CLIENT relog) Crossbows Reload Time Reduced by 1s");
-			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("12 - Less Ashlands Enemies", "(Toggling mid-game requires SERVER restart) Less Enemies in Ashlands");
+			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("12 - Less Ashlands Enemies", "(Toggling requires SERVER restart) Less Enemies in Ashlands");
 			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("13 - Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to max level within their respective biomes");
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("14 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
 			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("15 - Clear Mistlands", "(Disabling mid-game requires SERVER restart) Clear Mistlands mist after defeating the Queen");
 			public static readonly ConfigMetadata CraftableChain = new ConfigMetadata("16 - Craftable Chain", "Chain craftable at Black Forge");
 			public static readonly ConfigMetadata BrighterLanterns = new ConfigMetadata("17 - Brighter Lanterns", "(Toggling mid-game requires CLIENT relog) Dvergr lanterns are brighter"); // TODO: Test on server - disabling and relogging on local does not revert to default
-			public static readonly ConfigMetadata WeatherModifications = new ConfigMetadata("18 - Clearer Weather", "(Toggling mid-game requires SERVER restart) Reduces chance for mist and snowstorms");
+			public static readonly ConfigMetadata WeatherModifications = new ConfigMetadata("18 - Clearer Weather", "(Toggling requires SERVER restart) Reduces chance for mist and snowstorms");
+			public static readonly ConfigMetadata CreatureUnleveler = new ConfigMetadata("19 - Creature Unleveler By Boss", "(Toggling requires SERVER restart) Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog) All metal ore and bars weight decreased to 8");
 		}
@@ -118,7 +119,8 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> clearMistlandsEnabled;
 		public static ConfigEntry<bool> craftableChainEnabled;
 		public static ConfigEntry<bool> brighterLanternsEnabled;
-		public static ConfigEntry<bool> lessBadWeatherEnabled;
+		public static ConfigEntry<bool> clearerWeatherEnabled;
+		public static ConfigEntry<bool> creatureUnlevelerEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 
@@ -156,7 +158,8 @@ namespace MarsarahTweaks
 			clearMistlandsEnabled = CreateConfig(ConfigSections.Features, Configs.ClearMistlands.Name, true, Configs.ClearMistlands.Description);
 			craftableChainEnabled = CreateConfig(ConfigSections.Features, Configs.CraftableChain.Name, true, Configs.CraftableChain.Description);
 			brighterLanternsEnabled = CreateConfig(ConfigSections.Features, Configs.BrighterLanterns.Name, true, Configs.BrighterLanterns.Description);
-			lessBadWeatherEnabled = CreateConfig(ConfigSections.Features, Configs.WeatherModifications.Name, true, Configs.WeatherModifications.Description);
+			clearerWeatherEnabled = CreateConfig(ConfigSections.Features, Configs.WeatherModifications.Name, true, Configs.WeatherModifications.Description);
+			creatureUnlevelerEnabled = CreateConfig(ConfigSections.Features, Configs.CreatureUnleveler.Name, true, Configs.CreatureUnleveler.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
