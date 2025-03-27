@@ -51,7 +51,7 @@ namespace MarsarahTweaks.Patches
 					{
 						if (ConfigManager.extensionsChangesEnabled.Value)
 						{
-							MarsarahTweaks.MLog($"StationExtension Awake: Updating {ConfigManager.Configs.ExtensionsModifications.Name}...");
+							//MarsarahTweaks.MLog($"StationExtension Awake: Updating {ConfigManager.Configs.ExtensionsModifications.Name}...");
 
 							___m_maxStationDistance = 7f;
 						}
@@ -108,11 +108,11 @@ namespace MarsarahTweaks.Patches
 
 			if (modifiedPieces > 0)
 			{
-				MarsarahTweaks.MLog($"Updated {modifiedPieces} build pieces to require less space.");
+				//MarsarahTweaks.MLog($"Updated {modifiedPieces} build pieces to require less space.");
 			}
 			if (restoredPieces > 0)
 			{
-				MarsarahTweaks.MLog($"Restored {restoredPieces} build pieces to original space requirements.");
+				//MarsarahTweaks.MLog($"Restored {restoredPieces} build pieces to original space requirements.");
 			}
 		}
 	}

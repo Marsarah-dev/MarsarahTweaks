@@ -90,8 +90,10 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata MinibossWeight = new ConfigMetadata("20 - Hildir Weight Rewards", "(Toggling mid-game requires CLIENT relog) Increases base carry weight by 25 when turning in Hildir chests (for each chest)");
 			public static readonly ConfigMetadata ExtensionsModifications = new ConfigMetadata("21 - Station Extensions Changes", "(Toggling mid-game requires CLIENT relog) Decreases space requirement for workstation extensions and increases build distance to workstations (This does not increase workstation radius)");
 			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("22 - Stop Running Away", "Boars and Necks won't flee when alerted");
+			public static readonly ConfigMetadata ProgressionHalt = new ConfigMetadata("23 - Automatic Progression Halt", "Creatures and objects do not drop any items unless the previous biome boss has been defeated");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog) All metal ore and bars weight decreased to 8");
+			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("5 - Bigger Wisp Radius", "Increases wisp radius");
 		}
 
 		// Config entries
@@ -127,8 +129,10 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> minibossWeightEnabled;
 		public static ConfigEntry<bool> extensionsChangesEnabled;
 		public static ConfigEntry<bool> noFleeEnabled;
+		public static ConfigEntry<bool> automaticProgressionHaltEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
+		public static ConfigEntry<bool> biggerWispRadiusEnabled;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -169,9 +173,11 @@ namespace MarsarahTweaks
 			minibossWeightEnabled = CreateConfig(ConfigSections.Features, Configs.MinibossWeight.Name, true, Configs.MinibossWeight.Description);
 			extensionsChangesEnabled = CreateConfig(ConfigSections.Features, Configs.ExtensionsModifications.Name, true, Configs.ExtensionsModifications.Description);
 			noFleeEnabled = CreateConfig(ConfigSections.Features, Configs.FleeAIModifications.Name, true, Configs.FleeAIModifications.Description);
+			automaticProgressionHaltEnabled = CreateConfig(ConfigSections.Features, Configs.ProgressionHalt.Name, true, Configs.ProgressionHalt.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
+			biggerWispRadiusEnabled = CreateConfig(ConfigSections.QOL, Configs.BiggerWispRadius.Name, true, Configs.BiggerWispRadius.Description);
 
 			SetupWatcher();
 		}
