@@ -17,7 +17,7 @@ namespace MarsarahTweaks.Patches
 			{
 				if (ConfigManager.biggerWispRadiusEnabled.Value)
 				{
-					__instance.m_forceField.endRange = 100; // default 6, 8, 10, 15 (it changes) (30 in my mod)
+					__instance.m_forceField.endRange = 30; // default 6, 8, 10, 15 (it changes) (30 in my mod)
 				}
 			}
 		}

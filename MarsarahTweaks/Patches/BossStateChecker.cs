@@ -32,7 +32,7 @@ namespace MarsarahTweaks.Patches
 				if (bossDefeatedStates[key] != isDefeated)
 				{
 					bossDefeatedStates[key] = isDefeated;
-					MarsarahTweaks.MLog($"Boss state: {key} changed: {isDefeated}");
+					//MarsarahTweaks.MLog($"Boss state: {key} changed: {isDefeated}");
 				}
 			}
 		}

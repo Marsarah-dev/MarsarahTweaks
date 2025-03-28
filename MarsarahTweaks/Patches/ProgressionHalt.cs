@@ -118,7 +118,7 @@ namespace MarsarahTweaks.Patches
 					if (!bossDefeated && restrictedChests.Contains(chestName))
 					{
 						// Prevent interaction and show message
-						character.Message(MessageHud.MessageType.Center, $"The chest is magically sealed by {bossName}.");
+						character.Message(MessageHud.MessageType.Center, $"This chest is magically sealed by {bossName}.");
 						__result = false;
 						return false;
 					}
@@ -324,517 +324,747 @@ namespace MarsarahTweaks.Patches
 		class ProgressionHalt_Patch
 		{
 			private static bool dropsSet = false;
-			static void Postfix(ref ZNetScene __instance)
+			private static Dictionary<string, bool> restoredBosses = new Dictionary<string, bool>();
+
+			// Backup dictionaries
+			private static Dictionary<string, Dictionary<string, float>> mobDropChanceBackup = new Dictionary<string, Dictionary<string, float>>();
+			private static Dictionary<string, float> mineDropBackup = new Dictionary<string, float>();
+			private static Dictionary<string, float> mine5DropBackup = new Dictionary<string, float>();
+			private static Dictionary<string, float> destroyedDropBackup = new Dictionary<string, float>();
+			private static Dictionary<string, GameObject> destructibleDropBackup = new Dictionary<string, GameObject>();
+			private static Dictionary<string, DropTable> treeLogDropBackup = new Dictionary<string, DropTable>();
+
+			// Prefab dictionary
+			private static readonly Dictionary<string, List<string>> bossPrefabHolds = new Dictionary<string, List<string>>()
 			{
-				if (ConfigManager.automaticProgressionHaltEnabled.Value && __instance != null && !dropsSet)
+				{ 
+					"Eikthyr", new List<string> 
+					{
+						"Greydwarf",
+						"Greydwarf_Elite",
+						"Greydwarf_Shaman",
+						"Troll",
+						"Skeleton",
+						"Skeleton_Poison",
+						"Pickable_Carrot",
+						"Pickable_SeedCarrot",
+						"BlueberryBush",
+						"MineRock_Tin",
+						"MineRock_Copper",
+						"rock4_copper_frac",
+						"Birch_log_half",
+						"BirchStub",
+						"Oak_log_half",
+						"Pinetree_01_Stub",
+						"PineTree_log_half",
+						"BonePileSpawner",
+						"Spawner_GreydwarfNest",
+						"barrell"
+					}
+				},
 				{
-					/*foreach(GameObject prefab in __instance.m_prefabs)
+					"The Elder", new List<string>
 					{
-						//MarsarahMod.MModLog(prefab.name);
-					}*/
-
-					if (!eikthyrDefeated)
-					{
-						//MarsarahMod.MModLog("Halting drops for Eikthyr");
-						haltDrops(__instance.GetPrefab("Greydwarf")); // done
-						haltDrops(__instance.GetPrefab("Greydwarf_Elite")); // done
-						haltDrops(__instance.GetPrefab("Greydwarf_Shaman")); // done
-						haltDrops(__instance.GetPrefab("Troll")); // done
-						haltDrops(__instance.GetPrefab("Skeleton")); // done
-						haltDrops(__instance.GetPrefab("Skeleton_Poison")); // done
-						haltDrops(__instance.GetPrefab("Pickable_Carrot"));
-						haltDrops(__instance.GetPrefab("Pickable_SeedCarrot")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_Thistle")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_ForestCryptRandom")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_ForestCryptRemains01")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_ForestCryptRemains02")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_ForestCryptRemains03")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_ForestCryptRemains04")); // done
-						haltDrops(__instance.GetPrefab("BlueberryBush")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_Mushroom_yellow")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_SurtlingCoreStand")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_Tin"));
-						haltDrops(__instance.GetPrefab("MineRock_Tin")); // done
-						haltDrops(__instance.GetPrefab("MineRock_Copper"));
-						haltDrops(__instance.GetPrefab("rock4_copper_frac")); // done
-						haltDrops(__instance.GetPrefab("Birch_log_half")); // done
-						haltDrops(__instance.GetPrefab("BirchStub")); // done
-						haltDrops(__instance.GetPrefab("Oak_log_half")); // done
-						haltDrops(__instance.GetPrefab("Pinetree_01_Stub")); // done
-						haltDrops(__instance.GetPrefab("PineTree_log_half")); // done
-						haltDrops(__instance.GetPrefab("BonePileSpawner")); // done
-						haltDrops(__instance.GetPrefab("Spawner_GreydwarfNest")); // done
-						haltDrops(__instance.GetPrefab("barrell")); // done
+						"Leech",
+						"Draugr",
+						"Draugr_Elite",
+						"Surtling",
+						"Blob",
+						"BlobElite",
+						"Wraith",
+						"Abomination",
+						"sapling_turnip",
+						"sapling_seedturnip",
+						"Pickable_Turnip",
+						"Pickable_SeedTurnip",
+						"MineRock_Iron",
+						"dungeon_sunkencrypt_irongate_rusty",
+						"mudpile_frac",
+						"mudpile2_frac",
+						"mudpile_beacon",
+						"SwampTree1_log",
+						"Spawner_DraugrPile",
+						"GuckSack",
+						"GuckSack_small"
 					}
-					if (!elderDefeated)
+				},
+				{
+					"Bonemass", new List<string>
 					{
-						//MarsarahMod.MModLog("Halting drops for Elder");
-						haltDrops(__instance.GetPrefab("Leech")); // done
-						haltDrops(__instance.GetPrefab("Draugr")); // done
-						haltDrops(__instance.GetPrefab("Draugr_Elite")); // done
-						haltDrops(__instance.GetPrefab("Surtling")); // done
-						haltDrops(__instance.GetPrefab("Blob")); // done
-						haltDrops(__instance.GetPrefab("BlobElite")); // done
-						haltDrops(__instance.GetPrefab("Wraith")); // done
-						haltDrops(__instance.GetPrefab("Abomination")); // done
-						haltDrops(__instance.GetPrefab("sapling_turnip"));
-						haltDrops(__instance.GetPrefab("sapling_seedturnip"));
-						haltDrops(__instance.GetPrefab("Pickable_Turnip"));
-						haltDrops(__instance.GetPrefab("Pickable_SeedTurnip")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_SunkenCryptRandom")); // done
-						haltDrops(__instance.GetPrefab("MineRock_Iron"));
-						haltDrops(__instance.GetPrefab("dungeon_sunkencrypt_irongate_rusty"));
-						haltDrops(__instance.GetPrefab("mudpile_frac"));
-						haltDrops(__instance.GetPrefab("mudpile2_frac")); // done
-						haltDrops(__instance.GetPrefab("mudpile_beacon")); // done
-						haltDrops(__instance.GetPrefab("SwampTree1_log")); // done
-						//haltDrops(__instance.GetPrefab("SwampTree2_log")); // Dunno what this is
-						haltDrops(__instance.GetPrefab("Spawner_DraugrPile")); // done
-						haltDrops(__instance.GetPrefab("GuckSack")); // done
-						haltDrops(__instance.GetPrefab("GuckSack_small")); // done
+						"Wolf",
+						"Ulv",
+						"Fenring",
+						"Fenring_Cultist",
+						"Hatchling",
+						"StoneGolem",
+						"Serpent",
+						"Leviathan",
+						"Pickable_MountainCaveCrystal",
+						"Pickable_MountainCaveObsidian",
+						"Pickable_MeatPile",
+						"Pickable_Onion",
+						"Pickable_SeedOnion",
+						"sapling_onion",
+						"sapling_seedonion",
+						"MineRock_Obsidian",
+						"silvervein_frac",
+						"rock3_silver_frac",
+						"fenrirhide_hanging",
+						"fenrirhide_hanging_door",
+						"hanging_hairstrands",
+						"cloth_hanging_door",
+						"cloth_hanging_door_double",
+						"cloth_hanging_long"
 					}
-					if (!bonemassDefeated)
+				},
+				{
+					"Moder", new List<string>
 					{
-						//MarsarahMod.MModLog("Halting drops for Bonemass");
-						haltDrops(__instance.GetPrefab("Wolf")); // done
-						haltDrops(__instance.GetPrefab("Ulv")); // done
-						haltDrops(__instance.GetPrefab("Fenring")); // done
-						haltDrops(__instance.GetPrefab("Fenring_Cultist")); // done
-						haltDrops(__instance.GetPrefab("Hatchling")); // done
-						haltDrops(__instance.GetPrefab("StoneGolem")); // done
-						haltDrops(__instance.GetPrefab("Serpent")); // done
-						haltDrops(__instance.GetPrefab("Leviathan")); // Abyssal Barnacle - done
-						//haltDrops(__instance.GetPrefab("Pickable_DragonEgg")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_MountainCaveRandom")); // done
-						haltDrops(__instance.GetPrefab("Pickable_MountainCaveCrystal")); // done
-						haltDrops(__instance.GetPrefab("Pickable_MountainCaveObsidian"));
-						//haltDrops(__instance.GetPrefab("Pickable_MountainRemains01_buried"));
-						//haltDrops(__instance.GetPrefab("Pickable_Hairstrands01"));
-						//haltDrops(__instance.GetPrefab("Pickable_Hairstrands02"));
-						//haltDrops(__instance.GetPrefab("Pickable_MeatPile")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_Obsidian"));
-						haltDrops(__instance.GetPrefab("Pickable_Onion"));
-						haltDrops(__instance.GetPrefab("Pickable_SeedOnion"));
-						haltDrops(__instance.GetPrefab("sapling_onion"));
-						haltDrops(__instance.GetPrefab("sapling_seedonion"));
-						haltDrops(__instance.GetPrefab("MineRock_Obsidian")); // done
-						haltDrops(__instance.GetPrefab("silvervein_frac")); // done
-						haltDrops(__instance.GetPrefab("rock3_silver_frac"));
-						haltDrops(__instance.GetPrefab("fenrirhide_hanging")); // done
-						haltDrops(__instance.GetPrefab("fenrirhide_hanging_door"));
-						haltDrops(__instance.GetPrefab("hanging_hairstrands")); // done
-						haltDrops(__instance.GetPrefab("cloth_hanging_door")); // done
-						haltDrops(__instance.GetPrefab("cloth_hanging_door_double")); // done
-						haltDrops(__instance.GetPrefab("cloth_hanging_long")); // done
-						haltDrops("MountainKit"); // done
-						haltDrops("mountainkit"); // done
+						"Goblin",
+						"GoblinArcher",
+						"GoblinBrute",
+						"GoblinShaman",
+						"Deathsquito",
+						"Lox",
+						"BlobTar",
+						"CloudberryBush",
+						"Pickable_Barley",
+						"Pickable_Barley_Wild",
+						"sapling_flax",
+						"Pickable_Flax",
+						"Pickable_Flax_Wild",
+						"goblin_totempole"
 					}
-					if (!moderDefeated)
+				},
+				{
+					"Yagluth", new List<string>
 					{
-						//MarsarahMod.MModLog("Halting drops for Moder");
-						haltDrops(__instance.GetPrefab("Goblin")); // done
-						haltDrops(__instance.GetPrefab("GoblinArcher")); // done
-						haltDrops(__instance.GetPrefab("GoblinBrute")); // done
-						haltDrops(__instance.GetPrefab("GoblinShaman")); // done
-						haltDrops(__instance.GetPrefab("Deathsquito")); // done
-						haltDrops(__instance.GetPrefab("Lox")); // done
-						haltDrops(__instance.GetPrefab("BlobTar")); // done
-						haltDrops(__instance.GetPrefab("CloudberryBush")); // done
-						haltDrops(__instance.GetPrefab("Pickable_Barley"));
-						haltDrops(__instance.GetPrefab("Pickable_Barley_Wild")); // done
-						haltDrops(__instance.GetPrefab("sapling_flax"));
-						haltDrops(__instance.GetPrefab("Pickable_Flax"));
-						haltDrops(__instance.GetPrefab("Pickable_Flax_Wild")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_Tar")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_TarBig"));
-						haltDrops(__instance.GetPrefab("goblin_totempole")); // done
+						"Dverger",
+						"DvergerMage",
+						"Tick",
+						"Seeker",
+						"SeekerBrute",
+						"SeekerBrood",
+						"SeekerQueen",
+						"Gjall",
+						"Hare",
+						"Pickable_DvergerThing",
+						"Pickable_DvergrLantern",
+						"Pickable_DvergrMineTreasure",
+						"Pickable_DvergrStein",
+						"Pickable_Mushroom_JotunPuffs",
+						"Pickable_Mushroom_Magecap",
+						"Pickable_RoyalJelly",
+						"Pickable_BlackCoreStand",
+						"sapling_jotunpuffs",
+						"sapling_magecap",
+						"giant_arm",
+						"giant_brain_frac",
+						"giant_helmet1_destruction",
+						"giant_helmet2_destruction",
+						"giant_ribs_frac",
+						"giant_skull_frac",
+						"giant_sword1_destruction",
+						"giant_sword2_destruction",
+						"yggashoot_log_half",
+						"YggaShoot_small1",
+						"blackmarble_post01",
+						"trader_wagon_destructable",
+						"blackmarble_altar_crystal"
 					}
-					if (!yagluthDefeated)
+				},
+				{
+					"The Queen", new List<string>
 					{
-						//MarsarahMod.MModLog("Halting drops for Yagluth");
-						haltDrops(__instance.GetPrefab("Dverger")); //  done
-						haltDrops(__instance.GetPrefab("DvergerMage")); // done
-						haltDrops(__instance.GetPrefab("Tick")); // done
-						haltDrops(__instance.GetPrefab("Seeker")); // done
-						haltDrops(__instance.GetPrefab("SeekerBrute")); // done
-						haltDrops(__instance.GetPrefab("SeekerBrood")); // done
-						haltDrops(__instance.GetPrefab("SeekerQueen"));
-						haltDrops(__instance.GetPrefab("Gjall")); // done
-						haltDrops(__instance.GetPrefab("Hare")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_DvergerThing"));
-						//haltDrops(__instance.GetPrefab("Pickable_DvergrLantern")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_DvergrMineTreasure")); // done - this is just coin
-						//haltDrops(__instance.GetPrefab("Pickable_DvergrStein"));
-						//haltDrops(__instance.GetPrefab("Pickable_Mushroom_JotunPuffs")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_Mushroom_Magecap")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_RoyalJelly")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_BlackCoreStand")); // done
-						haltDrops(__instance.GetPrefab("sapling_jotunpuffs"));
-						haltDrops(__instance.GetPrefab("sapling_magecap"));
-						haltDrops(__instance.GetPrefab("giant_arm"));
-						haltDrops(__instance.GetPrefab("giant_brain_frac")); // done
-						haltDrops(__instance.GetPrefab("giant_helmet1_destruction")); // done
-						haltDrops(__instance.GetPrefab("giant_helmet2_destruction"));
-						haltDrops(__instance.GetPrefab("giant_ribs_frac")); // done
-						haltDrops(__instance.GetPrefab("giant_skull_frac")); // done
-						haltDrops(__instance.GetPrefab("giant_sword1_destruction")); // done
-						haltDrops(__instance.GetPrefab("giant_sword2_destruction")); // done
-						haltDrops(__instance.GetPrefab("yggashoot_log_half")); // done
-						haltDrops(__instance.GetPrefab("YggaShoot_small1")); // done
-						haltDrops(__instance.GetPrefab("blackmarble_post01")); // done
-						haltDrops(__instance.GetPrefab("trader_wagon_destructable")); // <--------------
-						haltDrops(__instance.GetPrefab("blackmarble_altar_crystal")); // <--------------
-						haltDrops("dvergrprops");
-						haltDrops("dvergrtown");
+						"DvergerAshlands",
+						"Charred_Archer",
+						"Charred_Archer_Fader",
+						"Charred_Melee",
+						"Charred_Melee_Fader",
+						"Charred_Twitcher",
+						"Charred_Mage",
+						"Morgen",
+						"Morgen_NonSleeping",
+						"Volture",
+						"Asksvin",
+						"FallenValkyrie",
+						"BlobLava",
+						"BonemawSerpent",
+						"lavarock_ashlands1",
+						"VineAsh",
+						"Pickable_Ashstone",
+						"Pickable_Charredskull",
+						"Pickable_Fiddlehead",
+						"Pickable_Meteorite",
+						"Pickable_MoltenCoreStand",
+						"Pickable_SmokePuff",
+						"Pickable_VoltureEgg",
+						"Pickable_SulfurRock",
+						"FlametalRockstand",
+						"FlametalRockstand_frac",
+						"LeviathanLava",
+						"dvergrprops_crate_ashlands",
+						"AshlandsTreeLogHalf1",
+						"AshlandsTreeLogHalf2",
+						"AshlandsTreeStump1",
+						"AshlandsTreeStump2",
+						"AshlandsTreeStump3",
+						"AshlandsBranch1",
+						"AshlandsBranch2",
+						"AshlandsBranch3",
+						"AshlandsBush1",
+						"AshlandsBush2",
+						"Ashlands_rock1",
+						"Ashlands_rock2",
+						"MineRock_Meteorite",
+						"UnstableLavaRock",
+						"Spawner_CharredCross",
+						"Spawner_CharredStone",
+						"Spawner_CharredStone_Elite",
+						"GraveStone_Broken_CharredTwitcherNest",
+						"GraveStone_CharredTwitcherNest",
+						"ashland_pot1_green",
+						"ashland_pot1_red",
+						"ashland_pot2_green",
+						"ashland_pot2_red",
+						"ashland_pot3_green",
+						"ashland_pot3_red",
+						"CharredBanner1",
+						"CharredBanner2",
+						"CharredBanner3",
+						"Charred_altar_bellfragment",
+						"piece_Charred_Balista",
+						"Ashlands_Fortress_Floor",
+						"Ashlands_Fortress_Wall_Pillar",
+						"Ashlands_Fortress_Wall_Pillar_base",
+						"Ashlands_Fortress_Wall_Pillar_base_frac",
+						"Ashlands_Fortress_Wall_Pillar_frac",
+						"Ashlands_Fortress_Wall_PillarTop",
+						"Ashlands_Fortress_Wall_PillarTop_frac",
+						"Ashlands_Fortress_Wall_PillarTopStone",
+						"Ashlands_Fortress_Wall_PillarTopStone_frac",
+						"Ashlands_Fortress_Wall_Spikes",
+						"Ashlands_Ruins_Floor_1point5x1point5",
+						"Ashlands_Ruins_Floor_1point5x1point5_broken",
+						"Ashlands_Ruins_Floor_3x3",
+						"Ashlands_Ruins_Floor_3x3_broken1",
+						"Ashlands_Ruins_Floor_3x3_broken2",
+						"Ashlands_Ruins_Floor_3x3_broken3",
+						"Ashlands_Ruins_Floor_6x6",
+						"Ashlands_Ruins_Floor_6x6_broken1",
+						"Ashlands_Ruins_Floor_6x6_broken2",
+						"Ashlands_Ruins_Ramp",
+						"Ashlands_Ruins_Ramp_Upsidedown",
+						"Ashlands_Ruins_TopStone",
+						"Ashlands_Ruins_twist_ArchBig",
+						"Ashlands_Ruins_twist_PillarBase",
+						"Ashlands_Ruins_twist_PillarBaseSmall",
+						"Ashlands_Ruins_Wall_4x6",
+						"Ashlands_Ruins_Wall_Windows_Broken_4x6",
+						"Ashland_Stair",
+						"Ashland_Steepstair",
+						"Ashlands_Altar",
+						"Ashlands_Arch2_Broken1",
+						"Ashlands_Arch2_Broken2",
+						"Ashlands_ArchRoof",
+						"Ashlands_ArchRoofDamaged",
+						"Ashlands_ArchRoofDamaged_half1",
+						"Ashlands_ArchRoofDamaged_half2",
+						"Ashlands_ArchRoofLong_Damaged",
+						"Ashlands_Boss_Pillar",
+						"Ashlands_Boss_Pillar_Twist_broken1",
+						"Ashlands_Boss_Pillar_Twist_broken2",
+						"Ashlands_Boss_Pillar_Twist_broken3",
+						"Ashlands_Floor",
+						"Ashlands_floor_large",
+						"Ashlands_floor_large_fractured",
+						"Ashlands_Pillar4",
+						"Ashlands_Pillar4_tip_broken1",
+						"Ashlands_Pillar4_tip_broken2",
+						"Ashlands_Pillar4_tip2_broken1",
+						"Ashlands_Pillar4_tip2_broken2",
+						"Ashlands_Pillar4_tip3_broken1",
+						"Ashlands_Pillar4_tip3_broken2",
+						"Ashlands_Pillar4_tip3_broken3",
+						"Ashlands_PillarBase3_double",
+						"Ashlands_WallBlock",
+						"rock4_ashlands_frac",
+						"cliff_ashlands_Arch_frac",
+						"cliff_ashlands1_frac",
+						"cliff_ashlands2_frac",
+						"cliff_ashlands4_frac",
+						"cliff_ashlands6_frac",
+						"cliff_ashlands7_HalfArch_frac",
+						"cliff_ashlandsflowrock_frac"
 					}
-					/*else if (MarsarahMod.seekerSoldierTrophyEnabled.Value)
-					{
-						setSeekerTrophyDrops(__instance.GetPrefab("SeekerBrute"));
-					}*/
-					if (!queenDefeated)
-					{
-						//MarsarahMod.MModLog("Halting drops for Queen");
-						haltDrops(__instance.GetPrefab("DvergerAshlands")); // done
-						haltDrops(__instance.GetPrefab("Charred_Archer")); // done
-						haltDrops(__instance.GetPrefab("Charred_Archer_Fader"));
-						haltDrops(__instance.GetPrefab("Charred_Melee")); // done
-						haltDrops(__instance.GetPrefab("Charred_Melee_Fader"));
-						haltDrops(__instance.GetPrefab("Charred_Twitcher")); // done
-						haltDrops(__instance.GetPrefab("Charred_Mage")); // done
-						haltDrops(__instance.GetPrefab("Morgen"));
-						haltDrops(__instance.GetPrefab("Morgen_NonSleeping"));
-						haltDrops(__instance.GetPrefab("Volture")); // done
-						haltDrops(__instance.GetPrefab("Asksvin")); // done
-						haltDrops(__instance.GetPrefab("FallenValkyrie")); // done
-						haltDrops(__instance.GetPrefab("BlobLava")); // done
-						haltDrops(__instance.GetPrefab("BonemawSerpent")); // done
-						haltDrops(__instance.GetPrefab("lavarock_ashlands1")); // MC
-						//haltDrops(__instance.GetPrefab("VineAsh")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_Ashstone"));
-						//haltDrops(__instance.GetPrefab("Pickable_Charredskull"));
-						//haltDrops(__instance.GetPrefab("Pickable_Fiddlehead")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_Meteorite"));
-						//haltDrops(__instance.GetPrefab("Pickable_MoltenCoreStand")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_SmokePuff")); // done
-						//haltDrops(__instance.GetPrefab("Pickable_VoltureEgg"));
-						haltDrops(__instance.GetPrefab("Pickable_SulfurRock"));
-						haltDrops(__instance.GetPrefab("FlametalRockstand"));
-						haltDrops(__instance.GetPrefab("FlametalRockstand_frac"));
-						haltDrops(__instance.GetPrefab("LeviathanLava")); // done
-						haltDrops(__instance.GetPrefab("dvergrprops_crate_ashlands")); // done
-						haltDrops(__instance.GetPrefab("AshlandsTreeLogHalf1")); // done
-						haltDrops(__instance.GetPrefab("AshlandsTreeLogHalf2"));
-						haltDrops(__instance.GetPrefab("AshlandsTreeStump1"));
-						haltDrops(__instance.GetPrefab("AshlandsTreeStump2")); // done
-						haltDrops(__instance.GetPrefab("AshlandsTreeStump3"));
-						haltDrops(__instance.GetPrefab("AshlandsBranch1")); // done
-						haltDrops(__instance.GetPrefab("AshlandsBranch2"));
-						haltDrops(__instance.GetPrefab("AshlandsBranch3"));
-						haltDrops(__instance.GetPrefab("AshlandsBush1"));
-						haltDrops(__instance.GetPrefab("AshlandsBush2"));
-						haltDrops(__instance.GetPrefab("Ashlands_rock1"));
-						haltDrops(__instance.GetPrefab("Ashlands_rock2"));
-						haltDrops(__instance.GetPrefab("MineRock_Meteorite"));
-						haltDrops(__instance.GetPrefab("UnstableLavaRock")); // done
-						haltDrops(__instance.GetPrefab("Spawner_CharredCross")); // Effigy of Malice - done
-						haltDrops(__instance.GetPrefab("Spawner_CharredStone")); // Monument of Torment - done
-						haltDrops(__instance.GetPrefab("Spawner_CharredStone_Elite"));
-						haltDrops(__instance.GetPrefab("GraveStone_Broken_CharredTwitcherNest")); // done
-						haltDrops(__instance.GetPrefab("GraveStone_CharredTwitcherNest")); // done
-						haltDrops(__instance.GetPrefab("ashland_pot1_green")); // done
-						haltDrops(__instance.GetPrefab("ashland_pot1_red")); // done
-						haltDrops(__instance.GetPrefab("ashland_pot2_green")); // done
-						haltDrops(__instance.GetPrefab("ashland_pot2_red"));
-						haltDrops(__instance.GetPrefab("ashland_pot3_green")); // done
-						haltDrops(__instance.GetPrefab("ashland_pot3_red")); // done
-						haltDrops(__instance.GetPrefab("CharredBanner1")); // done
-						haltDrops(__instance.GetPrefab("CharredBanner2")); // done
-						haltDrops(__instance.GetPrefab("CharredBanner3")); // done
-						haltDrops(__instance.GetPrefab("Charred_altar_bellfragment")); // done
-						haltDrops(__instance.GetPrefab("piece_Charred_Balista")); // done
-
-						haltDrops(__instance.GetPrefab("Ashlands_Fortress_Floor"));
-						haltDrops(__instance.GetPrefab("Ashlands_Fortress_Wall_Pillar"));
-						haltDrops(__instance.GetPrefab("Ashlands_Fortress_Wall_Pillar_base"));
-						haltDrops(__instance.GetPrefab("Ashlands_Fortress_Wall_Pillar_base_frac"));
-						haltDrops(__instance.GetPrefab("Ashlands_Fortress_Wall_Pillar_frac"));
-						haltDrops(__instance.GetPrefab("Ashlands_Fortress_Wall_PillarTop"));
-						haltDrops(__instance.GetPrefab("Ashlands_Fortress_Wall_PillarTop_frac"));
-						haltDrops(__instance.GetPrefab("Ashlands_Fortress_Wall_PillarTopStone"));
-						haltDrops(__instance.GetPrefab("Ashlands_Fortress_Wall_PillarTopStone_frac"));
-						haltDrops(__instance.GetPrefab("Ashlands_Fortress_Wall_Spikes"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Floor_1point5x1point5"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Floor_1point5x1point5_broken"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Floor_3x3"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Floor_3x3_broken1"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Floor_3x3_broken2"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Floor_3x3_broken3"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Floor_6x6"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Floor_6x6_broken1"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Floor_6x6_broken2"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Ramp"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Ramp_Upsidedown"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_TopStone"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_twist_ArchBig"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_twist_PillarBase"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_twist_PillarBaseSmall"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Wall_4x6"));
-						haltDrops(__instance.GetPrefab("Ashlands_Ruins_Wall_Windows_Broken_4x6"));
-
-						haltDrops(__instance.GetPrefab("Ashland_Stair"));
-						haltDrops(__instance.GetPrefab("Ashland_Steepstair"));
-						haltDrops(__instance.GetPrefab("Ashlands_Altar"));
-						haltDrops(__instance.GetPrefab("Ashlands_Arch2_Broken1"));
-						haltDrops(__instance.GetPrefab("Ashlands_Arch2_Broken2"));
-						haltDrops(__instance.GetPrefab("Ashlands_ArchRoof"));
-						haltDrops(__instance.GetPrefab("Ashlands_ArchRoofDamaged"));
-						haltDrops(__instance.GetPrefab("Ashlands_ArchRoofDamaged_half1"));
-						haltDrops(__instance.GetPrefab("Ashlands_ArchRoofDamaged_half2"));
-						haltDrops(__instance.GetPrefab("Ashlands_ArchRoofLong_Damaged"));
-						haltDrops(__instance.GetPrefab("Ashlands_Boss_Pillar"));
-						haltDrops(__instance.GetPrefab("Ashlands_Boss_Pillar_Twist_broken1"));
-						haltDrops(__instance.GetPrefab("Ashlands_Boss_Pillar_Twist_broken2"));
-						haltDrops(__instance.GetPrefab("Ashlands_Boss_Pillar_Twist_broken3"));
-						haltDrops(__instance.GetPrefab("Ashlands_Floor"));
-						haltDrops(__instance.GetPrefab("Ashlands_floor_large"));
-						haltDrops(__instance.GetPrefab("Ashlands_floor_large_fractured"));
-						haltDrops(__instance.GetPrefab("Ashlands_Pillar4"));
-						haltDrops(__instance.GetPrefab("Ashlands_Pillar4_tip_broken1"));
-						haltDrops(__instance.GetPrefab("Ashlands_Pillar4_tip_broken2"));
-						haltDrops(__instance.GetPrefab("Ashlands_Pillar4_tip2_broken1"));
-						haltDrops(__instance.GetPrefab("Ashlands_Pillar4_tip2_broken2"));
-						haltDrops(__instance.GetPrefab("Ashlands_Pillar4_tip3_broken1"));
-						haltDrops(__instance.GetPrefab("Ashlands_Pillar4_tip3_broken2"));
-						haltDrops(__instance.GetPrefab("Ashlands_Pillar4_tip3_broken3"));
-						haltDrops(__instance.GetPrefab("Ashlands_PillarBase3_double"));
-						haltDrops(__instance.GetPrefab("Ashlands_WallBlock"));
-
-						haltDrops(__instance.GetPrefab("rock4_ashlands_frac"));
-						haltDrops(__instance.GetPrefab("cliff_ashlands_Arch_frac"));
-						haltDrops(__instance.GetPrefab("cliff_ashlands1_frac"));
-						haltDrops(__instance.GetPrefab("cliff_ashlands2_frac"));
-						haltDrops(__instance.GetPrefab("cliff_ashlands4_frac"));
-						haltDrops(__instance.GetPrefab("cliff_ashlands6_frac"));
-						haltDrops(__instance.GetPrefab("cliff_ashlands7_HalfArch_frac"));
-						haltDrops(__instance.GetPrefab("cliff_ashlandsflowrock_frac"));
-					}
-
-					dropsSet = true;
 				}
-
-				// Better Seeker Soldier Trophy Rate =======================================================
-				/*if (MarsarahMod.seekerSoldierTrophyEnabled.Value && !MarsarahMod.automaticProgressionHaltEnabled.Value && __instance != null)
-				{
-					setSeekerTrophyDrops(__instance.GetPrefab("SeekerBrute"));
-				}*/
-			}
-		}
-
-		// Overloaded haltDrops method to handle string-based StartsWith
-		static void haltDrops(string prefabPrefix)
-		{
-			foreach (GameObject prefab in ZNetScene.instance.m_prefabs)
-			{
-				if (prefab.name.StartsWith(prefabPrefix))
-				{
-					haltDrops(prefab); // Call the regular haltDrops with the GameObject
-				}
-			}
-		}
-
-		static void haltDrops(GameObject prefab)
-		{
-			if (prefab == null)
-			{
-				MarsarahTweaks.MLog("Could not get prefab to halt drops");
-				return;
-			}
-
-			// Dictionary mapping component types to their respective handlers
-			Dictionary<Type, Func<GameObject, bool>> dropHandlers = new Dictionary<Type, Func<GameObject, bool>>()
-			{
-				{ typeof(CharacterDrop), haltDropsMob },
-				{ typeof(MineRock), haltDropsMine },
-				{ typeof(MineRock5), haltDropsMine5 },
-				//{ typeof(Pickable), haltDropsPickable },
-				//{ typeof(PickableItem), haltDropsPickableItem },
-				{ typeof(DropOnDestroyed), haltDropsOnDestroyed },
-				{ typeof(Destructible), haltDropsDestructible },
-				{ typeof(TreeLog), haltDropsTreeLog },
-				//{ typeof(Container), haltDropsContainer }
 			};
 
-			//bool modified = false; // Track if any drop was halted
+			// Tracking last defeated states to determine when changes occur
+			private static bool lastEikthyrDefeated = eikthyrDefeated;
+			private static bool lastElderDefeated = elderDefeated;
+			private static bool lastBonemassDefeated = bonemassDefeated;
+			private static bool lastModerDefeated = moderDefeated;
+			private static bool lastYagluthDefeated = yagluthDefeated;
+			private static bool lastQueenDefeated = queenDefeated;
 
-			// Iterate through all handlers and apply every matching one
-			foreach (var handler in dropHandlers)
+			static void Postfix(ref ZNetScene __instance)
 			{
-				if (prefab.GetComponent(handler.Key) != null)
+				if (ConfigManager.automaticProgressionHaltEnabled.Value && __instance != null)
 				{
-					handler.Value(prefab);
-					/*if (handler.Value(prefab))
+					// Check if any boss state has changed
+					bool bossStateChanged = false;
+
+					if (eikthyrDefeated != lastEikthyrDefeated)
 					{
-						//MarsarahTweaks.MLog($"Halted drop for {prefab.name} as component {handler.Key}");
-						modified = true; // Mark that at least one modification was made
-					}*/
+						lastEikthyrDefeated = eikthyrDefeated;
+						bossStateChanged = true;
+					}
+
+					if (elderDefeated != lastElderDefeated)
+					{
+						lastElderDefeated = elderDefeated;
+						bossStateChanged = true;
+					}
+
+					if (bonemassDefeated != lastBonemassDefeated)
+					{
+						lastBonemassDefeated = bonemassDefeated;
+						bossStateChanged = true;
+					}
+
+					if (moderDefeated != lastModerDefeated)
+					{
+						lastModerDefeated = moderDefeated;
+						bossStateChanged = true;
+					}
+
+					if (yagluthDefeated != lastYagluthDefeated)
+					{
+						lastYagluthDefeated = yagluthDefeated;
+						bossStateChanged = true;
+					}
+
+					if (queenDefeated != lastQueenDefeated)
+					{
+						lastQueenDefeated = queenDefeated;
+						bossStateChanged = true;
+					}
+
+					// Run the drops management logic only if boss state has changed or it's the first run
+					if (!dropsSet || bossStateChanged)
+					{
+						/*if (!dropsSet)
+						{
+							MarsarahTweaks.MLog("[Progression Halt] Running drop management due to drops not being set");
+						}
+						if (bossStateChanged)
+						{
+							MarsarahTweaks.MLog("[Progression Halt] Running drop management due to boss state changed");
+						}*/
+
+						if (!eikthyrDefeated)
+						{
+							haltDropsForBoss(__instance, "Eikthyr");
+						}
+						else
+						{
+							restoreDropsForBoss(__instance, "Eikthyr");
+						}
+
+						if (!elderDefeated)
+						{
+							haltDropsForBoss(__instance, "The Elder");
+						}
+						else
+						{
+							restoreDropsForBoss(__instance, "The Elder");
+						}
+
+						if (!bonemassDefeated)
+						{
+							haltDropsForBoss(__instance, "Bonemass");
+							haltDrops("MountainKit");
+							haltDrops("mountainkit");
+						}
+						else
+						{
+							restoreDropsForBoss(__instance, "Bonemass");
+							restoreDrops("MountainKit");
+							restoreDrops("mountainkit");
+						}
+
+						if (!moderDefeated)
+						{
+							haltDropsForBoss(__instance, "Moder");
+						}
+						else
+						{
+							restoreDropsForBoss(__instance, "Moder");
+						}
+
+						if (!yagluthDefeated)
+						{
+							haltDropsForBoss(__instance, "Yagluth");
+							haltDrops("dvergrprops");
+							haltDrops("dvergrtown");
+						}
+						else
+						{
+							restoreDropsForBoss(__instance, "Yagluth");
+							restoreDrops("dvergrprops");
+							restoreDrops("dvergrtown");
+						}
+
+						if (!queenDefeated)
+						{
+							haltDropsForBoss(__instance, "The Queen");
+						}
+						else
+						{
+							restoreDropsForBoss(__instance, "The Queen");
+						}
+
+						dropsSet = true; // Set after executing the logic to avoid repeated execution
+					}
 				}
 			}
 
-			// Log components if no drop handler was triggered
-			/*if (!modified)
+			// =======================================================================
+			// Main Halt Drops for Boss
+			private static void haltDropsForBoss (ZNetScene instance, string bossName)
 			{
-				Component[] prefabComponents = prefab.GetComponents<Component>();
-				foreach (Component comp in prefabComponents)
+				if (bossPrefabHolds.TryGetValue(bossName, out List<string> prefabStrings))
 				{
-					MarsarahTweaks.MLog(prefab.name + " - " + comp.ToString());
+					foreach (string prefabString in prefabStrings)
+					{
+						haltDrops(instance.GetPrefab(prefabString));
+					}
 				}
-			}*/
-		}
+			}
 
-
-		static bool haltDropsMob(GameObject prefab)
-		{
-			CharacterDrop characterDrop = prefab.GetComponent<CharacterDrop>();
-			if (characterDrop != null)
+			// Overloaded haltDrops method to handle string-based StartsWith
+			private static void haltDrops(string prefabPrefix)
 			{
-				foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
+				foreach (GameObject prefab in ZNetScene.instance.m_prefabs)
 				{
-					drop.m_chance = 0;
+					if (prefab.name.StartsWith(prefabPrefix))
+					{
+						haltDrops(prefab); // Call the regular haltDrops with the GameObject
+					}
 				}
-				return true;
 			}
-			return false;
-		}
 
-		static bool haltDropsMine(GameObject prefab)
-		{
-			MineRock prefabComponent = prefab.GetComponent<MineRock>();
-			if (prefabComponent != null)
+			// HaltDrops main handler
+			private static void haltDrops(GameObject prefab)
 			{
-				prefabComponent.m_dropItems.m_dropChance = 0;
-				return true;
-			}
-			return false;
-		}
-
-		static bool haltDropsMine5(GameObject prefab)
-		{
-			MineRock5 prefabComponent = prefab.GetComponent<MineRock5>();
-			if (prefabComponent != null)
-			{
-				prefabComponent.m_dropItems.m_dropChance = 0;
-				return true;
-			}
-			return false;
-		}
-
-		static bool haltDropsOnDestroyed(GameObject prefab)
-		{
-			DropOnDestroyed prefabComponent = prefab.GetComponent<DropOnDestroyed>();
-			if (prefabComponent != null)
-			{
-				prefabComponent.m_dropWhenDestroyed.m_dropChance = 0;
-				return true;
-			}
-			return false;
-		}
-
-		static bool haltDropsDestructible(GameObject prefab)
-		{
-			Destructible prefabComponent = prefab.GetComponent<Destructible>();
-			if (prefabComponent != null)
-			{
-				prefabComponent.m_spawnWhenDestroyed = null;
-				return true;
-			}
-			return false;
-		}
-
-		/*static bool haltDropsPickable(GameObject prefab)
-		{
-			Pickable prefabComponent = prefab.GetComponent<Pickable>();
-			if (prefabComponent != null)
-			{
-				prefabComponent.m_itemPrefab = ZNetScene.instance.GetPrefab("Pukeberries");
-				prefabComponent.m_amount = 1;
-				prefabComponent.m_bonusYieldAmount = 0;
-				prefabComponent.m_extraDrops.m_dropMin = 0;
-				prefabComponent.m_extraDrops.m_dropMax = 0;
-				return true;
-			}
-			return false;
-		}
-
-		static bool haltDropsPickableItem(GameObject prefab)
-		{
-			PickableItem prefabComponent = prefab.GetComponent<PickableItem>();
-			if (prefabComponent != null)
-			{
-				prefabComponent.m_itemPrefab = ZNetScene.instance.GetPrefab("Pukeberries")?.GetComponent<ItemDrop>();
-				return true;
-			}
-			return false;
-		}*/
-
-		static bool haltDropsTreeLog(GameObject prefab)
-		{
-			TreeLog prefabComponent = prefab.GetComponent<TreeLog>();
-			if (prefabComponent != null)
-			{
-				prefabComponent.m_dropWhenDestroyed = null;
-				return true;
-			}
-			return false;
-		}
-
-		/*static bool haltDropsPiece(GameObject prefab)
-		{
-			Piece prefabComponent = prefab.GetComponent<Piece>();
-			if (prefabComponent != null)
-			{
-				if (prefabComponent.IsPlacedByPlayer())
+				if (prefab == null)
 				{
-					return false;
+					MarsarahTweaks.MLog("Could not get prefab to halt drops");
+					return;
 				}
 
-				prefabComponent.
-				return true;
-			}
-			return false;
-		}*/
+				// Dictionary mapping component types to their respective handlers
+				Dictionary<Type, Func<GameObject, bool>> dropHandlers = new Dictionary<Type, Func<GameObject, bool>>()
+				{
+					{ typeof(CharacterDrop), haltDropsMob },
+					{ typeof(MineRock), haltDropsMine },
+					{ typeof(MineRock5), haltDropsMine5 },
+					{ typeof(DropOnDestroyed), haltDropsOnDestroyed },
+					{ typeof(Destructible), haltDropsDestructible },
+					{ typeof(TreeLog), haltDropsTreeLog }
+				};
 
-		/*static bool haltDropsContainer(GameObject prefab)
-		{
-			Container container = prefab.GetComponent<Container>();
-			if (container == null)
+				//bool modified = false; // Track if any drop was halted
+
+				// Iterate through all handlers and apply every matching one
+				foreach (var handler in dropHandlers)
+				{
+					if (prefab.GetComponent(handler.Key) != null)
+					{
+						handler.Value(prefab);
+						/*if (handler.Value(prefab))
+						{
+							//MarsarahTweaks.MLog($"Halted drop for {prefab.name} as component {handler.Key}");
+							modified = true; // Mark that at least one modification was made
+						}*/
+					}
+				}
+
+				// Log components if no drop handler was triggered
+				/*if (!modified)
+				{
+					Component[] prefabComponents = prefab.GetComponents<Component>();
+					foreach (Component comp in prefabComponents)
+					{
+						MarsarahTweaks.MLog(prefab.name + " - " + comp.ToString());
+					}
+				}*/
+			}
+
+			// Halt Drops X
+			private static bool haltDropsMob(GameObject prefab)
 			{
-				MarsarahTweaks.MLog($"[ERROR] No Container found on {prefab.name}");
+				CharacterDrop characterDrop = prefab.GetComponent<CharacterDrop>();
+				if (characterDrop != null)
+				{
+					string prefabName = prefab.name;
+
+					if (!mobDropChanceBackup.ContainsKey(prefabName))
+					{
+						// Store only drop chances (ensuring deep copy)
+						Dictionary<string, float> dropChances = new Dictionary<string, float>();
+						foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
+						{
+							dropChances[drop.m_prefab?.name ?? "UNKNOWN_PREFAB"] = drop.m_chance;
+						}
+						mobDropChanceBackup[prefabName] = dropChances;
+					}
+
+					// Halt drops by setting all chances to 0
+					foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
+					{
+						drop.m_chance = 0f;
+					}
+
+					return true;
+				}
 				return false;
 			}
 
-			MarsarahTweaks.MLog($"Found Container on {prefab.name}, attempting to access m_inventory...");
-
-			// Use reflection to access the private field m_inventory
-			FieldInfo inventoryField = typeof(Container).GetField("m_inventory", BindingFlags.NonPublic | BindingFlags.Instance);
-			if (inventoryField == null)
+			private static bool haltDropsMine(GameObject prefab)
 			{
-				MarsarahTweaks.MLog($"[ERROR] Could not find m_inventory field via reflection for {prefab.name}");
+				MineRock prefabComponent = prefab.GetComponent<MineRock>();
+				if (prefabComponent != null)
+				{
+					string prefabName = prefab.name;
+					if (!mineDropBackup.ContainsKey(prefabName))
+					{
+						mineDropBackup[prefabName] = prefabComponent.m_dropItems.m_dropChance;
+					}
+					prefabComponent.m_dropItems.m_dropChance = 0;
+					return true;
+				}
 				return false;
 			}
 
-			Inventory inventory = (Inventory)inventoryField.GetValue(container);
-			if (inventory == null)
+			private static bool haltDropsMine5(GameObject prefab)
 			{
-				MarsarahTweaks.MLog($"[ERROR] Inventory is NULL for {prefab.name}");
+				MineRock5 prefabComponent = prefab.GetComponent<MineRock5>();
+				if (prefabComponent != null)
+				{
+					string prefabName = prefab.name;
+					if (!mine5DropBackup.ContainsKey(prefabName))
+					{
+						mine5DropBackup[prefabName] = prefabComponent.m_dropItems.m_dropChance;
+					}
+					prefabComponent.m_dropItems.m_dropChance = 0;
+					return true;
+				}
 				return false;
 			}
 
-			MarsarahTweaks.MLog($"Successfully accessed inventory for {prefab.name}. Removing items...");
+			private static bool haltDropsOnDestroyed(GameObject prefab)
+			{
+				DropOnDestroyed prefabComponent = prefab.GetComponent<DropOnDestroyed>();
+				if (prefabComponent != null)
+				{
+					string prefabName = prefab.name;
+					if (!destroyedDropBackup.ContainsKey(prefabName))
+					{
+						destroyedDropBackup[prefabName] = prefabComponent.m_dropWhenDestroyed.m_dropChance;
+					}
+					prefabComponent.m_dropWhenDestroyed.m_dropChance = 0;
+					return true;
+				}
+				return false;
+			}
 
-			inventory.RemoveAll();
+			private static bool haltDropsDestructible(GameObject prefab)
+			{
+				Destructible prefabComponent = prefab.GetComponent<Destructible>();
+				if (prefabComponent != null)
+				{
+					string prefabName = prefab.name;
+					if (!destructibleDropBackup.ContainsKey(prefabName))
+					{
+						destructibleDropBackup[prefabName] = prefabComponent.m_spawnWhenDestroyed;
+					}
+					prefabComponent.m_spawnWhenDestroyed = null;
+					return true;
+				}
+				return false;
+			}
 
-			MarsarahTweaks.MLog($"✅ Cleared loot for {prefab.name}");
-			return true;
-		}*/
+			private static bool haltDropsTreeLog(GameObject prefab)
+			{
+				TreeLog prefabComponent = prefab.GetComponent<TreeLog>();
+				if (prefabComponent != null)
+				{
+					string prefabName = prefab.name;
+					if (!treeLogDropBackup.ContainsKey(prefabName))
+					{
+						treeLogDropBackup[prefabName] = prefabComponent.m_dropWhenDestroyed;
+					}
+					prefabComponent.m_dropWhenDestroyed = null;
+					return true;
+				}
+				return false;
+			}
+
+			// =======================================================================
+			// Main Restore Drops for Boss
+			private static void restoreDropsForBoss(ZNetScene instance, string bossName)
+			{
+				if (bossPrefabHolds.TryGetValue(bossName, out List<string> prefabStrings))
+				{
+					foreach (string prefabString in prefabStrings)
+					{
+						restoreDrops(instance.GetPrefab(prefabString));
+					}
+				}
+			}
+
+			// Overloaded restoreDrops method to handle string-based StartsWith
+			private static void restoreDrops(string prefabPrefix)
+			{
+				foreach (GameObject prefab in ZNetScene.instance.m_prefabs)
+				{
+					if (prefab.name.StartsWith(prefabPrefix))
+					{
+						restoreDrops(prefab); // Call the regular restoreDrops with the GameObject
+					}
+				}
+			}
+
+			// RestoreDrops main handler
+			private static void restoreDrops(GameObject prefab)
+			{
+				if (prefab == null)
+				{
+					MarsarahTweaks.MLog("Could not get prefab to restore drops");
+					return;
+				}
+
+				// Dictionary mapping component types to their respective restore handlers
+				Dictionary<Type, Func<GameObject, bool>> dropHandlers = new Dictionary<Type, Func<GameObject, bool>>()
+				{
+					{ typeof(CharacterDrop), restoreDropsMob },
+					{ typeof(MineRock), restoreDropsMine },
+					{ typeof(MineRock5), restoreDropsMine5 },
+					{ typeof(DropOnDestroyed), restoreDropsOnDestroyed },
+					{ typeof(Destructible), restoreDropsDestructible },
+					{ typeof(TreeLog), restoreDropsTreeLog }
+				};
+
+				// Iterate through all handlers and apply every matching one
+				foreach (var handler in dropHandlers)
+				{
+					if (prefab.GetComponent(handler.Key) != null)
+					{
+						handler.Value(prefab);
+					}
+				}
+			}
+
+			// Restore Drops X
+			private static bool restoreDropsMob(GameObject prefab)
+			{
+				CharacterDrop characterDrop = prefab.GetComponent<CharacterDrop>();
+				if (characterDrop != null)
+				{
+					string prefabName = prefab.name;
+					if (mobDropChanceBackup.TryGetValue(prefabName, out var originalChances))
+					{
+						foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
+						{
+							string dropPrefabName = drop.m_prefab?.name ?? "UNKNOWN_PREFAB";
+							if (originalChances.TryGetValue(dropPrefabName, out float originalChance))
+							{
+								drop.m_chance = originalChance; // Restore original chance
+							}
+						}
+
+						return true;
+					}
+				}
+				return false;
+			}
+
+			private static bool restoreDropsMine(GameObject prefab)
+			{
+				MineRock prefabComponent = prefab.GetComponent<MineRock>();
+				if (prefabComponent != null)
+				{
+					string prefabName = prefab.name;
+					if (mineDropBackup.TryGetValue(prefabName, out var originalChance))
+					{
+						prefabComponent.m_dropItems.m_dropChance = originalChance;
+						return true;
+					}
+				}
+				return false;
+			}
+
+			private static bool restoreDropsMine5(GameObject prefab)
+			{
+				MineRock5 prefabComponent = prefab.GetComponent<MineRock5>();
+				if (prefabComponent != null)
+				{
+					string prefabName = prefab.name;
+					if (mine5DropBackup.TryGetValue(prefabName, out var originalChance))
+					{
+						prefabComponent.m_dropItems.m_dropChance = originalChance;
+						return true;
+					}
+				}
+				return false;
+			}
+
+			private static bool restoreDropsOnDestroyed(GameObject prefab)
+			{
+				DropOnDestroyed prefabComponent = prefab.GetComponent<DropOnDestroyed>();
+				if (prefabComponent != null)
+				{
+					string prefabName = prefab.name;
+					if (destroyedDropBackup.TryGetValue(prefabName, out var originalChance))
+					{
+						prefabComponent.m_dropWhenDestroyed.m_dropChance = originalChance;
+						return true;
+					}
+				}
+				return false;
+			}
+
+			private static bool restoreDropsDestructible(GameObject prefab)
+			{
+				Destructible prefabComponent = prefab.GetComponent<Destructible>();
+				if (prefabComponent != null)
+				{
+					string prefabName = prefab.name;
+					if (destructibleDropBackup.TryGetValue(prefabName, out var originalSpawn))
+					{
+						prefabComponent.m_spawnWhenDestroyed = originalSpawn;
+						return true;
+					}
+				}
+				return false;
+			}
+
+			private static bool restoreDropsTreeLog(GameObject prefab)
+			{
+				TreeLog prefabComponent = prefab.GetComponent<TreeLog>();
+				if (prefabComponent != null)
+				{
+					string prefabName = prefab.name;
+					if (treeLogDropBackup.TryGetValue(prefabName, out var originalDrop))
+					{
+						prefabComponent.m_dropWhenDestroyed = originalDrop;
+						return true;
+					}
+				}
+				return false;
+			}
+		}
 	}
 }
