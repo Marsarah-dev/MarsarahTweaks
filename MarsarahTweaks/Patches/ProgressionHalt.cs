@@ -46,10 +46,10 @@ namespace MarsarahTweaks.Patches
 			// Create a dictionary to map bosses to resources that need to be prevented
 			private static readonly Dictionary<string, List<string>> pieceResourceRestrictions = new Dictionary<string, List<string>>()
 			{
-				{ "eikthyr", new List<string> { "piece_chair", "piece_chair02", "piece_table", "wood_pole_log", "wood_wall_log" } }, // wood_pole_log_4 and wood_wall_log_4x0.5 should be taken care of
-				{ "elder", new List<string> { "iron", "dungeon_sunkencrypt_irongate" } },
-				{ "yagluth", new List<string> { "blackmarble", "piece_dvergr", "dvergrprops", "dvergrtown", "dverger_guardstone" } },
-				{ "queen", new List<string> { "Piece_grausten", "Ashlands", "piece_blackwood_bench" } }
+				{ "Eikthyr", new List<string> { "piece_chair", "piece_chair02", "piece_table", "wood_pole_log", "wood_wall_log" } }, // wood_pole_log_4 and wood_wall_log_4x0.5 should be taken care of
+				{ "The Elder", new List<string> { "iron", "dungeon_sunkencrypt_irongate" } },
+				{ "Yagluth", new List<string> { "blackmarble", "piece_dvergr", "dvergrprops", "dvergrtown", "dverger_guardstone" } },
+				{ "The Queen", new List<string> { "Piece_grausten", "Ashlands", "piece_blackwood_bench" } }
 			};
 
 			static bool Prefix(Piece __instance)
@@ -89,32 +89,17 @@ namespace MarsarahTweaks.Patches
 			}
 		}
 
-		/*[HarmonyPatch(typeof(DropTable), "GetDropListItems")]
-		public static class DropTable_GetDropListItems_Patch
-		{
-			// This is the Postfix that will execute after GetDropListItems
-			static void Postfix(DropTable __instance, ref List<ItemDrop.ItemData> __result)
-			{
-				// Log or process the return value (the drop list) here
-				MarsarahTweaks.MLog($"[Patch] GetDropListItems {__instance.ToString()} returned {__result.Count} items.");
-
-				// Optionally, modify the return value if needed
-				// Example: Add an item to the drop list (be careful with modifying the return value)
-				// __result.Add(new ItemDrop.ItemData());
-			}
-		}*/
-
-
 		[HarmonyPatch(typeof(Container), "Interact")]
-		public static class Container_Interact_Patch
+		public static class ContainerInteract_Patch
 		{
 			private static readonly Dictionary<string, List<string>> chestResourceRestrictions = new Dictionary<string, List<string>>()
 			{
-				{ "eikthyr", new List<string> { "TreasureChest_forestcrypt", "TreasureChest_trollcave", "TreasureChest_blackforest" } },
-				{ "elder", new List<string> { "TreasureChest_swamp", "TreasureChest_sunkencrypt" } },
-				{ "bonemass", new List<string> { "TreasureChest_mountaincave" } },
-				{ "yagluth", new List<string> { "TreasureChest_dvergrtower", "TreasureChest_dvergrtown" } },
-				{ "queen", new List<string> { "TreasureChest_charredfortress", "TreasureChest_ashland_stone" } }
+				{ "Eikthyr", new List<string> { "TreasureChest_blackforest", "TreasureChest_forestcrypt", "TreasureChest_trollcave" } },
+				{ "The Elder", new List<string> { "TreasureChest_swamp", "TreasureChest_sunkencrypt" } },
+				{ "Bonemass", new List<string> { "TreasureChest_mountains", "TreasureChest_mountaincave" } },
+				{ "Moder", new List<string> { "TreasureChest_heath", "TreasureChest_plains_stone" } },
+				{ "Yagluth", new List<string> { "TreasureChest_dvergrtower", "TreasureChest_dvergrtown" } },
+				{ "The Queen", new List<string> { "TreasureChest_charredfortress", "TreasureChest_ashland_stone" } }
 			};
 
 			static bool Prefix(Container __instance, Humanoid character, bool hold, bool alt, ref bool __result)
@@ -133,7 +118,7 @@ namespace MarsarahTweaks.Patches
 					if (!bossDefeated && restrictedChests.Contains(chestName))
 					{
 						// Prevent interaction and show message
-						character.Message(MessageHud.MessageType.Center, "The chest is magically sealed.");
+						character.Message(MessageHud.MessageType.Center, $"The chest is magically sealed by {bossName}.");
 						__result = false;
 						return false;
 					}
@@ -144,11 +129,11 @@ namespace MarsarahTweaks.Patches
 
 
 		[HarmonyPatch(typeof(Pickable), "Interact")]
-		public static class Pickable_Interact_Patch
+		public static class PickableInteract_Patch
 		{
 			private static readonly Dictionary<string, List<string>> pickableResourceRestrictions = new Dictionary<string, List<string>>()
 			{
-				{ "eikthyr", new List<string> 
+				{ "Eikthyr", new List<string> 
 					{ 
 						"Pickable_Carrot", 
 						"Pickable_SeedCarrot",
@@ -163,13 +148,13 @@ namespace MarsarahTweaks.Patches
 						"Pickable_Tin"
 					} 
 				},
-				{ "elder", new List<string> 
+				{ "The Elder", new List<string> 
 					{
 						"Pickable_Turnip",
 						"Pickable_SeedTurnip"
 					} 
 				},
-				{ "bonemass", new List<string> 
+				{ "Bonemass", new List<string> 
 					{
 						"Pickable_DragonEgg",
 						"Pickable_MountainCaveCrystal",
@@ -184,7 +169,7 @@ namespace MarsarahTweaks.Patches
 						"hanging_hairstrands"
 					} 
 				},
-				{  "moder", new List<string>
+				{  "Moder", new List<string>
 					{
 						"CloudberryBush",
 						"Pickable_Barley",
@@ -196,7 +181,7 @@ namespace MarsarahTweaks.Patches
 						"goblin_totempole"
 					}
 				},
-				{ "yagluth", new List<string> 
+				{ "Yagluth", new List<string> 
 					{
 						"Pickable_DvergerThing",
 						"Pickable_DvergrLantern",
@@ -208,7 +193,7 @@ namespace MarsarahTweaks.Patches
 						"Pickable_BlackCoreStand",
 					} 
 				},
-				{ "queen", new List<string> 
+				{ "The Queen", new List<string> 
 					{
 						"VineAsh",
 						"Pickable_Ashstone",
@@ -258,7 +243,60 @@ namespace MarsarahTweaks.Patches
 
 					if (!bossDefeated && restrictedPickables.Contains(pickableName))
 					{
-						character.Message(MessageHud.MessageType.Center, "This object refuses to be picked.");
+						character.Message(MessageHud.MessageType.Center, $"{bossName} has a strong hold on this object");
+						__result = false;
+						return false;
+					}
+				}
+
+				return true; // Allow original method
+			}
+		}
+
+		[HarmonyPatch(typeof(PickableItem), "Interact")]
+		public static class PickableItemInteract_Patch
+		{
+			private static readonly Dictionary<string, List<string>> pickableItemResourceRestrictions = new Dictionary<string, List<string>>()
+			{
+				{ "Eikthyr", new List<string> {	"Pickable_ForestCryptRandom" } },
+				{ "The Elder", new List<string> { "Pickable_SunkenCryptRandom" } },
+				{ "Bonemass", new List<string> { "Pickable_MountainCaveRandom"	} }
+			};
+
+			static bool Prefix(Pickable __instance, Humanoid character, ref bool __result)
+			{
+				if (!ConfigManager.automaticProgressionHaltEnabled.Value) return true;
+
+				// Access private fields via reflection
+				FieldInfo nviewField = typeof(PickableItem).GetField("m_nview", BindingFlags.NonPublic | BindingFlags.Instance);
+
+				if (nviewField == null)
+				{
+					MarsarahTweaks.MLog("[ERROR] Could not access private fields in PickableItem!");
+					return true;
+				}
+
+				ZNetView nview = (ZNetView)nviewField.GetValue(__instance);
+
+				if (!nview.IsValid())
+				{
+					return true;
+				}
+
+				//string pickableItemName = __instance.name;
+				string pickableItemName = __instance.name.Replace("(Clone)", "").Trim();
+
+				foreach (var restriction in pickableItemResourceRestrictions)
+				{
+
+					string bossName = restriction.Key;
+					List<string> restrictedPickableItems = restriction.Value;
+
+					bool bossDefeated = GetBossDefeatedState(bossName);
+
+					if (!bossDefeated && restrictedPickableItems.Contains(pickableItemName))
+					{
+						character.Message(MessageHud.MessageType.Center, $"{bossName} has a strong hold on this object");
 						__result = false;
 						return false;
 					}
@@ -272,159 +310,15 @@ namespace MarsarahTweaks.Patches
 		{
 			return bossName switch
 			{
-				"eikthyr" => eikthyrDefeated,
-				"elder" => elderDefeated,
-				"bonemass" => bonemassDefeated,
-				"moder" => moderDefeated,
-				"yagluth" => yagluthDefeated,
-				"queen" => queenDefeated,
+				"Eikthyr" => eikthyrDefeated,
+				"The Elder" => elderDefeated,
+				"Bonemass" => bonemassDefeated,
+				"Moder" => moderDefeated,
+				"Yagluth" => yagluthDefeated,
+				"The Queen" => queenDefeated,
 				_ => false
 			};
 		}
-
-
-		/*[HarmonyPatch(typeof(Container), "Awake")] // Awake, Load
-		public static class Container_Awake_Patch
-		{
-			private static Dictionary<string, List<ItemDrop.ItemData>> originalChestItems = new Dictionary<string, List<ItemDrop.ItemData>>();
-			// Updated dictionary structure
-			private static readonly Dictionary<string, List<string>> chestResourceRestrictions = new Dictionary<string, List<string>>()
-			{
-				{ "eikthyr", new List<string> { "TreasureChest_forestcrypt", "TreasureChest_trollcave", "TreasureChest_blackforest" } },
-				{ "elder", new List<string> { "TreasureChest_swamp", "TreasureChest_sunkencrypt" } },
-				{ "bonemass", new List<string> { "TreasureChest_mountaincave" } },
-				{ "yagluth", new List<string> { "TreasureChest_dvergrtower", "TreasureChest_dvergrtown" } },
-				{ "queen", new List<string> { "TreasureChest_charredfortress", "TreasureChest_ashland_stone" } }
-			};
-
-			static void Postfix(Container __instance, ref Inventory ___m_inventory, ref DropTable ___m_defaultItems)
-			{
-				if (!ConfigManager.automaticProgressionHaltEnabled.Value) return;
-
-				// Remove "(Clone)" if present
-				string chestName = __instance.name.Replace("(Clone)", "").Trim();
-
-				// Iterate over chestResourceRestrictions to find matching key
-				foreach (var restriction in chestResourceRestrictions)
-				{
-					string bossName = restriction.Key;
-					List<string> restrictedChests = restriction.Value;
-
-					bool bossDefeated = false;
-
-					// Check if the boss is defeated by looking up the global key for the boss
-					switch (bossName)
-					{
-						case "eikthyr":
-							bossDefeated = eikthyrDefeated;
-							break;
-						case "elder":
-							bossDefeated = elderDefeated;
-							break;
-						case "bonemass":
-							bossDefeated = bonemassDefeated;
-							break;
-						case "moder":
-							bossDefeated = moderDefeated;
-							break;
-						case "yagluth":
-							bossDefeated = yagluthDefeated;
-							break;
-						case "queen":
-							bossDefeated = queenDefeated;
-							break;
-					}
-
-					if (!bossDefeated)
-					{
-						// Check if the current chest's name is in the restricted list for the corresponding progression key
-						if (restrictedChests.Contains(chestName))
-						{
-							MarsarahTweaks.MLog($"[Patch] Processing chest: {chestName}");
-
-							// DefaultItems Magnagement
-							if (___m_defaultItems == null)
-							{
-								MarsarahTweaks.MLog($"[ERROR] DefaultItems is NULL in Awake() for {chestName}");
-								return;
-							}
-
-							if (!originalChestItems.ContainsKey(chestName))
-							{
-								originalChestItems[chestName] = new List<ItemDrop.ItemData>();
-
-								foreach (var dropData in ___m_defaultItems.m_drops) // Directly access m_drops
-								{
-									if (dropData.m_item == null) continue;
-
-									ItemDrop itemDropComponent = dropData.m_item.GetComponent<ItemDrop>();
-									if (itemDropComponent == null) continue;
-
-									ItemDrop.ItemData itemData = itemDropComponent.m_itemData.Clone(); // Clone to avoid modifications
-									itemData.m_dropPrefab = dropData.m_item; // Keep prefab reference
-									originalChestItems[chestName].Add(itemData);
-								}
-
-								MarsarahTweaks.MLog($"[Backup] Stored {originalChestItems[chestName].Count} possible items for {chestName}");
-							}
-
-
-							List<ItemDrop.ItemData> dropListItems =  ___m_defaultItems.GetDropListItems();
-							MarsarahTweaks.MLog($"[DefaultDrops] Chest {chestName} attempt to get dropListItems: {dropListItems.Count}");
-
-							foreach (var item in dropListItems)
-							{
-								MarsarahTweaks.MLog($"- {item.m_shared.m_name}");
-							}
-
-							// Inventory Management
-							if (___m_inventory == null)
-							{
-								MarsarahTweaks.MLog($"[ERROR] Inventory is NULL in Awake() for {chestName}");
-								return;
-							}
-
-							// Access private field m_inventory via reflection
-							FieldInfo inventoryField = typeof(Inventory).GetField("m_inventory", BindingFlags.NonPublic | BindingFlags.Instance);
-							if (inventoryField == null)
-							{
-								MarsarahTweaks.MLog($"[ERROR] Could not access m_inventory field in Inventory class.");
-								return;
-							}
-
-							List<ItemDrop.ItemData> inventoryItems = (List<ItemDrop.ItemData>)inventoryField.GetValue(___m_inventory);
-
-							// Log the contents of the inventory
-							MarsarahTweaks.MLog($"[Inventory] Chest {chestName} contains {inventoryItems.Count} items.");
-							foreach (var item in inventoryItems)
-							{
-								MarsarahTweaks.MLog($"- {item.m_shared.m_name} (Stack: {item.m_stack})");
-							}
-
-							// Proceed with clearing loot
-							//MarsarahTweaks.MLog($"✅ Cleared loot for {__instance.name} in Awake()");
-							//___m_inventory.RemoveAll();
-
-							return;
-						}
-					}
-				}
-
-				foreach (var originalItemEntry in originalChestItems)
-				{
-					string originalChestName = originalItemEntry.Key;
-					List<ItemDrop.ItemData> originalLoot = originalItemEntry.Value;
-
-					MarsarahTweaks.MLog($"Original chest type {originalChestName} contains the following: ");
-					foreach (var item in originalLoot)
-					{
-						MarsarahTweaks.MLog($"- {item.m_shared.m_name}");
-					}
-				}
-
-				//MarsarahTweaks.MLog($"Skipping chest {chestName} (No restrictions applied)");
-			}
-		}*/
 
 		[HarmonyPatch(typeof(ZNetScene), "Update")] // Awake
 		class ProgressionHalt_Patch
@@ -450,16 +344,16 @@ namespace MarsarahTweaks.Patches
 						haltDrops(__instance.GetPrefab("Skeleton_Poison")); // done
 						haltDrops(__instance.GetPrefab("Pickable_Carrot"));
 						haltDrops(__instance.GetPrefab("Pickable_SeedCarrot")); // done
-						haltDrops(__instance.GetPrefab("Pickable_Thistle")); // done
-						haltDrops(__instance.GetPrefab("Pickable_ForestCryptRandom")); // done
-						haltDrops(__instance.GetPrefab("Pickable_ForestCryptRemains01")); // done
-						haltDrops(__instance.GetPrefab("Pickable_ForestCryptRemains02")); // done
-						haltDrops(__instance.GetPrefab("Pickable_ForestCryptRemains03")); // done
-						haltDrops(__instance.GetPrefab("Pickable_ForestCryptRemains04")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_Thistle")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_ForestCryptRandom")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_ForestCryptRemains01")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_ForestCryptRemains02")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_ForestCryptRemains03")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_ForestCryptRemains04")); // done
 						haltDrops(__instance.GetPrefab("BlueberryBush")); // done
-						haltDrops(__instance.GetPrefab("Pickable_Mushroom_yellow")); // done
-						haltDrops(__instance.GetPrefab("Pickable_SurtlingCoreStand")); // done
-						haltDrops(__instance.GetPrefab("Pickable_Tin"));
+						//haltDrops(__instance.GetPrefab("Pickable_Mushroom_yellow")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_SurtlingCoreStand")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_Tin"));
 						haltDrops(__instance.GetPrefab("MineRock_Tin")); // done
 						haltDrops(__instance.GetPrefab("MineRock_Copper"));
 						haltDrops(__instance.GetPrefab("rock4_copper_frac")); // done
@@ -487,7 +381,7 @@ namespace MarsarahTweaks.Patches
 						haltDrops(__instance.GetPrefab("sapling_seedturnip"));
 						haltDrops(__instance.GetPrefab("Pickable_Turnip"));
 						haltDrops(__instance.GetPrefab("Pickable_SeedTurnip")); // done
-						haltDrops(__instance.GetPrefab("Pickable_SunkenCryptRandom")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_SunkenCryptRandom")); // done
 						haltDrops(__instance.GetPrefab("MineRock_Iron"));
 						haltDrops(__instance.GetPrefab("dungeon_sunkencrypt_irongate_rusty"));
 						haltDrops(__instance.GetPrefab("mudpile_frac"));
@@ -510,15 +404,15 @@ namespace MarsarahTweaks.Patches
 						haltDrops(__instance.GetPrefab("StoneGolem")); // done
 						haltDrops(__instance.GetPrefab("Serpent")); // done
 						haltDrops(__instance.GetPrefab("Leviathan")); // Abyssal Barnacle - done
-						haltDrops(__instance.GetPrefab("Pickable_DragonEgg")); // done
-						haltDrops(__instance.GetPrefab("Pickable_MountainCaveRandom")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_DragonEgg")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_MountainCaveRandom")); // done
 						haltDrops(__instance.GetPrefab("Pickable_MountainCaveCrystal")); // done
 						haltDrops(__instance.GetPrefab("Pickable_MountainCaveObsidian"));
-						haltDrops(__instance.GetPrefab("Pickable_MountainRemains01_buried"));
-						haltDrops(__instance.GetPrefab("Pickable_Hairstrands01"));
-						haltDrops(__instance.GetPrefab("Pickable_Hairstrands02"));
-						haltDrops(__instance.GetPrefab("Pickable_MeatPile")); // done
-						haltDrops(__instance.GetPrefab("Pickable_Obsidian"));
+						//haltDrops(__instance.GetPrefab("Pickable_MountainRemains01_buried"));
+						//haltDrops(__instance.GetPrefab("Pickable_Hairstrands01"));
+						//haltDrops(__instance.GetPrefab("Pickable_Hairstrands02"));
+						//haltDrops(__instance.GetPrefab("Pickable_MeatPile")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_Obsidian"));
 						haltDrops(__instance.GetPrefab("Pickable_Onion"));
 						haltDrops(__instance.GetPrefab("Pickable_SeedOnion"));
 						haltDrops(__instance.GetPrefab("sapling_onion"));
@@ -551,8 +445,8 @@ namespace MarsarahTweaks.Patches
 						haltDrops(__instance.GetPrefab("sapling_flax"));
 						haltDrops(__instance.GetPrefab("Pickable_Flax"));
 						haltDrops(__instance.GetPrefab("Pickable_Flax_Wild")); // done
-						haltDrops(__instance.GetPrefab("Pickable_Tar")); // done
-						haltDrops(__instance.GetPrefab("Pickable_TarBig"));
+						//haltDrops(__instance.GetPrefab("Pickable_Tar")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_TarBig"));
 						haltDrops(__instance.GetPrefab("goblin_totempole")); // done
 					}
 					if (!yagluthDefeated)
@@ -567,14 +461,14 @@ namespace MarsarahTweaks.Patches
 						haltDrops(__instance.GetPrefab("SeekerQueen"));
 						haltDrops(__instance.GetPrefab("Gjall")); // done
 						haltDrops(__instance.GetPrefab("Hare")); // done
-						haltDrops(__instance.GetPrefab("Pickable_DvergerThing"));
-						haltDrops(__instance.GetPrefab("Pickable_DvergrLantern")); // done
-						haltDrops(__instance.GetPrefab("Pickable_DvergrMineTreasure")); // done - this is just coin
-						haltDrops(__instance.GetPrefab("Pickable_DvergrStein"));
-						haltDrops(__instance.GetPrefab("Pickable_Mushroom_JotunPuffs")); // done
-						haltDrops(__instance.GetPrefab("Pickable_Mushroom_Magecap")); // done
-						haltDrops(__instance.GetPrefab("Pickable_RoyalJelly")); // done
-						haltDrops(__instance.GetPrefab("Pickable_BlackCoreStand")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_DvergerThing"));
+						//haltDrops(__instance.GetPrefab("Pickable_DvergrLantern")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_DvergrMineTreasure")); // done - this is just coin
+						//haltDrops(__instance.GetPrefab("Pickable_DvergrStein"));
+						//haltDrops(__instance.GetPrefab("Pickable_Mushroom_JotunPuffs")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_Mushroom_Magecap")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_RoyalJelly")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_BlackCoreStand")); // done
 						haltDrops(__instance.GetPrefab("sapling_jotunpuffs"));
 						haltDrops(__instance.GetPrefab("sapling_magecap"));
 						haltDrops(__instance.GetPrefab("giant_arm"));
@@ -615,15 +509,14 @@ namespace MarsarahTweaks.Patches
 						haltDrops(__instance.GetPrefab("BlobLava")); // done
 						haltDrops(__instance.GetPrefab("BonemawSerpent")); // done
 						haltDrops(__instance.GetPrefab("lavarock_ashlands1")); // MC
-						haltDrops(__instance.GetPrefab("VineAsh")); // done
-						haltDrops(__instance.GetPrefab("Pickable_Ashstone"));
-						haltDrops(__instance.GetPrefab("Pickable_Charredskull"));
-						haltDrops(__instance.GetPrefab("Pickable_Fiddlehead")); // done
-						haltDrops(__instance.GetPrefab("Pickable_Meteorite"));
-						haltDrops(__instance.GetPrefab("Pickable_MoltenCoreStand")); // This works in Putrid hole, but not in Charred Fortress
-						haltDrops(__instance.GetPrefab("Pickable_SmokePuff")); // done
-						haltDrops(__instance.GetPrefab("Pickable_SulfurRock"));
-						haltDrops(__instance.GetPrefab("Pickable_VoltureEgg"));
+						//haltDrops(__instance.GetPrefab("VineAsh")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_Ashstone"));
+						//haltDrops(__instance.GetPrefab("Pickable_Charredskull"));
+						//haltDrops(__instance.GetPrefab("Pickable_Fiddlehead")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_Meteorite"));
+						//haltDrops(__instance.GetPrefab("Pickable_MoltenCoreStand")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_SmokePuff")); // done
+						//haltDrops(__instance.GetPrefab("Pickable_VoltureEgg"));
 						haltDrops(__instance.GetPrefab("Pickable_SulfurRock"));
 						haltDrops(__instance.GetPrefab("FlametalRockstand"));
 						haltDrops(__instance.GetPrefab("FlametalRockstand_frac"));
@@ -771,7 +664,7 @@ namespace MarsarahTweaks.Patches
 				//{ typeof(Container), haltDropsContainer }
 			};
 
-			bool modified = false; // Track if any drop was halted
+			//bool modified = false; // Track if any drop was halted
 
 			// Iterate through all handlers and apply every matching one
 			foreach (var handler in dropHandlers)
@@ -779,23 +672,23 @@ namespace MarsarahTweaks.Patches
 				if (prefab.GetComponent(handler.Key) != null)
 				{
 					handler.Value(prefab);
-					if (handler.Value(prefab))
+					/*if (handler.Value(prefab))
 					{
 						//MarsarahTweaks.MLog($"Halted drop for {prefab.name} as component {handler.Key}");
 						modified = true; // Mark that at least one modification was made
-					}
+					}*/
 				}
 			}
 
 			// Log components if no drop handler was triggered
-			if (!modified)
+			/*if (!modified)
 			{
 				Component[] prefabComponents = prefab.GetComponents<Component>();
 				foreach (Component comp in prefabComponents)
 				{
 					MarsarahTweaks.MLog(prefab.name + " - " + comp.ToString());
 				}
-			}
+			}*/
 		}
 
 
