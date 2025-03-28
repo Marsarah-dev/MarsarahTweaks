@@ -61,25 +61,248 @@ namespace MarsarahTweaks.Patches
 						return true;
 					}
 
-					return PreventDrop(__instance.name, pieceResourceRestrictions, "Piece");
+					//return PreventDrop(__instance.name, pieceResourceRestrictions, "Piece");
+					foreach (var bossEntry in pieceResourceRestrictions)
+					{
+						string bossName = bossEntry.Key;
+						List<string> restrictedResources = bossEntry.Value;
+
+						bool bossDefeated = GetBossDefeatedState(bossName);
+
+						if (!bossDefeated)
+						{
+							foreach (var resource in restrictedResources)
+							{
+								if (__instance.name.StartsWith(resource))
+								{
+									//MarsarahTweaks.MLog($"Progression Halt: Prevented Piece resource drop {__instance.name} because {bossName} has not been defeated.");
+									return false; // Prevent dropping
+								}
+							}
+						}
+					}
+
+					return true; // Allow dropping if none of the conditions match
 				}
 
 				return true; // Default return value
 			}
 		}
 
-		/*[HarmonyPatch(typeof(Container), "Awake")]
+		/*[HarmonyPatch(typeof(DropTable), "GetDropListItems")]
+		public static class DropTable_GetDropListItems_Patch
+		{
+			// This is the Postfix that will execute after GetDropListItems
+			static void Postfix(DropTable __instance, ref List<ItemDrop.ItemData> __result)
+			{
+				// Log or process the return value (the drop list) here
+				MarsarahTweaks.MLog($"[Patch] GetDropListItems {__instance.ToString()} returned {__result.Count} items.");
+
+				// Optionally, modify the return value if needed
+				// Example: Add an item to the drop list (be careful with modifying the return value)
+				// __result.Add(new ItemDrop.ItemData());
+			}
+		}*/
+
+
+		[HarmonyPatch(typeof(Container), "Interact")]
+		public static class Container_Interact_Patch
+		{
+			private static readonly Dictionary<string, List<string>> chestResourceRestrictions = new Dictionary<string, List<string>>()
+			{
+				{ "eikthyr", new List<string> { "TreasureChest_forestcrypt", "TreasureChest_trollcave", "TreasureChest_blackforest" } },
+				{ "elder", new List<string> { "TreasureChest_swamp", "TreasureChest_sunkencrypt" } },
+				{ "bonemass", new List<string> { "TreasureChest_mountaincave" } },
+				{ "yagluth", new List<string> { "TreasureChest_dvergrtower", "TreasureChest_dvergrtown" } },
+				{ "queen", new List<string> { "TreasureChest_charredfortress", "TreasureChest_ashland_stone" } }
+			};
+
+			static bool Prefix(Container __instance, Humanoid character, bool hold, bool alt, ref bool __result)
+			{
+				if (hold) return true; // Allow normal behavior for hold interactions
+
+				if (!ConfigManager.automaticProgressionHaltEnabled.Value) return true; // Skip if disabled
+
+				string chestName = __instance.name.Replace("(Clone)", "").Trim();
+				foreach (var restriction in chestResourceRestrictions)
+				{
+					string bossName = restriction.Key;
+					List<string> restrictedChests = restriction.Value;
+					bool bossDefeated = GetBossDefeatedState(bossName);
+
+					if (!bossDefeated && restrictedChests.Contains(chestName))
+					{
+						// Prevent interaction and show message
+						character.Message(MessageHud.MessageType.Center, "The chest is magically sealed.");
+						__result = false;
+						return false;
+					}
+				}
+				return true; // Allow normal behavior for unrestricted chests
+			}
+		}
+
+
+		[HarmonyPatch(typeof(Pickable), "Interact")]
+		public static class Pickable_Interact_Patch
+		{
+			private static readonly Dictionary<string, List<string>> pickableResourceRestrictions = new Dictionary<string, List<string>>()
+			{
+				{ "eikthyr", new List<string> 
+					{ 
+						"Pickable_Carrot", 
+						"Pickable_SeedCarrot",
+						"Pickable_Thistle",
+						"Pickable_ForestCryptRemains01", 
+						"Pickable_ForestCryptRemains02", 
+						"Pickable_ForestCryptRemains03", 
+						"Pickable_ForestCryptRemains04",
+						"BlueberryBush",
+						"Pickable_Mushroom_yellow",
+						"Pickable_SurtlingCoreStand",
+						"Pickable_Tin"
+					} 
+				},
+				{ "elder", new List<string> 
+					{
+						"Pickable_Turnip",
+						"Pickable_SeedTurnip"
+					} 
+				},
+				{ "bonemass", new List<string> 
+					{
+						"Pickable_DragonEgg",
+						"Pickable_MountainCaveCrystal",
+						"Pickable_MountainCaveObsidian",
+						"Pickable_MountainRemains01_buried",
+						"Pickable_Hairstrands01",
+						"Pickable_Hairstrands02",
+						"Pickable_MeatPile",
+						"Pickable_Obsidian",
+						"Pickable_Onion",
+						"Pickable_SeedOnion",
+						"hanging_hairstrands"
+					} 
+				},
+				{  "moder", new List<string>
+					{
+						"CloudberryBush",
+						"Pickable_Barley",
+						"Pickable_Barley_Wild",
+						"Pickable_Flax",
+						"Pickable_Flax_Wild",
+						"Pickable_Tar",
+						"Pickable_TarBig",
+						"goblin_totempole"
+					}
+				},
+				{ "yagluth", new List<string> 
+					{
+						"Pickable_DvergerThing",
+						"Pickable_DvergrLantern",
+						"Pickable_DvergrMineTreasure",
+						"Pickable_DvergrStein",
+						"Pickable_Mushroom_JotunPuffs",
+						"Pickable_Mushroom_Magecap",
+						"Pickable_RoyalJelly",
+						"Pickable_BlackCoreStand",
+					} 
+				},
+				{ "queen", new List<string> 
+					{
+						"VineAsh",
+						"Pickable_Ashstone",
+						"Pickable_Charredskull",
+						"Pickable_Fiddlehead",
+						"Pickable_SmokePuff",
+						"Pickable_Meteorite",
+						"Pickable_MoltenCoreStand",
+						"Pickable_SulfurRock",
+						"Pickable_VoltureEgg"
+					} 
+				}
+			};
+
+			static bool Prefix(Pickable __instance, Humanoid character, ref bool __result)
+			{
+				if (!ConfigManager.automaticProgressionHaltEnabled.Value) return true;
+
+				// Access private fields via reflection
+				FieldInfo nviewField = typeof(Pickable).GetField("m_nview", BindingFlags.NonPublic | BindingFlags.Instance);
+				FieldInfo enabledField = typeof(Pickable).GetField("m_enabled", BindingFlags.NonPublic | BindingFlags.Instance);
+
+				if (nviewField == null || enabledField == null)
+				{
+					MarsarahTweaks.MLog("[ERROR] Could not access private fields in Pickable!");
+					return true;
+				}
+
+				ZNetView nview = (ZNetView)nviewField.GetValue(__instance);
+				int enabled = (int)enabledField.GetValue(__instance);
+
+				if (!nview.IsValid() || enabled == 0)
+				{
+					return true;
+				}
+
+				//string pickableName = __instance.name;
+				string pickableName = __instance.name.Replace("(Clone)", "").Trim();
+
+				foreach (var restriction in pickableResourceRestrictions)
+				{
+
+					string bossName = restriction.Key;
+					List<string> restrictedPickables = restriction.Value;
+
+					bool bossDefeated = GetBossDefeatedState(bossName);
+
+					if (!bossDefeated && restrictedPickables.Contains(pickableName))
+					{
+						character.Message(MessageHud.MessageType.Center, "This object refuses to be picked.");
+						__result = false;
+						return false;
+					}
+				}
+
+				return true; // Allow original method
+			}
+		}
+
+		private static bool GetBossDefeatedState(string bossName)
+		{
+			return bossName switch
+			{
+				"eikthyr" => eikthyrDefeated,
+				"elder" => elderDefeated,
+				"bonemass" => bonemassDefeated,
+				"moder" => moderDefeated,
+				"yagluth" => yagluthDefeated,
+				"queen" => queenDefeated,
+				_ => false
+			};
+		}
+
+
+		/*[HarmonyPatch(typeof(Container), "Awake")] // Awake, Load
 		public static class Container_Awake_Patch
 		{
+			private static Dictionary<string, List<ItemDrop.ItemData>> originalChestItems = new Dictionary<string, List<ItemDrop.ItemData>>();
 			// Updated dictionary structure
 			private static readonly Dictionary<string, List<string>> chestResourceRestrictions = new Dictionary<string, List<string>>()
 			{
-				{ "eikthyr", new List<string> { "TreasureChest_forestcrypt", "TreasureChest_trollcave", "TreasureChest_blackforest" } }
+				{ "eikthyr", new List<string> { "TreasureChest_forestcrypt", "TreasureChest_trollcave", "TreasureChest_blackforest" } },
+				{ "elder", new List<string> { "TreasureChest_swamp", "TreasureChest_sunkencrypt" } },
+				{ "bonemass", new List<string> { "TreasureChest_mountaincave" } },
+				{ "yagluth", new List<string> { "TreasureChest_dvergrtower", "TreasureChest_dvergrtown" } },
+				{ "queen", new List<string> { "TreasureChest_charredfortress", "TreasureChest_ashland_stone" } }
 			};
 
-			static void Postfix(Container __instance, ref Inventory ___m_inventory)
+			static void Postfix(Container __instance, ref Inventory ___m_inventory, ref DropTable ___m_defaultItems)
 			{
 				if (!ConfigManager.automaticProgressionHaltEnabled.Value) return;
+
+				// Remove "(Clone)" if present
+				string chestName = __instance.name.Replace("(Clone)", "").Trim();
 
 				// Iterate over chestResourceRestrictions to find matching key
 				foreach (var restriction in chestResourceRestrictions)
@@ -115,115 +338,93 @@ namespace MarsarahTweaks.Patches
 					if (!bossDefeated)
 					{
 						// Check if the current chest's name is in the restricted list for the corresponding progression key
-						if (restrictedChests.Contains(__instance.name))
+						if (restrictedChests.Contains(chestName))
 						{
-							MarsarahTweaks.MLog($"[Patch] Processing chest: {__instance.name}");
+							MarsarahTweaks.MLog($"[Patch] Processing chest: {chestName}");
 
-							if (___m_inventory == null)
+							// DefaultItems Magnagement
+							if (___m_defaultItems == null)
 							{
-								MarsarahTweaks.MLog($"[ERROR] Inventory is NULL in Awake() for {__instance.name}");
+								MarsarahTweaks.MLog($"[ERROR] DefaultItems is NULL in Awake() for {chestName}");
 								return;
 							}
 
+							if (!originalChestItems.ContainsKey(chestName))
+							{
+								originalChestItems[chestName] = new List<ItemDrop.ItemData>();
+
+								foreach (var dropData in ___m_defaultItems.m_drops) // Directly access m_drops
+								{
+									if (dropData.m_item == null) continue;
+
+									ItemDrop itemDropComponent = dropData.m_item.GetComponent<ItemDrop>();
+									if (itemDropComponent == null) continue;
+
+									ItemDrop.ItemData itemData = itemDropComponent.m_itemData.Clone(); // Clone to avoid modifications
+									itemData.m_dropPrefab = dropData.m_item; // Keep prefab reference
+									originalChestItems[chestName].Add(itemData);
+								}
+
+								MarsarahTweaks.MLog($"[Backup] Stored {originalChestItems[chestName].Count} possible items for {chestName}");
+							}
+
+
+							List<ItemDrop.ItemData> dropListItems =  ___m_defaultItems.GetDropListItems();
+							MarsarahTweaks.MLog($"[DefaultDrops] Chest {chestName} attempt to get dropListItems: {dropListItems.Count}");
+
+							foreach (var item in dropListItems)
+							{
+								MarsarahTweaks.MLog($"- {item.m_shared.m_name}");
+							}
+
+							// Inventory Management
+							if (___m_inventory == null)
+							{
+								MarsarahTweaks.MLog($"[ERROR] Inventory is NULL in Awake() for {chestName}");
+								return;
+							}
+
+							// Access private field m_inventory via reflection
+							FieldInfo inventoryField = typeof(Inventory).GetField("m_inventory", BindingFlags.NonPublic | BindingFlags.Instance);
+							if (inventoryField == null)
+							{
+								MarsarahTweaks.MLog($"[ERROR] Could not access m_inventory field in Inventory class.");
+								return;
+							}
+
+							List<ItemDrop.ItemData> inventoryItems = (List<ItemDrop.ItemData>)inventoryField.GetValue(___m_inventory);
+
+							// Log the contents of the inventory
+							MarsarahTweaks.MLog($"[Inventory] Chest {chestName} contains {inventoryItems.Count} items.");
+							foreach (var item in inventoryItems)
+							{
+								MarsarahTweaks.MLog($"- {item.m_shared.m_name} (Stack: {item.m_stack})");
+							}
+
 							// Proceed with clearing loot
-							MarsarahTweaks.MLog($"✅ Cleared loot for {__instance.name} in Awake()");
-							___m_inventory.RemoveAll();
+							//MarsarahTweaks.MLog($"✅ Cleared loot for {__instance.name} in Awake()");
+							//___m_inventory.RemoveAll();
+
 							return;
 						}
 					}
 				}
 
-				MarsarahTweaks.MLog($"Skipping chest {__instance.name} (No restrictions applied)");
-			}
-		}*/
-
-		/*[HarmonyPatch(typeof(DropOnDestroyed), "OnDestroyed")]
-		class ProgressionHaltDestroyed_Patch
-		{
-			// Create a dictionary to map bosses to resources that need to be prevented
-			private static readonly Dictionary<string, List<string>> dropResourceRestrictions = new Dictionary<string, List<string>>()
-			{
-				{ "bonemass", new List<string> { "MountainKit" } },
-				{ "moder", new List<string> { "Pickable_Flax_Wild" } },
-				{ "yagluth", new List<string> { "dvergrtown" } },
-				{ "queen", new List<string> { "piece_Charred_Balista" } }
-			};
-
-			static bool Prefix(DropOnDestroyed __instance)
-			{
-				string prefabName = __instance.name;
-
-				// Get the list of items that will be dropped
-				List<GameObject> dropList = __instance.m_dropWhenDestroyed.GetDropList();
-				List<string> dropNames = new List<string>();
-				foreach (var drop in dropList)
+				foreach (var originalItemEntry in originalChestItems)
 				{
-					if (drop != null)
+					string originalChestName = originalItemEntry.Key;
+					List<ItemDrop.ItemData> originalLoot = originalItemEntry.Value;
+
+					MarsarahTweaks.MLog($"Original chest type {originalChestName} contains the following: ");
+					foreach (var item in originalLoot)
 					{
-						dropNames.Add(drop.name);
+						MarsarahTweaks.MLog($"- {item.m_shared.m_name}");
 					}
 				}
 
-				// Log the destruction event
-				MarsarahTweaks.MLog($"[DropOnDestroyed] Destroyed Object: {prefabName}, Drops: {string.Join(", ", dropNames)}");
-
-				if (ConfigManager.automaticProgressionHaltEnabled.Value)
-				{
-					return ShouldPreventDrop(__instance.name, dropResourceRestrictions, "DropOnDestroyed");
-				}
-
-				return true; // Default return value
+				//MarsarahTweaks.MLog($"Skipping chest {chestName} (No restrictions applied)");
 			}
 		}*/
-
-		// Checks if the resource drop should be prevented based on progression halt rules.
-		internal static bool PreventDrop(string objectName, Dictionary<string, List<string>> resourceRestrictions, string dropType)
-		{
-			foreach (var bossEntry in resourceRestrictions)
-			{
-				string bossName = bossEntry.Key;
-				List<string> restrictedResources = bossEntry.Value;
-
-				bool bossDefeated = false;
-
-				// Check if the boss is defeated by looking up the global key for the boss
-				switch (bossName)
-				{
-					case "eikthyr":
-						bossDefeated = eikthyrDefeated;
-						break;
-					case "elder":
-						bossDefeated = elderDefeated;
-						break;
-					case "bonemass":
-						bossDefeated = bonemassDefeated;
-						break;
-					case "moder":
-						bossDefeated = moderDefeated;
-						break;
-					case "yagluth":
-						bossDefeated = yagluthDefeated;
-						break;
-					case "queen":
-						bossDefeated = queenDefeated;
-						break;
-				}
-
-				if (!bossDefeated)
-				{
-					foreach (var resource in restrictedResources)
-					{
-						if (objectName.StartsWith(resource))
-						{
-							MarsarahTweaks.MLog($"Progression Halt: Prevented {dropType} resource drop {objectName} because {bossName} has not been defeated.");
-							return false; // Prevent dropping
-						}
-					}
-				}
-			}
-
-			return true; // Allow dropping if none of the conditions match
-		}
 
 		[HarmonyPatch(typeof(ZNetScene), "Update")] // Awake
 		class ProgressionHalt_Patch
@@ -562,8 +763,8 @@ namespace MarsarahTweaks.Patches
 				{ typeof(CharacterDrop), haltDropsMob },
 				{ typeof(MineRock), haltDropsMine },
 				{ typeof(MineRock5), haltDropsMine5 },
-				{ typeof(Pickable), haltDropsPickable },
-				{ typeof(PickableItem), haltDropsPickableItem },
+				//{ typeof(Pickable), haltDropsPickable },
+				//{ typeof(PickableItem), haltDropsPickableItem },
 				{ typeof(DropOnDestroyed), haltDropsOnDestroyed },
 				{ typeof(Destructible), haltDropsDestructible },
 				{ typeof(TreeLog), haltDropsTreeLog },
@@ -577,9 +778,10 @@ namespace MarsarahTweaks.Patches
 			{
 				if (prefab.GetComponent(handler.Key) != null)
 				{
+					handler.Value(prefab);
 					if (handler.Value(prefab))
 					{
-						MarsarahTweaks.MLog($"Halted drop for {prefab.name} as component {handler.Key}");
+						//MarsarahTweaks.MLog($"Halted drop for {prefab.name} as component {handler.Key}");
 						modified = true; // Mark that at least one modification was made
 					}
 				}
@@ -655,7 +857,7 @@ namespace MarsarahTweaks.Patches
 			return false;
 		}
 
-		static bool haltDropsPickable(GameObject prefab)
+		/*static bool haltDropsPickable(GameObject prefab)
 		{
 			Pickable prefabComponent = prefab.GetComponent<Pickable>();
 			if (prefabComponent != null)
@@ -679,7 +881,7 @@ namespace MarsarahTweaks.Patches
 				return true;
 			}
 			return false;
-		}
+		}*/
 
 		static bool haltDropsTreeLog(GameObject prefab)
 		{
