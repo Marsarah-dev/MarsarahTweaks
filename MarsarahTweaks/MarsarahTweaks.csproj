@@ -116,6 +116,7 @@
     <Compile Include="Patches\LessStaminaChanges.cs" />
     <Compile Include="Patches\LighterMetalWeight.cs" />
     <Compile Include="Patches\MinibossWeightChanges.cs" />
+    <Compile Include="Patches\OtherChanges.cs" />
     <Compile Include="Patches\OtherPatches.cs" />
     <Compile Include="Patches\PermanentLightsChanges.cs" />
     <Compile Include="Patches\PrefabHitLogger.cs" />
