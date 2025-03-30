@@ -9,34 +9,6 @@ namespace MarsarahTweaks.Patches
 {
 	internal class CreatureUnleveler
 	{
-		private static bool eikthyrDefeated = false;
-		private static bool elderDefeated = false;
-		private static bool bonemassDefeated = false;
-		private static bool moderDefeated = false;
-		private static bool yagluthDefeated = false;
-		private static bool queenDefeated = false;
-		private static bool faderDefeated = false;
-
-		// Check boss status 
-		[HarmonyPatch(typeof(ZoneSystem), "Update")]
-		class ClearMistlandsUpdate_Patch
-		{
-			static void Postfix(ZoneSystem __instance)
-			{
-				if (!ConfigManager.clearMistlandsEnabled.Value) return;
-
-				BossStateChecker.UpdateDefeatedStates(__instance);
-
-				eikthyrDefeated = BossStateChecker.IsBossDefeated("defeated_eikthyr");
-				elderDefeated = BossStateChecker.IsBossDefeated("defeated_gdking");
-				bonemassDefeated = BossStateChecker.IsBossDefeated("defeated_bonemass");
-				moderDefeated = BossStateChecker.IsBossDefeated("defeated_dragon");
-				yagluthDefeated = BossStateChecker.IsBossDefeated("defeated_goblinking");
-				queenDefeated = BossStateChecker.IsBossDefeated("defeated_queen");
-				faderDefeated = BossStateChecker.IsBossDefeated("defeated_fader");
-			}
-		}
-
 		private static Dictionary <string, Dictionary <string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>> creatureSpawnChanges = new Dictionary<string, Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>>()
 		{
 			{ "eikthyrDefeated", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
@@ -187,25 +159,25 @@ namespace MarsarahTweaks.Patches
 								switch (bossName)
 								{
 									case "eikthyrDefeated":
-										bossDefeated = eikthyrDefeated;
+										bossDefeated = GlobalKeyChecker.eikthyrDefeated;
 										break;
 									case "elderDefeated":
-										bossDefeated = elderDefeated;
+										bossDefeated = GlobalKeyChecker.elderDefeated;
 										break;
 									case "bonemassDefeated":
-										bossDefeated = bonemassDefeated;
+										bossDefeated = GlobalKeyChecker.bonemassDefeated;
 										break;
 									case "moderDefeated":
-										bossDefeated = moderDefeated;
+										bossDefeated = GlobalKeyChecker.moderDefeated;
 										break;
 									case "yagluthDefeated":
-										bossDefeated = yagluthDefeated;
+										bossDefeated = GlobalKeyChecker.yagluthDefeated;
 										break;
 									case "queenDefeated":
-										bossDefeated = queenDefeated;
+										bossDefeated = GlobalKeyChecker.queenDefeated;
 										break;
 									case "faderDefeated":
-										bossDefeated = faderDefeated;
+										bossDefeated = GlobalKeyChecker.faderDefeated;
 										break;
 								}
 

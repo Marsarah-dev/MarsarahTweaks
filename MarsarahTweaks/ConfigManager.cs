@@ -91,6 +91,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata ExtensionsModifications = new ConfigMetadata("21 - Station Extensions Changes", "(Toggling mid-game requires CLIENT relog) Decreases space requirement for workstation extensions and increases build distance to workstations (This does not increase workstation radius)");
 			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("22 - Stop Running Away", "Boars and Necks won't flee when alerted");
 			public static readonly ConfigMetadata ProgressionHalt = new ConfigMetadata("23 - Automatic Progression Halt", "Creatures and objects do not drop any items unless the previous biome boss has been defeated");
+			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("24 - Better Trophy Drop Rates", "Increased trophy drop rate for the following creatures: Rancid Remains (10%), Surtling (5%), Draugr Elite (10%), Wraith (5%), Cultist (10%), Fenring (10%), Stone Golem (5%), Deathsquito (5%), Fuling Berserker (5%), Tick (5%), Dverger (5%), Seeker Soldier (5%), Charred Warlock (5%)");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog) All metal ore and bars weight decreased to 8");
 			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("5 - Bigger Wisp Radius", "Increases wisp radius");
@@ -130,6 +131,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> extensionsChangesEnabled;
 		public static ConfigEntry<bool> noFleeEnabled;
 		public static ConfigEntry<bool> automaticProgressionHaltEnabled;
+		public static ConfigEntry<bool> betterTrophyDropsEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 		public static ConfigEntry<bool> biggerWispRadiusEnabled;
@@ -174,6 +176,7 @@ namespace MarsarahTweaks
 			extensionsChangesEnabled = CreateConfig(ConfigSections.Features, Configs.ExtensionsModifications.Name, true, Configs.ExtensionsModifications.Description);
 			noFleeEnabled = CreateConfig(ConfigSections.Features, Configs.FleeAIModifications.Name, true, Configs.FleeAIModifications.Description);
 			automaticProgressionHaltEnabled = CreateConfig(ConfigSections.Features, Configs.ProgressionHalt.Name, true, Configs.ProgressionHalt.Description);
+			betterTrophyDropsEnabled = CreateConfig(ConfigSections.Features, Configs.TrophyDropsModifications.Name, true, Configs.TrophyDropsModifications.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
@@ -225,7 +228,7 @@ namespace MarsarahTweaks
 
 		private static void OnConfigChanged(string configName)
 		{
-			MarsarahTweaks.MLog($"Config setting '{configName}' changed!");
+			//MarsarahTweaks.MLog($"Config setting '{configName}' changed!");
 			Config.Save();
 
 			if (ObjectDB.instance == null || ZNetScene.instance == null) return;
@@ -236,70 +239,84 @@ namespace MarsarahTweaks
 
 				if (!isDedicatedServer)
 				{
-					MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 					switch (configName)
 					{
 						case var name when name == Configs.DoubleBronzeCrafting.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							DoubleBronzeCrafting.UpdateDoubleBronzeCrafting(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.LighterMetalWeight.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							LighterMetalWeight.UpdateLighterMetalWeight(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.GearRecipeAmountsModifications.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, true, false);
 							break;
 
 						case var name when name == Configs.GearRecipeMaterialsModifications.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, false, true);
 							break;
 
 						case var name when name == Configs.BuildPieceAmountsModifications.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, true, false);
 							break;
 
 						case var name when name == Configs.BuildPieceMaterialsModifications.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, false, true);
 							break;
 
 						case var name when name == Configs.FoodAndMeadModifications.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							FoodAndMeadChanges.UpdateFoodAndMead(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.LinenCapeModifications.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							GearRecipeChanges.UpdateLinenCapeRecipe(ObjectDB.instance, true);
 							EarlyLinenCape.UpdateLinenCapeStats(true);
 							break;
 
 						case var name when name == Configs.GearSpeedModifications.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							GearSpeedChanges.UpdateGearSpeed(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.ForsakenPowersModifications.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							ForsakenPowersChanges.UpdateForsakenPowers(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.CharacterSpeedModifications.Name:
 							if (Player.m_localPlayer != null)
 							{
+								MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 								CharacterSpeedChanges.UpdateCharacterSpeed(Player.m_localPlayer, true);								
 							}
 							break;
 
 						case var name when name == Configs.StatusEffectsModifications.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							StatusEffectChanges.UpdateStatusEffects(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.GearUpgradeModifications.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							GearUpgradeChanges.UpdateGearRecipeUnlock(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.PermanentLightsModifications.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							PermanentLightsChanges.UpdateLightBuildPiecesAmounts(ZNetScene.instance, true);
 							break;
 
 						case var name when name == Configs.CraftableChain.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							CraftableChain.UpdateChainRecipe(ObjectDB.instance, true);
 							break;
 					}

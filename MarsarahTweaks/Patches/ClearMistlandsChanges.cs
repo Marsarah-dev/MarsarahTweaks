@@ -9,22 +9,6 @@ namespace MarsarahTweaks.Patches
 {
 	internal class ClearMistlandsChanges
 	{
-		private static bool queenDefeated = false;
-
-		// Check queen status 
-		[HarmonyPatch(typeof(ZoneSystem), "Update")]
-		class ClearMistlandsUpdate_Patch
-		{
-			static void Postfix(ZoneSystem __instance)
-			{
-				if (!ConfigManager.clearMistlandsEnabled.Value) return;
-
-				BossStateChecker.UpdateDefeatedStates(__instance);
-
-				queenDefeated = BossStateChecker.IsBossDefeated("defeated_queen");
-			}
-		}
-
 		// Disable Mist Emitter
 		[HarmonyPatch(typeof(MistEmitter), "Update")]
 		class ClearMistlandsEmitter_Patch
@@ -33,7 +17,7 @@ namespace MarsarahTweaks.Patches
 			{
 				if (__instance == null) return;
 
-				if (ConfigManager.clearMistlandsEnabled.Value && queenDefeated)
+				if (ConfigManager.clearMistlandsEnabled.Value && GlobalKeyChecker.queenDefeated)
 				{
 					__instance.gameObject.SetActive(false);
 				}
@@ -48,7 +32,7 @@ namespace MarsarahTweaks.Patches
 			{
 				if (__instance == null) return;
 
-				if (ConfigManager.clearMistlandsEnabled.Value && queenDefeated)
+				if (ConfigManager.clearMistlandsEnabled.Value && GlobalKeyChecker.queenDefeated)
 				{
 					__instance.gameObject.SetActive(false);
 				}

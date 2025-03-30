@@ -93,7 +93,7 @@
     <Compile Include="Patches\AIFleeChanges.cs" />
     <Compile Include="Patches\ArmorStatsChanges.cs" />
     <Compile Include="Patches\AshlandsEnemiesChanges.cs" />
-    <Compile Include="Patches\BossStateChecker.cs" />
+    <Compile Include="Patches\GlobalKeyChecker.cs" />
     <Compile Include="Patches\BrighterLanterns.cs" />
     <Compile Include="Patches\BuildPieceChanges.cs" />
     <Compile Include="Patches\CharacterSpeedChanges.cs" />
@@ -122,6 +122,7 @@
     <Compile Include="Patches\ProgressionHalt.cs" />
     <Compile Include="Patches\StatusEffectChanges.cs" />
     <Compile Include="Patches\TestJump.cs" />
+    <Compile Include="Patches\TrophyDropsChanges.cs" />
     <Compile Include="Patches\WeaponStaminaChanges.cs" />
     <Compile Include="Patches\WeatherChanges.cs" />
     <Compile Include="Patches\WispRadiusChanges.cs" />
