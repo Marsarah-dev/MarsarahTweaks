@@ -93,6 +93,7 @@
     <Compile Include="Patches\AIFleeChanges.cs" />
     <Compile Include="Patches\ArmorStatsChanges.cs" />
     <Compile Include="Patches\AshlandsEnemiesChanges.cs" />
+    <Compile Include="Patches\BoatRadiusChanges.cs" />
     <Compile Include="Patches\GlobalKeyChecker.cs" />
     <Compile Include="Patches\BrighterLanterns.cs" />
     <Compile Include="Patches\BuildPieceChanges.cs" />
