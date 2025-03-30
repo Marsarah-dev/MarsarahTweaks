@@ -14,7 +14,7 @@ namespace MarsarahTweaks.Patches
 		{
 			static void Postfix(ZNetScene __instance)
 			{
-				if (__instance == null || !ZNet.instance || !ZNet.instance.IsServer()) return;
+				if (__instance == null || !ZNet.instance || !ZNet.instance.IsServer()) return; // Only run on server
 
 				MarsarahTweaks.MLog($"ZNetScene Awake: Updating {ConfigManager.Configs.TougherShips.Name}...");
 				updateShipHP(__instance, false);

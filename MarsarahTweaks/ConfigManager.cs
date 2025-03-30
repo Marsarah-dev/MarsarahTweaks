@@ -95,13 +95,14 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("25 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000");
 			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("26 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
 
-			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog or reloading area) All metal ore and bars weight decreased to 8");
-			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("2 - Larger Pickup Area", "Item pickup area slightly increased");
-			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("3 - No Skill Levels Loss On Death", "(Toggling mid-game requires CLIENT relog) Skills won't go down the current level upon death (progress in that skill is still lost)");
-			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("4 - Larger Boat Explore Radius", "Larger explore radius on a boat");
-			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("5 - Bigger Wisp Radius", "Increases wisp radius");
-			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("6 - Friendly Ballistas", "Ballistas won't target players and tame animals");
-			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("7 - Less Fall Damage", "Fall damage reduced by 40%");
+			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("01 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog or reloading area) All metal ore and bars weight decreased to 8");
+			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("02 - Larger Pickup Area", "Item pickup area slightly increased");
+			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("03 - No Skill Levels Loss On Death", "(Toggling mid-game requires CLIENT relog) Skills won't go down the current level upon death (progress in that skill is still lost)");
+			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("04 - Larger Boat Explore Radius", "Larger explore radius on a boat");
+			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("05 - Bigger Wisp Radius", "Increases wisp radius");
+			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("06 - Friendly Ballistas", "Ballistas won't target players and tame animals");
+			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("07 - Less Fall Damage", "Fall damage reduced by 40%");
+			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("08 - Faster Resource Drops", "Enemies drop resources faster when dying");
 		}
 
 		// Config entries
@@ -149,6 +150,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> biggerWispRadiusEnabled;
 		public static ConfigEntry<bool> friendlyBallistasEnabled;
 		public static ConfigEntry<bool> lessFallDamageEnabled;
+		public static ConfigEntry<bool> fasterResourceDropsEnabled;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -202,6 +204,7 @@ namespace MarsarahTweaks
 			biggerWispRadiusEnabled = CreateConfig(ConfigSections.QOL, Configs.BiggerWispRadius.Name, true, Configs.BiggerWispRadius.Description);
 			friendlyBallistasEnabled = CreateConfig(ConfigSections.QOL, Configs.FriendlyBallistas.Name, true, Configs.FriendlyBallistas.Description);
 			lessFallDamageEnabled = CreateConfig(ConfigSections.QOL, Configs.LessFallDamage.Name, true, Configs.LessFallDamage.Description);
+			fasterResourceDropsEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterResourceDrops.Name, true, Configs.FasterResourceDrops.Description);
 
 			SetupWatcher();
 		}
@@ -253,118 +256,127 @@ namespace MarsarahTweaks
 			Config.Save();
 
 			if (ObjectDB.instance == null || ZNetScene.instance == null) return;
+			if (ZNet.instance == null) return;
 
-			if (ZNet.instance != null)
+			
+			bool isDedicatedServer = ZNet.instance.IsDedicated();
+			bool isServer = ZNet.instance.IsServer();
+
+			// Handle client-side (non-dedicated) configs
+			if (!isDedicatedServer)
 			{
-				bool isDedicatedServer = ZNet.instance.IsDedicated();
-
-				if (!isDedicatedServer)
+				switch (configName)
 				{
-					switch (configName)
-					{
-						case var name when name == Configs.DoubleBronzeCrafting.Name:
+					case var name when name == Configs.DoubleBronzeCrafting.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						DoubleBronzeCrafting.UpdateDoubleBronzeCrafting(ObjectDB.instance, true);
+						break;
+
+					case var name when name == Configs.GearRecipeAmountsModifications.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, true, false);
+						break;
+
+					case var name when name == Configs.GearRecipeMaterialsModifications.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, false, true);
+						break;
+
+					case var name when name == Configs.BuildPieceAmountsModifications.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, true, false);
+						break;
+
+					case var name when name == Configs.BuildPieceMaterialsModifications.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, false, true);
+						break;
+
+					case var name when name == Configs.FoodAndMeadModifications.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						FoodAndMeadChanges.UpdateFoodAndMead(ObjectDB.instance, true);
+						break;
+
+					case var name when name == Configs.LinenCapeModifications.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						GearRecipeChanges.UpdateLinenCapeRecipe(ObjectDB.instance, true);
+						EarlyLinenCape.UpdateLinenCapeStats(true);
+						break;
+
+					case var name when name == Configs.GearSpeedModifications.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						GearSpeedChanges.UpdateGearSpeed(ObjectDB.instance, true);
+						break;
+
+					case var name when name == Configs.ForsakenPowersModifications.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						ForsakenPowersChanges.UpdateForsakenPowers(ObjectDB.instance, true);
+						break;
+
+					case var name when name == Configs.CharacterSpeedModifications.Name:
+						if (Player.m_localPlayer != null)
+						{
 							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							DoubleBronzeCrafting.UpdateDoubleBronzeCrafting(ObjectDB.instance, true);
-							break;
+							CharacterSpeedChanges.UpdateCharacterSpeed(Player.m_localPlayer, true);								
+						}
+						break;
 
-						case var name when name == Configs.GearRecipeAmountsModifications.Name:
+					case var name when name == Configs.StatusEffectsModifications.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						StatusEffectChanges.UpdateStatusEffects(ObjectDB.instance, true);
+						break;
+
+					case var name when name == Configs.GearUpgradeModifications.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						GearUpgradeChanges.UpdateGearRecipeUnlock(ObjectDB.instance, true);
+						break;
+
+					case var name when name == Configs.PermanentLightsModifications.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						PermanentLightsChanges.UpdateLightBuildPiecesAmounts(ZNetScene.instance, true);
+						break;
+
+					case var name when name == Configs.CraftableChain.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						CraftableChain.UpdateChainRecipe(ObjectDB.instance, true);
+						break;
+
+					case var name when name == Configs.OtherModifications.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						OtherChanges.UpdateOthers(ObjectDB.instance, true);
+						break;
+
+					case var name when name == Configs.LighterMetalWeight.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						LighterMetalWeight.UpdateLighterMetalWeight(ObjectDB.instance, true);
+						break;
+
+					case var name when name == Configs.LargerPickupArea.Name:
+						if (Player.m_localPlayer != null)
+						{
 							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, true, false);
-							break;
-
-						case var name when name == Configs.GearRecipeMaterialsModifications.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, false, true);
-							break;
-
-						case var name when name == Configs.BuildPieceAmountsModifications.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, true, false);
-							break;
-
-						case var name when name == Configs.BuildPieceMaterialsModifications.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, false, true);
-							break;
-
-						case var name when name == Configs.FoodAndMeadModifications.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							FoodAndMeadChanges.UpdateFoodAndMead(ObjectDB.instance, true);
-							break;
-
-						case var name when name == Configs.LinenCapeModifications.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							GearRecipeChanges.UpdateLinenCapeRecipe(ObjectDB.instance, true);
-							EarlyLinenCape.UpdateLinenCapeStats(true);
-							break;
-
-						case var name when name == Configs.GearSpeedModifications.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							GearSpeedChanges.UpdateGearSpeed(ObjectDB.instance, true);
-							break;
-
-						case var name when name == Configs.ForsakenPowersModifications.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							ForsakenPowersChanges.UpdateForsakenPowers(ObjectDB.instance, true);
-							break;
-
-						case var name when name == Configs.CharacterSpeedModifications.Name:
-							if (Player.m_localPlayer != null)
-							{
-								MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-								CharacterSpeedChanges.UpdateCharacterSpeed(Player.m_localPlayer, true);								
-							}
-							break;
-
-						case var name when name == Configs.StatusEffectsModifications.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							StatusEffectChanges.UpdateStatusEffects(ObjectDB.instance, true);
-							break;
-
-						case var name when name == Configs.GearUpgradeModifications.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							GearUpgradeChanges.UpdateGearRecipeUnlock(ObjectDB.instance, true);
-							break;
-
-						case var name when name == Configs.PermanentLightsModifications.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							PermanentLightsChanges.UpdateLightBuildPiecesAmounts(ZNetScene.instance, true);
-							break;
-
-						case var name when name == Configs.CraftableChain.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							CraftableChain.UpdateChainRecipe(ObjectDB.instance, true);
-							break;
-
-						case var name when name == Configs.TougherShips.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							TougherShipsChanges.updateShipHP(ZNetScene.instance, true);
-							break;
-
-						case var name when name == Configs.OtherModifications.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							OtherChanges.UpdateOthers(ObjectDB.instance, true);
-							break;
-
-						case var name when name == Configs.LighterMetalWeight.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							LighterMetalWeight.UpdateLighterMetalWeight(ObjectDB.instance, true);
-							break;
-
-						case var name when name == Configs.LargerPickupArea.Name:
-							if (Player.m_localPlayer != null)
-							{
-								MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-								LargerPickupAreaChanges.UpdatePickupArea(Player.m_localPlayer, true);
-							}
-							break;
-					}
+							LargerPickupAreaChanges.UpdatePickupArea(Player.m_localPlayer, true);
+						}
+						break;
 				}
-                else
-                {
-					MarsarahTweaks.MLog($"ConfigManager: I am a server. No changes made to {configName}...");
+			}
+
+			// Handle server-side configs
+			if (isServer)
+			{
+				switch (configName)
+				{
+					case var name when name == Configs.TougherShips.Name:
+						MarsarahTweaks.MLog($"ConfigManager Server: Reapplying modifications for {configName}...");
+						TougherShipsChanges.updateShipHP(ZNetScene.instance, true);
+						break;
 				}
-            }
+			}
+
+            /*else
+            {
+				MarsarahTweaks.MLog($"ConfigManager: I am a server. No changes made to {configName}...");
+			}*/
 		}
 	}
 }
