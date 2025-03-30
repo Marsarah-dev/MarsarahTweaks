@@ -100,6 +100,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("3 - No Skill Levels Loss On Death", "(Toggling mid-game requires CLIENT relog) Skills won't go down the current level upon death (progress in that skill is still lost)");
 			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("4 - Larger Boat Explore Radius", "Larger explore radius on a boat");
 			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("5 - Bigger Wisp Radius", "Increases wisp radius");
+			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("6 - Friendly Ballistas", "Ballistas won't target players and tame animals");
 		}
 
 		// Config entries
@@ -145,6 +146,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> noSkillLowerOnDeathEnabled;
 		public static ConfigEntry<bool> largerBoatExploreRadiusEnabled;
 		public static ConfigEntry<bool> biggerWispRadiusEnabled;
+		public static ConfigEntry<bool> friendlyBallistasEnabled;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -196,6 +198,7 @@ namespace MarsarahTweaks
 			noSkillLowerOnDeathEnabled = CreateConfig(ConfigSections.QOL, Configs.NoSkillLoss.Name, true, Configs.NoSkillLoss.Description);
 			largerBoatExploreRadiusEnabled = CreateConfig(ConfigSections.QOL, Configs.LargerBoatExploreRadius.Name, true, Configs.LargerBoatExploreRadius.Description);
 			biggerWispRadiusEnabled = CreateConfig(ConfigSections.QOL, Configs.BiggerWispRadius.Name, true, Configs.BiggerWispRadius.Description);
+			friendlyBallistasEnabled = CreateConfig(ConfigSections.QOL, Configs.FriendlyBallistas.Name, true, Configs.FriendlyBallistas.Description);
 
 			SetupWatcher();
 		}
