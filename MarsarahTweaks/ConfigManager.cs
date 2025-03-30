@@ -96,6 +96,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("26 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog) All metal ore and bars weight decreased to 8");
+			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("2 - Larger Pickup Area", "Item pickup area slightly increased");
 			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("5 - Bigger Wisp Radius", "Increases wisp radius");
 		}
 
@@ -138,6 +139,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> otherEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
+		public static ConfigEntry<bool> largerPickupAreaEnabled;
 		public static ConfigEntry<bool> biggerWispRadiusEnabled;
 
 		public static void Init(ConfigFile configFile)
@@ -186,6 +188,7 @@ namespace MarsarahTweaks
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
+			largerPickupAreaEnabled = CreateConfig(ConfigSections.QOL, Configs.LargerPickupArea.Name, true, Configs.LargerPickupArea.Description);
 			biggerWispRadiusEnabled = CreateConfig(ConfigSections.QOL, Configs.BiggerWispRadius.Name, true, Configs.BiggerWispRadius.Description);
 
 			SetupWatcher();
@@ -334,6 +337,14 @@ namespace MarsarahTweaks
 						case var name when name == Configs.OtherModifications.Name:
 							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							OtherChanges.UpdateOthers(ObjectDB.instance, true);
+							break;
+
+						case var name when name == Configs.LargerPickupArea.Name:
+							if (Player.m_localPlayer != null)
+							{
+								MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+								LargerPickupAreaChanges.UpdatePickupArea(Player.m_localPlayer, true);
+							}
 							break;
 					}
 				}
