@@ -13,9 +13,16 @@ namespace MarsarahTweaks.Patches
 	{
 		public static void Init()
 		{
+			// Weather command
 			new ConsoleCommand("currentweather", "Prints the current biome's weather", args =>
 			{
 				PrintCurrentWeather(args);
+			});
+
+			// Ship HP command
+			new ConsoleCommand("currentshiphp", "Prints the HP of the ship you're currently controlling", args =>
+			{
+				PrintCurrentShipHP(args);
 			});
 		}
 
@@ -46,6 +53,32 @@ namespace MarsarahTweaks.Patches
 			{
 				args.Context?.AddString("[Weather Debug] EnvMan instance is null.");
 			}
+		}
+
+		private static void PrintCurrentShipHP(ConsoleEventArgs args)
+		{
+			if (Player.m_localPlayer == null)
+			{
+				args.Context?.AddString("[Ship Debug] No player found.");
+				return;
+			}
+
+			Ship controlledShip = Player.m_localPlayer.GetControlledShip();
+			if (controlledShip == null)
+			{
+				args.Context?.AddString("[Ship Debug] You are not controlling a ship.");
+				return;
+			}
+
+			WearNTear wearNTear = controlledShip.GetComponent<WearNTear>();
+			if (wearNTear == null)
+			{
+				args.Context?.AddString("[Ship Debug] This ship has no WearNTear component.");
+				return;
+			}
+
+			string message = $"[Ship Debug] Current Ship HP: {wearNTear.m_health}";
+			args.Context?.AddString(message);
 		}
 	}
 }

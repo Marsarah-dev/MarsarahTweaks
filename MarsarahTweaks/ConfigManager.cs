@@ -91,7 +91,8 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata ExtensionsModifications = new ConfigMetadata("21 - Station Extensions Changes", "(Toggling mid-game requires CLIENT relog) Decreases space requirement for workstation extensions and increases build distance to workstations (This does not increase workstation radius)");
 			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("22 - Stop Running Away", "Boars and Necks won't flee when alerted");
 			public static readonly ConfigMetadata ProgressionHalt = new ConfigMetadata("23 - Automatic Progression Halt", "Creatures and objects do not drop any items unless the previous biome boss has been defeated");
-			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("24 - Better Trophy Drop Rates", "Increased trophy drop rate for the following creatures: Rancid Remains (10%), Surtling (5%), Draugr Elite (10%), Wraith (5%), Cultist (10%), Fenring (10%), Stone Golem (5%), Deathsquito (5%), Fuling Berserker (5%), Tick (5%), Dverger (5%), Seeker Soldier (5%), Charred Warlock (5%)");
+			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("24 - Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Tick, Dverger, Seeker Soldier, Charred Warlock");
+			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("25 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog) All metal ore and bars weight decreased to 8");
 			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("5 - Bigger Wisp Radius", "Increases wisp radius");
@@ -132,6 +133,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> noFleeEnabled;
 		public static ConfigEntry<bool> automaticProgressionHaltEnabled;
 		public static ConfigEntry<bool> betterTrophyDropsEnabled;
+		public static ConfigEntry<bool> tougherShipsEnabled;
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 		public static ConfigEntry<bool> biggerWispRadiusEnabled;
@@ -177,6 +179,7 @@ namespace MarsarahTweaks
 			noFleeEnabled = CreateConfig(ConfigSections.Features, Configs.FleeAIModifications.Name, true, Configs.FleeAIModifications.Description);
 			automaticProgressionHaltEnabled = CreateConfig(ConfigSections.Features, Configs.ProgressionHalt.Name, true, Configs.ProgressionHalt.Description);
 			betterTrophyDropsEnabled = CreateConfig(ConfigSections.Features, Configs.TrophyDropsModifications.Name, true, Configs.TrophyDropsModifications.Description);
+			tougherShipsEnabled = CreateConfig(ConfigSections.Features, Configs.TougherShips.Name, true, Configs.TougherShips.Description);
 
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
@@ -318,6 +321,11 @@ namespace MarsarahTweaks
 						case var name when name == Configs.CraftableChain.Name:
 							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							CraftableChain.UpdateChainRecipe(ObjectDB.instance, true);
+							break;
+
+						case var name when name == Configs.TougherShips.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+							TougherShipsChanges.updateShipHP(ZNetScene.instance, true);
 							break;
 					}
 				}
