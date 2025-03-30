@@ -90,13 +90,14 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata MinibossWeight = new ConfigMetadata("20 - Hildir Weight Rewards", "(Toggling mid-game requires CLIENT relog) Increases base carry weight by 25 when turning in Hildir chests (for each chest)");
 			public static readonly ConfigMetadata ExtensionsModifications = new ConfigMetadata("21 - Station Extensions Changes", "(Toggling mid-game requires CLIENT relog) Decreases space requirement for workstation extensions and increases build distance to workstations (This does not increase workstation radius)");
 			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("22 - Stop Running Away", "Boars and Necks won't flee when alerted");
-			public static readonly ConfigMetadata ProgressionHalt = new ConfigMetadata("23 - Automatic Progression Halt", "Creatures and objects do not drop any items unless the previous biome boss has been defeated");
+			public static readonly ConfigMetadata ProgressionHalt = new ConfigMetadata("23 - Automatic Progression Halt", "(Toggling mid-game requires reloading area) Creatures and objects do not drop any items unless the previous biome boss has been defeated");
 			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("24 - Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Tick, Dverger, Seeker Soldier, Charred Warlock");
 			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("25 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000");
 			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("26 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
 
-			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog) All metal ore and bars weight decreased to 8");
+			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires reloading area) All metal ore and bars weight decreased to 8");
 			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("2 - Larger Pickup Area", "Item pickup area slightly increased");
+			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("3 - No Skill Levels Loss On Death", "(Toggling mid-game requires CLIENT relog) Skills won't go down the current level upon death (progress in that skill is still lost)");
 			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("5 - Bigger Wisp Radius", "Increases wisp radius");
 		}
 
@@ -140,6 +141,7 @@ namespace MarsarahTweaks
 
 		public static ConfigEntry<bool> lighterMetalWeightEnabled;
 		public static ConfigEntry<bool> largerPickupAreaEnabled;
+		public static ConfigEntry<bool> noSkillLowerOnDeathEnabled;
 		public static ConfigEntry<bool> biggerWispRadiusEnabled;
 
 		public static void Init(ConfigFile configFile)
@@ -189,6 +191,7 @@ namespace MarsarahTweaks
 			// ===== QOL
 			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
 			largerPickupAreaEnabled = CreateConfig(ConfigSections.QOL, Configs.LargerPickupArea.Name, true, Configs.LargerPickupArea.Description);
+			noSkillLowerOnDeathEnabled = CreateConfig(ConfigSections.QOL, Configs.NoSkillLoss.Name, true, Configs.NoSkillLoss.Description);
 			biggerWispRadiusEnabled = CreateConfig(ConfigSections.QOL, Configs.BiggerWispRadius.Name, true, Configs.BiggerWispRadius.Description);
 
 			SetupWatcher();
@@ -253,11 +256,6 @@ namespace MarsarahTweaks
 						case var name when name == Configs.DoubleBronzeCrafting.Name:
 							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							DoubleBronzeCrafting.UpdateDoubleBronzeCrafting(ObjectDB.instance, true);
-							break;
-
-						case var name when name == Configs.LighterMetalWeight.Name:
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-							LighterMetalWeight.UpdateLighterMetalWeight(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.GearRecipeAmountsModifications.Name:
@@ -337,6 +335,11 @@ namespace MarsarahTweaks
 						case var name when name == Configs.OtherModifications.Name:
 							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							OtherChanges.UpdateOthers(ObjectDB.instance, true);
+							break;
+
+						case var name when name == Configs.LighterMetalWeight.Name:
+							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+							LighterMetalWeight.UpdateLighterMetalWeight(ObjectDB.instance, true);
 							break;
 
 						case var name when name == Configs.LargerPickupArea.Name:
