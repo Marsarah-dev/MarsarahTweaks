@@ -101,6 +101,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("4 - Larger Boat Explore Radius", "Larger explore radius on a boat");
 			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("5 - Bigger Wisp Radius", "Increases wisp radius");
 			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("6 - Friendly Ballistas", "Ballistas won't target players and tame animals");
+			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("7 - Less Fall Damage", "Fall damage reduced by 40%");
 		}
 
 		// Config entries
@@ -147,6 +148,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> largerBoatExploreRadiusEnabled;
 		public static ConfigEntry<bool> biggerWispRadiusEnabled;
 		public static ConfigEntry<bool> friendlyBallistasEnabled;
+		public static ConfigEntry<bool> lessFallDamageEnabled;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -199,6 +201,7 @@ namespace MarsarahTweaks
 			largerBoatExploreRadiusEnabled = CreateConfig(ConfigSections.QOL, Configs.LargerBoatExploreRadius.Name, true, Configs.LargerBoatExploreRadius.Description);
 			biggerWispRadiusEnabled = CreateConfig(ConfigSections.QOL, Configs.BiggerWispRadius.Name, true, Configs.BiggerWispRadius.Description);
 			friendlyBallistasEnabled = CreateConfig(ConfigSections.QOL, Configs.FriendlyBallistas.Name, true, Configs.FriendlyBallistas.Description);
+			lessFallDamageEnabled = CreateConfig(ConfigSections.QOL, Configs.LessFallDamage.Name, true, Configs.LessFallDamage.Description);
 
 			SetupWatcher();
 		}
