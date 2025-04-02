@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace MarsarahTweaks.Patches
 {
-	internal class UIInventoryWeightAndSlots
+	internal class UIInventoryWeightAndSlots : UIController
 	{
 		// UI data
 		private static float currentWeight;
@@ -18,6 +18,7 @@ namespace MarsarahTweaks.Patches
 		private static float freeSlotsPercent;
 
 		// UI elements
+		public static GameObject UIInventoryArea = null;
 		private static Text UIWeightText = null;
 		private static Text UISlotText = null;
 		private static Image inventoryAreaBackground = null;
@@ -51,10 +52,10 @@ namespace MarsarahTweaks.Patches
 					CreateUI(__instance); // Create UI if missing
 
 					// Inventory Weight section
-					UIWeightText.enabled = UIController.showUI;
-					inventoryAreaBackground.enabled = UIController.showUI;
+					UIWeightText.enabled = showUI;
+					inventoryAreaBackground.enabled = showUI;
 
-					if (UIController.showUI)
+					if (showUI)
 					{
 						float currentWeightPrecent = currentWeight * 100 / maxWeight;
 						UIWeightText.color = GetColorFromPercent(currentWeightPrecent);
@@ -62,10 +63,10 @@ namespace MarsarahTweaks.Patches
 					}
 
 					// Inventory Slots section
-					UISlotText.enabled = UIController.showUI;
-					inventoryAreaBackground.enabled = UIController.showUI;
+					UISlotText.enabled = showUI;
+					inventoryAreaBackground.enabled = showUI;
 
-					if (UIController.showUI)
+					if (showUI)
 					{
 						UISlotText.color = GetColorFromPercent(freeSlotsPercent);
 						UISlotText.text = "(" + freeSlots.ToString() + ")";
@@ -92,7 +93,7 @@ namespace MarsarahTweaks.Patches
 				Vector2 UIInventoryAreaSize = new Vector2(115f, 30f); // width, height
 
 				// Inventory area object
-				GameObject UIInventoryArea = new GameObject("InventoryArea");
+				UIInventoryArea = new GameObject("InventoryArea");
 				UIInventoryArea.layer = 5;
 				UIInventoryArea.transform.SetParent(hud.m_healthPanel.transform);
 				RectTransform inventoryAreaTransform = UIInventoryArea.AddComponent<RectTransform>();
@@ -108,37 +109,13 @@ namespace MarsarahTweaks.Patches
 				inventoryAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
 				inventoryAreaBackground.sprite = sprite;
 				inventoryAreaBackground.type = Image.Type.Sliced;
-				inventoryAreaBackground.enabled = UIController.showUI;
+				inventoryAreaBackground.enabled = showUI;
 
 				// Inventory Weight Text
 				UIWeightText = CreateTextObject("WeightText", UIInventoryArea, Color.green, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(5f, 0f), UIInventoryAreaSize);
+
 				// Inventory Slots Text
 				UISlotText = CreateTextObject("SlotText", UIInventoryArea, Color.green, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-5f, 0f), UIInventoryAreaSize);
-			}
-
-			private static Text CreateTextObject(string name, GameObject parent, Color textColor, string fontName, int fontSize, TextAnchor alignment, Vector2 position, Vector2 sizeDelta)
-			{
-				GameObject textObject = new GameObject(name);
-				textObject.layer = 5;
-				textObject.transform.SetParent(parent.transform);
-				RectTransform textTransform = textObject.AddComponent<RectTransform>();
-				textTransform.anchoredPosition = position;
-				textTransform.sizeDelta = sizeDelta;
-				textTransform.localScale = Vector3.one;  // Ensure correct scale
-
-				Text text = textObject.AddComponent<Text>();
-				text.color = textColor;
-				text.font = Resources.FindObjectsOfTypeAll<Font>().FirstOrDefault(f => f.name == fontName);
-				text.fontSize = fontSize;
-				text.alignment = alignment;
-
-				Outline outline = textObject.AddComponent<Outline>();
-				outline.effectColor = Color.black;
-				outline.effectDistance = new Vector2(1f, -1f);
-				outline.useGraphicAlpha = true;
-				outline.useGUILayout = true;
-
-				return text;
 			}
 
 			private static Color GetColorFromPercent(float percent)

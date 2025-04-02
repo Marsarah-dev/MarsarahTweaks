@@ -9,13 +9,14 @@ using UnityEngine;
 
 namespace MarsarahTweaks.Patches
 {
-	internal class UIEnemyDetector
+	internal class UIEnemyDetector : UIController
 	{
 		// UI data
 		public static int numEnemies;
 		public static int numEnemiesPassive;
 
 		// UI elements
+		public static GameObject UIEnemyArea = null;
 		private static Text UIEnemyText = null;
 		private static Image enemyAreaBackground = null;
 
@@ -46,7 +47,7 @@ namespace MarsarahTweaks.Patches
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
-		public static class MarsarahMod_HUD_Update_Patch
+		public static class InventoryWeightAndSlots_HUDUpdatePatch
 		{
 			public static void Postfix(Hud __instance)
 			{
@@ -56,10 +57,10 @@ namespace MarsarahTweaks.Patches
 				{
 					CreateUI(__instance); // Create UI if missing
 
-					UIEnemyText.enabled = UIController.showUI;
-					enemyAreaBackground.enabled = UIController.showUI;
+					UIEnemyText.enabled = showUI;
+					enemyAreaBackground.enabled = showUI;
 
-					if (UIController.showUI)
+					if (showUI)
 					{
 						UIEnemyText.color = GetColorFromNum(numEnemies);
 
@@ -89,7 +90,7 @@ namespace MarsarahTweaks.Patches
 				Vector2 UIEnemyAreaSize = new Vector2(100f, 30f); // width, height
 
 				// Enemy area object
-				GameObject UIEnemyArea = new GameObject("EnemyArea");
+				UIEnemyArea = new GameObject("EnemyArea");
 				UIEnemyArea.layer = 5;
 				UIEnemyArea.transform.SetParent(hud.m_healthPanel.transform);
 				RectTransform enemyAreaTransform = UIEnemyArea.AddComponent<RectTransform>();
@@ -105,35 +106,10 @@ namespace MarsarahTweaks.Patches
 				enemyAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
 				enemyAreaBackground.sprite = sprite;
 				enemyAreaBackground.type = Image.Type.Sliced;
-				enemyAreaBackground.enabled = UIController.showUI;
+				enemyAreaBackground.enabled = showUI;
 
 				// Enemy area text object
 				UIEnemyText = CreateTextObject("EnemyText", UIEnemyArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleCenter, new Vector2(0f, 0f), UIEnemyAreaSize);
-			}
-
-			private static Text CreateTextObject(string name, GameObject parent, Color textColor, string fontName, int fontSize, TextAnchor alignment, Vector2 position, Vector2 sizeDelta)
-			{
-				GameObject textObject = new GameObject(name);
-				textObject.layer = 5;
-				textObject.transform.SetParent(parent.transform);
-				RectTransform textTransform = textObject.AddComponent<RectTransform>();
-				textTransform.anchoredPosition = position;
-				textTransform.sizeDelta = sizeDelta;
-				textTransform.localScale = Vector3.one;  // Ensure correct scale
-
-				Text text = textObject.AddComponent<Text>();
-				text.color = textColor;
-				text.font = Resources.FindObjectsOfTypeAll<Font>().FirstOrDefault(f => f.name == fontName);
-				text.fontSize = fontSize;
-				text.alignment = alignment;
-
-				Outline outline = textObject.AddComponent<Outline>();
-				outline.effectColor = Color.black;
-				outline.effectDistance = new Vector2(1f, -1f);
-				outline.useGraphicAlpha = true;
-				outline.useGUILayout = true;
-
-				return text;
 			}
 
 			private static Color GetColorFromNum(int num)

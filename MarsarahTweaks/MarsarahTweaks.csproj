@@ -136,6 +136,7 @@
     <Compile Include="Patches\UIEnemyDetector.cs" />
     <Compile Include="Patches\UIInventoryWeightAndSlots.cs" />
     <Compile Include="Patches\UILoadscreenTips.cs" />
+    <Compile Include="Patches\UITimeAndDay.cs" />
     <Compile Include="Patches\WeaponStaminaChanges.cs" />
     <Compile Include="Patches\WeatherChanges.cs" />
     <Compile Include="Patches\WispRadiusChanges.cs" />

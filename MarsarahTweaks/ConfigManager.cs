@@ -109,6 +109,8 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("2 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
 			public static readonly ConfigMetadata UIEnemyDetector = new ConfigMetadata("3 - Show Enemy Detector", "Shows enemy detector on the bottom left of the screen");
 			public static readonly ConfigMetadata UIBoatSpeed = new ConfigMetadata("4 - Show Boat Speed", "Shows boat speed when using a boat on the bottom left of the screen");
+			public static readonly ConfigMetadata UITimeAndDay = new ConfigMetadata("5 - Show Time And Day", "Shows time and day above the minimap");
+			public static readonly ConfigMetadata UITimeAndDay24H = new ConfigMetadata("6 - Show Time And Day - 24 Hour Format", "Use 24 Hour time format");
 		}
 
 		// Config entries
@@ -163,6 +165,8 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> showInventoryWeightAndSlots;
 		public static ConfigEntry<bool> showEnemyDetector;
 		public static ConfigEntry<bool> showBoatSpeed;
+		public static ConfigEntry<bool> showTimeAndDay;
+		public static ConfigEntry<bool> timeFormat24H;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -224,6 +228,8 @@ namespace MarsarahTweaks
 			showInventoryWeightAndSlots = CreateConfig(ConfigSections.UI, Configs.UIInventoryWeightAndSlots.Name, true, Configs.UIInventoryWeightAndSlots.Description);
 			showEnemyDetector = CreateConfig(ConfigSections.UI, Configs.UIEnemyDetector.Name, true, Configs.UIEnemyDetector.Description);
 			showBoatSpeed = CreateConfig(ConfigSections.UI, Configs.UIBoatSpeed.Name, true, Configs.UIBoatSpeed.Description);
+			showTimeAndDay = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay.Name, true, Configs.UITimeAndDay.Description);
+			timeFormat24H = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay24H.Name, false, Configs.UITimeAndDay24H.Description);
 
 			SetupWatcher();
 		}
@@ -376,6 +382,21 @@ namespace MarsarahTweaks
 							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							LargerPickupAreaChanges.UpdatePickupArea(Player.m_localPlayer, true);
 						}
+						break;
+
+					case var name when name == Configs.UIInventoryWeightAndSlots.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						UIController.UpdateUIPositions();
+						break;
+
+					case var name when name == Configs.UIEnemyDetector.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						UIController.UpdateUIPositions();
+						break;
+
+					case var name when name == Configs.UIBoatSpeed.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						UIController.UpdateUIPositions();
 						break;
 				}
 			}
