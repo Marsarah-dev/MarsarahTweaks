@@ -65,9 +65,6 @@
     <Reference Include="UnityEngine">
       <HintPath>Libs\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>Libs\UnityEngine.AnimationModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
@@ -134,6 +131,7 @@
     <Compile Include="Patches\TestJump.cs" />
     <Compile Include="Patches\TougherShipsChanges.cs" />
     <Compile Include="Patches\TrophyDropsChanges.cs" />
+    <Compile Include="Patches\UIManager.cs" />
     <Compile Include="Patches\WeaponStaminaChanges.cs" />
     <Compile Include="Patches\WeatherChanges.cs" />
     <Compile Include="Patches\WispRadiusChanges.cs" />

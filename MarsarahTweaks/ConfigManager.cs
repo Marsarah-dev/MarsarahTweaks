@@ -104,6 +104,8 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("7 - Less Fall Damage", "Fall damage reduced by 40%");
 			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("8 - Faster Resource Drops", "Enemies drop resources faster when dying");
 			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("9 - Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s)");
+
+			public static readonly ConfigMetadata MoreLoadingTips = new ConfigMetadata("1 - More Loading Tips", "More loading screen tips");
 		}
 
 		// Config entries
@@ -153,6 +155,9 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> lessFallDamageEnabled;
 		public static ConfigEntry<bool> fasterResourceDropsEnabled;
 		public static ConfigEntry<bool> fasterEquipEnabled;
+
+
+		public static ConfigEntry<bool> moreLoadingTipsEnabled;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -208,6 +213,9 @@ namespace MarsarahTweaks
 			lessFallDamageEnabled = CreateConfig(ConfigSections.QOL, Configs.LessFallDamage.Name, true, Configs.LessFallDamage.Description);
 			fasterResourceDropsEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterResourceDrops.Name, true, Configs.FasterResourceDrops.Description);
 			fasterEquipEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterEquip.Name, true, Configs.FasterEquip.Description);
+
+			// ===== UI
+			moreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.MoreLoadingTips.Name, true, Configs.MoreLoadingTips.Description);
 
 			SetupWatcher();
 		}
