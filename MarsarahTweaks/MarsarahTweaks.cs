@@ -26,9 +26,23 @@ namespace MarsarahTweaks
 			harmony.PatchAll();
 		}
 
+		void Update()
+		{
+			// Hide/display UI
+			UpdateUIDisplay();
+		}
+
 		private void OnDestroy()
 		{
 			Config.Save();
+		}
+
+		private void UpdateUIDisplay()
+		{
+			if (Input.GetKeyDown(KeyCode.Insert))
+			{
+				UIController.showUI = !UIController.showUI;
+			}
 		}
 
 		// Logger =====================================================================

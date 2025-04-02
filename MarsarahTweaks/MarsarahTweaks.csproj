@@ -131,6 +131,8 @@
     <Compile Include="Patches\TestJump.cs" />
     <Compile Include="Patches\TougherShipsChanges.cs" />
     <Compile Include="Patches\TrophyDropsChanges.cs" />
+    <Compile Include="Patches\UIController.cs" />
+    <Compile Include="Patches\UIInventoryWeightAndSlots.cs" />
     <Compile Include="Patches\UILoadscreenTips.cs" />
     <Compile Include="Patches\WeaponStaminaChanges.cs" />
     <Compile Include="Patches\WeatherChanges.cs" />
