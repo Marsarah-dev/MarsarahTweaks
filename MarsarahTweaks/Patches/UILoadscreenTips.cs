@@ -9,10 +9,24 @@ using System.Xml;
 
 namespace MarsarahTweaks.Patches
 {
-	internal class UIManager
+	internal class UILoadscreenTips
 	{
-		// Shared UI data
 		private static string loadingTipString;
+		private static string localizationLanguage;
+
+		[HarmonyPatch(typeof(Localization), "SetupLanguage")]
+		public static class MarsarahMod_LoadingTips_Patch
+		{
+			static void Postfix(Localization __instance, string language)
+			{
+				if (__instance == null) return;
+
+				if (ConfigManager.moreLoadingTipsEnabled.Value)
+				{
+					localizationLanguage = language;
+				}
+			}
+		}
 
 		[HarmonyPatch(typeof(Hud), "Awake")]
 		public static class MarsarahMod_HUD_Awake_Patch
@@ -23,7 +37,8 @@ namespace MarsarahTweaks.Patches
 
 				if (__instance && ConfigManager.moreLoadingTipsEnabled.Value)
 				{
-					List<String> loadingTipStrings = new List<string> {
+					List<String> loadingTipStrings = new List<string> 
+					{
 						"Weapons and armor can be crafted and upgraded using Workbenches or Forges.",
 						"Eating food increases your health and stamina pools. Try to balance your three food slots accordingly.",
 						"Crafting stations can be upgraded by building extenstions in their proximity.",
@@ -76,7 +91,9 @@ namespace MarsarahTweaks.Patches
 		{
 			static void Postfix(Hud __instance)
 			{
-				if (__instance && ConfigManager.moreLoadingTipsEnabled.Value)
+				if (__instance == null) return;
+
+				if (ConfigManager.moreLoadingTipsEnabled.Value && localizationLanguage == "English")
 				{
 					__instance.m_loadingTip.text = loadingTipString;
 				}
