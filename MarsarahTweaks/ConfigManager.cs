@@ -95,14 +95,15 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("25 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000");
 			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("26 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
 
-			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("01 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog or reloading area) All metal ore and bars weight decreased to 8");
-			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("02 - Larger Pickup Area", "Item pickup area slightly increased");
-			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("03 - No Skill Levels Loss On Death", "(Toggling mid-game requires CLIENT relog) Skills won't go down the current level upon death (progress in that skill is still lost)");
-			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("04 - Larger Boat Explore Radius", "Larger explore radius on a boat");
-			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("05 - Bigger Wisp Radius", "Increases wisp radius");
-			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("06 - Friendly Ballistas", "Ballistas won't target players and tame animals");
-			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("07 - Less Fall Damage", "Fall damage reduced by 40%");
-			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("08 - Faster Resource Drops", "Enemies drop resources faster when dying");
+			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog or reloading area) All metal ore and bars weight decreased to 8");
+			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("2 - Larger Pickup Area", "Item pickup area slightly increased");
+			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("3 - No Skill Levels Loss On Death", "(Toggling mid-game requires CLIENT relog) Skills won't go down the current level upon death (progress in that skill is still lost)");
+			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("4 - Larger Boat Explore Radius", "Larger explore radius on a boat");
+			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("5 - Bigger Wisp Radius", "Increases wisp radius");
+			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("6 - Friendly Ballistas", "Ballistas won't target players and tame animals");
+			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("7 - Less Fall Damage", "Fall damage reduced by 40%");
+			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("8 - Faster Resource Drops", "Enemies drop resources faster when dying");
+			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("9 - Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s)");
 		}
 
 		// Config entries
@@ -151,6 +152,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> friendlyBallistasEnabled;
 		public static ConfigEntry<bool> lessFallDamageEnabled;
 		public static ConfigEntry<bool> fasterResourceDropsEnabled;
+		public static ConfigEntry<bool> fasterEquipEnabled;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -205,6 +207,7 @@ namespace MarsarahTweaks
 			friendlyBallistasEnabled = CreateConfig(ConfigSections.QOL, Configs.FriendlyBallistas.Name, true, Configs.FriendlyBallistas.Description);
 			lessFallDamageEnabled = CreateConfig(ConfigSections.QOL, Configs.LessFallDamage.Name, true, Configs.LessFallDamage.Description);
 			fasterResourceDropsEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterResourceDrops.Name, true, Configs.FasterResourceDrops.Description);
+			fasterEquipEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterEquip.Name, true, Configs.FasterEquip.Description);
 
 			SetupWatcher();
 		}

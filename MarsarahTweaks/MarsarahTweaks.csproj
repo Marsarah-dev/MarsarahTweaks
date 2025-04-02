@@ -65,6 +65,9 @@
     <Reference Include="UnityEngine">
       <HintPath>Libs\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>Libs\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
@@ -94,6 +97,7 @@
     <Compile Include="Patches\ArmorStatsChanges.cs" />
     <Compile Include="Patches\AshlandsEnemiesChanges.cs" />
     <Compile Include="Patches\BoatRadiusChanges.cs" />
+    <Compile Include="Patches\FasterEquipChanges.cs" />
     <Compile Include="Patches\FasterResourceDrops.cs" />
     <Compile Include="Patches\FriendlyBallistas.cs" />
     <Compile Include="Patches\GlobalKeyChecker.cs" />
