@@ -106,7 +106,9 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("9 - Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s)");
 
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("1 - More Loading Tips", "More loading screen tips");
-			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("2 - Show Inventory Weight", "Shows inventory weight on the bottom left of the screen");
+			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("2 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
+			public static readonly ConfigMetadata UIEnemyDetector = new ConfigMetadata("3 - Show Enemy Detector", "Shows enemy detector on the bottom left of the screen");
+			public static readonly ConfigMetadata UIBoatSpeed = new ConfigMetadata("4 - Show Boat Speed", "Shows boat speed when using a boat on the bottom left of the screen");
 		}
 
 		// Config entries
@@ -159,6 +161,8 @@ namespace MarsarahTweaks
 
 		public static ConfigEntry<bool> moreLoadingTipsEnabled;
 		public static ConfigEntry<bool> showInventoryWeightAndSlots;
+		public static ConfigEntry<bool> showEnemyDetector;
+		public static ConfigEntry<bool> showBoatSpeed;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -218,6 +222,8 @@ namespace MarsarahTweaks
 			// ===== UI
 			moreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description);
 			showInventoryWeightAndSlots = CreateConfig(ConfigSections.UI, Configs.UIInventoryWeightAndSlots.Name, true, Configs.UIInventoryWeightAndSlots.Description);
+			showEnemyDetector = CreateConfig(ConfigSections.UI, Configs.UIEnemyDetector.Name, true, Configs.UIEnemyDetector.Description);
+			showBoatSpeed = CreateConfig(ConfigSections.UI, Configs.UIBoatSpeed.Name, true, Configs.UIBoatSpeed.Description);
 
 			SetupWatcher();
 		}

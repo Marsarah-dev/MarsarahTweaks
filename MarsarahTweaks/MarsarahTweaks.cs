@@ -29,20 +29,12 @@ namespace MarsarahTweaks
 		void Update()
 		{
 			// Hide/display UI
-			UpdateUIDisplay();
+			UIController.UpdateUIDisplay();
 		}
 
 		private void OnDestroy()
 		{
 			Config.Save();
-		}
-
-		private void UpdateUIDisplay()
-		{
-			if (Input.GetKeyDown(KeyCode.Insert))
-			{
-				UIController.showUI = !UIController.showUI;
-			}
 		}
 
 		// Logger =====================================================================
