@@ -41,7 +41,7 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
-		public static class MarsarahMod_HUD_Update_Patch
+		public static class InventoryWeightAndSlots_HUDUpdatePatch
 		{
 			public static void Postfix(Hud __instance)
 			{

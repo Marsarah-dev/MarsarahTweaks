@@ -60,7 +60,7 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
-		public static class MarsarahMod_HUD_Update_Patch
+		public static class TimeAndDay_HUDUpdatePatch
 		{
 			public static void Postfix(Hud __instance)
 			{

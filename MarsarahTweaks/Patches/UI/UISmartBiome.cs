@@ -131,7 +131,7 @@ namespace MarsarahTweaks.Patches.UI
 		private static Dictionary<string, int> equippedArmorWeightsDict = new Dictionary<string, int>();
 
 		[HarmonyPatch(typeof(Player), "Update")]
-		class InventoryWeightAndSlots_PlayerPatch
+		class SmartBiome_PlayerPatch
 		{
 			static void Prefix(ref Player ___m_localPlayer)
 			{
@@ -203,7 +203,7 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
-		public static class MarsarahMod_HUD_Update_Patch
+		public static class SmartBiome_HUDUpdatePatch
 		{
 			public static void Postfix(Hud __instance)
 			{

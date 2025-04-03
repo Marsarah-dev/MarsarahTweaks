@@ -59,7 +59,7 @@ namespace MarsarahTweaks.Patches.UI
 		};
 
 		[HarmonyPatch(typeof(Localization), "SetupLanguage")]
-		public static class MarsarahMod_LoadingTips_Patch
+		public static class LoadingTips_Patch
 		{
 			static void Postfix(Localization __instance, string language)
 			{
@@ -73,7 +73,7 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Awake")]
-		public static class MarsarahMod_HUD_Awake_Patch
+		public static class Loadscreens_HUDAwakePatch
 		{
 			public static void Postfix(Hud __instance)
 			{

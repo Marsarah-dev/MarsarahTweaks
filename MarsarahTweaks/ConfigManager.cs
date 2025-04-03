@@ -109,14 +109,16 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("8 - Faster Resource Drops", "Enemies drop resources faster when dying");
 			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("9 - Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s)");
 
-			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("1 - More Loading Tips", "More loading screen tips");
-			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("2 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
-			public static readonly ConfigMetadata UIEnemyDetector = new ConfigMetadata("3 - Show Enemy Detector", "Shows enemy detector on the bottom left of the screen");
-			public static readonly ConfigMetadata UIBoatSpeed = new ConfigMetadata("4 - Show Boat Speed", "Shows boat speed when using a boat on the bottom left of the screen");
-			public static readonly ConfigMetadata UITimeAndDay = new ConfigMetadata("5 - Show Time And Day", "Shows time and day above the minimap");
-			public static readonly ConfigMetadata UITimeAndDay24H = new ConfigMetadata("6 - Show Time And Day - 24 Hour Format", "Use 24 Hour time format");
-			public static readonly ConfigMetadata UISmartBiome = new ConfigMetadata("7 - Smart Biome Indicator", "Shows smart biome text on minimap (colored according to worn armor relative to current biome)");
-			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("8 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
+			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
+			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("02 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
+			public static readonly ConfigMetadata UIEnemyDetector = new ConfigMetadata("03 - Show Enemy Detector", "Shows enemy detector on the bottom left of the screen");
+			public static readonly ConfigMetadata UIBoatSpeed = new ConfigMetadata("04 - Show Boat Speed", "Shows boat speed when using a boat on the bottom left of the screen");
+			public static readonly ConfigMetadata UITimeAndDay = new ConfigMetadata("05 - Show Time And Day", "Shows time and day above the minimap");
+			public static readonly ConfigMetadata UITimeAndDay24H = new ConfigMetadata("06 - Time - 24 Hour Format", "Use 24 Hour time format when Show Time And Day is enabled");
+			public static readonly ConfigMetadata UISmartBiome = new ConfigMetadata("07 - Smart Biome Indicator", "Shows smart biome text on minimap (colored according to worn armor relative to current biome)");
+			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("08 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
+			public static readonly ConfigMetadata UIOnlinePlayers = new ConfigMetadata("09 - Show Online Players", "Shows online players on the bottom right of the screen");
+			public static readonly ConfigMetadata UIOnlinePlayersUnderMinimap = new ConfigMetadata("10 - Show Online Players Under Minimap", "Shows online players under minimap instead of bottom right when Show Online Players is enabled");
 		}
 
 		// Config entries
@@ -175,6 +177,8 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> timeFormat24H;
 		public static ConfigEntry<bool> showSmartBiome;
 		public static ConfigEntry<bool> showSummonCounter;
+		public static ConfigEntry<bool> showOnlinePlayers;
+		public static ConfigEntry<bool> onlinePlayersUnderMinimap;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -240,6 +244,8 @@ namespace MarsarahTweaks
 			timeFormat24H = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay24H.Name, false, Configs.UITimeAndDay24H.Description, false);
 			showSmartBiome = CreateConfig(ConfigSections.UI, Configs.UISmartBiome.Name, true, Configs.UISmartBiome.Description, false);
 			showSummonCounter = CreateConfig(ConfigSections.UI, Configs.UISummonCounter.Name, true, Configs.UISummonCounter.Description, false);
+			showOnlinePlayers = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayers.Name, true, Configs.UIOnlinePlayers.Description, false);
+			onlinePlayersUnderMinimap = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayersUnderMinimap.Name, true, Configs.UIOnlinePlayersUnderMinimap.Description, false);
 
 			SetupWatcher();
 		}

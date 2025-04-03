@@ -136,6 +136,7 @@
     <Compile Include="Patches\UI\UIEnemyDetector.cs" />
     <Compile Include="Patches\UI\UIInventoryWeightAndSlots.cs" />
     <Compile Include="Patches\UI\UILoadscreenTips.cs" />
+    <Compile Include="Patches\UI\UIOnlinePlayers.cs" />
     <Compile Include="Patches\UI\UISmartBiome.cs" />
     <Compile Include="Patches\UI\UISummonCounter.cs" />
     <Compile Include="Patches\UI\UITimeAndDay.cs" />

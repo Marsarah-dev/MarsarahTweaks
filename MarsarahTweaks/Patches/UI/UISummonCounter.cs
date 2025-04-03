@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.UI;
 using UnityEngine;
+using static Heightmap;
 
 namespace MarsarahTweaks.Patches.UI
 {
@@ -19,7 +20,7 @@ namespace MarsarahTweaks.Patches.UI
 		private static Image summonsAreaBackground;
 
 		[HarmonyPatch(typeof(Player), "Update")]
-		class InventoryWeightAndSlots_PlayerPatch
+		class SummonCounters_PlayerPatch
 		{
 			static void Prefix(ref Player ___m_localPlayer)
 			{
@@ -62,7 +63,7 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
-		public static class MarsarahMod_HUD_Update_Patch
+		public static class SummonCounter_HUDUpdatePatch
 		{
 			public static void Postfix(Hud __instance)
 			{
@@ -115,6 +116,7 @@ namespace MarsarahTweaks.Patches.UI
 				summonsAreaTransform.anchorMax = new Vector2(1f, 1f);
 				summonsAreaTransform.anchoredPosition = new Vector2(63f, -85f); // above the boss buff, to the right of hp bar
 				summonsAreaTransform.sizeDelta = UISumonsAreaSize;
+				UISummonsArea.transform.localScale = Vector3.one;  // Ensure correct scale
 
 				// Background texture
 				Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");

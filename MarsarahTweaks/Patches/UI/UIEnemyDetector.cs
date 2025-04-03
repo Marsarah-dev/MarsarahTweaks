@@ -21,7 +21,7 @@ namespace MarsarahTweaks.Patches.UI
 		private static Image enemyAreaBackground = null;
 
 		[HarmonyPatch(typeof(Player), "Update")]
-		class InventoryWeightAndSlots_PlayerPatch
+		class EnemyDetector_PlayerPatch
 		{
 			static void Prefix(ref Player ___m_localPlayer)
 			{
@@ -47,7 +47,7 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
-		public static class InventoryWeightAndSlots_HUDUpdatePatch
+		public static class EnemyDetector_HUDUpdatePatch
 		{
 			public static void Postfix(Hud __instance)
 			{
