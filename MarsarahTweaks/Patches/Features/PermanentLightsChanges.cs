@@ -45,24 +45,9 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (__instance == null) return;
 
-				if (ZNet.instance != null)
-				{
-					bool isDedicatedServer = ZNet.instance.IsDedicated();
-					if (!isDedicatedServer)
-					{
-						MarsarahTweaks.MLog($"ZNetScene Awake: Updating {ConfigManager.Configs.PermanentLightsModifications.Name}...");
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-						UpdateLightBuildPiecesAmounts(__instance, false);
-					}
-					else
-					{
-						MarsarahTweaks.MLog($"ZNetScene Awake: I am a server. No changes made to {ConfigManager.Configs.PermanentLightsModifications.Name}...");
-					}
-				}
-				else
-				{
-					MarsarahTweaks.MLog($"ZNetScene Awake: Too early to do anything. No changes made to {ConfigManager.Configs.PermanentLightsModifications.Name}...");
-				}
+				UpdateLightBuildPiecesAmounts(__instance, false);
 			}
 		}
 

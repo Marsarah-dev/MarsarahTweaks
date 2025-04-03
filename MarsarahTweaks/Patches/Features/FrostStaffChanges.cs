@@ -16,6 +16,8 @@ namespace MarsarahTweaks.Patches.Features
 
 			public static void Prefix(Attack __instance, ref float ___m_projectileAccuracy)
 			{
+				// Run on both client and server - no conditions placed
+
 				if (__instance.GetWeapon().m_shared.m_name == "$item_stafficeshards")
 				{
 					if (ConfigManager.betterFrostStaffAccuracyEnabled.Value)

@@ -16,6 +16,8 @@ namespace MarsarahTweaks.Patches.QOL
 
 			static void Prefix(ref float ___m_exploreRadius)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
 				if (ConfigManager.largerBoatExploreRadiusEnabled.Value)
 				{
 					if (Ship.GetLocalShip() && Ship.GetLocalShip().HasPlayerOnboard())

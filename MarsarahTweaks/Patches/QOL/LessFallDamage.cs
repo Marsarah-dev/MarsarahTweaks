@@ -14,29 +14,14 @@ namespace MarsarahTweaks.Patches.QOL
 		{
 			public static void Prefix(ref float damage)
 			{
-				if (ZNet.instance != null)
-				{
-					bool isDedicatedServer = ZNet.instance.IsDedicated();
-					if (!isDedicatedServer)
-					{
-						//MarsarahTweaks.MLog($"SEMan: Updating {ConfigManager.Configs.LessFallDamage.Name}...");
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-						if (ConfigManager.lessFallDamageEnabled.Value)
-						{
-							//MarsarahTweaks.MLog($"Reducing fall damage...");
-							damage = damage * 0.6f;
-						}
-					}
-					else
-					{
-						MarsarahTweaks.MLog($"SEMan: I am a server. No changes made to {ConfigManager.Configs.LessFallDamage.Name}...");
-					}
-				}
-				else
+				if (ConfigManager.lessFallDamageEnabled.Value)
 				{
-					MarsarahTweaks.MLog($"SEMan: Too early to do anything. No changes made to {ConfigManager.Configs.LessFallDamage.Name}...");
+					//MarsarahTweaks.MLog($"Reducing fall damage...");
+					damage = damage * 0.6f;
 				}
-			}
+	}
 		}
 	}
 }

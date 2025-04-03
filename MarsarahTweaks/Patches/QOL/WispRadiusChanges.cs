@@ -15,6 +15,8 @@ namespace MarsarahTweaks.Patches.QOL
 		{
 			static void Postfix([NotNull] ref Demister __instance)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
 				if (ConfigManager.biggerWispRadiusEnabled.Value)
 				{
 					__instance.m_forceField.endRange = 30; // default 6, 8, 10, 15 (it changes) (30 in my mod)

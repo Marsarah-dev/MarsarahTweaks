@@ -18,24 +18,9 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (__instance == null) return;
 
-				if (ZNet.instance != null)
-				{
-					bool isDedicatedServer = ZNet.instance.IsDedicated();
-					if (!isDedicatedServer)
-					{
-						MarsarahTweaks.MLog($"ZNetScene Awake: Updating {ConfigManager.Configs.ExtensionsModifications.Name}...");
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-						UpdateExtensions(__instance);
-					}
-					else
-					{
-						MarsarahTweaks.MLog($"ZNetScene Awake: I am a server. No changes made to {ConfigManager.Configs.ExtensionsModifications.Name}...");
-					}
-				}
-				else
-				{
-					MarsarahTweaks.MLog($"ZNetScene Awake: Too early to do anything. No changes made to {ConfigManager.Configs.ExtensionsModifications.Name}...");
-				}
+				UpdateExtensions(__instance);
 			}
 		}
 
@@ -44,27 +29,9 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			private static void Postfix(ref float ___m_maxStationDistance)
 			{
-				if (ZNet.instance != null)
-				{
-					bool isDedicatedServer = ZNet.instance.IsDedicated();
-					if (!isDedicatedServer)
-					{
-						if (ConfigManager.extensionsChangesEnabled.Value)
-						{
-							//MarsarahTweaks.MLog($"StationExtension Awake: Updating {ConfigManager.Configs.ExtensionsModifications.Name}...");
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-							___m_maxStationDistance = 7f;
-						}
-					}
-					else
-					{
-						MarsarahTweaks.MLog($"StationExtension Awake: I am a server. No changes made to {ConfigManager.Configs.ExtensionsModifications.Name}...");
-					}
-				}
-				else
-				{
-					MarsarahTweaks.MLog($"StationExtension Awake: Too early to do anything. No changes made to {ConfigManager.Configs.ExtensionsModifications.Name}...");
-				}
+				___m_maxStationDistance = 7f;
 			}
 		}
 

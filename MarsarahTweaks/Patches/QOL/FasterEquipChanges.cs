@@ -19,6 +19,8 @@ namespace MarsarahTweaks.Patches.QOL
 		{
 			private static void Prefix(ItemDrop.ItemData item)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
 				if (ConfigManager.fasterEquipEnabled.Value)
 				{
 					// Reduce equip durations
@@ -46,6 +48,8 @@ namespace MarsarahTweaks.Patches.QOL
 		{
 			private static void Prefix(ItemDrop.ItemData item)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
 				if (ConfigManager.fasterEquipEnabled.Value)
 				{
 					if (item.IsWeapon())
@@ -71,6 +75,8 @@ namespace MarsarahTweaks.Patches.QOL
 		{
 			private static bool Prefix(ZSyncAnimation __instance, string name)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return true; // Do not run on dedicated servers
+
 				if (ConfigManager.fasterEquipEnabled.Value && name == "equip_hip")
 				{
 					return false;

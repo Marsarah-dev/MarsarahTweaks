@@ -14,6 +14,8 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			public static void Postfix(Player __instance)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
 				if (__instance == null || !ConfigManager.minibossWeightEnabled.Value) return;
 
 				int defeatedMinibosses = 0;

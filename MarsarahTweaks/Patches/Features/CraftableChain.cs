@@ -12,23 +12,9 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (__instance == null) return;
 
-				if (ZNet.instance != null)
-				{
-					bool isDedicatedServer = ZNet.instance.IsDedicated();
-					if (!isDedicatedServer)
-					{
-						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.Configs.CraftableChain.Name}...");
-						UpdateChainRecipe(__instance, false);
-					}
-					else
-					{
-						MarsarahTweaks.MLog($"ObjectDB Awake: I am a server. No changes made to {ConfigManager.Configs.CraftableChain.Name}...");
-					}
-				}
-				else
-				{
-					MarsarahTweaks.MLog($"ObjectDB Awake: Too early to do anything. No changes made to {ConfigManager.Configs.CraftableChain.Name}...");
-				}
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
+				UpdateChainRecipe(__instance, false);
 			}
 		}
 

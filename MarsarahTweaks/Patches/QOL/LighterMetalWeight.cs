@@ -19,23 +19,9 @@ namespace MarsarahTweaks.Patches.QOL
 			{
 				if (__instance == null) return;
 
-				if (ZNet.instance != null)
-				{
-					bool isDedicatedServer = ZNet.instance.IsDedicated();
-					if (!isDedicatedServer)
-					{
-						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.Configs.LighterMetalWeight.Name}...");
-						UpdateLighterMetalWeight(__instance, false);
-					}
-					else
-					{
-						MarsarahTweaks.MLog($"ObjectDB Awake: I am a server. No changes made to {ConfigManager.Configs.LighterMetalWeight.Name}...");
-					}
-				}
-				else
-				{
-					MarsarahTweaks.MLog($"ObjectDB Awake: Too early to do anything. No changes made to {ConfigManager.Configs.LighterMetalWeight.Name}...");
-				}
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
+				UpdateLighterMetalWeight(__instance, false);
 			}
 		}
 

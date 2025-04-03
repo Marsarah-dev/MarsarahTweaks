@@ -19,26 +19,11 @@ namespace MarsarahTweaks.Patches.Grind
 			{
 				if (__instance == null) return;
 
-				if (ZNet.instance != null)
-				{
-					bool isDedicatedServer = ZNet.instance.IsDedicated();
-					if (!isDedicatedServer)
-					{
-						MarsarahTweaks.MLog($"ZNetScene Awake: Updating {ConfigManager.Configs.BuildPieceAmountsModifications.Name}...");
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-						if (!ConfigManager.buildPieceAmountsEnabled.Value && !ConfigManager.buildPieceMaterialsEnabled.Value) return;
+				if (!ConfigManager.buildPieceAmountsEnabled.Value && !ConfigManager.buildPieceMaterialsEnabled.Value) return;
 
-						UpdateBuildPieces(__instance, false, false);
-					}
-					else
-					{
-						MarsarahTweaks.MLog($"ZNetScene Awake: I am a server. No changes made to {ConfigManager.Configs.BuildPieceAmountsModifications.Name}...");
-					}
-				}
-				else
-				{
-					MarsarahTweaks.MLog($"ZNetScene Awake: Too early to do anything. No changes made to {ConfigManager.Configs.BuildPieceAmountsModifications.Name}...");
-				}
+				UpdateBuildPieces(__instance, false, false);
 			}
 		}
 

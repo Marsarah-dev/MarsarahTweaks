@@ -269,6 +269,8 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			static void Prefix(Humanoid __instance, ref GameObject[] ___m_randomWeapon, ref GameObject[] ___m_randomShield)
 			{
+				// Run on both client and server - no conditions placed
+
 				if (__instance && __instance.name.StartsWith("Skeleton_Friendly"))
 				{
 					if (ConfigManager.betterDeathRaiserSummonsEnabled.Value)

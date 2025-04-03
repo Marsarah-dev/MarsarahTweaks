@@ -18,24 +18,9 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (__instance == null) return;
 
-				if (ZNet.instance != null)
-				{
-					bool isDedicatedServer = ZNet.instance.IsDedicated();
-					if (!isDedicatedServer)
-					{
-						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.Configs.GearSpeedModifications.Name}...");
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-						UpdateGearSpeed(__instance, false);
-					}
-					else
-					{
-						MarsarahTweaks.MLog($"ObjectDB Awake: I am a server. No changes made to {ConfigManager.Configs.GearSpeedModifications.Name}...");
-					}
-				}
-				else
-				{
-					MarsarahTweaks.MLog($"ObjectDB Awake: Too early to do anything. No changes made to {ConfigManager.Configs.GearSpeedModifications.Name}...");
-				}
+				UpdateGearSpeed(__instance, false);
 			}
 		}
 
@@ -70,8 +55,6 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			if (objDB == null || objDB.m_items == null) return;
 
-			bool enableModifications = ConfigManager.gearSpeedModifiersEnabled.Value;
-
 			foreach (GameObject prefab in objDB.m_items)
 			{
 				ItemDrop item = prefab.GetComponent<ItemDrop>();
@@ -80,7 +63,7 @@ namespace MarsarahTweaks.Patches.Features
 				string itemName = item.name;
 				float currentModifier = item.m_itemData.m_shared.m_movementModifier;
 
-				if (enableModifications)
+				if (ConfigManager.gearSpeedModifiersEnabled.Value)
 				{
 					if (movementModifiers.TryGetValue(itemName, out float newModifier))
 					{

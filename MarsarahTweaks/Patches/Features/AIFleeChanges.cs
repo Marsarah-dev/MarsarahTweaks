@@ -14,6 +14,8 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			private static void Prefix(MonsterAI __instance, ref bool ___m_fleeIfNotAlerted)
 			{
+				if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Prevent running on clients
+
 				if (__instance == null || !ConfigManager.noFleeEnabled.Value) return;
 
 				BaseAI thisBaseAI = __instance.GetComponentInParent<BaseAI>();
@@ -22,7 +24,6 @@ namespace MarsarahTweaks.Patches.Features
 				if (thisBaseAI.name == "Boar(Clone)" || thisBaseAI.name == "Neck(Clone)")
 				{
 					___m_fleeIfNotAlerted = false;
-					//MarsarahTweaks.MLog($"{thisBaseAI.name} will NOT flee");
 				}
 			}
 		}

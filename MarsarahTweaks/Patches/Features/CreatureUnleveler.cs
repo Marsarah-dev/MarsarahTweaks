@@ -136,11 +136,7 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			static void Postfix(SpawnSystem __instance)
 			{
-				if (!ZNet.instance || !ZNet.instance.IsServer())
-				{
-					//MarsarahTweaks.MLog($"SpawnSystem Awake - I am a client - no changes made to {ConfigManager.Configs.CreatureUnleveler.Name}");
-					return; // Ensure it only runs on the server
-				}
+				if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Prevent running on clients
 
 				if (__instance != null && ConfigManager.creatureUnlevelerEnabled.Value)
 				{

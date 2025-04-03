@@ -86,7 +86,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("12 - Less Ashlands Enemies", "(Toggling requires SERVER restart) Less Enemies in Ashlands");
 			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("13 - Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to max level within their respective biomes");
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("14 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
-			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("15 - Clear Mistlands", "(Disabling mid-game requires SERVER restart) Clear Mistlands mist after defeating the Queen");
+			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("15 - Clear Mistlands", "(Disabling mid-game requires CLIENT relog) Clear Mistlands mist after defeating the Queen"); // TODO: I made this client-side only. Test
 			public static readonly ConfigMetadata CraftableChain = new ConfigMetadata("16 - Craftable Chain", "Chain craftable at Black Forge");
 			public static readonly ConfigMetadata BrighterLanterns = new ConfigMetadata("17 - Brighter Lanterns", "(Toggling mid-game requires CLIENT relog) Dvergr lanterns are brighter"); // TODO: Test on server (also test reloading area) - disabling and relogging on local does not revert to default
 			public static readonly ConfigMetadata WeatherModifications = new ConfigMetadata("18 - Clearer Weather", "(Toggling requires SERVER restart) Reduces chance for mist and snowstorms");
@@ -107,7 +107,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("6 - Friendly Ballistas", "Ballistas won't target players and tame animals");
 			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("7 - Less Fall Damage", "Fall damage reduced by 40%");
 			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("8 - Faster Resource Drops", "Enemies drop resources faster when dying");
-			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("9 - Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s)");
+			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("9 - Faster Equip", "(Toggling mid-game requires CLIENT relog) Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s)");
 
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
 			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("02 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");

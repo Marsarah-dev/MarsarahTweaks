@@ -32,22 +32,6 @@ namespace MarsarahTweaks
 		{
 			// Hide/display UI
 			UIController.UpdateUIDisplay();
-
-			/*if (ZNet.instance != null)
-			{
-				bool isServer = ZNet.instance.IsServer();
-				bool isDedicated = ZNet.instance.IsDedicated();
-				bool isOpen = ZNet.IsOpenServer();
-
-				MarsarahTweaks.MLog($"Is server: {isServer}");
-				MarsarahTweaks.MLog($"Is dedicated: {isDedicated}");
-				MarsarahTweaks.MLog($"Is open: {isOpen}");
-
-				 //* Local singleplayer: true, false, false
-				 //* Local server: true, false, true
-				 //* Dedicated server: true, true, true
-				 //* Client: false, false, false
-			}*/
 		}
 
 		private void OnDestroy()

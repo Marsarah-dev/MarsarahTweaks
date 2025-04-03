@@ -16,6 +16,8 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (__instance == null) return;
 
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
 				UpdateArmorStats(__instance);
 			}
 		}
@@ -25,6 +27,8 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			public static void Postfix(ref float hp, ref float stamina, ref float eitr)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
 				if (ConfigManager.extraArmorStatsEnabled.Value)
 				{
 					hp += hpFromGear;
@@ -39,10 +43,9 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			public static void Postfix(ref string __result, ItemDrop.ItemData item)
 			{
-				if (item == null || item.m_shared == null)
-				{
-					return;
-				}
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
+				if (item == null || item.m_shared == null) return;
 
 				if (ConfigManager.extraArmorStatsEnabled.Value)
 				{

@@ -11,30 +11,15 @@ namespace MarsarahTweaks.Patches.Features
 			//static void Prefix(ref float ___m_crouchSpeed, ref float ___m_walkSpeed, ref float ___m_speed, ref float ___m_swimSpeed)
 			static void Prefix(Character __instance)
 			{
-				if (ZNet.instance != null)
-				{
-					bool isDedicatedServer = ZNet.instance.IsDedicated();
-					if (!isDedicatedServer)
-					{
-						if (!__instance.IsPlayer())
-						{
-							//MarsarahTweaks.MLog("Character Awake: Not a player, skipping speed modification.");
-							return;
-						}
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-						MarsarahTweaks.MLog($"Character Awake: Updating {ConfigManager.Configs.CharacterSpeedModifications.Name}...");
-						//UpdateCharacterSpeed(___m_crouchSpeed, ___m_walkSpeed, ___m_speed, ___m_swimSpeed, false);
-						UpdateCharacterSpeed(__instance, false);
-					}
-					else
-					{
-						MarsarahTweaks.MLog($"Character Awake: I am a server. No changes made to {ConfigManager.Configs.CharacterSpeedModifications.Name}...");
-					}
-				}
-				else
+				if (!__instance.IsPlayer())
 				{
-					MarsarahTweaks.MLog($"Character Awake: Too early to do anything. No changes made to {ConfigManager.Configs.CharacterSpeedModifications.Name}...");
+					//MarsarahTweaks.MLog("Character Awake: Not a player, skipping speed modification.");
+					return;
 				}
+
+				UpdateCharacterSpeed(__instance, false);
 			}
 		}
 

@@ -16,23 +16,9 @@ namespace MarsarahTweaks.Patches.QOL
 			{
 				if (__instance == null) return;
 
-				if (ZNet.instance != null)
-				{
-					bool isDedicatedServer = ZNet.instance.IsDedicated();
-					if (!isDedicatedServer)
-					{
-						MarsarahTweaks.MLog($"Player Awake: Updating {ConfigManager.Configs.LargerPickupArea.Name}...");
-						UpdatePickupArea(__instance, false);
-					}
-					else
-					{
-						MarsarahTweaks.MLog($"Player Awake: I am a server. No changes made to {ConfigManager.Configs.LargerPickupArea.Name}...");
-					}
-				}
-				else
-				{
-					MarsarahTweaks.MLog($"Player Awake: Too early to do anything. No changes made to {ConfigManager.Configs.LargerPickupArea.Name}...");
-				}
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
+				UpdatePickupArea(__instance, false);
 			}
 		}
 

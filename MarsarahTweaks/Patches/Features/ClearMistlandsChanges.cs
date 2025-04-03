@@ -17,6 +17,8 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (__instance == null) return;
 
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
 				if (ConfigManager.clearMistlandsEnabled.Value && GlobalKeyChecker.queenDefeated)
 				{
 					__instance.gameObject.SetActive(false);
@@ -31,6 +33,8 @@ namespace MarsarahTweaks.Patches.Features
 			static void Postfix(ParticleMist __instance)
 			{
 				if (__instance == null) return;
+
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
 				if (ConfigManager.clearMistlandsEnabled.Value && GlobalKeyChecker.queenDefeated)
 				{

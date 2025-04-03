@@ -14,6 +14,8 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			static void Prefix(ref float v)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+
 				if (ConfigManager.lessStaminaUsageEnabled.Value)
 				{
 					v *= 0.85f;
