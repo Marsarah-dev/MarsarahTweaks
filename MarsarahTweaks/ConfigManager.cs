@@ -41,10 +41,10 @@ namespace MarsarahTweaks
 		public static class ConfigSections
 		{
 			public const string Main = "1 - Main";
-			public const string GrindReduction = "2 - Grind Reduction";
-			public const string Features = "3 - Features";
-			public const string QOL = "4 - QOL";
-			public const string UI = "5 - UI";
+			public const string GrindReduction = "2 - Grind Reduction (Synced with Server)";
+			public const string Features = "3 - Features (Synced with Server)";
+			public const string QOL = "4 - QOL (Synced with Server)";
+			public const string UI = "5 - UI (NOT Synced with Server)";
 		}
 
 		// Struct for Config Metadata
@@ -115,7 +115,8 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata UIBoatSpeed = new ConfigMetadata("4 - Show Boat Speed", "Shows boat speed when using a boat on the bottom left of the screen");
 			public static readonly ConfigMetadata UITimeAndDay = new ConfigMetadata("5 - Show Time And Day", "Shows time and day above the minimap");
 			public static readonly ConfigMetadata UITimeAndDay24H = new ConfigMetadata("6 - Show Time And Day - 24 Hour Format", "Use 24 Hour time format");
-			public static readonly ConfigMetadata SmartBiome = new ConfigMetadata("7 - Smart Biome Indicator", "Shows smart biome text on minimap (colored according to worn armor relative to current biome)");
+			public static readonly ConfigMetadata UISmartBiome = new ConfigMetadata("7 - Smart Biome Indicator", "Shows smart biome text on minimap (colored according to worn armor relative to current biome)");
+			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("8 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
 		}
 
 		// Config entries
@@ -172,7 +173,8 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> showBoatSpeed;
 		public static ConfigEntry<bool> showTimeAndDay;
 		public static ConfigEntry<bool> timeFormat24H;
-		public static ConfigEntry<bool> smartBiomeEnabled;
+		public static ConfigEntry<bool> showSmartBiome;
+		public static ConfigEntry<bool> showSummonCounter;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -230,20 +232,22 @@ namespace MarsarahTweaks
 			fasterEquipEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterEquip.Name, true, Configs.FasterEquip.Description);
 
 			// ===== UI
-			moreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description);
-			showInventoryWeightAndSlots = CreateConfig(ConfigSections.UI, Configs.UIInventoryWeightAndSlots.Name, true, Configs.UIInventoryWeightAndSlots.Description);
-			showEnemyDetector = CreateConfig(ConfigSections.UI, Configs.UIEnemyDetector.Name, true, Configs.UIEnemyDetector.Description);
-			showBoatSpeed = CreateConfig(ConfigSections.UI, Configs.UIBoatSpeed.Name, true, Configs.UIBoatSpeed.Description);
-			showTimeAndDay = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay.Name, true, Configs.UITimeAndDay.Description);
-			timeFormat24H = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay24H.Name, false, Configs.UITimeAndDay24H.Description);
-			smartBiomeEnabled = CreateConfig(ConfigSections.UI, Configs.SmartBiome.Name, true, Configs.SmartBiome.Description);
+			moreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description, false);
+			showInventoryWeightAndSlots = CreateConfig(ConfigSections.UI, Configs.UIInventoryWeightAndSlots.Name, true, Configs.UIInventoryWeightAndSlots.Description, false);
+			showEnemyDetector = CreateConfig(ConfigSections.UI, Configs.UIEnemyDetector.Name, true, Configs.UIEnemyDetector.Description, false);
+			showBoatSpeed = CreateConfig(ConfigSections.UI, Configs.UIBoatSpeed.Name, true, Configs.UIBoatSpeed.Description, false);
+			showTimeAndDay = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay.Name, true, Configs.UITimeAndDay.Description, false);
+			timeFormat24H = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay24H.Name, false, Configs.UITimeAndDay24H.Description, false);
+			showSmartBiome = CreateConfig(ConfigSections.UI, Configs.UISmartBiome.Name, true, Configs.UISmartBiome.Description, false);
+			showSummonCounter = CreateConfig(ConfigSections.UI, Configs.UISummonCounter.Name, true, Configs.UISummonCounter.Description, false);
 
 			SetupWatcher();
 		}
 
 		private static ConfigEntry<T> CreateConfig<T>(string group, string name, T defaultValue, string description, bool synchronizedSetting = true)
 		{
-			var configEntry = Config.Bind(group, name, defaultValue, new ConfigDescription(description + (synchronizedSetting ? " [Synced with Server]" : " [Not Synced with Server]")));
+			//var configEntry = Config.Bind(group, name, defaultValue, new ConfigDescription(description + (synchronizedSetting ? " [Synced with Server]" : " [Not Synced with Server]")));
+			var configEntry = Config.Bind(group, name, defaultValue, new ConfigDescription(description));
 
 			SyncedConfigEntry<T> syncedConfigEntry = configSync.AddConfigEntry(configEntry);
 			syncedConfigEntry.SynchronizedConfig = synchronizedSetting;
@@ -361,7 +365,7 @@ namespace MarsarahTweaks
 					case var name when name == Configs.GearUpgradeModifications.Name:
 						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						GearUpgradeChanges.UpdateGearRecipeUnlock(ObjectDB.instance, true);
-						if (smartBiomeEnabled.Value)
+						if (showSmartBiome.Value)
 						{
 							UISmartBiome.UpdateBiomeWeights();
 						}
@@ -410,7 +414,7 @@ namespace MarsarahTweaks
 						UIController.UpdateUIPositions();
 						break;
 
-					case var name when name == Configs.SmartBiome.Name:
+					case var name when name == Configs.UISmartBiome.Name:
 						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						UISmartBiome.UpdateBiomeWeights();
 						break;

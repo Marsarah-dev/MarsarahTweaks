@@ -58,7 +58,6 @@ namespace MarsarahTweaks.Patches.UI
 
 		public static void UpdateBiomeWeights()
 		{
-			MarsarahTweaks.MLog($"UpdateBiomeWeights called");
 			biomeWeightsDict = ConfigManager.gearUpgradeUnlockEnabled.Value ? unlockedBiomeWeights : defaultBiomeWeights;
 		}
 
@@ -138,10 +137,8 @@ namespace MarsarahTweaks.Patches.UI
 			{
 				if (___m_localPlayer == null) return;
 
-				if (ConfigManager.smartBiomeEnabled.Value && showUI)
+				if (ConfigManager.showSmartBiome.Value && showUI)
 				{
-					//MarsarahTweaks.MLog($"Player Update");
-
 					playerArmor = ___m_localPlayer.GetBodyArmor();
 					Inventory playerInventory = ___m_localPlayer.GetInventory();
 					List<ItemDrop.ItemData> playerEquippedItems = playerInventory.GetEquippedItems();
@@ -194,10 +191,8 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			static void Prefix(ref Text ___m_biomeNameSmall, ref Player player)
 			{
-				if (ConfigManager.smartBiomeEnabled.Value && showUI)
+				if (ConfigManager.showSmartBiome.Value && showUI)
 				{
-					//MarsarahTweaks.MLog($"Minimap UpdateBiome");
-
 					___m_biomeNameSmall.enabled = false;
 
 					currentBiome = player.GetCurrentBiome().ToString();
@@ -214,7 +209,7 @@ namespace MarsarahTweaks.Patches.UI
 			{
 				if (__instance == null) return;
 
-				if (ConfigManager.smartBiomeEnabled.Value)
+				if (ConfigManager.showSmartBiome.Value)
 				{
 					CreateUI(__instance); // Create UI if missing
 
@@ -258,8 +253,6 @@ namespace MarsarahTweaks.Patches.UI
 			{
 				if (UIBiomeText != null)
 					return;  // UI already exists, no need to create again
-
-				//MarsarahTweaks.MLog($"CreateInstance called");
 
 				int UITextFontSize = 16;
 				string UITextFontName = "AveriaSansLibre-Bold";
