@@ -2,6 +2,7 @@
 using BepInEx.Configuration;
 using HarmonyLib;
 using MarsarahTweaks.Patches;
+using MarsarahTweaks.Patches.UI;
 using ServerSync;
 using System.IO;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace MarsarahTweaks
 		{
 			ConfigManager.Init(Config);
 			CustomConsoleCommandHandler.Init(); // Register new console commands
+			UISmartBiome.UpdateBiomeWeights(); // Set the correct biome weight dictionary at startup
 
 			harmony.PatchAll();
 		}

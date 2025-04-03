@@ -16,6 +16,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.AccessControl;
 using UnityEngine;
+using MarsarahTweaks.Patches.Grind;
+using MarsarahTweaks.Patches.Features;
+using MarsarahTweaks.Patches.QOL;
+using MarsarahTweaks.Patches.UI;
 
 namespace MarsarahTweaks
 {
@@ -111,6 +115,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata UIBoatSpeed = new ConfigMetadata("4 - Show Boat Speed", "Shows boat speed when using a boat on the bottom left of the screen");
 			public static readonly ConfigMetadata UITimeAndDay = new ConfigMetadata("5 - Show Time And Day", "Shows time and day above the minimap");
 			public static readonly ConfigMetadata UITimeAndDay24H = new ConfigMetadata("6 - Show Time And Day - 24 Hour Format", "Use 24 Hour time format");
+			public static readonly ConfigMetadata SmartBiome = new ConfigMetadata("7 - Smart Biome Indicator", "Shows smart biome text on minimap (colored according to worn armor relative to current biome)");
 		}
 
 		// Config entries
@@ -167,6 +172,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> showBoatSpeed;
 		public static ConfigEntry<bool> showTimeAndDay;
 		public static ConfigEntry<bool> timeFormat24H;
+		public static ConfigEntry<bool> smartBiomeEnabled;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -230,6 +236,7 @@ namespace MarsarahTweaks
 			showBoatSpeed = CreateConfig(ConfigSections.UI, Configs.UIBoatSpeed.Name, true, Configs.UIBoatSpeed.Description);
 			showTimeAndDay = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay.Name, true, Configs.UITimeAndDay.Description);
 			timeFormat24H = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay24H.Name, false, Configs.UITimeAndDay24H.Description);
+			smartBiomeEnabled = CreateConfig(ConfigSections.UI, Configs.SmartBiome.Name, true, Configs.SmartBiome.Description);
 
 			SetupWatcher();
 		}
@@ -354,6 +361,10 @@ namespace MarsarahTweaks
 					case var name when name == Configs.GearUpgradeModifications.Name:
 						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						GearUpgradeChanges.UpdateGearRecipeUnlock(ObjectDB.instance, true);
+						if (smartBiomeEnabled.Value)
+						{
+							UISmartBiome.UpdateBiomeWeights();
+						}
 						break;
 
 					case var name when name == Configs.PermanentLightsModifications.Name:
@@ -397,6 +408,11 @@ namespace MarsarahTweaks
 					case var name when name == Configs.UIBoatSpeed.Name:
 						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						UIController.UpdateUIPositions();
+						break;
+
+					case var name when name == Configs.SmartBiome.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						UISmartBiome.UpdateBiomeWeights();
 						break;
 				}
 			}
