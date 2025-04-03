@@ -25,6 +25,8 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			static void Prefix(ref Player ___m_localPlayer)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
 				if (___m_localPlayer == null) return;
 
 				if (ConfigManager.showEnemyDetector.Value)
@@ -51,6 +53,8 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			public static void Postfix(Hud __instance)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
 				if (__instance == null) return;
 
 				if (ConfigManager.showEnemyDetector.Value)

@@ -13,7 +13,7 @@ namespace MarsarahTweaks.Patches.UI
 	internal class UIOnlinePlayers : UIController
 	{
 		// UI data
-		private static List<PlayerInfo> playerInfoList;
+		private static List<PlayerInfo> playerInfoList = new List<PlayerInfo>();
 		private static int numOnlinePlayerSlots = 21; // 20 (for players) + 1 (for the header)
 
 		// UI elements
@@ -25,6 +25,8 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			static void Prefix(ref List<PlayerInfo> ___m_players)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
 				if (ConfigManager.showOnlinePlayers.Value && showUI)
 				{
 					if (___m_players.Count != 0)
@@ -41,6 +43,8 @@ namespace MarsarahTweaks.Patches.UI
 
 			static void Postfix(Hud __instance)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
 				if (__instance == null) return;
 
 				if (ConfigManager.showOnlinePlayers.Value)
@@ -55,15 +59,15 @@ namespace MarsarahTweaks.Patches.UI
 					}
 
 					// Special case that prevents the online players area to show during the loadscreen, since we attached to the parent of the minimap
-					if (Player.m_localPlayer && !UIPartyArea.activeSelf)
+					if (Player.m_localPlayer && UIPartyArea != null && !UIPartyArea.activeSelf)
 					{
 						//MarsarahTweaks.MLog("Enabling Party UI after load screen");
 						UIPartyArea.SetActive(true);
 					}
 
 					int numPlayers = (playerInfoList.Count <= numOnlinePlayerSlots - 1) ? playerInfoList.Count : numOnlinePlayerSlots - 1;
-					bool onePlayer = playerInfoList.Count == 1;
-					//bool onePlayer = false;
+					//bool onePlayer = playerInfoList.Count == 1;
+					bool onePlayer = false;
 
 					if (!ConfigManager.onlinePlayersUnderMinimap.Value)
 					{
@@ -144,6 +148,7 @@ namespace MarsarahTweaks.Patches.UI
 				// Check if UI already exists (list not empty and all elements are valid)
 				if (UIPlayerTexts.Count > 0 && UIPlayerTexts.All(t => t != null))
 				{
+					//MarsarahTweaks.MLog("[Warning] UI is already created");
 					return; // UI is already created, no need to recreate
 				}
 
@@ -217,6 +222,7 @@ namespace MarsarahTweaks.Patches.UI
 
 			private static void UpdatePartyUIPosition(Hud hud)
 			{
+				MarsarahTweaks.MLog("[Info] UpdatePartyUICalled");
 				if (UIPartyArea == null) return;
 
 				//MarsarahTweaks.MLog($"Executing UpdatePartyUIPosition");

@@ -25,6 +25,8 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			static void Prefix(EnvMan __instance, ref float ___m_smoothDayFraction)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
 				if (__instance == null) return;
 
 				if (ConfigManager.showTimeAndDay.Value)
@@ -64,6 +66,8 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			public static void Postfix(Hud __instance)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
 				if (__instance == null) return;
 
 				if (ConfigManager.showTimeAndDay.Value)

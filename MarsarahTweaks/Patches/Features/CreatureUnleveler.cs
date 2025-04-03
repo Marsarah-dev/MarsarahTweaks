@@ -138,7 +138,7 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (!ZNet.instance || !ZNet.instance.IsServer())
 				{
-					MarsarahTweaks.MLog($"SpawnSystem Awake - I am a client - no changes made to {ConfigManager.Configs.CreatureUnleveler.Name}");
+					//MarsarahTweaks.MLog($"SpawnSystem Awake - I am a client - no changes made to {ConfigManager.Configs.CreatureUnleveler.Name}");
 					return; // Ensure it only runs on the server
 				}
 

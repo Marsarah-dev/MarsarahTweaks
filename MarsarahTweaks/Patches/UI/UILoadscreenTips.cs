@@ -63,6 +63,8 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			static void Postfix(Localization __instance, string language)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
 				if (__instance == null) return;
 
 				if (ConfigManager.moreLoadingTipsEnabled.Value)
@@ -77,6 +79,8 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			public static void Postfix(Hud __instance)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
 				if (__instance == null) return;
 
 				if (ConfigManager.moreLoadingTipsEnabled.Value)
@@ -91,6 +95,8 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			static void Postfix(Hud __instance)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
 				if (__instance == null) return;
 
 				if (ConfigManager.moreLoadingTipsEnabled.Value && localizationLanguage == "English")

@@ -13,7 +13,7 @@ namespace MarsarahTweaks
 	public class MarsarahTweaks : BaseUnityPlugin
 	{
 		internal const string ModName = "MarsarahTweaks";
-		internal const string ModVersion = "0.2.3";
+		internal const string ModVersion = "0.4.1";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 
@@ -22,7 +22,7 @@ namespace MarsarahTweaks
 		void Awake()
 		{
 			ConfigManager.Init(Config);
-			CustomConsoleCommandHandler.Init(); // Register new console commands
+			//CustomConsoleCommandHandler.Init(); // Register new console commands
 			UISmartBiome.UpdateBiomeWeights(); // Set the correct biome weight dictionary at startup
 
 			harmony.PatchAll();
@@ -32,6 +32,22 @@ namespace MarsarahTweaks
 		{
 			// Hide/display UI
 			UIController.UpdateUIDisplay();
+
+			/*if (ZNet.instance != null)
+			{
+				bool isServer = ZNet.instance.IsServer();
+				bool isDedicated = ZNet.instance.IsDedicated();
+				bool isOpen = ZNet.IsOpenServer();
+
+				MarsarahTweaks.MLog($"Is server: {isServer}");
+				MarsarahTweaks.MLog($"Is dedicated: {isDedicated}");
+				MarsarahTweaks.MLog($"Is open: {isOpen}");
+
+				 //* Local singleplayer: true, false, false
+				 //* Local server: true, false, true
+				 //* Dedicated server: true, true, true
+				 //* Client: false, false, false
+			}*/
 		}
 
 		private void OnDestroy()

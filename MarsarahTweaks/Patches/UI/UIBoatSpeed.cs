@@ -26,6 +26,8 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			static void Prefix(Ship __instance, ref Rigidbody ___m_body)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
 				if (ConfigManager.showBoatSpeed.Value)
 				{
 					if (__instance && __instance.HasPlayerOnboard())
@@ -49,6 +51,8 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			public static void Postfix(Hud __instance)
 			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
 				if (__instance == null) return;
 
 				if (ConfigManager.showBoatSpeed.Value)
