@@ -88,7 +88,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("14 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
 			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("15 - Clear Mistlands", "(Disabling mid-game requires CLIENT relog) Clear Mistlands mist after defeating the Queen");
 			public static readonly ConfigMetadata CraftableChain = new ConfigMetadata("16 - Craftable Chain", "Chain craftable at Black Forge");
-			public static readonly ConfigMetadata BrighterLanterns = new ConfigMetadata("17 - Brighter Lanterns", "(Toggling mid-game requires CLIENT relog) Dvergr lanterns are brighter"); // TODO: Test on server (also test reloading area) - disabling and relogging on local does not revert to default
+			public static readonly ConfigMetadata BrighterLanterns = new ConfigMetadata("17 - Brighter Lanterns", "(Toggling mid-game requires CLIENT relog or reloading area) Dvergr lanterns are brighter");
 			public static readonly ConfigMetadata WeatherModifications = new ConfigMetadata("18 - Clearer Weather", "(Toggling mid-game requires CLIENT relog) Reduces chance for mist and snowstorms");
 			public static readonly ConfigMetadata CreatureUnleveler = new ConfigMetadata("19 - Creature Unleveler By Boss", "Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss");
 			public static readonly ConfigMetadata MinibossWeight = new ConfigMetadata("20 - Hildir Weight Rewards", "(Toggling mid-game requires CLIENT relog) Increases base carry weight by 25 when turning in Hildir chests (for each chest)");
@@ -385,6 +385,11 @@ namespace MarsarahTweaks
 					case var name when name == Configs.CraftableChain.Name:
 						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						CraftableChain.UpdateChainRecipe(ObjectDB.instance, true);
+						break;
+
+					case var name when name == Configs.BrighterLanterns.Name:
+						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						BrighterLanterns.UpdateLanterns(ZNetScene.instance);
 						break;
 
 					case var name when name == Configs.TougherShips.Name:

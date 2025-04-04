@@ -25,7 +25,7 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static Dictionary<string, (float intensity, float range, float flickerIntensity, float flickerSpeed)> lanternBackups = new Dictionary<string, (float intensity, float range, float flickerIntensity, float flickerSpeed)>();
 
-		private static void UpdateLanterns(ZNetScene znScene)
+		public static void UpdateLanterns(ZNetScene znScene)
 		{
 			if (ConfigManager.brighterLanternsEnabled.Value)
 			{
@@ -33,6 +33,10 @@ namespace MarsarahTweaks.Patches.Features
 
 				UpdateLanternLight(znScene, "piece_dvergr_lantern", 2f, 9f, 0.05f, 5f);  // (2, 9) / (2, 12) / (3 / 12)
 				UpdateLanternLight(znScene, "piece_dvergr_lantern_pole", 2f, 15f, 0.05f, 5f);  // (2, 12) / (2, 15) / (3 / 15)
+			}
+			else
+			{
+				RestoreLanternDefaults(znScene);
 			}
 		}
 
@@ -42,19 +46,57 @@ namespace MarsarahTweaks.Patches.Features
 			if (lanternPrefab != null)
 			{
 				Light lightComponent = lanternPrefab.GetComponentInChildren<Light>();
+				LightFlicker lightFlicker = lanternPrefab.GetComponentInChildren<LightFlicker>();
+
+				// Backup only once (on first access)
+				if (!lanternBackups.ContainsKey(prefabName) && lightComponent != null && lightFlicker != null)
+				{
+					lanternBackups[prefabName] = (
+						lightComponent.intensity,
+						lightComponent.range,
+						lightFlicker.m_flickerIntensity,
+						lightFlicker.m_flickerSpeed
+					);
+				}
+
+				// Apply new values
 				if (lightComponent != null)
 				{
 					lightComponent.intensity = lightIntensity;
 					lightComponent.range = lightRange;
-					//MarsarahTweaks.MLog($"Light Component updated for {prefabName}");
 				}
 
-				LightFlicker lightFlicker = lanternPrefab.GetComponentInChildren<LightFlicker>();
 				if (lightFlicker != null)
 				{
 					lightFlicker.m_flickerIntensity = flickerIntensity;
 					lightFlicker.m_flickerSpeed = flickerSpeed;
-					//MarsarahTweaks.MLog($"Light Flicker updated for {prefabName}");
+				}
+			}
+		}
+
+		private static void RestoreLanternDefaults(ZNetScene znScene)
+		{
+			foreach (var kvp in lanternBackups)
+			{
+				string prefabName = kvp.Key;
+				var (intensity, range, flickerIntensity, flickerSpeed) = kvp.Value;
+
+				GameObject lanternPrefab = znScene.GetPrefab(prefabName);
+				if (lanternPrefab != null)
+				{
+					Light lightComponent = lanternPrefab.GetComponentInChildren<Light>();
+					if (lightComponent != null)
+					{
+						lightComponent.intensity = intensity;
+						lightComponent.range = range;
+					}
+
+					LightFlicker lightFlicker = lanternPrefab.GetComponentInChildren<LightFlicker>();
+					if (lightFlicker != null)
+					{
+						lightFlicker.m_flickerIntensity = flickerIntensity;
+						lightFlicker.m_flickerSpeed = flickerSpeed;
+					}
 				}
 			}
 		}

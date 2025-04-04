@@ -58,16 +58,26 @@ namespace MarsarahTweaks.Patches.UI
 						UpdatePartyUIPosition(__instance);
 					}
 
-					// Special case that prevents the online players area to show during the loadscreen, since we attached to the parent of the minimap
-					if (Player.m_localPlayer && UIPartyArea != null && !UIPartyArea.activeSelf)
+					// Special case that prevents the online players area to show during the load screen
+					if (Player.m_localPlayer && UIPartyArea != null)
 					{
-						//MarsarahTweaks.MLog("Enabling Party UI after load screen");
-						UIPartyArea.SetActive(true);
+						// Check if the load screen is active
+						bool isLoadScreenActive = IsLoadScreenActive(__instance);
+
+						// Only toggle visibility when necessary
+						if (isLoadScreenActive && UIPartyArea.activeSelf)
+						{
+							UIPartyArea.SetActive(false);  // Hide it during load screen
+						}
+						else if (!isLoadScreenActive && !UIPartyArea.activeSelf)
+						{
+							UIPartyArea.SetActive(true);   // Show it when not in load screen
+						}
 					}
 
 					int numPlayers = (playerInfoList.Count <= numOnlinePlayerSlots - 1) ? playerInfoList.Count : numOnlinePlayerSlots - 1;
-					//bool onePlayer = playerInfoList.Count == 1;
-					bool onePlayer = false;
+					bool onePlayer = playerInfoList.Count == 1;
+					//bool onePlayer = false;
 
 					if (!ConfigManager.onlinePlayersUnderMinimap.Value)
 					{
@@ -174,7 +184,7 @@ namespace MarsarahTweaks.Patches.UI
 					partyAreaTransform.anchorMin = new Vector2(1f, 0f);
 					partyAreaTransform.anchorMax = new Vector2(1f, 0f);
 					partyAreaTransform.pivot = new Vector2(1f, 0f); // Set pivot to bottom-right of the screen
-					partyAreaTransform.anchoredPosition = new Vector2(-20f, 5f);  // Offset from screen edge (bottom-right)
+					partyAreaTransform.anchoredPosition = new Vector2(-20f, 70f);  // Offset from screen edge (bottom-right)
 				}
 				else
 				{
@@ -274,6 +284,11 @@ namespace MarsarahTweaks.Patches.UI
 							: new Vector2(0f, -UIPartyPlayerTextDistanceV * i); // Move up from bottom
 					}
 				}
+			}
+
+			private static bool IsLoadScreenActive(Hud hud)
+			{
+				return Hud.instance && hud.m_loadingScreen && hud.m_loadingScreen.gameObject.activeSelf;
 			}
 		}
 	}
