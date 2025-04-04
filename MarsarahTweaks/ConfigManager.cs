@@ -70,44 +70,44 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata GearRecipeMaterialsModifications = new ConfigMetadata("3 - Alternate Gear Recipe Materials", "Modifies gear recipe materials for some items (more materials from current respective biomes)");
 			public static readonly ConfigMetadata BuildPieceAmountsModifications = new ConfigMetadata("4 - Cheaper Build Pieces Amounts", "Reduces costs for build pieces");
 			public static readonly ConfigMetadata BuildPieceMaterialsModifications = new ConfigMetadata("5 - Alternate Build Pieces Materials", "Modifies build pieces materials (This will move the Workbench Toolrack extension from Mountain to Swamp biome)");
-			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "(Toggling mid-game requires CLIENT relog for food stacks) Modifies food and mead recipes costs, crafted amounts and stacks");
+			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "Modifies food and mead recipes costs, crafted amounts and stacks. (Toggling mid-game requires CLIENT relog for food stacks)");
 
 			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("01 - Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it");
-			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("02 - Gear Speed Modifications", "(Toggling mid-game requires CLIENT relog) Removes speed penalty for heavy and mage armors; adds speed bonus to light armor");
+			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("02 - Gear Speed Modifications", "Removes speed penalty for heavy and mage armors; adds speed bonus to light armor. (Toggling mid-game requires CLIENT relog)");
 			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("03 - Forsaken Powers Modifications", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)");
 			public static readonly ConfigMetadata CharacterSpeedModifications = new ConfigMetadata("04 - Faster Character Speed", "Faster character jog, walk, swim and crouch speeds (run excluded)");
-			public static readonly ConfigMetadata StatusEffectsModifications = new ConfigMetadata("05 - Shorter Wet Effect And Potion Cooldowns", "Wet effect and potions cooldown timers reduced");
+			public static readonly ConfigMetadata StatusEffectsModifications = new ConfigMetadata("05 - Shorter Wet And Potion Cooldowns", "Wet effect and potions cooldown timers reduced");
 			public static readonly ConfigMetadata LessStaminaModifications = new ConfigMetadata("06 - Less Stamina Usage", "Stamina use of all actions is reduced by 15%");
-			public static readonly ConfigMetadata ExtraArmorStatsModifications = new ConfigMetadata("07 - Extra Armor Stats", "Heavy armor provides extra HP, light armor provides extra stamina, mage armor provides extra base eitr");
-			public static readonly ConfigMetadata DeathRaiserModifications = new ConfigMetadata("08 - Better Death Raiser", "Adds secondary attack that spawns archer skeletons. Primary attack will only spawn melee skeletons");
-			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("09 - Better Summoned Skeletons", "(Toggling mid-game requires CLIENT relog for speed changes) Increases summoned skeleton speed and add better looking gear according to Death Raiser level (stats not affected)");
+			public static readonly ConfigMetadata ExtraArmorStatsModifications = new ConfigMetadata("07 - Extra Armor Stats", "Heavy armor provides extra HP, light armor provides extra stamina, mage armor provides extra eitr");
+			public static readonly ConfigMetadata DeathRaiserModifications = new ConfigMetadata("08 - Better Death Raiser", "Adds a secondary attack that spawns archer skeletons. Primary attack will only spawn melee skeletons");
+			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("09 - Better Summoned Skeletons", "Increases summoned skeleton speed and add better looking gear according to Death Raiser level (stats not affected). (Toggling mid-game requires CLIENT relog for speed changes)");
 			public static readonly ConfigMetadata FrostStaffModifications = new ConfigMetadata("10 - Better Frost Staff Accuracy", "Improves Staff of Frost Accuracy");
-			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("11 - Reduced Crossbows Reload Time", "(Toggling mid-game requires CLIENT relog) Crossbows Reload Time Reduced by 1s");
-			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("12 - Less Ashlands Enemies", "Numbers and spawn chance reduced for Ashlands enemies");
+			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("11 - Reduced Crossbows Reload Time", "Crossbows Reload Time Reduced by 1s. (Toggling mid-game requires CLIENT relog)");
+			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("12 - Less Ashlands Enemies", "Numbers and spawn chance reduced for Ashlands enemies. (Toggling mid-game requires reloading area)");
 			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("13 - Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to max level within their respective biomes");
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("14 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
-			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("15 - Clear Mistlands", "(Disabling mid-game requires CLIENT relog) Clear Mistlands mist after defeating the Queen");
+			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("15 - Clear Mistlands", "Clear Mistlands mist after defeating the Queen. (Disabling mid-game requires CLIENT relog)");
 			public static readonly ConfigMetadata CraftableChain = new ConfigMetadata("16 - Craftable Chain", "Chain craftable at Black Forge");
-			public static readonly ConfigMetadata BrighterLanterns = new ConfigMetadata("17 - Brighter Lanterns", "(Toggling mid-game requires CLIENT relog or reloading area) Dvergr lanterns are brighter");
-			public static readonly ConfigMetadata WeatherModifications = new ConfigMetadata("18 - Clearer Weather", "(Toggling mid-game requires CLIENT relog) Reduces chance for mist and snowstorms");
+			public static readonly ConfigMetadata BrighterLanterns = new ConfigMetadata("17 - Brighter Lanterns", "Dvergr lanterns are brighter. (Toggling mid-game requires CLIENT relog or reloading area)");
+			public static readonly ConfigMetadata WeatherModifications = new ConfigMetadata("18 - Clearer Weather", "Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively. (Toggling mid-game requires CLIENT relog)");
 			public static readonly ConfigMetadata CreatureUnleveler = new ConfigMetadata("19 - Creature Unleveler By Boss", "Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss");
-			public static readonly ConfigMetadata MinibossWeight = new ConfigMetadata("20 - Hildir Weight Rewards", "(Toggling mid-game requires CLIENT relog) Increases base carry weight by 25 when turning in Hildir chests (for each chest)");
-			public static readonly ConfigMetadata ExtensionsModifications = new ConfigMetadata("21 - Station Extensions Changes", "(Toggling mid-game requires CLIENT relog) Decreases space requirement for workstation extensions and increases build distance to workstations (This does not increase workstation radius)");
-			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("22 - Stop Running Away", "(Toggling mid-game affects only new creatures) Boars and Necks won't flee when alerted");
-			public static readonly ConfigMetadata ProgressionHalt = new ConfigMetadata("23 - Automatic Progression Halt", "(Toggling mid-game requires reloading area) Creatures and objects do not drop any items unless the previous biome boss has been defeated");
+			public static readonly ConfigMetadata MinibossWeight = new ConfigMetadata("20 - Hildir Weight Rewards", "Increases base carry weight by 25 when turning in Hildir chests (for each chest). (Toggling mid-game requires CLIENT relog)");
+			public static readonly ConfigMetadata ExtensionsModifications = new ConfigMetadata("21 - Station Extensions Changes", "Decreases space requirement for workstation extensions and increases build distance to workstations (This does not increase workstation radius). (Toggling mid-game requires CLIENT relog)");
+			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("22 - Stop Running Away", "Boars and Necks won't flee when alerted. (Toggling mid-game only affects new creatures)");
+			public static readonly ConfigMetadata ProgressionHalt = new ConfigMetadata("23 - Automatic Progression Halt", "Creatures and objects do not drop any items unless the previous biome boss has been defeated. (Toggling mid-game requires CLIENT relog or reloading area)");
 			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("24 - Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Tick, Dverger, Seeker Soldier, Charred Warlock");
-			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("25 - Tougher Ships", "(Toggling mid-game requires CLIENT relog or reloading area) Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000");
+			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("25 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000 (Toggling mid-game requires CLIENT relog or reloading area)");
 			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("26 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
 
-			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "(Toggling mid-game requires CLIENT relog or reloading area) All metal ore and bars weight decreased to 8");
+			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "All metal ore and bars weight decreased to 8. (Toggling mid-game requires CLIENT relog or reloading area)");
 			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("2 - Larger Pickup Area", "Item pickup area slightly increased");
-			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("3 - No Skill Levels Loss On Death", "(Toggling mid-game requires CLIENT relog) Skills won't go down the current level upon death (progress in that skill is still lost)");
-			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("4 - Larger Boat Explore Radius", "Larger explore radius on a boat");
+			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("3 - No Skill Levels Loss On Death", "Skills won't go down the current level upon death (progress in that skill is still lost). (Toggling mid-game requires CLIENT relog)");
+			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("4 - Larger Boat Explore Radius", "Double explore radius on a boat");
 			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("5 - Bigger Wisp Radius", "Increases wisp radius");
 			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("6 - Friendly Ballistas", "Ballistas won't target players and tame animals");
 			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("7 - Less Fall Damage", "Fall damage reduced by 40%");
 			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("8 - Faster Resource Drops", "Enemies drop resources faster when dying");
-			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("9 - Faster Equip", "(Toggling mid-game requires CLIENT relog) Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s)");
+			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("9 - Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s). (Toggling mid-game requires CLIENT relog)");
 
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
 			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("02 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
@@ -117,7 +117,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata UITimeAndDay24H = new ConfigMetadata("06 - Time - 24 Hour Format", "Use 24 Hour time format when Show Time And Day is enabled");
 			public static readonly ConfigMetadata UISmartBiome = new ConfigMetadata("07 - Smart Biome Indicator", "Shows smart biome text on minimap (colored according to worn armor relative to current biome)");
 			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("08 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
-			public static readonly ConfigMetadata UIOnlinePlayers = new ConfigMetadata("09 - Show Online Players", "Shows online players on the bottom right of the screen");
+			public static readonly ConfigMetadata UIOnlinePlayers = new ConfigMetadata("09 - Show Online Players", "Shows online players on the bottom right of the screen (Not displayed if only one player is online)");
 			public static readonly ConfigMetadata UIOnlinePlayersUnderMinimap = new ConfigMetadata("10 - Show Online Players Under Minimap", "Shows online players under minimap instead of bottom right when Show Online Players is enabled");
 		}
 
@@ -310,66 +310,66 @@ namespace MarsarahTweaks
 				switch (configName)
 				{
 					case var name when name == Configs.DoubleBronzeCrafting.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						DoubleBronzeCrafting.UpdateDoubleBronzeCrafting(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.GearRecipeAmountsModifications.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, true, false);
 						break;
 
 					case var name when name == Configs.GearRecipeMaterialsModifications.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, false, true);
 						break;
 
 					case var name when name == Configs.BuildPieceAmountsModifications.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, true, false);
 						break;
 
 					case var name when name == Configs.BuildPieceMaterialsModifications.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, false, true);
 						break;
 
 					case var name when name == Configs.FoodAndMeadModifications.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						FoodAndMeadChanges.UpdateFoodAndMead(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.LinenCapeModifications.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						GearRecipeChanges.UpdateLinenCapeRecipe(ObjectDB.instance, true);
 						EarlyLinenCape.UpdateLinenCapeStats(true);
 						break;
 
 					case var name when name == Configs.GearSpeedModifications.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						GearSpeedChanges.UpdateGearSpeed(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.ForsakenPowersModifications.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						ForsakenPowersChanges.UpdateForsakenPowers(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.CharacterSpeedModifications.Name:
 						if (Player.m_localPlayer != null)
 						{
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+							//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							CharacterSpeedChanges.UpdateCharacterSpeed(Player.m_localPlayer, true);								
 						}
 						break;
 
 					case var name when name == Configs.StatusEffectsModifications.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						StatusEffectChanges.UpdateStatusEffects(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.GearUpgradeModifications.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						GearUpgradeChanges.UpdateGearRecipeUnlock(ObjectDB.instance, true);
 						if (showSmartBiome.Value)
 						{
@@ -378,60 +378,60 @@ namespace MarsarahTweaks
 						break;
 
 					case var name when name == Configs.PermanentLightsModifications.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						PermanentLightsChanges.UpdateLightBuildPiecesAmounts(ZNetScene.instance, true);
 						break;
 
 					case var name when name == Configs.CraftableChain.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						CraftableChain.UpdateChainRecipe(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.BrighterLanterns.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						BrighterLanterns.UpdateLanterns(ZNetScene.instance);
 						break;
 
 					case var name when name == Configs.TougherShips.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						TougherShipsChanges.updateShipHP(ZNetScene.instance, true);
 						break;
 
 					case var name when name == Configs.OtherModifications.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						OtherChanges.UpdateOthers(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.LighterMetalWeight.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						LighterMetalWeight.UpdateLighterMetalWeight(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.LargerPickupArea.Name:
 						if (Player.m_localPlayer != null)
 						{
-							MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+							//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 							LargerPickupAreaChanges.UpdatePickupArea(Player.m_localPlayer, true);
 						}
 						break;
 
 					case var name when name == Configs.UIInventoryWeightAndSlots.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						UIController.UpdateUIPositions();
 						break;
 
 					case var name when name == Configs.UIEnemyDetector.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						UIController.UpdateUIPositions();
 						break;
 
 					case var name when name == Configs.UIBoatSpeed.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						UIController.UpdateUIPositions();
 						break;
 
 					case var name when name == Configs.UISmartBiome.Name:
-						MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						UISmartBiome.UpdateBiomeWeights();
 						break;
 				}
@@ -455,7 +455,7 @@ namespace MarsarahTweaks
 				case var name when name == Configs.AshlandsEnemiesModifications.Name:
 					if (Object.FindObjectOfType<SpawnSystem>() is SpawnSystem spawnSystemA)
 					{
-						MarsarahTweaks.MLog($"ConfigManager Server: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager Server: Reapplying modifications for {configName}...");
 						AshlandsEnemiesChanges.UpdateAshlandsSpawns(spawnSystemA);
 					}
 					break;
@@ -463,7 +463,7 @@ namespace MarsarahTweaks
 				case var name when name == Configs.CreatureUnleveler.Name:
 					if (Object.FindObjectOfType<SpawnSystem>() is SpawnSystem spawnSystemB)
 					{
-						MarsarahTweaks.MLog($"ConfigManager Server: Reapplying modifications for {configName}...");
+						//MarsarahTweaks.MLog($"ConfigManager Server: Reapplying modifications for {configName}...");
 						CreatureUnleveler.ApplyCreatureLevelChanges(spawnSystemB);
 					}
 					break;
