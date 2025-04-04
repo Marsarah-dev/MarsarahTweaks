@@ -22,7 +22,7 @@ namespace MarsarahTweaks
 		void Awake()
 		{
 			ConfigManager.Init(Config);
-			//CustomConsoleCommandHandler.Init(); // Register new console commands
+			CustomConsoleCommandHandler.Init(); // Register new console commands
 			UISmartBiome.UpdateBiomeWeights(); // Set the correct biome weight dictionary at startup
 
 			harmony.PatchAll();

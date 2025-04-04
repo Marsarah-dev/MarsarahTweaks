@@ -18,7 +18,8 @@ namespace MarsarahTweaks.Patches.QOL
 
 			static void Postfix([NotNull] ref bool ___m_targetPlayers, [NotNull] ref bool ___m_targetTamed)
 			{
-				if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Prevent running on clients
+				//if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Prevent running on clients
+				// Needs to run on both client and server - no checks needed
 
 				if (ConfigManager.friendlyBallistasEnabled.Value)
 				{

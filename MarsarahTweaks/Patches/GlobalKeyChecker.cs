@@ -95,7 +95,8 @@ namespace MarsarahTweaks.Patches
 			{
 				return checkGlobalKey(globalKey);
 			}
-			//MarsarahTweaks.MLog($"[Warning] IsBossDefeated called with unknown boss: {boss}");
+
+			MarsarahTweaks.MLog($"[Warning] IsBossDefeated called with unknown boss: {boss}");
 			return false; // Default to false if boss name is not found
 		}
 	}

@@ -4,14 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace MarsarahTweaks.Patches.Features
 {
 	internal class CreatureUnleveler
 	{
+		private static readonly Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)> creatureSpawnBackups	= new Dictionary<string, (int?, float?, float?)>();
+
 		private static Dictionary <string, Dictionary <string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>> creatureSpawnChanges = new Dictionary<string, Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>>()
 		{
-			{ "eikthyrDefeated", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
+			{ "Eikthyr", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
 				{
 					// Meadows
 					{ "deer", (null, 15f, null) },
@@ -21,7 +24,7 @@ namespace MarsarahTweaks.Patches.Features
 					{ "Greyling", (2, 15f, null) }
 				}
 			},
-			{ "elderDefeated", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
+			{ "The Elder", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
 				{
 					// Meadows
 					{ "Boar", (null, 20f, 0f) },
@@ -40,7 +43,7 @@ namespace MarsarahTweaks.Patches.Features
 					{ "Greydwarf", (3, 20f, null) }
 				}
 			},
-			{ "bonemassDefeated", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
+			{ "Bonemass", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
 				{
 					// Meadows
 					{ "Boar", (null, 30f, null) },
@@ -67,7 +70,7 @@ namespace MarsarahTweaks.Patches.Features
 					{ "Surtling", (3, 20f, null) }
 				}
 			},
-			{ "moderDefeated", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
+			{ "Moder", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
 				{
 					// Black Forest
 					{ "Troll", (null, 30f, null) },
@@ -85,7 +88,7 @@ namespace MarsarahTweaks.Patches.Features
 					{ "Wolf", (3, 20f, null) }
 				}
 			},
-			{ "yagluthDefeated", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
+			{ "Yagluth", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
 				{
 					// Swamp
 					{ "Blob", (2, 20f, null) },
@@ -105,7 +108,7 @@ namespace MarsarahTweaks.Patches.Features
 					
 				}
 			},
-			{ "queenDefeated", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
+			{ "The Queen", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
 				{
 					// Plains
 					{ "Lox", (2, 20f, null) },
@@ -122,7 +125,7 @@ namespace MarsarahTweaks.Patches.Features
 					{ "Seeker", (3, 20f, null) }					
 				}
 			},
-			{ "faderDefeated", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
+			{ "Fader", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
 				{
 					{ "Dverger", (null, 30f, null) },
 					{ "Charred Melee [Other biomes when Fader is defeated]", (2, 10f, null) },
@@ -131,65 +134,99 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		};
 
-		[HarmonyPatch(typeof(SpawnSystem), "Awake")]
-		class RemoveMinimumDistanceForStars
+		// Tracking last defeated states to determine when changes occur
+		private static bool lastEikthyrDefeated = GlobalKeyChecker.isBossDefeated("Eikthyr");
+		private static bool lastElderDefeated = GlobalKeyChecker.isBossDefeated("The Elder");
+		private static bool lastBonemassDefeated = GlobalKeyChecker.isBossDefeated("Bonemass");
+		private static bool lastModerDefeated = GlobalKeyChecker.isBossDefeated("Moder");
+		private static bool lastYagluthDefeated = GlobalKeyChecker.isBossDefeated("Yagluth");
+		private static bool lastQueenDefeated = GlobalKeyChecker.isBossDefeated("The Queen");
+		private static bool lastFaderDefeated = GlobalKeyChecker.isBossDefeated("Fader");
+
+		[HarmonyPatch(typeof(SpawnSystem), "Awake")] // UpdateSpawning
+		class DynamicBossChangeWatcher_Patch
 		{
+			private static float checkTimer = 0f;
+			private static bool hasAppliedSpawnChangesOnce = false;
+
 			static void Postfix(SpawnSystem __instance)
 			{
-				if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Prevent running on clients
+				//if (!ZNet.instance || !ZNet.instance.IsServer()) return;
+				// Needs to run on both server and client - no clause made
+				
+				//creatureSpawnChanges = GenerateTestSpawnChanges(); // Temporary
 
-				if (__instance != null && ConfigManager.creatureUnlevelerEnabled.Value)
+				// Run once when the game/server starts
+				if (!hasAppliedSpawnChangesOnce)
 				{
-					// Apply the changes based on the defeated bosses.
-					foreach (SpawnSystemList spawnList in __instance.m_spawnLists)
-					{
-						foreach (SpawnSystem.SpawnData spawner in spawnList.m_spawners)
-						{
-							// Iterate through the bosses and check if they are defeated.
-							foreach (var bossEntry in creatureSpawnChanges)
-							{
-								string bossName = bossEntry.Key;
-								bool bossDefeated = false;
+					//MarsarahTweaks.MLog("Initial creature spawn changes applied.");
+					ApplyCreatureLevelChanges(__instance);
+					hasAppliedSpawnChangesOnce = true;
+				}
 
-								// Check if the boss is defeated by looking up the key in the global keys or a specific flag.
-								switch (bossName)
+				// Run again if any boss state changes
+				checkTimer += Time.deltaTime;
+				if (checkTimer < 2f) return; // Only check every 2 seconds
+				checkTimer = 0f;
+
+				if (BossStateChanged())
+				{
+					//MarsarahTweaks.MLog("Boss state changed, reapplying spawn changes");
+					ApplyCreatureLevelChanges(__instance);
+				}
+			}
+		}
+
+		public static void ApplyCreatureLevelChanges(SpawnSystem __instance)
+		{
+			foreach (SpawnSystemList spawnList in __instance.m_spawnLists)
+			{
+				foreach (SpawnSystem.SpawnData spawner in spawnList.m_spawners)
+				{
+					foreach (var bossEntry in creatureSpawnChanges)
+					{
+						if (!GlobalKeyChecker.isBossDefeated(bossEntry.Key)) continue;
+
+						if (bossEntry.Value.TryGetValue(spawner.m_name, out var changes))
+						{
+							if (ConfigManager.creatureUnlevelerEnabled.Value)
+							{
+								// Backup if not already backed up
+								if (!creatureSpawnBackups.ContainsKey(spawner.m_name))
 								{
-									case "eikthyrDefeated":
-										bossDefeated = GlobalKeyChecker.eikthyrDefeated;
-										break;
-									case "elderDefeated":
-										bossDefeated = GlobalKeyChecker.elderDefeated;
-										break;
-									case "bonemassDefeated":
-										bossDefeated = GlobalKeyChecker.bonemassDefeated;
-										break;
-									case "moderDefeated":
-										bossDefeated = GlobalKeyChecker.moderDefeated;
-										break;
-									case "yagluthDefeated":
-										bossDefeated = GlobalKeyChecker.yagluthDefeated;
-										break;
-									case "queenDefeated":
-										bossDefeated = GlobalKeyChecker.queenDefeated;
-										break;
-									case "faderDefeated":
-										bossDefeated = GlobalKeyChecker.faderDefeated;
-										break;
+									//MarsarahTweaks.MLog($"Backing up {spawner.m_name} (Boss: {bossEntry.Key})");
+									creatureSpawnBackups[spawner.m_name] = (spawner.m_maxLevel,	spawner.m_overrideLevelupChance, spawner.m_levelUpMinCenterDistance);
 								}
 
-								// If the boss is defeated, apply the changes.
-								if (bossDefeated && creatureSpawnChanges.TryGetValue(bossName, out var creatureChanges))
+								// Apply changes
+								if (changes.levelUpChance.HasValue)
 								{
-									if (creatureChanges.TryGetValue(spawner.m_name, out var changes))
-									{
-										// Apply the changes to the spawn data
-										if (changes.levelUpChance.HasValue)
-											spawner.m_overrideLevelupChance = changes.levelUpChance.Value;
-										if (changes.levelUpMinCenterDistance.HasValue)
-											spawner.m_levelUpMinCenterDistance = changes.levelUpMinCenterDistance.Value;
-										if (changes.maxLevel.HasValue)
-											spawner.m_maxLevel = changes.maxLevel.Value;
-									}
+									//MarsarahTweaks.MLog($"Applying levelUpChance={changes.levelUpChance.Value} to {spawner.m_name} (Boss: {bossEntry.Key})");
+									spawner.m_overrideLevelupChance = changes.levelUpChance.Value;
+								}
+								if (changes.levelUpMinCenterDistance.HasValue)
+								{
+									//MarsarahTweaks.MLog($"Applying levelUpMinCenterDistance={changes.levelUpMinCenterDistance.Value} to {spawner.m_name} (Boss: {bossEntry.Key})");
+									spawner.m_levelUpMinCenterDistance = changes.levelUpMinCenterDistance.Value;
+								}
+								if (changes.maxLevel.HasValue)
+								{
+									//MarsarahTweaks.MLog($"Applying maxLevel={changes.maxLevel.Value} to {spawner.m_name} (Boss: {bossEntry.Key})");
+									spawner.m_maxLevel = changes.maxLevel.Value;
+								}
+							}
+							else
+							{
+								// Restore from backup if exists
+								if (creatureSpawnBackups.TryGetValue(spawner.m_name, out var backup))
+								{
+									//MarsarahTweaks.MLog($"Restoring spawn values for {spawner.m_name} from backup");
+
+									spawner.m_maxLevel = backup.maxLevel ?? spawner.m_maxLevel;
+									spawner.m_overrideLevelupChance = backup.levelUpChance ?? spawner.m_overrideLevelupChance;
+									spawner.m_levelUpMinCenterDistance = backup.levelUpMinCenterDistance ?? spawner.m_levelUpMinCenterDistance;
+
+									creatureSpawnBackups.Remove(spawner.m_name);
 								}
 							}
 						}
@@ -197,5 +234,67 @@ namespace MarsarahTweaks.Patches.Features
 				}
 			}
 		}
+
+		private static bool BossStateChanged()
+		{
+			bool changed = false;
+
+			if (GlobalKeyChecker.eikthyrDefeated != lastEikthyrDefeated)
+			{
+				lastEikthyrDefeated = GlobalKeyChecker.eikthyrDefeated;
+				changed = true;
+			}
+			if (GlobalKeyChecker.elderDefeated != lastElderDefeated)
+			{
+				lastElderDefeated = GlobalKeyChecker.elderDefeated;
+				changed = true;
+			}
+			if (GlobalKeyChecker.bonemassDefeated != lastBonemassDefeated)
+			{
+				lastBonemassDefeated = GlobalKeyChecker.bonemassDefeated;
+				changed = true;
+			}
+			if (GlobalKeyChecker.moderDefeated != lastModerDefeated)
+			{
+				lastModerDefeated = GlobalKeyChecker.moderDefeated;
+				changed = true;
+			}
+			if (GlobalKeyChecker.yagluthDefeated != lastYagluthDefeated)
+			{
+				lastYagluthDefeated = GlobalKeyChecker.yagluthDefeated;
+				changed = true;
+			}
+			if (GlobalKeyChecker.queenDefeated != lastQueenDefeated)
+			{
+				lastQueenDefeated = GlobalKeyChecker.queenDefeated;
+				changed = true;
+			}
+			if (GlobalKeyChecker.faderDefeated != lastFaderDefeated)
+			{
+				lastFaderDefeated = GlobalKeyChecker.faderDefeated;
+				changed = true;
+			}
+
+			return changed;
+		}
+
+		/*public static Dictionary<string, Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>> GenerateTestSpawnChanges()
+		{
+			var testDict = new Dictionary<string, Dictionary<string, (int?, float?, float?)>>();
+
+			foreach (var bossEntry in creatureSpawnChanges)
+			{
+				var creatureDict = new Dictionary<string, (int?, float?, float?)>();
+
+				foreach (var creature in bossEntry.Value.Keys)
+				{
+					creatureDict[creature] = (3, 100f, 0f); // Set test values
+				}
+
+				testDict[bossEntry.Key] = creatureDict;
+			}
+
+			return testDict;
+		}*/
 	}
 }

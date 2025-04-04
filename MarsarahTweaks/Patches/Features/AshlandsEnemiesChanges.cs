@@ -9,23 +9,23 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class AshlandsEnemiesChanges
 	{
-		private static bool spawnChangesApplied = false;
-
 		[HarmonyPatch(typeof(SpawnSystem), "Awake")]
 		class LessAshlandsEnemiesAwake_Patch
 		{
 			private static void Postfix(SpawnSystem __instance)
 			{
-				if (!ZNet.instance || !ZNet.instance.IsServer() || spawnChangesApplied) return; // Do not run on clients or if changes are already applied
+				// Run on both client and server - no special clause added
 
-				if (__instance != null && ConfigManager.lessAshlandsEnemiesEnabled.Value)
-				{
-					UpdateAshlandsSpawns(__instance);
-					spawnChangesApplied = true;
-				}
+				if (__instance == null) return;
+
+				//MarsarahTweaks.MLog($"[Spawn Patch] Running on {(ZNet.instance.IsServer() ? "Server" : "Client")}");
+
+				UpdateAshlandsSpawns(__instance);
 			}
 		}
 
+		// Dictionaries
+		private static readonly Dictionary<string, (int maxSpawned, int groupMin, int groupMax, float spawnChance)> originalSpawnData = new Dictionary<string, (int maxSpawned, int groupMin, int groupMax, float spawnChance)>();
 		private static readonly Dictionary<string, (int? maxSpawned, int? groupMin, int? groupMax, float? spawnChance)> spawnAdjustments = new Dictionary<string, (int? maxSpawned, int? groupMin, int? groupMax, float? spawnChance)>()
 		{
 			{ "Fallen Valkyrie",			(null, null, null, 15f) },	// 1, 1, 1, 20
@@ -36,14 +36,23 @@ namespace MarsarahTweaks.Patches.Features
 			{ "Charred Twitcher [NIGHT]",	(3, 2, 3, null) },			// 4, 3, 6, 45
 			{ "Charred Archer",				(2, null, null, 30f) },		// 4, 1, 2, 35
 			{ "Charred Melee",				(2, null, null, 30f) },		// 4, 1, 2, 35
-			{ "Lava Blob",					(1, null, 1, 20f) },		// 2, 1, 2, 25
+			{ "Lava Blob",					(1, null, 1, 20f) }			// 2, 1, 2, 25
+			/*{ "Fallen Valkyrie",            (0, 0, 0, 0f) },	// 1, 1, 1, 20
+			{ "Asksvin [DAY]",              (0, 0, 0, 0f) },		// 2, 1, 3, 30
+			{ "Asksvin [NIGHT]",            (0, 0, 0, 0f) },		// 3, 1, 3, 45
+			{ "Volture",                    (0, 0, 0, 0f) },	// 3, 1, 2, 20
+			{ "Charred Twitcher [DAY]",     (0, 0, 0, 0f) },			// 3, 2, 4, 40
+			{ "Charred Twitcher [NIGHT]",   (0, 0, 0, 0f) },			// 4, 3, 6, 45
+			{ "Charred Archer",             (0, 0, 0, 0f) },		// 4, 1, 2, 35
+			{ "Charred Melee",              (0, 0, 0, 0f) },		// 4, 1, 2, 35
+			{ "Lava Blob",                  (0, 0, 0, 0f) }*/			// 2, 1, 2, 25
 		};
 
-		private static void UpdateAshlandsSpawns(SpawnSystem spawnSystem)
+		public static void UpdateAshlandsSpawns(SpawnSystem spawnSystem)
 		{
 			foreach (SpawnSystemList spawnList in spawnSystem.m_spawnLists)
 			{
-				// Super cool log from ChatGPT
+				// Super cool log
 				//MarsarahTweaks.MLog($"| {"Enemy",-25} | {"MAX",-3} | {"Group Min",-9} | {"Group Max",-9} | {"Chance",-6} |");
 				//MarsarahTweaks.MLog(new string('-', 60)); // Separator line
 
@@ -53,33 +62,56 @@ namespace MarsarahTweaks.Patches.Features
 					{
 						//MarsarahTweaks.MLog($"| {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
 
-						// Apply the new values
-						//string logMessage = $"Updating {spawner.m_name}:";
+						if (ConfigManager.lessAshlandsEnemiesEnabled.Value)
+						{
+							// Backup
+							if (!originalSpawnData.ContainsKey(spawner.m_name))
+							{
+								//MarsarahTweaks.MLog($"Backing up: | {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
+								originalSpawnData[spawner.m_name] = (spawner.m_maxSpawned, spawner.m_groupSizeMin, spawner.m_groupSizeMax, spawner.m_spawnChance);
+							}
 
-						// Apply and log changes
-						if (newValues.maxSpawned.HasValue)
-						{
-							//logMessage += $" Max Spawned {spawner.m_maxSpawned} → {newValues.maxSpawned.Value},";
-							spawner.m_maxSpawned = newValues.maxSpawned.Value;
-						}
-						if (newValues.groupMin.HasValue)
-						{
-							//logMessage += $" Group Min {spawner.m_groupSizeMin} → {newValues.groupMin.Value},";
-							spawner.m_groupSizeMin = newValues.groupMin.Value;
-						}
-						if (newValues.groupMax.HasValue)
-						{
-							//logMessage += $" Group Max {spawner.m_groupSizeMax} → {newValues.groupMax.Value},";
-							spawner.m_groupSizeMax = newValues.groupMax.Value;
-						}
-						if (newValues.spawnChance.HasValue)
-						{
-							//logMessage += $" Chance {spawner.m_spawnChance}% → {newValues.spawnChance.Value}%,";
-							spawner.m_spawnChance = newValues.spawnChance.Value;
-						}
+							//string updateLogMessage = $"Updating {spawner.m_name}:";
 
-						// Remove trailing comma and log the update
-						//MarsarahTweaks.MLog(logMessage.TrimEnd(','));
+							// Apply the new values
+							if (newValues.maxSpawned.HasValue && spawner.m_maxSpawned != newValues.maxSpawned.Value)
+							{
+								//updateLogMessage += $" Max Spawned {spawner.m_maxSpawned} → {newValues.maxSpawned.Value},";
+								spawner.m_maxSpawned = newValues.maxSpawned.Value;
+							}
+							if (newValues.groupMin.HasValue && spawner.m_groupSizeMin != newValues.groupMin.Value)
+							{
+								//updateLogMessage += $" Group Min {spawner.m_groupSizeMin} → {newValues.groupMin.Value},";
+								spawner.m_groupSizeMin = newValues.groupMin.Value;
+							}
+							if (newValues.groupMax.HasValue && spawner.m_groupSizeMax != newValues.groupMax.Value)
+							{
+								//updateLogMessage += $" Group Max {spawner.m_groupSizeMax} → {newValues.groupMax.Value},";
+								spawner.m_groupSizeMax = newValues.groupMax.Value;
+							}
+							if (newValues.spawnChance.HasValue && spawner.m_spawnChance != newValues.spawnChance.Value)
+							{
+								//updateLogMessage += $" Chance {spawner.m_spawnChance}% → {newValues.spawnChance.Value}%,";
+								spawner.m_spawnChance = newValues.spawnChance.Value;
+							}
+
+							//MarsarahTweaks.MLog($"Updated: | {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
+
+							// Remove trailing comma and log the update
+							//MarsarahTweaks.MLog(updateLogMessage.TrimEnd(','));
+						}
+						else if (originalSpawnData.TryGetValue(spawner.m_name, out var originalSpawn))
+						{
+							// Restore
+							spawner.m_maxSpawned = originalSpawn.maxSpawned;
+							spawner.m_groupSizeMin = originalSpawn.groupMin;
+							spawner.m_groupSizeMax = originalSpawn.groupMax;
+							spawner.m_spawnChance = originalSpawn.spawnChance;
+
+							//MarsarahTweaks.MLog($"Restored: | {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
+
+							originalSpawnData.Remove(spawner.m_name);
+						}
 					}
 				}
 			}

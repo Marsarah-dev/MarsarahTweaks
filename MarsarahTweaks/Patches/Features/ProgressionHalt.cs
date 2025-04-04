@@ -40,7 +40,7 @@ namespace MarsarahTweaks.Patches.Features
 						string bossName = bossEntry.Key;
 						List<string> restrictedResources = bossEntry.Value;
 
-						bool bossDefeated = GetBossDefeatedState(bossName);
+						bool bossDefeated = GlobalKeyChecker.isBossDefeated(bossName);
 
 						if (!bossDefeated)
 						{
@@ -86,7 +86,7 @@ namespace MarsarahTweaks.Patches.Features
 				{
 					string bossName = restriction.Key;
 					List<string> restrictedChests = restriction.Value;
-					bool bossDefeated = GetBossDefeatedState(bossName);
+					bool bossDefeated = GlobalKeyChecker.isBossDefeated(bossName);
 
 					if (!bossDefeated && restrictedChests.Contains(chestName))
 					{
@@ -212,7 +212,7 @@ namespace MarsarahTweaks.Patches.Features
 					string bossName = restriction.Key;
 					List<string> restrictedPickables = restriction.Value;
 
-					bool bossDefeated = GetBossDefeatedState(bossName);
+					bool bossDefeated = GlobalKeyChecker.isBossDefeated(bossName);
 
 					if (!bossDefeated && restrictedPickables.Contains(pickableName))
 					{
@@ -265,7 +265,7 @@ namespace MarsarahTweaks.Patches.Features
 					string bossName = restriction.Key;
 					List<string> restrictedPickableItems = restriction.Value;
 
-					bool bossDefeated = GetBossDefeatedState(bossName);
+					bool bossDefeated = GlobalKeyChecker.isBossDefeated(bossName);
 
 					if (!bossDefeated && restrictedPickableItems.Contains(pickableItemName))
 					{
@@ -277,20 +277,6 @@ namespace MarsarahTweaks.Patches.Features
 
 				return true; // Allow original method
 			}
-		}
-
-		private static bool GetBossDefeatedState(string bossName)
-		{
-			return bossName switch
-			{
-				"Eikthyr" => GlobalKeyChecker.eikthyrDefeated,
-				"The Elder" => GlobalKeyChecker.elderDefeated,
-				"Bonemass" => GlobalKeyChecker.bonemassDefeated,
-				"Moder" => GlobalKeyChecker.moderDefeated,
-				"Yagluth" => GlobalKeyChecker.yagluthDefeated,
-				"The Queen" => GlobalKeyChecker.queenDefeated,
-				_ => false
-			};
 		}
 
 		[HarmonyPatch(typeof(ZNetScene), "Update")]
@@ -574,12 +560,12 @@ namespace MarsarahTweaks.Patches.Features
 			};
 
 			// Tracking last defeated states to determine when changes occur
-			private static bool lastEikthyrDefeated = GetBossDefeatedState("Eikthyr");
-			private static bool lastElderDefeated = GetBossDefeatedState("The Elder");
-			private static bool lastBonemassDefeated = GetBossDefeatedState("Bonemass");
-			private static bool lastModerDefeated = GetBossDefeatedState("Moder");
-			private static bool lastYagluthDefeated = GetBossDefeatedState("Yagluth");
-			private static bool lastQueenDefeated = GetBossDefeatedState("The Queen");
+			private static bool lastEikthyrDefeated = GlobalKeyChecker.isBossDefeated("Eikthyr");
+			private static bool lastElderDefeated = GlobalKeyChecker.isBossDefeated("The Elder");
+			private static bool lastBonemassDefeated = GlobalKeyChecker.isBossDefeated("Bonemass");
+			private static bool lastModerDefeated = GlobalKeyChecker.isBossDefeated("Moder");
+			private static bool lastYagluthDefeated = GlobalKeyChecker.isBossDefeated("Yagluth");
+			private static bool lastQueenDefeated = GlobalKeyChecker.isBossDefeated("The Queen");
 
 			private static bool lastProgressionHaltState = ConfigManager.automaticProgressionHaltEnabled.Value;
 			private static bool lastTrophyDropsState = ConfigManager.betterTrophyDropsEnabled.Value;

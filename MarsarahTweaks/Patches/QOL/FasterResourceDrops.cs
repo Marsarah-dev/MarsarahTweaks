@@ -6,8 +6,6 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class FasterResourceDrops
 	{
-		private static Dictionary<string, float> ttlBackup = new Dictionary<string, float>();
-
 		[HarmonyPatch(typeof(Ragdoll), "Awake")]
 		class FasterResourceDrops_Patch
 		{
@@ -15,7 +13,8 @@ namespace MarsarahTweaks.Patches.QOL
 			{
 				if (__instance == null) return;
 
-				if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Do not run on clients
+				//if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Do not run on clients
+				// This never gets called on a dedicated server, so we make no checks
 
 				if (ConfigManager.fasterResourceDropsEnabled.Value)
 				{

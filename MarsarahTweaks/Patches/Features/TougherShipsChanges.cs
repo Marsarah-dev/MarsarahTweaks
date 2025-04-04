@@ -14,7 +14,9 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			static void Postfix(ZNetScene __instance)
 			{
-				if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Only run on server
+				//if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Only run on server
+				//if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+				// Run on both server and client
 
 				if (__instance == null) return;
 

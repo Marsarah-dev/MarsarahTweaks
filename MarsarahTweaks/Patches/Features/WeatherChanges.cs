@@ -14,7 +14,8 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			static void Postfix(EnvMan __instance)
 			{
-				if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Prevent running on clients
+				//if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Prevent running on clients
+				// Needs to run on both client and server - no checks made
 
 				if (ConfigManager.clearerWeatherEnabled.Value)
 				{
@@ -43,7 +44,7 @@ namespace MarsarahTweaks.Patches.Features
 				}
 			}
 
-			// Store weather weight changes in a dictionary
+			// Weather weight changes dictionary
 			static readonly Dictionary<(string biome, string env), float> weatherWeightChanges = new Dictionary<(string biome, string env), float>()
 			{
 				{ ("Meadows", "Misty"), 0.1f },
@@ -57,7 +58,7 @@ namespace MarsarahTweaks.Patches.Features
 				{ ("Plains", "Misty"), 0.1f },
 				{ ("Plains", "LightRain"), 0.1f },
 
-				{ ("Ocean", "Misty"), 0.05f }
+				{ ("Ocean", "Misty"), 0.5f }
 			};
 		}
 	}
