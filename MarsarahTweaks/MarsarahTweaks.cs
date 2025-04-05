@@ -16,13 +16,14 @@ namespace MarsarahTweaks
 		internal const string ModVersion = "0.4.2";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
+		private static readonly bool showLogs = true;
 
 		private readonly Harmony harmony = new Harmony(ModGUID);
 
 		void Awake()
 		{
 			ConfigManager.Init(Config);
-			CustomConsoleCommandHandler.Init(); // Register new console commands
+			//CustomConsoleCommandHandler.Init(); // Register new console commands
 			UISmartBiome.UpdateBiomeWeights(); // Set the correct biome weight dictionary at startup
 
 			harmony.PatchAll();
@@ -42,16 +43,19 @@ namespace MarsarahTweaks
 		// Logger =====================================================================
 		public static void MLog(string log, bool header = false, bool footer = false)
 		{
-			if (header)
+			if (showLogs)
 			{
-				Debug.Log("===================================================");
-			}
+				if (header)
+				{
+					Debug.Log("===================================================");
+				}
 
-			Debug.Log($"[Marsarah Tweaks] : {log}");
+				Debug.Log($"[Marsarah Tweaks] : {log}");
 
-			if (footer)
-			{
-				Debug.Log("===================================================");
+				if (footer)
+				{
+					Debug.Log("===================================================");
+				}
 			}
 		}
 	}

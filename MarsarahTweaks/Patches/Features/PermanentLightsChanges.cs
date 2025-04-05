@@ -26,12 +26,8 @@ namespace MarsarahTweaks.Patches.Features
 					}
 					/*else
 					{
-						// Reset fuel to behave normally when the config is disabled
-						if (__instance.m_maxFuel > 0)
-						{
-							float currentFuel = ___m_nview.GetZDO().GetFloat("fuel", __instance.m_maxFuel);
-							___m_nview.GetZDO().Set("fuel", Mathf.Min(currentFuel, __instance.m_maxFuel));
-						}
+						__instance.m_secPerFuel = 2f; // This makes fuel being consumed every 2s
+						//MarsarahTweaks.MLog($"No longer setting max fuel for {__instance.m_name}");
 					}*/
 				}
 			}
