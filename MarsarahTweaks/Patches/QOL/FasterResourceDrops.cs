@@ -13,10 +13,9 @@ namespace MarsarahTweaks.Patches.QOL
 			{
 				if (__instance == null) return;
 
-				//if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Do not run on clients
 				// This never gets called on a dedicated server, so we make no checks
 
-				if (ConfigManager.fasterResourceDropsEnabled.Value)
+				if (ConfigManager.FasterResourceDropsEnabled.Value)
 				{
 					if (___m_ttl > 5f)
 					{

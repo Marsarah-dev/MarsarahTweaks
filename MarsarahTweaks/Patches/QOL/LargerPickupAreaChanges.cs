@@ -12,7 +12,7 @@ namespace MarsarahTweaks.Patches.QOL
 		[HarmonyPatch(typeof(Player), "Awake")]
 		class LargerPickupArea_Patch
 		{
-			static void Prefix(Player __instance)
+			private static void Prefix(Player __instance)
 			{
 				if (__instance == null) return;
 
@@ -26,7 +26,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 		public static void UpdatePickupArea(Player player, bool wasChanged)
 		{
-			if (ConfigManager.largerPickupAreaEnabled.Value)
+			if (ConfigManager.LargerPickupAreaEnabled.Value)
 			{
 				if (originalPickupArea == -1f)
 				{

@@ -27,7 +27,7 @@ namespace MarsarahTweaks.Patches.Features
 
 			static bool Prefix(Piece __instance)
 			{
-				if (ConfigManager.automaticProgressionHaltEnabled.Value)
+				if (ConfigManager.AutomaticProgressionHaltEnabled.Value)
 				{
 					if (__instance.IsPlacedByPlayer())
 					{
@@ -40,7 +40,7 @@ namespace MarsarahTweaks.Patches.Features
 						string bossName = bossEntry.Key;
 						List<string> restrictedResources = bossEntry.Value;
 
-						bool bossDefeated = GlobalKeyChecker.isBossDefeated(bossName);
+						bool bossDefeated = GlobalKeyChecker.IsBossDefeated(bossName);
 
 						if (!bossDefeated)
 						{
@@ -63,7 +63,7 @@ namespace MarsarahTweaks.Patches.Features
 		}
 
 		[HarmonyPatch(typeof(Container), "Interact")]
-		public static class ContainerInteract_Patch
+		static class ContainerInteract_Patch
 		{
 			private static readonly Dictionary<string, List<string>> chestResourceRestrictions = new Dictionary<string, List<string>>()
 			{
@@ -79,14 +79,14 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (hold) return true; // Allow normal behavior for hold interactions
 
-				if (!ConfigManager.automaticProgressionHaltEnabled.Value) return true; // Skip if disabled
+				if (!ConfigManager.AutomaticProgressionHaltEnabled.Value) return true; // Skip if disabled
 
 				string chestName = __instance.name.Replace("(Clone)", "").Trim();
 				foreach (var restriction in chestResourceRestrictions)
 				{
 					string bossName = restriction.Key;
 					List<string> restrictedChests = restriction.Value;
-					bool bossDefeated = GlobalKeyChecker.isBossDefeated(bossName);
+					bool bossDefeated = GlobalKeyChecker.IsBossDefeated(bossName);
 
 					if (!bossDefeated && restrictedChests.Contains(chestName))
 					{
@@ -102,7 +102,7 @@ namespace MarsarahTweaks.Patches.Features
 
 
 		[HarmonyPatch(typeof(Pickable), "Interact")]
-		public static class PickableInteract_Patch
+		static class PickableInteract_Patch
 		{
 			private static readonly Dictionary<string, List<string>> pickableResourceRestrictions = new Dictionary<string, List<string>>()
 			{
@@ -183,7 +183,7 @@ namespace MarsarahTweaks.Patches.Features
 
 			static bool Prefix(Pickable __instance, Humanoid character, ref bool __result)
 			{
-				if (!ConfigManager.automaticProgressionHaltEnabled.Value) return true;
+				if (!ConfigManager.AutomaticProgressionHaltEnabled.Value) return true;
 
 				// Access private fields via reflection
 				FieldInfo nviewField = typeof(Pickable).GetField("m_nview", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -214,7 +214,7 @@ namespace MarsarahTweaks.Patches.Features
 					string bossName = restriction.Key;
 					List<string> restrictedPickables = restriction.Value;
 
-					bool bossDefeated = GlobalKeyChecker.isBossDefeated(bossName);
+					bool bossDefeated = GlobalKeyChecker.IsBossDefeated(bossName);
 
 					if (!bossDefeated && restrictedPickables.Contains(pickableName))
 					{
@@ -229,7 +229,7 @@ namespace MarsarahTweaks.Patches.Features
 		}
 
 		[HarmonyPatch(typeof(PickableItem), "Interact")]
-		public static class PickableItemInteract_Patch
+		static class PickableItemInteract_Patch
 		{
 			private static readonly Dictionary<string, List<string>> pickableItemResourceRestrictions = new Dictionary<string, List<string>>()
 			{
@@ -240,7 +240,7 @@ namespace MarsarahTweaks.Patches.Features
 
 			static bool Prefix(Pickable __instance, Humanoid character, ref bool __result)
 			{
-				if (!ConfigManager.automaticProgressionHaltEnabled.Value) return true;
+				if (!ConfigManager.AutomaticProgressionHaltEnabled.Value) return true;
 
 				// Access private fields via reflection
 				FieldInfo nviewField = typeof(PickableItem).GetField("m_nview", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -267,7 +267,7 @@ namespace MarsarahTweaks.Patches.Features
 					string bossName = restriction.Key;
 					List<string> restrictedPickableItems = restriction.Value;
 
-					bool bossDefeated = GlobalKeyChecker.isBossDefeated(bossName);
+					bool bossDefeated = GlobalKeyChecker.IsBossDefeated(bossName);
 
 					if (!bossDefeated && restrictedPickableItems.Contains(pickableItemName))
 					{
@@ -562,15 +562,15 @@ namespace MarsarahTweaks.Patches.Features
 			};
 
 			// Tracking last defeated states to determine when changes occur
-			private static bool lastEikthyrDefeated = GlobalKeyChecker.isBossDefeated("Eikthyr");
-			private static bool lastElderDefeated = GlobalKeyChecker.isBossDefeated("The Elder");
-			private static bool lastBonemassDefeated = GlobalKeyChecker.isBossDefeated("Bonemass");
-			private static bool lastModerDefeated = GlobalKeyChecker.isBossDefeated("Moder");
-			private static bool lastYagluthDefeated = GlobalKeyChecker.isBossDefeated("Yagluth");
-			private static bool lastQueenDefeated = GlobalKeyChecker.isBossDefeated("The Queen");
+			private static bool lastEikthyrDefeated = GlobalKeyChecker.IsBossDefeated("Eikthyr");
+			private static bool lastElderDefeated = GlobalKeyChecker.IsBossDefeated("The Elder");
+			private static bool lastBonemassDefeated = GlobalKeyChecker.IsBossDefeated("Bonemass");
+			private static bool lastModerDefeated = GlobalKeyChecker.IsBossDefeated("Moder");
+			private static bool lastYagluthDefeated = GlobalKeyChecker.IsBossDefeated("Yagluth");
+			private static bool lastQueenDefeated = GlobalKeyChecker.IsBossDefeated("The Queen");
 
-			private static bool lastProgressionHaltState = ConfigManager.automaticProgressionHaltEnabled.Value;
-			private static bool lastTrophyDropsState = ConfigManager.betterTrophyDropsEnabled.Value;
+			private static bool lastProgressionHaltState = ConfigManager.AutomaticProgressionHaltEnabled.Value;
+			private static bool lastTrophyDropsState = ConfigManager.BetterTrophyDropsEnabled.Value;
 
 			static void Postfix(ref ZNetScene __instance)
 			{
@@ -578,40 +578,40 @@ namespace MarsarahTweaks.Patches.Features
 
 				bool bossStateChanged = false;
 
-				if (GlobalKeyChecker.eikthyrDefeated != lastEikthyrDefeated)
+				if (GlobalKeyChecker.EikthyrDefeated != lastEikthyrDefeated)
 				{
-					lastEikthyrDefeated = GlobalKeyChecker.eikthyrDefeated;
+					lastEikthyrDefeated = GlobalKeyChecker.EikthyrDefeated;
 					bossStateChanged = true;
 				}
-				if (GlobalKeyChecker.elderDefeated != lastElderDefeated)
+				if (GlobalKeyChecker.ElderDefeated != lastElderDefeated)
 				{
-					lastElderDefeated = GlobalKeyChecker.elderDefeated;
+					lastElderDefeated = GlobalKeyChecker.ElderDefeated;
 					bossStateChanged = true;
 				}
-				if (GlobalKeyChecker.bonemassDefeated != lastBonemassDefeated)
+				if (GlobalKeyChecker.BonemassDefeated != lastBonemassDefeated)
 				{
-					lastBonemassDefeated = GlobalKeyChecker.bonemassDefeated;
+					lastBonemassDefeated = GlobalKeyChecker.BonemassDefeated;
 					bossStateChanged = true;
 				}
-				if (GlobalKeyChecker.moderDefeated != lastModerDefeated)
+				if (GlobalKeyChecker.ModerDefeated != lastModerDefeated)
 				{
-					lastModerDefeated = GlobalKeyChecker.moderDefeated;
+					lastModerDefeated = GlobalKeyChecker.ModerDefeated;
 					bossStateChanged = true;
 				}
-				if (GlobalKeyChecker.yagluthDefeated != lastYagluthDefeated)
+				if (GlobalKeyChecker.YagluthDefeated != lastYagluthDefeated)
 				{
-					lastYagluthDefeated = GlobalKeyChecker.yagluthDefeated;
+					lastYagluthDefeated = GlobalKeyChecker.YagluthDefeated;
 					bossStateChanged = true;
 				}
-				if (GlobalKeyChecker.queenDefeated != lastQueenDefeated)
+				if (GlobalKeyChecker.QueenDefeated != lastQueenDefeated)
 				{
-					lastQueenDefeated = GlobalKeyChecker.queenDefeated;
+					lastQueenDefeated = GlobalKeyChecker.QueenDefeated;
 					bossStateChanged = true;
 				}
 
 				// Check if Progression Halt was toggled
-				bool progressionHaltNowEnabled = ConfigManager.automaticProgressionHaltEnabled.Value;
-				bool trophyDropsNowEnabled = ConfigManager.betterTrophyDropsEnabled.Value;
+				bool progressionHaltNowEnabled = ConfigManager.AutomaticProgressionHaltEnabled.Value;
+				bool trophyDropsNowEnabled = ConfigManager.BetterTrophyDropsEnabled.Value;
 				if (progressionHaltNowEnabled != lastProgressionHaltState)
 				{
 					lastProgressionHaltState = progressionHaltNowEnabled;
@@ -623,23 +623,23 @@ namespace MarsarahTweaks.Patches.Features
 						if (trophyDropsNowEnabled)
 						{
 							//MarsarahTweaks.MLog($"Restoring Trophy Drops Special");
-							TrophyDropsChanges.restoreTrophyDrops(__instance);
+							TrophyDropsChanges.RestoreTrophyDrops(__instance);
 						}
 
 						// If Progression Halt was turned ON mid-game, run it without checking boss states or drops set
 						//MarsarahTweaks.MLog($"Setting up Progression Halt due to re-enabling");
-						handleProgressionHalt(__instance);
+						HandleProgressionHalt(__instance);
 						dropsSet = true;
 					}
 					else
 					{
 						// If Progression Halt was turned OFF mid-game, restore original drops
 						//MarsarahTweaks.MLog($"Restoring Progression Halt to default entirely");
-						restoreProgressionHalt(__instance);
+						RestoreProgressionHalt(__instance);
 
 						// Run Trophy Drops here
 						//MarsarahTweaks.MLog($"Setting up Trophy Drops due to Progression Halt being off");
-						TrophyDropsChanges.updateTrophyDrops(__instance);
+						TrophyDropsChanges.UpdateTrophyDrops(__instance);
 					}
 				}
 
@@ -649,7 +649,7 @@ namespace MarsarahTweaks.Patches.Features
 					if (!dropsSet || bossStateChanged)
 					{
 						//MarsarahTweaks.MLog($"Setting up Progression Halt standard way");
-						handleProgressionHalt(__instance);
+						HandleProgressionHalt(__instance);
 						dropsSet = true;
 					}
 				}
@@ -662,126 +662,126 @@ namespace MarsarahTweaks.Patches.Features
 					// If Trophy Drops was toggled mid-game, run it without checking Progression Halt state (since it checks inside) or trophyDropsSet
 					// This needs to be ran regardless if it's on or off
 					//MarsarahTweaks.MLog($"Setting up Trophy Drops due to toggling");
-					TrophyDropsChanges.updateTrophyDrops(__instance);
+					TrophyDropsChanges.UpdateTrophyDrops(__instance);
 				}
 
 				// Trophy Drops logic (ONLY run once on game start OR when Progression Halt is enabled and bosses change)
 				if (!trophyDropsSet || (progressionHaltNowEnabled && bossStateChanged))
 				{
 					//MarsarahTweaks.MLog($"Setting up Trophy Drops standard way");
-					TrophyDropsChanges.updateTrophyDrops(__instance);
+					TrophyDropsChanges.UpdateTrophyDrops(__instance);
 					trophyDropsSet = true;
 				}
 			}
 
 			// =======================================================================
 			// Progression Halt patch handler
-			private static void handleProgressionHalt (ZNetScene instance)
+			private static void HandleProgressionHalt (ZNetScene instance)
 			{
-				if (!GlobalKeyChecker.eikthyrDefeated)
+				if (!GlobalKeyChecker.EikthyrDefeated)
 				{
-					haltDropsForBoss(instance, "Eikthyr");
+					HaltDropsForBoss(instance, "Eikthyr");
 				}
 				else
 				{
-					restoreDropsForBoss(instance, "Eikthyr");
+					RestoreDropsForBoss(instance, "Eikthyr");
 				}
 
-				if (!GlobalKeyChecker.elderDefeated)
+				if (!GlobalKeyChecker.ElderDefeated)
 				{
-					haltDropsForBoss(instance, "The Elder");
+					HaltDropsForBoss(instance, "The Elder");
 				}
 				else
 				{
-					restoreDropsForBoss(instance, "The Elder");
+					RestoreDropsForBoss(instance, "The Elder");
 				}
 
-				if (!GlobalKeyChecker.bonemassDefeated)
+				if (!GlobalKeyChecker.BonemassDefeated)
 				{
-					haltDropsForBoss(instance, "Bonemass");
-					haltDrops("MountainKit");
-					haltDrops("mountainkit");
+					HaltDropsForBoss(instance, "Bonemass");
+					HaltDrops("MountainKit");
+					HaltDrops("mountainkit");
 				}
 				else
 				{
-					restoreDropsForBoss(instance, "Bonemass");
-					restoreDrops("MountainKit");
-					restoreDrops("mountainkit");
+					RestoreDropsForBoss(instance, "Bonemass");
+					RestoreDrops("MountainKit");
+					RestoreDrops("mountainkit");
 				}
 
-				if (!GlobalKeyChecker.moderDefeated)
+				if (!GlobalKeyChecker.ModerDefeated)
 				{
-					haltDropsForBoss(instance, "Moder");
+					HaltDropsForBoss(instance, "Moder");
 				}
 				else
 				{
-					restoreDropsForBoss(instance, "Moder");
+					RestoreDropsForBoss(instance, "Moder");
 				}
 
-				if (!GlobalKeyChecker.yagluthDefeated)
+				if (!GlobalKeyChecker.YagluthDefeated)
 				{
-					haltDropsForBoss(instance, "Yagluth");
-					haltDrops("dvergrprops");
-					haltDrops("dvergrtown");
+					HaltDropsForBoss(instance, "Yagluth");
+					HaltDrops("dvergrprops");
+					HaltDrops("dvergrtown");
 				}
 				else
 				{
-					restoreDropsForBoss(instance, "Yagluth");
-					restoreDrops("dvergrprops");
-					restoreDrops("dvergrtown");
+					RestoreDropsForBoss(instance, "Yagluth");
+					RestoreDrops("dvergrprops");
+					RestoreDrops("dvergrtown");
 				}
 
-				if (!GlobalKeyChecker.queenDefeated)
+				if (!GlobalKeyChecker.QueenDefeated)
 				{
-					haltDropsForBoss(instance, "The Queen");
+					HaltDropsForBoss(instance, "The Queen");
 				}
 				else
 				{
-					restoreDropsForBoss(instance, "The Queen");
+					RestoreDropsForBoss(instance, "The Queen");
 				}
 			}
 
 			// Restore all Progression Halt data
-			private static void  restoreProgressionHalt(ZNetScene instance)
+			private static void  RestoreProgressionHalt(ZNetScene instance)
 			{
-				restoreDropsForBoss(instance, "Eikthyr");
-				restoreDropsForBoss(instance, "The Elder");
-				restoreDropsForBoss(instance, "Bonemass");
-				restoreDrops("MountainKit");
-				restoreDrops("mountainkit");
-				restoreDropsForBoss(instance, "Moder");
-				restoreDropsForBoss(instance, "Yagluth");
-				restoreDrops("dvergrprops");
-				restoreDrops("dvergrtown");
-				restoreDropsForBoss(instance, "The Queen");
+				RestoreDropsForBoss(instance, "Eikthyr");
+				RestoreDropsForBoss(instance, "The Elder");
+				RestoreDropsForBoss(instance, "Bonemass");
+				RestoreDrops("MountainKit");
+				RestoreDrops("mountainkit");
+				RestoreDropsForBoss(instance, "Moder");
+				RestoreDropsForBoss(instance, "Yagluth");
+				RestoreDrops("dvergrprops");
+				RestoreDrops("dvergrtown");
+				RestoreDropsForBoss(instance, "The Queen");
 			}
 
 			// Main Halt Drops for Boss
-			private static void haltDropsForBoss (ZNetScene instance, string bossName)
+			private static void HaltDropsForBoss (ZNetScene instance, string bossName)
 			{
 				if (bossPrefabHolds.TryGetValue(bossName, out List<string> prefabStrings))
 				{
 					foreach (string prefabString in prefabStrings)
 					{
-						haltDrops(instance.GetPrefab(prefabString));
+						HaltDrops(instance.GetPrefab(prefabString));
 					}
 				}
 			}
 
-			// Overloaded haltDrops method to handle string-based StartsWith
-			private static void haltDrops(string prefabPrefix)
+			// Overloaded HaltDrops method to handle string-based StartsWith
+			private static void HaltDrops(string prefabPrefix)
 			{
 				foreach (GameObject prefab in ZNetScene.instance.m_prefabs)
 				{
 					if (prefab.name.StartsWith(prefabPrefix))
 					{
-						haltDrops(prefab); // Call the regular haltDrops with the GameObject
+						HaltDrops(prefab); // Call the regular HaltDrops with the GameObject
 					}
 				}
 			}
 
 			// HaltDrops main handler
-			private static void haltDrops(GameObject prefab)
+			private static void HaltDrops(GameObject prefab)
 			{
 				if (prefab == null)
 				{
@@ -792,12 +792,12 @@ namespace MarsarahTweaks.Patches.Features
 				// Dictionary mapping component types to their respective handlers
 				Dictionary<Type, Func<GameObject, bool>> dropHandlers = new Dictionary<Type, Func<GameObject, bool>>()
 				{
-					{ typeof(CharacterDrop), haltDropsMob },
-					{ typeof(MineRock), haltDropsMine },
-					{ typeof(MineRock5), haltDropsMine5 },
-					{ typeof(DropOnDestroyed), haltDropsOnDestroyed },
-					{ typeof(Destructible), haltDropsDestructible },
-					{ typeof(TreeLog), haltDropsTreeLog }
+					{ typeof(CharacterDrop), HaltDropsMob },
+					{ typeof(MineRock), HaltDropsMine },
+					{ typeof(MineRock5), HaltDropsMine5 },
+					{ typeof(DropOnDestroyed), HaltDropsOnDestroyed },
+					{ typeof(Destructible), HaltDropsDestructible },
+					{ typeof(TreeLog), HaltDropsTreeLog }
 				};
 
 				//bool modified = false; // Track if any drop was halted
@@ -828,7 +828,7 @@ namespace MarsarahTweaks.Patches.Features
 			}
 
 			// Halt Drops X
-			private static bool haltDropsMob(GameObject prefab)
+			private static bool HaltDropsMob(GameObject prefab)
 			{
 				CharacterDrop characterDrop = prefab.GetComponent<CharacterDrop>();
 				if (characterDrop != null)
@@ -858,7 +858,7 @@ namespace MarsarahTweaks.Patches.Features
 				return false;
 			}
 
-			private static bool haltDropsMine(GameObject prefab)
+			private static bool HaltDropsMine(GameObject prefab)
 			{
 				MineRock prefabComponent = prefab.GetComponent<MineRock>();
 				if (prefabComponent != null)
@@ -875,7 +875,7 @@ namespace MarsarahTweaks.Patches.Features
 				return false;
 			}
 
-			private static bool haltDropsMine5(GameObject prefab)
+			private static bool HaltDropsMine5(GameObject prefab)
 			{
 				MineRock5 prefabComponent = prefab.GetComponent<MineRock5>();
 				if (prefabComponent != null)
@@ -892,7 +892,7 @@ namespace MarsarahTweaks.Patches.Features
 				return false;
 			}
 
-			private static bool haltDropsOnDestroyed(GameObject prefab)
+			private static bool HaltDropsOnDestroyed(GameObject prefab)
 			{
 				DropOnDestroyed prefabComponent = prefab.GetComponent<DropOnDestroyed>();
 				if (prefabComponent != null)
@@ -909,7 +909,7 @@ namespace MarsarahTweaks.Patches.Features
 				return false;
 			}
 
-			private static bool haltDropsDestructible(GameObject prefab)
+			private static bool HaltDropsDestructible(GameObject prefab)
 			{
 				Destructible prefabComponent = prefab.GetComponent<Destructible>();
 				if (prefabComponent != null)
@@ -926,7 +926,7 @@ namespace MarsarahTweaks.Patches.Features
 				return false;
 			}
 
-			private static bool haltDropsTreeLog(GameObject prefab)
+			private static bool HaltDropsTreeLog(GameObject prefab)
 			{
 				TreeLog prefabComponent = prefab.GetComponent<TreeLog>();
 				if (prefabComponent != null)
@@ -945,31 +945,31 @@ namespace MarsarahTweaks.Patches.Features
 
 			// =======================================================================
 			// Main Restore Drops for Boss
-			private static void restoreDropsForBoss(ZNetScene instance, string bossName)
+			private static void RestoreDropsForBoss(ZNetScene instance, string bossName)
 			{
 				if (bossPrefabHolds.TryGetValue(bossName, out List<string> prefabStrings))
 				{
 					foreach (string prefabString in prefabStrings)
 					{
-						restoreDrops(instance.GetPrefab(prefabString));
+						RestoreDrops(instance.GetPrefab(prefabString));
 					}
 				}
 			}
 
-			// Overloaded restoreDrops method to handle string-based StartsWith
-			private static void restoreDrops(string prefabPrefix)
+			// Overloaded RestoreDrops method to handle string-based StartsWith
+			private static void RestoreDrops(string prefabPrefix)
 			{
 				foreach (GameObject prefab in ZNetScene.instance.m_prefabs)
 				{
 					if (prefab.name.StartsWith(prefabPrefix))
 					{
-						restoreDrops(prefab); // Call the regular restoreDrops with the GameObject
+						RestoreDrops(prefab); // Call the regular RestoreDrops with the GameObject
 					}
 				}
 			}
 
 			// RestoreDrops main handler
-			private static void restoreDrops(GameObject prefab)
+			private static void RestoreDrops(GameObject prefab)
 			{
 				if (prefab == null)
 				{
@@ -980,12 +980,12 @@ namespace MarsarahTweaks.Patches.Features
 				// Dictionary mapping component types to their respective restore handlers
 				Dictionary<Type, Func<GameObject, bool>> dropHandlers = new Dictionary<Type, Func<GameObject, bool>>()
 				{
-					{ typeof(CharacterDrop), restoreDropsMob },
-					{ typeof(MineRock), restoreDropsMine },
-					{ typeof(MineRock5), restoreDropsMine5 },
-					{ typeof(DropOnDestroyed), restoreDropsOnDestroyed },
-					{ typeof(Destructible), restoreDropsDestructible },
-					{ typeof(TreeLog), restoreDropsTreeLog }
+					{ typeof(CharacterDrop), RestoreDropsMob },
+					{ typeof(MineRock), RestoreDropsMine },
+					{ typeof(MineRock5), RestoreDropsMine5 },
+					{ typeof(DropOnDestroyed), RestoreDropsOnDestroyed },
+					{ typeof(Destructible), RestoreDropsDestructible },
+					{ typeof(TreeLog), RestoreDropsTreeLog }
 				};
 
 				// Iterate through all handlers and apply every matching one
@@ -999,7 +999,7 @@ namespace MarsarahTweaks.Patches.Features
 			}
 
 			// Restore Drops X
-			private static bool restoreDropsMob(GameObject prefab)
+			private static bool RestoreDropsMob(GameObject prefab)
 			{
 				CharacterDrop characterDrop = prefab.GetComponent<CharacterDrop>();
 				if (characterDrop != null)
@@ -1024,7 +1024,7 @@ namespace MarsarahTweaks.Patches.Features
 				return false;
 			}
 
-			private static bool restoreDropsMine(GameObject prefab)
+			private static bool RestoreDropsMine(GameObject prefab)
 			{
 				MineRock prefabComponent = prefab.GetComponent<MineRock>();
 				if (prefabComponent != null)
@@ -1042,7 +1042,7 @@ namespace MarsarahTweaks.Patches.Features
 				return false;
 			}
 
-			private static bool restoreDropsMine5(GameObject prefab)
+			private static bool RestoreDropsMine5(GameObject prefab)
 			{
 				MineRock5 prefabComponent = prefab.GetComponent<MineRock5>();
 				if (prefabComponent != null)
@@ -1060,7 +1060,7 @@ namespace MarsarahTweaks.Patches.Features
 				return false;
 			}
 
-			private static bool restoreDropsOnDestroyed(GameObject prefab)
+			private static bool RestoreDropsOnDestroyed(GameObject prefab)
 			{
 				DropOnDestroyed prefabComponent = prefab.GetComponent<DropOnDestroyed>();
 				if (prefabComponent != null)
@@ -1078,7 +1078,7 @@ namespace MarsarahTweaks.Patches.Features
 				return false;
 			}
 
-			private static bool restoreDropsDestructible(GameObject prefab)
+			private static bool RestoreDropsDestructible(GameObject prefab)
 			{
 				Destructible prefabComponent = prefab.GetComponent<Destructible>();
 				if (prefabComponent != null)
@@ -1096,7 +1096,7 @@ namespace MarsarahTweaks.Patches.Features
 				return false;
 			}
 
-			private static bool restoreDropsTreeLog(GameObject prefab)
+			private static bool RestoreDropsTreeLog(GameObject prefab)
 			{
 				TreeLog prefabComponent = prefab.GetComponent<TreeLog>();
 				if (prefabComponent != null)

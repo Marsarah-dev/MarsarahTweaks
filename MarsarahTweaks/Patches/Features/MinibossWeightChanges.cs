@@ -10,18 +10,18 @@ namespace MarsarahTweaks.Patches.Features
 	internal class MinibossWeightChanges
 	{
 		[HarmonyPatch(typeof(Player), "OnSpawned")]
-		public class MinibossCarryWeight_Patch
+		class MinibossCarryWeight_Patch
 		{
-			public static void Postfix(Player __instance)
+			private static void Postfix(Player __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-				if (__instance == null || !ConfigManager.minibossWeightEnabled.Value) return;
+				if (__instance == null || !ConfigManager.MinibossWeightEnabled.Value) return;
 
 				int defeatedMinibosses = 0;
-				if (GlobalKeyChecker.brennaDefeated) defeatedMinibosses++;
-				if (GlobalKeyChecker.geirrhafaDefeated) defeatedMinibosses++;
-				if (GlobalKeyChecker.thungrNZilDefeated) defeatedMinibosses++;
+				if (GlobalKeyChecker.BrennaDefeated) defeatedMinibosses++;
+				if (GlobalKeyChecker.GeirrhafaDefeated) defeatedMinibosses++;
+				if (GlobalKeyChecker.ThungrNZilDefeated) defeatedMinibosses++;
 
 				// Adjust carry weight based on minibosses defeated
 				__instance.m_maxCarryWeight = defeatedMinibosses switch

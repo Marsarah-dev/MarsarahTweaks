@@ -8,7 +8,7 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class ForsakenPowers_Patch
 		{
-			static void Postfix(ref ObjectDB __instance)
+			private static void Postfix(ref ObjectDB __instance)
 			{
 				if (__instance == null) return;
 
@@ -40,7 +40,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				var (newDuration, newCooldown) = modifiedValues[statusEffect.name];
 
-				if (ConfigManager.longerForsakenPowersEnabled.Value)
+				if (ConfigManager.LongerForsakenPowersEnabled.Value)
 				{
 					if (!originalValues.ContainsKey(statusEffect.name))
 					{

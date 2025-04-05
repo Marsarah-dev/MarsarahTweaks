@@ -58,7 +58,7 @@ namespace MarsarahTweaks.Patches.UI
 
 		public static void UpdateBiomeWeights()
 		{
-			biomeWeightsDict = ConfigManager.gearUpgradeUnlockEnabled.Value ? unlockedBiomeWeights : defaultBiomeWeights;
+			biomeWeightsDict = ConfigManager.GearUpgradeUnlockEnabled.Value ? unlockedBiomeWeights : defaultBiomeWeights;
 		}
 
 		private static Dictionary<string, int> armorWeightsDict = new Dictionary<string, int>()
@@ -133,13 +133,13 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Player), "Update")]
 		class SmartBiome_PlayerPatch
 		{
-			static void Prefix(ref Player ___m_localPlayer)
+			private static void Prefix(ref Player ___m_localPlayer)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (___m_localPlayer == null) return;
 
-				if (ConfigManager.showSmartBiome.Value && showUI)
+				if (ConfigManager.ShowSmartBiome.Value && showUI)
 				{
 					playerArmor = ___m_localPlayer.GetBodyArmor();
 					Inventory playerInventory = ___m_localPlayer.GetInventory();
@@ -191,11 +191,11 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Minimap), "UpdateBiome")]
 		class MoveBiomeMinimapText_Patch
 		{
-			static void Prefix(ref Text ___m_biomeNameSmall, ref Player player)
+			private static void Prefix(ref Text ___m_biomeNameSmall, ref Player player)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
-				if (ConfigManager.showSmartBiome.Value && showUI)
+				if (ConfigManager.ShowSmartBiome.Value && showUI)
 				{
 					___m_biomeNameSmall.enabled = false;
 
@@ -207,15 +207,15 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
-		public static class SmartBiome_HUDUpdatePatch
+		class SmartBiome_HUDUpdatePatch
 		{
-			public static void Postfix(Hud __instance)
+			private static void Postfix(Hud __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (__instance == null) return;
 
-				if (ConfigManager.showSmartBiome.Value)
+				if (ConfigManager.ShowSmartBiome.Value)
 				{
 					CreateUI(__instance); // Create UI if missing
 

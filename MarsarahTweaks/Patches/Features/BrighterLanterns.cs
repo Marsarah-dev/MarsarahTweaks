@@ -13,7 +13,7 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
 		class BrighterLanterns_Patch
 		{
-			static void Postfix(ZNetScene __instance)
+			private static void Postfix(ZNetScene __instance)
 			{
 				if (__instance == null) return;
 
@@ -27,7 +27,7 @@ namespace MarsarahTweaks.Patches.Features
 
 		public static void UpdateLanterns(ZNetScene znScene)
 		{
-			if (ConfigManager.brighterLanternsEnabled.Value)
+			if (ConfigManager.BrighterLanternsEnabled.Value)
 			{
 				// Defaults: intensity = 1.5, range = 6, flickerIntensity = 0.1, flickerSpeed = 10
 

@@ -9,16 +9,16 @@ namespace MarsarahTweaks.Patches
 {
 	public static class GlobalKeyChecker
 	{
-		public static bool eikthyrDefeated = false;
-		public static bool elderDefeated = false;
-		public static bool bonemassDefeated = false;
-		public static bool moderDefeated = false;
-		public static bool yagluthDefeated = false;
-		public static bool queenDefeated = false;
-		public static bool faderDefeated = false;
-		public static bool brennaDefeated = false;
-		public static bool geirrhafaDefeated = false;
-		public static bool thungrNZilDefeated = false;
+		public static bool EikthyrDefeated = false;
+		public static bool ElderDefeated = false;
+		public static bool BonemassDefeated = false;
+		public static bool ModerDefeated = false;
+		public static bool YagluthDefeated = false;
+		public static bool QueenDefeated = false;
+		public static bool FaderDefeated = false;
+		public static bool BrennaDefeated = false;
+		public static bool GeirrhafaDefeated = false;
+		public static bool ThungrNZilDefeated = false;
 
 		// Dictionary to store global key states
 		private static readonly Dictionary<string, bool> globalKeyStates = new Dictionary<string, bool>()
@@ -56,20 +56,20 @@ namespace MarsarahTweaks.Patches
 		{
 			static void Postfix(ZoneSystem __instance)
 			{
-				if (!ConfigManager.clearMistlandsEnabled.Value) return;
+				if (!ConfigManager.ClearMistlandsEnabled.Value) return;
 
 				UpdateDefeatedStates(__instance);
 
-				eikthyrDefeated = checkGlobalKey("defeated_eikthyr");
-				elderDefeated = checkGlobalKey("defeated_gdking");
-				bonemassDefeated = checkGlobalKey("defeated_bonemass");
-				moderDefeated = checkGlobalKey("defeated_dragon");
-				yagluthDefeated = checkGlobalKey("defeated_goblinking");
-				queenDefeated = checkGlobalKey("defeated_queen");
-				faderDefeated = checkGlobalKey("defeated_fader");
-				brennaDefeated = checkGlobalKey("hildir1");
-				geirrhafaDefeated = checkGlobalKey("hildir2");
-				thungrNZilDefeated = checkGlobalKey("hildir3");
+				EikthyrDefeated = CheckGlobalKey("defeated_eikthyr");
+				ElderDefeated = CheckGlobalKey("defeated_gdking");
+				BonemassDefeated = CheckGlobalKey("defeated_bonemass");
+				ModerDefeated = CheckGlobalKey("defeated_dragon");
+				YagluthDefeated = CheckGlobalKey("defeated_goblinking");
+				QueenDefeated = CheckGlobalKey("defeated_queen");
+				FaderDefeated = CheckGlobalKey("defeated_fader");
+				BrennaDefeated = CheckGlobalKey("hildir1");
+				GeirrhafaDefeated = CheckGlobalKey("hildir2");
+				ThungrNZilDefeated = CheckGlobalKey("hildir3");
 			}
 		}
 
@@ -82,18 +82,17 @@ namespace MarsarahTweaks.Patches
 				if (globalKeyStates[key] != keyIsPresent)
 				{
 					globalKeyStates[key] = keyIsPresent;
-					//MarsarahTweaks.MLog($"Global key: {key} changed: {keyIsPresent}");
 				}
 			}
 		}
 
-		private static bool checkGlobalKey(string globalKey) => globalKeyStates.ContainsKey(globalKey) && globalKeyStates[globalKey];
+		private static bool CheckGlobalKey(string globalKey) => globalKeyStates.ContainsKey(globalKey) && globalKeyStates[globalKey];
 
-		public static bool isBossDefeated(string boss)
+		public static bool IsBossDefeated(string boss)
 		{
 			if (bossToGlobalKey.TryGetValue(boss, out string globalKey))
 			{
-				return checkGlobalKey(globalKey);
+				return CheckGlobalKey(globalKey);
 			}
 
 			MarsarahTweaks.MLog($"[Warning] IsBossDefeated called with unknown boss: {boss}");

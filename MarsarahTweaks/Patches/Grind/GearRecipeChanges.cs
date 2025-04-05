@@ -14,13 +14,13 @@ namespace MarsarahTweaks.Patches.Grind
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearRecipeModifications_Patch
 		{
-			static void Postfix(ref ObjectDB __instance)
+			private static void Postfix(ref ObjectDB __instance)
 			{
 				if (__instance == null) return;
 
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-				if (ConfigManager.gearRecipeAmountsEnabled.Value || ConfigManager.gearRecipeMaterialsEnabled.Value)
+				if (ConfigManager.GearRecipeAmountsEnabled.Value || ConfigManager.GearRecipeMaterialsEnabled.Value)
 				{
 					UpdateGearRecipes(__instance, false, false);
 				}
@@ -1072,9 +1072,9 @@ namespace MarsarahTweaks.Patches.Grind
 			// Apply changes ============================================================
 			foreach (Recipe recipe in objDB.m_recipes)
 			{
-				bool hasGearAmountsChange = ConfigManager.gearRecipeAmountsEnabled.Value && newGearRecipesAmounts.ContainsKey(recipe.name);
-				bool hasGearMaterialsChange = ConfigManager.gearRecipeMaterialsEnabled.Value && newGearRecipesMaterials.ContainsKey(recipe.name);
-				bool hasLinenCapeChange = ConfigManager.earlyLinenCapeEnabled.Value && recipe.name == "Recipe_CapeLinen";
+				bool hasGearAmountsChange = ConfigManager.GearRecipeAmountsEnabled.Value && newGearRecipesAmounts.ContainsKey(recipe.name);
+				bool hasGearMaterialsChange = ConfigManager.GearRecipeMaterialsEnabled.Value && newGearRecipesMaterials.ContainsKey(recipe.name);
+				bool hasLinenCapeChange = ConfigManager.EarlyLinenCapeEnabled.Value && recipe.name == "Recipe_CapeLinen";
 
 				/*if (newGearRecipesAmounts.ContainsKey(recipe.name)) MarsarahTweaks.MLog($"Is in Gear Amounts list: {recipe.name}");
 				if (newGearRecipesMaterials.ContainsKey(recipe.name)) MarsarahTweaks.MLog($"Is in Gear Material list: {recipe.name}");
@@ -1083,14 +1083,6 @@ namespace MarsarahTweaks.Patches.Grind
 
 				foreach (Piece.Requirement req in recipe.m_resources)
 				{
-					/*bool needsBackup = hasGearAmountsChange || hasGearMaterialsChange;
-
-					// Ensure backup is created only once if modifications will be applied
-					if (needsBackup)
-					{
-						CreateBackup(recipe.name, req);
-					}*/
-
 					// Apply gear amounts modifications
 					if (hasGearAmountsChange && newGearRecipesAmounts[recipe.name].TryGetValue(req.m_resItem.name, out var amountValues))
 					{
@@ -1110,7 +1102,7 @@ namespace MarsarahTweaks.Patches.Grind
 					}
 
 					// Restore backups when disabling features
-					if (!ConfigManager.gearRecipeAmountsEnabled.Value && newGearRecipesAmounts.ContainsKey(recipe.name) && amountsWasChanged)
+					if (!ConfigManager.GearRecipeAmountsEnabled.Value && newGearRecipesAmounts.ContainsKey(recipe.name) && amountsWasChanged)
 					{
 						//MarsarahTweaks.MLog($"(Gear Amounts) Was changed: {amountsWasChanged}");
 						if (RestoreBackup(recipe.name, req, objDB, false))
@@ -1118,7 +1110,7 @@ namespace MarsarahTweaks.Patches.Grind
 							// Remove backup unless materials modification still needs it
 							if (!hasGearMaterialsChange || !newGearRecipesMaterials[recipe.name].ContainsKey(req.m_resItem.name))
 							{
-								if (!hasLinenCapeChange || !ConfigManager.earlyLinenCapeEnabled.Value)
+								if (!hasLinenCapeChange || !ConfigManager.EarlyLinenCapeEnabled.Value)
 								{
 									//MarsarahTweaks.MLog($"(Gear Amounts) Removing backup for: {recipe.name} - {req.m_resItem.name}");
 									defaultGearRecipeValues[recipe.name].Remove(req.m_resItem.name);
@@ -1127,7 +1119,7 @@ namespace MarsarahTweaks.Patches.Grind
 						}
 					}
 
-					if (!ConfigManager.gearRecipeMaterialsEnabled.Value && newGearRecipesMaterials.ContainsKey(recipe.name) && materialsWasChanged)
+					if (!ConfigManager.GearRecipeMaterialsEnabled.Value && newGearRecipesMaterials.ContainsKey(recipe.name) && materialsWasChanged)
 					{
 						//MarsarahTweaks.MLog($"(Gear Materials) Was changed: {materialsWasChanged}");
 						if (RestoreBackup(recipe.name, req, objDB, true))
@@ -1164,7 +1156,7 @@ namespace MarsarahTweaks.Patches.Grind
 			Recipe recipe = objDB.m_recipes.Find(r => r.name == "Recipe_CapeLinen");
 			if (recipe == null) return;
 
-			if (ConfigManager.earlyLinenCapeEnabled.Value)
+			if (ConfigManager.EarlyLinenCapeEnabled.Value)
 			{
 				foreach (Piece.Requirement req in recipe.m_resources)
 				{
@@ -1186,7 +1178,7 @@ namespace MarsarahTweaks.Patches.Grind
 			else if (wasChanged)
 			{
 				//MarsarahTweaks.MLog("Early Linen Cape: Backup beginning");
-				bool hasGearAmountsChange = ConfigManager.gearRecipeAmountsEnabled.Value && newGearRecipesAmounts.ContainsKey(recipe.name);
+				bool hasGearAmountsChange = ConfigManager.GearRecipeAmountsEnabled.Value && newGearRecipesAmounts.ContainsKey(recipe.name);
 
 				foreach (Piece.Requirement req in recipe.m_resources)
 				{

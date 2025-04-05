@@ -15,7 +15,7 @@ namespace MarsarahTweaks.Patches.QOL
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class OthersSection_Patch
 		{
-			static void Postfix(ref ObjectDB __instance)
+			private static void Postfix(ref ObjectDB __instance)
 			{
 				if (__instance == null) return;
 
@@ -26,8 +26,8 @@ namespace MarsarahTweaks.Patches.QOL
 		}
 
 		// Dictionaries
-		private static Dictionary<string, float> metalWeightOriginals = new Dictionary<string, float>();
-		private static Dictionary<string, float> metalWeightChanges = new Dictionary<string, float>()
+		private static readonly Dictionary<string, float> metalWeightOriginals = new Dictionary<string, float>();
+		private static readonly Dictionary<string, float> metalWeightChanges = new Dictionary<string, float>()
 		{
 			{ "TinOre", 8 },
 			{ "Tin", 8 },
@@ -53,7 +53,7 @@ namespace MarsarahTweaks.Patches.QOL
 		// Lighter Metal Weight" ===================================================================
 		public static void UpdateLighterMetalWeight(ObjectDB objDB, bool wasChanged)
 		{
-			if (ConfigManager.lighterMetalWeightEnabled.Value)
+			if (ConfigManager.LighterMetalWeightEnabled.Value)
 			{
 				// Apply weight reduction
 				foreach (var itemName in metalWeightChanges.Keys)

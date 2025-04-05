@@ -23,13 +23,13 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Player), "Update")]
 		class EnemyDetector_PlayerPatch
 		{
-			static void Prefix(ref Player ___m_localPlayer)
+			private static void Prefix(ref Player ___m_localPlayer)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (___m_localPlayer == null) return;
 
-				if (ConfigManager.showEnemyDetector.Value)
+				if (ConfigManager.ShowEnemyDetector.Value)
 				{
 					int numEnemiesIgnore = 0;
 					int numPassiveDverger = 0;
@@ -49,15 +49,15 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
-		public static class EnemyDetector_HUDUpdatePatch
+		class EnemyDetector_HUDUpdatePatch
 		{
-			public static void Postfix(Hud __instance)
+			private static void Postfix(Hud __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (__instance == null) return;
 
-				if (ConfigManager.showEnemyDetector.Value)
+				if (ConfigManager.ShowEnemyDetector.Value)
 				{
 					CreateUI(__instance); // Create UI if missing
 
@@ -100,7 +100,7 @@ namespace MarsarahTweaks.Patches.UI
 				RectTransform enemyAreaTransform = UIEnemyArea.AddComponent<RectTransform>();
 				enemyAreaTransform.anchorMin = new Vector2(1f, 1f);
 				enemyAreaTransform.anchorMax = new Vector2(1f, 1f);
-				enemyAreaTransform.anchoredPosition = new Vector2(ConfigManager.showInventoryWeightAndSlots.Value ? 70f : -40f, -230f);
+				enemyAreaTransform.anchoredPosition = new Vector2(ConfigManager.ShowInventoryWeightAndSlots.Value ? 70f : -40f, -230f);
 				enemyAreaTransform.sizeDelta = UIEnemyAreaSize;
 				UIEnemyArea.transform.localScale = Vector3.one;  // Ensure correct scale
 

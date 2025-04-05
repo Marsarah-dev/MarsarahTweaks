@@ -10,13 +10,13 @@ namespace MarsarahTweaks.Patches.QOL
 	internal class LessFallDamage
 	{
 		[HarmonyPatch(typeof(SEMan), "ModifyFallDamage")]
-		public class FallDamage_Patch
+		class FallDamage_Patch
 		{
-			public static void Prefix(ref float damage)
+			private static void Prefix(ref float damage)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-				if (ConfigManager.lessFallDamageEnabled.Value)
+				if (ConfigManager.LessFallDamageEnabled.Value)
 				{
 					//MarsarahTweaks.MLog($"Reducing fall damage...");
 					damage = damage * 0.6f;

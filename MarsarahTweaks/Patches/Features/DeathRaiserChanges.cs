@@ -27,7 +27,7 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		// Modify Skeleton Summons
 		[HarmonyPatch(typeof(Humanoid), nameof(Humanoid.StartAttack))]
-		public static class DeatRaiserAttack_Patch
+		static class DeatRaiserAttack_Patch
 		{
 			private static float lastAttackTime = 0f;
 			private static Attack originalSecondaryAttack = null; // Store default attack
@@ -42,7 +42,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (currentWeapon == null || currentWeapon.m_shared?.m_name != "$item_staffskeleton") return;
 
 				// If the config is disabled, restore the original secondary attack
-				if (!ConfigManager.betterDeathRaiserEnabled.Value)
+				if (!ConfigManager.BetterDeathRaiserEnabled.Value)
 				{
 					if (originalSecondaryAttack != null)
 					{
@@ -88,7 +88,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (ZNet.instance == null || ZNet.instance.IsDedicated()) return;
 
 				// Do nothing if the feature is disabled
-				if (!ConfigManager.betterDeathRaiserEnabled.Value) return;
+				if (!ConfigManager.BetterDeathRaiserEnabled.Value) return;
 
 				if (__result is GameObject gameObject && gameObject.name.Contains("Skeleton_Friendly"))
 				{
@@ -123,7 +123,7 @@ namespace MarsarahTweaks.Patches.Features
 				}
 
 				// Prevent modification if feature is disabled
-				if (!ConfigManager.betterDeathRaiserEnabled.Value)
+				if (!ConfigManager.BetterDeathRaiserEnabled.Value)
 				{
 					__runOriginal = true;
 					return;
@@ -138,7 +138,7 @@ namespace MarsarahTweaks.Patches.Features
 					int usedWeaponLevel = skeletonSharedComponent.WeaponLevel;
 					//MarsarahTweaks.MLog($"Used Weapon Level: {usedWeaponLevel}");
 
-					if (ConfigManager.betterDeathRaiserSummonsEnabled.Value)
+					if (ConfigManager.BetterDeathRaiserSummonsEnabled.Value)
 					{
 						if (SummonedSkeletonChanges.newSkeletonGear.TryGetValue(usedWeaponLevel, out var gearForLevel))
 						{
@@ -273,7 +273,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (__instance && __instance.name.StartsWith("Skeleton_Friendly"))
 				{
-					if (ConfigManager.betterDeathRaiserSummonsEnabled.Value)
+					if (ConfigManager.BetterDeathRaiserSummonsEnabled.Value)
 					{
 						// Skeleton speed
 						__instance.m_speed = 4; // 1

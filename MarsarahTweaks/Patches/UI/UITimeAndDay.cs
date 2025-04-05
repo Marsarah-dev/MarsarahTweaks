@@ -23,17 +23,17 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(EnvMan), "Update")]
 		class TimeAndDay_EnvManPatch
 		{
-			static void Prefix(EnvMan __instance, ref float ___m_smoothDayFraction)
+			private static void Prefix(EnvMan __instance, ref float ___m_smoothDayFraction)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (__instance == null) return;
 
-				if (ConfigManager.showTimeAndDay.Value)
+				if (ConfigManager.ShowTimeAndDay.Value)
 				{
 					currentDay = Traverse.Create((object)EnvMan.instance).Method("GetCurrentDay", Array.Empty<object>()).GetValue<int>();
 
-					if (!ConfigManager.timeFormat24H.Value)
+					if (!ConfigManager.TimeFormat24H.Value)
 					{
 						dayString = GetStringFromFraction(___m_smoothDayFraction);
 					}
@@ -62,15 +62,15 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
-		public static class TimeAndDay_HUDUpdatePatch
+		class TimeAndDay_HUDUpdatePatch
 		{
-			public static void Postfix(Hud __instance)
+			private static void Postfix(Hud __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (__instance == null) return;
 
-				if (ConfigManager.showTimeAndDay.Value)
+				if (ConfigManager.ShowTimeAndDay.Value)
 				{
 					CreateUI(__instance); // Create UI if missing
 

@@ -22,13 +22,13 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Player), "Update")]
 		class SummonCounters_PlayerPatch
 		{
-			static void Prefix(ref Player ___m_localPlayer)
+			private static void Prefix(ref Player ___m_localPlayer)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (___m_localPlayer == null) return;
 
-				if (ConfigManager.showSummonCounter.Value && showUI)
+				if (ConfigManager.ShowSummonCounter.Value && showUI)
 				{
 					List<Character> allCharacters = Character.GetAllCharacters();
 					int numSummonedSkeletons = 0;
@@ -65,15 +65,15 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
-		public static class SummonCounter_HUDUpdatePatch
+		class SummonCounter_HUDUpdatePatch
 		{
-			public static void Postfix(Hud __instance)
+			private static void Postfix(Hud __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (__instance == null) return;
 
-				if (ConfigManager.showSummonCounter.Value)
+				if (ConfigManager.ShowSummonCounter.Value)
 				{
 					CreateUI(__instance); // Create UI if missing
 

@@ -8,7 +8,7 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class CraftableChain_Patch
 		{
-			static void Postfix(ObjectDB __instance)
+			private static void Postfix(ObjectDB __instance)
 			{
 				if (__instance == null) return;
 
@@ -20,7 +20,7 @@ namespace MarsarahTweaks.Patches.Features
 
 		public static void UpdateChainRecipe(ObjectDB objDB, bool wasChanged)
 		{
-			if (ConfigManager.craftableChainEnabled.Value)
+			if (ConfigManager.CraftableChainEnabled.Value)
 			{
 				// Check if the chain recipe already exists
 				Recipe chainRecipe = objDB.m_recipes.Find(r => r.name == "Recipe_Chain");
@@ -33,10 +33,10 @@ namespace MarsarahTweaks.Patches.Features
 						objDB.m_recipes.Add(chainRecipe);
 						//MarsarahTweaks.MLog($"Chain recipe added: {chainRecipe.name}");
 					}
-					/*else
+					else
 					{
 						MarsarahTweaks.MLog("Failed to create chain recipe. Missing required items.");
-					}*/
+					}
 				}
 			}
 			else if (wasChanged)

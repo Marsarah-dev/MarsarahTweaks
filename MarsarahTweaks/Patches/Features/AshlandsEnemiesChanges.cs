@@ -14,11 +14,9 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			private static void Postfix(SpawnSystem __instance)
 			{
-				// Run on both client and server - no special clause added
+				// Run on both server and client - no checks made
 
 				if (__instance == null) return;
-
-				//MarsarahTweaks.MLog($"[Spawn Patch] Running on {(ZNet.instance.IsServer() ? "Server" : "Client")}");
 
 				UpdateAshlandsSpawns(__instance);
 			}
@@ -37,15 +35,6 @@ namespace MarsarahTweaks.Patches.Features
 			{ "Charred Archer",				(2, null, null, 30f) },		// 4, 1, 2, 35
 			{ "Charred Melee",				(2, null, null, 30f) },		// 4, 1, 2, 35
 			{ "Lava Blob",					(1, null, 1, 20f) }			// 2, 1, 2, 25
-			/*{ "Fallen Valkyrie",            (0, 0, 0, 0f) },	// 1, 1, 1, 20
-			{ "Asksvin [DAY]",              (0, 0, 0, 0f) },		// 2, 1, 3, 30
-			{ "Asksvin [NIGHT]",            (0, 0, 0, 0f) },		// 3, 1, 3, 45
-			{ "Volture",                    (0, 0, 0, 0f) },	// 3, 1, 2, 20
-			{ "Charred Twitcher [DAY]",     (0, 0, 0, 0f) },			// 3, 2, 4, 40
-			{ "Charred Twitcher [NIGHT]",   (0, 0, 0, 0f) },			// 4, 3, 6, 45
-			{ "Charred Archer",             (0, 0, 0, 0f) },		// 4, 1, 2, 35
-			{ "Charred Melee",              (0, 0, 0, 0f) },		// 4, 1, 2, 35
-			{ "Lava Blob",                  (0, 0, 0, 0f) }*/			// 2, 1, 2, 25
 		};
 
 		public static void UpdateAshlandsSpawns(SpawnSystem spawnSystem)
@@ -62,7 +51,7 @@ namespace MarsarahTweaks.Patches.Features
 					{
 						//MarsarahTweaks.MLog($"| {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
 
-						if (ConfigManager.lessAshlandsEnemiesEnabled.Value)
+						if (ConfigManager.LessAshlandsEnemiesEnabled.Value)
 						{
 							// Backup
 							if (!originalSpawnData.ContainsKey(spawner.m_name))

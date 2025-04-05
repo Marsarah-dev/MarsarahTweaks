@@ -11,7 +11,7 @@ namespace MarsarahTweaks.Patches.Grind
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class OthersSection_Patch
 		{
-			static void Postfix(ref ObjectDB __instance)
+			private static void Postfix(ref ObjectDB __instance)
 			{
 				if (__instance == null) return;
 
@@ -22,8 +22,8 @@ namespace MarsarahTweaks.Patches.Grind
 		}
 
 		// Dictionaries
-		private static Dictionary<string, int> doubleBronzeOriginals = new Dictionary<string, int>();
-		private static Dictionary<string, int> doubleBronzeChanges = new Dictionary<string, int>()
+		private static readonly Dictionary<string, int> doubleBronzeOriginals = new Dictionary<string, int>();
+		private static readonly Dictionary<string, int> doubleBronzeChanges = new Dictionary<string, int>()
 		{
 			{ "Recipe_Bronze", 2 },
 			{ "Recipe_Bronze5", 10 }
@@ -32,7 +32,7 @@ namespace MarsarahTweaks.Patches.Grind
 		// Double Bronze Crafting ==================================================================
 		public static void UpdateDoubleBronzeCrafting(ObjectDB objDB, bool wasChanged)
 		{
-			if (ConfigManager.doubleBronzeEnabled.Value)
+			if (ConfigManager.DoubleBronzeEnabled.Value)
 			{
 				// Apply changes only if enabled
 				foreach (var recipeName in doubleBronzeChanges.Keys)

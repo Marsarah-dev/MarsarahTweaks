@@ -12,12 +12,11 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(EnvMan), "InitializeBiomeEnvSetup")]
 		class LessFog_Patch
 		{
-			static void Postfix(EnvMan __instance)
+			private static void Postfix(EnvMan __instance)
 			{
-				//if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Prevent running on clients
-				// Needs to run on both client and server - no checks made
+				// Run on both server and client - no checks made
 
-				if (ConfigManager.clearerWeatherEnabled.Value)
+				if (ConfigManager.ClearerWeatherEnabled.Value)
 				{
 					foreach (BiomeEnvSetup biome in __instance.m_biomes)
 					{

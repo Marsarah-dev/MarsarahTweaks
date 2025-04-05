@@ -16,12 +16,11 @@ namespace MarsarahTweaks.Patches.QOL
 			private static bool originalTargetsFriendly = true;
 			private static readonly bool newTargetsFriendly = false;
 
-			static void Postfix([NotNull] ref bool ___m_targetPlayers, [NotNull] ref bool ___m_targetTamed)
+			private static void Postfix([NotNull] ref bool ___m_targetPlayers, [NotNull] ref bool ___m_targetTamed)
 			{
-				//if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Prevent running on clients
 				// Needs to run on both client and server - no checks needed
 
-				if (ConfigManager.friendlyBallistasEnabled.Value)
+				if (ConfigManager.FriendlyBallistasEnabled.Value)
 				{
 
 					if (___m_targetPlayers != newTargetsFriendly)

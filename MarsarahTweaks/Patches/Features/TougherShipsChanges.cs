@@ -21,13 +21,13 @@ namespace MarsarahTweaks.Patches.Features
 				if (__instance == null) return;
 
 				//MarsarahTweaks.MLog($"ZNetScene Awake: Updating {ConfigManager.Configs.TougherShips.Name}...");
-				updateShipHP(__instance, false);
+				UpdateShipHP(__instance, false);
 			}
 		}
 
-		public static void updateShipHP(ZNetScene znScene, bool wasChanged)
+		public static void UpdateShipHP(ZNetScene znScene, bool wasChanged)
 		{
-			if (ConfigManager.tougherShipsEnabled.Value)
+			if (ConfigManager.TougherShipsEnabled.Value)
 			{
 				ApplyHealthChange(znScene, "Raft", 400);
 				ApplyHealthChange(znScene, "Karve", 650);

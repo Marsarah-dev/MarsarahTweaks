@@ -122,130 +122,130 @@ namespace MarsarahTweaks
 		}
 
 		// Config entries
-		public static ConfigEntry<bool> serverConfigLocked;
+		public static ConfigEntry<bool> ServerConfigLocked;
 		//public static ConfigEntry<bool> testJumpEnabled;
 
-		public static ConfigEntry<bool> doubleBronzeEnabled;
-		public static ConfigEntry<bool> gearRecipeAmountsEnabled;
-		public static ConfigEntry<bool> gearRecipeMaterialsEnabled;
-		public static ConfigEntry<bool> buildPieceAmountsEnabled;
-		public static ConfigEntry<bool> buildPieceMaterialsEnabled;
-		public static ConfigEntry<bool> foodAndMeadModificationsEnabled;
+		public static ConfigEntry<bool> DoubleBronzeEnabled;
+		public static ConfigEntry<bool> GearRecipeAmountsEnabled;
+		public static ConfigEntry<bool> GearRecipeMaterialsEnabled;
+		public static ConfigEntry<bool> BuildPieceAmountsEnabled;
+		public static ConfigEntry<bool> BuildPieceMaterialsEnabled;
+		public static ConfigEntry<bool> FoodAndMeadModificationsEnabled;
 
-		public static ConfigEntry<bool> earlyLinenCapeEnabled;
-		public static ConfigEntry<bool> gearSpeedModifiersEnabled;
-		public static ConfigEntry<bool> longerForsakenPowersEnabled;
-		public static ConfigEntry<bool> fasterCharacterSpeedEnabled;
-		public static ConfigEntry<bool> shorterStatusEffectsEnabled;
-		public static ConfigEntry<bool> lessStaminaUsageEnabled;
-		public static ConfigEntry<bool> extraArmorStatsEnabled;
-		public static ConfigEntry<bool> betterDeathRaiserEnabled;
-		public static ConfigEntry<bool> betterDeathRaiserSummonsEnabled;
-		public static ConfigEntry<bool> betterFrostStaffAccuracyEnabled;
-		public static ConfigEntry<bool> reducedCrossbowsReloadTimeEnabled;
-		public static ConfigEntry<bool> lessAshlandsEnemiesEnabled;
-		public static ConfigEntry<bool> gearUpgradeUnlockEnabled;
-		public static ConfigEntry<bool> permanentLightsEnabled;
-		public static ConfigEntry<bool> clearMistlandsEnabled;
-		public static ConfigEntry<bool> craftableChainEnabled;
-		public static ConfigEntry<bool> brighterLanternsEnabled;
-		public static ConfigEntry<bool> clearerWeatherEnabled;
-		public static ConfigEntry<bool> creatureUnlevelerEnabled;
-		public static ConfigEntry<bool> minibossWeightEnabled;
-		public static ConfigEntry<bool> extensionsChangesEnabled;
-		public static ConfigEntry<bool> noFleeEnabled;
-		public static ConfigEntry<bool> automaticProgressionHaltEnabled;
-		public static ConfigEntry<bool> betterTrophyDropsEnabled;
-		public static ConfigEntry<bool> tougherShipsEnabled;
-		public static ConfigEntry<bool> otherEnabled;
+		public static ConfigEntry<bool> EarlyLinenCapeEnabled;
+		public static ConfigEntry<bool> GearSpeedModifiersEnabled;
+		public static ConfigEntry<bool> LongerForsakenPowersEnabled;
+		public static ConfigEntry<bool> FasterCharacterSpeedEnabled;
+		public static ConfigEntry<bool> ShorterStatusEffectsEnabled;
+		public static ConfigEntry<bool> LessStaminaUsageEnabled;
+		public static ConfigEntry<bool> ExtraArmorStatsEnabled;
+		public static ConfigEntry<bool> BetterDeathRaiserEnabled;
+		public static ConfigEntry<bool> BetterDeathRaiserSummonsEnabled;
+		public static ConfigEntry<bool> BetterFrostStaffAccuracyEnabled;
+		public static ConfigEntry<bool> ReducedCrossbowsReloadTimeEnabled;
+		public static ConfigEntry<bool> LessAshlandsEnemiesEnabled;
+		public static ConfigEntry<bool> GearUpgradeUnlockEnabled;
+		public static ConfigEntry<bool> PermanentLightsEnabled;
+		public static ConfigEntry<bool> ClearMistlandsEnabled;
+		public static ConfigEntry<bool> CraftableChainEnabled;
+		public static ConfigEntry<bool> BrighterLanternsEnabled;
+		public static ConfigEntry<bool> ClearerWeatherEnabled;
+		public static ConfigEntry<bool> CreatureUnlevelerEnabled;
+		public static ConfigEntry<bool> MinibossWeightEnabled;
+		public static ConfigEntry<bool> ExtensionsChangesEnabled;
+		public static ConfigEntry<bool> NoFleeEnabled;
+		public static ConfigEntry<bool> AutomaticProgressionHaltEnabled;
+		public static ConfigEntry<bool> BetterTrophyDropsEnabled;
+		public static ConfigEntry<bool> TougherShipsEnabled;
+		public static ConfigEntry<bool> OtherEnabled;
 
-		public static ConfigEntry<bool> lighterMetalWeightEnabled;
-		public static ConfigEntry<bool> largerPickupAreaEnabled;
-		public static ConfigEntry<bool> noSkillLowerOnDeathEnabled;
-		public static ConfigEntry<bool> largerBoatExploreRadiusEnabled;
-		public static ConfigEntry<bool> biggerWispRadiusEnabled;
-		public static ConfigEntry<bool> friendlyBallistasEnabled;
-		public static ConfigEntry<bool> lessFallDamageEnabled;
-		public static ConfigEntry<bool> fasterResourceDropsEnabled;
-		public static ConfigEntry<bool> fasterEquipEnabled;
+		public static ConfigEntry<bool> LighterMetalWeightEnabled;
+		public static ConfigEntry<bool> LargerPickupAreaEnabled;
+		public static ConfigEntry<bool> NoSkillLowerOnDeathEnabled;
+		public static ConfigEntry<bool> LargerBoatExploreRadiusEnabled;
+		public static ConfigEntry<bool> BiggerWispRadiusEnabled;
+		public static ConfigEntry<bool> FriendlyBallistasEnabled;
+		public static ConfigEntry<bool> LessFallDamageEnabled;
+		public static ConfigEntry<bool> FasterResourceDropsEnabled;
+		public static ConfigEntry<bool> FasterEquipEnabled;
 
-		public static ConfigEntry<bool> moreLoadingTipsEnabled;
-		public static ConfigEntry<bool> showInventoryWeightAndSlots;
-		public static ConfigEntry<bool> showEnemyDetector;
-		public static ConfigEntry<bool> showBoatSpeed;
-		public static ConfigEntry<bool> showTimeAndDay;
-		public static ConfigEntry<bool> timeFormat24H;
-		public static ConfigEntry<bool> showSmartBiome;
-		public static ConfigEntry<bool> showSummonCounter;
-		public static ConfigEntry<bool> showOnlinePlayers;
-		public static ConfigEntry<bool> onlinePlayersUnderMinimap;
+		public static ConfigEntry<bool> MoreLoadingTipsEnabled;
+		public static ConfigEntry<bool> ShowInventoryWeightAndSlots;
+		public static ConfigEntry<bool> ShowEnemyDetector;
+		public static ConfigEntry<bool> ShowBoatSpeed;
+		public static ConfigEntry<bool> ShowTimeAndDay;
+		public static ConfigEntry<bool> TimeFormat24H;
+		public static ConfigEntry<bool> ShowSmartBiome;
+		public static ConfigEntry<bool> ShowSummonCounter;
+		public static ConfigEntry<bool> ShowOnlinePlayers;
+		public static ConfigEntry<bool> OnlinePlayersUnderMinimap;
 
 		public static void Init(ConfigFile configFile)
 		{
 			Config = configFile;
 
-			serverConfigLocked = CreateConfig(ConfigSections.Main, Configs.ServerConfig.Name, true, Configs.ServerConfig.Description);
-			_ = configSync.AddLockingConfigEntry(serverConfigLocked);
+			ServerConfigLocked = CreateConfig(ConfigSections.Main, Configs.ServerConfig.Name, true, Configs.ServerConfig.Description);
+			_ = configSync.AddLockingConfigEntry(ServerConfigLocked);
 			//testJumpEnabled = CreateConfig("1 - Main", "Test Jump", true, "Test Jump Patch");
 
 			// ===== Grind Reduction
-			doubleBronzeEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.DoubleBronzeCrafting.Name, true, Configs.DoubleBronzeCrafting.Description);
-			gearRecipeAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeAmountsModifications.Name, true, Configs.GearRecipeAmountsModifications.Description);
-			gearRecipeMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeMaterialsModifications.Name, true, Configs.GearRecipeMaterialsModifications.Description);
-			buildPieceAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPieceAmountsModifications.Name, true, Configs.BuildPieceAmountsModifications.Description);
-			buildPieceMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPieceMaterialsModifications.Name, true, Configs.BuildPieceMaterialsModifications.Description);
-			foodAndMeadModificationsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.FoodAndMeadModifications.Name, true, Configs.FoodAndMeadModifications.Description);
+			DoubleBronzeEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.DoubleBronzeCrafting.Name, true, Configs.DoubleBronzeCrafting.Description);
+			GearRecipeAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeAmountsModifications.Name, true, Configs.GearRecipeAmountsModifications.Description);
+			GearRecipeMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.GearRecipeMaterialsModifications.Name, true, Configs.GearRecipeMaterialsModifications.Description);
+			BuildPieceAmountsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPieceAmountsModifications.Name, true, Configs.BuildPieceAmountsModifications.Description);
+			BuildPieceMaterialsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.BuildPieceMaterialsModifications.Name, true, Configs.BuildPieceMaterialsModifications.Description);
+			FoodAndMeadModificationsEnabled = CreateConfig(ConfigSections.GrindReduction, Configs.FoodAndMeadModifications.Name, true, Configs.FoodAndMeadModifications.Description);
 
 			// ===== Features
-			earlyLinenCapeEnabled = CreateConfig(ConfigSections.Features, Configs.LinenCapeModifications.Name, true, Configs.LinenCapeModifications.Description);
-			gearSpeedModifiersEnabled = CreateConfig(ConfigSections.Features, Configs.GearSpeedModifications.Name, true, Configs.GearSpeedModifications.Description);
-			longerForsakenPowersEnabled = CreateConfig(ConfigSections.Features, Configs.ForsakenPowersModifications.Name, true, Configs.ForsakenPowersModifications.Description);
-			fasterCharacterSpeedEnabled = CreateConfig(ConfigSections.Features, Configs.CharacterSpeedModifications.Name, true, Configs.CharacterSpeedModifications.Description);
-			shorterStatusEffectsEnabled = CreateConfig(ConfigSections.Features, Configs.StatusEffectsModifications.Name, true, Configs.StatusEffectsModifications.Description);
-			lessStaminaUsageEnabled = CreateConfig(ConfigSections.Features, Configs.LessStaminaModifications.Name, true, Configs.LessStaminaModifications.Description);
-			extraArmorStatsEnabled = CreateConfig(ConfigSections.Features, Configs.ExtraArmorStatsModifications.Name, true, Configs.ExtraArmorStatsModifications.Description);
-			betterDeathRaiserEnabled = CreateConfig(ConfigSections.Features, Configs.DeathRaiserModifications.Name, true, Configs.DeathRaiserModifications.Description);
-			betterDeathRaiserSummonsEnabled = CreateConfig(ConfigSections.Features, Configs.DeathRaiserSummonsModifications.Name, true, Configs.DeathRaiserSummonsModifications.Description);
-			betterFrostStaffAccuracyEnabled = CreateConfig(ConfigSections.Features, Configs.FrostStaffModifications.Name, true, Configs.FrostStaffModifications.Description);
-			reducedCrossbowsReloadTimeEnabled = CreateConfig(ConfigSections.Features, Configs.CrossbowsReloadModifications.Name, true, Configs.CrossbowsReloadModifications.Description);
-			lessAshlandsEnemiesEnabled = CreateConfig(ConfigSections.Features, Configs.AshlandsEnemiesModifications.Name, true, Configs.AshlandsEnemiesModifications.Description);
-			gearUpgradeUnlockEnabled = CreateConfig(ConfigSections.Features, Configs.GearUpgradeModifications.Name, true, Configs.GearUpgradeModifications.Description);
-			permanentLightsEnabled = CreateConfig(ConfigSections.Features, Configs.PermanentLightsModifications.Name, true, Configs.PermanentLightsModifications.Description);
-			clearMistlandsEnabled = CreateConfig(ConfigSections.Features, Configs.ClearMistlands.Name, true, Configs.ClearMistlands.Description);
-			craftableChainEnabled = CreateConfig(ConfigSections.Features, Configs.CraftableChain.Name, true, Configs.CraftableChain.Description);
-			brighterLanternsEnabled = CreateConfig(ConfigSections.Features, Configs.BrighterLanterns.Name, true, Configs.BrighterLanterns.Description);
-			clearerWeatherEnabled = CreateConfig(ConfigSections.Features, Configs.WeatherModifications.Name, true, Configs.WeatherModifications.Description);
-			creatureUnlevelerEnabled = CreateConfig(ConfigSections.Features, Configs.CreatureUnleveler.Name, true, Configs.CreatureUnleveler.Description);
-			minibossWeightEnabled = CreateConfig(ConfigSections.Features, Configs.MinibossWeight.Name, true, Configs.MinibossWeight.Description);
-			extensionsChangesEnabled = CreateConfig(ConfigSections.Features, Configs.ExtensionsModifications.Name, true, Configs.ExtensionsModifications.Description);
-			noFleeEnabled = CreateConfig(ConfigSections.Features, Configs.FleeAIModifications.Name, true, Configs.FleeAIModifications.Description);
-			automaticProgressionHaltEnabled = CreateConfig(ConfigSections.Features, Configs.ProgressionHalt.Name, true, Configs.ProgressionHalt.Description);
-			betterTrophyDropsEnabled = CreateConfig(ConfigSections.Features, Configs.TrophyDropsModifications.Name, true, Configs.TrophyDropsModifications.Description);
-			tougherShipsEnabled = CreateConfig(ConfigSections.Features, Configs.TougherShips.Name, true, Configs.TougherShips.Description);
-			otherEnabled = CreateConfig(ConfigSections.Features, Configs.OtherModifications.Name, true, Configs.OtherModifications.Description);
+			EarlyLinenCapeEnabled = CreateConfig(ConfigSections.Features, Configs.LinenCapeModifications.Name, true, Configs.LinenCapeModifications.Description);
+			GearSpeedModifiersEnabled = CreateConfig(ConfigSections.Features, Configs.GearSpeedModifications.Name, true, Configs.GearSpeedModifications.Description);
+			LongerForsakenPowersEnabled = CreateConfig(ConfigSections.Features, Configs.ForsakenPowersModifications.Name, true, Configs.ForsakenPowersModifications.Description);
+			FasterCharacterSpeedEnabled = CreateConfig(ConfigSections.Features, Configs.CharacterSpeedModifications.Name, true, Configs.CharacterSpeedModifications.Description);
+			ShorterStatusEffectsEnabled = CreateConfig(ConfigSections.Features, Configs.StatusEffectsModifications.Name, true, Configs.StatusEffectsModifications.Description);
+			LessStaminaUsageEnabled = CreateConfig(ConfigSections.Features, Configs.LessStaminaModifications.Name, true, Configs.LessStaminaModifications.Description);
+			ExtraArmorStatsEnabled = CreateConfig(ConfigSections.Features, Configs.ExtraArmorStatsModifications.Name, true, Configs.ExtraArmorStatsModifications.Description);
+			BetterDeathRaiserEnabled = CreateConfig(ConfigSections.Features, Configs.DeathRaiserModifications.Name, true, Configs.DeathRaiserModifications.Description);
+			BetterDeathRaiserSummonsEnabled = CreateConfig(ConfigSections.Features, Configs.DeathRaiserSummonsModifications.Name, true, Configs.DeathRaiserSummonsModifications.Description);
+			BetterFrostStaffAccuracyEnabled = CreateConfig(ConfigSections.Features, Configs.FrostStaffModifications.Name, true, Configs.FrostStaffModifications.Description);
+			ReducedCrossbowsReloadTimeEnabled = CreateConfig(ConfigSections.Features, Configs.CrossbowsReloadModifications.Name, true, Configs.CrossbowsReloadModifications.Description);
+			LessAshlandsEnemiesEnabled = CreateConfig(ConfigSections.Features, Configs.AshlandsEnemiesModifications.Name, true, Configs.AshlandsEnemiesModifications.Description);
+			GearUpgradeUnlockEnabled = CreateConfig(ConfigSections.Features, Configs.GearUpgradeModifications.Name, true, Configs.GearUpgradeModifications.Description);
+			PermanentLightsEnabled = CreateConfig(ConfigSections.Features, Configs.PermanentLightsModifications.Name, true, Configs.PermanentLightsModifications.Description);
+			ClearMistlandsEnabled = CreateConfig(ConfigSections.Features, Configs.ClearMistlands.Name, true, Configs.ClearMistlands.Description);
+			CraftableChainEnabled = CreateConfig(ConfigSections.Features, Configs.CraftableChain.Name, true, Configs.CraftableChain.Description);
+			BrighterLanternsEnabled = CreateConfig(ConfigSections.Features, Configs.BrighterLanterns.Name, true, Configs.BrighterLanterns.Description);
+			ClearerWeatherEnabled = CreateConfig(ConfigSections.Features, Configs.WeatherModifications.Name, true, Configs.WeatherModifications.Description);
+			CreatureUnlevelerEnabled = CreateConfig(ConfigSections.Features, Configs.CreatureUnleveler.Name, true, Configs.CreatureUnleveler.Description);
+			MinibossWeightEnabled = CreateConfig(ConfigSections.Features, Configs.MinibossWeight.Name, true, Configs.MinibossWeight.Description);
+			ExtensionsChangesEnabled = CreateConfig(ConfigSections.Features, Configs.ExtensionsModifications.Name, true, Configs.ExtensionsModifications.Description);
+			NoFleeEnabled = CreateConfig(ConfigSections.Features, Configs.FleeAIModifications.Name, true, Configs.FleeAIModifications.Description);
+			AutomaticProgressionHaltEnabled = CreateConfig(ConfigSections.Features, Configs.ProgressionHalt.Name, true, Configs.ProgressionHalt.Description);
+			BetterTrophyDropsEnabled = CreateConfig(ConfigSections.Features, Configs.TrophyDropsModifications.Name, true, Configs.TrophyDropsModifications.Description);
+			TougherShipsEnabled = CreateConfig(ConfigSections.Features, Configs.TougherShips.Name, true, Configs.TougherShips.Description);
+			OtherEnabled = CreateConfig(ConfigSections.Features, Configs.OtherModifications.Name, true, Configs.OtherModifications.Description);
 
 			// ===== QOL
-			lighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
-			largerPickupAreaEnabled = CreateConfig(ConfigSections.QOL, Configs.LargerPickupArea.Name, true, Configs.LargerPickupArea.Description);
-			noSkillLowerOnDeathEnabled = CreateConfig(ConfigSections.QOL, Configs.NoSkillLoss.Name, true, Configs.NoSkillLoss.Description);
-			largerBoatExploreRadiusEnabled = CreateConfig(ConfigSections.QOL, Configs.LargerBoatExploreRadius.Name, true, Configs.LargerBoatExploreRadius.Description);
-			biggerWispRadiusEnabled = CreateConfig(ConfigSections.QOL, Configs.BiggerWispRadius.Name, true, Configs.BiggerWispRadius.Description);
-			friendlyBallistasEnabled = CreateConfig(ConfigSections.QOL, Configs.FriendlyBallistas.Name, true, Configs.FriendlyBallistas.Description);
-			lessFallDamageEnabled = CreateConfig(ConfigSections.QOL, Configs.LessFallDamage.Name, true, Configs.LessFallDamage.Description);
-			fasterResourceDropsEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterResourceDrops.Name, true, Configs.FasterResourceDrops.Description);
-			fasterEquipEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterEquip.Name, true, Configs.FasterEquip.Description);
+			LighterMetalWeightEnabled = CreateConfig(ConfigSections.QOL, Configs.LighterMetalWeight.Name, true, Configs.LighterMetalWeight.Description);
+			LargerPickupAreaEnabled = CreateConfig(ConfigSections.QOL, Configs.LargerPickupArea.Name, true, Configs.LargerPickupArea.Description);
+			NoSkillLowerOnDeathEnabled = CreateConfig(ConfigSections.QOL, Configs.NoSkillLoss.Name, true, Configs.NoSkillLoss.Description);
+			LargerBoatExploreRadiusEnabled = CreateConfig(ConfigSections.QOL, Configs.LargerBoatExploreRadius.Name, true, Configs.LargerBoatExploreRadius.Description);
+			BiggerWispRadiusEnabled = CreateConfig(ConfigSections.QOL, Configs.BiggerWispRadius.Name, true, Configs.BiggerWispRadius.Description);
+			FriendlyBallistasEnabled = CreateConfig(ConfigSections.QOL, Configs.FriendlyBallistas.Name, true, Configs.FriendlyBallistas.Description);
+			LessFallDamageEnabled = CreateConfig(ConfigSections.QOL, Configs.LessFallDamage.Name, true, Configs.LessFallDamage.Description);
+			FasterResourceDropsEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterResourceDrops.Name, true, Configs.FasterResourceDrops.Description);
+			FasterEquipEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterEquip.Name, true, Configs.FasterEquip.Description);
 
 			// ===== UI
-			moreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description, false);
-			showInventoryWeightAndSlots = CreateConfig(ConfigSections.UI, Configs.UIInventoryWeightAndSlots.Name, true, Configs.UIInventoryWeightAndSlots.Description, false);
-			showEnemyDetector = CreateConfig(ConfigSections.UI, Configs.UIEnemyDetector.Name, true, Configs.UIEnemyDetector.Description, false);
-			showBoatSpeed = CreateConfig(ConfigSections.UI, Configs.UIBoatSpeed.Name, true, Configs.UIBoatSpeed.Description, false);
-			showTimeAndDay = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay.Name, true, Configs.UITimeAndDay.Description, false);
-			timeFormat24H = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay24H.Name, false, Configs.UITimeAndDay24H.Description, false);
-			showSmartBiome = CreateConfig(ConfigSections.UI, Configs.UISmartBiome.Name, true, Configs.UISmartBiome.Description, false);
-			showSummonCounter = CreateConfig(ConfigSections.UI, Configs.UISummonCounter.Name, true, Configs.UISummonCounter.Description, false);
-			showOnlinePlayers = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayers.Name, true, Configs.UIOnlinePlayers.Description, false);
-			onlinePlayersUnderMinimap = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayersUnderMinimap.Name, true, Configs.UIOnlinePlayersUnderMinimap.Description, false);
+			MoreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description, false);
+			ShowInventoryWeightAndSlots = CreateConfig(ConfigSections.UI, Configs.UIInventoryWeightAndSlots.Name, true, Configs.UIInventoryWeightAndSlots.Description, false);
+			ShowEnemyDetector = CreateConfig(ConfigSections.UI, Configs.UIEnemyDetector.Name, true, Configs.UIEnemyDetector.Description, false);
+			ShowBoatSpeed = CreateConfig(ConfigSections.UI, Configs.UIBoatSpeed.Name, true, Configs.UIBoatSpeed.Description, false);
+			ShowTimeAndDay = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay.Name, true, Configs.UITimeAndDay.Description, false);
+			TimeFormat24H = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay24H.Name, false, Configs.UITimeAndDay24H.Description, false);
+			ShowSmartBiome = CreateConfig(ConfigSections.UI, Configs.UISmartBiome.Name, true, Configs.UISmartBiome.Description, false);
+			ShowSummonCounter = CreateConfig(ConfigSections.UI, Configs.UISummonCounter.Name, true, Configs.UISummonCounter.Description, false);
+			ShowOnlinePlayers = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayers.Name, true, Configs.UIOnlinePlayers.Description, false);
+			OnlinePlayersUnderMinimap = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayersUnderMinimap.Name, true, Configs.UIOnlinePlayersUnderMinimap.Description, false);
 
 			SetupWatcher();
 		}
@@ -302,7 +302,6 @@ namespace MarsarahTweaks
 
 			
 			bool isDedicatedServer = ZNet.instance.IsDedicated();
-			bool isServer = ZNet.instance.IsServer();
 
 			// Handle client-side (non-dedicated) configs
 			if (!isDedicatedServer)
@@ -371,7 +370,7 @@ namespace MarsarahTweaks
 					case var name when name == Configs.GearUpgradeModifications.Name:
 						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
 						GearUpgradeChanges.UpdateGearRecipeUnlock(ObjectDB.instance, true);
-						if (showSmartBiome.Value)
+						if (ShowSmartBiome.Value)
 						{
 							UISmartBiome.UpdateBiomeWeights();
 						}
@@ -394,7 +393,7 @@ namespace MarsarahTweaks
 
 					case var name when name == Configs.TougherShips.Name:
 						//MarsarahTweaks.MLog($"ConfigManager: Reapplying modifications for {configName}...");
-						TougherShipsChanges.updateShipHP(ZNetScene.instance, true);
+						TougherShipsChanges.UpdateShipHP(ZNetScene.instance, true);
 						break;
 
 					case var name when name == Configs.OtherModifications.Name:
@@ -444,7 +443,7 @@ namespace MarsarahTweaks
 				{
 					case var name when name == Configs.TougherShips.Name:
 						MarsarahTweaks.MLog($"ConfigManager Server: Reapplying modifications for {configName}...");
-						TougherShipsChanges.updateShipHP(ZNetScene.instance, true);
+						TougherShipsChanges.UpdateShipHP(ZNetScene.instance, true);
 						break;
 				}
 			}*/

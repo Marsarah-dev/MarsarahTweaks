@@ -12,7 +12,7 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearRecipeModifications_Patch
 		{
-			static void Postfix(ref ObjectDB __instance)
+			private static void Postfix(ref ObjectDB __instance)
 			{
 				if (__instance == null) return;
 
@@ -25,22 +25,22 @@ namespace MarsarahTweaks.Patches.Features
 		// Dictionaries
 		private static Dictionary<string, (int recipeAmount, Dictionary<string, int> resourceAmounts)> recipeBackups = new Dictionary<string, (int, Dictionary<string, int>)>();
 		private static Dictionary<string, Dictionary<string, int>> otherRecipeModifiers = new Dictionary<string, Dictionary<string, int>>
-			{
-				{ "Recipe_Tankard", new Dictionary<string, int>
-					{
-						{ "FineWood", 2 }
-					}
-				},
-				{ "Recipe_IronNails", new Dictionary<string, int>
-					{
-						{ "Amount", 20 } // Special key to modify `recipe.m_amount`
-					}
+		{
+			{ "Recipe_Tankard", new Dictionary<string, int>
+				{
+					{ "FineWood", 2 }
 				}
-			};
+			},
+			{ "Recipe_IronNails", new Dictionary<string, int>
+				{
+					{ "Amount", 20 } // Special key to modify `recipe.m_amount`
+				}
+			}
+		};
 
 		public static void UpdateOthers(ObjectDB objDB, bool wasChanged)
 		{
-			if (ConfigManager.otherEnabled.Value)
+			if (ConfigManager.OtherEnabled.Value)
 			{
 				foreach (var entry in otherRecipeModifiers)
 				{

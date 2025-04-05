@@ -356,7 +356,7 @@ namespace MarsarahTweaks.Patches.Grind
 			// Get Dictionary for all recipe modifications
 			var recipeModifications = GetRecipeModifications();
 
-			if (ConfigManager.foodAndMeadModificationsEnabled.Value)
+			if (ConfigManager.FoodAndMeadModificationsEnabled.Value)
 			{
 				// Apply recipe changes ============================================================
 				foreach (KeyValuePair<string, RecipeModification> entry in recipeModifications)

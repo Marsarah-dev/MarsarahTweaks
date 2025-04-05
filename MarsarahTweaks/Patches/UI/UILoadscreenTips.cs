@@ -59,15 +59,15 @@ namespace MarsarahTweaks.Patches.UI
 		};
 
 		[HarmonyPatch(typeof(Localization), "SetupLanguage")]
-		public static class LoadingTips_Patch
+		class LoadingTips_Patch
 		{
-			static void Postfix(Localization __instance, string language)
+			private static void Postfix(Localization __instance, string language)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (__instance == null) return;
 
-				if (ConfigManager.moreLoadingTipsEnabled.Value)
+				if (ConfigManager.MoreLoadingTipsEnabled.Value)
 				{
 					localizationLanguage = language;
 				}
@@ -75,15 +75,15 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Awake")]
-		public static class Loadscreens_HUDAwakePatch
+		class Loadscreens_HUDAwakePatch
 		{
-			public static void Postfix(Hud __instance)
+			private static void Postfix(Hud __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (__instance == null) return;
 
-				if (ConfigManager.moreLoadingTipsEnabled.Value)
+				if (ConfigManager.MoreLoadingTipsEnabled.Value)
 				{
 					loadingTipString = loadingTipStrings[UnityEngine.Random.Range(0, loadingTipStrings.Count)];
 				}
@@ -93,13 +93,13 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Hud), "UpdateBlackScreen")]
 		class ExtraLoadingTipsUpdate_Patch
 		{
-			static void Postfix(Hud __instance)
+			private static void Postfix(Hud __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (__instance == null) return;
 
-				if (ConfigManager.moreLoadingTipsEnabled.Value && localizationLanguage == "English")
+				if (ConfigManager.MoreLoadingTipsEnabled.Value && localizationLanguage == "English")
 				{
 					__instance.m_loadingTip.text = loadingTipString;
 				}

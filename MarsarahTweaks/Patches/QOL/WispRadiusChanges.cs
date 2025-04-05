@@ -13,11 +13,11 @@ namespace MarsarahTweaks.Patches.QOL
 		[HarmonyPatch(typeof(Demister), "OnEnable")]
 		class BiggerWispRadius_Patch
 		{
-			static void Postfix([NotNull] ref Demister __instance)
+			private static void Postfix([NotNull] ref Demister __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-				if (ConfigManager.biggerWispRadiusEnabled.Value)
+				if (ConfigManager.BiggerWispRadiusEnabled.Value)
 				{
 					__instance.m_forceField.endRange = 30; // default 6, 8, 10, 15 (it changes) (30 in my mod)
 				}

@@ -12,11 +12,11 @@ namespace MarsarahTweaks.Patches.QOL
 		[HarmonyPatch(typeof(Skills), "Awake")]
 		class NoSkilllLowerOnDeath_Patch
 		{
-			static void Prefix(ref float ___m_DeathLowerFactor)
+			private static void Prefix(ref float ___m_DeathLowerFactor)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-				if (ConfigManager.noSkillLowerOnDeathEnabled.Value)
+				if (ConfigManager.NoSkillLowerOnDeathEnabled.Value)
 				{
 					___m_DeathLowerFactor = 0f;
 				}

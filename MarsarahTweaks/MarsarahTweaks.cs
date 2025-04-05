@@ -16,7 +16,8 @@ namespace MarsarahTweaks
 		internal const string ModVersion = "0.4.2";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
-		private static readonly bool showLogs = true;
+
+		private static readonly bool showLogs = false; // Set to true to display logs
 
 		private readonly Harmony harmony = new Harmony(ModGUID);
 

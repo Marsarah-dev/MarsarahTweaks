@@ -12,7 +12,7 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		private static readonly Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)> creatureSpawnBackups	= new Dictionary<string, (int?, float?, float?)>();
 
-		private static Dictionary <string, Dictionary <string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>> creatureSpawnChanges = new Dictionary<string, Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>>()
+		private static readonly Dictionary <string, Dictionary <string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>> creatureSpawnChanges = new Dictionary<string, Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>>()
 		{
 			{ "Eikthyr", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
 				{
@@ -135,13 +135,13 @@ namespace MarsarahTweaks.Patches.Features
 		};
 
 		// Tracking last defeated states to determine when changes occur
-		private static bool lastEikthyrDefeated = GlobalKeyChecker.isBossDefeated("Eikthyr");
-		private static bool lastElderDefeated = GlobalKeyChecker.isBossDefeated("The Elder");
-		private static bool lastBonemassDefeated = GlobalKeyChecker.isBossDefeated("Bonemass");
-		private static bool lastModerDefeated = GlobalKeyChecker.isBossDefeated("Moder");
-		private static bool lastYagluthDefeated = GlobalKeyChecker.isBossDefeated("Yagluth");
-		private static bool lastQueenDefeated = GlobalKeyChecker.isBossDefeated("The Queen");
-		private static bool lastFaderDefeated = GlobalKeyChecker.isBossDefeated("Fader");
+		private static bool lastEikthyrDefeated = GlobalKeyChecker.IsBossDefeated("Eikthyr");
+		private static bool lastElderDefeated = GlobalKeyChecker.IsBossDefeated("The Elder");
+		private static bool lastBonemassDefeated = GlobalKeyChecker.IsBossDefeated("Bonemass");
+		private static bool lastModerDefeated = GlobalKeyChecker.IsBossDefeated("Moder");
+		private static bool lastYagluthDefeated = GlobalKeyChecker.IsBossDefeated("Yagluth");
+		private static bool lastQueenDefeated = GlobalKeyChecker.IsBossDefeated("The Queen");
+		private static bool lastFaderDefeated = GlobalKeyChecker.IsBossDefeated("Fader");
 
 		[HarmonyPatch(typeof(SpawnSystem), "Awake")] // UpdateSpawning
 		class DynamicBossChangeWatcher_Patch
@@ -149,12 +149,9 @@ namespace MarsarahTweaks.Patches.Features
 			private static float checkTimer = 0f;
 			private static bool hasAppliedSpawnChangesOnce = false;
 
-			static void Postfix(SpawnSystem __instance)
+			private static void Postfix(SpawnSystem __instance)
 			{
-				//if (!ZNet.instance || !ZNet.instance.IsServer()) return;
-				// Needs to run on both server and client - no clause made
-				
-				//creatureSpawnChanges = GenerateTestSpawnChanges(); // Temporary
+				// Run on both server and client - no checks made
 
 				// Run once when the game/server starts
 				if (!hasAppliedSpawnChangesOnce)
@@ -185,11 +182,11 @@ namespace MarsarahTweaks.Patches.Features
 				{
 					foreach (var bossEntry in creatureSpawnChanges)
 					{
-						if (!GlobalKeyChecker.isBossDefeated(bossEntry.Key)) continue;
+						if (!GlobalKeyChecker.IsBossDefeated(bossEntry.Key)) continue;
 
 						if (bossEntry.Value.TryGetValue(spawner.m_name, out var changes))
 						{
-							if (ConfigManager.creatureUnlevelerEnabled.Value)
+							if (ConfigManager.CreatureUnlevelerEnabled.Value)
 							{
 								// Backup if not already backed up
 								if (!creatureSpawnBackups.ContainsKey(spawner.m_name))
@@ -239,62 +236,43 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			bool changed = false;
 
-			if (GlobalKeyChecker.eikthyrDefeated != lastEikthyrDefeated)
+			if (GlobalKeyChecker.EikthyrDefeated != lastEikthyrDefeated)
 			{
-				lastEikthyrDefeated = GlobalKeyChecker.eikthyrDefeated;
+				lastEikthyrDefeated = GlobalKeyChecker.EikthyrDefeated;
 				changed = true;
 			}
-			if (GlobalKeyChecker.elderDefeated != lastElderDefeated)
+			if (GlobalKeyChecker.ElderDefeated != lastElderDefeated)
 			{
-				lastElderDefeated = GlobalKeyChecker.elderDefeated;
+				lastElderDefeated = GlobalKeyChecker.ElderDefeated;
 				changed = true;
 			}
-			if (GlobalKeyChecker.bonemassDefeated != lastBonemassDefeated)
+			if (GlobalKeyChecker.BonemassDefeated != lastBonemassDefeated)
 			{
-				lastBonemassDefeated = GlobalKeyChecker.bonemassDefeated;
+				lastBonemassDefeated = GlobalKeyChecker.BonemassDefeated;
 				changed = true;
 			}
-			if (GlobalKeyChecker.moderDefeated != lastModerDefeated)
+			if (GlobalKeyChecker.ModerDefeated != lastModerDefeated)
 			{
-				lastModerDefeated = GlobalKeyChecker.moderDefeated;
+				lastModerDefeated = GlobalKeyChecker.ModerDefeated;
 				changed = true;
 			}
-			if (GlobalKeyChecker.yagluthDefeated != lastYagluthDefeated)
+			if (GlobalKeyChecker.YagluthDefeated != lastYagluthDefeated)
 			{
-				lastYagluthDefeated = GlobalKeyChecker.yagluthDefeated;
+				lastYagluthDefeated = GlobalKeyChecker.YagluthDefeated;
 				changed = true;
 			}
-			if (GlobalKeyChecker.queenDefeated != lastQueenDefeated)
+			if (GlobalKeyChecker.QueenDefeated != lastQueenDefeated)
 			{
-				lastQueenDefeated = GlobalKeyChecker.queenDefeated;
+				lastQueenDefeated = GlobalKeyChecker.QueenDefeated;
 				changed = true;
 			}
-			if (GlobalKeyChecker.faderDefeated != lastFaderDefeated)
+			if (GlobalKeyChecker.FaderDefeated != lastFaderDefeated)
 			{
-				lastFaderDefeated = GlobalKeyChecker.faderDefeated;
+				lastFaderDefeated = GlobalKeyChecker.FaderDefeated;
 				changed = true;
 			}
 
 			return changed;
 		}
-
-		/*public static Dictionary<string, Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>> GenerateTestSpawnChanges()
-		{
-			var testDict = new Dictionary<string, Dictionary<string, (int?, float?, float?)>>();
-
-			foreach (var bossEntry in creatureSpawnChanges)
-			{
-				var creatureDict = new Dictionary<string, (int?, float?, float?)>();
-
-				foreach (var creature in bossEntry.Value.Keys)
-				{
-					creatureDict[creature] = (3, 100f, 0f); // Set test values
-				}
-
-				testDict[bossEntry.Key] = creatureDict;
-			}
-
-			return testDict;
-		}*/
 	}
 }

@@ -11,7 +11,7 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class ExtensionsChanges
 	{
-		internal static bool lastExtensionSetting = ConfigManager.extensionsChangesEnabled.Value;
+		internal static bool lastExtensionSetting = ConfigManager.ExtensionsChangesEnabled.Value;
 
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
 		class BuildPiecesModifications_Patch
@@ -52,9 +52,6 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static void UpdateExtensionsSpace(ZNetScene znScene)
 		{
-			//int modifiedPieces = 0;
-			//int restoredPieces = 0;
-
 			foreach (GameObject piece in znScene.m_prefabs)
 			{
 				Piece actualPiece = piece.GetComponent<Piece>();
@@ -62,7 +59,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				string pieceName = actualPiece.m_name;
 
-				if (ConfigManager.extensionsChangesEnabled.Value)
+				if (ConfigManager.ExtensionsChangesEnabled.Value)
 				{
 					if (actualPiece.m_spaceRequirement >= 2)
 					{
@@ -75,7 +72,6 @@ namespace MarsarahTweaks.Patches.Features
 
 						// Apply new values
 						actualPiece.m_spaceRequirement = 1;
-						//modifiedPieces++;
 					}
 				}
 				else if (originalSpaceRequirements.TryGetValue(pieceName, out float originalSpaceRequirement))
@@ -85,26 +81,15 @@ namespace MarsarahTweaks.Patches.Features
 					actualPiece.m_spaceRequirement = originalSpaceRequirement;
 
 					originalSpaceRequirements.Remove(pieceName);
-					//restoredPieces++;
 				}
 			}
-
-			/*if (modifiedPieces > 0)
-			{
-				MarsarahTweaks.MLog($"Updated {modifiedPieces} build pieces to require less space.");
-			}
-			if (restoredPieces > 0)
-			{
-				MarsarahTweaks.MLog($"Restored {restoredPieces} build pieces to original space requirements.");
-			}*/
 		}
 
 		private static void UpdateExtensionsRange(StationExtension extension)
 		{
-			// string extensioName = extension.name ?? extension.GetInstanceID().ToString();
 			string extensioName = extension.name;
 
-			if (ConfigManager.extensionsChangesEnabled.Value)
+			if (ConfigManager.ExtensionsChangesEnabled.Value)
 			{
 				if (!originalStationDistance.ContainsKey(extensioName))
 				{
@@ -139,7 +124,7 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		void Update()
 		{
-			bool currentSetting = ConfigManager.extensionsChangesEnabled.Value;
+			bool currentSetting = ConfigManager.ExtensionsChangesEnabled.Value;
 
 			if (ExtensionsChanges.lastExtensionSetting != currentSetting)
 			{

@@ -14,10 +14,9 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			private static void Prefix(MonsterAI __instance, ref bool ___m_fleeIfNotAlerted)
 			{
-				//if (!ZNet.instance || !ZNet.instance.IsServer()) return; // Prevent running on clients
 				// Run on both server and client - no checks made
 
-				if (__instance == null || !ConfigManager.noFleeEnabled.Value) return;
+				if (__instance == null || !ConfigManager.NoFleeEnabled.Value) return;
 
 				BaseAI thisBaseAI = __instance.GetComponentInParent<BaseAI>();
 				if (thisBaseAI == null) return;	

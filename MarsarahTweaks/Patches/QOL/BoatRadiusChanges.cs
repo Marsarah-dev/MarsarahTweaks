@@ -14,11 +14,11 @@ namespace MarsarahTweaks.Patches.QOL
 		{
 			private static float originalExploreRadius = -1f;
 
-			static void Prefix(ref float ___m_exploreRadius)
+			private static void Prefix(ref float ___m_exploreRadius)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-				if (ConfigManager.largerBoatExploreRadiusEnabled.Value)
+				if (ConfigManager.LargerBoatExploreRadiusEnabled.Value)
 				{
 					if (Ship.GetLocalShip() && Ship.GetLocalShip().HasPlayerOnboard())
 					{

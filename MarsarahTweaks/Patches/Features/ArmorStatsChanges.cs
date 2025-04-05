@@ -12,7 +12,7 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(Player), "UpdateStats", new Type[] { typeof(float) })]
 		class eitrFromMageGear_Patch
 		{
-			static void Prefix(Player __instance)
+			private static void Prefix(Player __instance)
 			{
 				if (__instance == null) return;
 
@@ -23,13 +23,13 @@ namespace MarsarahTweaks.Patches.Features
 		}
 
 		[HarmonyPatch(typeof(Player), "GetTotalFoodValue")]
-		public class BaseEitr_Patch
+		class BaseEitr_Patch
 		{
-			public static void Postfix(ref float hp, ref float stamina, ref float eitr)
+			private static void Postfix(ref float hp, ref float stamina, ref float eitr)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-				if (ConfigManager.extraArmorStatsEnabled.Value)
+				if (ConfigManager.ExtraArmorStatsEnabled.Value)
 				{
 					hp += hpFromGear;
 					stamina += staminaFromGear;
@@ -39,15 +39,15 @@ namespace MarsarahTweaks.Patches.Features
 		}
 
 		[HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetTooltip), new Type[] { typeof(ItemDrop.ItemData), typeof(int), typeof(bool), typeof(float), typeof(int) })]
-		public class ArmorTooltip_Patch
+		class ArmorTooltip_Patch
 		{
-			public static void Postfix(ref string __result, ItemDrop.ItemData item)
+			private static void Postfix(ref string __result, ItemDrop.ItemData item)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
 				if (item == null || item.m_shared == null) return;
 
-				if (ConfigManager.extraArmorStatsEnabled.Value)
+				if (ConfigManager.ExtraArmorStatsEnabled.Value)
 				{
 					UpdateTooltips(item, ref __result);
 				}
@@ -112,7 +112,7 @@ namespace MarsarahTweaks.Patches.Features
 			hpFromGear = 0f;
 			staminaFromGear = 0f;
 
-			if (ConfigManager.extraArmorStatsEnabled.Value)
+			if (ConfigManager.ExtraArmorStatsEnabled.Value)
 			{
 				Inventory playerInventory = player.GetInventory();
 				List<ItemDrop.ItemData> playerEquippedItems = playerInventory.GetEquippedItems();

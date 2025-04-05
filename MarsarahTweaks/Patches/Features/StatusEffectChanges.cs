@@ -12,7 +12,7 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class StatusEffect_Patch
 		{
-			static void Postfix(ref ObjectDB __instance)
+			private static void Postfix(ref ObjectDB __instance)
 			{
 				if (__instance == null) return;
 
@@ -24,7 +24,7 @@ namespace MarsarahTweaks.Patches.Features
 		}
 
 		// Dictionaries
-		private static Dictionary<string, float> originalDurations = new Dictionary<string, float>();
+		private static readonly Dictionary<string, float> originalDurations = new Dictionary<string, float>();
 		private static readonly Dictionary<string, float> customDurations = new Dictionary<string, float>()
 		{
 			{ "Potion_eitr_minor", 60f },
@@ -42,7 +42,7 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (customDurations.TryGetValue(statusEffect.name, out float newDuration))
 				{
-					if (ConfigManager.shorterStatusEffectsEnabled.Value)
+					if (ConfigManager.ShorterStatusEffectsEnabled.Value)
 					{
 						if (!originalDurations.ContainsKey(statusEffect.name))
 						{

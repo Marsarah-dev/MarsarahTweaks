@@ -24,7 +24,7 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		}
 
-		private static Dictionary<string, float> newCrossbowsReloadTimes = new Dictionary<string, float>()
+		private static readonly Dictionary<string, float> newCrossbowsReloadTimes = new Dictionary<string, float>()
 		{
 			{ "CrossbowArbalest", 2.5f },
 			{ "CrossbowRipper", 2.5f },
@@ -35,7 +35,7 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static void UpdateCrossbowsReloadSpeed(ObjectDB objDB)
 		{
-			if (ConfigManager.reducedCrossbowsReloadTimeEnabled.Value)
+			if (ConfigManager.ReducedCrossbowsReloadTimeEnabled.Value)
 			{
 				foreach (var kvp in newCrossbowsReloadTimes)
 				{

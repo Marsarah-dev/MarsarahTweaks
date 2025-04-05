@@ -17,46 +17,8 @@ namespace MarsarahTweaks.Patches.Features
 		// Yagluth - Tick (5% -> 10%), Dverger (5% -> 10%), Seeker Soldier (5% -> 20%)
 		// The Queen - Charred Warlock (5% -> 20%)
 
-		/*
-		    { "Skeleton_Poison", ("TrophySkeletonPoison", 0.2f) }, // Eikthyr
-			{ "Surtling", ("TrophySurtling", 0.1f) }, // The Elder
-			{ "Draugr_Elite", ("TrophyDraugrElite", 0.2f) }, // The Elder
-			{ "Wraith", ("TrophyWraith", 0.2f) }, //  The Elder
-			{ "Fenring", ("TrophyFenring", 0.2f) }, // Bonemass
-			{ "Fenring_Cultist", ("TrophyCultist", 0.2f) }, // Bonemass
-			{ "StoneGolem", ("TrophySGolem", 0.2f) }, // Bonemass
-			{ "Deathsquito", ("TrophyDeathsquito", 0.1f) }, // Moder
-			{ "GoblinBrute", ("TrophyGoblinBrute", 0.1f) }, // Moder
-			{ "Tick", ("TrophyTick", 0.1f) }, // Yagluth
-			{ "Dverger", ("TrophyDvergr", 0.1f) }, // Yagluth
-			{ "DvergerMage", ("TrophyDvergr", 0.1f) }, // Yagluth
-			{ "SeekerBrute", ("TrophySeekerBrute", 0.2f) }, // Yagluth
-			{ "DvergerAshlands", ("TrophyDvergr", 0.1f) }, // The Queen
-			{ "Charred_Mage", ("TrophyCharredMage", 0.2f) } // The Queen
-		 */
-
 		// Dictionaries
-		//private static Dictionary<string, (string trophy, float originalRate)> originalTrophyDropRates = new Dictionary<string, (string trophy, float originalRate)>();
 		private static Dictionary<string, Dictionary<string, float>> originalTrophyDropRates = new Dictionary<string, Dictionary<string, float>>();
-		/*private static readonly Dictionary<string, (string trophy, float rate)> newTrophyDropRates = new Dictionary<string, (string trophy, float rate)>()
-		{
-			{ "Skeleton_Poison", ("TrophySkeletonPoison", 0.2f) }, // 0.1f
-			{ "Surtling", ("TrophySurtling", 0.1f) }, // 0.05f
-			{ "Draugr_Elite", ("TrophyDraugrElite", 0.2f) }, // 0.1f
-			{ "Wraith", ("TrophyWraith", 0.2f) }, // 0.05f
-			{ "Fenring", ("TrophyFenring", 0.2f) }, // 0.1f
-			{ "Fenring_Cultist", ("TrophyCultist", 0.2f) }, // 0.1f
-			{ "StoneGolem", ("TrophySGolem", 0.2f) }, // 0.05f
-			{ "Deathsquito", ("TrophyDeathsquito", 0.1f) }, // 0.05f
-			{ "GoblinBrute", ("TrophyGoblinBrute", 0.1f) }, // 0.05f
-			{ "Tick", ("TrophyTick", 0.1f) }, // 0.05f
-			{ "Dverger", ("TrophyDvergr", 0.1f) }, // 0.05f
-			{ "DvergerMage", ("TrophyDvergr", 0.1f) }, // 0.05f
-			{ "DvergerAshlands", ("TrophyDvergr", 0.1f) }, // 0.05f
-			{ "SeekerBrute", ("TrophySeekerBrute", 0.2f) }, // 0.05f
-			{ "Charred_Mage", ("TrophyCharredMage", 0.2f) } // 0.05f
-		};*/
-
 		private static readonly Dictionary<string, List<(string creature, string trophy, float rate)>> bossTrophyMappings = new Dictionary<string, List<(string, string, float)>>()
 		{
 			{ "Eikthyr", new List<(string, string, float)>
@@ -100,15 +62,15 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		};
 
-		public static void updateTrophyDrops(ZNetScene instance)
+		public static void UpdateTrophyDrops(ZNetScene instance)
 		{
 			if (instance == null) return;
 
-			bool progHaltEnabled = ConfigManager.automaticProgressionHaltEnabled.Value;
+			bool progHaltEnabled = ConfigManager.AutomaticProgressionHaltEnabled.Value;
 
 			foreach (var boss in bossTrophyMappings)
 			{
-				bool canMakeChanges = !progHaltEnabled || (progHaltEnabled && GlobalKeyChecker.isBossDefeated(boss.Key));
+				bool canMakeChanges = !progHaltEnabled || (progHaltEnabled && GlobalKeyChecker.IsBossDefeated(boss.Key));
 
 				if (!canMakeChanges)
 				{
@@ -128,7 +90,7 @@ namespace MarsarahTweaks.Patches.Features
 					{
 						if (drop.m_prefab.name == trophy)
 						{
-							if (ConfigManager.betterTrophyDropsEnabled.Value)
+							if (ConfigManager.BetterTrophyDropsEnabled.Value)
 							{
 								// Backup original drop rate
 								if (!originalTrophyDropRates.ContainsKey(creature))
@@ -167,14 +129,14 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		}
 
-		public static void restoreTrophyDrops(ZNetScene instance)
+		public static void RestoreTrophyDrops(ZNetScene instance)
 		{
-			bool progHaltEnabled = ConfigManager.automaticProgressionHaltEnabled.Value;
+			bool progHaltEnabled = ConfigManager.AutomaticProgressionHaltEnabled.Value;
 
 			foreach (var boss in bossTrophyMappings)
 			{
 				// Only restore backups for creatures whose boss has not yet been defeated
-				bool canMakeChanges = progHaltEnabled && !GlobalKeyChecker.isBossDefeated(boss.Key);
+				bool canMakeChanges = progHaltEnabled && !GlobalKeyChecker.IsBossDefeated(boss.Key);
 
 				if (!canMakeChanges)
 				{
@@ -221,11 +183,11 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (__instance == null) return;
 
-				//updateTrophyDrops(__instance);
+				//UpdateTrophyDrops(__instance);
 			}
 		}*/
 
-		/*public static void updateTrophyDrops(ZNetScene znScene)
+		/*public static void UpdateTrophyDrops(ZNetScene znScene)
 		{
 			foreach (var kvp in newTrophyDropRates)
 			{
@@ -253,7 +215,7 @@ namespace MarsarahTweaks.Patches.Features
 				{
 					if (drop.m_prefab.name == trophy)
 					{
-						if (ConfigManager.betterTrophyDropsEnabled.Value)
+						if (ConfigManager.BetterTrophyDropsEnabled.Value)
 							{
 							// Backup original drop rate
 							if (!originalTrophyDropRates.ContainsKey(creature))

@@ -8,7 +8,6 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(Character), "Awake")]
 		class FasterCharacterSpeed_Patch
 		{
-			//static void Prefix(ref float ___m_crouchSpeed, ref float ___m_walkSpeed, ref float ___m_speed, ref float ___m_swimSpeed)
 			static void Prefix(Character __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
@@ -40,7 +39,7 @@ namespace MarsarahTweaks.Patches.Features
 				//MarsarahTweaks.MLog($"CharacterSpeedChanges: Backed up original speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
 			}
 
-			if (ConfigManager.fasterCharacterSpeedEnabled.Value)
+			if (ConfigManager.FasterCharacterSpeedEnabled.Value)
 			{
 				// Apply modified values
 				character.m_crouchSpeed = 2.2f; // Default: 2

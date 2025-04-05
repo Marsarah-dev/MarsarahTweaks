@@ -13,13 +13,13 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(MistEmitter), "Update")]
 		class ClearMistlandsEmitter_Patch
 		{
-			static void Prefix(MistEmitter __instance)
+			private static void Prefix(MistEmitter __instance)
 			{
 				if (__instance == null) return;
 
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-				if (ConfigManager.clearMistlandsEnabled.Value && GlobalKeyChecker.queenDefeated)
+				if (ConfigManager.ClearMistlandsEnabled.Value && GlobalKeyChecker.QueenDefeated)
 				{
 					__instance.gameObject.SetActive(false);
 				}
@@ -30,13 +30,13 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(ParticleMist), "Update")]
 		class ClearMistlandsParticle_Patch
 		{
-			static void Postfix(ParticleMist __instance)
+			private static void Postfix(ParticleMist __instance)
 			{
 				if (__instance == null) return;
 
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-				if (ConfigManager.clearMistlandsEnabled.Value && GlobalKeyChecker.queenDefeated)
+				if (ConfigManager.ClearMistlandsEnabled.Value && GlobalKeyChecker.QueenDefeated)
 				{
 					__instance.gameObject.SetActive(false);
 				}

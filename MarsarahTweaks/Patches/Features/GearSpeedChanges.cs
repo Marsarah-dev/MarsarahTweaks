@@ -14,7 +14,7 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearSpeedChanges_Patch
 		{
-			static void Postfix(ref ObjectDB __instance)
+			private static void Postfix(ref ObjectDB __instance)
 			{
 				if (__instance == null) return;
 
@@ -63,7 +63,7 @@ namespace MarsarahTweaks.Patches.Features
 				string itemName = item.name;
 				float currentModifier = item.m_itemData.m_shared.m_movementModifier;
 
-				if (ConfigManager.gearSpeedModifiersEnabled.Value)
+				if (ConfigManager.GearSpeedModifiersEnabled.Value)
 				{
 					if (movementModifiers.TryGetValue(itemName, out float newModifier))
 					{

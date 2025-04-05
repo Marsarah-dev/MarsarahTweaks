@@ -14,12 +14,12 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(Fireplace), "UpdateFireplace")]
 		class PermanentLights_Patch
 		{
-			static void Postfix(Fireplace __instance, ref ZNetView ___m_nview)
+			private static void Postfix(Fireplace __instance, ref ZNetView ___m_nview)
 			{
 				// Ensure this only runs on the server (or the owner of the fireplace)
 				if (___m_nview.IsOwner())
 				{
-					if (ConfigManager.permanentLightsEnabled.Value)
+					if (ConfigManager.PermanentLightsEnabled.Value)
 					{
 						//MarsarahTweaks.MLog($"Setting max fuel for {__instance.m_name}");
 						___m_nview.GetZDO().Set("fuel", __instance.m_maxFuel);
@@ -64,7 +64,7 @@ namespace MarsarahTweaks.Patches.Features
 
 		public static void UpdateLightBuildPiecesAmounts(ZNetScene znScene, bool wasChanged)
 		{
-			if (ConfigManager.permanentLightsEnabled.Value)
+			if (ConfigManager.PermanentLightsEnabled.Value)
 			{
 				foreach (var pieceName in lightPieceCostChanges.Keys)
 				{
@@ -92,8 +92,6 @@ namespace MarsarahTweaks.Patches.Features
 						continue;
 					}
 
-					//MarsarahTweaks.MLog($"{pieceName} - Found prefab: {prefab.name}");
-
 					Piece component = prefab.GetComponent<Piece>();
 					if (component == null)
 					{
@@ -101,18 +99,11 @@ namespace MarsarahTweaks.Patches.Features
 						continue;
 					}
 
-					// Log original resources before modifying
-					/*foreach (Piece.Requirement req in component.m_resources)
-					{
-						MarsarahTweaks.MLog($"{pieceName} - Original: {req.m_resItem.name} x {req.m_amount}");
-					}*/
-
 					// Backup original costs only if they haven't been backed up yet
 					if (!originalLightPieceCosts.ContainsKey(pieceName))
 					{
 						//MarsarahTweaks.MLog($"Backing up {pieceName}");
-						originalLightPieceCosts[pieceName] = component.m_resources
-							.ToDictionary(req => req.m_resItem.name, req => req.m_amount);
+						originalLightPieceCosts[pieceName] = component.m_resources.ToDictionary(req => req.m_resItem.name, req => req.m_amount);
 					}
 
 					// Apply cost modifications
@@ -136,6 +127,7 @@ namespace MarsarahTweaks.Patches.Features
 							m_resItem = znScene.GetPrefab("Wood").GetComponent<ItemDrop>(),
 							m_recover = true
 						};
+
 						// Ensure the Hearth only gets the extra Wood requirement once
 						if (!component.m_resources.Any(req => req.m_resItem == woodReq.m_resItem && req.m_amount == woodReq.m_amount))
 						{

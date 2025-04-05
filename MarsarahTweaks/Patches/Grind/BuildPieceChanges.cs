@@ -15,13 +15,13 @@ namespace MarsarahTweaks.Patches.Grind
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
 		class BuildPiecesModifications_Patch
 		{
-			static void Postfix(ref ZNetScene __instance)
+			private static void Postfix(ref ZNetScene __instance)
 			{
 				if (__instance == null) return;
 
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-				if (!ConfigManager.buildPieceAmountsEnabled.Value && !ConfigManager.buildPieceMaterialsEnabled.Value) return;
+				if (!ConfigManager.BuildPieceAmountsEnabled.Value && !ConfigManager.BuildPieceMaterialsEnabled.Value) return;
 
 				UpdateBuildPieces(__instance, false, false);
 			}
@@ -575,8 +575,8 @@ namespace MarsarahTweaks.Patches.Grind
 				Piece.Requirement[] requirements = actualPiece.m_resources;
 				string pieceName = actualPiece.m_name;
 
-				bool hasPieceAmountsChange = ConfigManager.buildPieceAmountsEnabled.Value && newPieceAmounts.ContainsKey(pieceName);
-				bool hasPieceMaterialsChange = ConfigManager.buildPieceMaterialsEnabled.Value && newPieceMaterials.ContainsKey(pieceName);
+				bool hasPieceAmountsChange = ConfigManager.BuildPieceAmountsEnabled.Value && newPieceAmounts.ContainsKey(pieceName);
+				bool hasPieceMaterialsChange = ConfigManager.BuildPieceMaterialsEnabled.Value && newPieceMaterials.ContainsKey(pieceName);
 
 				foreach (Piece.Requirement req in requirements)
 				{
@@ -599,7 +599,7 @@ namespace MarsarahTweaks.Patches.Grind
 					}
 
 					// Restore backups when disabling features
-					if (!ConfigManager.buildPieceAmountsEnabled.Value && newPieceAmounts.ContainsKey(pieceName) && amountsWasChanged)
+					if (!ConfigManager.BuildPieceAmountsEnabled.Value && newPieceAmounts.ContainsKey(pieceName) && amountsWasChanged)
 					{
 						//MarsarahTweaks.MLog($"(Gear Amounts) Was changed: {amountsWasChanged}");
 						if (RestoreBackup(pieceName, req, false))
@@ -613,7 +613,7 @@ namespace MarsarahTweaks.Patches.Grind
 						}
 					}
 
-					if (!ConfigManager.buildPieceMaterialsEnabled.Value && newPieceMaterials.ContainsKey(pieceName) && materialsWasChanged)
+					if (!ConfigManager.BuildPieceMaterialsEnabled.Value && newPieceMaterials.ContainsKey(pieceName) && materialsWasChanged)
 					{
 						//MarsarahTweaks.MLog($"(Gear Materials) Was changed: {materialsWasChanged}");
 						if (RestoreBackup(pieceName, req, true))

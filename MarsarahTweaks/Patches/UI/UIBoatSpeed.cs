@@ -24,11 +24,11 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Ship), "GetSpeed")]
 		class ShowBoatSpeed_Patch
 		{
-			static void Prefix(Ship __instance, ref Rigidbody ___m_body)
+			private static void Prefix(Ship __instance, ref Rigidbody ___m_body)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
-				if (ConfigManager.showBoatSpeed.Value)
+				if (ConfigManager.ShowBoatSpeed.Value)
 				{
 					if (__instance && __instance.HasPlayerOnboard())
 					{
@@ -47,15 +47,15 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
-		public static class BoatSpeedHUDUpdate_Patch
+		static class BoatSpeedHUDUpdate_Patch
 		{
-			public static void Postfix(Hud __instance)
+			private static void Postfix(Hud __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (__instance == null) return;
 
-				if (ConfigManager.showBoatSpeed.Value)
+				if (ConfigManager.ShowBoatSpeed.Value)
 				{
 					CreateUI(__instance); // Create UI if missing
 
@@ -97,7 +97,7 @@ namespace MarsarahTweaks.Patches.UI
 				RectTransform boatAreaTransform = UIBoatArea.AddComponent<RectTransform>();
 				boatAreaTransform.anchorMin = new Vector2(1f, 1f);
 				boatAreaTransform.anchorMax = new Vector2(1f, 1f);
-				boatAreaTransform.anchoredPosition = new Vector2(ConfigManager.showInventoryWeightAndSlots.Value && ConfigManager.showEnemyDetector.Value ? 203f : ConfigManager.showInventoryWeightAndSlots.Value || ConfigManager.showEnemyDetector.Value ? 100f : -40f, -230f);
+				boatAreaTransform.anchoredPosition = new Vector2(ConfigManager.ShowInventoryWeightAndSlots.Value && ConfigManager.ShowEnemyDetector.Value ? 203f : ConfigManager.ShowInventoryWeightAndSlots.Value || ConfigManager.ShowEnemyDetector.Value ? 100f : -40f, -230f);
 				boatAreaTransform.sizeDelta = UIBoatAreaSize;
 				UIBoatArea.transform.localScale = Vector3.one;  // Ensure correct scale
 

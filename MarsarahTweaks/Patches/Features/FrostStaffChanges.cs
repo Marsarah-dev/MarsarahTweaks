@@ -10,17 +10,17 @@ namespace MarsarahTweaks.Patches.Features
 	internal class FrostStaffChanges
 	{
 		[HarmonyPatch(typeof(Attack), "FireProjectileBurst")]
-		public class IceStaffAccuracy_Patch
+		class IceStaffAccuracy_Patch
 		{
 			private static float originalAccuracy = -1;
 
-			public static void Prefix(Attack __instance, ref float ___m_projectileAccuracy)
+			private static void Prefix(Attack __instance, ref float ___m_projectileAccuracy)
 			{
 				// Run on both client and server - no conditions placed
 
 				if (__instance.GetWeapon().m_shared.m_name == "$item_stafficeshards")
 				{
-					if (ConfigManager.betterFrostStaffAccuracyEnabled.Value)
+					if (ConfigManager.BetterFrostStaffAccuracyEnabled.Value)
 					{
 						// Backup accuracy
 						if (originalAccuracy == -1)

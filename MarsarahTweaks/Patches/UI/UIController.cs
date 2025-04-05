@@ -51,9 +51,9 @@ namespace MarsarahTweaks.Patches.UI
 			float xOffset = -45f;
 			float yOffset = -230f;
 
-			bool inventoryUIActive = UIInventoryWeightAndSlots.UIInventoryArea != null && ConfigManager.showInventoryWeightAndSlots.Value;
-			bool enemyDetectorUIActive = UIEnemyDetector.UIEnemyArea != null && ConfigManager.showEnemyDetector.Value;
-			bool boatSpeedUIActive = UIBoatSpeed.UIBoatArea != null && ConfigManager.showBoatSpeed.Value;
+			bool inventoryUIActive = UIInventoryWeightAndSlots.UIInventoryArea != null && ConfigManager.ShowInventoryWeightAndSlots.Value;
+			bool enemyDetectorUIActive = UIEnemyDetector.UIEnemyArea != null && ConfigManager.ShowEnemyDetector.Value;
+			bool boatSpeedUIActive = UIBoatSpeed.UIBoatArea != null && ConfigManager.ShowBoatSpeed.Value;
 
 			if (inventoryUIActive)
 			{

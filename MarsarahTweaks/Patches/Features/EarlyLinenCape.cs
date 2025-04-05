@@ -14,7 +14,7 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
 		class EarlyLinenCape_Patch
 		{
-			static void Postfix(ref ZNetScene __instance)
+			private static void Postfix(ref ZNetScene __instance)
 			{
 				if (__instance == null) return;
 
@@ -40,7 +40,7 @@ namespace MarsarahTweaks.Patches.Features
 			ItemDrop itemDrop = item.GetComponent<ItemDrop>();
 			if (itemDrop != null)
 			{
-				if (ConfigManager.earlyLinenCapeEnabled.Value)
+				if (ConfigManager.EarlyLinenCapeEnabled.Value)
 				{
 					//MarsarahTweaks.MLog("Setting Linen Cape Poison Resist");
 					HitData.DamageModPair damageModPairPoison = new HitData.DamageModPair();
@@ -78,7 +78,7 @@ namespace MarsarahTweaks.Patches.Features
 			if (translationsDict != null)
 			{
 				// Modify the translation
-				if (ConfigManager.earlyLinenCapeEnabled.Value)
+				if (ConfigManager.EarlyLinenCapeEnabled.Value)
 				{
 					translationsDict["item_cape_linen"] = "Fine Cape";
 					translationsDict["item_cape_linen_description"] = "A finely crafted traveler's cape.";
@@ -95,13 +95,6 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				Localization.instance.ReLocalizeAll(Player.m_localPlayer.transform);
 			}
-
-			// Logging all entries
-			/*MarsarahTweaks.MLog("Checking existing localization keys...");
-			foreach (var entry in translationsDict)
-			{
-				MarsarahTweaks.MLog($"Key: {entry.Key} -> Value: {entry.Value}");
-			}*/
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace MarsarahTweaks.Patches.Features
 					return true;
 				}
 
-				if (ConfigManager.gearUpgradeUnlockEnabled.Value)
+				if (ConfigManager.GearUpgradeUnlockEnabled.Value)
 				{
 					__runOriginal = false;
 					__result = Mathf.Max(0, ___m_minStationLevel) + (quality - 1);
@@ -49,7 +49,7 @@ namespace MarsarahTweaks.Patches.Features
 
 
 		// Dictionaries
-		private static Dictionary<string, int> originalRecipeStationLevels = new Dictionary<string, int>();
+		private static readonly Dictionary<string, int> originalRecipeStationLevels = new Dictionary<string, int>();
 		private static readonly Dictionary<string, int> newRecipeStationLevels = new Dictionary<string, int>()
 		{
 			// Station Level 0
@@ -92,7 +92,7 @@ namespace MarsarahTweaks.Patches.Features
 
 		public static void UpdateGearRecipeUnlock(ObjectDB objDB, bool wasChanged)
 		{
-			if (ConfigManager.gearUpgradeUnlockEnabled.Value)
+			if (ConfigManager.GearUpgradeUnlockEnabled.Value)
 			{
 				foreach (var entry in newRecipeStationLevels)
 				{
@@ -133,6 +133,5 @@ namespace MarsarahTweaks.Patches.Features
 				originalRecipeStationLevels.Clear();
 			}
 		}
-
 	}
 }

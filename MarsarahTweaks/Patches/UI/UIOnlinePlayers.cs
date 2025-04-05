@@ -23,11 +23,11 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(ZNet), "Update")]
 		class OnlinePartyIndicator_Patch
 		{
-			static void Prefix(ref List<PlayerInfo> ___m_players)
+			private static void Prefix(ref List<PlayerInfo> ___m_players)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
-				if (ConfigManager.showOnlinePlayers.Value && showUI)
+				if (ConfigManager.ShowOnlinePlayers.Value && showUI)
 				{
 					if (___m_players.Count != 0)
 						playerInfoList = ___m_players;
@@ -36,25 +36,25 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
-		static class OnlinePlayers_HUDUpdatePatch
+		class OnlinePlayers_HUDUpdatePatch
 		{
-			private static bool lastOnlinePlayersUnderMinimap = ConfigManager.onlinePlayersUnderMinimap.Value;
+			private static bool lastOnlinePlayersUnderMinimap = ConfigManager.OnlinePlayersUnderMinimap.Value;
 			private static float UIPartyPlayerTextDistanceV = -25f; // goes down;
 
-			static void Postfix(Hud __instance)
+			private static void Postfix(Hud __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (__instance == null) return;
 
-				if (ConfigManager.showOnlinePlayers.Value)
+				if (ConfigManager.ShowOnlinePlayers.Value)
 				{
 					CreateUI(__instance); // Create UI if missing
 
 					// Handle where to display the online list when toggling
-					if (ConfigManager.onlinePlayersUnderMinimap.Value != lastOnlinePlayersUnderMinimap)
+					if (ConfigManager.OnlinePlayersUnderMinimap.Value != lastOnlinePlayersUnderMinimap)
 					{
-						lastOnlinePlayersUnderMinimap = ConfigManager.onlinePlayersUnderMinimap.Value;
+						lastOnlinePlayersUnderMinimap = ConfigManager.OnlinePlayersUnderMinimap.Value;
 						UpdatePartyUIPosition(__instance);
 					}
 
@@ -79,7 +79,7 @@ namespace MarsarahTweaks.Patches.UI
 					bool onePlayer = playerInfoList.Count == 1;
 					//bool onePlayer = false;
 
-					if (!ConfigManager.onlinePlayersUnderMinimap.Value)
+					if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
 					{
 						// Header after players
 						for (int i = 0; i < numOnlinePlayerSlots; i++)
@@ -172,14 +172,14 @@ namespace MarsarahTweaks.Patches.UI
 				UIPartyArea = new GameObject("PartyArea");
 				UIPartyArea.SetActive(false); // Hide the UI initially
 				UIPartyArea.layer = 5;
-				if (!ConfigManager.onlinePlayersUnderMinimap.Value)
+				if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
 					UIPartyArea.transform.SetParent(hud.m_rootObject.transform.parent); // Attach to the HUD root parent (entire UI)
 				else
 					UIPartyArea.transform.SetParent(hud.m_rootObject.transform); // Attach to the Mnimap
 
 				RectTransform partyAreaTransform = UIPartyArea.AddComponent<RectTransform>();
 				
-				if (!ConfigManager.onlinePlayersUnderMinimap.Value)
+				if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
 				{
 					partyAreaTransform.anchorMin = new Vector2(1f, 0f);
 					partyAreaTransform.anchorMax = new Vector2(1f, 0f);
@@ -209,8 +209,8 @@ namespace MarsarahTweaks.Patches.UI
 				for (int i = 0; i < numOnlinePlayerSlots; i++)
 				{
 					// Determine text alignment and row growth direction
-					TextAnchor alignment = ConfigManager.onlinePlayersUnderMinimap.Value ? TextAnchor.MiddleLeft : TextAnchor.MiddleRight;
-					Vector2 anchoredPosition = ConfigManager.onlinePlayersUnderMinimap.Value ? new Vector2(0f, UIPartyPlayerTextDistanceV * i) : new Vector2(0f, -UIPartyPlayerTextDistanceV * i);
+					TextAnchor alignment = ConfigManager.OnlinePlayersUnderMinimap.Value ? TextAnchor.MiddleLeft : TextAnchor.MiddleRight;
+					Vector2 anchoredPosition = ConfigManager.OnlinePlayersUnderMinimap.Value ? new Vector2(0f, UIPartyPlayerTextDistanceV * i) : new Vector2(0f, -UIPartyPlayerTextDistanceV * i);
 
 					// Create the text object using the helper function
 					Text UIPlayerText = CreateTextObject(
@@ -238,7 +238,7 @@ namespace MarsarahTweaks.Patches.UI
 				//MarsarahTweaks.MLog($"Executing UpdatePartyUIPosition");
 
 				// Set new parent first, keeping world position to avoid undesired shifts
-				if (!ConfigManager.onlinePlayersUnderMinimap.Value)
+				if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
 				{
 					UIPartyArea.transform.SetParent(hud.m_rootObject.transform.parent, false); // Attach to the HUD root parent (entire UI)
 				}
@@ -249,7 +249,7 @@ namespace MarsarahTweaks.Patches.UI
 
 				RectTransform partyAreaTransform = UIPartyArea.GetComponent<RectTransform>();
 
-				if (!ConfigManager.onlinePlayersUnderMinimap.Value)
+				if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
 				{
 					// Move to absolute bottom-right of the screen
 					partyAreaTransform.anchorMin = new Vector2(1f, 0f);
@@ -276,10 +276,10 @@ namespace MarsarahTweaks.Patches.UI
 						RectTransform textTransform = UIPlayerText.GetComponent<RectTransform>();
 
 						// Update alignment
-						UIPlayerText.alignment = ConfigManager.onlinePlayersUnderMinimap.Value ? TextAnchor.MiddleLeft : TextAnchor.MiddleRight;
+						UIPlayerText.alignment = ConfigManager.OnlinePlayersUnderMinimap.Value ? TextAnchor.MiddleLeft : TextAnchor.MiddleRight;
 
 						// Update text position within container
-						textTransform.anchoredPosition = ConfigManager.onlinePlayersUnderMinimap.Value
+						textTransform.anchoredPosition = ConfigManager.OnlinePlayersUnderMinimap.Value
 							? new Vector2(0f, UIPartyPlayerTextDistanceV * i) // Move down from top
 							: new Vector2(0f, -UIPartyPlayerTextDistanceV * i); // Move up from bottom
 					}
