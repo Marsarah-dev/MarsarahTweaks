@@ -1,13 +1,4 @@
 ﻿
-/*
- "Alternate Cooking Recipes" + "Alternate Mead Recipes" + "More Food Stacks" - "Food and Mead Modifications"
-Si
-"More Armor Stats" + "Mage Gear Eitr" - "More Armor Stats"
-Si
-"Better Death Raiser" + "Better Summoned Skeleton Gear" - "Better Death Raiser Summons" 
- */
-
-
 using BepInEx;
 using BepInEx.Configuration;
 using MarsarahTweaks.Patches;
