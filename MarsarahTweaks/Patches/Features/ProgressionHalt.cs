@@ -301,11 +301,11 @@ namespace MarsarahTweaks.Patches.Features
 				{ 
 					"Eikthyr", new List<string> 
 					{
-						"Greydwarf",
-						"Greydwarf_Elite",
-						"Greydwarf_Shaman",
+						//"Greydwarf",
+						//"Greydwarf_Elite",
+						//"Greydwarf_Shaman",
 						"Troll",
-						"Skeleton",
+						//"Skeleton",
 						"Skeleton_Poison",
 						"Pickable_Carrot",
 						"Pickable_SeedCarrot",

@@ -72,7 +72,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata BuildPieceMaterialsModifications = new ConfigMetadata("5 - Alternate Build Pieces Materials", "Modifies build pieces materials (This will move the Workbench Toolrack extension from Mountain to Swamp biome)");
 			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("6 - Food And Mead Modifications", "Modifies food and mead recipes costs, crafted amounts and stacks. (Toggling mid-game requires CLIENT relog for food stacks)");
 
-			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("01 - Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it");
+			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("01 - Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it. (Toggling mid-game requires CLIENT relog if the item is equipped)");
 			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("02 - Gear Speed Modifications", "Removes speed penalty for heavy and mage armors; adds speed bonus to light armor. (Toggling mid-game requires CLIENT relog)");
 			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("03 - Forsaken Powers Modifications", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)");
 			public static readonly ConfigMetadata CharacterSpeedModifications = new ConfigMetadata("04 - Faster Character Speed", "Faster character jog, walk, swim and crouch speeds (run excluded)");

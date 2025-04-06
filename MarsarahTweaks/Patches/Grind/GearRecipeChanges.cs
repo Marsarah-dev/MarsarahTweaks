@@ -30,10 +30,10 @@ namespace MarsarahTweaks.Patches.Grind
 		}
 
 		// Dictionaries
-		private static Dictionary<string, Dictionary<string, (string originalResItem, string newResItem, int amount, int amountPerLevel)>> defaultGearRecipeValues
+		private static readonly Dictionary<string, Dictionary<string, (string originalResItem, string newResItem, int amount, int amountPerLevel)>> defaultGearRecipeValues
 			= new Dictionary<string, Dictionary<string, (string originalResItem, string newResItem, int amount, int amountPerLevel)>>();
 
-		private static Dictionary<string, Dictionary<string, (int? amount, int? amountPerLevel)>> newGearRecipesAmounts = new Dictionary<string, Dictionary<string, (int? amount, int? amountPerLevel)>>()
+		private static readonly Dictionary<string, Dictionary<string, (int? amount, int? amountPerLevel)>> newGearRecipesAmounts = new Dictionary<string, Dictionary<string, (int? amount, int? amountPerLevel)>>()
 		{
 			// == Weapons, projeciles & shields ==
 			// Wood
@@ -964,7 +964,7 @@ namespace MarsarahTweaks.Patches.Grind
 			}
 		};
 
-		private static Dictionary<string, Dictionary<string, (string newResItem, int? amount, int? amountPerLevel)>> newGearRecipesMaterials = new Dictionary<string, Dictionary<string, (string newResItem, int? amount, int? amountPerLevel)>>()
+		private static readonly Dictionary<string, Dictionary<string, (string newResItem, int? amount, int? amountPerLevel)>> newGearRecipesMaterials = new Dictionary<string, Dictionary<string, (string newResItem, int? amount, int? amountPerLevel)>>()
 		{
 			{
 				"Recipe_Club", new Dictionary<string, (string, int?, int?)>
