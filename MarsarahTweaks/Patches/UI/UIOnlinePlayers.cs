@@ -77,9 +77,28 @@ namespace MarsarahTweaks.Patches.UI
 							{
 								UIPartyArea.SetActive(false);  // Hide it during load screen
 							}
-							else if (!isLoadScreenActive && !UIPartyArea.activeSelf)
+							else if (!isLoadScreenActive/* && !UIPartyArea.activeSelf*/)
 							{
-								UIPartyArea.SetActive(true);   // Show it when not in load screen
+								//UIPartyArea.SetActive(true);   // Show it when not in load screen
+
+								if (ConfigManager.OnlinePlayersUnderMinimap.Value)
+								{
+									// Check if minimap is visible
+									bool minimapVisible = Minimap.instance.m_mapSmall.activeInHierarchy;
+
+									if (minimapVisible && !UIPartyArea.activeSelf)
+									{
+										UIPartyArea.SetActive(true); // Show when minimap is visible
+									}
+									else if (!minimapVisible && UIPartyArea.activeSelf)
+									{
+										UIPartyArea.SetActive(false); // Hide when minimap is not visible
+									}
+								}
+								else if (!UIPartyArea.activeSelf)
+								{
+									UIPartyArea.SetActive(true);   // Show it when not in load screen
+								}
 							}
 						}
 					}

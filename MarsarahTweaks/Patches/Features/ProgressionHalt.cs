@@ -206,7 +206,7 @@ namespace MarsarahTweaks.Patches.Features
 				//string pickableName = __instance.name;
 				//string pickableName = __instance.name.Replace("(Clone)", "").Trim();
 				string pickableName = __instance.name.Replace("(Clone)", "").TrimEnd('(', ')').Trim();
-				MarsarahTweaks.MLog($"Trimmed: {pickableName} - Full: {__instance.name}");
+				//MarsarahTweaks.MLog($"Trimmed: {pickableName} - Full: {__instance.name}");
 
 				foreach (var restriction in pickableResourceRestrictions)
 				{
