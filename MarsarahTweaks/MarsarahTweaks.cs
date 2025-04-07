@@ -2,6 +2,9 @@
 /***************************************************
  * TODO
  * 
+ * ShowOnlinePlayers 
+ * - Fix redundancy in code when positioning header depending on party area location.
+ * - Right now the end result is the same, but the code treats it different
  ***************************************************/
 
 using BepInEx;
@@ -23,7 +26,7 @@ namespace MarsarahTweaks
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 
-		private static readonly bool showLogs = false; // Set to true to display logs
+		private static readonly bool showLogs = true; // Set to true to display logs
 
 		private readonly Harmony harmony = new Harmony(ModGUID);
 

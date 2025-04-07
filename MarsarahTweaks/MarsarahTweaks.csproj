@@ -150,11 +150,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ILRepack.targets" />
+    <None Include="MarsarahTweaks_DescriptionT.md" />
     <None Include="packages.config" />
-    <None Include="Patches\MarsarahTweaks_DescriptionN.md" />
+    <None Include="MarsarahTweaks_DescriptionN.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Patches\MarsarahTweaks_Readme.txt" />
+    <Content Include="MarsarahTweaks_Readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.40\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.40\build\ILRepack.Lib.MSBuild.Task.targets')" />

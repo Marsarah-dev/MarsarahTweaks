@@ -58,26 +58,35 @@ namespace MarsarahTweaks.Patches.UI
 						UpdatePartyUIPosition(__instance);
 					}
 
-					// Special case that prevents the online players area to show during the load screen
+					// Special case that prevents the online players area to show during the load screen or when UI is hidden
 					if (Player.m_localPlayer && UIPartyArea != null)
 					{
-						// Check if the load screen is active
+						// Check if the UI is hidden or loadscreen active
+						bool isUIHidden = IsUIHidden();
 						bool isLoadScreenActive = IsLoadScreenActive(__instance);
 
-						// Only toggle visibility when necessary
-						if (isLoadScreenActive && UIPartyArea.activeSelf)
+						// Toggle visibility according to UI
+						if (isUIHidden && UIPartyArea.activeSelf)
 						{
-							UIPartyArea.SetActive(false);  // Hide it during load screen
+							UIPartyArea.SetActive(false);  // Hide it when UI is hidden
 						}
-						else if (!isLoadScreenActive && !UIPartyArea.activeSelf)
+						else if (!isUIHidden)
 						{
-							UIPartyArea.SetActive(true);   // Show it when not in load screen
+							// Toggle visibility according to loadscreen
+							if (isLoadScreenActive && UIPartyArea.activeSelf)
+							{
+								UIPartyArea.SetActive(false);  // Hide it during load screen
+							}
+							else if (!isLoadScreenActive && !UIPartyArea.activeSelf)
+							{
+								UIPartyArea.SetActive(true);   // Show it when not in load screen
+							}
 						}
 					}
 
 					int numPlayers = (playerInfoList.Count <= numOnlinePlayerSlots - 1) ? playerInfoList.Count : numOnlinePlayerSlots - 1;
-					bool onePlayer = playerInfoList.Count == 1;
-					//bool onePlayer = false;
+					//bool onePlayer = playerInfoList.Count == 1;
+					bool onePlayer = false;
 
 					if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
 					{
@@ -114,7 +123,7 @@ namespace MarsarahTweaks.Patches.UI
 						// Header before players
 						if (!onePlayer)
 						{
-							UIPlayerTexts[0].enabled = showUI;
+							UIPlayerTexts[0].enabled = showUI && Minimap.instance.m_mapSmall.activeInHierarchy;
 							if (showUI)
 							{
 								UIPlayerTexts[0].color = Color.green;
@@ -125,7 +134,7 @@ namespace MarsarahTweaks.Patches.UI
 							{
 								if (i <= numPlayers)
 								{
-									UIPlayerTexts[i].enabled = showUI;
+									UIPlayerTexts[i].enabled = showUI && Minimap.instance.m_mapSmall.activeInHierarchy;
 									if (showUI)
 									{
 										UIPlayerTexts[i].color = Color.white;
@@ -255,7 +264,7 @@ namespace MarsarahTweaks.Patches.UI
 					partyAreaTransform.anchorMin = new Vector2(1f, 0f);
 					partyAreaTransform.anchorMax = new Vector2(1f, 0f);
 					partyAreaTransform.pivot = new Vector2(1f, 0f); // Set pivot to bottom-right of the screen
-					partyAreaTransform.anchoredPosition = new Vector2(-20f, 5f);  // Offset from screen edge
+					partyAreaTransform.anchoredPosition = new Vector2(-20f, 70f);  // Offset from screen edge
 				}
 				else
 				{
@@ -289,6 +298,11 @@ namespace MarsarahTweaks.Patches.UI
 			private static bool IsLoadScreenActive(Hud hud)
 			{
 				return Hud.instance && hud.m_loadingScreen && hud.m_loadingScreen.gameObject.activeSelf;
+			}
+
+			private static bool IsUIHidden()
+			{
+				return Hud.IsUserHidden();
 			}
 		}
 	}
