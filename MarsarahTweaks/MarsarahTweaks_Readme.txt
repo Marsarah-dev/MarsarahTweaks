@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.0.0
+Marsarah Tweaks v1.0.1
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 
@@ -40,7 +40,7 @@ MOD CONFIGS
 • If on, only server admins can change the configuration.
 
 ====================== [Grind Reduction] =======================
-► All configs in this section are synced with server
+► All configs in this section are synced with server.
 
 -------------------- [Double Bronze Crafting] ------------------
 
@@ -1298,7 +1298,7 @@ The following foods have the stack size increased to 20
 
 
 ========================= [Features] ===========================
-► All configs in this section are synced with server
+► All configs in this section are synced with server.
 
 --------------------- [Early Linen Cape] -----------------------
 
@@ -1871,6 +1871,15 @@ The following foods have the stack size increased to 20
 ► Conflicts:
   This only applies to vanilla game prefabs. Any mod that adds new prefabs (creatures, resources, pickables) will NOT be included in the Progression Halt system.
 
+► Specific boss halts
+
+- Eikthyr: Black Forest objects and creatures
+- The Elder: Swamp objects and creatures
+- Bonemass: Mountain and Ocean objects and creatures
+- Moder: Plains objects and creatures
+- Yagluth: Mistlands objects and creatures
+- The Queen: Ashlands objects and creatures
+
 
 ------------------ [Better Trophy Drop Rates] ------------------
 
@@ -1939,7 +1948,7 @@ The following foods have the stack size increased to 20
 
 
 ======================== [QOL] ========================
-► All configs in this section are synced with server
+► All configs in this section are synced with server.
 
 ------------------ [Lighter Metal Weight] ----------------------
 
@@ -2059,7 +2068,7 @@ The following foods have the stack size increased to 20
 
 
 ============================ [UI] ==============================
-► Configs in this section are NOT synced with server.
+► All configs in this section are synced with server.
 
 --------------------- [More Loading Tips]-----------------------
 
@@ -2205,5 +2214,9 @@ The following foods have the stack size increased to 20
 VERSION HISTORY
 ================================================================
 
+v1.0.1
+- Fixed a bug where features that were dependent on checking global keys (Progression Halt, Creature Unleveler) were dependent on having Clear Mistlands section enabled. Now these sections work as intended even if that option is off.
+- Made UI sections server synced like the rest of the configs.
+
 v1.0.0
-Initial upload.
+- Initial upload.

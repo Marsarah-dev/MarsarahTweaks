@@ -152,7 +152,7 @@
     <None Include="ILRepack.targets" />
     <None Include="MarsarahTweaks_DescriptionT.md" />
     <None Include="packages.config" />
-    <None Include="MarsarahTweaks_DescriptionN.md" />
+    <None Include="MarsarahTweaks_DescriptionN%28unused%29.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MarsarahTweaks_Description_BBCode.txt" />
