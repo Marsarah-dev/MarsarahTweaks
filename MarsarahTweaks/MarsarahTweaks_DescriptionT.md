@@ -1,8 +1,7 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.0.0  
-**Author:** Marsarah  
-**Ported from:** *MarsarahMod* (now deprecated)
+**Version:** 1.0.1   
+**Author:** Marsarah
 
 ---
 
@@ -33,7 +32,7 @@ https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/
 1. Unpack the `.zip` file.
 2. Copy `MarsarahTweaks.dll` into your `Valheim/BepInEx/plugins` folder.
 
-> ⚠️ **Note:** This mod must be installed on both the **server** and **all clients**.
+  ⚠️ **Note:** This mod must be installed on both the **server** and **all clients**.
 
 ---
 
@@ -48,9 +47,9 @@ This mod is **modular and customizable**.
 - Most features support **mid-game toggling**, but some require crafting menus to be reopened, reloading areas or **client** relogs (this is specified in each config).
 - Some configs below will have more detailed changes written in the [Docs] tab of the Nexusmods page. 
 
-> ✅ All gameplay-affecting features are synced using ServerSync.  
-> ❌ UI-related features are local and not synced.  
-> 🔄 Players will be disconnected if their mod version differs from the server.
+  ✅ All gameplay-affecting features are synced using ServerSync.  
+  ❌ UI-related features are local and not synced.  
+  🔄 Players will be disconnected if their mod version differs from the server.
 
 ---
 
@@ -482,6 +481,15 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 **❗ Conflicts:** This only applies to vanilla game prefabs. Any mod that adds new prefabs (creatures, resources, pickables) will **not** be included in the Progression Halt system.
 
+**🔧 Specific boss halts**
+
+- Eikthyr: Black Forest objects and creatures
+- The Elder: Swamp objects and creatures
+- Bonemass: Mountain and Ocean objects and creatures
+- Moder: Plains objects and creatures
+- Yagluth: Mistlands objects and creatures
+- The Queen: Ashlands objects and creatures
+
 ---
 
 ### <strong>🎯 Better Trophy Drop Rates</strong>
@@ -662,7 +670,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 ## <strong>🖥️ UI</strong>
 
-Configs in this section are **not** synced with server
+All features below are synced with the server and can be toggled mid-game.
 
 ---
 
@@ -799,5 +807,14 @@ Suggestions and bug reports are welcome on the [Posts] tab.
 Thanks for checking out Marsarah Tweaks!
 
 ## <strong> 🧑‍🤝‍🧑 Credits </strong>
-Azumatt - for posting a guide on YouTube about how to setup ServerSync in a project   
+Azumatt - for a guide on YouTube about how to setup ServerSync in a project  
 Blaxxun-bloop - for ServerSync
+
+## <strong> 📜 Version History </strong>
+
+v1.0.1
+- Fixed a bug where features that were dependent on checking global keys (Progression Halt, Creature Unleveler) were dependent on having Clear Mistlands section enabled. Now these sections work as intended even if that option is off.
+- Made UI sections server synced like the rest of the configs.
+
+v1.0.0
+- Initial Upload

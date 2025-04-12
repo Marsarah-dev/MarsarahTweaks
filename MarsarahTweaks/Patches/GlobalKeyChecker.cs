@@ -56,8 +56,6 @@ namespace MarsarahTweaks.Patches
 		{
 			static void Postfix(ZoneSystem __instance)
 			{
-				if (!ConfigManager.ClearMistlandsEnabled.Value) return;
-
 				UpdateDefeatedStates(__instance);
 
 				EikthyrDefeated = CheckGlobalKey("defeated_eikthyr");

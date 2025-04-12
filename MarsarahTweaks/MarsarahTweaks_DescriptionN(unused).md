@@ -1,8 +1,7 @@
 # Marsarah Tweaks
 
 **Version:** 1.0.0  
-**Author:** Marsarah  
-**Ported from:** *MarsarahMod* (now deprecated)
+**Author:** Marsarah
 
 ---
 
@@ -872,5 +871,5 @@ Suggestions and bug reports are welcome on the [Posts] tab.
 Thanks for checking out Marsarah Tweaks!
 
 ## 🧑‍🤝‍🧑 Credits
-Azumatt - for posting a guide on YouTube about how to setup ServerSync in a project   
+Azumatt - for a guide on YouTube about how to setup ServerSync in a project   
 Blaxxun-bloop - for ServerSync

@@ -104,8 +104,8 @@ namespace MarsarahTweaks.Patches.UI
 					}
 
 					int numPlayers = (playerInfoList.Count <= numOnlinePlayerSlots - 1) ? playerInfoList.Count : numOnlinePlayerSlots - 1;
-					//bool onePlayer = playerInfoList.Count == 1;
-					bool onePlayer = false;
+					bool onePlayer = playerInfoList.Count == 1;
+					//bool onePlayer = false;
 
 					if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
 					{

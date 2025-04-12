@@ -1,0 +1,777 @@
+[size=5][b]Marsarah Tweaks[/b][/size]
+
+[b]Version:[/b] 1.0.1  
+[b]Author:[/b] Marsarah  
+
+[line]
+
+[size=5][b]🧰 About the Mod[/b][/size]
+
+Marsarah Tweaks is a modular and optimized port of my previous project, [b]MarsarahMod[/b].  
+It features numerous code improvements, cleaned-up logic, and [b]ServerSync[/b] integration — all wrapped into a cleaner, more maintainable package.
+
+Each feature is grouped and configurable, allowing players or server admins to tweak Valheim’s grind and balance just the way they want.
+
+[line]
+
+[size=5][b]🔒 Permissions[/b][/size]
+
+Reuploading this mod, whether in part or in full, is [b]not permitted[/b].
+
+[line]
+
+[size=5][b]🧱 Requirements[/b][/size]
+
+This mod requires [b]BepInEx for Valheim[/b], available here:  
+https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/
+
+[line]
+
+[size=5][b]📦 Installation[/b][/size]
+
+1. Unpack the [i].zip[/i] file.
+2. Copy [i]MarsarahTweaks.dll[/i] into your [i]Valheim/BepInEx/plugins[/i] folder.
+
+> ⚠️ [b]Note:[/b] This mod must be installed on both the [b]server[/b] and [b]all clients[/b].
+
+[line]
+
+[size=5][b]⚙️ Configuration[/b][/size]
+
+This mod is [b]modular and customizable[/b].
+
+- A config file is generated on first launch:  
+  [i]Valheim/BepInEx/config/Marsarah.MarsarahTweaks.cfg[/i]
+- Each feature is in its own section and can be toggled individually.
+- Features can be changed manually or via a config manager (e.g. Configuration Manager).
+- Most features support [b]mid-game toggling[/b], but some require crafting menus to be reopened, reloading areas or [b]client[/b] relogs (this is specified in each config).
+- Some configs below will have more detailed changes written in the [Docs] tab of this page. 
+
+> ✅ All gameplay-affecting features are synced using ServerSync.  
+> ❌ UI-related features are local and not synced.  
+> 🔄 Players will be disconnected if their mod version differs from the server.
+
+[line]
+
+[size=5][b]⚡ Main Features[/b][/size]
+
+[line]
+
+[size=4][b]🔐 Lock Configuration[/b][/size]
+
+Prevents non-admin players from modifying any configuration values while in-game.  
+Useful for dedicated servers to maintain consistent settings.
+
+[line]
+
+[size=4][b]🛠️ Grind Reduction[/b][/size]
+
+All features below are synced with the server and can be toggled mid-game.
+
+[line]
+
+[size=4][b]🧪 Double Bronze Crafting[/b][/size]
+
+📜 Doubles the amount of [b]Bronze[/b] produced when combining [b]Copper and Tin[/b] at a Forge.
+
+- Only affects the [b]output amount[/b] — resource costs stay the same.  
+
+🔄 Requires reopening the Forge menu to take effect if toggled during gameplay.
+
+[b]❗ Conflicts:[/b] Mods that modify Bronze crafting output.
+
+
+[size=4][b]🛡️ Cheaper Gear Recipe Amounts[/b][/size]
+
+📜 Reduces the [b]amount[/b] (not type) of resources needed to craft or upgrade vanilla gear.
+
+- Focused especially on expensive items like metal weapons and armor  
+- Some recipes rebalance material use (e.g. replacing bronze with leather) for game balance  
+
+🔄 Requires reopening the relevant crafting menu after toggling the config mid-game
+
+[b]❗ Conflicts:[/b] Mods that change gear recipe ingredients.
+
+
+[size=4][b]⚔️ Alternate Gear Recipe Materials[/b][/size]
+
+📜 Changes gear crafting and upgrade materials to match the [b]biome progression[/b].  
+- This prevents players from needing to backtrack to earlier biomes to gather outdated materials.
+
+🔄 Requires reopening the relevant crafting menu after toggling the config mid-game
+
+[b]❗ Conflicts:[/b] Mods that modify vanilla gear recipe resources.
+
+
+[size=4][b]🏗️ Cheaper Build Piece Amounts[/b][/size]
+
+📜 Reduces the [b]amount[/b] of materials required to craft vanilla build pieces.
+
+- Works with mods that add new build pieces (but does not affect them)  
+
+🔄 Requires reopening the build menu after toggling the config mid-game
+
+[b]❗ Conflicts:[/b] Mods that modify vanilla build piece costs.
+
+
+[size=4][b]🏚️ Alternate Build Piece Materials[/b][/size]
+
+📜 Alters some [b]material types[/b] required for specific vanilla build pieces.  
+- Pairs well with the Cheaper Build Piece Amounts option
+- Note: This will move the Workbenck Toolrack extension from the Mountain to Swamp biome
+
+🔄 Requires reopening the build menu after toggling the config mid-game
+
+[b]❗ Conflicts:[/b] Mods that modify vanilla build piece costs.  
+✅ Compatible with mods that add new build pieces (changes won't apply to them).
+
+
+[size=4][b]🍲 Food and Mead Modifications[/b][/size]
+
+📜 Adjusts food and mead recipes for a smoother experience:
+
+- Changes recipe amounts, outputs, and ingredients  
+- All food stack sizes increased to [b]20[/b]
+
+🔄 Requires [b]client[/b] relog after toggling the config mid-game. 
+
+[b]❗ Conflicts:[/b] Mods that modify vanilla food or mead recipes.  
+✅ Compatible with mods that add new recipes.
+
+
+[line]
+
+[size=4][b]✨ Features[/b][/size]
+
+All features below are synced with the server and can be toggled mid-game (with relog/crafting menu reopen as needed).
+
+[line]
+
+[size=4][b]🧥 Early Linen Cape[/b][/size]
+
+📜 Moves the Linen Cape to the [b]Swamp biome[/b], renames it to [b]Fine Cape[/b], and adds [b]Poison Resistance[/b].
+
+- Adjusts material and upgrade requirements  
+
+🔄 Reopen the crafting menu to apply changes if toggling mid-game. If wearing the cape while toggling, a [b]client relog[/b] is required for Poison Resist to apply
+
+[b]❗ Conflicts:[/b] Mods that modify back pieces
+
+
+[size=4][b]🏃‍♂️ Gear Speed Modifications[/b][/size]
+
+📜 Removes movement speed penalties from heavy/mage gear and adds small bonuses to light armor sets.
+
+🔄 Requires [b]client relog[/b] to apply changes if toggled mid-game
+
+[b]❗ Conflicts:[/b] Mods that change gear speed modifiers
+
+[b]🔧 Changes:[/b]
+
+- [b]Heavy Gear:[/b] -5% → 0%  
+- [b]Mage Gear:[/b] -2% → 0%  
+- [b]Light Gear Bonuses:[/b]  
+  • Troll/Ask: +2%  
+  • Root: +1%  
+- [b]Weapon Penalties:[/b]  
+  • Battleaxe & Crystal Battleaxe: -20% → -5%  
+- [b]Shield Penalties:[/b]  
+  • Tower Shields: -20% → -10%
+
+
+[size=4][b]⚡ Forsaken Powers Modifications[/b][/size]
+
+📜 Adjusts [b]cooldowns[/b] and [b]durations[/b] of each Forsaken Power for more flexible usage.
+
+🔄 Changes apply instantly without relog if toggled mid-game
+
+[b]❗ Conflicts:[/b] Mods that modify Forsaken Powers
+
+[b]🔧 Power Timing Adjustments:[/b]
+
+- [b]Eikthyr Power:[/b] Cooldown: 15 min, Duration: 10 min  
+- [b]Elder Power:[/b] Cooldown: 15 min, Duration: 10 min  
+- [b]Bonemass Power:[/b] Cooldown: 17.5 min, Duration: 7.5 min  
+- [b]Moder Power:[/b] Cooldown: 15 min, Duration: 10 min  
+- [b]Yagluth Power:[/b] Cooldown: 17.5 min, Duration: 7.5 min  
+- [b]Queen Power:[/b] Cooldown: 15 min, Duration: 7.5 min  
+- [b]Fader Power:[/b] Cooldown: 15 min, Duration: 7.5 min
+
+
+[size=4][b]🏃‍♀️ Faster Character Speed[/b][/size]
+
+📜 Boosts overall character movement speeds for smoother gameplay.
+
+🔄 Changes apply instantly without relog if toggled mid-game
+
+[b]❗ Conflicts:[/b] Mods that modify player movement speed
+
+[b]🔧 Changes:[/b]
+
+- [b]Crouch Speed:[/b] 2.0 → 2.2  
+- [b]Swim Speed:[/b] 2.0 → 2.2  
+- [b]Walk Speed:[/b] 1.6 → 2.5  
+- [b]Run Speed:[/b] Unchanged
+
+
+[size=4][b]💧 Shorter Wet & Potion Cooldowns[/b][/size]
+
+📜 Reduces cooldowns for [b]potion usage[/b] and the [b]wet status effect[/b], making recovery smoother during exploration and combat.
+
+🔄 Changes apply instantly without relog if toggled mid-game
+
+[b]❗ Conflicts:[/b] Mods that modify status effects for wetness or potions
+
+[b]🔧 Cooldown Changes:[/b]
+
+- [b]Wet: [/b] 120s → 60s 
+- [b]Minor Eitr Potion: [/b] 120s → 60s 
+- [b]Minor Health Potion: [/b] 120s → 45s 
+- [b]Medium Health Potion: [/b] 120s → 60s 
+- [b]Major Health Potion: [/b] 120s → 75s 
+- [b]Minor Stamina Potion:[/b] 120s → 45s 
+- [b]Medium Stamina Potion:[/b] 120s → 60s 
+
+
+[size=4][b]💨 Less Stamina Usage[/b][/size]
+
+📜 Reduces all stamina costs across actions (combat, running, building, etc.) by [b]15%[/b].
+
+🔄 Changes apply instantly without relog if toggled mid-game
+
+[b]❗ Conflicts:[/b] Mods that globally modify player stamina  
+✅ Compatible with mods that modify stamina on a per-item basis
+
+
+[size=4][b]🛡️ Extra Armor Stats[/b][/size]
+
+📜 Enhances gear with [b]extra stats[/b] based on armor class:
+
+- [b]Heavy Armor:[/b] Adds HP  
+- [b]Light Armor:[/b] Adds Stamina  
+- [b]Mage Armor:[/b] Adds Eitr (not regen)
+
+🔄 Changes apply instantly without relog if toggled mid-game (may need [b]client[/b] relog for tooltip refresh)
+
+[b]❗ Conflicts:[/b] Mods that add HP/Stamina/Eitr to armor  
+✅ Compatible with custom armor mods — only vanilla gear is affected
+
+[b]🔧 Stat Bonuses by Armor Set:[/b]
+
+[b]HP (Heavy Armor):[/b]
+
+- [b]Set: Total HP - Breakdown (Head / Chest / Legs)[/b]
+- [b]Bronze:[/b] 10 - 2  / 4  / 4
+- [b]Iron:[/b] 20 - 4  / 8  / 8
+- [b]Silver:[/b] 30 - 8  / 12 / 10
+- [b]Padded:[/b] 40 - 10 / 16 / 14
+- [b]Carapace:[/b] 50 - 12 / 20 / 18
+- [b]Flametal:[/b] 60 - 14 / 24 / 22
+- [b]Ask:[/b] 25 - 5  / 10 / 10
+
+[b]Stamina (Light Armor):[/b]
+
+- [b]Set: Total HP - Breakdown (Head / Chest / Legs)[/b]
+- [b]Troll:[/b] 5  - 1 / 2 / 2
+- [b]Root:[/b] 10 - 3 / 4 / 3
+- [b]Fenris:[/b] 15 - 4 / 6 / 5
+- [b]Ask:[/b] 20 - 5 / 8 / 7
+
+[b]Eitr (Mage Armor):[/b]
+
+- [b]Set: Total HP - Breakdown (Head / Chest / Legs)[/b]
+- [b]Eitr-Weave:[/b] 50 - 10 / 20 / 20
+- [b]Embla:[/b] 75 - 15 / 30 / 30
+
+
+[size=4][b]💀 Better Death Raiser[/b][/size]
+
+📜 Modifies the way the Death Raiser summons Skeletons:
+
+- The primary attack will only spawn melee skeletons. 
+- Adds a secondary attack that spawns archer skeletons
+
+🔄 Changes apply instantly without relog if toggled mid-game
+
+[b]❗ Conflicts:[/b]  Mods that change how the Death Raiser functions or what it summons.  
+✅  Compatible with other mods that modify skeleton spawn stats or gear.
+
+
+[size=4][b]🦴 Better Summoned Skeletons[/b][/size]
+
+📜 Increases summoned skeleton speed and adds better looking gear according to Death Raiser level (Skeleton stats are not affected).
+
+🔄 Toggling mid-game requires [b]client[/b] relog for Summoned Skeleton speed changes to take effect. New gear is applied immediately for newly Summoned Skeletons without relogging.
+
+[b]❗ Conflicts:[/b]  Mods that modify Summoned Skeleton speed stats and gear.
+
+
+[size=4][b]❄️ Better Frost Staff Accuracy[/b][/size]
+
+📜 Improves Staff of Frost Accuracy.
+
+🔄 Changes apply instantly without relog if toggled mid-game
+
+[b]❗ Conflicts:[/b]  Mods that modify the Staff of Frost.
+
+
+[size=4][b]🏹 Reduced Crossbows Reload Time[/b][/size]
+
+📜 Crossbows Reload Time Reduced by 1s (3.5s → 2.5s).
+
+🔄 Toggling mid-game requires [b]client[/b] relog
+
+[b]❗ Conflicts:[/b] Mods that modify Crossbows reload time.
+
+
+[size=4][b]🔥 Less Ashlands Enemies[/b][/size]
+
+📜 Reduced the spawn rate and numbers of enemies in Ashlands.  
+- This does [b]not[/b] modify enemy levels or levelup chances (starred enemies).
+
+🔄 Toggling mid-game requires reloading area. 
+- This means moving to a new unloaded area will apply the new/old spawn values depending on the toggle. Areas that are currently active (having a player present) will retain the old config spawn data.  
+- Teleporting or simply walking away for a certain distance will make changes take effect if this config is toggled mid-game.
+
+[b]❗ Conflicts:[/b] Mods that modify Ashlands enemy spawn data.
+
+
+[size=4][b]🔧 Gear Upgrade Unlock[/b][/size]
+
+📜 Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to lvl 4 within their respective biomes.  
+- This is accomplished by reducing the crafting workstation level requirements for Leather Set, Troll Set, Bronze Set, all Mistlands sets, and all Ashlands sets.  
+- NOTE: Special Ashlands weapons that use gems can be crafted to lvl 3 (e.g. Klossen max level upgrade is 3 (from 2)).
+
+🔄 Can be enabled/disabled during gameplay, but requires the relevant crafting menu to be reopened to take effect.
+
+[b]❗ Conflicts:[/b] Mods that modify the required station level for the named sets.
+
+
+[size=4][b]💡 Permanent Lights[/b][/size]
+
+📜 Makes all light sources permanent and modifies the build costs of light source pieces to use maximum amount of their respective fuel type (wood, resin, coal etc).  
+- Fireplace now has an additional 20 Wood cost.  
+- Campfire and Fireplace Wood is refundable when destroyed.
+
+🔄 Changes apply instantly without relog if toggled mid-game
+
+[b]❗ Conflicts:[/b] Mods that modify light source fuel or build piece costs.  
+✅ Compatible with mods that add new light sources. This will make them permanent, but will not modify their build costs.
+
+
+[size=4][b]🌫️ Clear Mistlands[/b][/size]
+
+📜 Clears Mistlands mist after defeating the Queen.  
+- Changes will be applied immediately when the Queen is defeated. No relogs or restarts needed.
+
+🔄 Disabling mid-game requires [b]client[/b] relog if the Queen is defeated. Enabling mid-game will apply changes immediately.
+
+[b]❗ Conflicts:[/b] Mods that modify Mistlands mist.
+
+
+[size=4][b]⚙️ Craftable Chain[/b][/size]
+
+📜 Adds a Chain recipe at the Black Forge.
+
+🔄 Can be enabled/disabled during gameplay, but requires the Black Forge crafting menu to be reopened to take effect.
+
+[b]❗ Conflicts:[/b] Possibly mods that add the same recipe at the normal Forge (not tested).
+
+
+[size=4][b]💡 Brighter Lanterns[/b][/size]
+
+📜 Makes Dverger Lanterns brighter.  
+- Standing lanterns are a bit brighter than the wall mount lanterns.
+
+🔄 Toggling mid-game requires either [b]client[/b] relog or reloading area (moving/teleporting away from current zone and coming back).
+
+[b]❗ Conflicts:[/b]  Mods that modify Dverger Lanterns luminosity.
+
+
+[size=4][b]🌤️ Clearer Weather[/b][/size]
+
+📜 Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively.
+
+🔄 Toggling mid-game requires [b]client[/b] relog.
+
+[b]❗ Conflicts:[/b]  Weather or seasons mods.
+
+
+[size=4][b]👹 Creature Unleveler By Boss[/b][/size]
+
+📜 Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss.  
+- This happens in a staggered way and will not affect creatures from a biome whose boss has not been defeated.  
+- Changes are automatically applied when a boss is defeated, including when reverting the boss global key with console commands.  
+- If defeating bosses in an unordered way, the changes still apply in their natural order.  
+- Some creatures that did not have stars will now gain stars (e.g. Abomination, Lox, Deathsquito)
+
+🔄 Can be enabled/disabled during gameplay, but changes will only be applied to new areas and newly spawned creatures.  
+- For example, if the mod was enabled and a 2-star Troll was spawned, the Troll will retain its level even if the config is toggled OFF afterwards. Same applies when toggling ON, when defeating bosses or reverting with console commands.
+
+[b]❗ Conflicts:[/b]  Mods that change creature levels.
+
+
+[size=4][b]🏋️‍♀️ Hildir Weight Rewards[/b][/size]
+
+📜 Increases base carry weight by 25 when turning in Hildir chests (for each chest).  
+- This will apply for all characters in the world, but will require [b]client[/b] relogs when a chest is turned in.  
+- Changes are NOT applied when defeating the minibosses.
+
+🔄 Toggling mid-game requires [b]client[/b] relog.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+
+[size=4][b]🛠️ Station Extensions Changes[/b][/size]
+
+📜 Decreases space requirement for workstation extensions and increases build distance to workstations.  
+- This does not increase workstations radius.
+
+🔄 Can be enabled/disabled during gameplay, but requires reloading the build menu.
+
+[b]❗ Conflicts:[/b] Mods that modify station extensions.
+
+
+[size=4][b]🐗 Stop Running Away[/b][/size]
+
+📜 Boars and Necks won't flee when alerted.
+
+🔄 Toggling mid-game only affects newly spawned creatures.
+
+[b]❗ Conflicts:[/b] Mods that change Boar and Neck AI behavior.
+
+
+[size=4][b]⏸️ Automatic Progression Halt[/b][/size]
+
+📜 Creatures and destroyable objects do not drop any items unless the previous biome boss has been defeated.  
+📜 Pickable items and chests cannot be picked/opened under the same conditions.  
+- Resources from each biome are automatically unlocked when the relevant boss is defeated. There is no need for client relogs or server restarts.
+
+🔄 Toggling mid-game requires [b]client[/b] relog or reloading area. 
+- Reloading area means walking/teleporting away from the current zone and coming back. This only applies for destroyable objects like Copper Mines. Pickables and chests will be affected immediately. Creatures will be affected if they are new.
+
+[b]❗ Conflicts:[/b] This only applies to vanilla game prefabs. Any mod that adds new prefabs (creatures, resources, pickables) will [b]not[/b] be included in the Progression Halt system.
+
+[b]🔧 Specific boss halts[/b]
+
+- Eikthyr: Black Forest objects and creatures
+- The Elder: Swamp objects and creatures
+- Bonemass: Mountain and Ocean objects and creatures
+- Moder: Plains objects and creatures
+- Yagluth: Mistlands objects and creatures
+- The Queen: Ashlands objects and creatures
+
+
+[size=4][b]🎯 Better Trophy Drop Rates[/b][/size]
+
+📜 Increases trophy drop rate for some creatures.
+
+🔄 Can be enabled/disabled during gameplay, but the changes will only apply to newly spawned creatures.
+
+[b]❗ Conflicts:[/b] Incompatible with any mod that modifies creature trophy drop rates.
+
+[b]🔧 Changes[/b]
+
+- [b]Rancid Remains:[/b] 10% → 20%
+- [b]Surtling:[/b] 5%  → 10%
+- [b]Draugr Elite:[/b] 10% → 20%
+- [b]Wraith:[/b] 5%  → 20%
+- [b]Cultist:[/b] 10% → 20%
+- [b]Fenring:[/b] 10% → 20%
+- [b]Stone Golem:[/b] 5%  → 20%
+- [b]Deathsquito:[/b] 5%  → 10%
+- [b]Fuling Berserker:[/b] 5%  → 10%
+- [b]Tick:[/b] 5%  → 10%
+- [b]Dverger:[/b] 5%  → 10%
+- [b]Seeker Soldier:[/b] 5%  → 20%
+- [b]Charred Warlock:[/b] 5%  → 20%
+
+
+[size=4][b]🚢 Tougher Ships[/b][/size]
+
+📜 Increases Ships HP by a flat amount.
+
+🔄 Toggling mid-game requires [b]client[/b] relog or reloading area (moving/teleporting away and back).
+
+[b]❗ Conflicts:[/b] Mods that modify ship HP (sailing mods probably).
+
+[b]🔧 HP Changes:[/b]
+
+- [b]Raft:[/b] 300  → 400
+- [b]Karve:[/b] 500  → 650
+- [b]Longship:[/b] 1000 → 1250
+- [b]Drakkar:[/b] 3000 → 4000
+
+
+[size=4][b]🛠️ Other Section[/b][/size]
+
+📜 Tankard costs reduced and Iron Nails crafting output doubled.
+
+🔄 Can be enabled/disabled during gameplay, but requires crafting menu reload.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+[b]🔧 Changes:[/b]
+
+- [b]Tankard crafting resource amount:[/b]
+  • Fine Wood: 4 → 2
+- [b]Iron Nails[/b]
+  • Amount crafted: 10 → 20
+
+[line]
+
+[size=4][b]✨ QOL[/b][/size]
+
+All features below are synced with the server and can be toggled mid-game (with relog/reload area as specified).
+
+[line]
+
+[size=4][b]⚒️ Lighter Metal Weight[/b][/size]
+
+📜 Modifies metal weight to match Tin Ore weight.
+- All ores and metals will have reduced weight for easier transport.
+
+🔄 Toggling mid-game requires [b]client[/b] relog or reloading area (moving/teleporting away and back).
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+[b]🔧 Changes:[/b]
+
+- [b]All Ores:[/b] 10 → 8
+- [b]All Metals:[/b] 12 → 8
+
+
+[size=4][b]📦 Larger Pickup Area[/b][/size]
+
+📜 Item auto-pickup area slightly increased.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+[b]🔧 Changes:[/b]
+
+- [b]Pickup Range:[/b] Radius increase: 2 → 3
+
+
+[size=4][b]💀 No Skill Levels Loss On Death[/b][/size]
+
+📜 Skills will no longer drop in level when dying. However, the progress towards the next level for each skill will still drop. 
+- Example: Level 17 Swords, 30% progress → after death, the progress drops to 0%, but the Swords skill stays at level 17.
+
+🔄 Toggling mid-game requires [b]client[/b] relog.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+
+[size=4][b]⛵ Larger Boat Explore Radius[/b][/size]
+
+📜 Double explore radius on a boat.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] Incompatible with any mod that modifies explore radius.
+
+
+[size=4][b]✨ Bigger Wisp Radius[/b][/size]
+
+📜 Increases wisp radius.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] Incompatible with any mod that modifies the Wisplight.
+
+[b]🔧 Changes:[/b]
+
+- [b]Wisp Radius:[/b] 15 → 30
+
+
+[size=4][b]🏹 Friendly Ballistas[/b][/size]
+
+📜 Ballistas no longer fire on players and tamed creatures.
+- Prevents accidental damage from ballistas to players and their pets.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] Incompatible with any mod that changes Ballista behavior.
+
+
+[size=4][b]🪂 Less Fall Damage[/b][/size]
+
+📜 Reduces fall damage by 40%.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+
+[size=4][b]💨 Faster Resource Drops[/b][/size]
+
+📜 Enemies drop resources faster when dying.
+
+🔄 Can be enabled/disabled during gameplay, but changes will only be applied to newly spawned creatures or creatures in inactive areas.
+
+[b]❗ Conflicts:[/b] Incompatible with any mod that changes creature resource drop timers.
+
+[b]🔧 Changes:[/b]
+
+- [b]Resource Drop Speed:[/b] 
+  - Small creatures: 0.5s
+  - Large creatures: 5s
+
+
+[size=4][b]⚡ Faster Equip[/b][/size]
+
+📜 Equipping weapons is instant (skips equip animation).  
+📜 Armor equip timers reduced to 1s (from 1s/2s).
+
+🔄 Toggling mid-game requires [b]client[/b] relog.
+
+[b]❗ Conflicts:[/b] Incompatible with any mod that changes equip timers.
+
+[line]
+
+[size=4][b]🖥️ UI[/b][/size]
+
+All features below are synced with the server and can be toggled mid-game.
+
+[line]
+
+[size=4][b]📜 More Loading Tips[/b][/size]
+
+📜 Modifies some original loadscreen tips.   
+📜 Adds new tips in addition to the original ones.
+- Only applies for the English localization.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] Incompatible with any mod that changes/adds loading screen tips.
+
+
+[size=4][b]⚖️ Show Inventory Weight and Free Slots[/b][/size]
+
+📜 Displays current carry weight and max weight values at the bottom left of the screen under the health bar.   
+📜 Displays current number of inventory slots next to the carry weight indicator at the bottom left of the screen.
+- Text color changes according to weight/free slots percentage.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+
+[size=4][b]👀 Show Enemy Detector[/b][/size]
+
+📜 Displays an enemy detector next to the inventory weight widget at the bottom left of the screen.
+- Counts the number of enemies in close proximity.
+- Does not include other players, deer, hare, player-summoned creatures, or tame animals in the enemy count.
+- Neutral Dverger are counted in parentheses. When attacked, the number goes into the normal enemy counter.
+- Colors change according to the number of nearby enemies.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+
+[size=4][b]⛵ Show Boat Speed[/b][/size]
+
+📜 Displays current ship speed next to the inventory weight widget at the bottom left of the screen.
+- When going forward, "F" is displayed before the speed value.
+- When going backwards, "R" is displayed before the speed value.
+- The speed counter only shows when controlling a boat.
+- Colors change according to speed.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+
+[size=4][b]🕰️ Show Time And Day[/b][/size]
+
+📜 Displays current time of day above the minimap using day sections (Dawn, Morning, Day, Afternoon, Evening, Dusk, Night).  
+📜 Shows the number of days spent in the world.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+
+[size=4][b]⏰ Time - 24 Hour Format[/b][/size]
+
+📜 Sub-section for the previous config, enabling 24-hour format for displaying time.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+
+[size=4][b]🌍 Smart Biome Indicator[/b][/size]
+
+📜 Displays the current biome name on the minimap in a specific color according to equipped armor relative to the biome.
+- Colors range: purple (not ready for biome), red (hard), orange (ok), yellow (normal), green (easy).
+- Colors only change for the first 7 land biomes. The rest are displayed in white.
+- [b]NOTE:[/b] This only accounts for vanilla gear. Any custom armors will not be counted in the Smart Biome Indicator.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+
+[size=4][b]⚔️ Show Summon Counter[/b][/size]
+
+📜 Displays a counter for summoned skeletons from the Dead Raiser. This does not count summoned trolls.
+- Colors change according to the number of active summons.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+
+[size=4][b]🧑‍🤝‍🧑 Show Online Players[/b][/size]
+
+📜 Shows online players on the bottom right of the screen.
+- Not displayed if only one player is online.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+
+[size=4][b]🗺️ Show Online Players Under Minimap[/b][/size]
+
+📜 Sub-section for the previous config.
+- Shows online players under minimap instead of bottom right when Show Online Players is enabled.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+
+[line]
+
+[size=5][b]🔮 Future Plans[/b][/size]
+
+More features will be added over time. Config descriptions will be updated with known compatibility issues.  
+If using other mods that overlap in functionality, disable affected sections in this mod’s config to avoid conflicts.
+
+[line]
+
+
+[size=5][b]💬 Feedback[/b][/size]
+
+Suggestions and bug reports are welcome on the [Posts] and [Bugs] tabs.
+Thanks for checking out Marsarah Tweaks!
+
+
+[size=5][b]🧑‍🤝‍🧑 Credits[/b][/size]
+
+Azumatt - for a guide on YouTube about how to setup ServerSync in a project
+Blaxxun-bloop - for ServerSync
+
+[size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
+
+v1.0.1
+- Fixed a bug where features that were dependent on checking global keys (Progression Halt, Creature Unleveler) were dependent on having Clear Mistlands section enabled. Now these sections work as intended even if that option is off.
+- Made UI sections server synced like the rest of the configs.
+
+v1.0.0
+- Initial Upload

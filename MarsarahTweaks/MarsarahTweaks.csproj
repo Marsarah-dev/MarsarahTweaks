@@ -155,6 +155,7 @@
     <None Include="MarsarahTweaks_DescriptionN.md" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MarsarahTweaks_Description_BBCode.txt" />
     <Content Include="MarsarahTweaks_Readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
