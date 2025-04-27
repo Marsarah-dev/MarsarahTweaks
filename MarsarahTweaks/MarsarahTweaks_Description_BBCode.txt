@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.0.1  
+[b]Version:[/b] 1.1.0  
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -629,6 +629,14 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 [b]❗ Conflicts:[/b] Incompatible with any mod that changes equip timers.
 
+[size=4][b]⬆️ Move Camera Up While Sailing[/b][/size]
+
+📜 Moves the camera up by a slight amount when controlling a boat (specific for each boat) to provide enough view ahead.  
+
+🔄 Can be enabled/disabled during gameplay.   
+
+[b]❗ Conflicts:[/b] Incompatible with any mod that changes camera angles when sailing.
+
 [line]
 
 [size=4][b]🖥️ UI[/b][/size]
@@ -767,7 +775,14 @@ Thanks for checking out Marsarah Tweaks!
 Azumatt - for a guide on YouTube about how to setup ServerSync in a project
 Blaxxun-bloop - for ServerSync
 
+
 [size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
+
+
+v1.1.0
+- Added Section: Move Camera Up While Sailing
+- Added forgotten items from old mod port to Cheaper Build Piece Amounts (all banners Leather Scraps: 6 → 5)
+- Added Shipwreck to Progression Halt (halted by Eikthyr)
 
 v1.0.1
 - Fixed a bug where features that were dependent on checking global keys (Progression Halt, Creature Unleveler) were dependent on having Clear Mistlands section enabled. Now these sections work as intended even if that option is off.

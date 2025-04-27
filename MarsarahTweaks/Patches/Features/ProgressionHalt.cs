@@ -8,6 +8,7 @@ using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static InventoryGrid;
 
 namespace MarsarahTweaks.Patches.Features
 {
@@ -320,7 +321,13 @@ namespace MarsarahTweaks.Patches.Features
 						"PineTree_log_half",
 						"BonePileSpawner",
 						"Spawner_GreydwarfNest",
-						"barrell"
+						"barrell",
+						"shipwreck_karve_bottomboards",
+						"shipwreck_karve_bow",
+						//"shipwreck_karve_chest", // MC: this is not a DropOnDestroyed like the rest
+						"shipwreck_karve_dragonhead",
+						"shipwreck_karve_stern",
+						"shipwreck_karve_sternpost"
 					}
 				},
 				{

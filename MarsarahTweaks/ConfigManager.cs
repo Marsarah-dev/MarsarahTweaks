@@ -90,15 +90,16 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("25 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000 (Toggling mid-game requires CLIENT relog or reloading area)");
 			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("26 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
 
-			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("1 - Lighter Metal Weight", "All metal ore and bars weight decreased to 8. (Toggling mid-game requires CLIENT relog or reloading area)");
-			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("2 - Larger Pickup Area", "Item pickup area slightly increased");
-			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("3 - No Skill Levels Loss On Death", "Skills won't go down the current level upon death (progress in that skill is still lost). (Toggling mid-game requires CLIENT relog)");
-			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("4 - Larger Boat Explore Radius", "Double explore radius on a boat");
-			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("5 - Bigger Wisp Radius", "Increases wisp radius");
-			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("6 - Friendly Ballistas", "Ballistas won't target players and tame animals");
-			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("7 - Less Fall Damage", "Fall damage reduced by 40%");
-			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("8 - Faster Resource Drops", "Enemies drop resources faster when dying");
-			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("9 - Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s). (Toggling mid-game requires CLIENT relog)");
+			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("01 - Lighter Metal Weight", "All metal ore and bars weight decreased to 8. (Toggling mid-game requires CLIENT relog or reloading area)");
+			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("02 - Larger Pickup Area", "Item pickup area slightly increased");
+			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("03 - No Skill Levels Loss On Death", "Skills won't go down the current level upon death (progress in that skill is still lost). (Toggling mid-game requires CLIENT relog)");
+			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("04 - Larger Boat Explore Radius", "Double explore radius on a boat");
+			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("05 - Bigger Wisp Radius", "Increases wisp radius");
+			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("06 - Friendly Ballistas", "Ballistas won't target players and tame animals");
+			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("07 - Less Fall Damage", "Fall damage reduced by 40%");
+			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("08 - Faster Resource Drops", "Enemies drop resources faster when dying");
+			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("09 - Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s). (Toggling mid-game requires CLIENT relog)");
+			public static readonly ConfigMetadata CameraSailingPosition = new ConfigMetadata("10 - Move Camera Up While Sailing", "Moves the camera a bit upwards when sailing to better see in front of the boat");
 
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
 			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("02 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
@@ -110,6 +111,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("08 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
 			public static readonly ConfigMetadata UIOnlinePlayers = new ConfigMetadata("09 - Show Online Players", "Shows online players on the bottom right of the screen (Not displayed if only one player is online)");
 			public static readonly ConfigMetadata UIOnlinePlayersUnderMinimap = new ConfigMetadata("10 - Show Online Players Under Minimap", "Shows online players under minimap instead of bottom right when Show Online Players is enabled");
+			//public static readonly ConfigMetadata EnemyNameplates = new ConfigMetadata("11 - Better Enemy Nameplates", "Displays current and max HP of enemies and colors name according to alerted/aggravated status");
 		}
 
 		// Config entries
@@ -159,6 +161,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> LessFallDamageEnabled;
 		public static ConfigEntry<bool> FasterResourceDropsEnabled;
 		public static ConfigEntry<bool> FasterEquipEnabled;
+		public static ConfigEntry<bool> CameraUpWhenSailing;
 
 		public static ConfigEntry<bool> MoreLoadingTipsEnabled;
 		public static ConfigEntry<bool> ShowInventoryWeightAndSlots;
@@ -170,6 +173,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> ShowSummonCounter;
 		public static ConfigEntry<bool> ShowOnlinePlayers;
 		public static ConfigEntry<bool> OnlinePlayersUnderMinimap;
+		//public static ConfigEntry<bool> BetterEnemyNameplates;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -225,6 +229,7 @@ namespace MarsarahTweaks
 			LessFallDamageEnabled = CreateConfig(ConfigSections.QOL, Configs.LessFallDamage.Name, true, Configs.LessFallDamage.Description);
 			FasterResourceDropsEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterResourceDrops.Name, true, Configs.FasterResourceDrops.Description);
 			FasterEquipEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterEquip.Name, true, Configs.FasterEquip.Description);
+			CameraUpWhenSailing = CreateConfig(ConfigSections.QOL, Configs.CameraSailingPosition.Name, true, Configs.CameraSailingPosition.Description);
 
 			// ===== UI
 			MoreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description);
@@ -237,6 +242,7 @@ namespace MarsarahTweaks
 			ShowSummonCounter = CreateConfig(ConfigSections.UI, Configs.UISummonCounter.Name, true, Configs.UISummonCounter.Description);
 			ShowOnlinePlayers = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayers.Name, true, Configs.UIOnlinePlayers.Description);
 			OnlinePlayersUnderMinimap = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayersUnderMinimap.Name, true, Configs.UIOnlinePlayersUnderMinimap.Description);
+			//BetterEnemyNameplates = CreateConfig(ConfigSections.UI, Configs.EnemyNameplates.Name, true, Configs.EnemyNameplates.Description);
 
 			SetupWatcher();
 		}

@@ -131,12 +131,14 @@
     <Compile Include="Patches\PrefabHitLogger.cs" />
     <Compile Include="Patches\Features\ProgressionHalt.cs" />
     <Compile Include="Patches\Features\StatusEffectChanges.cs" />
+    <Compile Include="Patches\QOL\SailingCameraChanges.cs" />
     <Compile Include="Patches\TestJump.cs" />
     <Compile Include="Patches\Features\TougherShipsChanges.cs" />
     <Compile Include="Patches\Features\TrophyDropsChanges.cs" />
     <Compile Include="Patches\UI\UIBoatSpeed.cs" />
     <Compile Include="Patches\UI\UIController.cs" />
     <Compile Include="Patches\UI\UIEnemyDetector.cs" />
+    <Compile Include="Patches\UI\UIEnemyNameplates.cs" />
     <Compile Include="Patches\UI\UIInventoryWeightAndSlots.cs" />
     <Compile Include="Patches\UI\UILoadscreenTips.cs" />
     <Compile Include="Patches\UI\UIOnlinePlayers.cs" />

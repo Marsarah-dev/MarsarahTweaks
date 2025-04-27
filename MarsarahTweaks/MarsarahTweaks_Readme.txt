@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.0.1
+Marsarah Tweaks v1.1.0
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 
@@ -2067,6 +2067,18 @@ The following foods have the stack size increased to 20
   Incompatible with any mod that changes equip timers.
 
 
+--------------- [Move Camera Up While Sailing] -----------------
+
+► Description:
+  Moves the camera up by a slight amount when controlling a boat (specific for each boat) to provide enough view ahead.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  Incompatible with any mod that changes camera angles when sailing.
+
+
 ============================ [UI] ==============================
 ► All configs in this section are synced with server.
 
@@ -2213,6 +2225,11 @@ The following foods have the stack size increased to 20
 
 VERSION HISTORY
 ================================================================
+
+v1.1.0
+- Added Section: Move Camera Up While Sailing
+- Added forgotten items from old mod port to Cheaper Build Piece Amounts (all banners Leather Scraps: 6 → 5)
+- Added Shipwreck to Progression Halt (halted by Eikthyr)
 
 v1.0.1
 - Fixed a bug where features that were dependent on checking global keys (Progression Halt, Creature Unleveler) were dependent on having Clear Mistlands section enabled. Now these sections work as intended even if that option is off.

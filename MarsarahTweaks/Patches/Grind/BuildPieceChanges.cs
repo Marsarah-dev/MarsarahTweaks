@@ -170,6 +170,71 @@ namespace MarsarahTweaks.Patches.Grind
 					{ "LeatherScraps", 5 } // 6
 				}
 			},
+			{ "$piece_banner02", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
+			{ "$piece_banner03", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
+			{ "$piece_banner04", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
+			{ "$piece_banner05", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
+			{ "$piece_banner06", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
+			{ "$piece_banner07", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
+			{ "$piece_banner08", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
+			{ "$piece_banner09", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
+			{ "$piece_banner10", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
+			{ "$piece_banner11", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
+			{ "$piece_banner12", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
+			{ "$piece_banner13", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
+			{ "$piece_banner14", new Dictionary<string, int>
+				{
+					{ "LeatherScraps", 5 } // 6
+				}
+			},
 			{ "$piece_fermenter", new Dictionary<string, int>
 				{
 					{ "FineWood", 15 } // 30
