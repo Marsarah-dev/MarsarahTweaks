@@ -47,8 +47,7 @@ This mod is [b]modular and customizable[/b].
 - Most features support [b]mid-game toggling[/b], but some require crafting menus to be reopened, reloading areas or [b]client[/b] relogs (this is specified in each config).
 - Some configs below will have more detailed changes written in the [Docs] tab of this page. 
 
-> ✅ All gameplay-affecting features are synced using ServerSync.  
-> ❌ UI-related features are local and not synced.  
+> ✅ All features are synced using ServerSync.  
 > 🔄 Players will be disconnected if their mod version differs from the server.
 
 [line]

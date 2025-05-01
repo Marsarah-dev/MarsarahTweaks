@@ -47,8 +47,7 @@ This mod is **modular and customizable**.
 - Most features support **mid-game toggling**, but some require crafting menus to be reopened, reloading areas or **client** relogs (this is specified in each config).
 - Some configs below will have more detailed changes written in the [Docs] tab of the Nexusmods page. 
 
-  ✅ All gameplay-affecting features are synced using ServerSync.  
-  ❌ UI-related features are local and not synced.  
+  ✅ All features are synced using ServerSync.  
   🔄 Players will be disconnected if their mod version differs from the server.
 
 ---

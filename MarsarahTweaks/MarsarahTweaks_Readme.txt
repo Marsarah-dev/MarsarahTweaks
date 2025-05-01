@@ -29,7 +29,7 @@ Individual features can be enabled or disabled by editing this file or in-game w
 
 If you’re using another mod that changes similar gameplay elements (e.g. creature scaling), disable the overlapping section in this mod’s config to avoid conflicts. Specific compatibility issues will be mentioned in each config description if known.
 
-This mod uses Server Sync. All clients need to have the same version as the server, otherwise they will be disconnected at login. All configs with the exception of UI features are synced between server and clients.
+This mod uses Server Sync. All clients need to have the same version as the server, otherwise they will be disconnected at login. All configs are synced between server and clients.
 
 MOD CONFIGS
 ================================================================
