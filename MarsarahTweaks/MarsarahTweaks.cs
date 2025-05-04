@@ -3,11 +3,8 @@
  * DONE, NOT RELEASED
  * 
  * A. Fixes
- *    1. Added all banners to Cheaper Build Pieces section (only added the black banner from porting)
- *    2. Added Shipwrecks to Progression Halt
  *    
  * B. New QOL
- *    1. Added Section: Move Camera Up While Sailing.
  * 
  * TODO
  * 
@@ -93,7 +90,7 @@ namespace MarsarahTweaks
 	public class MarsarahTweaks : BaseUnityPlugin
 	{
 		internal const string ModName = "MarsarahTweaks";
-		internal const string ModVersion = "1.1.0";
+		internal const string ModVersion = "1.1.1";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 

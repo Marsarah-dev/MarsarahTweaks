@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.1.0   
+**Version:** 1.1.1   
 **Author:** Marsarah
 
 ---
@@ -49,6 +49,13 @@ This mod is **modular and customizable**.
 
   ✅ All features are synced using ServerSync.  
   🔄 Players will be disconnected if their mod version differs from the server.
+
+---
+
+## <strong> 💰 Donations </strong>
+
+My mods are and will always be free to use. If you'd like to support my work, you can donate here:
+https://paypal.me/Marsarah9
 
 ---
 
@@ -820,6 +827,10 @@ Azumatt - for a guide on YouTube about how to setup ServerSync in a project
 Blaxxun-bloop - for ServerSync
 
 ## <strong> 📜 Version History </strong>
+
+v1.1.1
+- Added Draugr Archers to Progression Halt (previous oversight)
+- Removed Pickable Bone Piles found in Meadows from Progression Halt
 
 v1.1.0
 - Added Section: Move Camera Up While Sailing

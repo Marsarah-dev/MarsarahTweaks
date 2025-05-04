@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.1.0
+Marsarah Tweaks v1.1.1
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 
@@ -2225,6 +2225,10 @@ The following foods have the stack size increased to 20
 
 VERSION HISTORY
 ================================================================
+
+v1.1.1
+- Added Draugr Archers to Progression Halt (previous oversight)
+- Removed Pickable Bone Piles found in Meadows from Progression Halt
 
 v1.1.0
 - Added Section: Move Camera Up While Sailing

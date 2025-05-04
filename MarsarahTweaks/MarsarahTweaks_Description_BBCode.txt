@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.1.0  
+[b]Version:[/b] 1.1.1  
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -777,6 +777,10 @@ Blaxxun-bloop - for ServerSync
 
 [size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
 
+
+v1.1.1
+- Added Draugr Archers to Progression Halt (previous oversight)
+- Removed Pickable Bone Piles found in Meadows from Progression Halt
 
 v1.1.0
 - Added Section: Move Camera Up While Sailing

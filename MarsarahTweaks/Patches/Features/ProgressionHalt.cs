@@ -112,7 +112,7 @@ namespace MarsarahTweaks.Patches.Features
 						"Pickable_Carrot", 
 						"Pickable_SeedCarrot",
 						"Pickable_Thistle",
-						"Pickable_ForestCryptRemains01", 
+						//"Pickable_ForestCryptRemains01", // MC these are the bones that also spawn in the meadows too
 						"Pickable_ForestCryptRemains02", 
 						"Pickable_ForestCryptRemains03", 
 						"Pickable_ForestCryptRemains04",
@@ -335,6 +335,7 @@ namespace MarsarahTweaks.Patches.Features
 					{
 						"Leech",
 						"Draugr",
+						"Draugr_Ranged",
 						"Draugr_Elite",
 						"Surtling",
 						"Blob",
