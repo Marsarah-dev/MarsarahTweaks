@@ -33,10 +33,10 @@ namespace MarsarahTweaks.Patches.Features
 						objDB.m_recipes.Add(chainRecipe);
 						//MarsarahTweaks.MLog($"Chain recipe added: {chainRecipe.name}");
 					}
-					else
+					/*else
 					{
 						MarsarahTweaks.MLog("Failed to create chain recipe. Missing required items.");
-					}
+					}*/
 				}
 			}
 			else if (wasChanged)

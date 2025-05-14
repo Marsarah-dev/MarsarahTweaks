@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.1.1   
+**Version:** 1.1.2   
 **Author:** Marsarah
 
 ---
@@ -152,6 +152,39 @@ All features below are synced with the server and can be toggled mid-game.
 ## <strong>✨ Features</strong>
 
 All features below are synced with the server and can be toggled mid-game (with relog/crafting menu reopen as needed).
+
+---
+
+### <strong>⏸️ Automatic Progression Halt</strong>
+
+📜 Creatures and destroyable objects do not drop any items unless the previous biome boss has been defeated.  
+📜 Pickable items and chests cannot be picked/opened under the same conditions.  
+- Resources from each biome are automatically unlocked when the relevant boss is defeated. There is no need for client relogs or server restarts.
+
+🔄 Toggling mid-game requires **client** relog or reloading area. 
+- Reloading area means walking/teleporting away from the current zone and coming back. This only applies for destroyable objects like Copper Mines. Pickables and chests will be affected immediately. Creatures will be affected if they are new.
+
+**❗ Conflicts:** This only applies to vanilla game prefabs. Any mod that adds new prefabs (creatures, resources, pickables) will **not** be included in the Progression Halt system.
+
+**🔧 Specific boss halts**
+
+- Eikthyr: Black Forest objects and creatures
+- The Elder: Swamp objects and creatures
+- Bonemass: Mountain and Ocean objects and creatures
+- Moder: Plains objects and creatures
+- Yagluth: Mistlands objects and creatures
+- The Queen: Ashlands objects and creatures
+
+---
+
+### <strong>⏸️ Halt Ocean Behind Elder</strong>
+
+📜 Halts Ocean biome resources (Leviathans and Serpents) behind The Elder instead of Bonemass. Requires Automatic Progression Halt to be enabled.   
+- NOTE: Ocean biome resources provide Mountain-tier gear and food (so it makes more sense to halt them behind Bonemass), but this option is here if players still want ocean resources earlier.
+
+🔄 Toggling mid-game requires [b]client[/b] relog or reloading area. 
+
+**❗ Conflicts:** Same as above.
 
 ---
 
@@ -473,28 +506,6 @@ All features below are synced with the server and can be toggled mid-game (with 
 🔄 Toggling mid-game only affects newly spawned creatures.
 
 **❗ Conflicts:** Mods that change Boar and Neck AI behavior.
-
----
-
-### <strong>⏸️ Automatic Progression Halt</strong>
-
-📜 Creatures and destroyable objects do not drop any items unless the previous biome boss has been defeated.  
-📜 Pickable items and chests cannot be picked/opened under the same conditions.  
-- Resources from each biome are automatically unlocked when the relevant boss is defeated. There is no need for client relogs or server restarts.
-
-🔄 Toggling mid-game requires **client** relog or reloading area. 
-- Reloading area means walking/teleporting away from the current zone and coming back. This only applies for destroyable objects like Copper Mines. Pickables and chests will be affected immediately. Creatures will be affected if they are new.
-
-**❗ Conflicts:** This only applies to vanilla game prefabs. Any mod that adds new prefabs (creatures, resources, pickables) will **not** be included in the Progression Halt system.
-
-**🔧 Specific boss halts**
-
-- Eikthyr: Black Forest objects and creatures
-- The Elder: Swamp objects and creatures
-- Bonemass: Mountain and Ocean objects and creatures
-- Moder: Plains objects and creatures
-- Yagluth: Mistlands objects and creatures
-- The Queen: Ashlands objects and creatures
 
 ---
 
@@ -827,6 +838,11 @@ Azumatt - for a guide on YouTube about how to setup ServerSync in a project
 Blaxxun-bloop - for ServerSync
 
 ## <strong> 📜 Version History </strong>
+
+v1.1.2
+- Modified the way Progressionn Halt reads prefab names. This change is specifically targeting a previous incompatibility with Ventrure Location Reset mod where it was changing parts of prefab names after resetting dungeons. This patch makes these two mods compatible.
+- Added section: Halt Ocean Behind Elder. This provides an extra option for players and sever admins if they prefer Ocean resources to be available earlier. Ocean-tier items and food are equal to Mountain-tier items and food, which is why this option is disabled by default, but still available if wanted.
+- Rearranged config entries in the config file, which means that old configs will have extra unused config entries (those can be safely deleted)
 
 v1.1.1
 - Added Draugr Archers to Progression Halt (previous oversight)

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using static InventoryGrid;
+using System.Text.RegularExpressions;
 
 namespace MarsarahTweaks.Patches.Features
 {
@@ -204,10 +205,57 @@ namespace MarsarahTweaks.Patches.Features
 					return true;
 				}
 
-				//string pickableName = __instance.name;
-				//string pickableName = __instance.name.Replace("(Clone)", "").Trim();
-				string pickableName = __instance.name.Replace("(Clone)", "").TrimEnd('(', ')').Trim();
-				//MarsarahTweaks.MLog($"Trimmed: {pickableName} - Full: {__instance.name}");
+				string rawName = __instance.name;
+				string pickableName = Regex.Split(rawName, @"[\s\(]")[0];
+				//MarsarahTweaks.MLog($"[PickupCheck] Raw Name: {rawName}, Cleaned Name: {pickableName}");
+
+				/*ZDO zdo = nview.GetZDO();
+				if (zdo != null)
+				{
+					//MarsarahTweaks.MLog($"[PickupCheck] Prefab: {__instance.gameObject.name}, Trimmed: {pickableName}");
+					MarsarahTweaks.MLog($"[PickupCheck] Raw Name: {rawName}, Cleaned Name: {pickableName}");
+					MarsarahTweaks.MLog($"[PickupCheck] Owner: {zdo.GetOwner()}, ZDO ID: {zdo.m_uid}");
+					//MarsarahTweaks.MLog($"[PickupCheck] Owner: {zdo.GetOwner()}, ZDO ID: {zdo.m_uid}, Pos: {__instance.transform.position}");
+
+					long ownerId = zdo.GetOwner();
+					long localPlayerId = ZNet.instance.LocalPlayerCharacterID.UserID;
+
+					//MarsarahTweaks.MLog($"[PickupCheck] My ID: {localPlayerId}");
+
+					// Try to find the player's name from the player list
+					var playerInfo = ZNet.instance.GetPlayerList().Where(p => p.m_characterID.UserID == ownerId).Cast<ZNet.PlayerInfo?>().FirstOrDefault();
+
+					string ownerName = playerInfo.HasValue ? playerInfo.Value.m_name : "Unknown";
+
+					// Log ownership info
+					if (ownerId == localPlayerId)
+					{
+						MarsarahTweaks.MLog($"[PickupCheck] This object belongs to me ({localPlayerId} - {ownerName})");
+					}
+					else if (ZNet.instance.GetServerPeer() != null && ownerId == ZNet.instance.GetServerPeer().m_uid)
+					{
+						MarsarahTweaks.MLog($"[PickupCheck] This object belongs to the server ({ownerName})");
+					}
+					else
+					{
+						MarsarahTweaks.MLog($"[PickupCheck] This object belongs to {ownerName} (ID: {ownerId})");
+					}
+
+					// Log Venture's VV_LastReset info if present
+					if (zdo.GetInt("VV_LastReset", -1) != -1)
+					{
+						int resetDay = zdo.GetInt("VV_LastReset", -1);
+						MarsarahTweaks.MLog($"[PickupCheck] Venture reset detected - VV_LastReset = {resetDay}");
+					}
+					else
+					{
+						MarsarahTweaks.MLog($"[PickupCheck] No VV_LastReset value found (not reset by Venture?)");
+					}
+				}
+				else
+				{
+					MarsarahTweaks.MLog("[PickupCheck] No ZDO found for pickable.");
+				}*/
 
 				foreach (var restriction in pickableResourceRestrictions)
 				{
@@ -220,9 +268,14 @@ namespace MarsarahTweaks.Patches.Features
 					if (!bossDefeated && restrictedPickables.Contains(pickableName))
 					{
 						character.Message(MessageHud.MessageType.Center, $"{bossName} has a strong hold on this object");
+						//MarsarahTweaks.MLog($"Halted {pickableName} for boss {bossName}");
 						__result = false;
 						return false;
 					}
+					/*else
+					{
+						MarsarahTweaks.MLog($"Did not halt {pickableName} for boss {bossName}");
+					}*/
 				}
 
 				return true; // Allow original method
@@ -260,7 +313,8 @@ namespace MarsarahTweaks.Patches.Features
 				}
 
 				//string pickableItemName = __instance.name;
-				string pickableItemName = __instance.name.Replace("(Clone)", "").Trim();
+				//string pickableItemName = __instance.name.Replace("(Clone)", "").Trim();
+				string pickableItemName = Regex.Split(__instance.name, @"[\s\(]")[0];
 
 				foreach (var restriction in pickableItemResourceRestrictions)
 				{
@@ -366,8 +420,8 @@ namespace MarsarahTweaks.Patches.Features
 						"Fenring_Cultist",
 						"Hatchling",
 						"StoneGolem",
-						"Serpent",
-						"Leviathan",
+						//"Serpent", // Ocean
+						//"Leviathan", // Ocean
 						"Pickable_MountainCaveCrystal",
 						"Pickable_MountainCaveObsidian",
 						"Pickable_MeatPile",
@@ -568,6 +622,11 @@ namespace MarsarahTweaks.Patches.Features
 					}
 				}
 			};
+			private static readonly List<string> oceanPrefabs = new List<string>()
+			{
+				"Serpent",
+				"Leviathan"
+			};
 
 			// Tracking last defeated states to determine when changes occur
 			private static bool lastEikthyrDefeated = GlobalKeyChecker.IsBossDefeated("Eikthyr");
@@ -578,6 +637,7 @@ namespace MarsarahTweaks.Patches.Features
 			private static bool lastQueenDefeated = GlobalKeyChecker.IsBossDefeated("The Queen");
 
 			private static bool lastProgressionHaltState = ConfigManager.AutomaticProgressionHaltEnabled.Value;
+			private static bool lastOceanElderProgressionHaltState = ConfigManager.HaltOceanBehindElderEnabled.Value;
 			private static bool lastTrophyDropsState = ConfigManager.BetterTrophyDropsEnabled.Value;
 
 			static void Postfix(ref ZNetScene __instance)
@@ -619,7 +679,9 @@ namespace MarsarahTweaks.Patches.Features
 
 				// Check if Progression Halt was toggled
 				bool progressionHaltNowEnabled = ConfigManager.AutomaticProgressionHaltEnabled.Value;
+				bool oceanElderProgressionHaltNowEnabled = ConfigManager.HaltOceanBehindElderEnabled.Value;
 				bool trophyDropsNowEnabled = ConfigManager.BetterTrophyDropsEnabled.Value;
+
 				if (progressionHaltNowEnabled != lastProgressionHaltState)
 				{
 					lastProgressionHaltState = progressionHaltNowEnabled;
@@ -648,6 +710,19 @@ namespace MarsarahTweaks.Patches.Features
 						// Run Trophy Drops here
 						//MarsarahTweaks.MLog($"Setting up Trophy Drops due to Progression Halt being off");
 						TrophyDropsChanges.UpdateTrophyDrops(__instance);
+					}
+				}
+
+				if (oceanElderProgressionHaltNowEnabled != lastOceanElderProgressionHaltState)
+				{
+					lastOceanElderProgressionHaltState = oceanElderProgressionHaltNowEnabled;
+
+					if (progressionHaltNowEnabled)
+					{
+						// Re-run the progression halt handler to apply updated ocean boss logic
+						//MarsarahTweaks.MLog("Ocean Progression Halt setting toggled, reapplying drops.");
+						HandleProgressionHalt(__instance);
+						dropsSet = true;
 					}
 				}
 
@@ -747,6 +822,20 @@ namespace MarsarahTweaks.Patches.Features
 				{
 					RestoreDropsForBoss(instance, "The Queen");
 				}
+
+				if (!GlobalKeyChecker.ElderDefeated && ConfigManager.HaltOceanBehindElderEnabled.Value)
+				{
+					HaltOceanPrefabs(instance);
+				}
+				else if (!GlobalKeyChecker.BonemassDefeated && !ConfigManager.HaltOceanBehindElderEnabled.Value)
+				{
+					HaltOceanPrefabs(instance);
+				}
+				else
+				{
+					RestoreOceanPrefabs(instance);
+				}
+
 			}
 
 			// Restore all Progression Halt data
@@ -762,6 +851,7 @@ namespace MarsarahTweaks.Patches.Features
 				RestoreDrops("dvergrprops");
 				RestoreDrops("dvergrtown");
 				RestoreDropsForBoss(instance, "The Queen");
+				RestoreOceanPrefabs(instance);
 			}
 
 			// Main Halt Drops for Boss
@@ -773,6 +863,15 @@ namespace MarsarahTweaks.Patches.Features
 					{
 						HaltDrops(instance.GetPrefab(prefabString));
 					}
+				}
+			}
+
+			// Halt Ocean prefabs
+			private static void HaltOceanPrefabs(ZNetScene instance)
+			{
+				foreach (string prefab in oceanPrefabs)
+				{
+					HaltDrops(instance.GetPrefab(prefab));
 				}
 			}
 
@@ -961,6 +1060,15 @@ namespace MarsarahTweaks.Patches.Features
 					{
 						RestoreDrops(instance.GetPrefab(prefabString));
 					}
+				}
+			}
+
+			// Restore Ocean Prefabs
+			private static void RestoreOceanPrefabs(ZNetScene instance)
+			{
+				foreach (string prefab in oceanPrefabs)
+				{
+					RestoreDrops(instance.GetPrefab(prefab));
 				}
 			}
 

@@ -3,6 +3,8 @@
  * DONE, NOT RELEASED
  * 
  * A. Fixes
+ *    - Progression Halt compatibility with Location Reset
+ *    - Added config to halt ocean behind Elder instead of Bonemass
  *    
  * B. New QOL
  * 
@@ -90,7 +92,7 @@ namespace MarsarahTweaks
 	public class MarsarahTweaks : BaseUnityPlugin
 	{
 		internal const string ModName = "MarsarahTweaks";
-		internal const string ModVersion = "1.1.1";
+		internal const string ModVersion = "1.1.2";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 
