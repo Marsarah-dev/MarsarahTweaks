@@ -96,6 +96,7 @@
     <Compile Include="Patches\Features\AIFleeChanges.cs" />
     <Compile Include="Patches\Features\ArmorStatsChanges.cs" />
     <Compile Include="Patches\Features\AshlandsEnemiesChanges.cs" />
+    <Compile Include="Patches\Features\MoreUsableFuel.cs" />
     <Compile Include="Patches\QOL\BoatRadiusChanges.cs" />
     <Compile Include="Patches\QOL\FasterEquipChanges.cs" />
     <Compile Include="Patches\QOL\FasterResourceDrops.cs" />

@@ -7,8 +7,10 @@
  *    
  * B. New QOL
  *    - Added section: Shorter Rested Delay
+ *    - Added section: More Usable Fuel
  * 
  * C. New Features
+ * 
  * 
  * TODO
  * 
@@ -62,13 +64,13 @@
  *    2. Add more pre-built structures to existing world (need to learn how to manipulate world generator)
  * 
  * D. New QOL
- *    1. Rested timer reduced to 10 sec (from 20)
+ *    1. 
  *    2. Increase Maypole range
  *    3. Remove character speed slow when performing specific actions (equip, eat)
  *    4. Destroy ship with a hammer
  *    5. 
- *    6. Make Ancient Bark usable at the Kiln
- *    7. Add Withered Bone to Shield Generator
+ *    6. 
+ *    7. 
  *    8. Faster smelting from all smelters and kiln
  * 
  * 

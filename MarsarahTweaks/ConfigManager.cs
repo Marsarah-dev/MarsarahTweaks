@@ -89,7 +89,7 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("24 - Stop Running Away", "Boars and Necks won't flee when alerted. (Toggling mid-game only affects new creatures)");
 			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("25 - Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Tick, Dverger, Seeker Soldier, Charred Warlock");
 			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("26 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000 (Toggling mid-game requires CLIENT relog or reloading area)");
-			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("27 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
+			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("28 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("01 - Lighter Metal Weight", "All metal ore and bars weight decreased to 8. (Toggling mid-game requires CLIENT relog or reloading area)");
 			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("02 - Larger Pickup Area", "Item pickup area slightly increased");
@@ -104,6 +104,7 @@ namespace MarsarahTweaks
 			//public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("11 - Pocket Portal", "Adds a new portal build piece that uses a special material that only takes one inventory slot that can be crafted at a workbench.");
 			// Move Pocket Portal to Features when implementing
 			public static readonly ConfigMetadata ShorterRestedDelay = new ConfigMetadata("11 - Shorter Rested Delay", "Reduces the amount of time needed to get the rested buff from 20 to 10 seconds (Toggling mid-game requires re-entering the rested area)");
+			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("12 - More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators");
 
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
 			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("02 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
@@ -169,6 +170,7 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> CameraUpWhenSailingEnabled;
 		//public static ConfigEntry<bool> PocketPortalEnabled;
 		public static ConfigEntry<bool> ShorterRestedDelayEnabled;
+		public static ConfigEntry<bool> MoreUsableFuelEnabled;
 
 		public static ConfigEntry<bool> MoreLoadingTipsEnabled;
 		public static ConfigEntry<bool> ShowInventoryWeightAndSlots;
@@ -240,6 +242,7 @@ namespace MarsarahTweaks
 			CameraUpWhenSailingEnabled = CreateConfig(ConfigSections.QOL, Configs.CameraSailingPosition.Name, true, Configs.CameraSailingPosition.Description);
 			//PocketPortalEnabled = CreateConfig(ConfigSections.QOL, Configs.PocketPortal.Name, true, Configs.PocketPortal.Description);
 			ShorterRestedDelayEnabled = CreateConfig(ConfigSections.QOL, Configs.ShorterRestedDelay.Name, true, Configs.ShorterRestedDelay.Description);
+			MoreUsableFuelEnabled = CreateConfig(ConfigSections.QOL, Configs.MoreUsableFuel.Name, true, Configs.MoreUsableFuel.Description);
 
 			// ===== UI
 			MoreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description);
@@ -472,6 +475,10 @@ namespace MarsarahTweaks
 						//MarsarahTweaks.MLog($"ConfigManager Server: Reapplying modifications for {configName}...");
 						CreatureUnleveler.ApplyCreatureLevelChanges(spawnSystemB);
 					}
+					break;
+				case var name when name == Configs.MoreUsableFuel.Name:
+					//MarsarahTweaks.MLog("Reapplying fuel modifications...");
+					MoreUsableFuel.UpdateMoreUsableFuel();
 					break;
 			}
 
