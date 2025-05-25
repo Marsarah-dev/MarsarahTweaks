@@ -3,10 +3,12 @@
  * DONE, NOT RELEASED
  * 
  * A. Fixes
- *    - Progression Halt compatibility with Location Reset
- *    - Added config to halt ocean behind Elder instead of Bonemass
+ *    - Fixed an issue with Progression Halt where players could get the contents of halted chests by simply destroying them
  *    
  * B. New QOL
+ *    - Added section: Shorter Rested Delay
+ * 
+ * C. New Features
  * 
  * TODO
  * 
@@ -14,7 +16,6 @@
  *    1. ShowOnlinePlayers 
  *       - Fix redundancy in code when positioning header depending on party area location.
  *       - Right now the end result is the same, but the code treats it different
- *    2. Do not halt Skeletal Remains from Meadows in Progression Halt
  * 
  * B. New UI
  *    1. Add arrow slots (selectable with a key combination)
@@ -22,7 +23,7 @@
  *       OR add a second row of keybinds 1-8 that can be toggled with a key (so one row can be for combat, one for non-combat)
  *    3. Show heat threshold in Ashlands
  *    4. Better enemy nameplates, better item level indicator
- *    5. Show player HP and death count next to online indicator (or color their names to with red if they have the corpse run buff)
+ *    5. Show player HP and death count next to online indicator (or color their names with red if they have the corpse run buff)
  *    6. Display total resource amount in inventory when building something, next to the current required amount of the piece
  *    7. Show boss power expiration message
  *    8. Add message when a player logs out
@@ -54,6 +55,7 @@
  *    5. Recreate the Better Sorting section
  *    6. Create a Vote to Sleep section, where a player can trigger a vote to sleep and if the majority votes yes, then time is skipped as sleeping.
  *       - If one or more players are in combat (enemies nearby), then the vote is entirely skipped and no tome is passed.
+ *    7. Add an Alternate Lights Fuel config (exclusive toggle with Permanent Lights) that makes lights use less fuel during the day (maybe turn them off or make them dimmer during the day) and work normal at night
  *    
  *    ** Overhaul
  *    1. Add magic to Plains
@@ -92,11 +94,11 @@ namespace MarsarahTweaks
 	public class MarsarahTweaks : BaseUnityPlugin
 	{
 		internal const string ModName = "MarsarahTweaks";
-		internal const string ModVersion = "1.1.2";
+		internal const string ModVersion = "1.2.0";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 
-		private static readonly bool showLogs = false; // Set to true to display logs
+		private static readonly bool showLogs = true; // Set to true to display logs
 
 		private readonly Harmony harmony = new Harmony(ModGUID);
 

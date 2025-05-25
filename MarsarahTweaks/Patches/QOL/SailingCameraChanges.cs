@@ -66,7 +66,7 @@ namespace MarsarahTweaks.Patches.QOL
 		{
 			if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
-			if (ConfigManager.CameraUpWhenSailing.Value)
+			if (ConfigManager.CameraUpWhenSailingEnabled.Value)
 			{
 				bool isControlling = Traverse.Create(__instance).Method("HaveControllingPlayer").GetValue<bool>();
 
@@ -100,7 +100,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 		private static float UpdateCameraOffset(float dt)
 		{
-			if (ConfigManager.CameraUpWhenSailing.Value)
+			if (ConfigManager.CameraUpWhenSailingEnabled.Value)
 			{
 				currentOffset = Mathf.Lerp(currentOffset, targetOffset, dt * smoothSpeed);
 			}
@@ -114,7 +114,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 		/*private static void UpdateCameraZoom(GameCamera camera)
 		{
-			if (moveCameraUp && ConfigManager.CameraUpWhenSailing.Value)
+			if (moveCameraUp && ConfigManager.CameraUpWhenSailingEnabled.Value)
 			{
 				if (defaultMaxDistance == -1f)
 				{

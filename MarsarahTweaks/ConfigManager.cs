@@ -101,6 +101,9 @@ namespace MarsarahTweaks
 			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("08 - Faster Resource Drops", "Enemies drop resources faster when dying");
 			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("09 - Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s). (Toggling mid-game requires CLIENT relog)");
 			public static readonly ConfigMetadata CameraSailingPosition = new ConfigMetadata("10 - Move Camera Up While Sailing", "Moves the camera a bit upwards when sailing to better see in front of the boat");
+			//public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("11 - Pocket Portal", "Adds a new portal build piece that uses a special material that only takes one inventory slot that can be crafted at a workbench.");
+			// Move Pocket Portal to Features when implementing
+			public static readonly ConfigMetadata ShorterRestedDelay = new ConfigMetadata("11 - Shorter Rested Delay", "Reduces the amount of time needed to get the rested buff from 20 to 10 seconds (Toggling mid-game requires re-entering the rested area)");
 
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
 			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("02 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
@@ -163,7 +166,9 @@ namespace MarsarahTweaks
 		public static ConfigEntry<bool> LessFallDamageEnabled;
 		public static ConfigEntry<bool> FasterResourceDropsEnabled;
 		public static ConfigEntry<bool> FasterEquipEnabled;
-		public static ConfigEntry<bool> CameraUpWhenSailing;
+		public static ConfigEntry<bool> CameraUpWhenSailingEnabled;
+		//public static ConfigEntry<bool> PocketPortalEnabled;
+		public static ConfigEntry<bool> ShorterRestedDelayEnabled;
 
 		public static ConfigEntry<bool> MoreLoadingTipsEnabled;
 		public static ConfigEntry<bool> ShowInventoryWeightAndSlots;
@@ -232,7 +237,9 @@ namespace MarsarahTweaks
 			LessFallDamageEnabled = CreateConfig(ConfigSections.QOL, Configs.LessFallDamage.Name, true, Configs.LessFallDamage.Description);
 			FasterResourceDropsEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterResourceDrops.Name, true, Configs.FasterResourceDrops.Description);
 			FasterEquipEnabled = CreateConfig(ConfigSections.QOL, Configs.FasterEquip.Name, true, Configs.FasterEquip.Description);
-			CameraUpWhenSailing = CreateConfig(ConfigSections.QOL, Configs.CameraSailingPosition.Name, true, Configs.CameraSailingPosition.Description);
+			CameraUpWhenSailingEnabled = CreateConfig(ConfigSections.QOL, Configs.CameraSailingPosition.Name, true, Configs.CameraSailingPosition.Description);
+			//PocketPortalEnabled = CreateConfig(ConfigSections.QOL, Configs.PocketPortal.Name, true, Configs.PocketPortal.Description);
+			ShorterRestedDelayEnabled = CreateConfig(ConfigSections.QOL, Configs.ShorterRestedDelay.Name, true, Configs.ShorterRestedDelay.Description);
 
 			// ===== UI
 			MoreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description);

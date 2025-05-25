@@ -21,10 +21,64 @@ namespace MarsarahTweaks.Patches.Features
 			// Create a dictionary to map bosses to resources that need to be prevented
 			private static readonly Dictionary<string, List<string>> pieceResourceRestrictions = new Dictionary<string, List<string>>()
 			{
-				{ "Eikthyr", new List<string> { "piece_chair", "piece_chair02", "piece_table", "wood_pole_log", "wood_wall_log" } }, // wood_pole_log_4 and wood_wall_log_4x0.5 should be taken care of
-				{ "The Elder", new List<string> { "iron", "dungeon_sunkencrypt_irongate" } },
-				{ "Yagluth", new List<string> { "blackmarble", "piece_dvergr", "dvergrprops", "dvergrtown", "dverger_guardstone" } },
-				{ "The Queen", new List<string> { "Piece_grausten", "Ashlands", "piece_blackwood_bench" } }
+				{ 
+					"Eikthyr", new List<string> 
+					{ 
+						"piece_chair", 
+						"piece_chair02", 
+						"piece_table", 
+						"wood_pole_log",
+						"wood_wall_log", // wood_pole_log_4 and wood_wall_log_4x0.5 should be taken care of
+						//"TreasureChest_blackforest",
+						//"TreasureChest_forestcrypt",
+						//"TreasureChest_trollcave"
+					}
+				}, 
+				{ 
+					"The Elder", new List<string> 
+					{ 
+						"iron", 
+						"dungeon_sunkencrypt_irongate",
+						//"TreasureChest_swamp",
+						//"TreasureChest_sunkencrypt"
+					} 
+				},
+				{ 
+					"Bonemass", new List<string> 
+					{ 
+						//"TreasureChest_mountains", 
+						//"TreasureChest_mountaincave" 
+					} 
+				},
+				{ 
+					"Moder", new List<string> 
+					{ 
+						//"TreasureChest_heath", 
+						//"TreasureChest_plains_stone" 
+					} 
+				},
+				{ 
+					"Yagluth", new List<string> 
+					{ 
+						"blackmarble", 
+						"piece_dvergr", 
+						"dvergrprops", 
+						"dvergrtown", 
+						"dverger_guardstone",
+						//"TreasureChest_dvergrtower",
+						//"TreasureChest_dvergrtown"
+					} 
+				},
+				{ 
+					"The Queen", new List<string> 
+					{ 
+						"Piece_grausten", 
+						"Ashlands", 
+						"piece_blackwood_bench",
+						//"TreasureChest_charredfortress",
+						//"TreasureChest_ashland_stone"
+					} 
+				}
 			};
 
 			static bool Prefix(Piece __instance)
@@ -36,21 +90,20 @@ namespace MarsarahTweaks.Patches.Features
 						return true;
 					}
 
-					//return PreventDrop(__instance.name, pieceResourceRestrictions, "Piece");
 					foreach (var bossEntry in pieceResourceRestrictions)
 					{
 						string bossName = bossEntry.Key;
-						List<string> restrictedResources = bossEntry.Value;
+						List<string> restrictedPieces = bossEntry.Value;
 
 						bool bossDefeated = GlobalKeyChecker.IsBossDefeated(bossName);
 
 						if (!bossDefeated)
 						{
-							foreach (var resource in restrictedResources)
+							foreach (var piece in restrictedPieces)
 							{
-								if (__instance.name.StartsWith(resource))
+								if (__instance.name.StartsWith(piece))
 								{
-									//MarsarahTweaks.MLog($"Progression Halt: Prevented Piece resource drop {__instance.name} because {bossName} has not been defeated.");
+									MarsarahTweaks.MLog($"Progression Halt: Prevented Piece piece drop for {__instance.name} because {bossName} has not been defeated.");
 									return false; // Prevent dropping
 								}
 							}
@@ -79,23 +132,62 @@ namespace MarsarahTweaks.Patches.Features
 
 			static bool Prefix(Container __instance, Humanoid character, bool hold, bool alt, ref bool __result)
 			{
-				if (hold) return true; // Allow normal behavior for hold interactions
+				if (hold) return true; // Allow normal behavior for hold interactions ??
 
 				if (!ConfigManager.AutomaticProgressionHaltEnabled.Value) return true; // Skip if disabled
 
-				string chestName = __instance.name.Replace("(Clone)", "").Trim();
+				//string chestName = __instance.name.Replace("(Clone)", "").Trim();
+				string chestName = __instance.name;
 				foreach (var restriction in chestResourceRestrictions)
 				{
 					string bossName = restriction.Key;
 					List<string> restrictedChests = restriction.Value;
 					bool bossDefeated = GlobalKeyChecker.IsBossDefeated(bossName);
 
-					if (!bossDefeated && restrictedChests.Contains(chestName))
+					//if (!bossDefeated && restrictedChests.Contains(chestName))
+					if (!bossDefeated && restrictedChests.Any(rc => chestName.StartsWith(rc)))
 					{
 						// Prevent interaction and show message
 						character.Message(MessageHud.MessageType.Center, $"This chest is magically sealed by {bossName}.");
 						__result = false;
 						return false;
+					}
+				}
+				return true; // Allow normal behavior for unrestricted chests
+			}
+		}
+
+		[HarmonyPatch(typeof(Container), "DropAllItems", new Type[] { })] // Patch the version without parameters (there are two overloads)
+		static class ContainerDropItems_Patch
+		{
+			private static readonly Dictionary<string, List<string>> chestResourceRestrictions = new Dictionary<string, List<string>>()
+			{
+				{ "Eikthyr", new List<string> { "TreasureChest_blackforest", "TreasureChest_forestcrypt", "TreasureChest_trollcave" } },
+				{ "The Elder", new List<string> { "TreasureChest_swamp", "TreasureChest_sunkencrypt" } },
+				{ "Bonemass", new List<string> { "TreasureChest_mountains", "TreasureChest_mountaincave" } },
+				{ "Moder", new List<string> { "TreasureChest_heath", "TreasureChest_plains_stone" } },
+				{ "Yagluth", new List<string> { "TreasureChest_dvergrtower", "TreasureChest_dvergrtown" } },
+				{ "The Queen", new List<string> { "TreasureChest_charredfortress", "TreasureChest_ashland_stone" } }
+			};
+
+			static bool Prefix(Container __instance)
+			{
+				if (!ConfigManager.AutomaticProgressionHaltEnabled.Value) return true; // Skip if disabled
+
+				//string chestName = __instance.name.Replace("(Clone)", "").Trim();
+				string chestName = __instance.name;
+				foreach (var restriction in chestResourceRestrictions)
+				{
+					string bossName = restriction.Key;
+					List<string> restrictedChests = restriction.Value;
+					bool bossDefeated = GlobalKeyChecker.IsBossDefeated(bossName);
+
+					//if (!bossDefeated && restrictedChests.Contains(chestName))
+					if (!bossDefeated && restrictedChests.Any(rc => chestName.StartsWith(rc)))
+					{
+						// Prevent content drop
+						MarsarahTweaks.MLog($"Progression Halt: Prevented Container content drop for {__instance.name} because {bossName} has not been defeated.");
+						return false; // Skip DropAllItems
 					}
 				}
 				return true; // Allow normal behavior for unrestricted chests
@@ -205,8 +297,9 @@ namespace MarsarahTweaks.Patches.Features
 					return true;
 				}
 
-				string rawName = __instance.name;
-				string pickableName = Regex.Split(rawName, @"[\s\(]")[0];
+				string pickableName = __instance.name;
+				//string rawName = __instance.name;
+				//string pickableName = Regex.Split(rawName, @"[\s\(]")[0];
 				//MarsarahTweaks.MLog($"[PickupCheck] Raw Name: {rawName}, Cleaned Name: {pickableName}");
 
 				/*ZDO zdo = nview.GetZDO();
@@ -265,10 +358,11 @@ namespace MarsarahTweaks.Patches.Features
 
 					bool bossDefeated = GlobalKeyChecker.IsBossDefeated(bossName);
 
-					if (!bossDefeated && restrictedPickables.Contains(pickableName))
+					//if (!bossDefeated && restrictedPickables.Contains(pickableName))
+					if (!bossDefeated && restrictedPickables.Any(rp => pickableName.StartsWith(rp)))
 					{
 						character.Message(MessageHud.MessageType.Center, $"{bossName} has a strong hold on this object");
-						//MarsarahTweaks.MLog($"Halted {pickableName} for boss {bossName}");
+						MarsarahTweaks.MLog($"Halted Pickable {pickableName} for boss {bossName}");
 						__result = false;
 						return false;
 					}
@@ -312,9 +406,9 @@ namespace MarsarahTweaks.Patches.Features
 					return true;
 				}
 
-				//string pickableItemName = __instance.name;
+				string pickableItemName = __instance.name;
 				//string pickableItemName = __instance.name.Replace("(Clone)", "").Trim();
-				string pickableItemName = Regex.Split(__instance.name, @"[\s\(]")[0];
+				//string pickableItemName = Regex.Split(__instance.name, @"[\s\(]")[0];
 
 				foreach (var restriction in pickableItemResourceRestrictions)
 				{
@@ -324,9 +418,11 @@ namespace MarsarahTweaks.Patches.Features
 
 					bool bossDefeated = GlobalKeyChecker.IsBossDefeated(bossName);
 
-					if (!bossDefeated && restrictedPickableItems.Contains(pickableItemName))
+					//if (!bossDefeated && restrictedPickableItems.Contains(pickableItemName))
+					if (!bossDefeated && restrictedPickableItems.Any(rpi => pickableItemName.StartsWith(rpi)))
 					{
 						character.Message(MessageHud.MessageType.Center, $"{bossName} has a strong hold on this object");
+						MarsarahTweaks.MLog($"Halted PickableItem {pickableItemName} for boss {bossName}");
 						__result = false;
 						return false;
 					}

@@ -1317,7 +1317,7 @@ The following foods have the stack size increased to 20
 
 - Eikthyr: Black Forest objects and creatures
 - The Elder: Swamp objects and creatures
-- Bonemass: Mountain and Ocean objects and creatures
+- Bonemass: Mountain and Ocean objects and creatures (ocean halted by Bonemass by default)
 - Moder: Plains objects and creatures
 - Yagluth: Mistlands objects and creatures
 - The Queen: Ashlands objects and creatures

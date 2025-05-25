@@ -170,7 +170,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 - Eikthyr: Black Forest objects and creatures
 - The Elder: Swamp objects and creatures
-- Bonemass: Mountain and Ocean objects and creatures
+- Bonemass: Mountain and Ocean objects and creatures (ocean halted by Bonemass by default)
 - Moder: Plains objects and creatures
 - Yagluth: Mistlands objects and creatures
 - The Queen: Ashlands objects and creatures
@@ -182,7 +182,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 📜 Halts Ocean biome resources (Leviathans and Serpents) behind The Elder instead of Bonemass. Requires Automatic Progression Halt to be enabled.   
 - NOTE: Ocean biome resources provide Mountain-tier gear and food (so it makes more sense to halt them behind Bonemass), but this option is here if players still want ocean resources earlier.
 
-🔄 Toggling mid-game requires [b]client[/b] relog or reloading area. 
+🔄 Toggling mid-game requires **client** relog or reloading area. 
 
 **❗ Conflicts:** Same as above.
 
