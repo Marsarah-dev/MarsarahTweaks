@@ -2,22 +2,24 @@
 /***************************************************
  * DONE, NOT RELEASED
  * 
- * A. Fixes
+ * A. Fixes/Others
  *    - Fixed an issue with Progression Halt where players could get the contents of halted chests by simply destroying them
+ *    - Online Players also shows the total number of players logged in. Also swapped the order of header and player list when displayed at the botom right corner
  *    
+ * B. New UI
+ *    - Added section: Show Owned Resources In Build Menu
+ *    - Added section: Show Boss Power Expiration Message
+ * 
+ * C. New Features
+ * 
  * B. New QOL
  *    - Added section: Shorter Rested Delay
  *    - Added section: More Usable Fuel
- * 
- * C. New Features
  * 
  * 
  * TODO
  * 
  * A. Fixes
- *    1. ShowOnlinePlayers 
- *       - Fix redundancy in code when positioning header depending on party area location.
- *       - Right now the end result is the same, but the code treats it different
  * 
  * B. New UI
  *    1. Add arrow slots (selectable with a key combination)
@@ -26,8 +28,8 @@
  *    3. Show heat threshold in Ashlands
  *    4. Better enemy nameplates, better item level indicator
  *    5. Show player HP and death count next to online indicator (or color their names with red if they have the corpse run buff)
- *    6. Display total resource amount in inventory when building something, next to the current required amount of the piece
- *    7. Show boss power expiration message
+ *    6. 
+ *    7. 
  *    8. Add message when a player logs out
  *    9. Create Smart Pins - admin predefines pins and players can only put the predefined pins on map
  * 
@@ -72,13 +74,7 @@
  *    6. 
  *    7. 
  *    8. Faster smelting from all smelters and kiln
- * 
- * 
- * Tin: 14
- * Copper: 22
- * Bronze: 5
- * Iron: 21
- * Silver: 2
+ *
  ***************************************************/
 
 using BepInEx;

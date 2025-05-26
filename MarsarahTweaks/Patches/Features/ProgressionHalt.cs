@@ -103,7 +103,7 @@ namespace MarsarahTweaks.Patches.Features
 							{
 								if (__instance.name.StartsWith(piece))
 								{
-									MarsarahTweaks.MLog($"Progression Halt: Prevented Piece piece drop for {__instance.name} because {bossName} has not been defeated.");
+									//MarsarahTweaks.MLog($"Progression Halt: Prevented Piece piece drop for {__instance.name} because {bossName} has not been defeated.");
 									return false; // Prevent dropping
 								}
 							}
@@ -186,7 +186,7 @@ namespace MarsarahTweaks.Patches.Features
 					if (!bossDefeated && restrictedChests.Any(rc => chestName.StartsWith(rc)))
 					{
 						// Prevent content drop
-						MarsarahTweaks.MLog($"Progression Halt: Prevented Container content drop for {__instance.name} because {bossName} has not been defeated.");
+						//MarsarahTweaks.MLog($"Progression Halt: Prevented Container content drop for {__instance.name} because {bossName} has not been defeated.");
 						return false; // Skip DropAllItems
 					}
 				}
@@ -362,7 +362,7 @@ namespace MarsarahTweaks.Patches.Features
 					if (!bossDefeated && restrictedPickables.Any(rp => pickableName.StartsWith(rp)))
 					{
 						character.Message(MessageHud.MessageType.Center, $"{bossName} has a strong hold on this object");
-						MarsarahTweaks.MLog($"Halted Pickable {pickableName} for boss {bossName}");
+						//MarsarahTweaks.MLog($"Halted Pickable {pickableName} for boss {bossName}");
 						__result = false;
 						return false;
 					}
@@ -422,7 +422,7 @@ namespace MarsarahTweaks.Patches.Features
 					if (!bossDefeated && restrictedPickableItems.Any(rpi => pickableItemName.StartsWith(rpi)))
 					{
 						character.Message(MessageHud.MessageType.Center, $"{bossName} has a strong hold on this object");
-						MarsarahTweaks.MLog($"Halted PickableItem {pickableItemName} for boss {bossName}");
+						//MarsarahTweaks.MLog($"Halted PickableItem {pickableItemName} for boss {bossName}");
 						__result = false;
 						return false;
 					}

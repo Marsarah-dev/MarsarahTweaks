@@ -103,16 +103,44 @@ namespace MarsarahTweaks.Patches.UI
 						}
 					}
 
-					int numPlayers = (playerInfoList.Count <= numOnlinePlayerSlots - 1) ? playerInfoList.Count : numOnlinePlayerSlots - 1;
+					int numPlayersTotal = playerInfoList.Count;
+					int numPlayersToFit = (playerInfoList.Count <= numOnlinePlayerSlots - 1) ? playerInfoList.Count : numOnlinePlayerSlots - 1;
 					bool onePlayer = playerInfoList.Count == 1;
 					//bool onePlayer = false;
 
 					if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
 					{
 						// Header after players
-						for (int i = 0; i < numOnlinePlayerSlots; i++)
+						if (!onePlayer)
 						{
-							if ((i < numPlayers) && !onePlayer)
+							UIPlayerTexts[0].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
+							if (showUI)
+							{
+								UIPlayerTexts[0].color = Color.green;
+								UIPlayerTexts[0].text = $"Online: {numPlayersTotal}";
+							}
+
+							for (int i = 1; i < numOnlinePlayerSlots; i++)
+							{
+								if (i <= numPlayersToFit)
+								{
+									UIPlayerTexts[i].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
+									if (showUI)
+									{
+										UIPlayerTexts[i].color = Color.white;
+										UIPlayerTexts[i].text = playerInfoList[i - 1].m_name;
+									}
+								}
+								else
+								{
+									UIPlayerTexts[i].color = Color.white;
+									UIPlayerTexts[i].text = "";
+								}
+							}
+						}
+						/*for (int i = 0; i < numOnlinePlayerSlots; i++)
+						{
+							if ((i < numPlayersToFit) && !onePlayer)
 							{
 								UIPlayerTexts[i].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
 								if (showUI)
@@ -121,13 +149,13 @@ namespace MarsarahTweaks.Patches.UI
 									UIPlayerTexts[i].text = playerInfoList[i].m_name;
 								}
 							}
-							else if (i == numPlayers && !onePlayer)
+							else if (i == numPlayersToFit && !onePlayer)
 							{
 								UIPlayerTexts[i].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
 								if (showUI)
 								{
 									UIPlayerTexts[i].color = Color.green;
-									UIPlayerTexts[i].text = "Online:";
+									UIPlayerTexts[i].text = $"Online: {numPlayersTotal}";
 								}
 							}
 							else
@@ -135,7 +163,7 @@ namespace MarsarahTweaks.Patches.UI
 								UIPlayerTexts[i].color = Color.white;
 								UIPlayerTexts[i].text = "";
 							}
-						}
+						}*/
 					}
 					else
 					{
@@ -146,12 +174,12 @@ namespace MarsarahTweaks.Patches.UI
 							if (showUI)
 							{
 								UIPlayerTexts[0].color = Color.green;
-								UIPlayerTexts[0].text = "Online:";
+								UIPlayerTexts[0].text = $"Online: {numPlayersTotal}";
 							}
 
 							for (int i = 1; i < numOnlinePlayerSlots; i++)
 							{
-								if (i <= numPlayers)
+								if (i <= numPlayersToFit)
 								{
 									UIPlayerTexts[i].enabled = showUI && Minimap.instance.m_mapSmall.activeInHierarchy;
 									if (showUI)
