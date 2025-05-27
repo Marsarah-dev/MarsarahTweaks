@@ -119,6 +119,8 @@ namespace MarsarahTweaks
 			//public static readonly ConfigMetadata EnemyNameplates = new ConfigMetadata("11 - Better Enemy Nameplates", "Displays current and max HP of enemies and colors name according to alerted/aggravated status");
 			public static readonly ConfigMetadata UIShowOwnedResources = new ConfigMetadata("11 - Show Owned Resources In Build Menu", "Displays the total amount of resources in the player's inventory in addition to the required resource amount for the selected piece in the build menu");
 			public static readonly ConfigMetadata UIShowPowerExpiration = new ConfigMetadata("12 - Show Boss Power Expiration Message", "Displays a message in the center of the screen when any Forsaken Power expires");
+			public static readonly ConfigMetadata UIPlayerLogoutAnnounce = new ConfigMetadata("13 - Player Logout Announce", "Displays a message when a player logs out in the top-left message log and in the chat window");
+			public static readonly ConfigMetadata UIAshlandsHeatLevel = new ConfigMetadata("14 - Show Heat Threshold Meter", "Shows a heat meter when in Ashlands water or lava");
 		}
 
 		// Config entries
@@ -187,6 +189,8 @@ namespace MarsarahTweaks
 		//public static ConfigEntry<bool> BetterEnemyNameplates;
 		public static ConfigEntry<bool> ShowOwnedResources;
 		public static ConfigEntry<bool> ShowBossExpirationMessage;
+		public static ConfigEntry<bool> AnnouncePlayerLogout;
+		public static ConfigEntry<bool> ShowHeatLevelInAshlands;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -258,10 +262,12 @@ namespace MarsarahTweaks
 			ShowSmartBiome = CreateConfig(ConfigSections.UI, Configs.UISmartBiome.Name, true, Configs.UISmartBiome.Description);
 			ShowSummonCounter = CreateConfig(ConfigSections.UI, Configs.UISummonCounter.Name, true, Configs.UISummonCounter.Description);
 			ShowOnlinePlayers = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayers.Name, true, Configs.UIOnlinePlayers.Description);
-			OnlinePlayersUnderMinimap = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayersUnderMinimap.Name, true, Configs.UIOnlinePlayersUnderMinimap.Description);
+			OnlinePlayersUnderMinimap = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayersUnderMinimap.Name, false, Configs.UIOnlinePlayersUnderMinimap.Description);
 			//BetterEnemyNameplates = CreateConfig(ConfigSections.UI, Configs.EnemyNameplates.Name, true, Configs.EnemyNameplates.Description);
 			ShowOwnedResources = CreateConfig(ConfigSections.UI, Configs.UIShowOwnedResources.Name, true, Configs.UIShowOwnedResources.Description);
 			ShowBossExpirationMessage = CreateConfig(ConfigSections.UI, Configs.UIShowPowerExpiration.Name, true, Configs.UIShowPowerExpiration.Description);
+			AnnouncePlayerLogout = CreateConfig(ConfigSections.UI, Configs.UIPlayerLogoutAnnounce.Name, true, Configs.UIPlayerLogoutAnnounce.Description);
+			ShowHeatLevelInAshlands = CreateConfig(ConfigSections.UI, Configs.UIAshlandsHeatLevel.Name, true, Configs.UIAshlandsHeatLevel.Description);
 
 			SetupWatcher();
 		}

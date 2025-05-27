@@ -38,7 +38,8 @@
     <Reference Include="0Harmony">
       <HintPath>Libs\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="assembly_guiutils">
+    <Reference Include="assembly_guiutils, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\assembly_guiutils.dll</HintPath>
     </Reference>
     <Reference Include="assembly_valheim">
@@ -138,6 +139,7 @@
     <Compile Include="Patches\TestJump.cs" />
     <Compile Include="Patches\Features\TougherShipsChanges.cs" />
     <Compile Include="Patches\Features\TrophyDropsChanges.cs" />
+    <Compile Include="Patches\UI\UIAshlandsHeatLevel.cs" />
     <Compile Include="Patches\UI\UIBoatSpeed.cs" />
     <Compile Include="Patches\UI\UIBossPowerExpiration.cs" />
     <Compile Include="Patches\UI\UIController.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="Patches\UI\UIEnemyNameplates.cs" />
     <Compile Include="Patches\UI\UIInventoryWeightAndSlots.cs" />
     <Compile Include="Patches\UI\UILoadscreenTips.cs" />
+    <Compile Include="Patches\UI\UIPlayerLogoutAnnounce.cs" />
     <Compile Include="Patches\UI\UIOnlinePlayers.cs" />
     <Compile Include="Patches\UI\UIShowOwnedResources.cs" />
     <Compile Include="Patches\UI\UISmartBiome.cs" />

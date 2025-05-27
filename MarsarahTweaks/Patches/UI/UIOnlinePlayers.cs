@@ -29,8 +29,8 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (ConfigManager.ShowOnlinePlayers.Value && showUI)
 				{
-					if (___m_players.Count != 0)
-						playerInfoList = ___m_players;
+					//if (___m_players.Count != 0)
+					playerInfoList = ___m_players;
 				}
 			}
 		}
@@ -108,10 +108,9 @@ namespace MarsarahTweaks.Patches.UI
 					bool onePlayer = playerInfoList.Count == 1;
 					//bool onePlayer = false;
 
-					if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
+					if (!onePlayer)
 					{
-						// Header after players
-						if (!onePlayer)
+						if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
 						{
 							UIPlayerTexts[0].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
 							if (showUI)
@@ -137,38 +136,34 @@ namespace MarsarahTweaks.Patches.UI
 									UIPlayerTexts[i].text = "";
 								}
 							}
-						}
-						/*for (int i = 0; i < numOnlinePlayerSlots; i++)
-						{
-							if ((i < numPlayersToFit) && !onePlayer)
+							/*for (int i = 0; i < numOnlinePlayerSlots; i++) // Header after players
 							{
-								UIPlayerTexts[i].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
-								if (showUI)
+								if ((i < numPlayersToFit) && !onePlayer)
+								{
+									UIPlayerTexts[i].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
+									if (showUI)
+									{
+										UIPlayerTexts[i].color = Color.white;
+										UIPlayerTexts[i].text = playerInfoList[i].m_name;
+									}
+								}
+								else if (i == numPlayersToFit && !onePlayer)
+								{
+									UIPlayerTexts[i].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
+									if (showUI)
+									{
+										UIPlayerTexts[i].color = Color.green;
+										UIPlayerTexts[i].text = $"Online: {numPlayersTotal}";
+									}
+								}
+								else
 								{
 									UIPlayerTexts[i].color = Color.white;
-									UIPlayerTexts[i].text = playerInfoList[i].m_name;
+									UIPlayerTexts[i].text = "";
 								}
-							}
-							else if (i == numPlayersToFit && !onePlayer)
-							{
-								UIPlayerTexts[i].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
-								if (showUI)
-								{
-									UIPlayerTexts[i].color = Color.green;
-									UIPlayerTexts[i].text = $"Online: {numPlayersTotal}";
-								}
-							}
-							else
-							{
-								UIPlayerTexts[i].color = Color.white;
-								UIPlayerTexts[i].text = "";
-							}
-						}*/
-					}
-					else
-					{
-						// Header before players
-						if (!onePlayer)
+							}*/
+						}
+						else
 						{
 							UIPlayerTexts[0].enabled = showUI && Minimap.instance.m_mapSmall.activeInHierarchy;
 							if (showUI)
@@ -194,6 +189,14 @@ namespace MarsarahTweaks.Patches.UI
 									UIPlayerTexts[i].text = "";
 								}
 							}
+						}
+					}
+					else
+					{
+						for (int i = 0; i < numOnlinePlayerSlots; i++)
+						{
+							UIPlayerTexts[i].color = Color.white;
+							UIPlayerTexts[i].text = "";
 						}
 					}
 				}
@@ -268,17 +271,8 @@ namespace MarsarahTweaks.Patches.UI
 					TextAnchor alignment = ConfigManager.OnlinePlayersUnderMinimap.Value ? TextAnchor.MiddleLeft : TextAnchor.MiddleRight;
 					Vector2 anchoredPosition = ConfigManager.OnlinePlayersUnderMinimap.Value ? new Vector2(0f, UIPartyPlayerTextDistanceV * i) : new Vector2(0f, -UIPartyPlayerTextDistanceV * i);
 
-					// Create the text object using the helper function
-					Text UIPlayerText = CreateTextObject(
-						$"PartyText_{i}",
-						UIPartyArea,
-						Color.white,
-						UITextFontName,
-						UITextFontSize,
-						alignment,
-						anchoredPosition,
-						UIPartyAreaSize
-					);
+					// Create the text object
+					Text UIPlayerText = CreateTextObject($"PartyText_{i}", UIPartyArea, Color.white, UITextFontName, UITextFontSize, alignment, anchoredPosition, UIPartyAreaSize);
 
 					// Store the text object
 					UIPlayerTexts.Add(UIPlayerText);
@@ -288,7 +282,7 @@ namespace MarsarahTweaks.Patches.UI
 
 			private static void UpdatePartyUIPosition(Hud hud)
 			{
-				MarsarahTweaks.MLog("[Info] UpdatePartyUICalled");
+				//MarsarahTweaks.MLog("[Info] UpdatePartyUICalled");
 				if (UIPartyArea == null) return;
 
 				//MarsarahTweaks.MLog($"Executing UpdatePartyUIPosition");

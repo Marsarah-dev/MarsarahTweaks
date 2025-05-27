@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace MarsarahTweaks.Patches.UI
 {
@@ -44,6 +45,38 @@ namespace MarsarahTweaks.Patches.UI
 
 			return text;
 		}
+
+		public static TextMeshProUGUI CreateTMPTextObject(string name, GameObject parent, Color textColor, string fontName, int fontSize, TextAlignmentOptions alignment, Vector2 position, Vector2 sizeDelta)
+		{
+			GameObject textObject = new GameObject(name);
+			textObject.layer = 5;
+			textObject.transform.SetParent(parent.transform, false);
+
+			RectTransform rectTransform = textObject.AddComponent<RectTransform>();
+			rectTransform.anchoredPosition = position;
+			rectTransform.sizeDelta = sizeDelta;
+			rectTransform.localScale = Vector3.one;
+
+			TextMeshProUGUI tmpText = textObject.AddComponent<TextMeshProUGUI>();
+			tmpText.color = textColor;
+			tmpText.font = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == fontName);
+			tmpText.fontSize = fontSize;
+			tmpText.alignment = alignment;
+			tmpText.text = ""; // default
+			//tmpText.enableWordWrapping = false;
+
+			// Optionally try to assign emoji-capable TMP font
+			//tmpText.font = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name.Contains("Emoji") || f.name.Contains("Noto"));
+
+			// Outline (optional)
+			var outline = textObject.AddComponent<Outline>();
+			outline.effectColor = Color.black;
+			outline.effectDistance = new Vector2(1f, -1f);
+			outline.useGraphicAlpha = true;
+
+			return tmpText;
+		}
+
 
 		public static void UpdateUIPositions()
 		{

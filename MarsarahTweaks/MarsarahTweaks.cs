@@ -9,6 +9,10 @@
  * B. New UI
  *    - Added section: Show Owned Resources In Build Menu
  *    - Added section: Show Boss Power Expiration Message
+ *    - Added section: Player Logout Announce 
+ *    - NEXT: Also add login message at the top left
+ *    - NEXT: Show heat level in Ashlands
+ *    - NEXT: Change Summons counter text to emoji (make section to change everything to emoji)
  * 
  * C. New Features
  * 
@@ -30,7 +34,7 @@
  *    5. Show player HP and death count next to online indicator (or color their names with red if they have the corpse run buff)
  *    6. 
  *    7. 
- *    8. Add message when a player logs out
+ *    8. 
  *    9. Create Smart Pins - admin predefines pins and players can only put the predefined pins on map
  * 
  * C. New Features
@@ -58,7 +62,7 @@
  *    4. Increase Scrap Iron drop amount from Muddy Piles
  *    5. Recreate the Better Sorting section
  *    6. Create a Vote to Sleep section, where a player can trigger a vote to sleep and if the majority votes yes, then time is skipped as sleeping.
- *       - If one or more players are in combat (enemies nearby), then the vote is entirely skipped and no tome is passed.
+ *       - If one or more players are in combat (enemies nearby), then the vote is entirely skipped and no time is passed.
  *    7. Add an Alternate Lights Fuel config (exclusive toggle with Permanent Lights) that makes lights use less fuel during the day (maybe turn them off or make them dimmer during the day) and work normal at night
  *    
  *    ** Overhaul
@@ -74,6 +78,64 @@
  *    6. 
  *    7. 
  *    8. Faster smelting from all smelters and kiln
+ *    
+
+
+
+🎯 Legend:
+
+🟢 Easy: Can be done with patches, UI edits, or config alone.
+
+🟡 Medium: Requires more extensive UI handling, gameplay state tracking, or syncing.
+
+🔴 Hard: Needs asset additions, major reverse engineering, or world generation hooks.
+
+B. New UI
+Feature	Complexity	Notes
+1. Arrow slots (selectable with key combo)		🟡 Medium	UI + inventory tracking; needs input patching and equip system extensions.
+2. Extra tool slots or toggleable keybind row	🔴 Hard		Requires deep Inventory and InputManager integration, potential UI overhaul.
+3. Show heat threshold in Ashlands				🟢 Easy		Track biome + temperature; display threshold in UI.
+4. Better nameplates + item level				🟡 Medium	Needs patching enemy nameplate drawing + item quality display.
+5. Show HP/deaths next to name					🔴 Hard		Needs syncing player HP/death count to others, complex in multiplayer.
+9. Smart Pins									🟡→🔴 Medium to Hard	Requires UI pin menu patching + pin system restriction logic.
+
+C. New Features
+Gear
+Feature	Complexity	Notes
+1. Staff of Fracturing effect		🟡 Medium	Modify AoE code, easy with custom logic in projectile/explosion.
+2. Gear set bonuses					🟡 Medium	Track gear sets and apply effects, like how Troll set works.
+3. Change gem for Ashlands weapons	🟢 Easy		Replace crafting recipe entries.
+4. Healing Staff of Protection		🟡 Medium	Add alt-attack behavior and healing; reuse dvergr logic.
+
+Building
+Feature	Complexity	Notes
+1. Silver Sconce			🟢 Easy		Reuse bronze/gold sconce logic, change visuals.
+2. Silver/Obsidian pieces	🔴 Hard		Needs new 3D assets and integration with build tables.
+3. Chest snapping + signs	🔴 Hard		Requires placement logic + sign prefab/UI work.
+4. Smart dropbox			🔴 Hard		Needs scanning nearby chests and item categorization logic.
+5. Barrel cost reduction	🟢 Easy		Patch recipe.
+
+Other
+Feature	Complexity	Notes
+1. Better Roads (speed buff)		🟡 Medium	Detect if player is on road (terrain or pathfinding zone).
+2. Pocket Portal (only 2 allowed)	🔴 Hard		Requires portal pairing system and strict instancing.
+3. Wards buffs + repair				🟡 Medium	Hook ward logic, apply SEs + invoke WearNTear.Repair periodically.
+4. More iron from piles				🟢 Easy		Patch drop table.
+5. Better Sorting UI				🟡 Medium	Redo Inventory UI, tag-based sort.
+6. Vote to Sleep					🔴 Hard		Network voting, combat detection, time skip sync.
+7. Alternate Lights Fuel			🟡 Medium	Time-of-day detection + light component handling.
+
+Overhaul
+Feature	Complexity	Notes
+1. Plains magic			🔴 Hard			Needs SEs, AI changes, magic behaviors.
+2. Pre-built structures	🔴 Very Hard	Deep world generation patching or prefab injection.
+
+D. New QOL
+Feature	Complexity	Notes
+2. Increase Maypole range	🟢 Easy		Patch ComfortManager radius logic.
+3. Remove equip/eat slow	🟡 Medium	Find and patch delays or UseItem debuffs.
+4. Destroy ship with hammer	🟢 Easy		Add hammer destruction behavior for ships.
+8. Faster smelting			🟢 Easy		Patch smelter tick timers or fuel usage.
  *
  ***************************************************/
 
