@@ -25,12 +25,12 @@ namespace MarsarahTweaks.Patches.QOL
 
 					if (___m_targetPlayers != newTargetsFriendly)
 					{
-						//MarsarahTweaks.MLog($"Applying new player targeting: {newTargetsFriendly}");
+						//MarsarahTweaks.LogInfo($"Applying new player targeting: {newTargetsFriendly}");
 						___m_targetPlayers = newTargetsFriendly;
 					}
 					if (___m_targetTamed != newTargetsFriendly)
 					{
-						//MarsarahTweaks.MLog($"Applying new tamed targeting: {newTargetsFriendly}");
+						//MarsarahTweaks.LogInfo($"Applying new tamed targeting: {newTargetsFriendly}");
 						___m_targetTamed = newTargetsFriendly;
 					}
 				}
@@ -38,12 +38,12 @@ namespace MarsarahTweaks.Patches.QOL
 				{
 					if (___m_targetPlayers != originalTargetsFriendly)
 					{
-						//MarsarahTweaks.MLog($"Restoring player targeting: {originalTargetsFriendly}");
+						//MarsarahTweaks.LogInfo($"Restoring player targeting: {originalTargetsFriendly}");
 						___m_targetPlayers = originalTargetsFriendly;
 					}
 					if (___m_targetTamed != originalTargetsFriendly)
 					{
-						//MarsarahTweaks.MLog($"Restoring tamed targeting: {originalTargetsFriendly}");
+						//MarsarahTweaks.LogInfo($"Restoring tamed targeting: {originalTargetsFriendly}");
 						___m_targetTamed = originalTargetsFriendly;
 					}
 				}

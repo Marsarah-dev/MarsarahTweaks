@@ -83,7 +83,7 @@ namespace MarsarahTweaks.Patches.QOL
 							targetOffset = 0f; // Default if unknown ship
 						}
 
-						//MarsarahTweaks.MLog($"[SailingCamera] Controlling {prefabName}, offset set to {targetOffset:F1}");
+						//MarsarahTweaks.LogInfo($"[SailingCamera] Controlling {prefabName}, offset set to {targetOffset:F1}");
 					}
 					else
 					{
@@ -119,18 +119,18 @@ namespace MarsarahTweaks.Patches.QOL
 				if (defaultMaxDistance == -1f)
 				{
 					defaultMaxDistance = camera.m_maxDistance;
-					MarsarahTweaks.MLog($"[SailingCamera] Backed up max camera zoom {defaultMaxDistance}");
+					MarsarahTweaks.LogInfo($"[SailingCamera] Backed up max camera zoom {defaultMaxDistance}");
 				}
 				if (camera.m_maxDistance != sailingMaxDistance)
 				{
 					camera.m_maxDistance = sailingMaxDistance;
-					MarsarahTweaks.MLog($"[SailingCamera] Set new max camera zoom {sailingMaxDistance}");
+					MarsarahTweaks.LogInfo($"[SailingCamera] Set new max camera zoom {sailingMaxDistance}");
 				}
 			}
 			else if (defaultMaxDistance != -1f && camera.m_maxDistance != defaultMaxDistance)
 			{
 				camera.m_maxDistance = defaultMaxDistance;
-				MarsarahTweaks.MLog($"[SailingCamera] Restored max camera zoom {defaultMaxDistance}");
+				MarsarahTweaks.LogInfo($"[SailingCamera] Restored max camera zoom {defaultMaxDistance}");
 			}
 		}*/
 	}

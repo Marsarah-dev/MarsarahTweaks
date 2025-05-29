@@ -105,12 +105,12 @@ namespace MarsarahTweaks.Patches.Features
 					// Backup original value if not already stored
 					if (!originalRecipeStationLevels.ContainsKey(recipeName))
 					{
-						//MarsarahTweaks.MLog($"Backing up {recipeName} min station level value: {recipe.m_minStationLevel}");
+						//MarsarahTweaks.LogInfo($"Backing up {recipeName} min station level value: {recipe.m_minStationLevel}");
 						originalRecipeStationLevels[recipeName] = recipe.m_minStationLevel;
 					}
 
 					// Apply new value
-					//MarsarahTweaks.MLog($"Applying new min station level for {recipeName}: {newStationLevel}");
+					//MarsarahTweaks.LogInfo($"Applying new min station level for {recipeName}: {newStationLevel}");
 					recipe.m_minStationLevel = newStationLevel;
 				}
 			}
@@ -125,7 +125,7 @@ namespace MarsarahTweaks.Patches.Features
 					if (recipe == null) continue;
 
 					// Restore original value
-					//MarsarahTweaks.MLog($"Restoring {recipeName} min station level value: {originalLevel}");
+					//MarsarahTweaks.LogInfo($"Restoring {recipeName} min station level value: {originalLevel}");
 					recipe.m_minStationLevel = originalLevel;
 				}
 

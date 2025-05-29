@@ -19,7 +19,7 @@ namespace MarsarahTweaks.Patches.QOL
 				if (originalRestedDelay == -1f)
 				{
 					originalRestedDelay = __instance.m_delay;
-					//MarsarahTweaks.MLog($"Original rested delay saved: {originalRestedDelay}");
+					//MarsarahTweaks.LogInfo($"Original rested delay saved: {originalRestedDelay}");
 				}
 
 				if (ConfigManager.ShorterRestedDelayEnabled.Value)
@@ -27,7 +27,7 @@ namespace MarsarahTweaks.Patches.QOL
 					if (__instance.m_delay != newRestedDelay)
 					{
 						__instance.m_delay = 10f;
-						//MarsarahTweaks.MLog($"Rested delay set to {__instance.m_delay}");
+						//MarsarahTweaks.LogInfo($"Rested delay set to {__instance.m_delay}");
 					}
 				}
 				else
@@ -35,11 +35,11 @@ namespace MarsarahTweaks.Patches.QOL
 					if (__instance.m_delay != originalRestedDelay)
 					{
 						__instance.m_delay = originalRestedDelay;
-						//MarsarahTweaks.MLog($"Rested delay reverted to {__instance.m_delay}");
+						//MarsarahTweaks.LogInfo($"Rested delay reverted to {__instance.m_delay}");
 					}
 					else // Apparently it's automatically set to 20 if the config is off, even mid-game
 					{
-						//MarsarahTweaks.MLog($"Rested delay is at {__instance.m_delay}");
+						//MarsarahTweaks.LogInfo($"Rested delay is at {__instance.m_delay}");
 					}
 				}
 			}

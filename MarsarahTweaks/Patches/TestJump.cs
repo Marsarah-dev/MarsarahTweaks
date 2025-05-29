@@ -11,12 +11,12 @@
 //			if (ConfigManager.testJumpEnabled.Value)
 //			{
 //				___m_jumpForce = 15;
-//				MarsarahTweaks.MLog("Modified jump force: " + ___m_jumpForce);
+//				MarsarahTweaks.LogInfo("Modified jump force: " + ___m_jumpForce);
 //			}
 //			else
 //			{
 //				___m_jumpForce = 8;
-//				MarsarahTweaks.MLog("Default jump force: " + ___m_jumpForce);
+//				MarsarahTweaks.LogInfo("Default jump force: " + ___m_jumpForce);
 //			}
 //		}
 //	}

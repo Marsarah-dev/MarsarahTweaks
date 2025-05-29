@@ -74,7 +74,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (!canMakeChanges)
 				{
-					//MarsarahTweaks.MLog($"Skipping trophy drops modifications for {boss.Key}");
+					//MarsarahTweaks.LogInfo($"Skipping trophy drops modifications for {boss.Key}");
 					continue; 
 				}
 
@@ -100,10 +100,10 @@ namespace MarsarahTweaks.Patches.Features
 								if (!originalTrophyDropRates[creature].ContainsKey(trophy))
 								{
 									originalTrophyDropRates[creature][trophy] = drop.m_chance; // Store original drop chance
-									//MarsarahTweaks.MLog($"[Trophy Drops] Backing up {trophy} drop rate ({drop.m_chance}) for {creature}");
+									//MarsarahTweaks.LogInfo($"[Trophy Drops] Backing up {trophy} drop rate ({drop.m_chance}) for {creature}");
 								}
 
-								//MarsarahTweaks.MLog($"[Trophy Drops] Setting trophy: {trophy} drop rate: {rate} for creature: {creature}");
+								//MarsarahTweaks.LogInfo($"[Trophy Drops] Setting trophy: {trophy} drop rate: {rate} for creature: {creature}");
 								drop.m_chance = rate;
 							}
 							else
@@ -111,7 +111,7 @@ namespace MarsarahTweaks.Patches.Features
 								// Restore backup
 								if (originalTrophyDropRates.TryGetValue(creature, out var originalTrophies) && originalTrophies.TryGetValue(trophy, out float originalRate))
 								{
-									//MarsarahTweaks.MLog($"[Trophy Drops] Restoring {trophy} drop rate ({originalRate}) for {creature}");
+									//MarsarahTweaks.LogInfo($"[Trophy Drops] Restoring {trophy} drop rate ({originalRate}) for {creature}");
 									drop.m_chance = originalRate;
 
 									// Delete backup so we don't restore infinitely
@@ -119,7 +119,7 @@ namespace MarsarahTweaks.Patches.Features
 									if (originalTrophyDropRates[creature].Count == 0)
 									{
 										originalTrophyDropRates.Remove(creature);
-										//MarsarahTweaks.MLog($"[Trophy Drops] Cleared backup for {creature}");
+										//MarsarahTweaks.LogInfo($"[Trophy Drops] Cleared backup for {creature}");
 									}
 								}
 							}
@@ -140,7 +140,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (!canMakeChanges)
 				{
-					//MarsarahTweaks.MLog($"[Trophy Drops Restore Special] Skipping trophy drops restore for {boss.Key}");
+					//MarsarahTweaks.LogInfo($"[Trophy Drops Restore Special] Skipping trophy drops restore for {boss.Key}");
 					continue;
 				}
 
@@ -158,7 +158,7 @@ namespace MarsarahTweaks.Patches.Features
 						{
 							if (originalTrophyDropRates.TryGetValue(creature, out var originalTrophies) && originalTrophies.TryGetValue(trophy, out float originalRate))
 							{
-								//MarsarahTweaks.MLog($"[Trophy Drops Restore Special] Restoring {trophy} drop rate ({originalRate}) for {creature}");
+								//MarsarahTweaks.LogInfo($"[Trophy Drops Restore Special] Restoring {trophy} drop rate ({originalRate}) for {creature}");
 								drop.m_chance = originalRate;
 
 								// Delete backup so we don't restore infinitely
@@ -166,7 +166,7 @@ namespace MarsarahTweaks.Patches.Features
 								if (originalTrophyDropRates[creature].Count == 0)
 								{
 									originalTrophyDropRates.Remove(creature);
-									//MarsarahTweaks.MLog($"[Trophy Drops Restore Special] Cleared backup for {creature}");
+									//MarsarahTweaks.LogInfo($"[Trophy Drops Restore Special] Cleared backup for {creature}");
 								}
 							}
 						}
@@ -199,7 +199,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (creaturePrefab == null)
 				{
-					MarsarahTweaks.MLog($"[Trophy Drops] Could not get prefab for {creature}");
+					MarsarahTweaks.LogInfo($"[Trophy Drops] Could not get prefab for {creature}");
 					continue;
 				}
 
@@ -207,7 +207,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (creatureDrop == null)
 				{
-					MarsarahTweaks.MLog($"[Trophy Drops] Could not get CharacterDrop for {creature}");
+					MarsarahTweaks.LogInfo($"[Trophy Drops] Could not get CharacterDrop for {creature}");
 					continue;
 				}
 
@@ -225,10 +225,10 @@ namespace MarsarahTweaks.Patches.Features
 							if (!originalTrophyDropRates[creature].ContainsKey(trophy))
 							{
 								originalTrophyDropRates[creature][trophy] = drop.m_chance; // Store original drop chance
-								MarsarahTweaks.MLog($"[Trophy Drops] Backing up {trophy} drop rate ({drop.m_chance}) for {creature}");
+								MarsarahTweaks.LogInfo($"[Trophy Drops] Backing up {trophy} drop rate ({drop.m_chance}) for {creature}");
 							}
 
-							MarsarahTweaks.MLog($"[Trophy Drops] Setting trophy: {trophy} drop rate: {rate} for creature: {creature}");
+							MarsarahTweaks.LogInfo($"[Trophy Drops] Setting trophy: {trophy} drop rate: {rate} for creature: {creature}");
 							drop.m_chance = rate;
 						}
 						else
@@ -236,7 +236,7 @@ namespace MarsarahTweaks.Patches.Features
 							// Restore backup
 							if (originalTrophyDropRates.TryGetValue(creature, out var originalTrophies) && originalTrophies.TryGetValue(trophy, out float originalRate))
 							{
-								MarsarahTweaks.MLog($"[Trophy Drops] Restoring {trophy} drop rate ({originalRate}) for {creature}");
+								MarsarahTweaks.LogInfo($"[Trophy Drops] Restoring {trophy} drop rate ({originalRate}) for {creature}");
 								drop.m_chance = originalRate;
 							}
 						}

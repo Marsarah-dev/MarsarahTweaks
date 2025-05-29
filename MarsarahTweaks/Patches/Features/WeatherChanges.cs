@@ -31,14 +31,14 @@ namespace MarsarahTweaks.Patches.Features
 
 							if (weatherWeightChanges.TryGetValue((biome.m_name, environment.m_env.m_name), out float newWeight))
 							{
-								//MarsarahTweaks.MLog($"Changing old weather weight {environment.m_weight} -> {newWeight} for {environment.m_env.m_name} in biome {biome.m_name}");
+								//MarsarahTweaks.LogInfo($"Changing old weather weight {environment.m_weight} -> {newWeight} for {environment.m_env.m_name} in biome {biome.m_name}");
 								environment.m_weight = newWeight;
 							}
 
 							//totalWeightAfter += environment.m_weight;
 						}
 
-						//MarsarahTweaks.MLog($"Biome {biome.m_name}: Total weight before: {totalWeightBefore}, after: {totalWeightAfter}");
+						//MarsarahTweaks.LogInfo($"Biome {biome.m_name}: Total weight before: {totalWeightBefore}, after: {totalWeightAfter}");
 					}
 				}
 			}

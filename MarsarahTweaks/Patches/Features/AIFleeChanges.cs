@@ -23,7 +23,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (thisBaseAI.name == "Boar(Clone)" || thisBaseAI.name == "Neck(Clone)")
 				{
-					//MarsarahTweaks.MLog($"This AI won't flee");
+					//MarsarahTweaks.LogInfo($"This AI won't flee");
 					___m_fleeIfNotAlerted = false;
 				}
 			}

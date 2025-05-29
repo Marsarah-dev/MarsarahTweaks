@@ -73,7 +73,7 @@ namespace MarsarahTweaks.Patches.QOL
 					// Set the reduced weight
 					if (metalWeightChanges.TryGetValue(item.name, out float newWeight))
 					{
-						//MarsarahTweaks.MLog($"Applying new weight for {item.name} from {itemDrop.m_itemData.m_shared.m_weight} to {newWeight}");
+						//MarsarahTweaks.LogInfo($"Applying new weight for {item.name} from {itemDrop.m_itemData.m_shared.m_weight} to {newWeight}");
 						itemDrop.m_itemData.m_shared.m_weight = newWeight;
 					}
 				}
@@ -91,7 +91,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 					if (metalWeightOriginals.TryGetValue(item.name, out float originalWeight))
 					{
-						//MarsarahTweaks.MLog($"Restoring original value for {item.name} from {itemDrop.m_itemData.m_shared.m_weight} to {originalWeight}");
+						//MarsarahTweaks.LogInfo($"Restoring original value for {item.name} from {itemDrop.m_itemData.m_shared.m_weight} to {originalWeight}");
 						itemDrop.m_itemData.m_shared.m_weight = originalWeight;
 					}
 				}

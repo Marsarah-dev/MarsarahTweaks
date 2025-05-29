@@ -66,7 +66,7 @@ namespace MarsarahTweaks.Patches.Features
 						// Backup
 						if (!originalSpaceRequirements.TryGetValue(pieceName, out float originalSpaceRequirement))
 						{
-							//MarsarahTweaks.MLog($"Backing up space requirement for {pieceName}");
+							//MarsarahTweaks.LogInfo($"Backing up space requirement for {pieceName}");
 							originalSpaceRequirements[pieceName] = actualPiece.m_spaceRequirement;
 						}
 
@@ -77,7 +77,7 @@ namespace MarsarahTweaks.Patches.Features
 				else if (originalSpaceRequirements.TryGetValue(pieceName, out float originalSpaceRequirement))
 				{
 					// Restore
-					//MarsarahTweaks.MLog($"Restoring space requirement for {pieceName}");
+					//MarsarahTweaks.LogInfo($"Restoring space requirement for {pieceName}");
 					actualPiece.m_spaceRequirement = originalSpaceRequirement;
 
 					originalSpaceRequirements.Remove(pieceName);
@@ -93,7 +93,7 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (!originalStationDistance.ContainsKey(extensioName))
 				{
-					//MarsarahTweaks.MLog($"Backing up build distance for {extensioName}");
+					//MarsarahTweaks.LogInfo($"Backing up build distance for {extensioName}");
 					originalStationDistance[extensioName] = extension.m_maxStationDistance;
 				}
 
@@ -101,7 +101,7 @@ namespace MarsarahTweaks.Patches.Features
 			}
 			else if (originalStationDistance.TryGetValue(extensioName, out float original))
 			{
-				//MarsarahTweaks.MLog($"Restoring build distance for {extensioName}");
+				//MarsarahTweaks.LogInfo($"Restoring build distance for {extensioName}");
 				extension.m_maxStationDistance = original;
 
 				originalStationDistance.Remove(extensioName);

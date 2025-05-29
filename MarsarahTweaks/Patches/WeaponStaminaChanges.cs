@@ -21,17 +21,17 @@
 //				{
 //					if (!ZNet.instance.IsDedicated())
 //					{
-//						MarsarahTweaks.MLog($"ObjectDB Awake: Updating {ConfigManager.Configs.WeaponStaminaModifications.Name}...");
+//						MarsarahTweaks.LogInfo($"ObjectDB Awake: Updating {ConfigManager.Configs.WeaponStaminaModifications.Name}...");
 //						UpdateWeaponStaminaCosts(__instance, false);
 //					}
 //					else
 //					{
-//						MarsarahTweaks.MLog($"ObjectDB Awake: I am a server. No changes made to {ConfigManager.Configs.WeaponStaminaModifications.Name}...");
+//						MarsarahTweaks.LogInfo($"ObjectDB Awake: I am a server. No changes made to {ConfigManager.Configs.WeaponStaminaModifications.Name}...");
 //					}
 //				}
 //				else
 //				{
-//					MarsarahTweaks.MLog($"ObjectDB Awake: Too early to do anything. No changes made to {ConfigManager.Configs.WeaponStaminaModifications.Name}...");
+//					MarsarahTweaks.LogInfo($"ObjectDB Awake: Too early to do anything. No changes made to {ConfigManager.Configs.WeaponStaminaModifications.Name}...");
 //				}
 //			}
 //		}
@@ -138,7 +138,7 @@
 //				if (shared.m_itemType == ItemDrop.ItemData.ItemType.OneHandedWeapon || shared.m_itemType == ItemDrop.ItemData.ItemType.TwoHandedWeapon || shared.m_itemType == ItemDrop.ItemData.ItemType.TwoHandedWeaponLeft)
 //				{
 //					float staminaUsage = shared.m_attack.m_attackStamina;
-//					MarsarahTweaks.MLog($"Weapon: {shared.m_name}, Stamina Usage: {staminaUsage}");
+//					MarsarahTweaks.LogInfo($"Weapon: {shared.m_name}, Stamina Usage: {staminaUsage}");
 //				}
 //			}
 //		}

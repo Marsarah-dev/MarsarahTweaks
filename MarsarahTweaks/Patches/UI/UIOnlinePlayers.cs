@@ -217,11 +217,11 @@ namespace MarsarahTweaks.Patches.UI
 				// Check if UI already exists (list not empty and all elements are valid)
 				if (UIPlayerTexts.Count > 0 && UIPlayerTexts.All(t => t != null))
 				{
-					//MarsarahTweaks.MLog("[Warning] UI is already created");
+					//MarsarahTweaks.LogInfo("[Warning] UI is already created");
 					return; // UI is already created, no need to recreate
 				}
 
-				//MarsarahTweaks.MLog($"Executing CreateUI");
+				//MarsarahTweaks.LogInfo($"Executing CreateUI");
 
 				int UITextFontSize = 16;
 				string UITextFontName = "AveriaSansLibre-Bold";
@@ -282,10 +282,10 @@ namespace MarsarahTweaks.Patches.UI
 
 			private static void UpdatePartyUIPosition(Hud hud)
 			{
-				//MarsarahTweaks.MLog("[Info] UpdatePartyUICalled");
+				//MarsarahTweaks.LogInfo("[Info] UpdatePartyUICalled");
 				if (UIPartyArea == null) return;
 
-				//MarsarahTweaks.MLog($"Executing UpdatePartyUIPosition");
+				//MarsarahTweaks.LogInfo($"Executing UpdatePartyUIPosition");
 
 				// Set new parent first, keeping world position to avoid undesired shifts
 				if (!ConfigManager.OnlinePlayersUnderMinimap.Value)

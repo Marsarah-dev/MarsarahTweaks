@@ -30,7 +30,7 @@ namespace MarsarahTweaks.Patches.QOL
 						{
 							item.m_shared.m_equipDuration = 0;
 						}
-						//MarsarahTweaks.MLog($"Weapon {item.m_shared.m_name} - anim state: {item.m_shared.m_animationState}");
+						//MarsarahTweaks.LogInfo($"Weapon {item.m_shared.m_name} - anim state: {item.m_shared.m_animationState}");
 					}
 					if (item.IsEquipable() && !item.IsWeapon())
 					{
@@ -93,10 +93,10 @@ namespace MarsarahTweaks.Patches.QOL
 				if (name == "equip_hip")
 				{
 					float forwardSpeed = ___m_animator.GetFloat(___s_forwardSpeedID);
-					MarsarahTweaks.MLog($"[Equip] equip_hip triggered in ZSyncAnimation on {__instance.gameObject.name} - forward speed: {forwardSpeed}");
+					MarsarahTweaks.LogInfo($"[Equip] equip_hip triggered in ZSyncAnimation on {__instance.gameObject.name} - forward speed: {forwardSpeed}");
 
 					//___m_animator.SetFloat(___s_forwardSpeedID, 5.0f);  // Reset speed - -surprisingly, this does not work
-					//MarsarahTweaks.MLog($"equip_hip triggered - Resetting forward speed to 5.0");
+					//MarsarahTweaks.LogInfo($"equip_hip triggered - Resetting forward speed to 5.0");
 
 					// __instance.m_smoothCharacterSpeeds = false; // nogo
 				}
@@ -111,7 +111,7 @@ namespace MarsarahTweaks.Patches.QOL
 				if (!___m_nview.IsOwner()) return;
 
 				float newForwardSpeed = ___m_animator.GetFloat(___s_forwardSpeedID);
-				MarsarahTweaks.MLog($"SyncParameters - Forward Speed: {newForwardSpeed}");
+				MarsarahTweaks.LogInfo($"SyncParameters - Forward Speed: {newForwardSpeed}");
 			}
 		}*/
 
@@ -132,7 +132,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 						if (Mathf.Abs(@float) > 0.01)
 						{
-							MarsarahTweaks.MLog($"num2: {num2} - float: {@float}");
+							MarsarahTweaks.LogInfo($"num2: {num2} - float: {@float}");
 						}
 					}
 				}

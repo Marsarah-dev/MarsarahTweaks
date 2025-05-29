@@ -31,11 +31,11 @@ namespace MarsarahTweaks.Patches.Features
 					if (chainRecipe != null)
 					{
 						objDB.m_recipes.Add(chainRecipe);
-						//MarsarahTweaks.MLog($"Chain recipe added: {chainRecipe.name}");
+						//MarsarahTweaks.LogInfo($"Chain recipe added: {chainRecipe.name}");
 					}
 					/*else
 					{
-						MarsarahTweaks.MLog("Failed to create chain recipe. Missing required items.");
+						MarsarahTweaks.LogInfo("Failed to create chain recipe. Missing required items.");
 					}*/
 				}
 			}
@@ -46,7 +46,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (chainRecipe != null)
 				{
 					objDB.m_recipes.Remove(chainRecipe);
-					//MarsarahTweaks.MLog($"Chain recipe removed: {chainRecipe.name}");
+					//MarsarahTweaks.LogInfo($"Chain recipe removed: {chainRecipe.name}");
 				}
 			}
 		}
@@ -57,7 +57,7 @@ namespace MarsarahTweaks.Patches.Features
 			Recipe dvergrLantern = objDB.m_recipes.Find(r => r.name == "Recipe_Lantern");
 			if (dvergrLantern == null)
 			{
-				//MarsarahTweaks.MLog($"Missing required recipe: {dvergrLantern}");
+				//MarsarahTweaks.LogInfo($"Missing required recipe: {dvergrLantern}");
 				return null;
 			}
 
@@ -83,7 +83,7 @@ namespace MarsarahTweaks.Patches.Features
 			chainRecipe.name = "Recipe_Chain";
 			chainRecipe.m_enabled = true;
 
-			//MarsarahTweaks.MLog($"Successfully created chain recipe: {chainRecipe.name}");
+			//MarsarahTweaks.LogInfo($"Successfully created chain recipe: {chainRecipe.name}");
 			return chainRecipe;
 		}
 	}

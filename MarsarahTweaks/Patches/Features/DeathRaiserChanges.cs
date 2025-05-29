@@ -81,7 +81,7 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (__result == null)
 				{
-					//MarsarahTweaks.MLog("[Instantiate Patch] Error: Instantiated object is null!");
+					//MarsarahTweaks.LogInfo("[Instantiate Patch] Error: Instantiated object is null!");
 					return;
 				}
 
@@ -93,14 +93,14 @@ namespace MarsarahTweaks.Patches.Features
 				if (__result is GameObject gameObject && gameObject.name.Contains("Skeleton_Friendly"))
 				{
 					ModState.LastSpawnedSkeleton = gameObject;
-					//MarsarahTweaks.MLog($"Captured instantiated skeleton: {gameObject.name}");
+					//MarsarahTweaks.LogInfo($"Captured instantiated skeleton: {gameObject.name}");
 
 					// Set attack type and weapon level
 					SkeletonSharedData skeletonShared = gameObject.AddComponent<SkeletonSharedData>();
 					skeletonShared.IsSecondaryAttack = ModState.LastAttackWasSecondary;
 					skeletonShared.WeaponLevel = ModState.LastWeaponLevel;
-					//MarsarahTweaks.MLog($"Set IsSecondaryAttack = {skeletonShared.IsSecondaryAttack} for {gameObject.name}");
-					//MarsarahTweaks.MLog($"Set WeaponLevel = {skeletonShared.WeaponLevel} for {gameObject.name}");
+					//MarsarahTweaks.LogInfo($"Set IsSecondaryAttack = {skeletonShared.IsSecondaryAttack} for {gameObject.name}");
+					//MarsarahTweaks.LogInfo($"Set WeaponLevel = {skeletonShared.WeaponLevel} for {gameObject.name}");
 				}
 			}
 		}
@@ -136,7 +136,7 @@ namespace MarsarahTweaks.Patches.Features
 					var skeletonSharedComponent = __instance.GetComponent<SkeletonSharedData>();
 					bool isSecondaryAttack = skeletonSharedComponent != null && skeletonSharedComponent.IsSecondaryAttack;
 					int usedWeaponLevel = skeletonSharedComponent.WeaponLevel;
-					//MarsarahTweaks.MLog($"Used Weapon Level: {usedWeaponLevel}");
+					//MarsarahTweaks.LogInfo($"Used Weapon Level: {usedWeaponLevel}");
 
 					if (ConfigManager.BetterDeathRaiserSummonsEnabled.Value)
 					{
@@ -159,8 +159,8 @@ namespace MarsarahTweaks.Patches.Features
 								string weaponPrefabName = !string.IsNullOrEmpty(gear.weapon2) && UnityEngine.Random.value > 0.5f ? gear.weapon2 : gear.weapon1;
 								string shieldPrefabName = !string.IsNullOrEmpty(gear.shield2) && UnityEngine.Random.value > 0.5f ? gear.shield2 : gear.shield1;
 
-								//MarsarahTweaks.MLog($"Selected Weapon: {weaponPrefabName}");
-								//MarsarahTweaks.MLog($"Selected Shield: {shieldPrefabName}");
+								//MarsarahTweaks.LogInfo($"Selected Weapon: {weaponPrefabName}");
+								//MarsarahTweaks.LogInfo($"Selected Shield: {shieldPrefabName}");
 
 								var weaponPrefab = ObjectDB.instance.GetItemPrefab(weaponPrefabName);
 								GameObject shieldPrefab = null;
@@ -174,27 +174,27 @@ namespace MarsarahTweaks.Patches.Features
 
 								if (weaponPrefab != null)
 								{
-									//MarsarahTweaks.MLog($"Weapon Prefab: {weaponPrefab}");
+									//MarsarahTweaks.LogInfo($"Weapon Prefab: {weaponPrefab}");
 									giveItem(__instance, weaponPrefab, originalSkeletonWeaponData);
 								}
 								if (shieldPrefab != null && skeletonType == "Melee")
 								{
-									//MarsarahTweaks.MLog($"Weapon Prefab: {shieldPrefab}");
+									//MarsarahTweaks.LogInfo($"Weapon Prefab: {shieldPrefab}");
 									giveItem(__instance, shieldPrefab);
 								}
 								if (chestPrefab != null)
 								{
-									//MarsarahTweaks.MLog($"Weapon Prefab: {chestPrefab}");
+									//MarsarahTweaks.LogInfo($"Weapon Prefab: {chestPrefab}");
 									giveItem(__instance, chestPrefab);
 								}
 								if (legsPrefab != null)
 								{
-									//MarsarahTweaks.MLog($"Weapon Prefab: {legsPrefab}");
+									//MarsarahTweaks.LogInfo($"Weapon Prefab: {legsPrefab}");
 									giveItem(__instance, legsPrefab);
 								}
 								if (capePrefab != null)
 								{
-									//MarsarahTweaks.MLog($"Weapon Prefab: {capePrefab}");
+									//MarsarahTweaks.LogInfo($"Weapon Prefab: {capePrefab}");
 									giveItem(__instance, capePrefab);
 								}								
 							}
@@ -209,7 +209,7 @@ namespace MarsarahTweaks.Patches.Features
 						if (weaponPrefab != null)
 						{
 							giveItem(__instance, weaponPrefab);
-							//MarsarahTweaks.MLog($"Assigned {weaponPrefabName} to Skeleton_Friendly (Secondary Attack: {isSecondaryAttack})");
+							//MarsarahTweaks.LogInfo($"Assigned {weaponPrefabName} to Skeleton_Friendly (Secondary Attack: {isSecondaryAttack})");
 
 							// Only melee skeletons get shields
 							if (!isSecondaryAttack)
@@ -238,7 +238,7 @@ namespace MarsarahTweaks.Patches.Features
 					if (shieldPrefab != null)
 					{
 						giveItem(skeleton, shieldPrefab);
-						//MarsarahTweaks.MLog($"Assigned {shieldPrefabName} to Skeleton_Friendly");
+						//MarsarahTweaks.LogInfo($"Assigned {shieldPrefabName} to Skeleton_Friendly");
 					}
 				}
 			}

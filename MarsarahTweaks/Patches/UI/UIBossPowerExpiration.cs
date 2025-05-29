@@ -22,7 +22,7 @@ namespace MarsarahTweaks.Patches.UI
 				//string seName = __instance.name.ToLowerInvariant();
 				string seName = __instance.name;
 
-				//MarsarahTweaks.MLog($"SE Name: {seName}");
+				//MarsarahTweaks.LogInfo($"SE Name: {seName}");
 
 				if (seName.Contains("GP_"))
 				{

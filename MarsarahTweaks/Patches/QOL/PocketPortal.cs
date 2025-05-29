@@ -28,7 +28,7 @@ namespace MarsarahTweaks.Patches.QOL
 			piece.m_description = "$piece_pocketportal_description";
 			piece.m_category = Piece.PieceCategory.Misc; // Optional, but useful
 
-			MarsarahTweaks.MLog("Pocket Portal localized name + category set.");
+			MarsarahTweaks.LogInfo("Pocket Portal localized name + category set.");
 		}
 	}
 
@@ -50,7 +50,7 @@ namespace MarsarahTweaks.Patches.QOL
 			if (!pieceTable.m_pieces.Contains(portalPrefab))
 			{
 				pieceTable.m_pieces.Add(portalPrefab);
-				MarsarahTweaks.MLog("Pocket Portal added to hammer menu.");
+				MarsarahTweaks.LogInfo("Pocket Portal added to hammer menu.");
 			}
 		}
 	}
@@ -103,13 +103,13 @@ public static class PocketPortal_ShowOriginalPortal_Patch
 		var portalPrefab = ZNetScene.instance?.GetPrefab("portal");
 		if (portalPrefab == null) return;
 
-		MarsarahTweaks.MLog($"Portal category: {portalPrefab.GetComponent<Piece>().m_category}");
+		MarsarahTweaks.LogInfo($"Portal category: {portalPrefab.GetComponent<Piece>().m_category}");
 		//portalPrefab.GetComponent<Piece>().m_category = Piece.PieceCategory.Misc;
 
 		if (!pieceTable.m_pieces.Contains(portalPrefab))
 		{
 			pieceTable.m_pieces.Add(portalPrefab);
-			MarsarahTweaks.MLog("Added portal to hammer build pieces.");
+			MarsarahTweaks.LogInfo("Added portal to hammer build pieces.");
 		}
 	}
 }*/

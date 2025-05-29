@@ -370,7 +370,7 @@ namespace MarsarahTweaks.Patches.Grind
 					// Backup entry if it doesn't exist
 					if (!originalRecipeValues.ContainsKey(recipeName))
 					{
-						//MarsarahTweaks.MLog($"Initial backup entry for {recipeName}");
+						//MarsarahTweaks.LogInfo($"Initial backup entry for {recipeName}");
 						originalRecipeValues[recipeName] = new RecipeModification()
 						{
 							ResourceChanges = new Dictionary<string, int>(),
@@ -383,7 +383,7 @@ namespace MarsarahTweaks.Patches.Grind
 					// Apply recipe amount
 					if (recipeModification.RecipeAmount.HasValue)
 					{
-						//MarsarahTweaks.MLog($"Apply recipe amount for {recipeName}");
+						//MarsarahTweaks.LogInfo($"Apply recipe amount for {recipeName}");
 						recipe.m_amount = recipeModification.RecipeAmount.Value;
 					}
 
@@ -396,11 +396,11 @@ namespace MarsarahTweaks.Patches.Grind
 							// Backup original resource amounts if not already saved
 							if (!originalRecipeValues[recipeName].ResourceChanges.ContainsKey(req.m_resItem.name))
 							{
-								//MarsarahTweaks.MLog($"Backup resource amount for {recipeName} - {req.m_resItem.name}");
+								//MarsarahTweaks.LogInfo($"Backup resource amount for {recipeName} - {req.m_resItem.name}");
 								originalRecipeValues[recipeName].ResourceChanges[req.m_resItem.name] = req.m_amount;
 							}
 
-							//MarsarahTweaks.MLog($"Apply new resource amount for {recipeName} - {req.m_resItem.name} to: {newAmount}");
+							//MarsarahTweaks.LogInfo($"Apply new resource amount for {recipeName} - {req.m_resItem.name} to: {newAmount}");
 							req.m_amount = newAmount;
 						}
 
@@ -410,11 +410,11 @@ namespace MarsarahTweaks.Patches.Grind
 							// Backup original m_resItem if not already saved
 							if (!originalRecipeValues[recipeName].ResourceReplacements.ContainsKey(req.m_resItem.name))
 							{
-								//MarsarahTweaks.MLog($"Backup resource material for {recipeName} - {req.m_resItem.name}");
+								//MarsarahTweaks.LogInfo($"Backup resource material for {recipeName} - {req.m_resItem.name}");
 								originalRecipeValues[recipeName].OriginalResourceReplacements[req.m_resItem.name] = (req.m_resItem.name, newItemName);
 							}
 
-							//MarsarahTweaks.MLog($"Apply resource material for {recipeName} - {req.m_resItem.name} to: {newItemName}");
+							//MarsarahTweaks.LogInfo($"Apply resource material for {recipeName} - {req.m_resItem.name} to: {newItemName}");
 							req.m_resItem = objDB.GetItemPrefab(newItemName).GetComponent<ItemDrop>();
 						}
 					}
@@ -435,12 +435,12 @@ namespace MarsarahTweaks.Patches.Grind
 						// Backup original stack if not already saved
 						if (!originalFoodStacks.ContainsKey(itemName))
 						{
-							//MarsarahTweaks.MLog($"Backup stack for {itemName}");
+							//MarsarahTweaks.LogInfo($"Backup stack for {itemName}");
 							originalFoodStacks[itemName] = itemDrop.m_itemData.m_shared.m_maxStackSize;
 						}
 
 						// Apply new changes
-						//MarsarahTweaks.MLog($"Apply new stack for {itemName} to: {itemStack}");
+						//MarsarahTweaks.LogInfo($"Apply new stack for {itemName} to: {itemStack}");
 						itemDrop.m_itemData.m_shared.m_maxStackSize = itemStack;
 					}
 				}
@@ -459,7 +459,7 @@ namespace MarsarahTweaks.Patches.Grind
 					// Restore recipe amount
 					if (recipeModificationOriginal.RecipeAmount.HasValue)
 					{
-						//MarsarahTweaks.MLog($"Restoring backup: amount for {recipeName}");
+						//MarsarahTweaks.LogInfo($"Restoring backup: amount for {recipeName}");
 						recipe.m_amount = recipeModificationOriginal.RecipeAmount.Value;
 					}
 
@@ -472,7 +472,7 @@ namespace MarsarahTweaks.Patches.Grind
 
 							if (req.m_resItem.name == newResItem)
 							{
-								//MarsarahTweaks.MLog($"Restoring backup: requirement material for {recipeName} - {newResItem} back to: {originalResItem}");
+								//MarsarahTweaks.LogInfo($"Restoring backup: requirement material for {recipeName} - {newResItem} back to: {originalResItem}");
 								req.m_resItem = objDB.GetItemPrefab(originalResItem).GetComponent<ItemDrop>();
 								break;
 							}
@@ -481,7 +481,7 @@ namespace MarsarahTweaks.Patches.Grind
 						// Restore requirement amount
 						if (recipeModificationOriginal.ResourceChanges.TryGetValue(req.m_resItem.name, out int originalAmount))
 						{
-							//MarsarahTweaks.MLog($"Restoring backup: requirement amount for {recipeName} - {req.m_resItem.name}");
+							//MarsarahTweaks.LogInfo($"Restoring backup: requirement amount for {recipeName} - {req.m_resItem.name}");
 							req.m_amount = originalAmount;
 						}
 					}
@@ -499,12 +499,12 @@ namespace MarsarahTweaks.Patches.Grind
 					ItemDrop itemDrop = item.GetComponent<ItemDrop>();
 					if (itemDrop != null)
 					{
-						//MarsarahTweaks.MLog($"Restoring backup: stacks for {itemName}");
+						//MarsarahTweaks.LogInfo($"Restoring backup: stacks for {itemName}");
 						itemDrop.m_itemData.m_shared.m_maxStackSize = itemStack;
 					}
 				}
 
-				//MarsarahTweaks.MLog($"(Cleanup) Removing backups");
+				//MarsarahTweaks.LogInfo($"(Cleanup) Removing backups");
 				originalRecipeValues.Clear();
 				originalFoodStacks.Clear();
 			}

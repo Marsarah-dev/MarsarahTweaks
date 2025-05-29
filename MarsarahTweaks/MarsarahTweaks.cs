@@ -5,14 +5,15 @@
  * A. Fixes/Others
  *    - Fixed an issue with Progression Halt where players could get the contents of halted chests by simply destroying them
  *    - Online Players also shows the total number of players logged in. Also swapped the order of header and player list when displayed at the botom right corner
+ *     - TODO: fix logging out on boat camera
  *    
  * B. New UI
  *    - Added section: Show Owned Resources In Build Menu
  *    - Added section: Show Boss Power Expiration Message
  *    - Added section: Player Logout Announce 
- *    - NEXT: Also add login message at the top left
- *    - NEXT: Show heat level in Ashlands
- *    - NEXT: Change Summons counter text to emoji (make section to change everything to emoji)
+ *    - Added section: Show Heat Meter in Ashlands
+ *    - Added section: Use Symbols for UI Elements
+ *    - Removed "F" from boat forward speed (kept "R" for reverse);
  * 
  * C. New Features
  * 
@@ -26,10 +27,9 @@
  * A. Fixes
  * 
  * B. New UI
- *    1. Add arrow slots (selectable with a key combination)
- *    2. Expand on Equipment and Quickslots and add tools slots + Arrow slots
- *       OR add a second row of keybinds 1-8 that can be toggled with a key (so one row can be for combat, one for non-combat)
- *    3. Show heat threshold in Ashlands
+ *    1. 
+ *    2. 
+ *    3. 
  *    4. Better enemy nameplates, better item level indicator
  *    5. Show player HP and death count next to online indicator (or color their names with red if they have the corpse run buff)
  *    6. 
@@ -92,9 +92,9 @@
 
 B. New UI
 Feature	Complexity	Notes
-1. Arrow slots (selectable with key combo)		🟡 Medium	UI + inventory tracking; needs input patching and equip system extensions.
-2. Extra tool slots or toggleable keybind row	🔴 Hard		Requires deep Inventory and InputManager integration, potential UI overhaul.
-3. Show heat threshold in Ashlands				🟢 Easy		Track biome + temperature; display threshold in UI.
+1. 
+2. 
+3. 
 4. Better nameplates + item level				🟡 Medium	Needs patching enemy nameplate drawing + item quality display.
 5. Show HP/deaths next to name					🔴 Hard		Needs syncing player HP/death count to others, complex in multiplayer.
 9. Smart Pins									🟡→🔴 Medium to Hard	Requires UI pin menu patching + pin system restriction logic.
@@ -183,7 +183,7 @@ namespace MarsarahTweaks
 		}
 
 		// Logger =====================================================================
-		public static void MLog(string log, bool header = false, bool footer = false)
+		public static void LogInfo(string log, bool header = false, bool footer = false)
 		{
 			if (showLogs)
 			{
@@ -193,6 +193,42 @@ namespace MarsarahTweaks
 				}
 
 				Debug.Log($"[Marsarah Tweaks] : {log}");
+
+				if (footer)
+				{
+					Debug.Log("===================================================");
+				}
+			}
+		}
+
+		public static void LogWarn(string log, bool header = false, bool footer = false)
+		{
+			if (showLogs)
+			{
+				if (header)
+				{
+					Debug.Log("===================================================");
+				}
+
+				Debug.LogWarning($"[Marsarah Tweaks] : {log}");
+
+				if (footer)
+				{
+					Debug.Log("===================================================");
+				}
+			}
+		}
+
+		public static void LogError(string log, bool header = false, bool footer = false)
+		{
+			if (showLogs)
+			{
+				if (header)
+				{
+					Debug.Log("===================================================");
+				}
+
+				Debug.LogError($"[Marsarah Tweaks] : {log}");
 
 				if (footer)
 				{

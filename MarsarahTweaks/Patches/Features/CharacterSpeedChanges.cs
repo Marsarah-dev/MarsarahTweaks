@@ -14,7 +14,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (!__instance.IsPlayer())
 				{
-					//MarsarahTweaks.MLog("Character Awake: Not a player, skipping speed modification.");
+					//MarsarahTweaks.LogInfo("Character Awake: Not a player, skipping speed modification.");
 					return;
 				}
 
@@ -36,7 +36,7 @@ namespace MarsarahTweaks.Patches.Features
 				originalSpeeds["speed"] = character.m_speed;
 				originalSpeeds["swimSpeed"] = character.m_swimSpeed;
 
-				//MarsarahTweaks.MLog($"CharacterSpeedChanges: Backed up original speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
+				//MarsarahTweaks.LogInfo($"CharacterSpeedChanges: Backed up original speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
 			}
 
 			if (ConfigManager.FasterCharacterSpeedEnabled.Value)
@@ -47,7 +47,7 @@ namespace MarsarahTweaks.Patches.Features
 				character.m_speed = 5f;         // Default: 4
 				character.m_swimSpeed = 2.2f;   // Default: 2
 
-				//MarsarahTweaks.MLog($"CharacterSpeedChanges: Applied modified speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
+				//MarsarahTweaks.LogInfo($"CharacterSpeedChanges: Applied modified speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
 			}
 			else if (wasChanged && originalSpeeds.Count > 0)
 			{
@@ -57,7 +57,7 @@ namespace MarsarahTweaks.Patches.Features
 				character.m_speed = originalSpeeds["speed"];
 				character.m_swimSpeed = originalSpeeds["swimSpeed"];
 
-				//MarsarahTweaks.MLog($"CharacterSpeedChanges: Restored original speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
+				//MarsarahTweaks.LogInfo($"CharacterSpeedChanges: Restored original speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
 			}
 		}
 

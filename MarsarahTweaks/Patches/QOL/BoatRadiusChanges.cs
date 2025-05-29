@@ -24,13 +24,13 @@ namespace MarsarahTweaks.Patches.QOL
 					{
 						if (originalExploreRadius == -1f)
 						{
-							//MarsarahTweaks.MLog($"Backing up explore radius: {___m_exploreRadius}");
+							//MarsarahTweaks.LogInfo($"Backing up explore radius: {___m_exploreRadius}");
 							originalExploreRadius = ___m_exploreRadius;
 						}
 
 						if (___m_exploreRadius != 100f)
 						{
-							//MarsarahTweaks.MLog($"Applying new explore radius: 100");
+							//MarsarahTweaks.LogInfo($"Applying new explore radius: 100");
 							___m_exploreRadius = 100f;
 						}
 					}
@@ -38,7 +38,7 @@ namespace MarsarahTweaks.Patches.QOL
 					{
 						if (originalExploreRadius != -1f && ___m_exploreRadius != originalExploreRadius)
 						{
-							//MarsarahTweaks.MLog($"Restoring original explore radius: {originalExploreRadius}");
+							//MarsarahTweaks.LogInfo($"Restoring original explore radius: {originalExploreRadius}");
 							___m_exploreRadius = originalExploreRadius; // 50
 						}						
 					}
@@ -47,7 +47,7 @@ namespace MarsarahTweaks.Patches.QOL
 				{
 					if (originalExploreRadius != -1f && ___m_exploreRadius != originalExploreRadius)
 					{
-						//MarsarahTweaks.MLog($"Restoring original explore radius: {originalExploreRadius} due to config OFF");
+						//MarsarahTweaks.LogInfo($"Restoring original explore radius: {originalExploreRadius} due to config OFF");
 						___m_exploreRadius = originalExploreRadius; // 50
 					}
 				}

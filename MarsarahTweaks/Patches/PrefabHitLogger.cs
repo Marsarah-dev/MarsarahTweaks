@@ -18,11 +18,11 @@
 //			{
 //				if (__instance != null)
 //				{
-//					// Log the prefab name and damage information when MineRock is damaged
+//					// LogInfo the prefab name and damage information when MineRock is damaged
 //					string prefabName = __instance.name;
 //					float health = __instance.GetHealth(); // Current health of the rock
-//					//MarsarahTweaks.MLog($"[MineRock] Damaged MineRock prefab: {prefabName}, Health: {health}, Hit Info: {hit}");
-//					MarsarahTweaks.MLog($"[MineRock] Damaged MineRock prefab: {prefabName}");
+//					//MarsarahTweaks.LogInfo($"[MineRock] Damaged MineRock prefab: {prefabName}, Health: {health}, Hit Info: {hit}");
+//					MarsarahTweaks.LogInfo($"[MineRock] Damaged MineRock prefab: {prefabName}");
 //				}
 //			}
 //		}
@@ -35,11 +35,11 @@
 //			{
 //				if (__instance != null)
 //				{
-//					// Log the prefab name and damage information when MineRock is damaged
+//					// LogInfo the prefab name and damage information when MineRock is damaged
 //					string prefabName = __instance.name;
 //					float health = __instance.GetHealth(); // Current health of the rock
-//					//MarsarahTweaks.MLog($"[Minerock5] Damaged MineRock5 prefab: {prefabName}, Health: {health}, Hit Info: {hit}");
-//					MarsarahTweaks.MLog($"[Minerock5] Damaged MineRock5 prefab: {prefabName}");
+//					//MarsarahTweaks.LogInfo($"[Minerock5] Damaged MineRock5 prefab: {prefabName}, Health: {health}, Hit Info: {hit}");
+//					MarsarahTweaks.LogInfo($"[Minerock5] Damaged MineRock5 prefab: {prefabName}");
 //				}
 //			}
 //		}
@@ -52,10 +52,10 @@
 //			{
 //				if (__instance != null)
 //				{
-//					// Log the prefab name and damage information when MineRock is damaged
+//					// LogInfo the prefab name and damage information when MineRock is damaged
 //					string prefabName = __instance.name;
-//					//MarsarahTweaks.MLog($"[Destructible] Damaged Destructible prefab: {prefabName}, Hit Info: {hit}");
-//					MarsarahTweaks.MLog($"[Destructible] Damaged Destructible prefab: {prefabName}");
+//					//MarsarahTweaks.LogInfo($"[Destructible] Damaged Destructible prefab: {prefabName}, Hit Info: {hit}");
+//					MarsarahTweaks.LogInfo($"[Destructible] Damaged Destructible prefab: {prefabName}");
 //				}
 //			}
 //		}
@@ -79,9 +79,9 @@
 //					}
 //				}*/
 
-//				// Log the destruction event
-//				//MarsarahTweaks.MLog($"[DropOnDestroyed] Destroyed Object: {prefabName}, Drops: {string.Join(", ", dropNames)}");
-//				MarsarahTweaks.MLog($"[DropOnDestroyed] Destroyed Object: {prefabName}");
+//				// LogInfo the destruction event
+//				//MarsarahTweaks.LogInfo($"[DropOnDestroyed] Destroyed Object: {prefabName}, Drops: {string.Join(", ", dropNames)}");
+//				MarsarahTweaks.LogInfo($"[DropOnDestroyed] Destroyed Object: {prefabName}");
 //			}
 //		}
 //	}

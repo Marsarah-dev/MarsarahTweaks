@@ -30,7 +30,6 @@ namespace MarsarahTweaks.Patches.UI
 
 				heatThreshold = __instance.m_heatLevelFirstDamageThreshold;
 				currentHeat = ___m_lavaHeatLevel;
-				//MarsarahTweaks.MLog($"[🔥 Heat Log] LavaHeatLevel: {currentHeat:F2} / Threshold: {heatThreshold:F2}");
 			}
 		}
 
@@ -42,8 +41,6 @@ namespace MarsarahTweaks.Patches.UI
 			private static GameObject UIHeatBarArea = null;
 			private static Text heatBarText = null;
 			private static TMPro.TextMeshProUGUI heatBarEmojiTMP = null;
-			//private static readonly List<Image> heatBarSegments = new List<Image>();
-			//private static GuiBar heatBar;
 
 			private static void Postfix(Hud __instance)
 			{
@@ -72,9 +69,6 @@ namespace MarsarahTweaks.Patches.UI
 							float pct = Mathf.Clamp01(currentHeat / heatThreshold) * 100f;
 							heatBarText.text = $"{pct:0}%";
 						}
-
-						//heatBar.SetValue(currentHeat);
-						//heatBar.SetMaxValue(heatThreshold);
 
 						// Gradual color change
 						float heatPercent = heatBarFill.fillAmount;
@@ -111,13 +105,6 @@ namespace MarsarahTweaks.Patches.UI
 								heatBarEmojiTMP.text = "";
 
 							}
-							//foreach (var segment in heatBarSegments)
-							//{
-							//	if (segment != null)
-							//	{
-							//		segment.enabled = false;
-							//	}
-							//}
 						}
 						else
 						{
@@ -130,13 +117,6 @@ namespace MarsarahTweaks.Patches.UI
 								heatBarEmojiTMP.text = "🔥";
 
 							}
-							//foreach (var segment in heatBarSegments)
-							//{
-							//	if (segment != null)
-							//	{
-							//		segment.enabled = showUI;
-							//	}
-							//}
 						}
 					}
 				}
@@ -216,17 +196,6 @@ namespace MarsarahTweaks.Patches.UI
 				heatBarFill.fillAmount = 0f; // Initially empty
 				heatBarFill.enabled = false;
 
-				// New stuff
-				/*heatBar = fillArea.AddComponent<GuiBar>();
-				heatBar.m_bar = fillRect; // Or heatBarFill.rectTransform
-				heatBar.m_smoothFill = true;     // Smooth increase
-				heatBar.m_smoothDrain = true;    // Smooth decrease
-				heatBar.m_smoothSpeed = 2f;      
-				heatBar.SetMaxValue(100f);
-				heatBar.SetValue(0f);*/
-
-				//AddSegments(heatBarFill.rectTransform, 6);
-
 				// Text overlay
 				heatBarText = CreateTextObject("HeatText", UIHeatBarArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleCenter, new Vector2(0f, 0f), UIHeatAreaSize);
 
@@ -242,38 +211,6 @@ namespace MarsarahTweaks.Patches.UI
 				tex.Apply();
 
 				return Sprite.Create(tex, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f));
-			}
-
-			private static void AddSegments(RectTransform barRect, int segmentCount)
-			{
-				//heatBarSegments.Clear();
-
-				for (int i = 1; i < segmentCount; i++)
-				{
-					GameObject segment = new GameObject($"Segment_{i}", typeof(RectTransform), typeof(Image));
-					segment.transform.SetParent(barRect, false);
-
-					RectTransform rt = segment.GetComponent<RectTransform>();
-					rt.anchorMin = new Vector2(0, 0);
-					rt.anchorMax = new Vector2(0, 1);
-					rt.pivot = new Vector2(0.5f, 0.5f);
-
-					float normalizedPos = (float)i / segmentCount;
-					rt.anchoredPosition = new Vector2(normalizedPos * barRect.rect.width, 0);
-					rt.sizeDelta = new Vector2(2f, 0); // width of line, height stretches full bar
-
-					Image img = segment.GetComponent<Image>();
-					img.color = new Color(0, 0, 0, 0.4f); // semi-transparent black
-					/*if (heatBarFill.fillAmount == 0)
-					{
-						img.enabled = false;
-					}
-					else
-					{
-						img.enabled = showUI;
-					}
-					heatBarSegments.Add(img);*/
-				}
 			}
 
 			private static bool IsLoadScreenActive(Hud hud)

@@ -30,16 +30,16 @@ namespace MarsarahTweaks.Patches.QOL
 			{
 				if (originalPickupArea == -1f)
 				{
-					//MarsarahTweaks.MLog($"Backing up pickup area ({player.m_autoPickupRange})");
+					//MarsarahTweaks.LogInfo($"Backing up pickup area ({player.m_autoPickupRange})");
 					originalPickupArea = player.m_autoPickupRange;
 				}
 
-				//MarsarahTweaks.MLog($"Assigning new pickup area (3) - from {player.m_autoPickupRange}");
+				//MarsarahTweaks.LogInfo($"Assigning new pickup area (3) - from {player.m_autoPickupRange}");
 				player.m_autoPickupRange = 3f;
 			}
 			else if (wasChanged && originalPickupArea != -1f)
 			{
-				//MarsarahTweaks.MLog($"Restoring pickup area: {originalPickupArea} - from {player.m_autoPickupRange}");
+				//MarsarahTweaks.LogInfo($"Restoring pickup area: {originalPickupArea} - from {player.m_autoPickupRange}");
 				player.m_autoPickupRange = originalPickupArea;
 			}
 		}

@@ -103,7 +103,7 @@ namespace MarsarahTweaks.Patches.Features
 							{
 								if (__instance.name.StartsWith(piece))
 								{
-									//MarsarahTweaks.MLog($"Progression Halt: Prevented Piece piece drop for {__instance.name} because {bossName} has not been defeated.");
+									//MarsarahTweaks.LogInfo($"Progression Halt: Prevented Piece piece drop for {__instance.name} because {bossName} has not been defeated.");
 									return false; // Prevent dropping
 								}
 							}
@@ -186,7 +186,7 @@ namespace MarsarahTweaks.Patches.Features
 					if (!bossDefeated && restrictedChests.Any(rc => chestName.StartsWith(rc)))
 					{
 						// Prevent content drop
-						//MarsarahTweaks.MLog($"Progression Halt: Prevented Container content drop for {__instance.name} because {bossName} has not been defeated.");
+						//MarsarahTweaks.LogInfo($"Progression Halt: Prevented Container content drop for {__instance.name} because {bossName} has not been defeated.");
 						return false; // Skip DropAllItems
 					}
 				}
@@ -285,7 +285,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (nviewField == null || enabledField == null)
 				{
-					MarsarahTweaks.MLog("[ERROR] Could not access private fields in Pickable!");
+					MarsarahTweaks.LogError("[ERROR] Could not access private fields in Pickable!");
 					return true;
 				}
 
@@ -300,54 +300,54 @@ namespace MarsarahTweaks.Patches.Features
 				string pickableName = __instance.name;
 				//string rawName = __instance.name;
 				//string pickableName = Regex.Split(rawName, @"[\s\(]")[0];
-				//MarsarahTweaks.MLog($"[PickupCheck] Raw Name: {rawName}, Cleaned Name: {pickableName}");
+				//MarsarahTweaks.LogInfo($"[PickupCheck] Raw Name: {rawName}, Cleaned Name: {pickableName}");
 
 				/*ZDO zdo = nview.GetZDO();
 				if (zdo != null)
 				{
-					//MarsarahTweaks.MLog($"[PickupCheck] Prefab: {__instance.gameObject.name}, Trimmed: {pickableName}");
-					MarsarahTweaks.MLog($"[PickupCheck] Raw Name: {rawName}, Cleaned Name: {pickableName}");
-					MarsarahTweaks.MLog($"[PickupCheck] Owner: {zdo.GetOwner()}, ZDO ID: {zdo.m_uid}");
-					//MarsarahTweaks.MLog($"[PickupCheck] Owner: {zdo.GetOwner()}, ZDO ID: {zdo.m_uid}, Pos: {__instance.transform.position}");
+					//MarsarahTweaks.LogInfo($"[PickupCheck] Prefab: {__instance.gameObject.name}, Trimmed: {pickableName}");
+					MarsarahTweaks.LogInfo($"[PickupCheck] Raw Name: {rawName}, Cleaned Name: {pickableName}");
+					MarsarahTweaks.LogInfo($"[PickupCheck] Owner: {zdo.GetOwner()}, ZDO ID: {zdo.m_uid}");
+					//MarsarahTweaks.LogInfo($"[PickupCheck] Owner: {zdo.GetOwner()}, ZDO ID: {zdo.m_uid}, Pos: {__instance.transform.position}");
 
 					long ownerId = zdo.GetOwner();
 					long localPlayerId = ZNet.instance.LocalPlayerCharacterID.UserID;
 
-					//MarsarahTweaks.MLog($"[PickupCheck] My ID: {localPlayerId}");
+					//MarsarahTweaks.LogInfo($"[PickupCheck] My ID: {localPlayerId}");
 
 					// Try to find the player's name from the player list
 					var playerInfo = ZNet.instance.GetPlayerList().Where(p => p.m_characterID.UserID == ownerId).Cast<ZNet.PlayerInfo?>().FirstOrDefault();
 
 					string ownerName = playerInfo.HasValue ? playerInfo.Value.m_name : "Unknown";
 
-					// Log ownership info
+					// LogInfo ownership info
 					if (ownerId == localPlayerId)
 					{
-						MarsarahTweaks.MLog($"[PickupCheck] This object belongs to me ({localPlayerId} - {ownerName})");
+						MarsarahTweaks.LogInfo($"[PickupCheck] This object belongs to me ({localPlayerId} - {ownerName})");
 					}
 					else if (ZNet.instance.GetServerPeer() != null && ownerId == ZNet.instance.GetServerPeer().m_uid)
 					{
-						MarsarahTweaks.MLog($"[PickupCheck] This object belongs to the server ({ownerName})");
+						MarsarahTweaks.LogInfo($"[PickupCheck] This object belongs to the server ({ownerName})");
 					}
 					else
 					{
-						MarsarahTweaks.MLog($"[PickupCheck] This object belongs to {ownerName} (ID: {ownerId})");
+						MarsarahTweaks.LogInfo($"[PickupCheck] This object belongs to {ownerName} (ID: {ownerId})");
 					}
 
-					// Log Venture's VV_LastReset info if present
+					// LogInfo Venture's VV_LastReset info if present
 					if (zdo.GetInt("VV_LastReset", -1) != -1)
 					{
 						int resetDay = zdo.GetInt("VV_LastReset", -1);
-						MarsarahTweaks.MLog($"[PickupCheck] Venture reset detected - VV_LastReset = {resetDay}");
+						MarsarahTweaks.LogInfo($"[PickupCheck] Venture reset detected - VV_LastReset = {resetDay}");
 					}
 					else
 					{
-						MarsarahTweaks.MLog($"[PickupCheck] No VV_LastReset value found (not reset by Venture?)");
+						MarsarahTweaks.LogInfo($"[PickupCheck] No VV_LastReset value found (not reset by Venture?)");
 					}
 				}
 				else
 				{
-					MarsarahTweaks.MLog("[PickupCheck] No ZDO found for pickable.");
+					MarsarahTweaks.LogInfo("[PickupCheck] No ZDO found for pickable.");
 				}*/
 
 				foreach (var restriction in pickableResourceRestrictions)
@@ -362,13 +362,13 @@ namespace MarsarahTweaks.Patches.Features
 					if (!bossDefeated && restrictedPickables.Any(rp => pickableName.StartsWith(rp)))
 					{
 						character.Message(MessageHud.MessageType.Center, $"{bossName} has a strong hold on this object");
-						//MarsarahTweaks.MLog($"Halted Pickable {pickableName} for boss {bossName}");
+						//MarsarahTweaks.LogInfo($"Halted Pickable {pickableName} for boss {bossName}");
 						__result = false;
 						return false;
 					}
 					/*else
 					{
-						MarsarahTweaks.MLog($"Did not halt {pickableName} for boss {bossName}");
+						MarsarahTweaks.LogInfo($"Did not halt {pickableName} for boss {bossName}");
 					}*/
 				}
 
@@ -395,7 +395,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (nviewField == null)
 				{
-					MarsarahTweaks.MLog("[ERROR] Could not access private fields in PickableItem!");
+					MarsarahTweaks.LogError("[ERROR] Could not access private fields in PickableItem!");
 					return true;
 				}
 
@@ -422,7 +422,7 @@ namespace MarsarahTweaks.Patches.Features
 					if (!bossDefeated && restrictedPickableItems.Any(rpi => pickableItemName.StartsWith(rpi)))
 					{
 						character.Message(MessageHud.MessageType.Center, $"{bossName} has a strong hold on this object");
-						//MarsarahTweaks.MLog($"Halted PickableItem {pickableItemName} for boss {bossName}");
+						//MarsarahTweaks.LogInfo($"Halted PickableItem {pickableItemName} for boss {bossName}");
 						__result = false;
 						return false;
 					}
@@ -788,23 +788,23 @@ namespace MarsarahTweaks.Patches.Features
 						// Restore Trophy Drops and then apply Progression Halt
 						if (trophyDropsNowEnabled)
 						{
-							//MarsarahTweaks.MLog($"Restoring Trophy Drops Special");
+							//MarsarahTweaks.LogInfo($"Restoring Trophy Drops Special");
 							TrophyDropsChanges.RestoreTrophyDrops(__instance);
 						}
 
 						// If Progression Halt was turned ON mid-game, run it without checking boss states or drops set
-						//MarsarahTweaks.MLog($"Setting up Progression Halt due to re-enabling");
+						//MarsarahTweaks.LogInfo($"Setting up Progression Halt due to re-enabling");
 						HandleProgressionHalt(__instance);
 						dropsSet = true;
 					}
 					else
 					{
 						// If Progression Halt was turned OFF mid-game, restore original drops
-						//MarsarahTweaks.MLog($"Restoring Progression Halt to default entirely");
+						//MarsarahTweaks.LogInfo($"Restoring Progression Halt to default entirely");
 						RestoreProgressionHalt(__instance);
 
 						// Run Trophy Drops here
-						//MarsarahTweaks.MLog($"Setting up Trophy Drops due to Progression Halt being off");
+						//MarsarahTweaks.LogInfo($"Setting up Trophy Drops due to Progression Halt being off");
 						TrophyDropsChanges.UpdateTrophyDrops(__instance);
 					}
 				}
@@ -816,7 +816,7 @@ namespace MarsarahTweaks.Patches.Features
 					if (progressionHaltNowEnabled)
 					{
 						// Re-run the progression halt handler to apply updated ocean boss logic
-						//MarsarahTweaks.MLog("Ocean Progression Halt setting toggled, reapplying drops.");
+						//MarsarahTweaks.LogInfo("Ocean Progression Halt setting toggled, reapplying drops.");
 						HandleProgressionHalt(__instance);
 						dropsSet = true;
 					}
@@ -827,7 +827,7 @@ namespace MarsarahTweaks.Patches.Features
 				{
 					if (!dropsSet || bossStateChanged)
 					{
-						//MarsarahTweaks.MLog($"Setting up Progression Halt standard way");
+						//MarsarahTweaks.LogInfo($"Setting up Progression Halt standard way");
 						HandleProgressionHalt(__instance);
 						dropsSet = true;
 					}
@@ -840,14 +840,14 @@ namespace MarsarahTweaks.Patches.Features
 
 					// If Trophy Drops was toggled mid-game, run it without checking Progression Halt state (since it checks inside) or trophyDropsSet
 					// This needs to be ran regardless if it's on or off
-					//MarsarahTweaks.MLog($"Setting up Trophy Drops due to toggling");
+					//MarsarahTweaks.LogInfo($"Setting up Trophy Drops due to toggling");
 					TrophyDropsChanges.UpdateTrophyDrops(__instance);
 				}
 
 				// Trophy Drops logic (ONLY run once on game start OR when Progression Halt is enabled and bosses change)
 				if (!trophyDropsSet || (progressionHaltNowEnabled && bossStateChanged))
 				{
-					//MarsarahTweaks.MLog($"Setting up Trophy Drops standard way");
+					//MarsarahTweaks.LogInfo($"Setting up Trophy Drops standard way");
 					TrophyDropsChanges.UpdateTrophyDrops(__instance);
 					trophyDropsSet = true;
 				}
@@ -988,7 +988,7 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (prefab == null)
 				{
-					MarsarahTweaks.MLog("Could not get prefab to halt drops");
+					//MarsarahTweaks.LogInfo("Could not get prefab to halt drops");
 					return;
 				}
 
@@ -1013,19 +1013,19 @@ namespace MarsarahTweaks.Patches.Features
 						handler.Value(prefab);
 						/*if (handler.Value(prefab))
 						{
-							//MarsarahTweaks.MLog($"Halted drop for {prefab.name} as component {handler.Key}");
+							//MarsarahTweaks.LogInfo($"Halted drop for {prefab.name} as component {handler.Key}");
 							modified = true; // Mark that at least one modification was made
 						}*/
 					}
 				}
 
-				// Log components if no drop handler was triggered
+				// LogInfo components if no drop handler was triggered
 				/*if (!modified)
 				{
 					Component[] prefabComponents = prefab.GetComponents<Component>();
 					foreach (Component comp in prefabComponents)
 					{
-						MarsarahTweaks.MLog(prefab.name + " - " + comp.ToString());
+						MarsarahTweaks.LogInfo(prefab.name + " - " + comp.ToString());
 					}
 				}*/
 			}
@@ -1044,7 +1044,7 @@ namespace MarsarahTweaks.Patches.Features
 						Dictionary<string, float> dropChances = new Dictionary<string, float>();
 						foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
 						{
-							//MarsarahTweaks.MLog($"Backing up {prefabName}");
+							//MarsarahTweaks.LogInfo($"Backing up {prefabName}");
 							dropChances[drop.m_prefab?.name ?? "UNKNOWN_PREFAB"] = drop.m_chance;
 						}
 						mobDropChanceBackup[prefabName] = dropChances;
@@ -1069,7 +1069,7 @@ namespace MarsarahTweaks.Patches.Features
 					string prefabName = prefab.name;
 					if (!mineDropBackup.ContainsKey(prefabName))
 					{
-						//MarsarahTweaks.MLog($"Backing up {prefabName}");
+						//MarsarahTweaks.LogInfo($"Backing up {prefabName}");
 						mineDropBackup[prefabName] = prefabComponent.m_dropItems.m_dropChance;
 					}
 					prefabComponent.m_dropItems.m_dropChance = 0;
@@ -1086,7 +1086,7 @@ namespace MarsarahTweaks.Patches.Features
 					string prefabName = prefab.name;
 					if (!mine5DropBackup.ContainsKey(prefabName))
 					{
-						//MarsarahTweaks.MLog($"Backing up {prefabName}");
+						//MarsarahTweaks.LogInfo($"Backing up {prefabName}");
 						mine5DropBackup[prefabName] = prefabComponent.m_dropItems.m_dropChance;
 					}
 					prefabComponent.m_dropItems.m_dropChance = 0;
@@ -1103,7 +1103,7 @@ namespace MarsarahTweaks.Patches.Features
 					string prefabName = prefab.name;
 					if (!destroyedDropBackup.ContainsKey(prefabName))
 					{
-						//MarsarahTweaks.MLog($"Backing up {prefabName}");
+						//MarsarahTweaks.LogInfo($"Backing up {prefabName}");
 						destroyedDropBackup[prefabName] = prefabComponent.m_dropWhenDestroyed.m_dropChance;
 					}
 					prefabComponent.m_dropWhenDestroyed.m_dropChance = 0;
@@ -1120,7 +1120,7 @@ namespace MarsarahTweaks.Patches.Features
 					string prefabName = prefab.name;
 					if (!destructibleDropBackup.ContainsKey(prefabName))
 					{
-						//MarsarahTweaks.MLog($"Backing up {prefabName}");
+						//MarsarahTweaks.LogInfo($"Backing up {prefabName}");
 						destructibleDropBackup[prefabName] = prefabComponent.m_spawnWhenDestroyed;
 					}
 					prefabComponent.m_spawnWhenDestroyed = null;
@@ -1137,7 +1137,7 @@ namespace MarsarahTweaks.Patches.Features
 					string prefabName = prefab.name;
 					if (!treeLogDropBackup.ContainsKey(prefabName))
 					{
-						//MarsarahTweaks.MLog($"Backing up {prefabName}");
+						//MarsarahTweaks.LogInfo($"Backing up {prefabName}");
 						treeLogDropBackup[prefabName] = prefabComponent.m_dropWhenDestroyed;
 					}
 					prefabComponent.m_dropWhenDestroyed = null;
@@ -1185,7 +1185,7 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (prefab == null)
 				{
-					MarsarahTweaks.MLog("Could not get prefab to restore drops");
+					//MarsarahTweaks.LogInfo("Could not get prefab to restore drops");
 					return;
 				}
 
@@ -1224,7 +1224,7 @@ namespace MarsarahTweaks.Patches.Features
 							string dropPrefabName = drop.m_prefab?.name ?? "UNKNOWN_PREFAB";
 							if (originalChances.TryGetValue(dropPrefabName, out float originalChance))
 							{
-								//MarsarahTweaks.MLog($"Restoring backup for {prefabName}");
+								//MarsarahTweaks.LogInfo($"Restoring backup for {prefabName}");
 								drop.m_chance = originalChance; // Restore original chance
 							}
 						}
@@ -1244,7 +1244,7 @@ namespace MarsarahTweaks.Patches.Features
 					string prefabName = prefab.name;
 					if (mineDropBackup.TryGetValue(prefabName, out var originalChance))
 					{
-						//MarsarahTweaks.MLog($"Restoring backup for {prefabName}");
+						//MarsarahTweaks.LogInfo($"Restoring backup for {prefabName}");
 						prefabComponent.m_dropItems.m_dropChance = originalChance;
 
 						mineDropBackup.Remove(prefabName);
@@ -1262,7 +1262,7 @@ namespace MarsarahTweaks.Patches.Features
 					string prefabName = prefab.name;
 					if (mine5DropBackup.TryGetValue(prefabName, out var originalChance))
 					{
-						//MarsarahTweaks.MLog($"Restoring backup for {prefabName}");
+						//MarsarahTweaks.LogInfo($"Restoring backup for {prefabName}");
 						prefabComponent.m_dropItems.m_dropChance = originalChance;
 
 						mine5DropBackup.Remove(prefabName);
@@ -1280,7 +1280,7 @@ namespace MarsarahTweaks.Patches.Features
 					string prefabName = prefab.name;
 					if (destroyedDropBackup.TryGetValue(prefabName, out var originalChance))
 					{
-						//MarsarahTweaks.MLog($"Restoring backup for {prefabName}");
+						//MarsarahTweaks.LogInfo($"Restoring backup for {prefabName}");
 						prefabComponent.m_dropWhenDestroyed.m_dropChance = originalChance;
 
 						destroyedDropBackup.Remove(prefabName);
@@ -1298,7 +1298,7 @@ namespace MarsarahTweaks.Patches.Features
 					string prefabName = prefab.name;
 					if (destructibleDropBackup.TryGetValue(prefabName, out var originalSpawn))
 					{
-						//MarsarahTweaks.MLog($"Restoring backup for {prefabName}");
+						//MarsarahTweaks.LogInfo($"Restoring backup for {prefabName}");
 						prefabComponent.m_spawnWhenDestroyed = originalSpawn;
 
 						destructibleDropBackup.Remove(prefabName);
@@ -1316,7 +1316,7 @@ namespace MarsarahTweaks.Patches.Features
 					string prefabName = prefab.name;
 					if (treeLogDropBackup.TryGetValue(prefabName, out var originalDrop))
 					{
-						//MarsarahTweaks.MLog($"Restoring backup for {prefabName}");
+						//MarsarahTweaks.LogInfo($"Restoring backup for {prefabName}");
 						prefabComponent.m_dropWhenDestroyed = originalDrop;
 
 						treeLogDropBackup.Remove(prefabName);

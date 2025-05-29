@@ -38,7 +38,7 @@ namespace MarsarahTweaks.Patches.UI
 				{
 					if (!currentPeers.Contains(prevName))
 					{
-						//MarsarahTweaks.MLog($"{prevName} logged out.");
+						//MarsarahTweaks.LogInfo($"{prevName} logged out.");
 						// Send to all clients
 						ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, LogoutRPC, prevName);
 					}

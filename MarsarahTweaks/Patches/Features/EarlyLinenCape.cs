@@ -26,7 +26,7 @@ namespace MarsarahTweaks.Patches.Features
 
 		public static void UpdateLinenCapeStats(bool wasChanged)
 		{
-			//MarsarahTweaks.MLog("Updating Linen Cape Stats");
+			//MarsarahTweaks.LogInfo("Updating Linen Cape Stats");
 			UpdatePoisonResist(wasChanged);
 			RenameLinenCape(wasChanged);
 		}
@@ -42,7 +42,7 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (ConfigManager.EarlyLinenCapeEnabled.Value)
 				{
-					//MarsarahTweaks.MLog("Setting Linen Cape Poison Resist");
+					//MarsarahTweaks.LogInfo("Setting Linen Cape Poison Resist");
 					HitData.DamageModPair damageModPairPoison = new HitData.DamageModPair();
 					damageModPairPoison.m_modifier = HitData.DamageModifier.Resistant;
 					damageModPairPoison.m_type = HitData.DamageType.Poison;
@@ -53,7 +53,7 @@ namespace MarsarahTweaks.Patches.Features
 				}
 				else if (wasChanged)
 				{
-					//MarsarahTweaks.MLog("Removing Linen Cape Poison Resist");
+					//MarsarahTweaks.LogInfo("Removing Linen Cape Poison Resist");
 					itemDrop.m_itemData.m_shared.m_damageModifiers.RemoveAll(mod => mod.m_type == HitData.DamageType.Poison);
 				}
 			}
@@ -62,7 +62,7 @@ namespace MarsarahTweaks.Patches.Features
 		// Apply new name for Linen Cape
 		private static void RenameLinenCape(bool wasChanged)
 		{
-			//MarsarahTweaks.MLog("Renaming Linen Cape");
+			//MarsarahTweaks.LogInfo("Renaming Linen Cape");
 
 			var localizationInstance = Localization.instance;
 
@@ -88,7 +88,7 @@ namespace MarsarahTweaks.Patches.Features
 					translationsDict["item_cape_linen"] = "Linen Cape";
 					translationsDict["item_cape_linen_description"] = "A simple traveler's cape.";
 				}
-				//MarsarahTweaks.MLog("Updated translation!");
+				//MarsarahTweaks.LogInfo("Updated translation!");
 			}
 
 			if (Player.m_localPlayer)

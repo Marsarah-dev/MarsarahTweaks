@@ -21,13 +21,13 @@ namespace MarsarahTweaks.Patches.Features
 				{
 					if (ConfigManager.PermanentLightsEnabled.Value)
 					{
-						//MarsarahTweaks.MLog($"Setting max fuel for {__instance.m_name}");
+						//MarsarahTweaks.LogInfo($"Setting max fuel for {__instance.m_name}");
 						___m_nview.GetZDO().Set("fuel", __instance.m_maxFuel);
 					}
 					/*else
 					{
 						__instance.m_secPerFuel = 2f; // This makes fuel being consumed every 2s
-						//MarsarahTweaks.MLog($"No longer setting max fuel for {__instance.m_name}");
+						//MarsarahTweaks.LogInfo($"No longer setting max fuel for {__instance.m_name}");
 					}*/
 				}
 			}
@@ -88,21 +88,21 @@ namespace MarsarahTweaks.Patches.Features
 
 					if (prefab == null)
 					{
-						//MarsarahTweaks.MLog($"{pieceName} prefab not found in znScene!");
+						//MarsarahTweaks.LogInfo($"{pieceName} prefab not found in znScene!");
 						continue;
 					}
 
 					Piece component = prefab.GetComponent<Piece>();
 					if (component == null)
 					{
-						//MarsarahTweaks.MLog($"{pieceName} - Found prefab, but no Piece component!");
+						//MarsarahTweaks.LogInfo($"{pieceName} - Found prefab, but no Piece component!");
 						continue;
 					}
 
 					// Backup original costs only if they haven't been backed up yet
 					if (!originalLightPieceCosts.ContainsKey(pieceName))
 					{
-						//MarsarahTweaks.MLog($"Backing up {pieceName}");
+						//MarsarahTweaks.LogInfo($"Backing up {pieceName}");
 						originalLightPieceCosts[pieceName] = component.m_resources.ToDictionary(req => req.m_resItem.name, req => req.m_amount);
 					}
 
@@ -111,7 +111,7 @@ namespace MarsarahTweaks.Patches.Features
 					{
 						if (lightPieceCostChanges[pieceName].TryGetValue(req.m_resItem.name, out int newAmount))
 						{
-							//MarsarahTweaks.MLog($"Applying new amount for {pieceName} - {req.m_resItem.name}");
+							//MarsarahTweaks.LogInfo($"Applying new amount for {pieceName} - {req.m_resItem.name}");
 							req.m_amount = newAmount;
 							if (req.m_resItem.name == "Wood") req.m_recover = true;
 						}
@@ -132,14 +132,14 @@ namespace MarsarahTweaks.Patches.Features
 						if (!component.m_resources.Any(req => req.m_resItem == woodReq.m_resItem && req.m_amount == woodReq.m_amount))
 						{
 							component.m_resources = component.m_resources.Append(woodReq).ToArray();
-							//MarsarahTweaks.MLog($"Added Wood requirement for {pieceName}");
+							//MarsarahTweaks.LogInfo($"Added Wood requirement for {pieceName}");
 						}
 					}
 
-					// Log final resources to confirm changes
+					// LogInfo final resources to confirm changes
 					/*foreach (Piece.Requirement req in component.m_resources)
 					{
-						MarsarahTweaks.MLog($"{pieceName} - After change: {req.m_resItem.name} x {req.m_amount}");
+						MarsarahTweaks.LogInfo($"{pieceName} - After change: {req.m_resItem.name} x {req.m_amount}");
 					}*/
 				}
 			}
@@ -177,7 +177,7 @@ namespace MarsarahTweaks.Patches.Features
 						{
 							if (originalCosts.TryGetValue(req.m_resItem.name, out int originalAmount))
 							{
-								//MarsarahTweaks.MLog($"Restoring backup for {pieceName}");
+								//MarsarahTweaks.LogInfo($"Restoring backup for {pieceName}");
 								req.m_amount = originalAmount;
 								if (req.m_resItem.name == "Wood")
 								{
@@ -193,7 +193,7 @@ namespace MarsarahTweaks.Patches.Features
 						component.m_resources = component.m_resources
 							.Where(req => !(req.m_resItem.name == "Wood" && req.m_amount == 20))
 							.ToArray();
-						//MarsarahTweaks.MLog($"Removed Wood requirement for {pieceName}");
+						//MarsarahTweaks.LogInfo($"Removed Wood requirement for {pieceName}");
 					}
 				}
 

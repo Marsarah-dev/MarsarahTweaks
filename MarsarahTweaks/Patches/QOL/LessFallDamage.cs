@@ -18,7 +18,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 				if (ConfigManager.LessFallDamageEnabled.Value)
 				{
-					//MarsarahTweaks.MLog($"Reducing fall damage...");
+					//MarsarahTweaks.LogInfo($"Reducing fall damage...");
 					damage = damage * 0.6f;
 				}
 	}

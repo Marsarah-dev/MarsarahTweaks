@@ -156,7 +156,7 @@ namespace MarsarahTweaks.Patches.Features
 				// Run once when the game/server starts
 				if (!hasAppliedSpawnChangesOnce)
 				{
-					//MarsarahTweaks.MLog("Initial creature spawn changes applied.");
+					//MarsarahTweaks.LogInfo("Initial creature spawn changes applied.");
 					ApplyCreatureLevelChanges(__instance);
 					hasAppliedSpawnChangesOnce = true;
 				}
@@ -168,7 +168,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (BossStateChanged())
 				{
-					//MarsarahTweaks.MLog("Boss state changed, reapplying spawn changes");
+					//MarsarahTweaks.LogInfo("Boss state changed, reapplying spawn changes");
 					ApplyCreatureLevelChanges(__instance);
 				}
 			}
@@ -191,24 +191,24 @@ namespace MarsarahTweaks.Patches.Features
 								// Backup if not already backed up
 								if (!creatureSpawnBackups.ContainsKey(spawner.m_name))
 								{
-									//MarsarahTweaks.MLog($"Backing up {spawner.m_name} (Boss: {bossEntry.Key})");
+									//MarsarahTweaks.LogInfo($"Backing up {spawner.m_name} (Boss: {bossEntry.Key})");
 									creatureSpawnBackups[spawner.m_name] = (spawner.m_maxLevel,	spawner.m_overrideLevelupChance, spawner.m_levelUpMinCenterDistance);
 								}
 
 								// Apply changes
 								if (changes.levelUpChance.HasValue)
 								{
-									//MarsarahTweaks.MLog($"Applying levelUpChance={changes.levelUpChance.Value} to {spawner.m_name} (Boss: {bossEntry.Key})");
+									//MarsarahTweaks.LogInfo($"Applying levelUpChance={changes.levelUpChance.Value} to {spawner.m_name} (Boss: {bossEntry.Key})");
 									spawner.m_overrideLevelupChance = changes.levelUpChance.Value;
 								}
 								if (changes.levelUpMinCenterDistance.HasValue)
 								{
-									//MarsarahTweaks.MLog($"Applying levelUpMinCenterDistance={changes.levelUpMinCenterDistance.Value} to {spawner.m_name} (Boss: {bossEntry.Key})");
+									//MarsarahTweaks.LogInfo($"Applying levelUpMinCenterDistance={changes.levelUpMinCenterDistance.Value} to {spawner.m_name} (Boss: {bossEntry.Key})");
 									spawner.m_levelUpMinCenterDistance = changes.levelUpMinCenterDistance.Value;
 								}
 								if (changes.maxLevel.HasValue)
 								{
-									//MarsarahTweaks.MLog($"Applying maxLevel={changes.maxLevel.Value} to {spawner.m_name} (Boss: {bossEntry.Key})");
+									//MarsarahTweaks.LogInfo($"Applying maxLevel={changes.maxLevel.Value} to {spawner.m_name} (Boss: {bossEntry.Key})");
 									spawner.m_maxLevel = changes.maxLevel.Value;
 								}
 							}
@@ -217,7 +217,7 @@ namespace MarsarahTweaks.Patches.Features
 								// Restore from backup if exists
 								if (creatureSpawnBackups.TryGetValue(spawner.m_name, out var backup))
 								{
-									//MarsarahTweaks.MLog($"Restoring spawn values for {spawner.m_name} from backup");
+									//MarsarahTweaks.LogInfo($"Restoring spawn values for {spawner.m_name} from backup");
 
 									spawner.m_maxLevel = backup.maxLevel ?? spawner.m_maxLevel;
 									spawner.m_overrideLevelupChance = backup.levelUpChance ?? spawner.m_overrideLevelupChance;

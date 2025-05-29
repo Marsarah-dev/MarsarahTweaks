@@ -58,7 +58,7 @@ namespace MarsarahTweaks.Patches.Features
 
 			if (!barkPrefab || !coalPrefab)
 			{
-				//MarsarahTweaks.MLog("Missing prefab: AncientBark or Coal.");
+				//MarsarahTweaks.LogInfo("Missing prefab: AncientBark or Coal.");
 				return;
 			}
 
@@ -78,7 +78,7 @@ namespace MarsarahTweaks.Patches.Features
 						m_to = coalDrop
 					};
 					kiln.m_conversion.Add(newWitheredBoneConversion);
-					//MarsarahTweaks.MLog("Added Ancient Bark as fuel for Kiln.");
+					//MarsarahTweaks.LogInfo("Added Ancient Bark as fuel for Kiln.");
 				}
 			}
 			else
@@ -86,7 +86,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (witheredBoneConversion != null)
 				{
 					kiln.m_conversion.Remove(witheredBoneConversion);
-					//MarsarahTweaks.MLog("Removed Ancient Bark as fuel from Kiln.");
+					//MarsarahTweaks.LogInfo("Removed Ancient Bark as fuel from Kiln.");
 				}
 			}
 		}
@@ -104,14 +104,14 @@ namespace MarsarahTweaks.Patches.Features
 			var prefab = ObjectDB.instance?.GetItemPrefab("WitheredBone");
 			if (!prefab)
 			{
-				//MarsarahTweaks.MLog("WitheredBone prefab not found.");
+				//MarsarahTweaks.LogInfo("WitheredBone prefab not found.");
 				return;
 			}
 
 			var itemDrop = prefab.GetComponent<ItemDrop>();
 			if (!itemDrop)
 			{
-				//MarsarahTweaks.MLog("WitheredBone does not have ItemDrop component.");
+				//MarsarahTweaks.LogInfo("WitheredBone does not have ItemDrop component.");
 				return;
 			}
 
@@ -120,7 +120,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (!sg.m_fuelItems.Contains(itemDrop))
 				{
 					sg.m_fuelItems.Add(itemDrop);
-					//MarsarahTweaks.MLog("Added WitheredBone as fuel for Shield Generator.");
+					//MarsarahTweaks.LogInfo("Added WitheredBone as fuel for Shield Generator.");
 				}
 			}
 			else
@@ -128,7 +128,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (sg.m_fuelItems.Contains(itemDrop))
 				{
 					sg.m_fuelItems.Remove(itemDrop);
-					//MarsarahTweaks.MLog("Removed WitheredBone as fuel from Shield Generator.");
+					//MarsarahTweaks.LogInfo("Removed WitheredBone as fuel from Shield Generator.");
 				}
 			}			
 		}
