@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.1.2
+Marsarah Tweaks v1.2.0
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 
@@ -2092,6 +2092,30 @@ The following foods have the stack size increased to 20
   Incompatible with any mod that changes camera angles when sailing.
 
 
+------------------- [Shorter Rested Delay] ---------------------
+
+► Description:
+  Reduces the amount of time needed to get the rested buff from 20 to 10 seconds.
+
+► Mid-Game Toggling:
+  Toggling mid-game requires re-entering the resting area.
+
+► Conflicts:
+  Incompatible with any mod that changes resting delay.
+
+
+--------------------- [More Usable Fuel] -----------------------
+
+► Description:
+  Ancient Bark can be used as fuel for Kilns. Withered Bones can be used in Shield Generators.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+
+
 ============================ [UI] ==============================
 ► All configs in this section are synced with server.
 
@@ -2143,7 +2167,8 @@ The following foods have the stack size increased to 20
 
 ► Description:
   Displays current ship speed next to the inventory weight widget at the bottom left of the screen.
-  When going forward, "F" is displayed before the speed value.
+  If the Alternate UI Layout is used, this widget is displayed at the bottom-left of the minimap. If Minimal Status Effects is installed, the widget moves to the top-left of the minimap.
+  When going forward, only the speed value is displayed.
   When going backwards, "R" is displayed before the speed value.
   The speed counter only shows when controlling a boat.
   Colors change according to speed.
@@ -2213,8 +2238,10 @@ The following foods have the stack size increased to 20
 -------------------- [Show Online Players] ---------------------
 
 ► Description:
-  Shows online players on the bottom right of the screen. 
+  Shows a list of online players and the total number of players on the bottom right of the screen.
   Not displayed if only one player is online.
+  Displays maximum 20 players.
+  The list can be toggled with the Home key, but the total number of online players will still be shown. 
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
@@ -2236,12 +2263,94 @@ The following foods have the stack size increased to 20
   No known conflicts.
 
 
+-------------- [Show Owned Resources In Build Menu] -------------
+
+► Description:
+  Displays the total amount of resources in the player's inventory in addition to the required resource amount for the selected piece in the build menu.
+  If a player has 20 Wood in their inventory and the build piece requires 2, then "2/20" will be displayed in the resource cost.
+
+► Mid-Game Toggling:
+  Toggling mid-game requires reopening the build menu.
+
+► Conflicts:
+  Valheim Plus
+
+
+-------------- [Show Boss Power Expiration Message] -------------
+
+► Description:
+  Displays a message in the center of the screen when any Forsaken Power expires.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+
+
+-------------------- [Player Logout Announce] -------------------
+
+► Description:
+  Displays a message when a player logs out in the top-left corner of the screen and in the chat window.
+  NOTE: The text in the chat will not bring the chat window up automatically, but will show when it's manually brought up. This is to make it easier to notice if someone left and avoid sending messages thinking they're still online.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+
+
+------------------ [Show Heat Meter in Ashlands] ----------------
+
+► Description:
+  Shows a heat meter at the top-center of the screen when in Ashlands water or lava.
+  If a player swims away from Ashlands water into other biomes (not on ship), then the meter will still show and it will remain on the last heat value because the game never refreshes the heat variable internally. If this happens, simply relog. 
+  This will be adressed in future updates to only show in Ashlands.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+
+
+---------------------- [Alternate UI Layout] --------------------
+
+► Description:
+  Alternates the layout of this mod's UI by using symbols instead of words for Inventory Weight and Slots, Enemy Counter, Summons Counter, and Boat Speed. 
+  Repositions the Boat Speed widget to the minimap area. If using the non-symbols version, the Boat Speed widget is located at the bottom-left of the screen next to the Enemy Detector.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  Compatible with Minimal Status Effects. This mod automatically detects the existence of Minimal Status Effects and repositions the Boat Speed widget to not be on top of the rudder icon when sailing.
+
+
 VERSION HISTORY
 ================================================================
 
+v1.2.0
+- Fixed an issue with Progression Halt where players could get the contents of halted chests by simply destroying them.
+- Fixed an issue with the Move Camera Up While Sailing section, where if a player would log out while controlling a ship, then the camera would be stuck in a high position when logging back in.
+- Fixed an issue with UI widgets (Time and day; online players) not showing on worlds with no map enabled. Now they display properly with the No Map global setting on.
+
+- Section change: Show Boat Speed - Removed the letter "F" when displaying boat forward speed (kept "R" for reverse);
+- Section change: Show Online Players - Now also shows the total number of players logged in. Swapped the order of header and player list when displayed at the botom right corner (header is now below the player list).
+- Section change: Show Online Players - Added key toggle (Home key) to show/hide the player list (the total number of online players will always be displayed if the config is enabled - this toggle just hides the player list).
+
+- Added QOL section: Shorter Rested Delay
+- Added QOL section: More Usable Fuel
+- Added UI section: Show Owned Resources In Build Menu
+- Added UI section: Show Boss Power Expiration Message
+- Added UI section: Player Logout Announce 
+- Added UI section: Show Heat Meter in Ashlands
+- Added UI section: Alternate UI Layout
+
 v1.1.2
 - Modified the way Progressionn Halt reads prefab names. This change is specifically targeting a previous incompatibility with Ventrure Location Reset mod where it was changing parts of prefab names after resetting dungeons. This patch makes these two mods compatible.
-- Added section: Halt Ocean Behind Elder. This provides an extra option for players and sever admins if they prefer Ocean resources to be available earlier. Ocean-tier items and food are equal to Mountain-tier items and food, which is why this option is disabled by default, but still available if wanted.
+- Added Feature section: Halt Ocean Behind Elder. This provides an extra option for players and sever admins if they prefer Ocean resources to be available earlier. Ocean-tier items and food are equal to Mountain-tier items and food, which is why this option is disabled by default, but still available if wanted.
 - Rearranged config entries in the config file, which means that old configs will have extra unused config entries (those can be safely deleted)
 
 v1.1.1
@@ -2249,7 +2358,7 @@ v1.1.1
 - Removed Pickable Bone Piles found in Meadows from Progression Halt
 
 v1.1.0
-- Added Section: Move Camera Up While Sailing
+- Added QOL Section: Move Camera Up While Sailing
 - Added forgotten items from old mod port to Cheaper Build Piece Amounts (all banners Leather Scraps: 6 → 5)
 - Added Shipwreck to Progression Halt (halted by Eikthyr)
 
