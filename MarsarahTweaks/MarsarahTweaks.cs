@@ -4,8 +4,8 @@
  * 
  * A. Fixes/Others
  *    - Fixed an issue with Progression Halt where players could get the contents of halted chests by simply destroying them
- *    - Online Players also shows the total number of players logged in. Also swapped the order of header and player list when displayed at the botom right corner
- *     - TODO: fix logging out on boat camera
+ *    - Fixed an issue with the "Move Camera Up While Sailing" section, where if a player would log out while controlling a ship, then the camera would be stuck in that position when logging back in
+ *    - Fixed an issue with UI widgets (Time and day; online players) not showing on worlds with no map enabled. Now they display properly with the No Map global setting on
  *    
  * B. New UI
  *    - Added section: Show Owned Resources In Build Menu
@@ -14,6 +14,8 @@
  *    - Added section: Show Heat Meter in Ashlands
  *    - Added section: Use Symbols for UI Elements
  *    - Removed "F" from boat forward speed (kept "R" for reverse);
+ *    - Online Players also shows the total number of players logged in. Also swapped the order of header and player list when displayed at the botom right corner
+ *    - Added key toggle (Home key) for Online Players to show/hide the player list (the total number of online players will always be displayed if the config is enabled - this toggle just hides the player list)
  * 
  * C. New Features
  * 

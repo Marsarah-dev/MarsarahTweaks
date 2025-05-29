@@ -11,13 +11,18 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIController
 	{
-		public static bool showUI = true;		
+		public static bool showUI = true;
+		public static bool showPlayerList = true;
 
 		public static void UpdateUIDisplay()
 		{
 			if (Input.GetKeyDown(KeyCode.Insert))
 			{
 				showUI = !showUI;
+			}
+			if (Input.GetKeyDown(KeyCode.Home))
+			{
+				showPlayerList = !showPlayerList;
 			}
 		}
 

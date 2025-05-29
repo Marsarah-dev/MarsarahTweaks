@@ -28,7 +28,6 @@ namespace MarsarahTweaks.Patches.QOL
 		//private static float defaultMaxDistance = -1f; // Seems to be 8
 		//private const float sailingMaxDistance = 20f;
 
-
 		[HarmonyPatch(typeof(Ship), "GetSpeed")]
 		private class ShipCamera_Patch
 		{
@@ -53,22 +52,15 @@ namespace MarsarahTweaks.Patches.QOL
 			}
 		}
 
-		/*[HarmonyPatch(typeof(GameCamera), "UpdateCamera")]
-		public static class GameCamera_ZoomPatch
-		{
-			private static void Prefix(GameCamera __instance)
-			{
-				SailingCameraChanges.UpdateCameraZoom(__instance);
-			}
-		}*/
-
 		private static void UpdateShipControlledState(Ship __instance)
 		{
 			if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 			if (ConfigManager.CameraUpWhenSailingEnabled.Value)
 			{
-				bool isControlling = Traverse.Create(__instance).Method("HaveControllingPlayer").GetValue<bool>();
+				//bool isControlling = Traverse.Create(__instance).Method("HaveControllingPlayer").GetValue<bool>();
+				Ship currentControlledShip = Player.m_localPlayer.GetControlledShip();
+				bool isControlling = currentControlledShip != null;
 
 				if (isControlling != moveCameraUp)
 				{
@@ -111,27 +103,5 @@ namespace MarsarahTweaks.Patches.QOL
 
 			return currentOffset;
 		}
-
-		/*private static void UpdateCameraZoom(GameCamera camera)
-		{
-			if (moveCameraUp && ConfigManager.CameraUpWhenSailingEnabled.Value)
-			{
-				if (defaultMaxDistance == -1f)
-				{
-					defaultMaxDistance = camera.m_maxDistance;
-					MarsarahTweaks.LogInfo($"[SailingCamera] Backed up max camera zoom {defaultMaxDistance}");
-				}
-				if (camera.m_maxDistance != sailingMaxDistance)
-				{
-					camera.m_maxDistance = sailingMaxDistance;
-					MarsarahTweaks.LogInfo($"[SailingCamera] Set new max camera zoom {sailingMaxDistance}");
-				}
-			}
-			else if (defaultMaxDistance != -1f && camera.m_maxDistance != defaultMaxDistance)
-			{
-				camera.m_maxDistance = defaultMaxDistance;
-				MarsarahTweaks.LogInfo($"[SailingCamera] Restored max camera zoom {defaultMaxDistance}");
-			}
-		}*/
 	}
 }

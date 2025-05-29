@@ -35,6 +35,21 @@ namespace MarsarahTweaks.Patches.UI
 			}
 		}
 
+		[HarmonyPatch(typeof(Hud), "Awake")]
+		private class DisableMinimapUnderNoMapPatch
+		{
+			private static void Postfix()
+			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
+				if (Game.m_noMap && ConfigManager.OnlinePlayersUnderMinimap.Value)
+				{
+					MarsarahTweaks.LogInfo("Disabling OnlinePlayersUnderMinimap: no map is enabled.");
+					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
+				}
+			}
+		}
+
 		[HarmonyPatch(typeof(Hud), "Update")]
 		class OnlinePlayers_HUDUpdatePatch
 		{
@@ -46,6 +61,12 @@ namespace MarsarahTweaks.Patches.UI
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				if (__instance == null) return;
+
+				if (Game.m_noMap && ConfigManager.OnlinePlayersUnderMinimap.Value)
+				{
+					MarsarahTweaks.LogInfo("Cannot enable OnlinePlayersUnderMinimap on a no map world.");
+					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
+				}
 
 				if (ConfigManager.ShowOnlinePlayers.Value)
 				{
@@ -112,7 +133,10 @@ namespace MarsarahTweaks.Patches.UI
 					{
 						if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
 						{
-							UIPlayerTexts[0].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
+							bool shouldShowOnlineHeader = showUI && !Chat.instance.IsChatDialogWindowVisible();
+							bool shouldShowPlayerList = showUI && showPlayerList && !Chat.instance.IsChatDialogWindowVisible();
+
+							UIPlayerTexts[0].enabled = shouldShowOnlineHeader;
 							if (showUI)
 							{
 								UIPlayerTexts[0].color = Color.green;
@@ -123,7 +147,7 @@ namespace MarsarahTweaks.Patches.UI
 							{
 								if (i <= numPlayersToFit)
 								{
-									UIPlayerTexts[i].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
+									UIPlayerTexts[i].enabled = shouldShowPlayerList;
 									if (showUI)
 									{
 										UIPlayerTexts[i].color = Color.white;
@@ -136,36 +160,13 @@ namespace MarsarahTweaks.Patches.UI
 									UIPlayerTexts[i].text = "";
 								}
 							}
-							/*for (int i = 0; i < numOnlinePlayerSlots; i++) // Header after players
-							{
-								if ((i < numPlayersToFit) && !onePlayer)
-								{
-									UIPlayerTexts[i].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
-									if (showUI)
-									{
-										UIPlayerTexts[i].color = Color.white;
-										UIPlayerTexts[i].text = playerInfoList[i].m_name;
-									}
-								}
-								else if (i == numPlayersToFit && !onePlayer)
-								{
-									UIPlayerTexts[i].enabled = showUI && !Chat.instance.IsChatDialogWindowVisible();
-									if (showUI)
-									{
-										UIPlayerTexts[i].color = Color.green;
-										UIPlayerTexts[i].text = $"Online: {numPlayersTotal}";
-									}
-								}
-								else
-								{
-									UIPlayerTexts[i].color = Color.white;
-									UIPlayerTexts[i].text = "";
-								}
-							}*/
 						}
 						else
 						{
-							UIPlayerTexts[0].enabled = showUI && Minimap.instance.m_mapSmall.activeInHierarchy;
+							bool shouldShowOnlineHeader = showUI && Minimap.instance.m_mapSmall.activeInHierarchy;
+							bool shouldShowPlayerList = showUI && showPlayerList && Minimap.instance.m_mapSmall.activeInHierarchy;
+
+							UIPlayerTexts[0].enabled = shouldShowOnlineHeader;
 							if (showUI)
 							{
 								UIPlayerTexts[0].color = Color.green;
@@ -176,7 +177,7 @@ namespace MarsarahTweaks.Patches.UI
 							{
 								if (i <= numPlayersToFit)
 								{
-									UIPlayerTexts[i].enabled = showUI && Minimap.instance.m_mapSmall.activeInHierarchy;
+									UIPlayerTexts[i].enabled = shouldShowPlayerList;
 									if (showUI)
 									{
 										UIPlayerTexts[i].color = Color.white;

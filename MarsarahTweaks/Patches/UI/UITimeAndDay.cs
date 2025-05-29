@@ -74,10 +74,12 @@ namespace MarsarahTweaks.Patches.UI
 				{
 					CreateUI(__instance); // Create UI if missing
 
-					UITimeText.enabled = showUI && Minimap.instance.m_mapSmall.activeInHierarchy;
-					UIDayText.enabled = showUI && Minimap.instance.m_mapSmall.activeInHierarchy;
+					bool showTimeUI = Game.m_noMap ? showUI : showUI && Minimap.instance != null && Minimap.instance.m_mapSmall != null && Minimap.instance.m_mapSmall.activeInHierarchy;
 
-					if (showUI && Minimap.instance.m_mapSmall.activeInHierarchy)
+					UITimeText.enabled = showTimeUI;
+					UIDayText.enabled = showTimeUI;
+
+					if (showTimeUI)
 					{
 						UITimeText.color = GetColorFromString(dayString);
 						UIDayText.color = Color.white;
