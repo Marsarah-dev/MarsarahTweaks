@@ -7,6 +7,7 @@
  * B. New UI
  * 
  * C. New Features
+ *    - IP: Pocket Portal
  * 
  * B. New QOL
  * 
@@ -14,6 +15,8 @@
  * TODO
  * 
  * A. Fixes
+ *    - Correct info on Enemy Detector readme to mention new UI layout too
+ *    - Move the boat speed indicator in alternate UI to the right on no map mode
  * 
  * B. New UI
  *    1. 
@@ -132,10 +135,12 @@ using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
 using MarsarahTweaks.Patches;
+using MarsarahTweaks.Patches.QOL;
 using MarsarahTweaks.Patches.UI;
 using ServerSync;
 using System.IO;
 using UnityEngine;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks
 {
@@ -143,7 +148,7 @@ namespace MarsarahTweaks
 	public class MarsarahTweaks : BaseUnityPlugin
 	{
 		internal const string ModName = "MarsarahTweaks";
-		internal const string ModVersion = "1.2.0";
+		internal const string ModVersion = "1.3.0";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 
@@ -156,6 +161,7 @@ namespace MarsarahTweaks
 			ConfigManager.Init(Config);
 			//CustomConsoleCommandHandler.Init(); // Register new console commands
 			UISmartBiome.UpdateBiomeWeights(); // Set the correct biome weight dictionary at startup
+			//AssetManager.InitializeCustomAssets(); // Initialize my custom assets
 
 			harmony.PatchAll();
 		}

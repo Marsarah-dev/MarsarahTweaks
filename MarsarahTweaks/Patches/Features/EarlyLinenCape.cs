@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Reflection;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.Features
 {

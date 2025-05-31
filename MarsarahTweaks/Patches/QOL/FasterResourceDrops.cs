@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.QOL
 {

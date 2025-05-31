@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.Features
 {

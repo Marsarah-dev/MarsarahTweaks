@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static Heightmap;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.UI
 {

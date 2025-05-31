@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.UI
 {

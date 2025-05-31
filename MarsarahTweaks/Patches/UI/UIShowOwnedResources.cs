@@ -7,6 +7,7 @@ using HarmonyLib;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.UI
 {

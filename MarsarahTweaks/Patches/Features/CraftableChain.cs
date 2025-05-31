@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using UnityEngine;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.Features
 {

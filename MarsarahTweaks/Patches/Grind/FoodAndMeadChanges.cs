@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.Grind
 {

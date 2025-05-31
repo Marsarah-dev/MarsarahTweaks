@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.Features
 {

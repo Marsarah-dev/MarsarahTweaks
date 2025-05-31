@@ -10,6 +10,7 @@ using System.Windows;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.UI
 {

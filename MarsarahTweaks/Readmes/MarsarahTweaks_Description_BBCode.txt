@@ -117,7 +117,7 @@ All features below are synced with the server and can be toggled mid-game.
 
 📜 Alters some [b]material types[/b] required for specific vanilla build pieces.  
 - Pairs well with the Cheaper Build Piece Amounts option
-- Note: This will move the Workbenck Toolrack extension from the Mountain to Swamp biome
+- Note: This will move the Workbench Toolrack extension from the Mountain to Swamp biome
 
 🔄 Requires reopening the build menu after toggling the config mid-game
 

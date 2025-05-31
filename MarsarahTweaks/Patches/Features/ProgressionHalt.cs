@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static InventoryGrid;
 using System.Text.RegularExpressions;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.Features
 {

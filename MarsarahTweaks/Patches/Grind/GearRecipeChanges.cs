@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.Grind
 {
