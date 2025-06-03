@@ -3,12 +3,11 @@
 //using System.Linq;
 //using System.Text;
 //using System.Threading.Tasks;
-//using UnityEngine;
 
-//namespace MarsarahTweaks.Managers
+//namespace MarsarahTweaks.CustomEntities
 //{
-//	public class PieceManager
+//	internal class CustomPiece
 //	{
-
+//		public CustomPiece() { }
 //	}
 //}

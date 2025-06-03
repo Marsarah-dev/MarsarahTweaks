@@ -17,6 +17,7 @@
  * A. Fixes
  *    - Correct info on Enemy Detector readme to mention new UI layout too
  *    - Move the boat speed indicator in alternate UI to the right on no map mode
+ *    - Change color of free inv slot to be red later like in the weight indicator
  * 
  * B. New UI
  *    1. 
@@ -134,13 +135,16 @@ Feature	Complexity	Notes
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+using Jotunn.Managers;
+using MarsarahTweaks.Managers;
 using MarsarahTweaks.Patches;
+using MarsarahTweaks.Patches.Features;
 using MarsarahTweaks.Patches.QOL;
 using MarsarahTweaks.Patches.UI;
 using ServerSync;
+using System;
 using System.IO;
 using UnityEngine;
-using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks
 {
@@ -162,6 +166,10 @@ namespace MarsarahTweaks
 			//CustomConsoleCommandHandler.Init(); // Register new console commands
 			UISmartBiome.UpdateBiomeWeights(); // Set the correct biome weight dictionary at startup
 			//AssetManager.InitializeCustomAssets(); // Initialize my custom assets
+			//PocketPortal.Init();
+			//PocketPortal.LoadAssetBundle();
+			
+
 
 			harmony.PatchAll();
 		}
