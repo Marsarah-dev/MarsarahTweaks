@@ -18,6 +18,7 @@
  *    - Correct info on Enemy Detector readme to mention new UI layout too
  *    - Move the boat speed indicator in alternate UI to the right on no map mode
  *    - Change color of free inv slot to be red later like in the weight indicator
+ *    - Change Craftable chain code of assigning crafting station and other things (don't use dvergr lantern anymore)
  * 
  * B. New UI
  *    1. 

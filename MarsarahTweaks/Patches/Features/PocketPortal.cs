@@ -4,6 +4,7 @@ using Jotunn.Entities;
 using Jotunn.Managers;
 using Splatform;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -110,7 +111,7 @@ namespace MarsarahTweaks.Patches.Features
 
 			Piece piece = PocketPortalPrefab.GetComponent<Piece>();
 			piece.m_name = "Pocket Portal";
-			piece.m_description = "A custom pocket portal";
+			piece.m_description = "A portal meant to be easy to carry and make exploration more convenient";
 			piece.m_craftingStation = null;
 
 			var customPrefab = new CustomPrefab(PocketPortalPrefab, fixReference: true);
@@ -245,17 +246,6 @@ namespace MarsarahTweaks.Patches.Features
 				return;
 			}
 
-			/*var particleSystem = PortalCorePrefab.GetComponentInChildren<ParticleSystem>();
-			if (particleSystem != null)
-			{
-				var main = particleSystem.main;
-				main.startColor = new ParticleSystem.MinMaxGradient(new Color(0.5f, 0.75f, 1f)); // Light blue
-			}
-			else
-			{
-				MarsarahTweaks.LogWarn("[PortalCore] ParticleSystem not found to modify startColor");
-			}*/
-
 			// Find the core child object (SurtlingCore -> attach -> core)
 			Transform coreTransform = PortalCorePrefab.transform.Find("attach/core");
 			if (coreTransform != null)
@@ -320,11 +310,55 @@ namespace MarsarahTweaks.Patches.Features
 			}
 
 			ItemDrop itemDrop = PortalCorePrefab.GetComponent<ItemDrop>();
+			Sprite originalIcon = PrefabManager.Instance.GetPrefab("SurtlingCore").GetComponent<ItemDrop>().m_itemData.m_shared.m_icons[0];
+			
+			Rect rect = new Rect(360, 1340, 64, 64);
+
+			// Copy only the icon's sub-region from the large texture
+			Texture2D croppedTex = new Texture2D((int)rect.width, (int)rect.height, TextureFormat.RGBA32, false);
+			RenderTexture rt = RenderTexture.GetTemporary(originalIcon.texture.width, originalIcon.texture.height, 0, RenderTextureFormat.ARGB32);
+			Graphics.Blit(originalIcon.texture, rt);
+			RenderTexture.active = rt;
+
+			croppedTex.ReadPixels(
+				new Rect(rect.x, rect.y, rect.width, rect.height),
+				0, 0
+			);
+			croppedTex.Apply();
+
+			Color[] pixels = croppedTex.GetPixels();
+			for (int i = 0; i < pixels.Length; i++)
+			{
+				Color c = pixels[i];
+				pixels[i] = new Color(
+					c.r * 0.2f,    // Reduce red
+					c.g * 1.2f,	   // Boost green
+					c.b * 2f,      // Strong blue boost
+					c.a            // Preserve alpha
+				);
+			}
+			croppedTex.SetPixels(pixels);
+			croppedTex.Apply();
+
+			RenderTexture.ReleaseTemporary(rt);
+			RenderTexture.active = null;
+
+			// Create new Sprite from cropped region
+			Sprite newIcon = Sprite.Create(
+				croppedTex,
+				new Rect(0, 0, croppedTex.width, croppedTex.height),
+				new Vector2(0.5f, 0.5f),
+				originalIcon.pixelsPerUnit
+			);
+
+			// Assign to the item
+			itemDrop.m_itemData.m_shared.m_icons = new Sprite[] { newIcon };
+
+
 			itemDrop.m_itemData.m_shared.m_name = "Portal Core";
 			itemDrop.m_itemData.m_shared.m_description = "The core of an easy to carry portal";
 			itemDrop.m_itemData.m_shared.m_maxStackSize = 1;
 			itemDrop.m_itemData.m_shared.m_weight = 10f;
-			//itemDrop.m_itemData.m_shared.m_icons = new[] { /* assign your custom sprite here */ };
 
 			var customPortalCore = new CustomPrefab(PortalCorePrefab, fixReference: true);
 			PrefabManager.Instance.AddPrefab(customPortalCore);
@@ -410,6 +444,63 @@ namespace MarsarahTweaks.Patches.Features
 					MarsarahTweaks.LogInfo($"[PocketPortal] Auto-assigned missing tagauthor: {authorId}");
 				}
 			}
+		}
+
+		[HarmonyPatch(typeof(Player), "Update")]
+		public class Player_Update_DebugPortalCount
+		{
+			static void Postfix(Player __instance)
+			{
+				if (__instance != Player.m_localPlayer) return;
+
+				if (Input.GetKeyDown(KeyCode.F8))
+				{
+					LogPocketPortalCount();
+				}
+			}
+		}
+
+		public static void LogPocketPortalCount()
+		{
+			if (ZNet.instance == null || ZDOMan.instance == null || Player.m_localPlayer == null)
+			{
+				MarsarahTweaks.LogWarn("Required instances are missing.");
+				return;
+			}
+
+			long localPlayerUID = ZNet.GetUID();
+			//int pocketPortalHash = 853122569;
+			int pocketPortalHash = PocketPortalPrefab.name.GetStableHashCode();
+
+			// Use reflection to get private m_objectsByID
+			var zdoDictField = typeof(ZDOMan).GetField("m_objectsByID", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (zdoDictField == null)
+			{
+				MarsarahTweaks.LogError("Could not access m_objectsByID field.");
+				return;
+			}
+
+			var zdoDict = zdoDictField.GetValue(ZDOMan.instance) as Dictionary<ZDOID, ZDO>;
+			if (zdoDict == null)
+			{
+				MarsarahTweaks.LogError("m_objectsByID is null or invalid.");
+				return;
+			}
+
+			int count = 0;
+			foreach (var zdo in zdoDict.Values)
+			{
+				if (zdo == null)
+					continue;
+
+				if (zdo.GetPrefab() != pocketPortalHash)
+					continue;
+
+				if (zdo.GetOwner() == localPlayerUID)
+					count++;
+			}
+
+			MarsarahTweaks.LogInfo($"Pocket Portals built by this player: {count}");
 		}
 	}
 }
