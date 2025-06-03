@@ -18,7 +18,7 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		private static bool initialized = false;
 		private static GameObject PocketPortalPrefab;
-		//private static GameObject CustomFxPrefab;
+		private static GameObject PortalCorePrefab;
 
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
 		public static class ZNetScene_Awake_Patch
@@ -29,13 +29,15 @@ namespace MarsarahTweaks.Patches.Features
 					return;
 
 				initialized = true;
-				RegisterPocketPortal(__instance);
+				CreatePocketPortal(__instance);
 			}
 		}
 
-		private static void RegisterPocketPortal(ZNetScene znetScene)
+		private static void CreatePocketPortal(ZNetScene znetScene)
 		{
-			RegisterPortalEffects();
+			ModifyPortalEffects();
+			CreatePortalCore();
+			CreatePortalCoreRecipe();
 
 			if (PrefabManager.Instance.GetPrefab("pocket_portal") != null)
 			{
@@ -127,7 +129,7 @@ namespace MarsarahTweaks.Patches.Features
 				Category = "Misc",
 				Requirements = new[]
 				{
-					new RequirementConfig("SurtlingCore", 1),
+					new RequirementConfig("PortalCore", 1),
 				}
 			};
 
@@ -139,7 +141,7 @@ namespace MarsarahTweaks.Patches.Features
 		}
 
 		// Clone and register the fx_portal_connected effect (unchanged)
-		private static void RegisterPortalEffects()
+		private static void ModifyPortalEffects()
 		{
 			GameObject originalFx = PrefabManager.Instance.GetPrefab("fx_portal_connected");
 			if (originalFx == null)
@@ -225,6 +227,143 @@ namespace MarsarahTweaks.Patches.Features
 			MarsarahTweaks.LogInfo("[PocketPortal] 🎨 Custom portal connect effect assigned.");
 		}
 
+		// Clone and register the Portal Core
+		private static void CreatePortalCore()
+		{
+			GameObject surtlingCore = PrefabManager.Instance.GetPrefab("SurtlingCore");
+			if (surtlingCore == null)
+			{
+				MarsarahTweaks.LogError("[PocketPortal] Could not find SurtlingCore prefab!");
+				return;
+			}
+
+			PortalCorePrefab = PrefabManager.Instance.CreateClonedPrefab("PortalCore", surtlingCore);
+
+			if (PortalCorePrefab == null)
+			{
+				MarsarahTweaks.LogError("[PocketPortal] Failed to clone SurtlingCore prefab!");
+				return;
+			}
+
+			/*var particleSystem = PortalCorePrefab.GetComponentInChildren<ParticleSystem>();
+			if (particleSystem != null)
+			{
+				var main = particleSystem.main;
+				main.startColor = new ParticleSystem.MinMaxGradient(new Color(0.5f, 0.75f, 1f)); // Light blue
+			}
+			else
+			{
+				MarsarahTweaks.LogWarn("[PortalCore] ParticleSystem not found to modify startColor");
+			}*/
+
+			// Find the core child object (SurtlingCore -> attach -> core)
+			Transform coreTransform = PortalCorePrefab.transform.Find("attach/core");
+			if (coreTransform != null)
+			{
+				Renderer coreRenderer = coreTransform.GetComponent<Renderer>();
+				if (coreRenderer != null)
+				{
+					//MarsarahTweaks.LogInfo($"Core found: {coreTransform != null}, Renderer: {coreRenderer != null}");
+					//MarsarahTweaks.LogInfo($"R: {coreMaterial.GetColor("_EmissionColor").r} - G: {coreMaterial.GetColor("_EmissionColor").g} - B: {coreMaterial.GetColor("_EmissionColor").b} - A: {coreMaterial.GetColor("_EmissionColor").a}");
+					// R: 1.429 - G: 0.8574001 - B: 0 - A: 1
+
+					// Create a new material instance to avoid affecting other objects
+					Material coreMaterial = new Material(coreRenderer.sharedMaterial);
+
+					//coreMaterial.SetColor("_Color", new Color(0.1f, 0.3f, 1f)); // Deep blue base
+
+					// Enable emission and set color (bright cyan-blue)
+					coreMaterial.EnableKeyword("_EMISSION");					
+					coreMaterial.SetColor("_EmissionColor", new Color(0f, 1f, 5f) * 3f); // HDR intensity
+
+					// 3. Force glow intensity (Valheim-specific)
+					//coreMaterial.SetFloat("_Glow", 1f); // Full glow intensity
+					//coreMaterial.SetFloat("_GlowStrength", 3f); // Additional boost
+
+					// Apply the material
+					coreRenderer.sharedMaterial = coreMaterial;
+
+					MarsarahTweaks.LogInfo("[PortalCore] Modified core emission color");
+				}
+				else
+				{
+					MarsarahTweaks.LogWarn("[PortalCore] No Renderer found on core object");
+				}
+			}
+			else
+			{
+				MarsarahTweaks.LogWarn("[PortalCore] 'attach/core' child not found");
+			}
+
+			// Find the Point Light child
+			Transform pointLightTransform = PortalCorePrefab.transform.Find("attach/Point light");
+			if (pointLightTransform != null)
+			{
+				Light pointLight = pointLightTransform.GetComponent<Light>();
+				if (pointLight != null)
+				{
+					// Set color (cyan-blue) and intensity
+					pointLight.color = new Color(0f, 0.5f, 1f); // RGB (0-1)
+					pointLight.intensity = 3f; // Brightness multiplier
+					pointLight.range = 3f; // Light radius
+
+					MarsarahTweaks.LogInfo("[PortalCore] Modified Point Light color");
+				}
+				else
+				{
+					MarsarahTweaks.LogWarn("[PortalCore] No Light component found on Point Light");
+				}
+			}
+			else
+			{
+				MarsarahTweaks.LogWarn("[PortalCore] 'attach/Point Light' child not found");
+			}
+
+			ItemDrop itemDrop = PortalCorePrefab.GetComponent<ItemDrop>();
+			itemDrop.m_itemData.m_shared.m_name = "Portal Core";
+			itemDrop.m_itemData.m_shared.m_description = "The core of an easy to carry portal";
+			itemDrop.m_itemData.m_shared.m_maxStackSize = 1;
+			itemDrop.m_itemData.m_shared.m_weight = 10f;
+			//itemDrop.m_itemData.m_shared.m_icons = new[] { /* assign your custom sprite here */ };
+
+			var customPortalCore = new CustomPrefab(PortalCorePrefab, fixReference: true);
+			PrefabManager.Instance.AddPrefab(customPortalCore);
+			PrefabManager.Instance.RegisterToZNetScene(PortalCorePrefab);
+
+			var customPortalcoreItem = new CustomItem(PortalCorePrefab, fixReference: true);
+			ItemManager.Instance.AddItem(customPortalcoreItem);
+
+			if (ZNetScene.instance.GetPrefab("PortalCore") == null)
+			{
+				MarsarahTweaks.LogError("[PocketPortal] ❌ Failed to register PortalCore prefab!");
+			}
+			else
+			{
+				MarsarahTweaks.LogInfo("[PocketPortal] ✅ Successfully registered PortalCore prefab");
+			}
+		}
+
+		// Create the Portal Core recipe
+		private static void CreatePortalCoreRecipe()
+		{
+			var recipeConfig = new RecipeConfig
+			{
+				Item = "PortalCore",
+				Amount = 1,
+				CraftingStation = "piece_workbench",
+				Requirements = new[]
+				{
+					new RequirementConfig("SurtlingCore", 5),
+					new RequirementConfig("FineWood", 20),
+					new RequirementConfig("GreydwarfEye", 20),
+					new RequirementConfig("Wood", 20)
+				}
+			};
+
+			var customRecipe = new CustomRecipe(recipeConfig);
+			ItemManager.Instance.AddRecipe(customRecipe);
+		}
+
 		// Adds the pocket_portal prefab to the list of known portals
 		[HarmonyPatch(typeof(Game), nameof(Game.ConnectPortals))]
 		public static class Game_ConnectPortals_Patch
@@ -272,74 +411,5 @@ namespace MarsarahTweaks.Patches.Features
 				}
 			}
 		}
-
-		/*[HarmonyPatch(typeof(TeleportWorld), "UpdatePortal")]
-		public static class TeleportWorld_UpdatePortal_Patch
-		{
-			private static void Prefix(TeleportWorld __instance)
-			{
-				if (!__instance.name.Contains("pocket_portal")) return;
-
-				if (__instance.m_connected == null)
-				{
-					MarsarahTweaks.LogError($"[PocketPortal] m_connected is null for {__instance.name}");
-				}
-				else if (__instance.m_connected.m_effectPrefabs == null)
-				{
-					MarsarahTweaks.LogError($"[PocketPortal] m_effectPrefabs is null for {__instance.name}");
-				}
-				else if (__instance.m_connected.m_effectPrefabs.Length == 0)
-				{
-					MarsarahTweaks.LogError($"[PocketPortal] m_effectPrefabs is empty for {__instance.name}");
-				}
-				else if (__instance.m_connected.m_effectPrefabs[0].m_prefab == null)
-				{
-					//__instance.m_connected.m_effectPrefabs[0].m_prefab = CustomFxPrefab;
-
-					//MarsarahTweaks.LogWarn($"[PocketPortal] 🔄 Reassigned EffectList on Load for for {__instance.name}");
-
-					MarsarahTweaks.LogError($"[PocketPortal] prefab is null for {__instance.name}");
-				}
-				else 
-				{
-					MarsarahTweaks.LogInfo($"[PocketPortal] ✅ Effect prefab ready: {__instance.m_connected.m_effectPrefabs[0].m_prefab.name}");
-				}
-
-				if (ZNetScene.instance.GetPrefab("fx_pocket_portal_connected") == null)
-				{
-					MarsarahTweaks.LogError("[PocketPortal] ❌ New effect prefab is missing!");
-				}
-				else
-				{
-					MarsarahTweaks.LogInfo("[PocketPortal] ✅ New effect prefab is OK.");
-				}
-			}
-		}*/
-
-		/*[HarmonyPatch(typeof(EffectList), nameof(EffectList.Create))]
-		public static class EffectList_Create_Patch
-		{
-			private static void Prefix(EffectList __instance)
-			{
-				if (__instance.m_effectPrefabs == null || __instance.m_effectPrefabs.Length == 0) return;
-
-				// Fix null prefabs in the EffectList
-				foreach (var effectData in __instance.m_effectPrefabs)
-				{
-					if (effectData.m_prefab == null)
-					{
-						GameObject newFXPrefab = ZNetScene.instance.GetPrefab("fx_pocket_portal_connected");
-						if (newFXPrefab == null)
-						{
-							MarsarahTweaks.LogWarn("[PocketPortal] Could not retrieve fx_pocket_portal_connected from ZNetScene. Using static variable.");
-							newFXPrefab = CustomFxPrefab;
-						}
-
-						effectData.m_prefab = newFXPrefab;
-						MarsarahTweaks.LogInfo("[PocketPortal] 🔄 Fixed null prefab in EffectList");
-					}
-				}
-			}
-		}*/
 	}
 }

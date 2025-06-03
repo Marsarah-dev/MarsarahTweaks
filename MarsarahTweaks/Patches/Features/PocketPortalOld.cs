@@ -48,7 +48,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (!initialized)
 				{
 					initialized = true;
-					RegisterPocketPortal(__instance);
+					CreatePocketPortal(__instance);
 				}
 
 				FieldInfo namedPrefabsField = typeof(ZNetScene).GetField("m_namedPrefabs", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -74,11 +74,11 @@ namespace MarsarahTweaks.Patches.Features
 
 		/*public static void Init()
 		{
-			//PrefabManager.OnVanillaPrefabsAvailable += RegisterPocketPortal;
-			PrefabManager.OnPrefabsRegistered += RegisterPocketPortal;
+			//PrefabManager.OnVanillaPrefabsAvailable += CreatePocketPortal;
+			PrefabManager.OnPrefabsRegistered += CreatePocketPortal;
 		}*/
 
-		/*private static void RegisterPocketPortal(ZNetScene znetScene)
+		/*private static void CreatePocketPortal(ZNetScene znetScene)
 		{
 			try
 			{
@@ -874,11 +874,11 @@ namespace MarsarahTweaks.Patches.Features
 
 		//public static void Init()
 		//{
-		//	//PrefabManager.OnVanillaPrefabsAvailable += RegisterPocketPortal;
-		//	PrefabManager.OnPrefabsRegistered += RegisterPocketPortal;
+		//	//PrefabManager.OnVanillaPrefabsAvailable += CreatePocketPortal;
+		//	PrefabManager.OnPrefabsRegistered += CreatePocketPortal;
 		//}
 
-		//private static void RegisterPocketPortal()
+		//private static void CreatePocketPortal()
 		//{
 		//	try
 		//	{
