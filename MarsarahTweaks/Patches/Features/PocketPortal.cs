@@ -35,6 +35,8 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static void RegisterPocketPortal(ZNetScene znetScene)
 		{
+			RegisterPortalEffects();
+
 			if (PrefabManager.Instance.GetPrefab("pocket_portal") != null)
 			{
 				return;
@@ -66,9 +68,6 @@ namespace MarsarahTweaks.Patches.Features
 			znet.m_type = ZDO.ObjectType.Solid;
 			znet.m_syncInitialScale = false;
 
-			/*if (!PocketPortalPrefab.GetComponent<WearNTear>()) PocketPortalPrefab.AddComponent<WearNTear>();
-			if (!PocketPortalPrefab.GetComponent<Piece>()) PocketPortalPrefab.AddComponent<Piece>();
-			if (!PocketPortalPrefab.GetComponent<TeleportWorld>()) PocketPortalPrefab.AddComponent<TeleportWorld>();*/
 			TeleportWorld tp = PocketPortalPrefab.GetComponent<TeleportWorld>();
 
 			// Replace red _target_found with blue one from "portal"
@@ -85,15 +84,17 @@ namespace MarsarahTweaks.Patches.Features
 				GameObject effectPocketPortal = UnityEngine.Object.Instantiate(newEffect.gameObject, PocketPortalPrefab.transform);
 				effectPocketPortal.name = "_target_found";
 
+				Vector3 newPosition = effectPocketPortal.transform.localPosition;
+				newPosition.y -= 0.3f; // Negative Y value moves it downward
+				effectPocketPortal.transform.localPosition = newPosition;
+
 				if (tp != null)
 				{
 					tp.m_target_found = effectPocketPortal.GetComponent<EffectFade>();
 					tp.m_colorTargetfound = new Color(1f, 4f, 6f, 1f); // glowing cyan-blue
 					MarsarahTweaks.LogInfo("[PocketPortal] 🔄 Replaced target_found_red with target_found and applied custom color.");
 
-					tp.m_connected = vanillaPortalPrefab.GetComponent<TeleportWorld>().m_connected;
-					//tp.m_connected = new EffectList(); // disables red flash
-					MarsarahTweaks.LogInfo("[PocketPortal] 🔇 Disabled fx_portal_connected on link.");
+					ReplaceConnectedEffect(tp);
 				}
 				else
 				{
@@ -104,79 +105,6 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				MarsarahTweaks.LogWarn("[PocketPortal] Could not find _target_found in vanilla portal.");
 			}
-
-			// Change effects list
-			/*GameObject originalFx = PrefabManager.Instance.GetPrefab("fx_portal_connected");
-			if (originalFx == null)
-			{
-				MarsarahTweaks.LogError("[PocketPortal] Could not find fx_portal_connected prefab!");
-				return;
-			}
-
-			//originalFx.SetActive(false);
-			CustomFxPrefab = UnityEngine.Object.Instantiate(originalFx);
-			//originalFx.SetActive(true);
-			CustomFxPrefab.name = "fx_pocket_portal_connected";
-			CustomFxPrefab.SetActive(false);
-
-			// Modify particle system color
-			foreach (var ps in CustomFxPrefab.GetComponentsInChildren<ParticleSystem>())
-			{
-				var main = ps.main;
-				main.startColor = new ParticleSystem.MinMaxGradient(new Color(0f, 1f, 3f)); // cyan-ish
-			}
-
-			UnityEngine.Object.DontDestroyOnLoad(CustomFxPrefab);
-
-			CustomFxPrefab.SetActive(true);
-
-			// Add directly to ZNetScene
-			PrefabManager.Instance.RegisterToZNetScene(CustomFxPrefab);
-
-			List<GameObject> prefabs = ZNetScene.instance.m_prefabs;
-			if (!prefabs.Contains(CustomFxPrefab))
-			{
-				prefabs.Add(CustomFxPrefab);
-				MarsarahTweaks.LogInfo("[PocketPortal] Added fx_pocket_portal_connected to ZNetScene.m_prefabs manually");
-			}
-
-			var namedPrefabsField = typeof(ZNetScene).GetField("m_namedPrefabs", BindingFlags.NonPublic | BindingFlags.Instance);
-			var namedPrefabs = (Dictionary<int, GameObject>)namedPrefabsField.GetValue(ZNetScene.instance);
-
-			int hash = CustomFxPrefab.name.GetStableHashCode();
-			if (!namedPrefabs.ContainsKey(hash))
-			{
-				namedPrefabs.Add(hash, CustomFxPrefab);
-				MarsarahTweaks.LogInfo("[PocketPortal] Manually added fx_pocket_portal_connected to ZNetScene.m_namedPrefabs");
-			}
-
-			EffectList newEffectList = new EffectList();
-			EffectData effectData = new EffectData()
-			{
-				m_prefab = CustomFxPrefab,
-				m_enabled = true,
-				m_variant = -1,
-				m_attach = false,
-				m_follow = false,
-				m_inheritParentRotation = false,
-				m_inheritParentScale = false,
-				m_multiplyParentVisualScale = false,
-				m_randomRotation = false,
-				m_scale = false,
-				m_childTransform = ""
-			};
-
-			newEffectList.m_effectPrefabs = new EffectData[] { effectData };
-
-			if (tp != null)
-			{
-				tp.m_connected = newEffectList;
-				MarsarahTweaks.LogInfo("[PocketPortal] Successfully assigned custom effect list to portal");
-			}
-			else
-			{
-				MarsarahTweaks.LogWarn("[PocketPortal] TeleportWorld not found while assigning new target_found VFX.");
-			}*/
 
 			Piece piece = PocketPortalPrefab.GetComponent<Piece>();
 			piece.m_name = "Pocket Portal";
@@ -210,6 +138,94 @@ namespace MarsarahTweaks.Patches.Features
 			MarsarahTweaks.LogInfo("[PocketPortal] ✅ Pocket Portal registered and ready.");
 		}
 
+		// Clone and register the fx_portal_connected effect (unchanged)
+		private static void RegisterPortalEffects()
+		{
+			GameObject originalFx = PrefabManager.Instance.GetPrefab("fx_portal_connected");
+			if (originalFx == null)
+			{
+				MarsarahTweaks.LogError("[PocketPortal] Could not find fx_portal_connected prefab!");
+				return;
+			}
+
+			GameObject fxClone = PrefabManager.Instance.CreateClonedPrefab("fx_pocket_portal_connected", originalFx);
+
+			if (fxClone == null)
+			{
+				MarsarahTweaks.LogError("[PocketPortal] Failed to clone effect prefab!");
+				return;
+			}
+
+			foreach (var ps in fxClone.GetComponentsInChildren<ParticleSystem>())
+			{
+				var main = ps.main;
+				main.startColor = new ParticleSystem.MinMaxGradient(
+					new Color(0f, 1f, 3f) // Cyan-blue
+				);
+				MarsarahTweaks.LogInfo($"[PocketPortal] Modified particle system: {ps.name}");
+			}
+
+			var blueFlames = fxClone.transform.Find("blue flames")?.GetComponent<ParticleSystem>();
+			if (blueFlames != null)
+			{
+				var renderer = blueFlames.GetComponent<ParticleSystemRenderer>();
+				if (renderer != null && renderer.material != null)
+				{
+					renderer.material.color = new Color(0f, 1f, 3f); // Apply tint directly
+					MarsarahTweaks.LogInfo("[PocketPortal] Set material color on 'blue flames' renderer.");
+				}
+			}
+			else
+			{
+				MarsarahTweaks.LogWarn("[PocketPortal] Could not find 'blue flames' particle system.");
+			}
+
+			var customFx = new CustomPrefab(fxClone, fixReference: true);
+			PrefabManager.Instance.AddPrefab(customFx);
+			PrefabManager.Instance.RegisterToZNetScene(fxClone);
+
+			if (ZNetScene.instance.GetPrefab("fx_pocket_portal_connected") == null)
+			{
+				MarsarahTweaks.LogError("[PocketPortal] ❌ Failed to register effect prefab!");
+			}
+			else
+			{
+				MarsarahTweaks.LogInfo("[PocketPortal] ✅ Successfully registered effect prefab");
+			}
+		}
+
+		// Swap the effectlist of the portal
+		private static void ReplaceConnectedEffect(TeleportWorld tp)
+		{
+			if (tp == null)
+			{
+				MarsarahTweaks.LogWarn("[PocketPortal] ReplaceConnectedEffect: TeleportWorld was null.");
+				return;
+			}
+
+			GameObject customFx = PrefabManager.Instance.GetPrefab("fx_pocket_portal_connected");
+			if (customFx == null)
+			{
+				MarsarahTweaks.LogError("[PocketPortal] ReplaceConnectedEffect: Custom effect prefab not found.");
+				return;
+			}
+
+			tp.m_connected = new EffectList
+			{
+				m_effectPrefabs = new[]
+				{
+					new EffectData
+					{
+						m_prefab = customFx,
+						m_enabled = true
+					}
+				}
+			};
+
+			MarsarahTweaks.LogInfo("[PocketPortal] 🎨 Custom portal connect effect assigned.");
+		}
+
+		// Adds the pocket_portal prefab to the list of known portals
 		[HarmonyPatch(typeof(Game), nameof(Game.ConnectPortals))]
 		public static class Game_ConnectPortals_Patch
 		{
@@ -287,6 +303,15 @@ namespace MarsarahTweaks.Patches.Features
 				else 
 				{
 					MarsarahTweaks.LogInfo($"[PocketPortal] ✅ Effect prefab ready: {__instance.m_connected.m_effectPrefabs[0].m_prefab.name}");
+				}
+
+				if (ZNetScene.instance.GetPrefab("fx_pocket_portal_connected") == null)
+				{
+					MarsarahTweaks.LogError("[PocketPortal] ❌ New effect prefab is missing!");
+				}
+				else
+				{
+					MarsarahTweaks.LogInfo("[PocketPortal] ✅ New effect prefab is OK.");
 				}
 			}
 		}*/
