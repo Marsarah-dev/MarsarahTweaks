@@ -20,6 +20,7 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		private static bool initialized = false;
 		private static GameObject PocketPortalPrefab;
+		private static GameObject PocketPortalEffectsPrefab;
 		private static GameObject PortalCorePrefab;
 
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
@@ -31,11 +32,204 @@ namespace MarsarahTweaks.Patches.Features
 					return;
 
 				initialized = true;
-				CreatePocketPortal(__instance);
+
+				Init();
+
+				//CreatePocketPortal(__instance);
 			}
 		}
 
-		private static void CreatePocketPortal(ZNetScene znetScene)
+		private static void Init() 
+		{
+			/*
+			* Create Pocket Portal
+			* Create Portal Core
+			* Create Portal Core Recipe
+			*/
+
+			CreatePocketPortal();
+		}
+
+		private static void CreatePocketPortal()
+		{
+			if (ZNetScene.instance.GetPrefab("pocket_portal") != null) return;
+
+			// Clone Pocket Portal
+			ClonePocketPortalPrefab();
+			if (PocketPortalPrefab == null)	return;
+
+			// Validate pocket portal prefab
+			if (!ValidatePocketPortalPrefab()) return;
+
+			// Apply portal-specific data
+			SetupPocketPortalDefaults();
+
+			// Register new portal effects
+			RegisterPocketPortalEffects();
+
+			// Apply new portal effects
+			ApplyPocketPortalVisuals();
+
+			// Add pocket portal to ZNetScene
+			MPrefabManager.RegisterToZNetScene(PocketPortalPrefab);
+
+			var pieceConfig = new PieceConfig
+			{
+				PieceTable = "Hammer",
+				Category = "Misc",
+				Requirements = new[]
+				{
+					new RequirementConfig("PortalCore", 1),
+				}
+			};
+
+			var customPiece = new CustomPiece(PocketPortalPrefab, fixReference: true, pieceConfig);
+			PieceManager.Instance.AddPiece(customPiece);
+
+			PocketPortalPrefab.SetActive(true);
+			MarsarahTweaks.LogInfo("[PocketPortal] Pocket Portal registered and ready.");
+		}
+
+		private static void ClonePocketPortalPrefab()
+		{
+			PocketPortalPrefab = MPrefabManager.ClonePrefab("portal_wood", "pocket_portal");
+			if (PocketPortalPrefab == null)
+			{
+				MarsarahTweaks.LogError("[PocketPortal] Cloning of portal_wood failed.");
+			}
+		}
+
+		private static bool ValidatePocketPortalPrefab()
+		{
+			bool pocketPortalValidated = MPrefabManager.ValidatePrefab(PocketPortalPrefab, hasNetView: true, hasTeleport: true, hasPiece: true, hasWearNTear: true);
+			if (!pocketPortalValidated)
+			{
+				MarsarahTweaks.LogError($"[PocketPortal] Prefab validation failed.");
+				return false;
+			}
+			return true;
+		}
+
+		private static void SetupPocketPortalDefaults()
+		{
+			ZNetView znet = PocketPortalPrefab.GetComponent<ZNetView>();
+			if (znet != null)
+			{
+				znet.m_persistent = true;
+				znet.m_distant = false;
+				znet.m_type = ZDO.ObjectType.Solid;
+				znet.m_syncInitialScale = false;
+			}
+
+			Piece piece = PocketPortalPrefab.GetComponent<Piece>();
+			if (piece != null)
+			{
+				piece.m_name = "Pocket Portal";
+				piece.m_description = "A portal meant to be easy to carry and make exploration more convenient";
+				piece.m_craftingStation = null;
+			}			
+		}
+
+		private static void RegisterPocketPortalEffects()
+		{
+			PocketPortalEffectsPrefab = MPrefabManager.ClonePrefab("fx_portal_connected", "fx_pocket_portal_connected");
+			if (PocketPortalEffectsPrefab == null)
+			{
+				MarsarahTweaks.LogError("[PocketPortal] Failed to clone portal effect prefab!");
+				return;
+			}
+
+			foreach (var ps in PocketPortalEffectsPrefab.GetComponentsInChildren<ParticleSystem>())
+			{
+				var main = ps.main;
+				main.startColor = new ParticleSystem.MinMaxGradient(
+					new Color(0f, 1f, 3f) // Cyan-blue
+				);
+			}
+
+			var blueFlames = PocketPortalEffectsPrefab.transform.Find("blue flames")?.GetComponent<ParticleSystem>();
+			if (blueFlames != null)
+			{
+				var renderer = blueFlames.GetComponent<ParticleSystemRenderer>();
+				if (renderer != null && renderer.material != null)
+				{
+					renderer.material.color = new Color(0f, 1f, 3f);
+				}
+			}
+			else
+			{
+				MarsarahTweaks.LogWarn("[PocketPortal] Could not find 'blue flames' particle system.");
+			}
+
+			MPrefabManager.RegisterToZNetScene(PocketPortalEffectsPrefab);
+		}
+
+		private static void ApplyPocketPortalVisuals()
+		{
+			GameObject vanillaUnusedPortalPrefab = ZNetScene.instance.GetPrefab("portal");
+			if (vanillaUnusedPortalPrefab == null)
+			{
+				MarsarahTweaks.LogError("[PocketPortal] Unused portal prefab not found");
+				return;
+			}
+
+			// Destroy old target_found effect from the pocket portal
+			Transform oldEffect = PocketPortalPrefab.transform.Find("_target_found_red");
+			if (oldEffect != null)
+			{
+				UnityEngine.Object.DestroyImmediate(oldEffect.gameObject);
+			}
+
+			// Add new effect taken from the unused portal
+			Transform newEffect = vanillaUnusedPortalPrefab.transform.Find("_target_found");
+			if (newEffect != null)
+			{
+				// Create the new effect
+				GameObject effectPocketPortal = UnityEngine.Object.Instantiate(newEffect.gameObject, PocketPortalPrefab.transform);
+				effectPocketPortal.name = "_target_found_blue";
+
+				// Change its position relative to the portal
+				Vector3 newPosition = effectPocketPortal.transform.localPosition;
+				newPosition.y -= 0.3f;
+				effectPocketPortal.transform.localPosition = newPosition;
+
+				// Apply new effect to the TeleportWorld component
+				TeleportWorld tp = PocketPortalPrefab.GetComponent<TeleportWorld>();
+				if (tp != null)
+				{
+					tp.m_target_found = effectPocketPortal.GetComponent<EffectFade>();
+					tp.m_colorTargetfound = new Color(1f, 4f, 6f, 1f); // glowing cyan-blue
+
+					if (PocketPortalEffectsPrefab == null)
+					{
+						MarsarahTweaks.LogError("[PocketPortal] Custom effect prefab not found.");
+						return;
+					}
+
+					tp.m_connected = new EffectList
+					{
+						m_effectPrefabs = new[]
+						{
+							new EffectData
+							{
+								m_prefab = PocketPortalEffectsPrefab,
+								m_enabled = true
+							}
+						}
+					};
+				}
+				else
+				{
+					MarsarahTweaks.LogWarn("[PocketPortal] TeleportWorld not found while assigning new target_found VFX.");
+				}
+			}
+			else
+			{
+				MarsarahTweaks.LogWarn("[PocketPortal] Could not find _target_found in vanilla portal.");
+			}
+		}
+
+		/*private static void CreatePocketPortal(ZNetScene znetScene)
 		{
 			ModifyPortalEffects();
 			CreatePortalCore();
@@ -98,7 +292,7 @@ namespace MarsarahTweaks.Patches.Features
 					tp.m_colorTargetfound = new Color(1f, 4f, 6f, 1f); // glowing cyan-blue
 					MarsarahTweaks.LogInfo("[PocketPortal] 🔄 Replaced target_found_red with target_found and applied custom color.");
 
-					ReplaceConnectedEffect(tp);
+					ReplaceConnectedEffect(tp); // This needs the new effect added to prefabs before used
 				}
 				else
 				{
@@ -147,10 +341,41 @@ namespace MarsarahTweaks.Patches.Features
 
 			PocketPortalPrefab.SetActive(true);
 			MarsarahTweaks.LogInfo("[PocketPortal] ✅ Pocket Portal registered and ready.");
-		}
+		}*/
 
-		// Clone and register the fx_portal_connected effect (unchanged)
-		private static void ModifyPortalEffects()
+		// Swap the effectlist of the portal
+		/*private static void ReplaceConnectedEffect(TeleportWorld tp)
+		{
+			if (tp == null)
+			{
+				MarsarahTweaks.LogWarn("[PocketPortal] ReplaceConnectedEffect: TeleportWorld was null.");
+				return;
+			}
+
+			GameObject customFx = PrefabManager.Instance.GetPrefab("fx_pocket_portal_connected");
+			if (customFx == null)
+			{
+				MarsarahTweaks.LogError("[PocketPortal] ReplaceConnectedEffect: Custom effect prefab not found.");
+				return;
+			}
+
+			tp.m_connected = new EffectList
+			{
+				m_effectPrefabs = new[]
+				{
+					new EffectData
+					{
+						m_prefab = customFx,
+						m_enabled = true
+					}
+				}
+			};
+
+			MarsarahTweaks.LogInfo("[PocketPortal] 🎨 Custom portal connect effect assigned.");
+		}*/
+
+		// Clone and register the fx_portal_connected effect
+		/*private static void ModifyPortalEffects()
 		{
 			GameObject originalFx = PrefabManager.Instance.GetPrefab("fx_portal_connected");
 			if (originalFx == null)
@@ -203,41 +428,10 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				MarsarahTweaks.LogInfo("[PocketPortal] ✅ Successfully registered effect prefab");
 			}
-		}
-
-		// Swap the effectlist of the portal
-		private static void ReplaceConnectedEffect(TeleportWorld tp)
-		{
-			if (tp == null)
-			{
-				MarsarahTweaks.LogWarn("[PocketPortal] ReplaceConnectedEffect: TeleportWorld was null.");
-				return;
-			}
-
-			GameObject customFx = PrefabManager.Instance.GetPrefab("fx_pocket_portal_connected");
-			if (customFx == null)
-			{
-				MarsarahTweaks.LogError("[PocketPortal] ReplaceConnectedEffect: Custom effect prefab not found.");
-				return;
-			}
-
-			tp.m_connected = new EffectList
-			{
-				m_effectPrefabs = new[]
-				{
-					new EffectData
-					{
-						m_prefab = customFx,
-						m_enabled = true
-					}
-				}
-			};
-
-			MarsarahTweaks.LogInfo("[PocketPortal] 🎨 Custom portal connect effect assigned.");
-		}
+		}*/
 
 		// Clone and register the Portal Core
-		private static void CreatePortalCore()
+		/*private static void CreatePortalCore()
 		{
 			GameObject surtlingCore = PrefabManager.Instance.GetPrefab("SurtlingCore");
 			if (surtlingCore == null)
@@ -376,10 +570,10 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				MarsarahTweaks.LogInfo("[PocketPortal] ✅ Successfully registered PortalCore prefab");
 			}
-		}
+		}*/
 
 		// Create the Portal Core recipe
-		private static void CreatePortalCoreRecipe()
+		/*private static void CreatePortalCoreRecipe()
 		{
 			var recipeConfig = new RecipeConfig
 			{
@@ -404,10 +598,10 @@ namespace MarsarahTweaks.Patches.Features
 			}
 
 			ItemManager.Instance.AddRecipe(customRecipe);
-		}
+		}*/
 
 		// Adds the pocket_portal prefab to the list of known portals
-		[HarmonyPatch(typeof(Game), nameof(Game.ConnectPortals))]
+		/*[HarmonyPatch(typeof(Game), nameof(Game.ConnectPortals))]
 		public static class Game_ConnectPortals_Patch
 		{
 			static void Prefix(Game __instance)
@@ -452,9 +646,10 @@ namespace MarsarahTweaks.Patches.Features
 					MarsarahTweaks.LogInfo($"[PocketPortal] Auto-assigned missing tagauthor: {authorId}");
 				}
 			}
-		}
+		}*/
 
-		[HarmonyPatch(typeof(Player), nameof(Player.TryPlacePiece))]
+		// Limit Pocket Portals per player
+		/*[HarmonyPatch(typeof(Player), nameof(Player.TryPlacePiece))]
 		public static class PocketPortal_LimitPlacement
 		{
 			static bool Prefix(Player __instance, Piece piece, ref bool __result)
@@ -495,7 +690,7 @@ namespace MarsarahTweaks.Patches.Features
 			}
 
 			return false;
-		}
+		}*/
 
 		/*[HarmonyPatch(typeof(Player), "Update")]
 		public class Player_Update_DebugPortalCount

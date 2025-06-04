@@ -3,6 +3,7 @@
  * DONE, NOT RELEASED
  * 
  * A. Fixes
+ *    - Fixed an issue with the Player Logout Announce not working in certain situations
  *    
  * B. New UI
  * 
