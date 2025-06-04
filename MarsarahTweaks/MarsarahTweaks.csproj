@@ -172,8 +172,6 @@
     <Compile Include="Patches\WeaponStaminaChanges.cs" />
     <Compile Include="Patches\Features\WeatherChanges.cs" />
     <Compile Include="Patches\QOL\WispRadiusChanges.cs" />
-    <Compile Include="Managers\PieceManager.cs" />
-    <Compile Include="Managers\PrefabManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

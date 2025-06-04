@@ -49,12 +49,12 @@ namespace MarsarahTweaks.Patches.UI
 			}
 		}
 
-		[HarmonyPatch(typeof(ZNet), "Awake")]
+		[HarmonyPatch(typeof(ZNetScene), "Awake")]
 		public static class ZNet_Awake_LogoutAnnounce_Patch
 		{
 			public static void Postfix()
 			{
-				PlayerLogoutAnnounce.TryRegisterRPC();
+				TryRegisterRPC();
 			}
 		}
 
@@ -64,6 +64,7 @@ namespace MarsarahTweaks.Patches.UI
 
 			ZRoutedRpc.instance.Register<string>(LogoutRPC, OnPlayerLogoutRPC);
 			_registered = true;
+			//MarsarahTweaks.LogInfo("Registered LogoutAnnounce RPC", true);
 		}
 
 		private static void OnPlayerLogoutRPC(long sender, string playerName)
@@ -72,18 +73,6 @@ namespace MarsarahTweaks.Patches.UI
 
 			MessageHud.instance?.ShowMessage(MessageHud.MessageType.TopLeft, $"{playerName} logged out.");
 			Chat.instance?.AddString(title: "[Server]", text: $"{playerName} logged out.", type: Talker.Type.Shout);
-
-			/*if (Chat.instance != null)
-			{
-				var chatFocusedField = typeof(Chat).GetField("m_focused", BindingFlags.NonPublic | BindingFlags.Instance);
-				if (chatFocusedField != null && Chat.instance != null)
-				{
-					chatFocusedField.SetValue(Chat.instance, true);
-				}
-
-				//Chat.instance.m_chatWindow.SetActive(true);  // Activate the chat window GameObject
-				//Chat.instance.m_input.ActivateInputField();  // Focus the chat input field so it's ready for typing
-			}*/
 		}
 	}
 }

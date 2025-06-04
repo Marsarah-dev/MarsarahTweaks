@@ -2,6 +2,7 @@
 using Jotunn.Configs;
 using Jotunn.Entities;
 using Jotunn.Managers;
+using MarsarahTweaks.Managers;
 using Splatform;
 using System;
 using System.Collections;
@@ -137,6 +138,13 @@ namespace MarsarahTweaks.Patches.Features
 			var customPiece = new CustomPiece(PocketPortalPrefab, fixReference: true, pieceConfig);
 			PieceManager.Instance.AddPiece(customPiece);
 
+			// Hide from build menu if disabled
+			if (!ConfigManager.PocketPortalEnabled.Value)
+			{
+				PocketPortalPrefab.GetComponent<Piece>().m_enabled = false;
+				MarsarahTweaks.LogInfo("[PocketPortal] 🔒 Portal hidden from build menu due to config.");
+			}
+
 			PocketPortalPrefab.SetActive(true);
 			MarsarahTweaks.LogInfo("[PocketPortal] ✅ Pocket Portal registered and ready.");
 		}
@@ -253,22 +261,12 @@ namespace MarsarahTweaks.Patches.Features
 				Renderer coreRenderer = coreTransform.GetComponent<Renderer>();
 				if (coreRenderer != null)
 				{
-					//MarsarahTweaks.LogInfo($"Core found: {coreTransform != null}, Renderer: {coreRenderer != null}");
-					//MarsarahTweaks.LogInfo($"R: {coreMaterial.GetColor("_EmissionColor").r} - G: {coreMaterial.GetColor("_EmissionColor").g} - B: {coreMaterial.GetColor("_EmissionColor").b} - A: {coreMaterial.GetColor("_EmissionColor").a}");
-					// R: 1.429 - G: 0.8574001 - B: 0 - A: 1
-
 					// Create a new material instance to avoid affecting other objects
 					Material coreMaterial = new Material(coreRenderer.sharedMaterial);
-
-					//coreMaterial.SetColor("_Color", new Color(0.1f, 0.3f, 1f)); // Deep blue base
 
 					// Enable emission and set color (bright cyan-blue)
 					coreMaterial.EnableKeyword("_EMISSION");					
 					coreMaterial.SetColor("_EmissionColor", new Color(0f, 1f, 5f) * 3f); // HDR intensity
-
-					// 3. Force glow intensity (Valheim-specific)
-					//coreMaterial.SetFloat("_Glow", 1f); // Full glow intensity
-					//coreMaterial.SetFloat("_GlowStrength", 3f); // Additional boost
 
 					// Apply the material
 					coreRenderer.sharedMaterial = coreMaterial;
@@ -294,7 +292,7 @@ namespace MarsarahTweaks.Patches.Features
 				{
 					// Set color (cyan-blue) and intensity
 					pointLight.color = new Color(0f, 0.5f, 1f); // RGB (0-1)
-					pointLight.intensity = 3f; // Brightness multiplier
+					pointLight.intensity = 2.5f; // Brightness multiplier
 					pointLight.range = 3f; // Light radius
 
 					MarsarahTweaks.LogInfo("[PortalCore] Modified Point Light color");
@@ -330,12 +328,18 @@ namespace MarsarahTweaks.Patches.Features
 			for (int i = 0; i < pixels.Length; i++)
 			{
 				Color c = pixels[i];
-				pixels[i] = new Color(
-					c.r * 0.2f,    // Reduce red
-					c.g * 1.2f,	   // Boost green
-					c.b * 2f,      // Strong blue boost
-					c.a            // Preserve alpha
-				);
+
+				// Detect red-glow pixels
+				if (c.r > 0.5f && c.r > c.g + 0.1f && c.r > c.b + 0.1f)
+				{
+					// Convert red glow to cyan
+					pixels[i] = new Color(0.0f, c.r * 0.8f, c.r * 1.1f, c.a); // From red -> cyan (G & B dominate)
+				}
+				else
+				{
+					// Leave other pixels mostly intact
+					pixels[i] = c;
+				}
 			}
 			croppedTex.SetPixels(pixels);
 			croppedTex.Apply();
@@ -351,10 +355,7 @@ namespace MarsarahTweaks.Patches.Features
 				originalIcon.pixelsPerUnit
 			);
 
-			// Assign to the item
 			itemDrop.m_itemData.m_shared.m_icons = new Sprite[] { newIcon };
-
-
 			itemDrop.m_itemData.m_shared.m_name = "Portal Core";
 			itemDrop.m_itemData.m_shared.m_description = "The core of an easy to carry portal";
 			itemDrop.m_itemData.m_shared.m_maxStackSize = 1;
@@ -395,6 +396,13 @@ namespace MarsarahTweaks.Patches.Features
 			};
 
 			var customRecipe = new CustomRecipe(recipeConfig);
+
+			if (!ConfigManager.PocketPortalEnabled.Value)
+			{
+				customRecipe.Recipe.m_enabled = false;
+				MarsarahTweaks.LogInfo("[PortalCore] 🔒 Recipe hidden from workbench due to config.");
+			}
+
 			ItemManager.Instance.AddRecipe(customRecipe);
 		}
 
@@ -446,7 +454,50 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		}
 
-		[HarmonyPatch(typeof(Player), "Update")]
+		[HarmonyPatch(typeof(Player), nameof(Player.TryPlacePiece))]
+		public static class PocketPortal_LimitPlacement
+		{
+			static bool Prefix(Player __instance, Piece piece, ref bool __result)
+			{
+				if (piece.name == PocketPortalPrefab.name && PlayerHasPocketPortal())
+				{
+					__instance.Message(MessageHud.MessageType.Center, "You can only place one Pocket Portal.");
+					__result = false; // Prevent further execution
+					return false;     // Skip original method
+				}
+
+				return true; // Let placement continue normally
+			}
+		}
+
+		public static bool PlayerHasPocketPortal()
+		{
+			if (ZNet.instance == null || ZDOMan.instance == null || Player.m_localPlayer == null)
+				return false;
+
+			string localPlayerName = Player.m_localPlayer.GetPlayerName();
+			int pocketPortalHash = PocketPortalPrefab.name.GetStableHashCode();
+
+			var zdoDictField = typeof(ZDOMan).GetField("m_objectsByID", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (zdoDictField == null)
+				return false;
+
+			Dictionary<ZDOID, ZDO> zdoDict = zdoDictField.GetValue(ZDOMan.instance) as Dictionary<ZDOID, ZDO>;
+			if (zdoDict == null)
+				return false;
+
+			foreach (var zdo in zdoDict.Values)
+			{
+				if (zdo == null) continue;
+				if (zdo.GetPrefab() != pocketPortalHash) continue;
+				if (zdo.GetString(ZDOVars.s_creatorName) == localPlayerName)
+					return true;
+			}
+
+			return false;
+		}
+
+		/*[HarmonyPatch(typeof(Player), "Update")]
 		public class Player_Update_DebugPortalCount
 		{
 			static void Postfix(Player __instance)
@@ -468,11 +519,11 @@ namespace MarsarahTweaks.Patches.Features
 				return;
 			}
 
-			long localPlayerUID = ZNet.GetUID();
+			//long localPlayerUID = ZNet.GetUID();
+			string localPlayerName = Player.m_localPlayer.GetPlayerName();
 			//int pocketPortalHash = 853122569;
 			int pocketPortalHash = PocketPortalPrefab.name.GetStableHashCode();
 
-			// Use reflection to get private m_objectsByID
 			var zdoDictField = typeof(ZDOMan).GetField("m_objectsByID", BindingFlags.NonPublic | BindingFlags.Instance);
 			if (zdoDictField == null)
 			{
@@ -496,11 +547,11 @@ namespace MarsarahTweaks.Patches.Features
 				if (zdo.GetPrefab() != pocketPortalHash)
 					continue;
 
-				if (zdo.GetOwner() == localPlayerUID)
+				if (zdo.GetString(ZDOVars.s_creatorName) == localPlayerName)
 					count++;
 			}
 
 			MarsarahTweaks.LogInfo($"Pocket Portals built by this player: {count}");
-		}
+		}*/
 	}
 }
