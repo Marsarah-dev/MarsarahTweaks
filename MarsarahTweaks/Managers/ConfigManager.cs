@@ -89,7 +89,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("24 - Stop Running Away", "Boars and Necks won't flee when alerted. (Toggling mid-game only affects new creatures)");
 			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("25 - Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Tick, Dverger, Seeker Soldier, Charred Warlock");
 			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("26 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000 (Toggling mid-game requires CLIENT relog or reloading area)");
-			public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("27 - Pocket Portal", "Adds a new portal build piece that uses a special material that only takes one inventory slot which can be crafted at a workbench. Can only build one per player");
+			public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("27 - Pocket Portal", "Adds a new portal that is built from a Portal Core that only takes one inventory slot which can be crafted at a Workbench. Can only build one Pocket Portal player. (Toggling mid-game requires reloading the build/crafting menu)");
 			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("28 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("01 - Lighter Metal Weight", "All metal ore and bars weight decreased to 8. (Toggling mid-game requires CLIENT relog or reloading area)");
@@ -333,66 +333,54 @@ namespace MarsarahTweaks.Managers
 				switch (configName)
 				{
 					case var name when name == Configs.DoubleBronzeCrafting.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						DoubleBronzeCrafting.UpdateDoubleBronzeCrafting(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.GearRecipeAmountsModifications.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, true, false);
 						break;
 
 					case var name when name == Configs.GearRecipeMaterialsModifications.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						GearRecipeChanges.UpdateGearRecipes(ObjectDB.instance, false, true);
 						break;
 
 					case var name when name == Configs.BuildPieceAmountsModifications.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, true, false);
 						break;
 
 					case var name when name == Configs.BuildPieceMaterialsModifications.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, false, true);
 						break;
 
 					case var name when name == Configs.FoodAndMeadModifications.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						FoodAndMeadChanges.UpdateFoodAndMead(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.LinenCapeModifications.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						GearRecipeChanges.UpdateLinenCapeRecipe(ObjectDB.instance, true);
 						EarlyLinenCape.UpdateLinenCapeStats(true);
 						break;
 
 					case var name when name == Configs.GearSpeedModifications.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						GearSpeedChanges.UpdateGearSpeed(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.ForsakenPowersModifications.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						ForsakenPowersChanges.UpdateForsakenPowers(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.CharacterSpeedModifications.Name:
 						if (Player.m_localPlayer != null)
 						{
-							//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 							CharacterSpeedChanges.UpdateCharacterSpeed(Player.m_localPlayer, true);								
 						}
 						break;
 
 					case var name when name == Configs.StatusEffectsModifications.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						StatusEffectChanges.UpdateStatusEffects(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.GearUpgradeModifications.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						GearUpgradeChanges.UpdateGearRecipeUnlock(ObjectDB.instance, true);
 						if (ShowSmartBiome.Value)
 						{
@@ -401,60 +389,54 @@ namespace MarsarahTweaks.Managers
 						break;
 
 					case var name when name == Configs.PermanentLightsModifications.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						PermanentLightsChanges.UpdateLightBuildPiecesAmounts(ZNetScene.instance, true);
 						break;
 
 					case var name when name == Configs.CraftableChain.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						CraftableChain.UpdateChainRecipe(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.BrighterLanterns.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						BrighterLanterns.UpdateLanterns(ZNetScene.instance);
 						break;
 
 					case var name when name == Configs.TougherShips.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						TougherShipsChanges.UpdateShipHP(ZNetScene.instance, true);
 						break;
 
 					case var name when name == Configs.OtherModifications.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						OtherChanges.UpdateOthers(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.LighterMetalWeight.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						LighterMetalWeight.UpdateLighterMetalWeight(ObjectDB.instance, true);
 						break;
 
 					case var name when name == Configs.LargerPickupArea.Name:
 						if (Player.m_localPlayer != null)
 						{
-							//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 							LargerPickupAreaChanges.UpdatePickupArea(Player.m_localPlayer, true);
 						}
 						break;
 
+					case var name when name == Configs.PocketPortal.Name:
+						PocketPortal.TogglePocketPortalVisibility();
+						PocketPortal.TogglePortalCoreVisibility();
+						break;
+
 					case var name when name == Configs.UIInventoryWeightAndSlots.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						UIController.UpdateUIPositions();
 						break;
 
 					case var name when name == Configs.UIEnemyDetector.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						UIController.UpdateUIPositions();
 						break;
 
 					case var name when name == Configs.UIBoatSpeed.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						UIController.UpdateUIPositions();
 						break;
 
 					case var name when name == Configs.UISmartBiome.Name:
-						//MarsarahTweaks.LogInfo($"ConfigManager: Reapplying modifications for {configName}...");
 						UISmartBiome.UpdateBiomeWeights();
 						break;
 				}
@@ -478,7 +460,6 @@ namespace MarsarahTweaks.Managers
 				case var name when name == Configs.AshlandsEnemiesModifications.Name:
 					if (Object.FindObjectOfType<SpawnSystem>() is SpawnSystem spawnSystemA)
 					{
-						//MarsarahTweaks.LogInfo($"ConfigManager Server: Reapplying modifications for {configName}...");
 						AshlandsEnemiesChanges.UpdateAshlandsSpawns(spawnSystemA);
 					}
 					break;
@@ -486,7 +467,6 @@ namespace MarsarahTweaks.Managers
 				case var name when name == Configs.CreatureUnleveler.Name:
 					if (Object.FindObjectOfType<SpawnSystem>() is SpawnSystem spawnSystemB)
 					{
-						//MarsarahTweaks.LogInfo($"ConfigManager Server: Reapplying modifications for {configName}...");
 						CreatureUnleveler.ApplyCreatureLevelChanges(spawnSystemB);
 					}
 					break;
@@ -495,12 +475,6 @@ namespace MarsarahTweaks.Managers
 					MoreUsableFuel.UpdateMoreUsableFuel();
 					break;
 			}
-
-
-			/*else
-            {
-				MarsarahTweaks.LogInfo($"ConfigManager: I am a server. No changes made to {configName}...");
-			}*/
 		}
 	}
 }

@@ -116,16 +116,18 @@ namespace MarsarahTweaks.Managers
 			ItemManager.Instance.AddItem(customItem);
 		}
 
-		public static void RegisterRecipe(RecipeConfig recipe)
+		public static Recipe RegisterRecipe(RecipeConfig recipe)
 		{
 			if (recipe == null)
 			{
 				MarsarahTweaks.LogError("[MPrefabManager] Tried to register null recipe.");
-				return;
+				return null;
 			}
 
 			CustomRecipe customRecipe = new CustomRecipe(recipe);
 			ItemManager.Instance.AddRecipe(customRecipe);
+
+			return customRecipe.Recipe;
 		}
 
 		public static void AddToBuildMenu(GameObject prefab, PieceConfig pieceConfig)

@@ -21,6 +21,7 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		private static bool initialized = false;
 		private static GameObject PocketPortalPrefab;
+		private static Recipe PortalCoreRecipe;
 
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
 		public static class ZNetScene_Awake_Patch
@@ -38,12 +39,6 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static void Init() 
 		{
-			/*
-			* Create Pocket Portal
-			* Create Portal Core
-			* Create Portal Core Recipe
-			*/
-
 			CreatePocketPortal();
 			CreatePortalCore();
 		}
@@ -72,7 +67,7 @@ namespace MarsarahTweaks.Patches.Features
 			ConfigurePocketPortalPieceData();			
 
 			PocketPortalPrefab.SetActive(true);
-			MarsarahTweaks.LogInfo("[PocketPortal] Pocket Portal registered and ready.");
+			//MarsarahTweaks.LogInfo("[PocketPortal] Pocket Portal registered and ready.");
 		}
 
 		private static void ClonePocketPortalPrefab()
@@ -118,6 +113,7 @@ namespace MarsarahTweaks.Patches.Features
 			};
 
 			MPrefabManager.AddToBuildMenu(PocketPortalPrefab, pieceConfig);
+			TogglePocketPortalVisibility();
 		}
 
 		private static GameObject RegisterPocketPortalEffects()
@@ -392,9 +388,46 @@ namespace MarsarahTweaks.Patches.Features
 				}
 			};
 
-			MPrefabManager.RegisterRecipe(recipeConfig);
+			PortalCoreRecipe = MPrefabManager.RegisterRecipe(recipeConfig);
+			TogglePortalCoreVisibility();
 		}
 
+		public static void TogglePocketPortalVisibility()
+		{
+			Piece pocketPortalPiece = PocketPortalPrefab.GetComponent<Piece>();
+			if (pocketPortalPiece == null)
+			{
+				MarsarahTweaks.LogWarn($"[PocketPortal] Piece component does not exist. No toggle made.");
+				return;
+			}
+
+			if (ConfigManager.PocketPortalEnabled.Value)
+			{
+				pocketPortalPiece.m_enabled = true;
+			}
+			else
+			{
+				pocketPortalPiece.m_enabled = false;
+			}
+		}
+
+		public static void TogglePortalCoreVisibility()
+		{
+			if (PortalCoreRecipe == null)
+			{
+				MarsarahTweaks.LogWarn($"[PortalCore] Recipe does not exist. No toggle made.");
+				return;
+			}
+
+			if (ConfigManager.PocketPortalEnabled.Value)
+			{
+				PortalCoreRecipe.m_enabled = true;
+			}
+			else
+			{
+				PortalCoreRecipe.m_enabled = false;
+			}
+		}
 
 		// Adds the pocket_portal prefab to the list of known portals
 		[HarmonyPatch(typeof(Game), nameof(Game.ConnectPortals))]
@@ -405,7 +438,7 @@ namespace MarsarahTweaks.Patches.Features
 				GameObject portal = PocketPortalPrefab;
 				if (portal == null)
 				{
-					MarsarahTweaks.LogWarn("[PocketPortal] ConnectPortals patch: prefab not ready yet.");
+					//MarsarahTweaks.LogWarn("[PocketPortal] ConnectPortals patch: prefab not ready yet.");
 					return;
 				}
 
@@ -413,7 +446,7 @@ namespace MarsarahTweaks.Patches.Features
 				{
 					__instance.m_portalPrefabs.Add(portal);
 					__instance.PortalPrefabHash.Add("pocket_portal".GetStableHashCode());
-					MarsarahTweaks.LogInfo("[PocketPortal] Registered 'pocket_portal' in Game.m_portalPrefabs via ConnectPortals.");
+					//MarsarahTweaks.LogInfo("[PocketPortal] Registered 'pocket_portal' in Game.m_portalPrefabs via ConnectPortals.");
 				}
 			}
 		}
