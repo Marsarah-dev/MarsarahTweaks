@@ -158,15 +158,14 @@ namespace MarsarahTweaks.Patches.UI
 					!ConfigManager.ShowInventoryWeightAndSlots.Value && ConfigManager.ShowEnemyDetector.Value ? 57f : - 51f;
 				float yOffset = -230f;*/
 
-				float xOffset = -283f;
+				float xOffset = Game.m_noMap? -145f : - 283f;
 				float yOffset = -225f;
 
 				bool minimalStatusEffectsLoaded = AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "MinimalStatusEffects");
-				//MarsarahTweaks.LogInfo($"Minimal Status Effects loaded: {minimalStatusEffectsLoaded}");
-
 				if (minimalStatusEffectsLoaded)
 				{
-					yOffset = -55f;
+					xOffset = -360f;
+					yOffset = -25f; // -55f;
 				}
 
 				// Boat Area Object
@@ -184,11 +183,11 @@ namespace MarsarahTweaks.Patches.UI
 				UIBoatArea2.transform.localScale = Vector3.one;
 
 				// Background texture
-				Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
-				Image boatAreaBackground = UIBoatArea2.AddComponent<Image>();
-				boatAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
-				boatAreaBackground.sprite = sprite;
-				boatAreaBackground.type = Image.Type.Sliced;
+				//Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
+				//Image boatAreaBackground = UIBoatArea2.AddComponent<Image>();
+				//boatAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
+				//boatAreaBackground.sprite = sprite;
+				//boatAreaBackground.type = Image.Type.Sliced;
 
 				// Text overlay
 				UIBoatText2 = CreateTextObject("BoatText2", UIBoatArea2, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-4f, 0f), UIBoatAreaSize);

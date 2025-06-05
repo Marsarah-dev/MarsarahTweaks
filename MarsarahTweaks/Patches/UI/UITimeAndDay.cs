@@ -1,25 +1,30 @@
-﻿using System;
+﻿using HarmonyLib;
+using MarsarahTweaks.Managers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using HarmonyLib;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.UI
 {
 	internal class UITimeAndDay : UIController
 	{
 		// UI data
-		public static string dayString;
-		public static int currentDay;
+		public static string TimeString;
+		public static string TimeEmoji;
+		public static int CurrentDay;
 
 		// UI elements
 		private static Text UITimeText;
 		private static Text UIDayText;
+
+		private static TMPro.TextMeshProUGUI UITimeEmojiTMP = null;
+		private static Color UITimeEmojiColor;
 
 		[HarmonyPatch(typeof(EnvMan), "Update")]
 		class TimeAndDay_EnvManPatch
@@ -32,11 +37,11 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (ConfigManager.ShowTimeAndDay.Value)
 				{
-					currentDay = Traverse.Create((object)EnvMan.instance).Method("GetCurrentDay", Array.Empty<object>()).GetValue<int>();
+					CurrentDay = Traverse.Create((object)EnvMan.instance).Method("GetCurrentDay", Array.Empty<object>()).GetValue<int>();
 
 					if (!ConfigManager.TimeFormat24H.Value)
 					{
-						dayString = GetStringFromFraction(___m_smoothDayFraction);
+						TimeString = GetStringFromFraction(___m_smoothDayFraction);
 					}
 					else
 					{
@@ -44,8 +49,10 @@ namespace MarsarahTweaks.Patches.UI
 						int minutes = (int)((___m_smoothDayFraction * 24f - (float)hours) * 60f);
 						string hoursString = hours < 10 ? "0" + hours.ToString() : hours.ToString();
 						string minutesString = minutes < 10 ? "0" + minutes.ToString() : minutes.ToString();
-						dayString = "Time " + hoursString + ":" + minutesString;
+						TimeString = "Time " + hoursString + ":" + minutesString;
 					}
+					TimeEmoji = GetEmojiFromFraction(___m_smoothDayFraction);
+					UITimeEmojiColor = GetColorFromFraction(___m_smoothDayFraction);
 				}
 			}
 
@@ -60,11 +67,37 @@ namespace MarsarahTweaks.Patches.UI
 				if (dayFraction < 0.80f) return "Dusk";
 				return "Night";
 			}
+
+			private static string GetEmojiFromFraction(float dayFraction)
+			{
+				if (dayFraction < 0.20f) return "🌙";
+				if (dayFraction < 0.25f) return "🌅";
+				if (dayFraction < 0.33f) return "🌅";
+				if (dayFraction < 0.50f) return "☀️";
+				if (dayFraction < 0.66f) return "☀️";
+				if (dayFraction < 0.75f) return "🌤";
+				if (dayFraction < 0.80f) return "🌤";
+				return "🌙";
+			}
+
+			private static Color GetColorFromFraction(float dayFraction)
+			{
+				if (dayFraction < 0.20f) return Color.white;
+				if (dayFraction < 0.25f) return new Color(1f, 0.549019f, 0f);
+				if (dayFraction < 0.33f) return Color.yellow;
+				if (dayFraction < 0.50f) return Color.green;
+				if (dayFraction < 0.66f) return Color.green;
+				if (dayFraction < 0.75f) return Color.yellow;
+				if (dayFraction < 0.80f) return new Color(1f, 0.549019f, 0f);
+				return Color.white;
+			}
 		}
 
 		[HarmonyPatch(typeof(Hud), "Update")]
 		class TimeAndDay_HUDUpdatePatch
 		{
+			private static bool lastUseSymbolsForUI = ConfigManager.UseSymbolsForUI.Value;
+
 			private static void Postfix(Hud __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
@@ -75,18 +108,28 @@ namespace MarsarahTweaks.Patches.UI
 				{
 					CreateUI(__instance); // Create UI if missing
 
+					// Handle where to display the time text when toggling
+					if (ConfigManager.UseSymbolsForUI.Value != lastUseSymbolsForUI)
+					{
+						lastUseSymbolsForUI = ConfigManager.UseSymbolsForUI.Value;
+						UpdateTimePosition();
+					}
+
 					bool showTimeUI = Game.m_noMap ? showUI : showUI && Minimap.instance != null && Minimap.instance.m_mapSmall != null && Minimap.instance.m_mapSmall.activeInHierarchy;
 
 					UITimeText.enabled = showTimeUI;
 					UIDayText.enabled = showTimeUI;
+					UITimeEmojiTMP.enabled = ConfigManager.UseSymbolsForUI.Value ? showTimeUI : false;
 
 					if (showTimeUI)
 					{
-						UITimeText.color = GetColorFromString(dayString);
+						UITimeText.color = GetColorFromString(TimeString);
 						UIDayText.color = Color.white;
+						UITimeEmojiTMP.color = UITimeEmojiColor;
 
-						UITimeText.text = dayString;
-						UIDayText.text = "Day " + currentDay.ToString();
+						UITimeText.text = TimeString;
+						UIDayText.text = "Day " + CurrentDay.ToString();
+						UITimeEmojiTMP.text = TimeEmoji;
 					}
 				}
 				else
@@ -95,17 +138,20 @@ namespace MarsarahTweaks.Patches.UI
 						UITimeText.enabled = false;
 					if (UIDayText != null)
 						UIDayText.enabled = false;
+					if (UITimeEmojiTMP != null)
+						UITimeEmojiTMP.enabled = false;
 				}
 			}
 
 			private static void CreateUI(Hud hud)
 			{
-				if (UITimeText != null && UIDayText != null)
+				if (UITimeText != null && UIDayText != null && UITimeEmojiTMP != null)
 					return;  // UI already exists, no need to create again
 
 				int UITextFontSize = 16;
 				string UITextFontName = "AveriaSansLibre-Bold";
 				Vector2 UITimeAreaSize = new Vector2(200f, 30f); // width, height
+				Vector2 UITimeAreaEmojiSize = new Vector2(30f, 30f); // width, height
 
 				// Day-Time area object
 				GameObject UITimeArea = new GameObject("TimeArea");
@@ -120,12 +166,22 @@ namespace MarsarahTweaks.Patches.UI
 
 				// Special modification for text sizeDelta
 				UITimeAreaSize.x = UITimeAreaSize.x / 2;
+				float timeTextXPos = ConfigManager.UseSymbolsForUI.Value ? 20f : 40f;
 
 				// Time text
-				UITimeText = CreateTextObject("TimeText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(40f, 0f), UITimeAreaSize);
+				UITimeText = CreateTextObject("TimeText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(timeTextXPos, 0f), UITimeAreaSize);
 
 				// Day text
 				UIDayText = CreateTextObject("DayText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(-40f, 0f), UITimeAreaSize);
+
+				// Time emoji
+				UITimeEmojiTMP = CreateTMPTextObject("TimeEmojiTMP", UITimeArea, Color.white, UITextFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineRight, new Vector2(80f, 0f), UITimeAreaEmojiSize);
+			}
+
+			private static void UpdateTimePosition()
+			{
+				float xOffset = ConfigManager.UseSymbolsForUI.Value ? 20f : 40f;
+				UITimeText.GetComponent<RectTransform>().anchoredPosition = new Vector2(xOffset, 0f);
 			}
 
 			private static Color GetColorFromString(string word)

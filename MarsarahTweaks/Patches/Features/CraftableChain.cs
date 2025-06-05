@@ -52,39 +52,45 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		}
 
-
 		private static Recipe CreateChainRecipe(ObjectDB objDB)
 		{
-			Recipe dvergrLantern = objDB.m_recipes.Find(r => r.name == "Recipe_Lantern");
-			if (dvergrLantern == null)
+			if (objDB == null || ZNetScene.instance == null) return null;
+
+			ItemDrop chainItem = objDB.GetItemPrefab("Chain")?.GetComponent<ItemDrop>();
+			ItemDrop ironItem = objDB.GetItemPrefab("Iron")?.GetComponent<ItemDrop>();
+			GameObject blackForgePrefab = ZNetScene.instance.GetPrefab("blackforge"); ;
+			CraftingStation blackForge = null;
+
+			if (blackForgePrefab != null)
 			{
-				//MarsarahTweaks.LogInfo($"Missing required recipe: {dvergrLantern}");
+				blackForge = blackForgePrefab.GetComponent<CraftingStation>();
+			}
+
+			if (chainItem == null || ironItem == null || blackForge == null)
+			{
+				MarsarahTweaks.LogWarn("Failed to create chain recipe: missing required item or crafting station.");
 				return null;
 			}
 
-			// Create the new chain recipe
 			Recipe chainRecipe = ScriptableObject.CreateInstance<Recipe>();
-			chainRecipe.m_item = objDB.GetItemPrefab("Chain").GetComponent<ItemDrop>();
+			chainRecipe.name = "Recipe_Chain";
+			chainRecipe.m_item = chainItem;
 			chainRecipe.m_amount = 2;
 			chainRecipe.m_minStationLevel = 1;
-			chainRecipe.m_resources = new Piece.Requirement[1];
-
-			chainRecipe.m_resources[0] = new Piece.Requirement
+			chainRecipe.m_enabled = true;
+			chainRecipe.m_craftingStation = blackForge;
+			chainRecipe.m_repairStation = blackForge;
+			chainRecipe.m_resources = new Piece.Requirement[]
 			{
-				m_amount = 1,
-				m_amountPerLevel = 1,
-				m_recover = true,
-				m_resItem = objDB.GetItemPrefab("Iron").GetComponent<ItemDrop>()
+				new Piece.Requirement
+				{
+					m_resItem = ironItem,
+					m_amount = 1,
+					m_amountPerLevel = 1,
+					m_recover = true
+				}
 			};
 
-			// Set the crafting and repair stations from the lantern recipe
-			chainRecipe.hideFlags = dvergrLantern.hideFlags;
-			chainRecipe.m_craftingStation = dvergrLantern.m_craftingStation;
-			chainRecipe.m_repairStation = dvergrLantern.m_repairStation;
-			chainRecipe.name = "Recipe_Chain";
-			chainRecipe.m_enabled = true;
-
-			//MarsarahTweaks.LogInfo($"Successfully created chain recipe: {chainRecipe.name}");
 			return chainRecipe;
 		}
 	}

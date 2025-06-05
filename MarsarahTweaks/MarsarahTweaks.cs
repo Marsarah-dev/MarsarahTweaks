@@ -6,30 +6,30 @@
  *    - Fixed an issue with the Player Logout Announce not working in certain situations
  *    
  * B. New UI
+ *    - Added symbols for the time of day according to day section when Alternate UI is enabled
  * 
  * C. New Features
  *    - Pocket Portal
  *    - Max Portals Per Player
+ *    - IP: Alternate Gear Recipes: Change Dundr to use Iolite instead of Bloodstone
  * 
  * B. New QOL
  * 
  * D. Other changes
+ *    - Moved position of the Boat Speed Indicator in the Alternate UI mode to be above the wind indicator for no map game modifier or when Minimal Status Effects in installed
+ *    - Craftable Chain recipe is no longer dependent on using a Dvergr Lantern as a base (code logic change).
+ *    - Updated compatibility notes for Show Owned Resources In Build Menu.
  *    
  *  
- * 
  * TODO
  * 
  * A. Fixes
- *    - Move the boat speed indicator in alternate UI to the right on no map mode
- *    - Change color of free inv slot to be red later like in the weight indicator
- *    - Change Craftable chain code of assigning crafting station and other things (don't use dvergr lantern anymore)
- *    - Fix incompatibility with Craft From Containers (do not whow in crafting menu)
  * 
  * B. New UI
  *    1. 
  *    2. 
- *    3. 
- *    4. Better enemy nameplates, better item level indicator
+ *    3. Better enemy nameplates
+ *    4. Better item level indicator
  *    5. Show player HP and death count next to online indicator (or color their names with red if they have the corpse run buff)
  *    6. 
  *    7. 
@@ -40,8 +40,7 @@
  *    ** Gear
  *    1. Staff of Fracturing - increase blast radius of splinters
  *    2. Add better gear set bonuses
- *    3. Change gem type resource for Ashlands weapons. I think one is using Bloodstone where it's supposed to use Jade
- *       - Dundr (uses Bloodstone instead of Iolite)
+ *    3.
  *    4. Add secondary attack to Staff of Protection that heals (like the Dverger Mage heal)
  *    
  *    ** Building
@@ -88,62 +87,6 @@
  *    7. 
  *    8. Faster smelting from all smelters and kiln
  *    
-
-
-
-🎯 Legend:
-
-🟢 Easy: Can be done with patches, UI edits, or config alone.
-
-🟡 Medium: Requires more extensive UI handling, gameplay state tracking, or syncing.
-
-🔴 Hard: Needs asset additions, major reverse engineering, or world generation hooks.
-
-B. New UI
-Feature	Complexity	Notes
-1. 
-2. 
-3. 
-4. Better nameplates + item level				🟡 Medium	Needs patching enemy nameplate drawing + item quality display.
-5. Show HP/deaths next to name					🔴 Hard		Needs syncing player HP/death count to others, complex in multiplayer.
-9. Smart Pins									🟡→🔴 Medium to Hard	Requires UI pin menu patching + pin system restriction logic.
-
-C. New Features
-Gear
-Feature	Complexity	Notes
-1. Staff of Fracturing effect		🟡 Medium	Modify AoE code, easy with custom logic in projectile/explosion.
-2. Gear set bonuses					🟡 Medium	Track gear sets and apply effects, like how Troll set works.
-3. Change gem for Ashlands weapons	🟢 Easy		Replace crafting recipe entries.
-4. Healing Staff of Protection		🟡 Medium	Add alt-attack behavior and healing; reuse dvergr logic.
-
-Building
-Feature	Complexity	Notes
-1. Silver Sconce			🟢 Easy		Reuse bronze/gold sconce logic, change visuals.
-2. Silver/Obsidian pieces	🔴 Hard		Needs new 3D assets and integration with build tables.
-3. Chest snapping + signs	🔴 Hard		Requires placement logic + sign prefab/UI work.
-4. Smart dropbox			🔴 Hard		Needs scanning nearby chests and item categorization logic.
-
-Other
-Feature	Complexity	Notes
-1. Better Roads (speed buff)		🟡 Medium	Detect if player is on road (terrain or pathfinding zone).
-2. 
-3. Wards buffs + repair				🟡 Medium	Hook ward logic, apply SEs + invoke WearNTear.Repair periodically.
-4. 
-5. Better Sorting UI				🟡 Medium	Redo Inventory UI, tag-based sort.
-6. Vote to Sleep					🔴 Hard		Network voting, combat detection, time skip sync.
-7. Alternate Lights Fuel			🟡 Medium	Time-of-day detection + light component handling.
-
-Overhaul
-Feature	Complexity	Notes
-1. Plains magic			🔴 Hard			Needs SEs, AI changes, magic behaviors.
-2. Pre-built structures	🔴 Very Hard	Deep world generation patching or prefab injection.
-
-D. New QOL
-Feature	Complexity	Notes
-2. Increase Maypole range	🟢 Easy		Patch ComfortManager radius logic.
-3. Remove equip/eat slow	🟡 Medium	Find and patch delays or UseItem debuffs.
-4. Destroy ship with hammer	🟢 Easy		Add hammer destruction behavior for ships.
-8. Faster smelting			🟢 Easy		Patch smelter tick timers or fuel usage.
  *
  ***************************************************/
 

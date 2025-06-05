@@ -55,7 +55,7 @@ namespace MarsarahTweaks.Patches.UI
 		class OnlinePlayers_HUDUpdatePatch
 		{
 			private static bool lastOnlinePlayersUnderMinimap = ConfigManager.OnlinePlayersUnderMinimap.Value;
-			private static float UIPartyPlayerTextDistanceV = -25f; // goes down;
+			private static readonly float UIPartyPlayerTextDistanceV = -25f; // goes down;
 
 			private static void Postfix(Hud __instance)
 			{

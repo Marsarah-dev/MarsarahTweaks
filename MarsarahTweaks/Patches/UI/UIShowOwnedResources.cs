@@ -19,7 +19,6 @@ namespace MarsarahTweaks.Patches.UI
 			static void Postfix(Transform elementRoot, Piece.Requirement req, Player player, bool craft, int quality, int craftMultiplier)
 			{
 				if (!ConfigManager.ShowOwnedResources.Value) return;
-
 				if (req?.m_resItem == null || player == null) return;
 
 				int requiredAmount = req.GetAmount(quality) * craftMultiplier;

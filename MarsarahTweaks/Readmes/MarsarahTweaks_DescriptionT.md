@@ -850,7 +850,9 @@ All features below are synced with the server and can be toggled mid-game.
 
 🔄 Toggling mid-game requires reopening the build menu.
 
-**❗ Conflicts:** Valheim Plus
+**❗ Conflicts:** Valheim Plus, Craft From Containers
+**Note:** If Craft From Containers is installed, this config will override the available resource lookup to the player inventory instead of nearby containers. Simply disable this config to see available resources from chests again.
+**Note:** This will not disable Craft From Container's ability to craft from containers; it's just a visual incompatibility, same as Valheim Plus
 
 ---
 
