@@ -1,5 +1,8 @@
 ﻿using BepInEx;
 using Jotunn;
+using Jotunn.Configs;
+using Jotunn.Entities;
+using Jotunn.Managers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,73 +25,7 @@ namespace MarsarahTweaks.Managers
 				return null;
 			}
 
-			// --- Try ZNetScene.GetPrefab ---
-			if (ZNetScene.instance != null)
-			{
-				GameObject znetPrefab = ZNetScene.instance.GetPrefab(name);
-				if (znetPrefab != null)
-				{
-					return znetPrefab;
-				}
-			}
-
-			// --- Try ObjectDB.GetItemPrefab ---
-			if (ObjectDB.instance != null)
-			{
-				GameObject itemPrefab = ObjectDB.instance.GetItemPrefab(name);
-				if (itemPrefab != null)
-				{
-					return itemPrefab;
-				}
-			}
-
-			// --- Try ZNetScene.m_namedPrefabs via reflection ---
-			try
-			{
-				var znetScene = ZNetScene.instance;
-				if (znetScene != null)
-				{
-					var namedPrefabsField = typeof(ZNetScene).GetField("m_namedPrefabs", BindingFlags.Instance | BindingFlags.NonPublic);
-					var namedPrefabs = namedPrefabsField?.GetValue(znetScene) as Dictionary<int, GameObject>;
-					if (namedPrefabs != null && namedPrefabs.TryGetValue(name.GetStableHashCode(), out GameObject reflectedPrefab))
-					{
-						return reflectedPrefab;
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				MarsarahTweaks.LogError($"[MPrefabManager] Reflection on ZNetScene.m_namedPrefabs failed: {e.Message}");
-			}
-
-			// --- Try ObjectDB.m_itemByHash via reflection ---
-			try
-			{
-				var objDB = ObjectDB.instance;
-				if (objDB != null)
-				{
-					var itemByHashField = typeof(ObjectDB).GetField("m_itemByHash", BindingFlags.Instance | BindingFlags.NonPublic);
-					var itemByHash = itemByHashField?.GetValue(objDB) as Dictionary<int, GameObject>;
-					if (itemByHash != null && itemByHash.TryGetValue(name.GetStableHashCode(), out GameObject reflectedItem))
-					{
-						return reflectedItem;
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				MarsarahTweaks.LogError($"[MPrefabManager] Reflection on ObjectDB.m_itemByHash failed: {e.Message}");
-			}
-
-			// Fallback to Resources.FindObjectsOfTypeAll (slow, only for dev/debug)
-			GameObject fallbackPrefab = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(go => go.name == name);
-			if (fallbackPrefab != null)
-			{
-				return fallbackPrefab;				
-			}
-
-			//MarsarahTweaks.LogWarn($"[MPrefabManager] GetPrefab could not find: {name}");
-			return null;
+			return PrefabManager.Instance.GetPrefab(name);
 		}
 
 		public static GameObject ClonePrefab(string nameOfOriginal, string nameOfClone)
@@ -129,55 +66,7 @@ namespace MarsarahTweaks.Managers
 				return null;
 			}
 
-			originalPrefab.SetActive(false);
-			GameObject clonedPrefab = UnityEngine.Object.Instantiate(originalPrefab);
-			originalPrefab.SetActive(true);
-
-			clonedPrefab.SetActive(false);
-			clonedPrefab.name = nameOfClone;			
-
-			return clonedPrefab;
-		}
-
-		public static bool ValidatePrefab(GameObject prefab, bool hasNetView = false, bool hasTeleport = false, bool hasTransform = false, bool hasPiece = false, bool hasWearNTear = false)
-		{
-			if (prefab == null)
-			{
-				MarsarahTweaks.LogWarn("[MPrefabManager] Cannot validate null prefab.");
-				return false;
-			}
-
-			if (hasNetView && prefab.GetComponent<ZNetView>() == null)
-			{
-				MarsarahTweaks.LogWarn($"[MPrefabManager] {prefab.name} is missing ZNetView. Adding.");
-				prefab.AddComponent<ZNetView>();
-			}
-
-			if (hasTeleport && prefab.GetComponent<TeleportWorld>() == null)
-			{
-				MarsarahTweaks.LogWarn($"[MPrefabManager] {prefab.name} is marked as portal but missing TeleportWorld. Adding.");
-				prefab.AddComponent<TeleportWorld>();
-			}
-
-			if (hasTransform && prefab.GetComponent<ZSyncTransform>() == null)
-			{
-				MarsarahTweaks.LogWarn($"[MPrefabManager] {prefab.name} missing ZSyncTransform. Adding.");
-				prefab.AddComponent<ZSyncTransform>();
-			}
-
-			if (hasPiece && prefab.GetComponent<Piece>() == null)
-			{
-				MarsarahTweaks.LogWarn($"[MPrefabManager] {prefab.name} is marked as piece but missing Piece. Adding.");
-				prefab.AddComponent<Piece>();
-			}
-
-			if (hasWearNTear && prefab.GetComponent<WearNTear>() == null)
-			{
-				MarsarahTweaks.LogWarn($"[MPrefabManager] {prefab.name} is marked as destructible but missing WearNTear. Adding.");
-				prefab.AddComponent<WearNTear>();
-			}
-
-			return true;
+			return PrefabManager.Instance.CreateClonedPrefab(nameOfClone, originalPrefab);
 		}
 
 		public static void RegisterToZNetScene(GameObject prefab)
@@ -188,53 +77,76 @@ namespace MarsarahTweaks.Managers
 				return;
 			}
 
-			var znetScene = ZNetScene.instance;
+			ZNetScene znetScene = ZNetScene.instance;
 			if (znetScene == null)
 			{
 				MarsarahTweaks.LogError("[MPrefabManager] ZNetScene.instance is null. Cannot register prefab.");
 				return;
 			}
 
-			string name = prefab.name;
-			int hash = name.GetStableHashCode();
-
-			// Reflect to access m_namedPrefabs
-			var namedPrefabsField = typeof(ZNetScene).GetField("m_namedPrefabs", BindingFlags.Instance | BindingFlags.NonPublic);
-			var namedPrefabs = namedPrefabsField?.GetValue(znetScene) as Dictionary<int, GameObject>;
-			if (namedPrefabs == null)
+			if (znetScene.GetPrefab(prefab.name) != null)
 			{
-				MarsarahTweaks.LogError("[MPrefabManager] Failed to reflect ZNetScene.m_namedPrefabs.");
+				MarsarahTweaks.LogWarn($"[MPrefabManager] Prefab '{prefab.name}' already registered in ZNetScene.");
 				return;
 			}
 
-			if (namedPrefabs.ContainsKey(hash))
-			{
-				MarsarahTweaks.LogWarn($"[MPrefabManager] Prefab '{name}' already registered in ZNetScene.");
-				return;
-			}
-
-			if (prefab.GetComponent<ZNetView>() != null)
-			{
-				znetScene.m_prefabs.Add(prefab);
-			}
-			else
-			{
-				znetScene.m_nonNetViewPrefabs.Add(prefab);
-			}
-
-			namedPrefabs.Add(hash, prefab);
+			CustomPrefab customPrefab = new CustomPrefab(prefab, fixReference: true);
+			PrefabManager.Instance.AddPrefab(customPrefab);
+			PrefabManager.Instance.RegisterToZNetScene(prefab);
 
 			if (GetPrefab(prefab.name) == null)
 			{
-				MarsarahTweaks.LogError($"[MPrefabManager] Failed to register prefab '{name}'!");
+				MarsarahTweaks.LogError($"[MPrefabManager] Failed to register prefab '{prefab.name}'!");
 			}
 			else
 			{
-				MarsarahTweaks.LogInfo($"[MPrefabManager] Registered prefab '{name}' to ZNetScene.");
+				MarsarahTweaks.LogInfo($"[MPrefabManager] Registered prefab '{prefab.name}' to ZNetScene.");
 			}
 		}
 
-		public static void AddToHammerBuildMenu(GameObject prefab)
+		public static void RegisterItem(GameObject prefab)
+		{
+			if (prefab == null)
+			{
+				MarsarahTweaks.LogError("[MPrefabManager] Tried to register null prefab.");
+				return;
+			}
+
+			CustomItem customItem = new CustomItem(prefab, fixReference: true);
+			ItemManager.Instance.AddItem(customItem);
+		}
+
+		public static void RegisterRecipe(RecipeConfig recipe)
+		{
+			if (recipe == null)
+			{
+				MarsarahTweaks.LogError("[MPrefabManager] Tried to register null recipe.");
+				return;
+			}
+
+			CustomRecipe customRecipe = new CustomRecipe(recipe);
+			ItemManager.Instance.AddRecipe(customRecipe);
+		}
+
+		public static void AddToBuildMenu(GameObject prefab, PieceConfig pieceConfig)
+		{
+			if (prefab == null)
+			{
+				MarsarahTweaks.LogWarn($"[MPrefabManager] Given prefab is null. Cannot add to build menu.");
+				return;
+			}
+
+			if (pieceConfig == null)
+			{
+				MarsarahTweaks.LogWarn($"[MPrefabManager] Given piece config is null. Cannot add to build menu.");
+				return;
+			}
+
+			CustomPiece customPiece = new CustomPiece(prefab, fixReference: true, pieceConfig);
+			PieceManager.Instance.AddPiece(customPiece);
+		}
+
+		/*public static void AddToHammerBuildMenu(GameObject prefab)
 		{
 			if (prefab == null)
 			{
@@ -257,6 +169,6 @@ namespace MarsarahTweaks.Managers
 				table.m_pieces.Add(prefab);
 				MarsarahTweaks.LogInfo($"[MPrefabManager] Added '{prefab.name}' to hammer build menu.");
 			}
-		}
+		}*/
 	}
 }
