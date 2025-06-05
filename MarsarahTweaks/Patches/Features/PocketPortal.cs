@@ -457,7 +457,7 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			static void Postfix(TeleportWorld __instance)
 			{
-				if (!__instance.name.Contains("pocket_portal")) return;
+				//if (!__instance.name.Contains("pocket_portal")) return;
 
 				var nview = __instance.GetComponent<ZNetView>();
 				if (nview == null || !nview.IsValid()) return;
@@ -494,7 +494,7 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		}
 
-		public static bool PlayerHasPocketPortal()
+		private static bool PlayerHasPocketPortal()
 		{
 			if (ZNet.instance == null || ZDOMan.instance == null || Player.m_localPlayer == null)
 				return false;
@@ -520,60 +520,5 @@ namespace MarsarahTweaks.Patches.Features
 
 			return false;
 		}
-
-		/*[HarmonyPatch(typeof(Player), "Update")]
-		public class Player_Update_DebugPortalCount
-		{
-			static void Postfix(Player __instance)
-			{
-				if (__instance != Player.m_localPlayer) return;
-
-				if (Input.GetKeyDown(KeyCode.F3))
-				{
-					LogPocketPortalCount();
-				}
-			}
-		}
-
-		public static void LogPocketPortalCount()
-		{
-			if (ZNet.instance == null || ZDOMan.instance == null || Player.m_localPlayer == null)
-			{
-				MarsarahTweaks.LogWarn("Required instances are missing.");
-				return;
-			}
-
-			string localPlayerName = Player.m_localPlayer.GetPlayerName();
-			int pocketPortalHash = PocketPortalPrefab.name.GetStableHashCode();
-
-			var zdoDictField = typeof(ZDOMan).GetField("m_objectsByID", BindingFlags.NonPublic | BindingFlags.Instance);
-			if (zdoDictField == null)
-			{
-				MarsarahTweaks.LogError("Could not access m_objectsByID field.");
-				return;
-			}
-
-			var zdoDict = zdoDictField.GetValue(ZDOMan.instance) as Dictionary<ZDOID, ZDO>;
-			if (zdoDict == null)
-			{
-				MarsarahTweaks.LogError("m_objectsByID is null or invalid.");
-				return;
-			}
-
-			int count = 0;
-			foreach (var zdo in zdoDict.Values)
-			{
-				if (zdo == null)
-					continue;
-
-				if (zdo.GetPrefab() != pocketPortalHash)
-					continue;
-
-				if (zdo.GetString(ZDOVars.s_creatorName) == localPlayerName)
-					count++;
-			}
-
-			MarsarahTweaks.LogInfo($"Pocket Portals built by this player: {count}");
-		}*/
 	}
 }

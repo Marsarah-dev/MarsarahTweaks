@@ -8,18 +8,22 @@
  * B. New UI
  * 
  * C. New Features
- *    - IP: Pocket Portal
+ *    - Pocket Portal
+ *    - Max Portals Per Player
  * 
  * B. New QOL
  * 
+ * D. Other changes
+ *    
+ *  
  * 
  * TODO
  * 
  * A. Fixes
- *    - Correct info on Enemy Detector readme to mention new UI layout too
  *    - Move the boat speed indicator in alternate UI to the right on no map mode
  *    - Change color of free inv slot to be red later like in the weight indicator
  *    - Change Craftable chain code of assigning crafting station and other things (don't use dvergr lantern anymore)
+ *    - Fix incompatibility with Craft From Containers (do not whow in crafting menu)
  * 
  * B. New UI
  *    1. 
@@ -46,7 +50,7 @@
  *    3. Add pre-attached signs to existing chests and counter + image with what it contains
  *       - Add snapping points to chests
  *    4. Create a smart dropbox - Everything placed in it will automatically be moved to nearby chests that have an item of the respective type
- *    5. Reduce Barrel Wood cost from 10 to 5
+ *    5. 
  *    
  *    ** Other
  *    1. Add Better Roads (increase player speed on roads)
@@ -59,6 +63,16 @@
  *    6. Create a Vote to Sleep section, where a player can trigger a vote to sleep and if the majority votes yes, then time is skipped as sleeping.
  *       - If one or more players are in combat (enemies nearby), then the vote is entirely skipped and no time is passed.
  *    7. Add an Alternate Lights Fuel config (exclusive toggle with Permanent Lights) that makes lights use less fuel during the day (maybe turn them off or make them dimmer during the day) and work normal at night
+ *    8. Swap relevant configs from bool to numbers where applicable
+ *       - Less Stamina Usage            -> Rename to Stamina Usage          - Value indicates percentage of stamina used. Posisive numbers increase it
+ *       - Reduced Crossbows Reload Time -> Rename to Crossbows Reload Time  - Change the mod to set it to the indicated value instead of subtracting/adding
+ *       - Hildir Weight Rewards         ->                                  - Set extra weight per chest delivered
+ *       - Lighter Metal Weight          -> Rename to Metal Weight           - Set number for all metals (default values between 8 and 12)
+ *       - Larger Pickup Area            -> Rename to Pickup Area            - Set to indicated number (default 2)
+ *       - Larger Boat Explore Radius    -> Rename to Boat Explore Radius    - Set to multiplier (2 means 2x the radius) / Or set to indicated value
+ *       - Bigger Wisp Radius            -> Rename to Wisp Radius            - Set to indicated value
+ *       - Less Fall Damage              -> Rename to Fall Damage Multiplier - Set to multiplier (0.6 means 40% less fall damage)
+ *       - Shorter Rested Delay          -> Rename to Rested Delay           - Set to indicated value (default 20s)
  *    
  *    ** Overhaul
  *    1. Add magic to Plains
@@ -108,14 +122,13 @@ Feature	Complexity	Notes
 2. Silver/Obsidian pieces	🔴 Hard		Needs new 3D assets and integration with build tables.
 3. Chest snapping + signs	🔴 Hard		Requires placement logic + sign prefab/UI work.
 4. Smart dropbox			🔴 Hard		Needs scanning nearby chests and item categorization logic.
-5. Barrel cost reduction	🟢 Easy		Patch recipe.
 
 Other
 Feature	Complexity	Notes
 1. Better Roads (speed buff)		🟡 Medium	Detect if player is on road (terrain or pathfinding zone).
-2. Pocket Portal (only 2 allowed)	🔴 Hard		Requires portal pairing system and strict instancing.
+2. 
 3. Wards buffs + repair				🟡 Medium	Hook ward logic, apply SEs + invoke WearNTear.Repair periodically.
-4. More iron from piles				🟢 Easy		Patch drop table.
+4. 
 5. Better Sorting UI				🟡 Medium	Redo Inventory UI, tag-based sort.
 6. Vote to Sleep					🔴 Hard		Network voting, combat detection, time skip sync.
 7. Alternate Lights Fuel			🟡 Medium	Time-of-day detection + light component handling.

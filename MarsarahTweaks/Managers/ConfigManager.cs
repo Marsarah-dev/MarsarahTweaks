@@ -90,7 +90,8 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("25 - Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Tick, Dverger, Seeker Soldier, Charred Warlock");
 			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("26 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000 (Toggling mid-game requires CLIENT relog or reloading area)");
 			public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("27 - Pocket Portal", "Adds a new portal that is built from a Portal Core that only takes one inventory slot which can be crafted at a Workbench. Can only build one Pocket Portal player. (Toggling mid-game requires reloading the build/crafting menu)");
-			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("28 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
+			public static readonly ConfigMetadata PortalsPerPlayer = new ConfigMetadata("28 - Max Portals Per Player", "Set the number of portals a player can build per world for each player. This number applies individually for the normal and the stone portal. Set to -1 for unlimited portals.");
+			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("29 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
 
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("01 - Lighter Metal Weight", "All metal ore and bars weight decreased to 8. (Toggling mid-game requires CLIENT relog or reloading area)");
 			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("02 - Larger Pickup Area", "Item pickup area slightly increased");
@@ -161,6 +162,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> BetterTrophyDropsEnabled;
 		public static ConfigEntry<bool> TougherShipsEnabled;
 		public static ConfigEntry<bool> PocketPortalEnabled;
+		public static ConfigEntry<int> MaxPortalsPerPlayer;
 		public static ConfigEntry<bool> OtherEnabled;
 
 		public static ConfigEntry<bool> LighterMetalWeightEnabled;
@@ -237,6 +239,7 @@ namespace MarsarahTweaks.Managers
 			BetterTrophyDropsEnabled = CreateConfig(ConfigSections.Features, Configs.TrophyDropsModifications.Name, true, Configs.TrophyDropsModifications.Description);
 			TougherShipsEnabled = CreateConfig(ConfigSections.Features, Configs.TougherShips.Name, true, Configs.TougherShips.Description);
 			PocketPortalEnabled = CreateConfig(ConfigSections.Features, Configs.PocketPortal.Name, true, Configs.PocketPortal.Description);
+			MaxPortalsPerPlayer = CreateConfig(ConfigSections.Features, Configs.PortalsPerPlayer.Name, -1, Configs.PortalsPerPlayer.Description);
 			OtherEnabled = CreateConfig(ConfigSections.Features, Configs.OtherModifications.Name, true, Configs.OtherModifications.Description);
 
 			// ===== QOL

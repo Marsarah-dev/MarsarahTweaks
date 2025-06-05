@@ -2153,8 +2153,8 @@ The following foods have the stack size increased to 20
   Displays an enemy detector next to the inventory weight widget at the bottom left of the screen.
   Counts the number of enemies in close proximity.
   Does not include other players, deer, hare, player summoned creatures, or tame animals in the enemy count.
-  Neutral Dverger are counted in parantheses. When attacked, the number goes into the normal enemy counter.
-  Colors change according to number of nearby enemies.
+  Neutral Dverger are counted in parentheses. When attacked, the number goes into the normal enemy counter. If Alternate UI Layout is enabled, neutral Dverger are counted with a separate indicator.
+  Colors change according to the number of nearby enemies. If Alternate UI Layout is enabled, the icon will also change to a ghost if 7 or more enemies are nearby.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
