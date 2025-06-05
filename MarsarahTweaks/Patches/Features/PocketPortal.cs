@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Jotunn;
 using Jotunn.Configs;
 using Jotunn.Entities;
 using Jotunn.Managers;
@@ -34,8 +35,6 @@ namespace MarsarahTweaks.Patches.Features
 				initialized = true;
 
 				Init();
-
-				//CreatePocketPortal(__instance);
 			}
 		}
 
@@ -52,14 +51,14 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static void CreatePocketPortal()
 		{
-			if (ZNetScene.instance.GetPrefab("pocket_portal") != null) return;
+			if (MPrefabManager.GetPrefab("pocket_portal") != null) return;
 
 			// Clone Pocket Portal
 			ClonePocketPortalPrefab();
 			if (PocketPortalPrefab == null)	return;
 
 			// Validate pocket portal prefab
-			if (!ValidatePocketPortalPrefab()) return;
+			ValidatePocketPortalPrefab();
 
 			// Apply portal-specific data
 			SetupPocketPortalDefaults();
@@ -73,21 +72,21 @@ namespace MarsarahTweaks.Patches.Features
 			// Add pocket portal to ZNetScene
 			MPrefabManager.RegisterToZNetScene(PocketPortalPrefab);
 
-			var pieceConfig = new PieceConfig
-			{
-				PieceTable = "Hammer",
-				Category = "Misc",
-				Requirements = new[]
-				{
-					new RequirementConfig("PortalCore", 1),
-				}
-			};
+			//var customPrefab = new CustomPrefab(PocketPortalPrefab, fixReference: true);
+			//PrefabManager.Instance.AddPrefab(customPrefab);
+			//PrefabManager.Instance.RegisterToZNetScene(PocketPortalPrefab);
 
-			var customPiece = new CustomPiece(PocketPortalPrefab, fixReference: true, pieceConfig);
-			PieceManager.Instance.AddPiece(customPiece);
+			// Add portal to build menu
+			MPrefabManager.AddToHammerBuildMenu(PocketPortalPrefab);
 
 			PocketPortalPrefab.SetActive(true);
 			MarsarahTweaks.LogInfo("[PocketPortal] Pocket Portal registered and ready.");
+		}
+
+		private static IEnumerator ActivateLater(GameObject prefab)
+		{
+			yield return null; // Wait one frame
+			prefab.SetActive(true);
 		}
 
 		private static void ClonePocketPortalPrefab()
@@ -99,15 +98,13 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		}
 
-		private static bool ValidatePocketPortalPrefab()
+		private static void ValidatePocketPortalPrefab()
 		{
 			bool pocketPortalValidated = MPrefabManager.ValidatePrefab(PocketPortalPrefab, hasNetView: true, hasTeleport: true, hasPiece: true, hasWearNTear: true);
 			if (!pocketPortalValidated)
 			{
 				MarsarahTweaks.LogError($"[PocketPortal] Prefab validation failed.");
-				return false;
 			}
-			return true;
 		}
 
 		private static void SetupPocketPortalDefaults()
@@ -124,10 +121,22 @@ namespace MarsarahTweaks.Patches.Features
 			Piece piece = PocketPortalPrefab.GetComponent<Piece>();
 			if (piece != null)
 			{
+				piece.m_enabled = true;
 				piece.m_name = "Pocket Portal";
 				piece.m_description = "A portal meant to be easy to carry and make exploration more convenient";
 				piece.m_craftingStation = null;
-			}			
+				piece.m_resources = new[]
+				{
+					new Piece.Requirement
+					{
+						m_resItem = ObjectDB.instance.GetItemPrefab("SurtlingCore").GetComponent<ItemDrop>(),
+						m_amount = 1,
+						m_recover = true
+					}
+				};
+			}
+
+			PocketPortalPrefab.layer = LayerMask.NameToLayer("piece");
 		}
 
 		private static void RegisterPocketPortalEffects()
@@ -166,7 +175,7 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static void ApplyPocketPortalVisuals()
 		{
-			GameObject vanillaUnusedPortalPrefab = ZNetScene.instance.GetPrefab("portal");
+			GameObject vanillaUnusedPortalPrefab = MPrefabManager.GetPrefab("portal");
 			if (vanillaUnusedPortalPrefab == null)
 			{
 				MarsarahTweaks.LogError("[PocketPortal] Unused portal prefab not found");
@@ -601,7 +610,7 @@ namespace MarsarahTweaks.Patches.Features
 		}*/
 
 		// Adds the pocket_portal prefab to the list of known portals
-		/*[HarmonyPatch(typeof(Game), nameof(Game.ConnectPortals))]
+		[HarmonyPatch(typeof(Game), nameof(Game.ConnectPortals))]
 		public static class Game_ConnectPortals_Patch
 		{
 			static void Prefix(Game __instance)
@@ -617,7 +626,7 @@ namespace MarsarahTweaks.Patches.Features
 				{
 					__instance.m_portalPrefabs.Add(portal);
 					__instance.PortalPrefabHash.Add("pocket_portal".GetStableHashCode());
-					MarsarahTweaks.LogInfo("[PocketPortal] ✅ Registered 'pocket_portal' in Game.m_portalPrefabs via ConnectPortals.");
+					MarsarahTweaks.LogInfo("[PocketPortal] Registered 'pocket_portal' in Game.m_portalPrefabs via ConnectPortals.");
 				}
 			}
 		}
@@ -643,10 +652,10 @@ namespace MarsarahTweaks.Patches.Features
 					string authorId = PlatformManager.DistributionPlatform?.LocalUser?.PlatformUserID.ToString() ?? "";
 					zdo.Set(ZDOVars.s_tagauthor, authorId);
 
-					MarsarahTweaks.LogInfo($"[PocketPortal] Auto-assigned missing tagauthor: {authorId}");
+					//MarsarahTweaks.LogInfo($"[PocketPortal] Auto-assigned missing tagauthor: {authorId}");
 				}
 			}
-		}*/
+		}
 
 		// Limit Pocket Portals per player
 		/*[HarmonyPatch(typeof(Player), nameof(Player.TryPlacePiece))]

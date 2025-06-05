@@ -1,5 +1,7 @@
 ﻿using BepInEx;
+using Jotunn;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,6 +14,83 @@ namespace MarsarahTweaks.Managers
 	// MPrefabManager: MarsarahTweaks prefab cloning and registration system
 	internal class MPrefabManager
 	{
+		public static GameObject GetPrefab(string name)
+		{
+			if (string.IsNullOrEmpty(name))
+			{
+				MarsarahTweaks.LogError("[MPrefabManager] GetPrefab: Given prefab name is null or empty.");
+				return null;
+			}
+
+			// --- Try ZNetScene.GetPrefab ---
+			if (ZNetScene.instance != null)
+			{
+				GameObject znetPrefab = ZNetScene.instance.GetPrefab(name);
+				if (znetPrefab != null)
+				{
+					return znetPrefab;
+				}
+			}
+
+			// --- Try ObjectDB.GetItemPrefab ---
+			if (ObjectDB.instance != null)
+			{
+				GameObject itemPrefab = ObjectDB.instance.GetItemPrefab(name);
+				if (itemPrefab != null)
+				{
+					return itemPrefab;
+				}
+			}
+
+			// --- Try ZNetScene.m_namedPrefabs via reflection ---
+			try
+			{
+				var znetScene = ZNetScene.instance;
+				if (znetScene != null)
+				{
+					var namedPrefabsField = typeof(ZNetScene).GetField("m_namedPrefabs", BindingFlags.Instance | BindingFlags.NonPublic);
+					var namedPrefabs = namedPrefabsField?.GetValue(znetScene) as Dictionary<int, GameObject>;
+					if (namedPrefabs != null && namedPrefabs.TryGetValue(name.GetStableHashCode(), out GameObject reflectedPrefab))
+					{
+						return reflectedPrefab;
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				MarsarahTweaks.LogError($"[MPrefabManager] Reflection on ZNetScene.m_namedPrefabs failed: {e.Message}");
+			}
+
+			// --- Try ObjectDB.m_itemByHash via reflection ---
+			try
+			{
+				var objDB = ObjectDB.instance;
+				if (objDB != null)
+				{
+					var itemByHashField = typeof(ObjectDB).GetField("m_itemByHash", BindingFlags.Instance | BindingFlags.NonPublic);
+					var itemByHash = itemByHashField?.GetValue(objDB) as Dictionary<int, GameObject>;
+					if (itemByHash != null && itemByHash.TryGetValue(name.GetStableHashCode(), out GameObject reflectedItem))
+					{
+						return reflectedItem;
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				MarsarahTweaks.LogError($"[MPrefabManager] Reflection on ObjectDB.m_itemByHash failed: {e.Message}");
+			}
+
+			// Fallback to Resources.FindObjectsOfTypeAll (slow, only for dev/debug)
+			GameObject fallbackPrefab = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(go => go.name == name);
+			if (fallbackPrefab != null)
+			{
+				return fallbackPrefab;				
+			}
+
+			//MarsarahTweaks.LogWarn($"[MPrefabManager] GetPrefab could not find: {name}");
+			return null;
+		}
+
 		public static GameObject ClonePrefab(string nameOfOriginal, string nameOfClone)
 		{
 			if (nameOfOriginal.IsNullOrWhiteSpace() || nameOfClone.IsNullOrWhiteSpace())
@@ -20,13 +99,13 @@ namespace MarsarahTweaks.Managers
 				return null;
 			}
 
-			if (ZNetScene.instance.GetPrefab(nameOfClone) != null)
+			if (GetPrefab(nameOfClone) != null)
 			{
 				MarsarahTweaks.LogWarn($"[MPrefabManager] A prefab named {nameOfClone} already exists in ZNetScene. Skipping clone.");
 				return null;
 			}
 
-			GameObject originalPrefab = ZNetScene.instance.GetPrefab(nameOfOriginal);
+			GameObject originalPrefab = GetPrefab(nameOfOriginal);
 			if (originalPrefab == null)
 			{
 				MarsarahTweaks.LogError($"[MPrefabManager] Original prefab {nameOfOriginal} not found.");
@@ -44,7 +123,7 @@ namespace MarsarahTweaks.Managers
 				return null;
 			}
 
-			if (ZNetScene.instance.GetPrefab(nameOfClone) != null)
+			if (GetPrefab(nameOfClone) != null)
 			{
 				MarsarahTweaks.LogWarn($"[MPrefabManager] A prefab named {nameOfClone} already exists in ZNetScene. Skipping clone.");
 				return null;
@@ -145,13 +224,38 @@ namespace MarsarahTweaks.Managers
 
 			namedPrefabs.Add(hash, prefab);
 
-			if (ZNetScene.instance.GetPrefab(prefab.name) == null)
+			if (GetPrefab(prefab.name) == null)
 			{
 				MarsarahTweaks.LogError($"[MPrefabManager] Failed to register prefab '{name}'!");
 			}
 			else
 			{
 				MarsarahTweaks.LogInfo($"[MPrefabManager] Registered prefab '{name}' to ZNetScene.");
+			}
+		}
+
+		public static void AddToHammerBuildMenu(GameObject prefab)
+		{
+			if (prefab == null)
+			{
+				MarsarahTweaks.LogError("[MPrefabManager] Tried to add null prefab to hammer.");
+				return;
+			}
+
+			GameObject hammerPrefab = ObjectDB.instance?.GetItemPrefab("Hammer");
+			ItemDrop hammer = hammerPrefab?.GetComponent<ItemDrop>();
+			PieceTable table = hammer?.m_itemData?.m_shared?.m_buildPieces;
+
+			if (table == null)
+			{
+				MarsarahTweaks.LogError("[MPrefabManager] Could not get Hammer piece table.");
+				return;
+			}
+
+			if (!table.m_pieces.Contains(prefab))
+			{
+				table.m_pieces.Add(prefab);
+				MarsarahTweaks.LogInfo($"[MPrefabManager] Added '{prefab.name}' to hammer build menu.");
 			}
 		}
 	}
