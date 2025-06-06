@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.3.0  
+[b]Version:[/b] 1.3.1  
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -22,11 +22,9 @@ Reuploading this mod, whether in part or in full, is [b]not permitted[/b].
 
 [size=5][b]🧱 Requirements[/b][/size]
 
-This mod requires [b]BepInEx for Valheim[/b], available here:  
-https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/
-From version 1.3.0 [b]Jotunn[/b] is also required: 
-https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/
-⚠️ [b]Note:[/b] This needs to be installed on the dedicated server as well as all clients
+This mod requires [b]BepInEx for Valheim[/b], available here:  [url=https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/]BepInExPack_Valheim[/url]
+From version 1.3.0 [b]Jotunn[/b] is also required: [url=https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/]Jotunn[/url]
+⚠️ [b]Note:[/b] This needs to be installed on the [b]dedicated server[/b] as well as all [b]clients.[/b]
 
 [line]
 
@@ -50,7 +48,7 @@ This mod is [b]modular and customizable[/b].
 - Most features support [b]mid-game toggling[/b], but some require crafting menus to be reopened, reloading areas or [b]client[/b] relogs (this is specified in each config).
 - Some configs below will have more detailed changes written in the [Docs] tab of this page. 
 
-> ✅ All features are synced using ServerSync.  
+> ✅ All features (except UI) are synced using ServerSync.  
 > 🔄 Players will be disconnected if their mod version differs from the server.
 
 [line]
@@ -109,47 +107,47 @@ All features below are synced with the server and can be toggled mid-game.
 [b]🔧 Changes:[/b]
 
 - [b]Club[/b]
-  • Material:         Bone Fragments → Leather Scraps
+  • Material: Bone Fragments → Leather Scraps
 - [b]Copper Knife:[/b]
-  • Material:         Greydwarf Eye  → Leather Scraps 
-  • Amount Upgrade:   8/16/24        → 2/4/6 
+  • Material: Greydwarf Eye  → Leather Scraps 
+  • Amount Upgrade: 8/16/24 → 2/4/6 
 - [b]Silver Knife:[/b]
-  • Material:         Wood           → Fine Wood
-  • Material:         Iron           → Obsidian
+  • Material: Wood → Fine Wood
+  • Material: Iron → Obsidian
 - [b]Silver Sword:[/b]
-  • Material:         Wood           → Fine Wood
-  • Amount Craft:     2              → 10 
-  • Amount Upgrade:   1/2/3          → 2/4/6
-  • Material:         Iron           → Obsidian
-  • Amount Craft:     5              → 4
-  • Amount Upgrade:   3/6/9          → 2/4/6
+  • Material: Wood → Fine Wood
+  • Amount Craft: 2 → 10 
+  • Amount Upgrade: 1/2/3 → 2/4/6
+  • Material: Iron → Obsidian
+  • Amount Craft: 5  → 4
+  • Amount Upgrade: 3/6/9 → 2/4/6
 - [b]Serpent Scale Shield:[/b]
-  • Material:         Iron           → Chitin
-  • Amount Upgrade:   2/4/6          → 1/2/4
+  • Material: Iron  → Chitin
+  • Amount Upgrade: 2/4/6 → 1/2/4
 - [b]Porcupine:[/b]
-  • Material:         Iron           → Black Metal
+  • Material: Iron → Black Metal
 - [b]Arbalest:[/b]
-  • Material:         Wood           → Fine Wood
+  • Material: Wood → Fine Wood
 - [b]Wolf Armor Chest:[/b]
-  • Material:         Chain          → Wolf Fang
-  • Amount Craft:     1              → 3
+  • Material: Chain → Wolf Fang
+  • Amount Craft: 1 → 3
 - [b]Padded Helmet:[/b]
-  • Material:         Iron           → Black Metal
+  • Material: Iron → Black Metal
 - [b]Padded Cuirass:[/b]
-  • Material:         Iron           → Black Metal
+  • Material: Iron → Black Metal
 - [b]Padded Greaves:[/b]
-  • Material:         Iron           → Black Metal
+  • Material: Iron → Black Metal
 - [b]Linen Cape:[/b]
-  • Material:         Silver         → Black Metal
+  • Material: Silver → Black Metal
 - [b]Eitr-Weave Hood:[/b]
-  • Material:         Iron           → Scale Hide
-  • Amount Craft:     2              → 3
+  • Material: Iron → Scale Hide
+  • Amount Craft: 2 → 3
 - [b]Robes of Embla:[/b]
-  • Material:         Flametal       → Sulfur
+  • Material: Flametal → Sulfur
 - [b]Ashen Cape:[/b]
-  • Material:         Flametal       → Sulfur
+  • Material: Flametal → Sulfur
 - [b]Dundr:[/b]
-  • Material:         Bloodstone     → Iolite
+  • Material: Bloodstone → Iolite
 
 
 [size=4][b]🏗️ Cheaper Build Piece Amounts[/b][/size]
@@ -178,8 +176,8 @@ All features below are synced with the server and can be toggled mid-game.
 [b]🔧 Changes:[/b]
 
 - [b]Tool Rack (Workbench Extension):[/b] Obsidian → Coal (This will move this extension one biome earlier)
-- [b]Darkwood Gate:[/b]                   Iron     → Black Metal
-- [b]Bath Tub:[/b]                        Iron     → Black Metal
+- [b]Darkwood Gate:[/b] Iron → Black Metal
+- [b]Bath Tub:[/b] Iron → Black Metal
 
 
 [size=4][b]🍲 Food and Mead Modifications[/b][/size]
@@ -247,10 +245,10 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 [b]🔧 Changes:[/b]
 
-- [b]Material:[/b]       Linen thread → Deer Hide
-- [b]Craft Amount:[/b]   20     → 5
+- [b]Material:[/b] Linen thread → Deer Hide
+- [b]Craft Amount:[/b] 20 → 5
 - [b]Upgrade Amount:[/b] 4/8/12 → 2/4/6
-- [b]Material:[/b]       Silver → Iron
+- [b]Material:[/b] Silver → Iron
 
 
 [size=4][b]🏃‍♂️ Gear Speed Modifications[/b][/size]
@@ -769,7 +767,8 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 [size=4][b]🖥️ UI[/b][/size]
 
-All features below are synced with the server and can be toggled mid-game.
+Configs in this section are [b]not[/b] synced with the server.
+All configs can be toggled mid-game.
 
 [line]
 
@@ -880,7 +879,7 @@ All features below are synced with the server and can be toggled mid-game.
 
 📜 Sub-section for the previous config.
 - Shows online players under minimap instead of bottom right when Show Online Players is enabled.
-- This option is automatically disabled on a no-map world and cannot be toggled on.
+- This option is automatically disabled on a no-map world, or when Minimal Status Effects is installed, and cannot be toggled on.
 
 🔄 Can be enabled/disabled during gameplay.
 
@@ -962,6 +961,10 @@ Blaxxun-bloop - for ServerSync
 
 
 [size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
+
+v1.3.1
+- All UI configs are no longer synced with server. Players can individually configure this mod's UI elements individually.
+- Show Online Players Under Minimap cannot be toggled on with Minimal Status Effects installed.
 
 v1.3.0
 - [b]Mod now requires Jotunn[/b]  

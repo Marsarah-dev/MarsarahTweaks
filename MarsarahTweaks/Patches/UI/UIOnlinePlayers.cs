@@ -56,6 +56,7 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static bool lastOnlinePlayersUnderMinimap = ConfigManager.OnlinePlayersUnderMinimap.Value;
 			private static readonly float UIPartyPlayerTextDistanceV = -25f; // goes down;
+			private static readonly bool minimalStatusEffectsLoaded = AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "MinimalStatusEffects");
 
 			private static void Postfix(Hud __instance)
 			{
@@ -65,7 +66,13 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (Game.m_noMap && ConfigManager.OnlinePlayersUnderMinimap.Value)
 				{
-					MarsarahTweaks.LogInfo("Cannot enable OnlinePlayersUnderMinimap on a no map world.");
+					MarsarahTweaks.LogInfo("Cannot enable 'Online Players Under Minimap' on a no map world.");
+					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
+				}
+
+				if (minimalStatusEffectsLoaded && ConfigManager.OnlinePlayersUnderMinimap.Value)
+				{
+					MarsarahTweaks.LogInfo("Cannot enable 'Online Players Under Minimap' with 'Minimal Status Effects' enabled.");
 					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
 				}
 

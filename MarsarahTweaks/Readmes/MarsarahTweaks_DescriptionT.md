@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.3.0   
+**Version:** 1.3.1   
 **Author:** Marsarah
 
 ---
@@ -50,7 +50,7 @@ This mod is **modular and customizable**.
 - Most features support **mid-game toggling**, but some require crafting menus to be reopened, reloading areas or **client** relogs (this is specified in each config).
 - Some configs below will have more detailed changes written in the [Docs] tab of the Nexusmods page. 
 
-  ✅ All features are synced using ServerSync.  
+  ✅ All features (except UI) are synced using ServerSync.  
   🔄 Players will be disconnected if their mod version differs from the server.
 
 ---
@@ -814,7 +814,8 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 ## <strong>🖥️ UI</strong>
 
-All features below are synced with the server and can be toggled mid-game.
+Configs in this section are **not** synced with the server.  
+All configs can be toggled mid-game.
 
 ---
 
@@ -934,7 +935,7 @@ All features below are synced with the server and can be toggled mid-game.
 
 📜 Sub-section for the previous config.
 - Shows online players under minimap instead of bottom right when Show Online Players is enabled.
-- This option is automatically disabled on a no-map world and cannot be toggled on.
+- This option is automatically disabled on a no-map world, or when Minimal Status Effects is installed, and cannot be toggled on.  
 
 🔄 Can be enabled/disabled during gameplay.
 
@@ -1017,6 +1018,10 @@ Azumatt - for a guide on YouTube about how to setup ServerSync in a project
 Blaxxun-bloop - for ServerSync
 
 ## <strong> 📜 Version History </strong>
+
+v1.3.1
+- All UI configs are no longer synced with server. Players can individually configure this mod's UI elements individually.
+- Show Online Players Under Minimap cannot be toggled on with Minimal Status Effects installed.
 
 v1.3.0
 - **Mod now requires Jotunn**  

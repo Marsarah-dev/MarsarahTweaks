@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.3.0
+Marsarah Tweaks v1.3.1
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 
@@ -10,7 +10,7 @@ REQUIREMENTS
 ================================================================
 This mod requires BepInEx for Valheim which can be downloaded from Thunderstore:
 https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/
-From version 1.3.0 [b]Jotunn[/b] is also required: 
+From version 1.3.0 Jotunn is also required: 
 https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/
 Note: This needs to be installed on the dedicated SERVER as well as all CLIENTS
 
@@ -32,7 +32,7 @@ Individual features can be enabled or disabled by editing this file or in-game w
 
 If you’re using another mod that changes similar gameplay elements (e.g. creature scaling), disable the overlapping section in this mod’s config to avoid conflicts. Specific compatibility issues will be mentioned in each config description if known.
 
-This mod uses Server Sync. All clients need to have the same version as the server, otherwise they will be disconnected at login. All configs are synced between server and clients.
+This mod uses Server Sync. All clients need to have the same version as the server, otherwise they will be disconnected at login. All configs (except UI) are synced between server and clients.
 
 MOD CONFIGS
 ================================================================
@@ -2156,7 +2156,7 @@ The following foods have the stack size increased to 20
 
 
 ============================ [UI] ==============================
-► All configs in this section are synced with server.
+► Configs in this section are NOT synced with server.
 
 --------------------- [More Loading Tips]-----------------------
 
@@ -2295,7 +2295,7 @@ The following foods have the stack size increased to 20
 ► Description:
   Sub-section for the previous config.
   Shows online players under minimap instead of bottom right when Show Online Players is enabled.
-  This option is automatically disabled on a no-map world and cannot be toggled on.
+  This option is automatically disabled on a no-map world, or when Minimal Status Effects is installed, and cannot be toggled on.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
@@ -2373,6 +2373,10 @@ The following foods have the stack size increased to 20
 
 VERSION HISTORY
 ================================================================
+
+v1.3.1
+- All UI configs are no longer synced with server. Players can individually configure this mod's UI elements individually.
+- Show Online Players Under Minimap cannot be toggled on with Minimal Status Effects installed.
 
 v1.3.0
 - Mod now requires Jotunn
