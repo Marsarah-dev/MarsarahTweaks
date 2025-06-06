@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.2.0   
+**Version:** 1.3.0   
 **Author:** Marsarah
 
 ---
@@ -23,7 +23,10 @@ Reuploading this mod, whether in part or in full, is **not permitted**.
 ## <strong> 🧱 Requirements </strong>
 
 This mod requires **BepInEx for Valheim**, available here:  
-https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/
+https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/  
+From version 1.3.0 **Jotunn** is also required:  
+https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/  
+  ⚠️ **Note:** This needs to be installed on the **dedicated server** as well as **all clients**.
 
 ---
 
@@ -90,8 +93,9 @@ All features below are synced with the server and can be toggled mid-game.
 
 📜 Reduces the **amount** (not type) of resources needed to craft or upgrade vanilla gear.
 
-- Focused especially on expensive items like metal weapons and armor  
-- Some recipes rebalance material use (e.g. replacing bronze with leather) for game balance  
+- Focused especially on metal for weapons and armor  
+- Rebalances the material amounts for some recipes (e.g. more wood or leather) for game balance  
+- Specific details can be found in the **Docs** tab of the **Nexusmods** page
 
 🔄 Requires reopening the relevant crafting menu after toggling the config mid-game
 
@@ -103,10 +107,55 @@ All features below are synced with the server and can be toggled mid-game.
 
 📜 Changes gear crafting and upgrade materials to match the **biome progression**.  
 - This prevents players from needing to backtrack to earlier biomes to gather outdated materials.
+- Other changes are made where it made sense (e.g. Dundr using Iolite instead of Bloodstone)
 
 🔄 Requires reopening the relevant crafting menu after toggling the config mid-game
 
 **❗ Conflicts:** Mods that modify vanilla gear recipe resources.
+
+**🔧 Changes:**
+- **Club:**  
+  • Material:         Bone Fragments → Leather Scraps
+- **Copper Knife:**  
+  • Material:         Greydwarf Eye  → Leather Scraps   
+  • Amount Upgrade:   8/16/24        → 2/4/6 
+- **Silver Knife:**  
+  • Material:         Wood           → Fine Wood  
+  • Material:         Iron           → Obsidian  
+- **Silver Sword:**  
+  • Material:         Wood           → Fine Wood  
+  • Amount Craft:     2              → 10  
+  • Amount Upgrade:   1/2/3          → 2/4/6  
+  • Material:         Iron           → Obsidian  
+  • Amount Craft:     5              → 4  
+  • Amount Upgrade:   3/6/9          → 2/4/6  
+- **Serpent Scale Shield:**  
+  • Material:         Iron           → Chitin  
+  • Amount Upgrade:   2/4/6          → 1/2/4  
+- **Porcupine:**  
+  • Material:         Iron           → Black Metal  
+- **Arbalest:**  
+  • Material:         Wood           → Fine Wood  
+- **Wolf Armor Chest:**  
+  • Material:         Chain          → Wolf Fang  
+  • Amount Craft:     1              → 3  
+- **Padded Helmet:**  
+  • Material:         Iron           → Black Metal  
+- **Padded Cuirass:**  
+  • Material:         Iron           → Black Metal  
+- **Padded Greaves:**  
+  • Material:         Iron           → Black Metal  
+- **Linen Cape:**  
+  • Material:         Silver         → Black Metal  
+- **Eitr-Weave Hood:**  
+  • Material:         Iron           → Scale Hide  
+  • Amount Craft:     2              → 3  
+- **Robes of Embla:**  
+  • Material:         Flametal       → Sulfur  
+- **Ashen Cape:**  
+  • Material:         Flametal       → Sulfur  
+- **Dundr:**  
+  • Material:         Bloodstone     → Iolite  
 
 ---
 
@@ -114,11 +163,12 @@ All features below are synced with the server and can be toggled mid-game.
 
 📜 Reduces the **amount** of materials required to craft vanilla build pieces.
 
-- Works with mods that add new build pieces (but does not affect them)  
+- Specific details can be found in the **Docs** tab of the **Nexusmods** page
 
 🔄 Requires reopening the build menu after toggling the config mid-game
 
 **❗ Conflicts:** Mods that modify vanilla build piece costs.
+- Works with mods that add new build pieces (but does not affect them)  
 
 ---
 
@@ -133,6 +183,11 @@ All features below are synced with the server and can be toggled mid-game.
 **❗ Conflicts:** Mods that modify vanilla build piece costs.  
 ✅ Compatible with mods that add new build pieces (changes won't apply to them).
 
+**🔧 Changes:**
+- **Tool Rack (Workbench Extension):** Obsidian → Coal (This will move this extension one biome earlier)
+- **Darkwood Gate:**                   Iron     → Black Metal
+- **Bath Tub:**                        Iron     → Black Metal
+
 ---
 
 ### <strong>🍲 Food and Mead Modifications</strong>
@@ -141,6 +196,7 @@ All features below are synced with the server and can be toggled mid-game.
 
 - Changes recipe amounts, outputs, and ingredients  
 - All food stack sizes increased to **20**
+- Specific details can be found in the **Docs** tab of the **Nexusmods** page
 
 🔄 Requires **client** relog after toggling the config mid-game. 
 
@@ -167,7 +223,6 @@ All features below are synced with the server and can be toggled mid-game (with 
 **❗ Conflicts:** This only applies to vanilla game prefabs. Any mod that adds new prefabs (creatures, resources, pickables) will **not** be included in the Progression Halt system.
 
 **🔧 Specific boss halts**
-
 - Eikthyr: Black Forest objects and creatures
 - The Elder: Swamp objects and creatures
 - Bonemass: Mountain and Ocean objects and creatures (ocean halted by Bonemass by default)
@@ -197,6 +252,12 @@ All features below are synced with the server and can be toggled mid-game (with 
 🔄 Reopen the crafting menu to apply changes if toggling mid-game. If wearing the cape while toggling, a **client relog** is required for Poison Resist to apply
 
 **❗ Conflicts:** Mods that modify back pieces
+
+**🔧 Changes:**
+- **Material:**       Linen thread → Deer Hide
+- **Craft Amount:**   20     → 5
+- **Upgrade Amount:** 4/8/12 → 2/4/6
+- **Material:**       Silver → Iron
 
 ---
 
@@ -354,6 +415,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 ### <strong>🦴 Better Summoned Skeletons</strong>
 
 📜 Increases summoned skeleton speed and adds better looking gear according to Death Raiser level (Skeleton stats are not affected).
+- Specific details can be found in the **Docs** tab of the **Nexusmods** page
 
 🔄 Toggling mid-game requires **client** relog for Summoned Skeleton speed changes to take effect. New gear is applied immediately for newly Summoned Skeletons without relogging.
 
@@ -385,6 +447,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 📜 Reduced the spawn rate and numbers of enemies in Ashlands.  
 - This does **not** modify enemy levels or levelup chances (starred enemies).
+- Specific details can be found in the **Docs** tab of the **Nexusmods** page
 
 🔄 Toggling mid-game requires reloading area. 
 - This means moving to a new unloaded area will apply the new/old spawn values depending on the toggle. Areas that are currently active (having a player present) will retain the old config spawn data.  
@@ -419,7 +482,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 ---
 
-### <strong>🌫️ Clear Mistlands</strong>
+### <strong>🌫️ Clear Mistlands After Queen</strong>
 
 📜 Clears Mistlands mist after defeating the Queen.  
 - Changes will be applied immediately when the Queen is defeated. No relogs or restarts needed.
@@ -468,11 +531,12 @@ All features below are synced with the server and can be toggled mid-game (with 
 - Changes are automatically applied when a boss is defeated, including when reverting the boss global key with console commands.  
 - If defeating bosses in an unordered way, the changes still apply in their natural order.  
 - Some creatures that did not have stars will now gain stars (e.g. Abomination, Lox, Deathsquito)
+- Specific details can be found in the **Docs** tab of the **Nexusmods** page
 
 🔄 Can be enabled/disabled during gameplay, but changes will only be applied to new areas and newly spawned creatures.  
 - For example, if the mod was enabled and a 2-star Troll was spawned, the Troll will retain its level even if the config is toggled OFF afterwards. Same applies when toggling ON, when defeating bosses or reverting with console commands.
 
-**❗ Conflicts:**  Mods that change creature levels.
+**❗ Conflicts:**  Mods that change creature levels. (e.g. Creature Level And Loot Control)
 
 ---
 
@@ -480,7 +544,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 📜 Increases base carry weight by 25 when turning in Hildir chests (for each chest).  
 - This will apply for all characters in the world, but will require **client** relogs when a chest is turned in.  
-- Changes are NOT applied when defeating the minibosses.
+- Changes are **not** applied when defeating the minibosses.
 
 🔄 Toggling mid-game requires **client** relog.
 
@@ -491,7 +555,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 ### <strong>🛠️ Station Extensions Changes</strong>
 
 📜 Decreases space requirement for workstation extensions and increases build distance to workstations.  
-- This does not increase workstations radius.
+- This does **not** increase workstations radius.
 
 🔄 Can be enabled/disabled during gameplay, but requires reloading the build menu.
 
@@ -551,6 +615,40 @@ All features below are synced with the server and can be toggled mid-game (with 
 | Karve     | 500    | 650    |
 | Longship  | 1000   | 1250   |
 | Drakkar   | 3000   | 4000   |
+
+---
+
+### <strong>🚪 Pocket Portal</strong>
+
+📜 Adds a new portal that is functionally equal to the normal portal but is built from a special material, the Portal Core.
+- The Portal Core takes takes only one inventory slot and can be crafted at a lvl 4 Workbench with resources gathered from the Mountain and Black Forest biomes.  
+- The portal's shape is exactly the same as a normal portal, but has blue effects.
+- It does **not** allow the carying of metal or other prohibited items through it. It functions like a normal portal and can connect to any other portal.
+- Can craft and carry any number of Portal Cores, but can only build **one** Pocket Portal per player. 
+
+🔄 Toggling mid-game requires reloading the build/crafting menu. 
+- Even if this config is disabled, the prefabs are still crated and existing portals or cores will not be removed from the world or inventory. Only the ability to craft them is affected by the toggle.
+
+**❗ Conflicts:** No known conflicts. Requires Jotunn.
+
+**🔧 Portal Core Resource Requirements:**
+- **Surtling Core:** 5
+- **Fine Wood:** 20
+- **Freeze Gland:** 5
+- **Obsidian:** 20
+
+---
+
+### <strong>🚪 Max Portals Per Player</strong>
+
+📜 Sets the number of portals that can be built by each player. This applies separately for each world.
+- This number applies individually for the normal and the stone portal. E.g. If the number is set to 5, then a player can build 5 normal portals and 5 stone portals.
+- This does not affect the number of Pocket Portals a player can build.
+- Set to -1 for unlimited portals (default).
+
+🔄 Changes will take effect immediately if the number is changed mid-game.
+
+**❗ Conflicts:** Incompatible with Rare Magic Portal Plus (or any other mod that sets a limit to portals), unless the value is set to -1.
 
 ---
 
@@ -641,7 +739,6 @@ All features below are synced with the server and can be toggled mid-game (with 
 ### <strong>🏹 Friendly Ballistas</strong>
 
 📜 Ballistas no longer fire on players and tamed creatures.
-- Prevents accidental damage from ballistas to players and their pets.
 
 🔄 Can be enabled/disabled during gameplay.
 
@@ -751,7 +848,7 @@ All features below are synced with the server and can be toggled mid-game.
 - Counts the number of enemies in close proximity.
 - Does not include other players, deer, hare, player-summoned creatures, or tame animals in the enemy count.
 - Neutral Dverger are counted in parentheses. When attacked, the number goes into the normal enemy counter. If Alternate UI Layout is enabled, neutral Dverger are counted with a separate indicator.
-- Colors change according to the number of nearby enemies. If Alternate UI Layout is enabled, the icon will also change to a ghost if 7 or more enemies are nearby.
+- Colors change according to the number of nearby enemies. If Alternate UI Layout is enabled, the icon will change according to how many enemies are nearby.
 
 🔄 Can be enabled/disabled during gameplay.
 
@@ -762,7 +859,7 @@ All features below are synced with the server and can be toggled mid-game.
 ### <strong>⛵ Show Boat Speed</strong>
 
 📜 Displays current ship speed next to the inventory weight widget at the bottom left of the screen.
-- If the Alternate UI Layout is used, this widget is displayed at the bottom-left of the minimap. If Minimal Status Effects is installed, the widget moves to the top-left of the minimap.
+- If the Alternate UI Layout is used, this indicator is displayed above the main sailing widget. If Minimal Status Effects is installed, the speed indicator moves with the main widget.
 - When going forward, only the speed value is displayed.
 - When going backwards, "R" is displayed before the speed value.
 - The speed counter only shows when controlling a boat.
@@ -778,6 +875,7 @@ All features below are synced with the server and can be toggled mid-game.
 
 📜 Displays current time of day above the minimap using day sections (Dawn, Morning, Day, Afternoon, Evening, Dusk, Night).  
 📜 Shows the number of days spent in the world.
+- If the Alternate UI Layout is used, an additional symbol is displayed next to the time depending on the time of day.
 
 🔄 Can be enabled/disabled during gameplay.
 
@@ -824,7 +922,7 @@ All features below are synced with the server and can be toggled mid-game.
 📜 Shows a list of online players and the total number of players on the bottom right of the screen.
 - Not displayed if only one player is online.
 - Displays maximum 20 players.
-- The list can be toggled with the Home key, but the total number of online players will still be shown. 
+- The list can be toggled with the **Home** key, but the total number of online players will still be shown. 
 
 🔄 Can be enabled/disabled during gameplay.
 
@@ -836,6 +934,7 @@ All features below are synced with the server and can be toggled mid-game.
 
 📜 Sub-section for the previous config.
 - Shows online players under minimap instead of bottom right when Show Online Players is enabled.
+- This option is automatically disabled on a no-map world and cannot be toggled on.
 
 🔄 Can be enabled/disabled during gameplay.
 
@@ -850,8 +949,8 @@ All features below are synced with the server and can be toggled mid-game.
 
 🔄 Toggling mid-game requires reopening the build menu.
 
-**❗ Conflicts:** Valheim Plus, Craft From Containers
-**Note:** If Craft From Containers is installed, this config will override the available resource lookup to the player inventory instead of nearby containers. Simply disable this config to see available resources from chests again.
+**❗ Conflicts:** Valheim Plus, Craft From Containers  
+**Note:** If Craft From Containers is installed, this config will override the available resource lookup to the player inventory instead of nearby containers. Simply disable this config to see available resources from chests again.  
 **Note:** This will not disable Craft From Container's ability to craft from containers; it's just a visual incompatibility, same as Valheim Plus
 
 ---
@@ -890,13 +989,13 @@ All features below are synced with the server and can be toggled mid-game.
 
 ### <strong>🖥️ Alternate UI Layout</strong>
 
-📜 Alternates the layout of this mod's UI by using symbols instead of words for Inventory Weight and Slots, Enemy Counter, Summons Counter, and Boat Speed. 
+📜 Alternates the layout of this mod's UI by using symbols instead of words for Inventory Weight and Slots, Enemy Counter, Summons Counter, Boat Speed, and Time of Day. 
 📜 Repositions the Boat Speed widget to the minimap area.
 
 🔄 Can be enabled/disabled during gameplay.
 
 **❗ Conflicts:** No known conflicts.
-✅ Compatible with Minimal Status Effects. This mod automatically detects the existence of Minimal Status Effects and repositions the Boat Speed widget to not be on top of the rudder icon when sailing.
+✅ Compatible with Minimal Status Effects. This mod automatically detects the existence of Minimal Status Effects and repositions the Boat Speed widget accordingly.
 
 ---
 ---
@@ -919,26 +1018,37 @@ Blaxxun-bloop - for ServerSync
 
 ## <strong> 📜 Version History </strong>
 
+v1.3.0
+- **Mod now requires Jotunn**  
+- Fixed an issue with Player Logout Announce not working in certain situations.
+- Moved position of the Boat Speed Indicator in the Alternate UI mode to be above the wind indicator for no-map game modifier or when Minimal Status Effects in installed.
+- Added symbols for the Time of Day widget according to day section in Alternate UI mode.  
+- Modified symbols for Enemy Detector in Alternate UI mode according to the number of nearby enemies.
+- Updated compatibility notes for: Show Owned Resources In Build Menu and Creature Unleveler By Boss.
+- Updated descriptions to include specific changes for the following sections: Alternate Gear Recipe Materials, Alternate Build Piece Materials, Early Linen Cape.
+- Renamed section 'Clear Mistlands' to 'Clear Mistlands After Queen'.
+- **Feature addition:** Alternate Gear Recipes - Changed Dundr to use Iolite instead of Bloodstone for crafting and upgrading.
+- **New Feature:** Pocket Portal
+- **New Feature:** Max Portals Per Player
+
 v1.2.0
 - Fixed an issue with Progression Halt where players could get the contents of halted chests by simply destroying them.
 - Fixed an issue with the Move Camera Up While Sailing section, where if a player would log out while controlling a ship, then the camera would be stuck in a high position when logging back in.
 - Fixed an issue with UI widgets (Time and day; online players) not showing on worlds with no map enabled. Now they display properly with the No Map global setting on.
-
-- Section change: Show Boat Speed - Removed the letter "F" when displaying boat forward speed (kept "R" for reverse);
-- Section change: Show Online Players - Now also shows the total number of players logged in. Swapped the order of header and player list when displayed at the botom right corner (header is now below the player list).
-- Section change: Show Online Players - Added key toggle (Home key) to show/hide the player list (the total number of online players will always be displayed if the config is enabled - this toggle just hides the player list).
-
-- Added QOL section: Shorter Rested Delay
-- Added QOL section: More Usable Fuel
-- Added UI section: Show Owned Resources In Build Menu
-- Added UI section: Show Boss Power Expiration Message
-- Added UI section: Player Logout Announce 
-- Added UI section: Show Heat Meter in Ashlands
-- Added UI section: Alternate UI Layout
+- **Feature change:** Show Boat Speed - Removed the letter "F" when displaying boat forward speed (kept "R" for reverse);
+- **Feature change:** Show Online Players - Now also shows the total number of players logged in. Swapped the order of header and player list when displayed at the botom right corner (header is now below the player list).
+- **Feature change:** Show Online Players - Added key toggle (Home key) to show/hide the player list (the total number of online players will always be displayed if the config is enabled - this toggle just hides the player list).
+- **New QOL feature:** Shorter Rested Delay
+- **New QOL feature:** More Usable Fuel
+- **New UI feature:** Show Owned Resources In Build Menu
+- **New UI feature:** Show Boss Power Expiration Message
+- **New UI feature:** Player Logout Announce
+- **New UI feature:** Show Heat Meter in Ashlands
+- **New UI feature:** Alternate UI Layout
 
 v1.1.2
 - Modified the way Progressionn Halt reads prefab names. This change is specifically targeting a previous incompatibility with Ventrure Location Reset mod where it was changing parts of prefab names after resetting dungeons. This patch makes these two mods compatible.
-- Added Feature section: Halt Ocean Behind Elder. This provides an extra option for players and sever admins if they prefer Ocean resources to be available earlier. Ocean-tier items and food are equal to Mountain-tier items and food, which is why this option is disabled by default, but still available if wanted.
+- **New Feature:** Halt Ocean Behind Elder. This provides an extra option for players and sever admins if they prefer Ocean resources to be available earlier. Ocean-tier items and food are equal to Mountain-tier items and food, which is why this option is disabled by default, but still available if wanted.
 - Rearranged config entries in the config file, which means that old configs will have extra unused config entries (those can be safely deleted)
 
 v1.1.1
@@ -946,7 +1056,7 @@ v1.1.1
 - Removed Pickable Bone Piles found in Meadows from Progression Halt
 
 v1.1.0
-- Added QOL Section: Move Camera Up While Sailing
+- **New QOL feature:** Move Camera Up While Sailing
 - Added forgotten items from old mod port to Cheaper Build Piece Amounts (all banners Leather Scraps: 6 → 5)
 - Added Shipwreck to Progression Halt (halted by Eikthyr)
 

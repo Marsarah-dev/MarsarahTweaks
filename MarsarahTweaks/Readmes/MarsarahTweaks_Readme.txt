@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.2.0
+Marsarah Tweaks v1.3.0
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 
@@ -10,6 +10,9 @@ REQUIREMENTS
 ================================================================
 This mod requires BepInEx for Valheim which can be downloaded from Thunderstore:
 https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/
+From version 1.3.0 [b]Jotunn[/b] is also required: 
+https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/
+Note: This needs to be installed on the dedicated SERVER as well as all CLIENTS
 
 INSTALLATION
 ================================================================
@@ -643,7 +646,7 @@ MOD CONFIGS
 -------------- [Alternate Gear Recipe Materials] ---------------
 
 ► Description:
-  Changes some gear material requirements for crafting or upgrading vanilla gear to match the biome the item comes from. Thus a player will not need to be pushed back to the previous biome to get the required material to craft it (where possible).
+  Changes some gear material requirements for crafting or upgrading vanilla gear to match the biome the item comes from. Thus a player will not need to be pushed back to the previous biome to get the required material to craft it (where possible). Other changes are made as it made sense.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay, but requires the relevant crafting menu to be reopened to take effect.
@@ -708,6 +711,8 @@ MOD CONFIGS
 - Ashen Cape
   • Material:         Flametal       → Sulfur
 
+- Dundr
+  • Material:         Bloodstone     → Iolite
 
 --------------- [Cheaper Build Pieces Amounts] -----------------
 
@@ -1699,7 +1704,7 @@ The following foods have the stack size increased to 20
   Compatible with mods that add new light sources. This will make them permanent, but will not modify their build costs.
 
 
------------------------ [Clear Mistlands] ----------------------
+----------------- [Clear Mistlands After Queen] ----------------
 
 ► Description:
   Clears Mistlands mist after defeating the Queen.
@@ -1764,7 +1769,7 @@ The following foods have the stack size increased to 20
   For example, if the mod was enabled and a 2-star Troll was spawned, the Troll will retain its level even if the config is toggled OFF afterwards. Same applies when toggling ON, when defeating bosses or reverting with console commands.
 
 ► Conflicts:
-  Incompatible with any mod that changes creature levels.
+  Incompatible with any mod that changes creature levels. (e.g. Creature Level And Loot Control)
 
 ▼ Changes:
 
@@ -1938,6 +1943,40 @@ The following foods have the stack size increased to 20
 - Karve:    500  → 650
 - Longship: 1000 → 1250
 - Drakkar:  3000 → 4000
+
+
+----------------------- [Pocket Portal] ------------------------
+
+► Description:
+  Adds a new portal that is functionally equal to the normal portal but is built from a special material, the Portal Core.
+  The Portal Core takes takes only one inventory slot and can be crafted at a lvl 4 Workbench with resources gathered from the Mountain and Black Forest biomes.  
+  The portal's shape is exactly the same as a normal portal, but has blue effects.
+  It does not allow the carying of metal or other prohibited items through it. It functions like a normal portal and can connect to any other portal.
+  Can craft and carry any number of Portal Cores, but can only build one Pocket Portal per player. 
+
+► Mid-Game Toggling: Toggling mid-game requires reloading the build/crafting menu. 
+  Even if this config is disabled, the prefabs are still crated and existing portals or cores will not be removed from the world or inventory. Only the ability to craft them is affected by the toggle.
+
+► Conflicts: No known conflicts. Requires Jotunn.
+
+▼ Portal Core Resource Requirements:
+- Surtling Core: 5
+- Fine Wood:     20
+- Freeze Gland:  5
+- Obsidian:      20
+
+
+------------------ [Max Portals Per Player] --------------------
+
+► Description:
+  Sets the number of portals that can be built by each player. This applies separately for each world.
+  This number applies individually for the normal and the stone portal. E.g. If the number is set to 5, then a player can build 5 normal portals and 5 stone portals.
+  This does not affect the number of Pocket Portals a player can build.
+  Set to -1 for unlimited portals (default).
+
+► Mid-Game Toggling: Changes will take effect immediately if the number is changed mid-game.
+
+► Conflicts: Incompatible with Rare Magic Portal Plus (or any other mod that sets a limit to portals), unless the value is set to -1.
 
 
 ----------------------- [Other Section] ------------------------
@@ -2154,7 +2193,7 @@ The following foods have the stack size increased to 20
   Counts the number of enemies in close proximity.
   Does not include other players, deer, hare, player summoned creatures, or tame animals in the enemy count.
   Neutral Dverger are counted in parentheses. When attacked, the number goes into the normal enemy counter. If Alternate UI Layout is enabled, neutral Dverger are counted with a separate indicator.
-  Colors change according to the number of nearby enemies. If Alternate UI Layout is enabled, the icon will also change to a ghost if 7 or more enemies are nearby.
+  Colors change according to the number of nearby enemies. If Alternate UI Layout is enabled, the icon will change according to how many enemies are nearby.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
@@ -2167,7 +2206,7 @@ The following foods have the stack size increased to 20
 
 ► Description:
   Displays current ship speed next to the inventory weight widget at the bottom left of the screen.
-  If the Alternate UI Layout is used, this widget is displayed at the bottom-left of the minimap. If Minimal Status Effects is installed, the widget moves to the top-left of the minimap.
+  If the Alternate UI Layout is used, this indicator is displayed above the main sailing widget. If Minimal Status Effects is installed, the speed indicator moves with the main widget.
   When going forward, only the speed value is displayed.
   When going backwards, "R" is displayed before the speed value.
   The speed counter only shows when controlling a boat.
@@ -2185,6 +2224,7 @@ The following foods have the stack size increased to 20
 ► Description:
   Displays current time of day above the minimap using day sections (Dawn, Morning, Day, Afternoon, Evening, Dusk, Night).
   Shows number of days spent in the world.
+  If the Alternate UI Layout is used, an additional symbol is displayed next to the time depending on the time of day.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
@@ -2255,6 +2295,7 @@ The following foods have the stack size increased to 20
 ► Description:
   Sub-section for the previous config.
   Shows online players under minimap instead of bottom right when Show Online Players is enabled.
+  This option is automatically disabled on a no-map world and cannot be toggled on.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
@@ -2320,39 +2361,54 @@ The following foods have the stack size increased to 20
 ---------------------- [Alternate UI Layout] --------------------
 
 ► Description:
-  Alternates the layout of this mod's UI by using symbols instead of words for Inventory Weight and Slots, Enemy Counter, Summons Counter, and Boat Speed. 
+  Alternates the layout of this mod's UI by using symbols instead of words for Inventory Weight and Slots, Enemy Counter, Summons Counter, Boat Speed, and Time of Day. 
   Repositions the Boat Speed widget to the minimap area. If using the non-symbols version, the Boat Speed widget is located at the bottom-left of the screen next to the Enemy Detector.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  Compatible with Minimal Status Effects. This mod automatically detects the existence of Minimal Status Effects and repositions the Boat Speed widget to not be on top of the rudder icon when sailing.
+  Compatible with Minimal Status Effects. This mod automatically detects the existence of Minimal Status Effects and repositions the Boat Speed widget accordingly.
 
 
 VERSION HISTORY
 ================================================================
+
+v1.3.0
+- Mod now requires Jotunn
+
+- Fixed an issue with Player Logout Announce not working in certain situations.  
+- Moved position of the Boat Speed Indicator in the Alternate UI mode to be above the wind indicator for no-map game modifier or when Minimal Status Effects in installed.  
+- Added symbols for the Time of Day widget according to day section in Alternate UI mode.  
+- Modified symbols for Enemy Detector in Alternate UI mode according to the number of nearby enemies.  
+- Updated compatibility notes for Show Owned Resources In Build Menu, Creature Unleveler By Boss.  
+- Updated descriptions to include specific changes for the following sections: Alternate Gear Recipe Materials, Alternate Build Piece Materials, Early Linen Cape.  
+- Renamed section 'Clear Mistlands' to 'Clear Mistlands After Queen'.  
+
+- Section addition: Alternate Gear Recipes - Changed Dundr to use Iolite instead of Bloodstone for crafting and upgrading.  
+- New Feature: Pocket Portal  
+- New Feature: Max Portals Per Player  
 
 v1.2.0
 - Fixed an issue with Progression Halt where players could get the contents of halted chests by simply destroying them.
 - Fixed an issue with the Move Camera Up While Sailing section, where if a player would log out while controlling a ship, then the camera would be stuck in a high position when logging back in.
 - Fixed an issue with UI widgets (Time and day; online players) not showing on worlds with no map enabled. Now they display properly with the No Map global setting on.
 
-- Section change: Show Boat Speed - Removed the letter "F" when displaying boat forward speed (kept "R" for reverse);
-- Section change: Show Online Players - Now also shows the total number of players logged in. Swapped the order of header and player list when displayed at the botom right corner (header is now below the player list).
-- Section change: Show Online Players - Added key toggle (Home key) to show/hide the player list (the total number of online players will always be displayed if the config is enabled - this toggle just hides the player list).
+- Feature change: Show Boat Speed - Removed the letter "F" when displaying boat forward speed (kept "R" for reverse);
+- Feature change: Show Online Players - Now also shows the total number of players logged in. Swapped the order of header and player list when displayed at the botom right corner (header is now below the player list).
+- Feature change: Show Online Players - Added key toggle (Home key) to show/hide the player list (the total number of online players will always be displayed if the config is enabled - this toggle just hides the player list).
 
-- Added QOL section: Shorter Rested Delay
-- Added QOL section: More Usable Fuel
-- Added UI section: Show Owned Resources In Build Menu
-- Added UI section: Show Boss Power Expiration Message
-- Added UI section: Player Logout Announce 
-- Added UI section: Show Heat Meter in Ashlands
-- Added UI section: Alternate UI Layout
+- New QOL feature: Shorter Rested Delay
+- New QOL feature: More Usable Fuel
+- New UI feature: Show Owned Resources In Build Menu
+- New UI feature: Show Boss Power Expiration Message
+- New UI feature: Player Logout Announce 
+- New UI feature: Show Heat Meter in Ashlands
+- New UI feature: Alternate UI Layout
 
 v1.1.2
 - Modified the way Progressionn Halt reads prefab names. This change is specifically targeting a previous incompatibility with Ventrure Location Reset mod where it was changing parts of prefab names after resetting dungeons. This patch makes these two mods compatible.
-- Added Feature section: Halt Ocean Behind Elder. This provides an extra option for players and sever admins if they prefer Ocean resources to be available earlier. Ocean-tier items and food are equal to Mountain-tier items and food, which is why this option is disabled by default, but still available if wanted.
+- New Feature: Halt Ocean Behind Elder. This provides an extra option for players and sever admins if they prefer Ocean resources to be available earlier. Ocean-tier items and food are equal to Mountain-tier items and food, which is why this option is disabled by default, but still available if wanted.
 - Rearranged config entries in the config file, which means that old configs will have extra unused config entries (those can be safely deleted)
 
 v1.1.1
@@ -2360,7 +2416,7 @@ v1.1.1
 - Removed Pickable Bone Piles found in Meadows from Progression Halt
 
 v1.1.0
-- Added QOL Section: Move Camera Up While Sailing
+- New QOL feature: Move Camera Up While Sailing
 - Added forgotten items from old mod port to Cheaper Build Piece Amounts (all banners Leather Scraps: 6 → 5)
 - Added Shipwreck to Progression Halt (halted by Eikthyr)
 
@@ -2369,4 +2425,4 @@ v1.0.1
 - Made UI sections server synced like the rest of the configs.
 
 v1.0.0
-- Initial upload.
+- Initial Upload

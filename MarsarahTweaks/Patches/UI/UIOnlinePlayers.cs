@@ -141,7 +141,7 @@ namespace MarsarahTweaks.Patches.UI
 							if (showUI)
 							{
 								UIPlayerTexts[0].color = Color.green;
-								UIPlayerTexts[0].text = $"Online: {numPlayersTotal}";
+								UIPlayerTexts[0].text = $"Online: {numPlayersTotal}"; // 🧑‍🤝‍🧑
 							}
 
 							for (int i = 1; i < numOnlinePlayerSlots; i++)

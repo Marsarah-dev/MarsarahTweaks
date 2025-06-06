@@ -105,10 +105,14 @@ namespace MarsarahTweaks.Patches.UI
 							UIEnemyText2.text = numEnemies.ToString();
 
 							UIEnemyEmojiTMP.color = enemyColor;
-							if (numEnemies < 7)
+							if (numEnemies == 0)
+								UIEnemyEmojiTMP.text = "👁"; // 👁 - 👀
+							else if (numEnemies < 5)
 								UIEnemyEmojiTMP.text = "😈";
+							else if (numEnemies < 7)
+								UIEnemyEmojiTMP.text = "👿";
 							else
-								UIEnemyEmojiTMP.text = "👻";
+								UIEnemyEmojiTMP.text = "☠"; // 👻
 
 							Color friendlyColor = GetColorFromNum(numEnemiesPassive);
 
@@ -118,7 +122,7 @@ namespace MarsarahTweaks.Patches.UI
 							UIFriendlyEmojiTMP.color = friendlyColor;
 							UIFriendlyEmojiTMP.text = "🧔‍";
 
-							// 👹 👺 😈 👻 - 🧔‍♂️ 🧔‍♀️
+							// 👹 👺 😈 👻 - 🧔‍♂️ 🧔‍♀️ - ⚔️ ☠
 						}
 					}
 				}

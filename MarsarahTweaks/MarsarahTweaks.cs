@@ -3,30 +3,23 @@
  * DONE, NOT RELEASED
  * 
  * A. Fixes
- *    - Fixed an issue with the Player Logout Announce not working in certain situations
  *    
  * B. New UI
- *    - Added symbols for the time of day according to day section when Alternate UI is enabled
  * 
  * C. New Features
- *    - Pocket Portal
- *    - Max Portals Per Player
- *    - IP: Alternate Gear Recipes: Change Dundr to use Iolite instead of Bloodstone
  * 
  * B. New QOL
  * 
- * D. Other changes
- *    - Moved position of the Boat Speed Indicator in the Alternate UI mode to be above the wind indicator for no map game modifier or when Minimal Status Effects in installed
- *    - Craftable Chain recipe is no longer dependent on using a Dvergr Lantern as a base (code logic change).
- *    - Updated compatibility notes for Show Owned Resources In Build Menu.
+ * D. Other changes 
  *    
  *  
  * TODO
  * 
  * A. Fixes
+ *    - Only show Heat meter in Ashlands biome
  * 
  * B. New UI
- *    1. 
+ *    1. Add 🧑‍🤝‍🧑 for Online players in alternate UI (too much headache to add now)
  *    2. 
  *    3. Better enemy nameplates
  *    4. Better item level indicator
@@ -123,11 +116,6 @@ namespace MarsarahTweaks
 			ConfigManager.Init(Config);
 			//CustomConsoleCommandHandler.Init(); // Register new console commands
 			UISmartBiome.UpdateBiomeWeights(); // Set the correct biome weight dictionary at startup
-			//AssetManager.InitializeCustomAssets(); // Initialize my custom assets
-			//PocketPortal.Init();
-			//PocketPortal.LoadAssetBundle();
-			
-
 
 			harmony.PatchAll();
 		}

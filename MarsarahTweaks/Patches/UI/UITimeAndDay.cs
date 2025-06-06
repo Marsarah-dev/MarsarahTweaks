@@ -75,8 +75,8 @@ namespace MarsarahTweaks.Patches.UI
 				if (dayFraction < 0.33f) return "🌅";
 				if (dayFraction < 0.50f) return "☀️";
 				if (dayFraction < 0.66f) return "☀️";
-				if (dayFraction < 0.75f) return "🌤";
-				if (dayFraction < 0.80f) return "🌤";
+				if (dayFraction < 0.75f) return "🌄"; // 🌤
+				if (dayFraction < 0.80f) return "🌄";
 				return "🌙";
 			}
 

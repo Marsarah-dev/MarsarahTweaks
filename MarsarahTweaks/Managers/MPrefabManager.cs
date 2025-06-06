@@ -98,10 +98,10 @@ namespace MarsarahTweaks.Managers
 			{
 				MarsarahTweaks.LogError($"[MPrefabManager] Failed to register prefab '{prefab.name}'!");
 			}
-			else
+			/*else
 			{
 				MarsarahTweaks.LogInfo($"[MPrefabManager] Registered prefab '{prefab.name}' to ZNetScene.");
-			}
+			}*/
 		}
 
 		public static void RegisterItem(GameObject prefab)

@@ -379,12 +379,13 @@ namespace MarsarahTweaks.Patches.Features
 				Item = "PortalCore",
 				Amount = 1,
 				CraftingStation = "Workbench",
+				MinStationLevel = 4,
 				Requirements = new[]
 				{
 					new RequirementConfig("SurtlingCore", 5),
 					new RequirementConfig("FineWood", 20),
-					new RequirementConfig("GreydwarfEye", 20),
-					new RequirementConfig("Wood", 20)
+					new RequirementConfig("FreezeGland", 5),
+					new RequirementConfig("Obsidian", 20)
 				}
 			};
 
@@ -519,6 +520,55 @@ namespace MarsarahTweaks.Patches.Features
 			}
 
 			return false;
+		}
+
+		[HarmonyPatch(typeof(Tutorial), "Awake")]
+		public static class Tutorial_Awake_Patch
+		{
+			static void Postfix(Tutorial __instance)
+			{
+				if (__instance == null)	return;
+
+				AddCustomTutorial();
+			}
+		}
+
+		private static void AddCustomTutorial()
+		{
+			if (Tutorial.instance == null) return;
+
+			var customTutorial = new Tutorial.TutorialText
+			{
+				m_name = "portal_core_intro",
+				m_topic = "Pocket Portal",
+				m_label = "Portal Core",
+				m_text = "You've crafted a <color=yellow>Portal Core</color>.\nUse it to build a <color=yellow>Pocket Portal</color> which should make your exploration journeys easier.\nBut keep in mind that only one of these portals can be built in the world.\nHowever, you can always destroy it and place it somewhere else as needed.",
+				m_isMunin = false
+			};
+
+			Tutorial.instance.m_texts.Add(customTutorial);
+
+			//MarsarahTweaks.LogInfo("Added custom tutorial text.");
+		}
+
+		[HarmonyPatch(typeof(Player), "OnInventoryChanged")]
+		public static class Player_OnInventoryChanged_Patch
+		{
+			static void Postfix(Player __instance)
+			{
+				if (__instance == null || !__instance.IsOwner()) return;
+				if (__instance.HaveSeenTutorial("portal_core_intro")) return;
+
+				foreach (var item in __instance.GetInventory().GetAllItems())
+				{
+					if (item.m_shared.m_name == "Portal Core")
+					{
+						__instance.ShowTutorial("portal_core_intro");
+						//MarsarahTweaks.LogInfo("Triggered Portal Core tutorial.");
+						break;
+					}
+				}
+			}
 		}
 	}
 }

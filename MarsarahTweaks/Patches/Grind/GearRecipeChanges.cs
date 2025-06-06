@@ -1064,6 +1064,12 @@ namespace MarsarahTweaks.Patches.Grind
 				{
 					{ "FlametalNew", ("SulfurStone", 5, null) }
 				}
+			},
+			{
+				"Recipe_StaffLightning", new Dictionary<string, (string, int?, int?)>
+				{
+					{ "GemstoneRed", ("GemstoneBlue", 1, 1) }
+				}
 			}
 		};
 
