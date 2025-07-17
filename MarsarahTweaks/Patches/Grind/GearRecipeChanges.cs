@@ -996,7 +996,7 @@ namespace MarsarahTweaks.Patches.Grind
 			{
 				"Recipe_ShieldSerpentscale", new Dictionary<string, (string, int?, int?)>
 				{
-					{ "Iron", ("Chitin", 4, 1) }
+					{ "Iron", ("Chitin", 4, 2) }
 				}
 			},
 			{

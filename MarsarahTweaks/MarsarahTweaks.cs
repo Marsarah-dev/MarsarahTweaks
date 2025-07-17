@@ -17,6 +17,13 @@
  * B. New QOL
  * 
  * D. Other changes 
+ *    - Alternate Gear Recipe Materials:
+ *      - Serpent Scale Shield: Increased Chitin upgrade cost from 1 to 2 per level
+ *    - Food And Mead Modifications: Reduced resource amounts for the following recipes:
+ *      - Mead base: Ratatosk: Honey 10 > 5; Blueberries 10 > 5
+ *      - Mead base: Troll Endurance: Honey 10 > 5
+ *      - Mead base: Vananidir: Dandelion 10 > 7
+ *      - Mead base: Animal Whispers: Carrot 10 > 5
  *    
  *  
  * TODO
@@ -50,14 +57,8 @@
  *    5. 
  *    
  *    ** Crafting
- *    1. Increase Serpent Shield Chitin cost (when Alt Gear Recipes is enabled), and reduce Finewood cost
  *    
- *    ** Cooking
- *    1. Reduce resource amounts for the following:
- *       - Mead base: Ratatosk: Honey 10 > 5; Blueberries 10 > 5
- *       - Mead base: Troll Endurance: Honey 10 > 5
- *       - Mead base: Vananidir: Dandelion 10 > 5
- *       - Mead base: Animal Whispers: Carrot 10 > 5
+ *    ** Cooking       
  *    
  *    ** Other
  *    1. Add Better Roads (increase player speed on roads)

@@ -285,6 +285,26 @@ namespace MarsarahTweaks.Patches.Grind
 				{
 					ResourceChanges = { { "Honey", 5 }, { "Raspberry", 5 } }
 				}
+			},
+			{ "Recipe_MeadBaseHasty", new RecipeModification // Ratatosk
+				{
+					ResourceChanges = { { "Honey", 5 }, { "Blueberries", 5 } }
+				}
+			},
+			{ "Recipe_MeadBaseStrength", new RecipeModification // Troll Endurance
+				{
+					ResourceChanges = { { "Honey", 5 } }
+				}
+			},
+			{ "Recipe_MeadBaseSwimmer", new RecipeModification // Draught of Vananidir
+				{
+					ResourceChanges = { { "Dandelion", 7 } }
+				}
+			},
+			{ "Recipe_MeadBaseTamer", new RecipeModification // Animal Whispers
+				{
+					ResourceChanges = { { "Carrot", 5 } }
+				}
 			}
 		};
 		private static Dictionary<string, int> foodStacksModifications = new Dictionary<string, int>()
@@ -354,6 +374,15 @@ namespace MarsarahTweaks.Patches.Grind
 		// Update Food And Mead ====================================================================
 		public static void UpdateFoodAndMead (ObjectDB objDB, bool wasModified)
 		{
+			/*foreach (Recipe recipe in objDB.m_recipes)
+			{
+				// show item recipe info
+				foreach (Piece.Requirement req in recipe.m_resources)
+				{
+					Debug.Log($"[Marsarah Mod] :: {recipe.name} - Requirement: {req.m_resItem.name} - Amount: {req.m_amount} - Upgrade: {req.m_amountPerLevel} ");
+				}
+			}*/
+
 			// Get Dictionary for all recipe modifications
 			var recipeModifications = GetRecipeModifications();
 
