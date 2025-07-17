@@ -1051,31 +1051,31 @@ namespace MarsarahTweaks.Patches.Features
 					{ typeof(TreeBase), HaltDropsTreeBase }
 				};
 
-				bool modified = false; // Track if any drop was halted
+				//bool modified = false; // Track if any drop was halted
 
 				// Iterate through all handlers and apply every matching one
 				foreach (var handler in dropHandlers)
 				{
 					if (prefab.GetComponent(handler.Key) != null)
 					{
-						//handler.Value(prefab);
-						if (handler.Value(prefab))
+						handler.Value(prefab);
+						/*if (handler.Value(prefab))
 						{
 							//MarsarahTweaks.LogInfo($"Halted drop for {prefab.name} as component {handler.Key}");
 							modified = true; // Mark that at least one modification was made
-						}
+						}*/
 					}
 				}
 
 				// LogInfo components if no drop handler was triggered
-				if (!modified)
+				/*if (!modified)
 				{
 					Component[] prefabComponents = prefab.GetComponents<Component>();
 					foreach (Component comp in prefabComponents)
 					{
 						MarsarahTweaks.LogInfo(prefab.name + " - " + comp.ToString());
 					}
-				}
+				}*/
 			}
 
 			// Halt Drops X

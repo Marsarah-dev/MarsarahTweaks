@@ -56,6 +56,14 @@ namespace MarsarahTweaks.Patches.UI
 
 					if (Player.m_localPlayer && heatBarFill != null && heatThreshold > 0f)
 					{
+						// Hide UI if not in Ashlands
+						if (Player.m_localPlayer.GetCurrentBiome() != Heightmap.Biome.AshLands)
+						{
+							if (UIHeatBarArea != null && UIHeatBarArea.activeSelf)
+								UIHeatBarArea.SetActive(false);
+							return;
+						}
+
 						// Handle loadscreena and ui hidden cases
 						bool shouldBeVisible = !IsUIHidden() && !IsLoadScreenActive(__instance);
 						if (UIHeatBarArea.activeSelf != shouldBeVisible)

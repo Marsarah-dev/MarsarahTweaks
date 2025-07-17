@@ -6,6 +6,9 @@
  *    - Progresion Halt: 
  *      - Fixed broken gravestones dropping Grausten
  *      - Fixed Ashlands trees dropping Ashwood and Charcoal Resin when initially cut down (either by player or environmental damage)
+ *    - Creature Unleveler:
+ *      - Fixed an issue where hopping worlds in the same game session does not reset/reapply creature spawner data properly.
+ *    - Heat meter in Ashlands only shows when in Ashlands biome
  *    
  * B. New UI
  * 
@@ -19,9 +22,6 @@
  * TODO
  * 
  * A. Fixes
- *    - Only show Heat meter in Ashlands biome
- *    - Investigate Creature Unleveler. I saw starred drakes and fenring with yagluth not defeated
- *      - Issue is that it does not reload defaults when swapping worlds
  * 
  * B. New UI
  *    1. Add 🧑‍🤝‍🧑 for Online players in alternate UI (too much headache to add now)

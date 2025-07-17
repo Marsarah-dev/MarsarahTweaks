@@ -144,11 +144,40 @@ namespace MarsarahTweaks.Patches.Features
 		private static bool lastQueenDefeated = GlobalKeyChecker.IsBossDefeated("The Queen");
 		private static bool lastFaderDefeated = GlobalKeyChecker.IsBossDefeated("Fader");
 
+		// Track whether changes have been applied
+		private static bool hasAppliedSpawnChangesOnce = false;
+
+		[HarmonyPatch(typeof(ZNetScene), "Awake")]
+		class WorldChangeReset_Patch
+		{
+			static void Prefix()
+			{
+				ResetCreatureUnlevelerState();
+			}
+		}
+
+		public static void ResetCreatureUnlevelerState()
+		{
+			hasAppliedSpawnChangesOnce = false;
+			//creatureSpawnBackups.Clear();
+
+			// Reset boss state tracking
+			lastEikthyrDefeated = GlobalKeyChecker.IsBossDefeated("Eikthyr");
+			lastElderDefeated = GlobalKeyChecker.IsBossDefeated("The Elder");
+			lastBonemassDefeated = GlobalKeyChecker.IsBossDefeated("Bonemass");
+			lastModerDefeated = GlobalKeyChecker.IsBossDefeated("Moder");
+			lastYagluthDefeated = GlobalKeyChecker.IsBossDefeated("Yagluth");
+			lastQueenDefeated = GlobalKeyChecker.IsBossDefeated("The Queen");
+			lastFaderDefeated = GlobalKeyChecker.IsBossDefeated("Fader");
+
+			MarsarahTweaks.LogInfo("[Creatue Unleveler] New world load reset done.");
+		}
+
+
 		[HarmonyPatch(typeof(SpawnSystem), "Awake")] // UpdateSpawning
 		class DynamicBossChangeWatcher_Patch
 		{
 			private static float checkTimer = 0f;
-			private static bool hasAppliedSpawnChangesOnce = false;
 
 			private static void Postfix(SpawnSystem __instance)
 			{
@@ -175,63 +204,87 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		}
 
+		private static readonly List<string> BossProgressionOrder = new List<string>()
+		{
+			"Eikthyr", "The Elder", "Bonemass", "Moder", "Yagluth", "The Queen", "Fader"
+		};
+
 		public static void ApplyCreatureLevelChanges(SpawnSystem __instance)
 		{
 			foreach (SpawnSystemList spawnList in __instance.m_spawnLists)
 			{
 				foreach (SpawnSystem.SpawnData spawner in spawnList.m_spawners)
 				{
-					foreach (var bossEntry in creatureSpawnChanges)
+					string spawnerName = spawner.m_name;
+
+					// Find all bosses that define changes for this creature
+					List<string> affectingBosses = creatureSpawnChanges
+						.Where(kvp => kvp.Value.ContainsKey(spawnerName))
+						.Select(kvp => kvp.Key)
+						.ToList();
+
+					if (affectingBosses.Count == 0) continue;
+
+					// Sort by progression order
+					affectingBosses.Sort((a, b) => BossProgressionOrder.IndexOf(a).CompareTo(BossProgressionOrder.IndexOf(b)));
+
+					// Find the highest defeated boss
+					string highestDefeatedBoss = affectingBosses.LastOrDefault(GlobalKeyChecker.IsBossDefeated);
+
+					if (ConfigManager.CreatureUnlevelerEnabled.Value)
 					{
-						if (!GlobalKeyChecker.IsBossDefeated(bossEntry.Key)) continue;
-
-						if (bossEntry.Value.TryGetValue(spawner.m_name, out var changes))
+						if (highestDefeatedBoss != null && highestDefeatedBoss != "")
 						{
-							if (ConfigManager.CreatureUnlevelerEnabled.Value)
+							//MarsarahTweaks.LogInfo($"Applying changes to: {spawnerName} - defeated boss: {highestDefeatedBoss}");
+							var changes = creatureSpawnChanges[highestDefeatedBoss][spawnerName];
+
+							if (!creatureSpawnBackups.ContainsKey(spawnerName))
 							{
-								// Backup if not already backed up
-								if (!creatureSpawnBackups.ContainsKey(spawner.m_name))
-								{
-									//MarsarahTweaks.LogInfo($"Backing up {spawner.m_name} (Boss: {bossEntry.Key})");
-									creatureSpawnBackups[spawner.m_name] = (spawner.m_maxLevel,	spawner.m_overrideLevelupChance, spawner.m_levelUpMinCenterDistance);
-								}
-
-								// Apply changes
-								if (changes.levelUpChance.HasValue)
-								{
-									//MarsarahTweaks.LogInfo($"Applying levelUpChance={changes.levelUpChance.Value} to {spawner.m_name} (Boss: {bossEntry.Key})");
-									spawner.m_overrideLevelupChance = changes.levelUpChance.Value;
-								}
-								if (changes.levelUpMinCenterDistance.HasValue)
-								{
-									//MarsarahTweaks.LogInfo($"Applying levelUpMinCenterDistance={changes.levelUpMinCenterDistance.Value} to {spawner.m_name} (Boss: {bossEntry.Key})");
-									spawner.m_levelUpMinCenterDistance = changes.levelUpMinCenterDistance.Value;
-								}
-								if (changes.maxLevel.HasValue)
-								{
-									//MarsarahTweaks.LogInfo($"Applying maxLevel={changes.maxLevel.Value} to {spawner.m_name} (Boss: {bossEntry.Key})");
-									spawner.m_maxLevel = changes.maxLevel.Value;
-								}
+								creatureSpawnBackups[spawnerName] = (
+									spawner.m_maxLevel,
+									spawner.m_overrideLevelupChance,
+									spawner.m_levelUpMinCenterDistance
+								);
 							}
-							else
+
+							if (changes.levelUpChance.HasValue)
+								spawner.m_overrideLevelupChance = changes.levelUpChance.Value;
+
+							if (changes.levelUpMinCenterDistance.HasValue)
+								spawner.m_levelUpMinCenterDistance = changes.levelUpMinCenterDistance.Value;
+
+							if (changes.maxLevel.HasValue)
+								spawner.m_maxLevel = changes.maxLevel.Value;
+						}
+						else
+						{
+							if (creatureSpawnBackups.TryGetValue(spawnerName, out var backup))
 							{
-								// Restore from backup if exists
-								if (creatureSpawnBackups.TryGetValue(spawner.m_name, out var backup))
-								{
-									//MarsarahTweaks.LogInfo($"Restoring spawn values for {spawner.m_name} from backup");
+								//MarsarahTweaks.LogInfo($"(Enabled) Restoring changes for: {spawnerName} - defeated boss: {highestDefeatedBoss}");
+								spawner.m_maxLevel = backup.maxLevel ?? spawner.m_maxLevel;
+								spawner.m_overrideLevelupChance = backup.levelUpChance ?? spawner.m_overrideLevelupChance;
+								spawner.m_levelUpMinCenterDistance = backup.levelUpMinCenterDistance ?? spawner.m_levelUpMinCenterDistance;
 
-									spawner.m_maxLevel = backup.maxLevel ?? spawner.m_maxLevel;
-									spawner.m_overrideLevelupChance = backup.levelUpChance ?? spawner.m_overrideLevelupChance;
-									spawner.m_levelUpMinCenterDistance = backup.levelUpMinCenterDistance ?? spawner.m_levelUpMinCenterDistance;
-
-									creatureSpawnBackups.Remove(spawner.m_name);
-								}
+								creatureSpawnBackups.Remove(spawnerName);
 							}
+						}
+					}
+					else
+					{
+						if (creatureSpawnBackups.TryGetValue(spawnerName, out var backup))
+						{
+							//MarsarahTweaks.LogInfo($"(Disabled) Restoring changes for: {spawnerName} - defeated boss: {highestDefeatedBoss}");
+							spawner.m_maxLevel = backup.maxLevel ?? spawner.m_maxLevel;
+							spawner.m_overrideLevelupChance = backup.levelUpChance ?? spawner.m_overrideLevelupChance;
+							spawner.m_levelUpMinCenterDistance = backup.levelUpMinCenterDistance ?? spawner.m_levelUpMinCenterDistance;
+
+							creatureSpawnBackups.Remove(spawnerName);
 						}
 					}
 				}
 			}
 		}
+
 
 		private static bool BossStateChanged()
 		{
