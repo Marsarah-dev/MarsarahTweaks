@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.3.1
+Marsarah Tweaks v1.3.2
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 
@@ -18,6 +18,8 @@ INSTALLATION
 ================================================================
 1. Unpack the .zip file.
 2. Copy MarsarahTweaks.dll into your Valheim/BepInEx/plugins folder.
+
+Or use a mod manager.
 
 NOTE: This mod needs to be installed on the SERVER and all CLIENTS
 
@@ -55,7 +57,7 @@ MOD CONFIGS
   Can be enabled/disabled during gameplay, but requires the Forge crafting menu to be reopened to take effect.
 
 ► Conflicts:
-  Incompatible with other mods that modify the crafted output of Bronze.
+  Incompatible with TripleBronze by KaceCottam or Triple Bronze JVL by Digitalroot.
 
 ----------------- [Cheaper Gear Recipe Amounts] ----------------
 
@@ -451,23 +453,23 @@ MOD CONFIGS
 - Leather Helmet
   • Craft (Deer Hide):           6        → 7
   • Upgrade (Deer Hide):         6/12/18  → 5/10/15
-  • Upgrade (Bone Fragments):    5/10/15  → 4/8/12
+  • Upgrade (Bone Fragments):    5/10/15  → 1/2/4
 
 - Leather Tunic
   • Craft (Deer Hide):           6        → 7
   • Upgrade (Deer Hide):         6/12/18  → 5/10/15
-  • Upgrade (Bone Fragments):    5/10/15  → 4/8/12
+  • Upgrade (Bone Fragments):    5/10/15  → 1/2/4
 
 - Leather Pants
   • Craft (Deer Hide):           6        → 7
   • Upgrade (Deer Hide):         6/12/18  → 5/10/15
-  • Upgrade (Bone Fragments):    5/10/15  → 4/8/12
+  • Upgrade (Bone Fragments):    5/10/15  → 1/2/4
 
 - Deer Leather Cape
   • Craft (Deer Hide):           4        → 5
   • Craft (Bone Fragments):      5        → 0
   • Upgrade (Deer Hide):         4/8/12   → 3/6/9
-  • Upgrade (Bone Fragments):    5/10/15  → 2/4/6
+  • Upgrade (Bone Fragments):    5/10/15  → 1/2/4
 
 - Troll Leather Helmet
   • Craft (Bone Fragments):      3        → 0
@@ -677,7 +679,7 @@ MOD CONFIGS
 
 - Serpent Scale Shield
   • Material:         Iron           → Chitin
-  • Amount Upgrade:   2/4/6          → 1/2/4
+  • Amount Upgrade:   2/4/6          → 2/4/8
 
 - Porcupine
   • Material:         Iron           → Black Metal
@@ -1310,7 +1312,7 @@ The following foods have the stack size increased to 20
 ► Description:
   Creatures and destroyable objects do not drop any items unless the previous biome boss has been defeated.
   Pickable items and chests cannot be picked/opened under the same conditions.
-  Resources from each biome are automatically unlocked when the relevant boss is defeated. There is no need for CLIENT relogs or SERVER restarts.
+  Resources from each biome are automatically unlocked when the relevant boss is defeated. There is no need for CLIENT relogs or SERVER restarts. However, the immediate area will need to be reloaded by leaving until unloaded by distance.
 
 ► Mid-Game Toggling:
   Toggling mid-game requires CLIENT relog or reloading area. Reloading area means walking/teleporting away from the current zone and coming back. This only applies for destroyable objects like Copper Mines. Pickables and chests will be affected immediately. Creatures will be affected if they are new.
@@ -1427,7 +1429,7 @@ The following foods have the stack size increased to 20
 ------------------- [Faster Character Speed] -------------------
 
 ► Description:
-  Increases player character movement speeds.
+  Increases player character movement speeds. Terrain is not taken in consideration when modifying movement speed.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
@@ -2053,7 +2055,7 @@ The following foods have the stack size increased to 20
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  Incompatible with any mod that modifies explore radius.
+  Incompatible with any mod that modifies explore radius (sailing mods).
 
 
 -------------------- [Bigger Wisp Radius] ----------------------
@@ -2065,7 +2067,7 @@ The following foods have the stack size increased to 20
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  Incompatible with any mod that modifies the Wisplight.
+  Incompatible with any mod that modifies the Wisplight (e.g. DeezMistyBalls).
 
 
 --------------------- [Friendly Ballistas] ---------------------
@@ -2077,7 +2079,7 @@ The following foods have the stack size increased to 20
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  Incompatible with any mod that changes Ballista behaviour.
+  Incompatible with any mod that changes Ballista behaviour (e.g. ImFriendly Dammit).
 
 
 --------------------- [Less Fall Damage] -----------------------
@@ -2103,7 +2105,7 @@ The following foods have the stack size increased to 20
   Can be enabled/disabled during gameplay, but changes will only be applied to newly spawned creatures or creatures in inactive areas.
 
 ► Conflicts:
-  Incompatible with anymod that changes creature resource drops timer.
+  Incompatible with anymod that changes creature resource drops timer (e.g Instant Monster Loot Drop).
 
 
 ----------------------- [Faster Equip] -------------------------
@@ -2116,7 +2118,7 @@ The following foods have the stack size increased to 20
   Toggling mid-game requires CLIENT relog.
 
 ► Conflicts:
-  Incompatible with any mod that changes equip timers.
+  Incompatible with any mod that changes equip timers (e.g. InstantEquip).
 
 
 --------------- [Move Camera Up While Sailing] -----------------
@@ -2128,7 +2130,7 @@ The following foods have the stack size increased to 20
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  Incompatible with any mod that changes camera angles when sailing.
+  Incompatible with any mod that changes camera angles when sailing (e.g Sailing by Smoothbrain).
 
 
 ------------------- [Shorter Rested Delay] ---------------------
@@ -2348,8 +2350,6 @@ The following foods have the stack size increased to 20
 
 ► Description:
   Shows a heat meter at the top-center of the screen when in Ashlands water or lava.
-  If a player swims away from Ashlands water into other biomes (not on ship), then the meter will still show and it will remain on the last heat value because the game never refreshes the heat variable internally. If this happens, simply relog. 
-  This will be adressed in future updates to only show in Ashlands.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.

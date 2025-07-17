@@ -8,7 +8,10 @@
  *      - Fixed Ashlands trees dropping Ashwood and Charcoal Resin when initially cut down (either by player or environmental damage)
  *    - Creature Unleveler:
  *      - Fixed an issue where hopping worlds in the same game session does not reset/reapply creature spawner data properly.
- *    - Heat meter in Ashlands only shows when in Ashlands biome
+ *    - Show Heat Meter in Ashlands
+ *      - Heat meter now only shows when in the Ashlands biome
+ *    - Compatibility fix:
+ *      - Fixed an incompatibility with the XPortal mod, where the tags for the Pocket Portal would be reset when reloading a world
  *    
  * B. New UI
  * 
@@ -19,6 +22,10 @@
  * D. Other changes 
  *    - Alternate Gear Recipe Materials:
  *      - Serpent Scale Shield: Increased Chitin upgrade cost from 1 to 2 per level
+ *      - Leather Helmet: Bone Fragments craft/upgrade: 0/1 (from 0/5)
+ *      - Leather Tunic: Bone Fragments craft/upgrade: 0/1 (from 0/5)
+ *      - Leather Pants: Bone Fragments craft/upgrade: 0/1 (from 0/5)
+ *      - Deer Leather Cape: Bone Fragments craft/upgrade: 0/1 (from 5/5)
  *    - Food And Mead Modifications: Reduced resource amounts for the following recipes:
  *      - Mead base: Ratatosk: Honey 10 > 5; Blueberries 10 > 5
  *      - Mead base: Troll Endurance: Honey 10 > 5
@@ -29,6 +36,7 @@
  * TODO
  * 
  * A. Fixes
+ *    - Remove fireplace pieces from the permament lights mod OR find an alternative solution for permanent lights
  * 
  * B. New UI
  *    1. Add 🧑‍🤝‍🧑 for Online players in alternate UI (too much headache to add now)
@@ -62,7 +70,7 @@
  *    
  *    ** Other
  *    1. Add Better Roads (increase player speed on roads)
- *    2. Add pocket portal (need to figure out how to build just two of those)
+ *    2. 
  *    3. Do something to wards
  *       - Increase HP, Stamina and Eitr (if the player has Eitr) of players within range
  *       - Passively heal surrounding build pieces
@@ -110,7 +118,10 @@ using MarsarahTweaks.Patches.QOL;
 using MarsarahTweaks.Patches.UI;
 using ServerSync;
 using System;
+using System.Collections;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace MarsarahTweaks
@@ -123,7 +134,7 @@ namespace MarsarahTweaks
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 
-		private static readonly bool showLogs = true; // Set to true to display logs
+		private static readonly bool showLogs = false; // Set to true to display logs
 
 		private readonly Harmony harmony = new Harmony(ModGUID);
 

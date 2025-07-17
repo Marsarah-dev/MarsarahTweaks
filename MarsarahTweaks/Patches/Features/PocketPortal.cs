@@ -430,6 +430,21 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		}
 
+		// Adds the pocket_portal prefab early to be picked up by ZDOMan
+		[HarmonyPatch(typeof(Game), "Awake")]
+		public static class EarlyPortalPrefabRegister
+		{
+			static void Prefix(Game __instance)
+			{
+				int hash = "pocket_portal".GetStableHashCode();
+				if (!__instance.PortalPrefabHash.Contains(hash))
+				{
+					__instance.PortalPrefabHash.Add(hash);
+					MarsarahTweaks.LogInfo($"Registered pocket_portal prefab hash early: {hash}");
+				}
+			}
+		}
+
 		// Adds the pocket_portal prefab to the list of known portals
 		[HarmonyPatch(typeof(Game), nameof(Game.ConnectPortals))]
 		public static class Game_ConnectPortals_Patch

@@ -660,28 +660,28 @@ namespace MarsarahTweaks.Patches.Grind
 				"Recipe_HelmetLeather", new Dictionary<string, (int?, int?)>
 				{
 					{ "DeerHide", (7, 5) }, // 6, 6
-					{ "BoneFragments", (null, 4) } // 0, 5
+					{ "BoneFragments", (0, 1) } // 0, 5
 				}
 			},
 			{
 				"Recipe_ArmorLeatherChest", new Dictionary<string, (int?, int?)>
 				{
 					{ "DeerHide", (7, 5) }, // 6, 6
-					{ "BoneFragments", (null, 4) } // 0, 5
+					{ "BoneFragments", (0, 1) } // 0, 5
 				}
 			},
 			{
 				"Recipe_ArmorLeatherLegs", new Dictionary<string, (int?, int?)>
 				{
 					{ "DeerHide", (7, 5) }, // 6, 6
-					{ "BoneFragments", (null, 4) } // 0, 5
+					{ "BoneFragments", (0, 1) } // 0, 5
 				}
 			},
 			{
 				"Recipe_CapeDeerHide", new Dictionary<string, (int?, int?)>
 				{
 					{ "DeerHide", (5, 3) }, // 4, 4
-					{ "BoneFragments", (0, 2) } // 5, 5
+					{ "BoneFragments", (0, 1) } // 5, 5
 				}
 			},
 

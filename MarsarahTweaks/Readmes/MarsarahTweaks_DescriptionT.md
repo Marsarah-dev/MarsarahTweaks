@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.3.1   
+**Version:** 1.3.2   
 **Author:** Marsarah
 
 ---
@@ -35,6 +35,8 @@ https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/
 1. Unpack the `.zip` file.
 2. Copy `MarsarahTweaks.dll` into your `Valheim/BepInEx/plugins` folder.
 
+Or use a mod manager.
+
   ⚠️ **Note:** This mod must be installed on both the **server** and **all clients**.
 
 ---
@@ -46,8 +48,8 @@ This mod is **modular and customizable**.
 - A config file is generated on first launch:  
   `Valheim/BepInEx/config/Marsarah.MarsarahTweaks.cfg`
 - Each feature is in its own section and can be toggled individually.
-- Features can be changed manually or via a config manager (e.g. Configuration Manager).
-- Most features support **mid-game toggling**, but some require crafting menus to be reopened, reloading areas or **client** relogs (this is specified in each config).
+- Features can be changed manually or using a Configuration Manager.
+- Most features support **mid-game toggling**, but some require crafting menus to be reopened, reloading areas or **client** relogs (this is specified in each section below).
 - Some configs below will have more detailed changes written in the [Docs] tab of the Nexusmods page. 
 
   ✅ All features (except UI) are synced using ServerSync.  
@@ -83,9 +85,9 @@ All features below are synced with the server and can be toggled mid-game.
 
 - Only affects the **output amount** — resource costs stay the same.  
 
-🔄 Requires reopening the Forge menu to take effect if toggled during gameplay.
+🔄 Toggling mid-game requires reopening the Forge menu for changes to take effect.
 
-**❗ Conflicts:** Mods that modify Bronze crafting output.
+**❗ Conflicts:** TripleBronze by KaceCottam or Triple Bronze JVL by Digitalroot.
 
 ---
 
@@ -97,7 +99,7 @@ All features below are synced with the server and can be toggled mid-game.
 - Rebalances the material amounts for some recipes (e.g. more wood or leather) for game balance  
 - Specific details can be found in the **Docs** tab of the **Nexusmods** page
 
-🔄 Requires reopening the relevant crafting menu after toggling the config mid-game
+🔄 Toggling mid-game requires reopening the relevant crafting menu.
 
 **❗ Conflicts:** Mods that change gear recipe ingredients.
 
@@ -109,7 +111,7 @@ All features below are synced with the server and can be toggled mid-game.
 - This prevents players from needing to backtrack to earlier biomes to gather outdated materials.
 - Other changes are made where it made sense (e.g. Dundr using Iolite instead of Bloodstone)
 
-🔄 Requires reopening the relevant crafting menu after toggling the config mid-game
+🔄 Toggling mid-game requires reopening the relevant crafting menu.
 
 **❗ Conflicts:** Mods that modify vanilla gear recipe resources.
 
@@ -165,7 +167,7 @@ All features below are synced with the server and can be toggled mid-game.
 
 - Specific details can be found in the **Docs** tab of the **Nexusmods** page
 
-🔄 Requires reopening the build menu after toggling the config mid-game
+🔄 Toggling mid-game requires reopening the build menu.
 
 **❗ Conflicts:** Mods that modify vanilla build piece costs.
 - Works with mods that add new build pieces (but does not affect them)  
@@ -178,7 +180,7 @@ All features below are synced with the server and can be toggled mid-game.
 - Pairs well with the Cheaper Build Piece Amounts option
 - Note: This will move the Workbench Toolrack extension from the Mountain to Swamp biome
 
-🔄 Requires reopening the build menu after toggling the config mid-game
+🔄 Toggling mid-game requires reopening the build menu.
 
 **❗ Conflicts:** Mods that modify vanilla build piece costs.  
 ✅ Compatible with mods that add new build pieces (changes won't apply to them).
@@ -192,7 +194,7 @@ All features below are synced with the server and can be toggled mid-game.
 
 ### <strong>🍲 Food and Mead Modifications</strong>
 
-📜 Adjusts food and mead recipes for a smoother experience:
+📜 Adjusts food and mead recipes.
 
 - Changes recipe amounts, outputs, and ingredients  
 - All food stack sizes increased to **20**
@@ -215,7 +217,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 📜 Creatures and destroyable objects do not drop any items unless the previous biome boss has been defeated.  
 📜 Pickable items and chests cannot be picked/opened under the same conditions.  
-- Resources from each biome are automatically unlocked when the relevant boss is defeated. There is no need for client relogs or server restarts.
+- Resources from each biome are automatically unlocked when the relevant boss is defeated. There is no need for client relogs or server restarts. However, the immediate area will need to be reloaded by leaving until unloaded by distance.
 
 🔄 Toggling mid-game requires **client** relog or reloading area. 
 - Reloading area means walking/teleporting away from the current zone and coming back. This only applies for destroyable objects like Copper Mines. Pickables and chests will be affected immediately. Creatures will be affected if they are new.
@@ -249,7 +251,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 - Adjusts material and upgrade requirements  
 
-🔄 Reopen the crafting menu to apply changes if toggling mid-game. If wearing the cape while toggling, a **client relog** is required for Poison Resist to apply
+🔄 Reopen the crafting menu to apply changes if toggling mid-game. If wearing the cape while toggling, a **client relog** is required for Poison Resist to apply.
 
 **❗ Conflicts:** Mods that modify back pieces
 
@@ -307,6 +309,8 @@ All features below are synced with the server and can be toggled mid-game (with 
 ### <strong>🏃‍♀️ Faster Character Speed</strong>
 
 📜 Boosts overall character movement speeds for smoother gameplay.
+
+- Terrain is not taken in consideration when modifying movement speed.
 
 🔄 Changes apply instantly without relog if toggled mid-game
 
@@ -719,7 +723,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 🔄 Can be enabled/disabled during gameplay.
 
-**❗ Conflicts:** Incompatible with any mod that modifies explore radius.
+**❗ Conflicts:** Incompatible with any mod that modifies explore radius (sailing mods).
 
 ---
 
@@ -729,7 +733,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 🔄 Can be enabled/disabled during gameplay.
 
-**❗ Conflicts:** Incompatible with any mod that modifies the Wisplight.
+**❗ Conflicts:** Incompatible with any mod that modifies the Wisplight (e.g. DeezMistyBalls).
 
 **🔧 Changes:**
 - **Wisp Radius:** 15 → 30
@@ -742,7 +746,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 🔄 Can be enabled/disabled during gameplay.
 
-**❗ Conflicts:** Incompatible with any mod that changes Ballista behavior.
+**❗ Conflicts:** Incompatible with any mod that changes Ballista behavior (e.g. ImFriendly Dammit).
 
 ---
 
@@ -762,7 +766,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 🔄 Can be enabled/disabled during gameplay, but changes will only be applied to newly spawned creatures or creatures in inactive areas.
 
-**❗ Conflicts:** Incompatible with any mod that changes creature resource drop timers.
+**❗ Conflicts:** Incompatible with any mod that changes creature resource drop timers (e.g Instant Monster Loot Drop).
 
 **🔧 Changes:**
 - **Resource Drop Speed:** 
@@ -778,7 +782,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 🔄 Toggling mid-game requires **client** relog.
 
-**❗ Conflicts:** Incompatible with any mod that changes equip timers.
+**❗ Conflicts:** Incompatible with any mod that changes equip timers (e.g. InstantEquip).
 
 ---
 
@@ -788,7 +792,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 🔄 Can be enabled/disabled during gameplay.
 
-**❗ Conflicts:** Incompatible with any mod that changes camera angles when sailing.
+**❗ Conflicts:** Incompatible with any mod that changes camera angles when sailing (e.g Sailing by Smoothbrain).
 
 ---
 
@@ -979,8 +983,6 @@ All configs can be toggled mid-game.
 ### <strong>🔥 Show Heat Meter in Ashlands</strong>
 
 📜 Shows a heat meter at the top-center of the screen when in Ashlands water or lava.
-- If a player swims away from Ashlands water into other biomes (not on ship), then the meter will still show and it will remain on the last heat value because the game never refreshes the heat variable internally. If this happens, simply relog. 
-- This will be adressed in future updates to only show in Ashlands.
 
 🔄 Can be enabled/disabled during gameplay.
 
