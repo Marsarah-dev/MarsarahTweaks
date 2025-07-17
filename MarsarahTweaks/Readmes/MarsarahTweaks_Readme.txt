@@ -2374,6 +2374,31 @@ The following foods have the stack size increased to 20
 VERSION HISTORY
 ================================================================
 
+- Fixes:
+  - Progression Halt: 
+    - Fixed broken gravestones dropping Grausten
+    - Fixed Ashlands trees dropping Ashwood and Charcoal Resin when initially cut down (either by player or environmental damage)
+  - Creature Unleveler:
+    - Fixed an issue where hopping worlds in the same game session does not reset/reapply creature spawner data properly.
+  - Show Heat Meter in Ashlands
+    - Heat meter now only shows when in the Ashlands biome
+  - Pocket Portal compatibility fix:
+    - Fixed an incompatibility with the XPortal mod, where the tags for the Pocket Portal would be reset when reloading a world
+ 
+- Section additions:
+   - Alternate Gear Recipe Materials:
+     - Serpent Scale Shield: Increased Chitin upgrade cost from 1 to 2 per level
+   - Cheaper Gear Recipe Amounts:
+     - Leather Helmet: Bone Fragments craft/upgrade: 0/1 (from 0/5)
+     - Leather Tunic: Bone Fragments craft/upgrade: 0/1 (from 0/5)
+     - Leather Pants: Bone Fragments craft/upgrade: 0/1 (from 0/5)
+     - Deer Leather Cape: Bone Fragments craft/upgrade: 0/1 (from 5/5)
+   - Food And Mead Modifications: Reduced resource amounts for the following recipes:
+     - Mead base: Ratatosk: Honey 10 > 5; Blueberries 10 > 5
+     - Mead base: Troll Endurance: Honey 10 > 5
+     - Mead base: Vananidir: Dandelion 10 > 7
+     - Mead base: Animal Whispers: Carrot 10 > 5
+
 v1.3.1
 - All UI configs are no longer synced with server. Players can individually configure this mod's UI elements individually.
 - Show Online Players Under Minimap cannot be toggled on with Minimal Status Effects installed.

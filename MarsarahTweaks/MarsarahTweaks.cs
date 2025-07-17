@@ -3,15 +3,6 @@
  * DONE, NOT RELEASED
  * 
  * A. Fixes
- *    - Progresion Halt: 
- *      - Fixed broken gravestones dropping Grausten
- *      - Fixed Ashlands trees dropping Ashwood and Charcoal Resin when initially cut down (either by player or environmental damage)
- *    - Creature Unleveler:
- *      - Fixed an issue where hopping worlds in the same game session does not reset/reapply creature spawner data properly.
- *    - Show Heat Meter in Ashlands
- *      - Heat meter now only shows when in the Ashlands biome
- *    - Compatibility fix:
- *      - Fixed an incompatibility with the XPortal mod, where the tags for the Pocket Portal would be reset when reloading a world
  *    
  * B. New UI
  * 
@@ -20,17 +11,6 @@
  * B. New QOL
  * 
  * D. Other changes 
- *    - Alternate Gear Recipe Materials:
- *      - Serpent Scale Shield: Increased Chitin upgrade cost from 1 to 2 per level
- *      - Leather Helmet: Bone Fragments craft/upgrade: 0/1 (from 0/5)
- *      - Leather Tunic: Bone Fragments craft/upgrade: 0/1 (from 0/5)
- *      - Leather Pants: Bone Fragments craft/upgrade: 0/1 (from 0/5)
- *      - Deer Leather Cape: Bone Fragments craft/upgrade: 0/1 (from 5/5)
- *    - Food And Mead Modifications: Reduced resource amounts for the following recipes:
- *      - Mead base: Ratatosk: Honey 10 > 5; Blueberries 10 > 5
- *      - Mead base: Troll Endurance: Honey 10 > 5
- *      - Mead base: Vananidir: Dandelion 10 > 7
- *      - Mead base: Animal Whispers: Carrot 10 > 5
  *    
  *  
  * TODO
