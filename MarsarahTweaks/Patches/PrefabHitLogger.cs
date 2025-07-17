@@ -11,7 +11,7 @@
 //	internal class PrefabHitLogger
 //	{
 //		// Patch for when MineRock is damaged
-//		[HarmonyPatch(typeof(MineRock), "Damage")] // The Damage method
+//		[HarmonyPatch(typeof(MineRock), "Damage")]
 //		class MineRockLogger_Patch
 //		{
 //			public static void Prefix(MineRock __instance, HitData hit)
@@ -28,7 +28,7 @@
 //		}
 
 //		// Patch for when MineRock5 is damaged
-//		[HarmonyPatch(typeof(MineRock5), "Damage")] // The Damage method
+//		[HarmonyPatch(typeof(MineRock5), "Damage")]
 //		class MineRock5Logger_Patch
 //		{
 //			public static void Prefix(MineRock __instance, HitData hit)
@@ -45,7 +45,7 @@
 //		}
 
 //		// Patch for when Destructible is damaged
-//		[HarmonyPatch(typeof(Destructible), "Damage")] // The Damage method
+//		[HarmonyPatch(typeof(Destructible), "Damage")]
 //		class DestructibleLogger_Patch
 //		{
 //			public static void Prefix(Destructible __instance, HitData hit)

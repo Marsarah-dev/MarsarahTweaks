@@ -3,6 +3,9 @@
  * DONE, NOT RELEASED
  * 
  * A. Fixes
+ *    - Progresion Halt: 
+ *      - Fixed broken gravestones dropping Grausten
+ *      - Fixed Ashlands trees dropping Ashwood and Charcoal Resin when initially cut down (either by player or environmental damage)
  *    
  * B. New UI
  * 
@@ -17,14 +20,16 @@
  * 
  * A. Fixes
  *    - Only show Heat meter in Ashlands biome
+ *    - Investigate Creature Unleveler. I saw starred drakes and fenring with yagluth not defeated
+ *      - Issue is that it does not reload defaults when swapping worlds
  * 
  * B. New UI
  *    1. Add 🧑‍🤝‍🧑 for Online players in alternate UI (too much headache to add now)
- *    2. 
+ *    2. Add taming indicator for each creature in taming progress
  *    3. Better enemy nameplates
  *    4. Better item level indicator
  *    5. Show player HP and death count next to online indicator (or color their names with red if they have the corpse run buff)
- *    6. 
+ *    6. Make my UI elements draggable
  *    7. 
  *    8. 
  *    9. Create Smart Pins - admin predefines pins and players can only put the predefined pins on map
@@ -43,6 +48,16 @@
  *       - Add snapping points to chests
  *    4. Create a smart dropbox - Everything placed in it will automatically be moved to nearby chests that have an item of the respective type
  *    5. 
+ *    
+ *    ** Crafting
+ *    1. Increase Serpent Shield Chitin cost (when Alt Gear Recipes is enabled), and reduce Finewood cost
+ *    
+ *    ** Cooking
+ *    1. Reduce resource amounts for the following:
+ *       - Mead base: Ratatosk: Honey 10 > 5; Blueberries 10 > 5
+ *       - Mead base: Troll Endurance: Honey 10 > 5
+ *       - Mead base: Vananidir: Dandelion 10 > 5
+ *       - Mead base: Animal Whispers: Carrot 10 > 5
  *    
  *    ** Other
  *    1. Add Better Roads (increase player speed on roads)
@@ -103,7 +118,7 @@ namespace MarsarahTweaks
 	public class MarsarahTweaks : BaseUnityPlugin
 	{
 		internal const string ModName = "MarsarahTweaks";
-		internal const string ModVersion = "1.3.1";
+		internal const string ModVersion = "1.3.2";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 

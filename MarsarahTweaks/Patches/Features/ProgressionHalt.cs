@@ -1,21 +1,56 @@
 ﻿using HarmonyLib;
+using MarsarahTweaks.Managers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
 using static InventoryGrid;
-using System.Text.RegularExpressions;
-using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.Features
 {
 	internal class ProgressionHalt
 	{
+		/*[HarmonyPatch(typeof(TreeBase), "RPC_Damage")]
+		class ProgressionHaltTreeDrop_Patch
+		{
+			static void Prefix(TreeBase __instance, ref DropTable ___m_dropWhenDestroyed)
+			{
+				if (ConfigManager.AutomaticProgressionHaltEnabled.Value)
+				{
+					//MarsarahTweaks.LogInfo($"[TreBase] Name: {__instance.name}");
+					//List<GameObject> dropList = ___m_dropWhenDestroyed.GetDropList();
+					//for (int i = 0; i < dropList.Count; i++)
+					//{
+					//	MarsarahTweaks.LogInfo($"[TreeBase] Drops: {dropList[i].name}");
+					//}
+
+					if (__instance.name.StartsWith("AshlandsTree"))
+					{
+						string suffix = __instance.name.Substring("AshlandsTree".Length);
+
+						if (suffix.StartsWith("1") ||
+							suffix.StartsWith("3") ||
+							suffix.StartsWith("4") ||
+							suffix.StartsWith("5") ||
+							suffix.StartsWith("6") ||
+							suffix.StartsWith("6_big"))
+						{
+							MarsarahTweaks.LogInfo($"[TreBase] Name: {__instance.name}");
+							MarsarahTweaks.LogInfo($"[TreBase] Drop Chance: {___m_dropWhenDestroyed.m_dropChance}");
+							___m_dropWhenDestroyed.m_dropChance = 0;
+						}
+					}
+				}
+			}
+		}*/
+
 		[HarmonyPatch(typeof(Piece), "DropResources")]
 		class ProgressionHaltPiece_Patch
 		{
@@ -440,12 +475,13 @@ namespace MarsarahTweaks.Patches.Features
 			private static bool trophyDropsSet = false;
 
 			// Backup dictionaries
-			private static Dictionary<string, Dictionary<string, float>> mobDropChanceBackup = new Dictionary<string, Dictionary<string, float>>();
-			private static Dictionary<string, float> mineDropBackup = new Dictionary<string, float>();
-			private static Dictionary<string, float> mine5DropBackup = new Dictionary<string, float>();
-			private static Dictionary<string, float> destroyedDropBackup = new Dictionary<string, float>();
-			private static Dictionary<string, GameObject> destructibleDropBackup = new Dictionary<string, GameObject>();
-			private static Dictionary<string, DropTable> treeLogDropBackup = new Dictionary<string, DropTable>();
+			private static readonly Dictionary<string, Dictionary<string, float>> mobDropChanceBackup = new Dictionary<string, Dictionary<string, float>>();
+			private static readonly Dictionary<string, float> mineDropBackup = new Dictionary<string, float>();
+			private static readonly Dictionary<string, float> mine5DropBackup = new Dictionary<string, float>();
+			private static readonly Dictionary<string, float> destroyedDropBackup = new Dictionary<string, float>();
+			private static readonly Dictionary<string, GameObject> destructibleDropBackup = new Dictionary<string, GameObject>();
+			private static readonly Dictionary<string, DropTable> treeLogDropBackup = new Dictionary<string, DropTable>();
+			private static readonly Dictionary<string, float> treeBaseDropBackup = new Dictionary<string, float>();
 
 			// Prefab dictionary
 			private static readonly Dictionary<string, List<string>> bossPrefabHolds = new Dictionary<string, List<string>>()
@@ -521,7 +557,7 @@ namespace MarsarahTweaks.Patches.Features
 						//"Leviathan", // Ocean
 						"Pickable_MountainCaveCrystal",
 						"Pickable_MountainCaveObsidian",
-						"Pickable_MeatPile",
+						//"Pickable_MeatPile",
 						"Pickable_Onion",
 						"Pickable_SeedOnion",
 						"sapling_onion",
@@ -568,14 +604,14 @@ namespace MarsarahTweaks.Patches.Features
 						"SeekerQueen",
 						"Gjall",
 						"Hare",
-						"Pickable_DvergerThing",
-						"Pickable_DvergrLantern",
-						"Pickable_DvergrMineTreasure",
-						"Pickable_DvergrStein",
-						"Pickable_Mushroom_JotunPuffs",
-						"Pickable_Mushroom_Magecap",
-						"Pickable_RoyalJelly",
-						"Pickable_BlackCoreStand",
+						//"Pickable_DvergerThing",
+						//"Pickable_DvergrLantern",
+						//"Pickable_DvergrMineTreasure",
+						//"Pickable_DvergrStein",
+						//"Pickable_Mushroom_JotunPuffs",
+						//"Pickable_Mushroom_Magecap",
+						//"Pickable_RoyalJelly",
+						//"Pickable_BlackCoreStand",
 						"sapling_jotunpuffs",
 						"sapling_magecap",
 						"giant_arm",
@@ -611,19 +647,25 @@ namespace MarsarahTweaks.Patches.Features
 						"BlobLava",
 						"BonemawSerpent",
 						"lavarock_ashlands1",
-						"VineAsh",
-						"Pickable_Ashstone",
-						"Pickable_Charredskull",
-						"Pickable_Fiddlehead",
-						"Pickable_Meteorite",
-						"Pickable_MoltenCoreStand",
-						"Pickable_SmokePuff",
-						"Pickable_VoltureEgg",
+						//"VineAsh",
+						//"Pickable_Ashstone",
+						//"Pickable_Charredskull",
+						//"Pickable_Fiddlehead",
+						//"Pickable_Meteorite",
+						//"Pickable_MoltenCoreStand",
+						//"Pickable_SmokePuff",
+						//"Pickable_VoltureEgg",
 						"Pickable_SulfurRock",
 						"FlametalRockstand",
 						"FlametalRockstand_frac",
 						"LeviathanLava",
 						"dvergrprops_crate_ashlands",
+						"AshlandsTree1",
+						"AshlandsTree3",
+						"AshlandsTree4",
+						"AshlandsTree5",
+						"AshlandsTree6",
+						"AshlandsTree6_big",
 						"AshlandsTreeLogHalf1",
 						"AshlandsTreeLogHalf2",
 						"AshlandsTreeStump1",
@@ -642,7 +684,11 @@ namespace MarsarahTweaks.Patches.Features
 						"Spawner_CharredStone",
 						"Spawner_CharredStone_Elite",
 						"GraveStone_Broken_CharredTwitcherNest",
+						"GraveStone_Broken_World",
 						"GraveStone_CharredTwitcherNest",
+						"GraveStone_CharredFaderLocation",
+						"GraveStone_Elite_Broken_CharredTwitcherNest",
+						"GraveStone_Elite_CharredTwitcherNest",
 						"ashland_pot1_green",
 						"ashland_pot1_red",
 						"ashland_pot2_green",
@@ -1001,34 +1047,35 @@ namespace MarsarahTweaks.Patches.Features
 					{ typeof(MineRock5), HaltDropsMine5 },
 					{ typeof(DropOnDestroyed), HaltDropsOnDestroyed },
 					{ typeof(Destructible), HaltDropsDestructible },
-					{ typeof(TreeLog), HaltDropsTreeLog }
+					{ typeof(TreeLog), HaltDropsTreeLog },
+					{ typeof(TreeBase), HaltDropsTreeBase }
 				};
 
-				//bool modified = false; // Track if any drop was halted
+				bool modified = false; // Track if any drop was halted
 
 				// Iterate through all handlers and apply every matching one
 				foreach (var handler in dropHandlers)
 				{
 					if (prefab.GetComponent(handler.Key) != null)
 					{
-						handler.Value(prefab);
-						/*if (handler.Value(prefab))
+						//handler.Value(prefab);
+						if (handler.Value(prefab))
 						{
 							//MarsarahTweaks.LogInfo($"Halted drop for {prefab.name} as component {handler.Key}");
 							modified = true; // Mark that at least one modification was made
-						}*/
+						}
 					}
 				}
 
 				// LogInfo components if no drop handler was triggered
-				/*if (!modified)
+				if (!modified)
 				{
 					Component[] prefabComponents = prefab.GetComponents<Component>();
 					foreach (Component comp in prefabComponents)
 					{
 						MarsarahTweaks.LogInfo(prefab.name + " - " + comp.ToString());
 					}
-				}*/
+				}
 			}
 
 			// Halt Drops X
@@ -1147,6 +1194,24 @@ namespace MarsarahTweaks.Patches.Features
 				return false;
 			}
 
+			private static bool HaltDropsTreeBase(GameObject prefab)
+			{
+				TreeBase prefabComponent = prefab.GetComponent<TreeBase>();
+				if (prefabComponent != null && prefabComponent.m_dropWhenDestroyed != null)
+				{
+					string prefabName = prefab.name;
+					if (!treeBaseDropBackup.ContainsKey(prefabName))
+					{
+						//MarsarahTweaks.LogInfo($"Backing up {prefabName}");
+						treeBaseDropBackup[prefabName] = prefabComponent.m_dropWhenDestroyed.m_dropChance;
+					}
+
+					prefabComponent.m_dropWhenDestroyed.m_dropChance = 0f;
+					return true;
+				}
+				return false;
+			}
+
 			// =======================================================================
 			// Main Restore Drops for Boss
 			private static void RestoreDropsForBoss(ZNetScene instance, string bossName)
@@ -1198,7 +1263,8 @@ namespace MarsarahTweaks.Patches.Features
 					{ typeof(MineRock5), RestoreDropsMine5 },
 					{ typeof(DropOnDestroyed), RestoreDropsOnDestroyed },
 					{ typeof(Destructible), RestoreDropsDestructible },
-					{ typeof(TreeLog), RestoreDropsTreeLog }
+					{ typeof(TreeLog), RestoreDropsTreeLog },
+					{ typeof(TreeBase), RestoreDropsTreeBase }
 				};
 
 				// Iterate through all handlers and apply every matching one
@@ -1321,6 +1387,24 @@ namespace MarsarahTweaks.Patches.Features
 						prefabComponent.m_dropWhenDestroyed = originalDrop;
 
 						treeLogDropBackup.Remove(prefabName);
+						return true;
+					}
+				}
+				return false;
+			}
+
+			private static bool RestoreDropsTreeBase(GameObject prefab)
+			{
+				TreeBase prefabComponent = prefab.GetComponent<TreeBase>();
+				if (prefabComponent != null && prefabComponent.m_dropWhenDestroyed != null)
+				{
+					string prefabName = prefab.name;
+					if (treeBaseDropBackup.TryGetValue(prefabName, out float originalChance))
+					{
+						//MarsarahTweaks.LogInfo($"Restoring backup for {prefabName}");
+						prefabComponent.m_dropWhenDestroyed.m_dropChance = originalChance;
+
+						treeBaseDropBackup.Remove(prefabName);
 						return true;
 					}
 				}
