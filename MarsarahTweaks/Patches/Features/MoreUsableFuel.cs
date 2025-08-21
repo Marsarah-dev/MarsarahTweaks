@@ -50,7 +50,8 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static void UpdateKiln(Smelter kiln)
 		{
-			if (!kiln.m_conversion.Exists(conv => conv.m_to.name == "Coal")) return;
+			//if (!kiln.m_conversion.Exists(conv => conv.m_to.name == "Coal")) return;
+			if (!kiln.m_conversion.Exists(conv => conv.m_to != null && conv.m_to.name == "Coal")) return;
 
 			//if (kiln.m_conversion.Any(conv => conv.m_from.name == "ElderBark")) return;
 

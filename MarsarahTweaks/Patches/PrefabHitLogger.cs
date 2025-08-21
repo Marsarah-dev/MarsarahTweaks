@@ -21,7 +21,7 @@
 //					// LogInfo the prefab name and damage information when MineRock is damaged
 //					string prefabName = __instance.name;
 //					float health = __instance.GetHealth(); // Current health of the rock
-//					//MarsarahTweaks.LogInfo($"[MineRock] Damaged MineRock prefab: {prefabName}, Health: {health}, Hit Info: {hit}");
+//														   //MarsarahTweaks.LogInfo($"[MineRock] Damaged MineRock prefab: {prefabName}, Health: {health}, Hit Info: {hit}");
 //					MarsarahTweaks.LogInfo($"[MineRock] Damaged MineRock prefab: {prefabName}");
 //				}
 //			}
@@ -38,7 +38,7 @@
 //					// LogInfo the prefab name and damage information when MineRock is damaged
 //					string prefabName = __instance.name;
 //					float health = __instance.GetHealth(); // Current health of the rock
-//					//MarsarahTweaks.LogInfo($"[Minerock5] Damaged MineRock5 prefab: {prefabName}, Health: {health}, Hit Info: {hit}");
+//														   //MarsarahTweaks.LogInfo($"[Minerock5] Damaged MineRock5 prefab: {prefabName}, Health: {health}, Hit Info: {hit}");
 //					MarsarahTweaks.LogInfo($"[Minerock5] Damaged MineRock5 prefab: {prefabName}");
 //				}
 //			}

@@ -3,6 +3,7 @@
  * DONE, NOT RELEASED
  * 
  * A. Fixes
+ *    - More Usable Fuel error message fixed when building or being nearby any Shield Generators
  *    
  * B. New UI
  * 
@@ -50,7 +51,7 @@
  *    
  *    ** Other
  *    1. Add Better Roads (increase player speed on roads)
- *    2. 
+ *    2. Add fenris hide to the nighttime fenring
  *    3. Do something to wards
  *       - Increase HP, Stamina and Eitr (if the player has Eitr) of players within range
  *       - Passively heal surrounding build pieces
@@ -69,6 +70,7 @@
  *       - Bigger Wisp Radius            -> Rename to Wisp Radius            - Set to indicated value
  *       - Less Fall Damage              -> Rename to Fall Damage Multiplier - Set to multiplier (0.6 means 40% less fall damage)
  *       - Shorter Rested Delay          -> Rename to Rested Delay           - Set to indicated value (default 20s)
+ *    9. Make Fulings, Seekers and Charred spawn at night in later biomes (not in Meadows, BF and Swamp)
  *    
  *    ** Overhaul
  *    1. Add magic to Plains
@@ -114,7 +116,7 @@ namespace MarsarahTweaks
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 
-		private static readonly bool showLogs = false; // Set to true to display logs
+		private static readonly bool showLogs = true; // Set to true to display logs
 
 		private readonly Harmony harmony = new Harmony(ModGUID);
 

@@ -306,7 +306,8 @@ namespace MarsarahTweaks.Patches.Features
 						"Pickable_Meteorite",
 						"Pickable_MoltenCoreStand",
 						"Pickable_SulfurRock",
-						"Pickable_VoltureEgg"
+						"Pickable_VoltureEgg",
+						"Pickable_Pot_Shard"
 					} 
 				}
 			};
@@ -761,7 +762,36 @@ namespace MarsarahTweaks.Patches.Features
 						"cliff_ashlands4_frac",
 						"cliff_ashlands6_frac",
 						"cliff_ashlands7_HalfArch_frac",
-						"cliff_ashlandsflowrock_frac"
+						"cliff_ashlandsflowrock_frac",
+						// These are not halted but dun't know if they are the ones that drop things
+						//"Ashlands_Arch1",
+						//"Ashlands_Arch2",
+						//"Ashlands_Pillar4_tip",
+						//"Ashlands_Pillar4_tip2",
+						//"Ashlands_Pillar4_tip3",
+						//"Ashlands_Ramp",
+						//"Ashlands_Ruins_Wall_Broken3_4x6",
+						//"Ashlands_Ruins_Wall_Broken4_4x6",
+						//"Ashlands_Ruins_Wall_Broken5_4x6",
+						//"Ashlands_Ruins_Wall_Top_wHole",
+						//"Ashlands_Ruins_Wall_Window_4x6_broken2",
+						//"Ashlands_Ruins_Wall_Window_4x6_broken3",
+						//"Ashlands_Ruins_Wall_Window_4x6_broken4",
+						//"Ashlands_Ruins_Wall_Window_4x6_broken5",
+						//"Ashlands_Ruins_Wall_Window_4x6_broken6",
+						//"Ashlands_StairsBroad",
+						//"Ashlands_Wall_2x2",
+						//"Ashlands_Wall_2x2_cornerL",
+						//"Ashlands_Wall_2x2_cornerL_top",
+						//"Ashlands_Wall_2x2_cornerR",
+						//"Ashlands_Wall_2x2_cornerR_top",
+						//"Ashlands_Wall_2x2_edge",
+						//"Ashlands_Wall_2x2_edge_top",
+						//"Ashlands_Wall_2x2_edge2",
+						//"Ashlands_Wall_2x2_edge2_top",
+						//"Ashlands_Wall_2x2_top",
+						//"Ashlands_WallBlock_1x2x2",
+						//"Ashlands_WallBlock_base",
 					}
 				}
 			};
