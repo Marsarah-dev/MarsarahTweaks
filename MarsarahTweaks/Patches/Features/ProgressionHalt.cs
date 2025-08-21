@@ -474,6 +474,7 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			private static bool dropsSet = false;
 			private static bool trophyDropsSet = false;
+			private static bool betterDropsSet = false;
 
 			// Backup dictionaries
 			private static readonly Dictionary<string, Dictionary<string, float>> mobDropChanceBackup = new Dictionary<string, Dictionary<string, float>>();
@@ -812,6 +813,7 @@ namespace MarsarahTweaks.Patches.Features
 			private static bool lastProgressionHaltState = ConfigManager.AutomaticProgressionHaltEnabled.Value;
 			private static bool lastOceanElderProgressionHaltState = ConfigManager.HaltOceanBehindElderEnabled.Value;
 			private static bool lastTrophyDropsState = ConfigManager.BetterTrophyDropsEnabled.Value;
+			private static bool lastBetterDropsState = ConfigManager.BetterDropsEnabled.Value;
 
 			static void Postfix(ref ZNetScene __instance)
 			{
@@ -854,6 +856,7 @@ namespace MarsarahTweaks.Patches.Features
 				bool progressionHaltNowEnabled = ConfigManager.AutomaticProgressionHaltEnabled.Value;
 				bool oceanElderProgressionHaltNowEnabled = ConfigManager.HaltOceanBehindElderEnabled.Value;
 				bool trophyDropsNowEnabled = ConfigManager.BetterTrophyDropsEnabled.Value;
+				bool betterDropsNowEnabled = ConfigManager.BetterDropsEnabled.Value;
 
 				if (progressionHaltNowEnabled != lastProgressionHaltState)
 				{
@@ -861,12 +864,18 @@ namespace MarsarahTweaks.Patches.Features
 
 					if (progressionHaltNowEnabled)
 					{
-						// Handle case Trophy Drops ON and Progression Halt toggled from OFF to ON
-						// Restore Trophy Drops and then apply Progression Halt
+						// Handle case Trophy/Better Drops ON and Progression Halt toggled from OFF to ON
+						// Restore Trophy/Better Drops and then apply Progression Halt
 						if (trophyDropsNowEnabled)
 						{
 							//MarsarahTweaks.LogInfo($"Restoring Trophy Drops Special");
 							TrophyDropsChanges.RestoreTrophyDrops(__instance);
+						}
+
+						if (betterDropsNowEnabled)
+						{
+							//MarsarahTweaks.LogInfo($"Restoring Bettter Drops Special");
+							BetterDropsChanges.RestoreBetterDrops(__instance);
 						}
 
 						// If Progression Halt was turned ON mid-game, run it without checking boss states or drops set
@@ -880,9 +889,12 @@ namespace MarsarahTweaks.Patches.Features
 						//MarsarahTweaks.LogInfo($"Restoring Progression Halt to default entirely");
 						RestoreProgressionHalt(__instance);
 
-						// Run Trophy Drops here
+						// Run Trophy/Better Drops here
 						//MarsarahTweaks.LogInfo($"Setting up Trophy Drops due to Progression Halt being off");
 						TrophyDropsChanges.UpdateTrophyDrops(__instance);
+
+						//MarsarahTweaks.LogInfo($"Setting up Better Drops due to Progression Halt being off");
+						BetterDropsChanges.UpdateBetterDrops(__instance);
 					}
 				}
 
@@ -921,12 +933,31 @@ namespace MarsarahTweaks.Patches.Features
 					TrophyDropsChanges.UpdateTrophyDrops(__instance);
 				}
 
+				// Check if Better Drops was toggled
+				if (betterDropsNowEnabled != lastBetterDropsState)
+				{
+					lastBetterDropsState = betterDropsNowEnabled;
+
+					// If Better Drops was toggled mid-game, run it without checking Progression Halt state (since it checks inside) or trophyDropsSet
+					// This needs to be ran regardless if it's on or off
+					//MarsarahTweaks.LogInfo($"Setting up Better Drops due to toggling");
+					BetterDropsChanges.UpdateBetterDrops(__instance);
+				}
+
 				// Trophy Drops logic (ONLY run once on game start OR when Progression Halt is enabled and bosses change)
 				if (!trophyDropsSet || (progressionHaltNowEnabled && bossStateChanged))
 				{
 					//MarsarahTweaks.LogInfo($"Setting up Trophy Drops standard way");
 					TrophyDropsChanges.UpdateTrophyDrops(__instance);
 					trophyDropsSet = true;
+				}
+
+				// Better Drops logic (ONLY run once on game start OR when Progression Halt is enabled and bosses change)
+				if (!betterDropsSet || (progressionHaltNowEnabled && bossStateChanged))
+				{
+					//MarsarahTweaks.LogInfo($"Setting up Better Drops standard way");
+					BetterDropsChanges.UpdateBetterDrops(__instance);
+					betterDropsSet = true;
 				}
 			}
 

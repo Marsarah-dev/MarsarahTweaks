@@ -72,7 +72,6 @@ namespace MarsarahTweaks.Patches.Features
 			foreach (var boss in bossTrophyMappings)
 			{
 				bool canMakeChanges = !progHaltEnabled || (progHaltEnabled && GlobalKeyChecker.IsBossDefeated(boss.Key));
-
 				if (!canMakeChanges)
 				{
 					//MarsarahTweaks.LogInfo($"Skipping trophy drops modifications for {boss.Key}");
@@ -138,7 +137,6 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				// Only restore backups for creatures whose boss has not yet been defeated
 				bool canMakeChanges = progHaltEnabled && !GlobalKeyChecker.IsBossDefeated(boss.Key);
-
 				if (!canMakeChanges)
 				{
 					//MarsarahTweaks.LogInfo($"[Trophy Drops Restore Special] Skipping trophy drops restore for {boss.Key}");
@@ -175,76 +173,5 @@ namespace MarsarahTweaks.Patches.Features
 				}
 			}
 		}
-
-
-		/*[HarmonyPatch(typeof(ZNetScene), "Update")]
-		class TrophyDrops_Patch
-		{
-			static void Postfix(ref ZNetScene __instance)
-			{
-				if (__instance == null) return;
-
-				//UpdateTrophyDrops(__instance);
-			}
-		}*/
-
-		/*public static void UpdateTrophyDrops(ZNetScene znScene)
-		{
-			foreach (var kvp in newTrophyDropRates)
-			{
-				string creature = kvp.Key;
-				string trophy = kvp.Value.trophy;
-				float rate = kvp.Value.rate;
-
-				GameObject creaturePrefab = znScene.GetPrefab(creature);
-
-				if (creaturePrefab == null)
-				{
-					MarsarahTweaks.LogInfo($"[Trophy Drops] Could not get prefab for {creature}");
-					continue;
-				}
-
-				CharacterDrop creatureDrop = creaturePrefab.GetComponent<CharacterDrop>();
-
-				if (creatureDrop == null)
-				{
-					MarsarahTweaks.LogInfo($"[Trophy Drops] Could not get CharacterDrop for {creature}");
-					continue;
-				}
-
-				foreach (CharacterDrop.Drop drop in creatureDrop.m_drops)
-				{
-					if (drop.m_prefab.name == trophy)
-					{
-						if (ConfigManager.BetterTrophyDropsEnabled.Value)
-							{
-							// Backup original drop rate
-							if (!originalTrophyDropRates.ContainsKey(creature))
-							{
-								originalTrophyDropRates[creature] = new Dictionary<string, float>();
-							}
-							if (!originalTrophyDropRates[creature].ContainsKey(trophy))
-							{
-								originalTrophyDropRates[creature][trophy] = drop.m_chance; // Store original drop chance
-								MarsarahTweaks.LogInfo($"[Trophy Drops] Backing up {trophy} drop rate ({drop.m_chance}) for {creature}");
-							}
-
-							MarsarahTweaks.LogInfo($"[Trophy Drops] Setting trophy: {trophy} drop rate: {rate} for creature: {creature}");
-							drop.m_chance = rate;
-						}
-						else
-						{
-							// Restore backup
-							if (originalTrophyDropRates.TryGetValue(creature, out var originalTrophies) && originalTrophies.TryGetValue(trophy, out float originalRate))
-							{
-								MarsarahTweaks.LogInfo($"[Trophy Drops] Restoring {trophy} drop rate ({originalRate}) for {creature}");
-								drop.m_chance = originalRate;
-							}
-						}
-					}
-					break;
-				}
-			}
-		}*/
 	}
 }

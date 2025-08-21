@@ -8,6 +8,8 @@
  * B. New UI
  * 
  * C. New Features
+ *    - Better Drops
+ *      - Fenring drops Fenris Hair and Fanris Claw. No longer drops Wolf Fang
  * 
  * B. New QOL
  * 
