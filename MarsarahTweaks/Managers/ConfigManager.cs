@@ -112,7 +112,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("12 - More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators");
 
 			public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("01 - Pocket Portal", "Adds a new portal that is built from a Portal Core that only takes one inventory slot which can be crafted at a Workbench starting with the Mountain area. Can only build one Pocket Portal per player. (Toggling mid-game requires reloading the build/crafting menu)");
-			public static readonly ConfigMetadata SilverSconce = new ConfigMetadata("02 - Silver Sconce", "Adds a Silver Sconce unlocked at the Mountain biome");
+			public static readonly ConfigMetadata SilverSconce = new ConfigMetadata("02 - Silver Sconce", "Adds 3 Silver Sconce build pieces with different flame colors unlocked at the Mountain biome");
 
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
 			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("02 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");

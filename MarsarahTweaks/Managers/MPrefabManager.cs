@@ -18,7 +18,7 @@ namespace MarsarahTweaks.Managers
 	// MPrefabManager: MarsarahTweaks prefab cloning and registration system
 	internal class MPrefabManager
 	{
-		private static readonly LogManager log = new LogManager("M Prefab Manager", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("M Prefab Manager", LogManager.LogLevel.Warning);
 
 		public static GameObject GetPrefab(string name)
 		{
@@ -83,19 +83,28 @@ namespace MarsarahTweaks.Managers
 			ZNetScene znetScene = ZNetScene.instance;
 			if (znetScene == null)
 			{
-				log.Error("ZNetScene.instance is null. Cannot register prefab.");
-				return;
-			}
+				//log.Error("ZNetScene.instance is null. Cannot register prefab.");
+				//return;
 
-			if (znetScene.GetPrefab(prefab.name) != null)
+				// Early: just add as CustomPrefab, Jötunn will inject later
+				CustomPrefab customPrefab = new CustomPrefab(prefab, fixReference: true);
+				PrefabManager.Instance.AddPrefab(customPrefab);
+				log.Info($"Queued prefab '{prefab.name}' for registration.");
+			}
+			else
 			{
-				log.Warn($"Prefab '{prefab.name}' already registered in ZNetScene.");
-				return;
-			}
+				if (znetScene.GetPrefab(prefab.name) != null)
+				{
+					log.Warn($"Prefab '{prefab.name}' already registered in ZNetScene.");
+					return;
+				}
 
-			CustomPrefab customPrefab = new CustomPrefab(prefab, fixReference: true);
-			PrefabManager.Instance.AddPrefab(customPrefab);
-			PrefabManager.Instance.RegisterToZNetScene(prefab);
+				PrefabManager.Instance.RegisterToZNetScene(prefab);
+			}		
+
+			//CustomPrefab customPrefab = new CustomPrefab(prefab, fixReference: true);
+			//PrefabManager.Instance.AddPrefab(customPrefab);
+			//PrefabManager.Instance.RegisterToZNetScene(prefab);
 
 			if (GetPrefab(prefab.name) == null)
 			{
