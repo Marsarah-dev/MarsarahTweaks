@@ -170,7 +170,7 @@ namespace MarsarahTweaks.Patches.Features
 			lastQueenDefeated = GlobalKeyChecker.IsBossDefeated("The Queen");
 			lastFaderDefeated = GlobalKeyChecker.IsBossDefeated("Fader");
 
-			MarsarahTweaks.LogInfo("[Creatue Unleveler] New world load reset done.");
+			//MarsarahTweaks.LogInfo("[Creatue Unleveler] New world load reset done.");
 		}
 
 

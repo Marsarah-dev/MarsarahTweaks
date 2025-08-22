@@ -15,7 +15,7 @@ using static EffectList;
 using static UnityEngine.UI.Image;
 using static ZDOExtraData;
 
-namespace MarsarahTweaks.Patches.Features
+namespace MarsarahTweaks.Patches.BuildPieces
 {
 	public static class PocketPortal
 	{
@@ -440,7 +440,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (!__instance.PortalPrefabHash.Contains(hash))
 				{
 					__instance.PortalPrefabHash.Add(hash);
-					MarsarahTweaks.LogInfo($"Registered pocket_portal prefab hash early: {hash}");
+					//MarsarahTweaks.LogInfo($"Registered pocket_portal prefab hash early: {hash}");
 				}
 			}
 		}

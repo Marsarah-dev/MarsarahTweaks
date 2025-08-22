@@ -110,12 +110,14 @@
     <Compile Include="Managers\ConfigManager.cs" />
     <Compile Include="Managers\MPrefabManager.cs" />
     <Compile Include="MarsarahTweaks.cs" />
+    <Compile Include="Patches\BuildPieces\SilverSconce.cs" />
     <Compile Include="Patches\Features\AIFleeChanges.cs" />
     <Compile Include="Patches\Features\ArmorStatsChanges.cs" />
     <Compile Include="Patches\Features\AshlandsEnemiesChanges.cs" />
     <Compile Include="Patches\Features\BetterDropsChanges.cs" />
     <Compile Include="Patches\Features\MoreUsableFuel.cs" />
-    <Compile Include="Patches\Features\PocketPortal.cs" />
+    <Compile Include="Patches\Features\NighttimeSpawnChanges.cs" />
+    <Compile Include="Patches\BuildPieces\PocketPortal.cs" />
     <Compile Include="Patches\Features\PortalsPerPlayer.cs" />
     <Compile Include="Patches\QOL\BoatRadiusChanges.cs" />
     <Compile Include="Patches\QOL\FasterEquipChanges.cs" />

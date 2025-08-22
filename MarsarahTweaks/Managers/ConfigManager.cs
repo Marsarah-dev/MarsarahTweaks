@@ -11,6 +11,7 @@ using MarsarahTweaks.Patches.Grind;
 using MarsarahTweaks.Patches.Features;
 using MarsarahTweaks.Patches.QOL;
 using MarsarahTweaks.Patches.UI;
+using MarsarahTweaks.Patches.BuildPieces;
 
 namespace MarsarahTweaks.Managers
 {
@@ -35,7 +36,8 @@ namespace MarsarahTweaks.Managers
 			public const string GrindReduction = "2 - Grind Reduction (Synced with Server)";
 			public const string Features = "3 - Features (Synced with Server)";
 			public const string QOL = "4 - QOL (Synced with Server)";
-			public const string UI = "5 - UI (NOT Synced with Server)";
+			public const string BuildPieces = "5 - Build Pieces (Synced with Server)";
+			public const string UI = "6 - UI (NOT Synced with Server)";
 		}
 
 		// Struct for Config Metadata
@@ -84,13 +86,13 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata BrighterLanterns = new ConfigMetadata("19 - Brighter Lanterns", "Dvergr lanterns are brighter. (Toggling mid-game requires CLIENT relog or reloading area)");
 			public static readonly ConfigMetadata WeatherModifications = new ConfigMetadata("20 - Clearer Weather", "Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively. (Toggling mid-game requires CLIENT relog)");
 			public static readonly ConfigMetadata CreatureUnleveler = new ConfigMetadata("21 - Creature Unleveler By Boss", "Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss");
-			public static readonly ConfigMetadata MinibossWeight = new ConfigMetadata("22 - Hildir Weight Rewards", "Increases base carry weight by 25 when turning in Hildir chests (for each chest). (Toggling mid-game requires CLIENT relog)");
-			public static readonly ConfigMetadata ExtensionsModifications = new ConfigMetadata("23 - Station Extensions Changes", "Decreases space requirement for workstation extensions and increases build distance to workstations (This does not increase workstation radius)");
-			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("24 - Stop Running Away", "Boars and Necks won't flee when alerted. (Toggling mid-game only affects new creatures)");
-			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("25 - Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Tick, Dverger, Seeker Soldier, Charred Warlock");
-			public static readonly ConfigMetadata DropsModifications = new ConfigMetadata("26 - Better Creature Drops", "Modifies the drops for the following creatures: Ghost (adds Necklace), Fenring (adds Fanris Hair and Fenris Claw, removes Wolf Fang), Bat (adds 50% Bloodbag drop), Dvergr (increases chance of Soft Tissue to 100% from 25%)");
-			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("27 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000 (Toggling mid-game requires CLIENT relog or reloading area)");
-			public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("28 - Pocket Portal", "Adds a new portal that is built from a Portal Core that only takes one inventory slot which can be crafted at a Workbench starting with the Mountain area. Can only build one Pocket Portal per player. (Toggling mid-game requires reloading the build/crafting menu)");
+			public static readonly ConfigMetadata StopNighttimeInvasion = new ConfigMetadata("22 - Stop Nighttime Invasion", "Fulings, Seeker and Charred no longer spawn in early biomes at night");
+			public static readonly ConfigMetadata MinibossWeight = new ConfigMetadata("23 - Hildir Weight Rewards", "Increases base carry weight by 25 when turning in Hildir chests (for each chest). (Toggling mid-game requires CLIENT relog)");
+			public static readonly ConfigMetadata ExtensionsModifications = new ConfigMetadata("24 - Station Extensions Changes", "Decreases space requirement for workstation extensions and increases build distance to workstations (This does not increase workstation radius)");
+			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("25 - Stop Running Away", "Boars and Necks won't flee when alerted. (Toggling mid-game only affects new creatures)");
+			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("26 - Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Tick, Dverger, Seeker Soldier, Charred Warlock");
+			public static readonly ConfigMetadata DropsModifications = new ConfigMetadata("27 - Better Creature Drops", "Modifies the drops for the following creatures: Ghost (adds Necklace), Fenring (adds Fanris Hair and Fenris Claw, removes Wolf Fang), Bat (adds 50% Bloodbag drop), Dvergr (increases chance of Soft Tissue to 100% from 25%)");
+			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("28 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000 (Toggling mid-game requires CLIENT relog or reloading area)");
 			public static readonly ConfigMetadata PortalsPerPlayer = new ConfigMetadata("29 - Max Portals Per Player", "Set the number of portals a player can build per world for each player. This number applies individually for the normal and the stone portal. Set to -1 for unlimited portals.");
 			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("30 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
 
@@ -106,6 +108,9 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata CameraSailingPosition = new ConfigMetadata("10 - Move Camera Up While Sailing", "Moves the camera a bit upwards when sailing to better see in front of the boat");
 			public static readonly ConfigMetadata ShorterRestedDelay = new ConfigMetadata("11 - Shorter Rested Delay", "Reduces the amount of time needed to get the rested buff from 20 to 10 seconds (Toggling mid-game requires re-entering the resting area)");
 			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("12 - More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators");
+
+			public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("01 - Pocket Portal", "Adds a new portal that is built from a Portal Core that only takes one inventory slot which can be crafted at a Workbench starting with the Mountain area. Can only build one Pocket Portal per player. (Toggling mid-game requires reloading the build/crafting menu)");
+			public static readonly ConfigMetadata SilverSconce = new ConfigMetadata("02 - Silver Sconce", "Adds a Silver Sconce unlocked at the Mountain biome");
 
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
 			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("02 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
@@ -157,13 +162,13 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> BrighterLanternsEnabled;
 		public static ConfigEntry<bool> ClearerWeatherEnabled;
 		public static ConfigEntry<bool> CreatureUnlevelerEnabled;
+		public static ConfigEntry<bool> StopNighttimeInvasionEnabled;
 		public static ConfigEntry<bool> MinibossWeightEnabled;
 		public static ConfigEntry<bool> ExtensionsChangesEnabled;
 		public static ConfigEntry<bool> NoFleeEnabled;
 		public static ConfigEntry<bool> BetterTrophyDropsEnabled;
 		public static ConfigEntry<bool> BetterDropsEnabled;
 		public static ConfigEntry<bool> TougherShipsEnabled;
-		public static ConfigEntry<bool> PocketPortalEnabled;
 		public static ConfigEntry<int> MaxPortalsPerPlayer;
 		public static ConfigEntry<bool> OtherEnabled;
 
@@ -196,6 +201,9 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> AnnouncePlayerLogout;
 		public static ConfigEntry<bool> ShowHeatLevelInAshlands;
 		public static ConfigEntry<bool> UseSymbolsForUI;
+
+		public static ConfigEntry<bool> PocketPortalEnabled;
+		public static ConfigEntry<bool> SilverSconceEnabled;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -235,13 +243,13 @@ namespace MarsarahTweaks.Managers
 			BrighterLanternsEnabled = CreateConfig(ConfigSections.Features, Configs.BrighterLanterns.Name, true, Configs.BrighterLanterns.Description);
 			ClearerWeatherEnabled = CreateConfig(ConfigSections.Features, Configs.WeatherModifications.Name, true, Configs.WeatherModifications.Description);
 			CreatureUnlevelerEnabled = CreateConfig(ConfigSections.Features, Configs.CreatureUnleveler.Name, true, Configs.CreatureUnleveler.Description);
+			StopNighttimeInvasionEnabled = CreateConfig(ConfigSections.Features, Configs.StopNighttimeInvasion.Name, true, Configs.StopNighttimeInvasion.Description);
 			MinibossWeightEnabled = CreateConfig(ConfigSections.Features, Configs.MinibossWeight.Name, true, Configs.MinibossWeight.Description);
 			ExtensionsChangesEnabled = CreateConfig(ConfigSections.Features, Configs.ExtensionsModifications.Name, true, Configs.ExtensionsModifications.Description);
 			NoFleeEnabled = CreateConfig(ConfigSections.Features, Configs.FleeAIModifications.Name, true, Configs.FleeAIModifications.Description);
 			BetterTrophyDropsEnabled = CreateConfig(ConfigSections.Features, Configs.TrophyDropsModifications.Name, true, Configs.TrophyDropsModifications.Description);
 			BetterDropsEnabled = CreateConfig(ConfigSections.Features, Configs.DropsModifications.Name, true, Configs.DropsModifications.Description);
 			TougherShipsEnabled = CreateConfig(ConfigSections.Features, Configs.TougherShips.Name, true, Configs.TougherShips.Description);
-			PocketPortalEnabled = CreateConfig(ConfigSections.Features, Configs.PocketPortal.Name, true, Configs.PocketPortal.Description);
 			MaxPortalsPerPlayer = CreateConfig(ConfigSections.Features, Configs.PortalsPerPlayer.Name, -1, Configs.PortalsPerPlayer.Description);
 			OtherEnabled = CreateConfig(ConfigSections.Features, Configs.OtherModifications.Name, true, Configs.OtherModifications.Description);
 
@@ -258,6 +266,10 @@ namespace MarsarahTweaks.Managers
 			CameraUpWhenSailingEnabled = CreateConfig(ConfigSections.QOL, Configs.CameraSailingPosition.Name, true, Configs.CameraSailingPosition.Description);
 			ShorterRestedDelayEnabled = CreateConfig(ConfigSections.QOL, Configs.ShorterRestedDelay.Name, true, Configs.ShorterRestedDelay.Description);
 			MoreUsableFuelEnabled = CreateConfig(ConfigSections.QOL, Configs.MoreUsableFuel.Name, true, Configs.MoreUsableFuel.Description);
+
+			// ===== Build Pieces
+			PocketPortalEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.PocketPortal.Name, true, Configs.PocketPortal.Description);
+			SilverSconceEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.SilverSconce.Name, true, Configs.SilverSconce.Description);
 
 			// ===== UI
 			MoreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description, false);
@@ -329,8 +341,8 @@ namespace MarsarahTweaks.Managers
 
 			if (ObjectDB.instance == null || ZNetScene.instance == null) return;
 			if (ZNet.instance == null) return;
+			var spawnSystem = Object.FindObjectOfType<SpawnSystem>();
 
-			
 			bool isDedicatedServer = ZNet.instance.IsDedicated();
 
 			// Handle client-side (non-dedicated) configs
@@ -352,6 +364,7 @@ namespace MarsarahTweaks.Managers
 
 					case var name when name == Configs.BuildPieceAmountsModifications.Name:
 						BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, true, false);
+						SilverSconce.RefreshSilverSconceRequirements();
 						break;
 
 					case var name when name == Configs.BuildPieceMaterialsModifications.Name:
@@ -396,6 +409,7 @@ namespace MarsarahTweaks.Managers
 
 					case var name when name == Configs.PermanentLightsModifications.Name:
 						PermanentLightsChanges.UpdateLightBuildPiecesAmounts(ZNetScene.instance, true);
+						SilverSconce.RefreshSilverSconceRequirements();
 						break;
 
 					case var name when name == Configs.CraftableChain.Name:
@@ -428,6 +442,10 @@ namespace MarsarahTweaks.Managers
 					case var name when name == Configs.PocketPortal.Name:
 						PocketPortal.TogglePocketPortalVisibility();
 						PocketPortal.TogglePortalCoreVisibility();
+						break;
+
+					case var name when name == Configs.SilverSconce.Name:
+						SilverSconce.ToggleSilverSconceVisibility();
 						break;
 
 					case var name when name == Configs.UIInventoryWeightAndSlots.Name:
@@ -464,18 +482,26 @@ namespace MarsarahTweaks.Managers
 			switch (configName)
 			{
 				case var name when name == Configs.AshlandsEnemiesModifications.Name:
-					if (Object.FindObjectOfType<SpawnSystem>() is SpawnSystem spawnSystemA)
+					if (spawnSystem != null)
 					{
-						AshlandsEnemiesChanges.UpdateAshlandsSpawns(spawnSystemA);
+						AshlandsEnemiesChanges.UpdateAshlandsSpawns(spawnSystem);
+					}
+					break;
+
+				case var name when name == Configs.StopNighttimeInvasion.Name:
+					if (spawnSystem != null)
+					{
+						NighttimeSpawnChanges.UpdateNighttimeSpawns(spawnSystem);
 					}
 					break;
 
 				case var name when name == Configs.CreatureUnleveler.Name:
-					if (Object.FindObjectOfType<SpawnSystem>() is SpawnSystem spawnSystemB)
+					if (spawnSystem != null)
 					{
-						CreatureUnleveler.ApplyCreatureLevelChanges(spawnSystemB);
+						CreatureUnleveler.ApplyCreatureLevelChanges(spawnSystem);
 					}
 					break;
+
 				case var name when name == Configs.MoreUsableFuel.Name:
 					//MarsarahTweaks.LogInfo("Reapplying fuel modifications...");
 					MoreUsableFuel.UpdateMoreUsableFuel();

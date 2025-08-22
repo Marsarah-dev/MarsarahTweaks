@@ -8,8 +8,19 @@
  * B. New UI
  * 
  * C. New Features
- *    - Better Drops
- *      - Fenring drops Fenris Hair and Fanris Claw. No longer drops Wolf Fang
+ *    - Better Creature Drops
+ *      - Ghost: Added Silver Necklace drop
+ *      - Fenring: Added Fenris Hair 1-2, Added Fenris Claw (replacing Wolf Fang)
+ *      - Bat: Added Blood Bag 50% chance drop
+ *      - Dverger Rogue, Mage and Ashlands Dvergr: Increased Soft Tissue chance to 100% (from 25%)
+ *      
+ *    - Stop Nighttime Invasion
+ *      - Fulings, Seeker and Charred do not spawn in early biomes at night when their relevant bosses are defeated
+ *      - Fulings: Mountain
+ *      - Seeker: Plains
+ *      - Charred: Plains, Mistlands
+ *      
+ *    - Silver Sconce
  * 
  * B. New QOL
  * 
@@ -40,7 +51,7 @@
  *    4. Add secondary attack to Staff of Protection that heals (like the Dverger Mage heal)
  *    
  *    ** Building
- *    1. Add Silver Sconce
+ *    1. 
  *    2. Add more Silver/Obsidian build pieces
  *    3. Add pre-attached signs to existing chests and counter + image with what it contains
  *       - Add snapping points to chests
@@ -53,7 +64,7 @@
  *    
  *    ** Other
  *    1. Add Better Roads (increase player speed on roads)
- *    2. Add fenris hide to the nighttime fenring
+ *    2. 
  *    3. Do something to wards
  *       - Increase HP, Stamina and Eitr (if the player has Eitr) of players within range
  *       - Passively heal surrounding build pieces
@@ -114,7 +125,7 @@ namespace MarsarahTweaks
 	public class MarsarahTweaks : BaseUnityPlugin
 	{
 		internal const string ModName = "MarsarahTweaks";
-		internal const string ModVersion = "1.3.2";
+		internal const string ModVersion = "1.4.0";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 
