@@ -21,6 +21,10 @@
  *      - Charred: Plains, Mistlands
  *      
  *    - Silver Sconce
+ *      - Added 3 tyes of Silver Sconces (red, blue and green flame) available in the Mountain biome
+ *      
+ *    - Green Standing Brazier (TODO)
+ *      - Add a green version of the standing brazier
  * 
  * B. New QOL
  * 

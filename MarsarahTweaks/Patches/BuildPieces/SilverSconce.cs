@@ -71,6 +71,10 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			CopyLightSettings("piece_groundtorch_blue", SilverSconcePrefabBlue);
 			CopyLightSettings("piece_groundtorch_green", SilverSconcePrefabGreen);
 
+			// Modify Silver Sconce Ison
+			ModifySilverSconceIcon(SilverSconcePrefabBlue, new Color(0.4f, 0.7f, 1f));
+			ModifySilverSconceIcon(SilverSconcePrefabGreen, new Color(0.2f, 1f, 0.4f));
+
 			// Add silver sconce to ZNetScene
 			MPrefabManager.RegisterToZNetScene(SilverSconcePrefab);
 			MPrefabManager.RegisterToZNetScene(SilverSconcePrefabBlue);
@@ -271,6 +275,88 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			log.Info($"Replaced '_enabled' from {sourcePrefabName} to {targetPrefab.name}");
 		}
 
+		private static Sprite ModifySilverSconceIcon(GameObject prefab, Color targetTint, bool isBlue = false)
+		{
+			Piece sconcePiece = prefab.GetComponent<Piece>();
+			if (sconcePiece == null)
+			{
+				log.Warn("Piece prefab is null.");
+				return null;
+			}
+
+			Sprite originalIcon = sconcePiece.m_icon;
+			if (originalIcon == null)
+			{
+				log.Warn($"Piece '{sconcePiece.name}' has no icon assigned.");
+				return null;
+			}
+			if (originalIcon.texture == null)
+			{
+				log.Warn($"Original icon texture is null for piece '{sconcePiece.name}'.");
+				return null;
+			}
+
+			Rect atlasRect = new Rect(864, 848, 64, 64); // 872, 848
+
+			// Copy only the sub-region from the atlas
+			Texture2D croppedTex = new Texture2D((int)atlasRect.width, (int)atlasRect.height, TextureFormat.RGBA32, false);
+			RenderTexture rt = RenderTexture.GetTemporary(originalIcon.texture.width, originalIcon.texture.height, 0, RenderTextureFormat.ARGB32);
+			Graphics.Blit(originalIcon.texture, rt);
+			RenderTexture.active = rt;
+
+			croppedTex.ReadPixels(atlasRect, 0, 0);
+			croppedTex.Apply();
+
+			Color[] pixels = croppedTex.GetPixels();
+			for (int i = 0; i < pixels.Length; i++)
+			{
+				Color c = pixels[i];
+
+				// Detect yellow/orange glow
+				if (c.r > 0.6f && c.g > 0.5f && c.b < 0.4f && Mathf.Abs(c.r - c.g) < 0.25f)
+				{
+					float intensity = (c.r + c.g) * 0.5f;
+
+					// Special tweak for blue icons
+					if (isBlue)
+					{
+						intensity *= 1.3f; // brighten glow for blue
+					}
+
+					pixels[i] = new Color(
+						targetTint.r * intensity,
+						targetTint.g * intensity,
+						targetTint.b * intensity,
+						c.a
+					);
+				}
+				else
+				{
+					pixels[i] = c;
+				}
+			}
+			croppedTex.SetPixels(pixels);
+			croppedTex.Apply();
+
+			RenderTexture.ReleaseTemporary(rt);
+			RenderTexture.active = null;
+
+			// Create new Sprite from cropped region
+			Sprite newIcon = Sprite.Create(
+				croppedTex,
+				new Rect(0, 0, croppedTex.width, croppedTex.height),
+				new Vector2(0.5f, 0.5f),
+				originalIcon.pixelsPerUnit
+			);
+
+			// Replace the icon on the Piece
+			sconcePiece.m_icon = newIcon;
+
+			log.Info($"Icon changed for {prefab.name}");
+
+			return newIcon;
+		}
+
 		private static void ConfigureSilverSconcePieceData(GameObject prefab, string resourceWood, string resourceMetal, string resourceFuel)
 		{
 			var pieceConfig = new PieceConfig
@@ -281,7 +367,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				{
 					new RequirementConfig(resourceWood, 2, recover: true), // ElderBark
 					new RequirementConfig(resourceMetal, ConfigManager.BuildPieceAmountsEnabled.Value? 1 : 2, recover: true), // Silver
-					new RequirementConfig(resourceFuel, ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, recover: true) // Resin
+					new RequirementConfig(resourceFuel, ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, recover: false) // Resin
 				}
 			};
 
