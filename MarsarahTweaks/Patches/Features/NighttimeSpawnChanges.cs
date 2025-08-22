@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class NighttimeSpawnChanges
 	{
+		private static readonly LogManager log = new LogManager("Night Spawns", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(SpawnSystem), "Awake")]
 		class NighttimeSpawn_Patch
 		{
@@ -51,12 +53,12 @@ namespace MarsarahTweaks.Patches.Features
 								// Backup
 								if (!originalBiomes.ContainsKey(spawner.m_name))
 								{
-									//MarsarahTweaks.LogInfo($"[Night Spawns] Backing up: {spawner.m_name} - biomes: {spawner.m_biome}");
+									log.Info($"Backing up: {spawner.m_name} - biomes: {spawner.m_biome}");
 									originalBiomes[spawner.m_name] = (spawner.m_biome);
 								}
 
 								spawner.m_biome = newBiomeData.biome;
-								//MarsarahTweaks.LogInfo($"[Night Spawns] Adjusted spawner {spawner.m_name} (key: {newBiomeData.globalKey}) to biomes {spawner.m_biome}");
+								log.Info($"Adjusted spawner {spawner.m_name} (key: {newBiomeData.globalKey}) to biomes {spawner.m_biome}");
 							}
 						}
 						else if ((spawner.m_requiredGlobalKey ?? "") == newBiomeData.globalKey)
@@ -65,7 +67,7 @@ namespace MarsarahTweaks.Patches.Features
 							if (originalBiomes.TryGetValue(spawner.m_name, out var originalBiome))
 							{
 								spawner.m_biome = originalBiome;
-								//MarsarahTweaks.LogInfo($"[Night Spawns] Restored {spawner.m_name} - biomes: {spawner.m_biome}");
+								log.Info($"Restored {spawner.m_name} - biomes: {spawner.m_biome}");
 
 								originalBiomes.Remove(spawner.m_name);
 							}
@@ -82,22 +84,22 @@ namespace MarsarahTweaks.Patches.Features
 					? string.Join(", ", spawnList.m_biomeFolded)
 					: "(none)";
 
-				MarsarahTweaks.LogInfo($"=== Spawn List (biomeFolded): {biomes} ===");
+				log.Info($"=== Spawn List (biomeFolded): {biomes} ===");
 
-				MarsarahTweaks.LogInfo($"| {"Enemy",-25} | {"Biome",-30} | {"Day?",-5} | {"Night?",-7} | {"Chance",-6} | {"Key",-20} |");
-				MarsarahTweaks.LogInfo(new string('-', 110));
+				log.Info($"| {"Enemy",-25} | {"Biome",-30} | {"Day?",-5} | {"Night?",-7} | {"Chance",-6} | {"Key",-20} |");
+				log.Info(new string('-', 110));
 
 				foreach (SpawnSystem.SpawnData spawner in spawnList.m_spawners)
 				{
 					string biome = spawner.m_biome.ToString();
 					string key = string.IsNullOrEmpty(spawner.m_requiredGlobalKey) ? "-" : spawner.m_requiredGlobalKey;
 
-					MarsarahTweaks.LogInfo(
+					log.Info(
 						$"| {spawner.m_name,-25} | {biome,-30} | {spawner.m_spawnAtDay,-5} | {spawner.m_spawnAtNight,-7} | {spawner.m_spawnChance,-6:F0}% | {key,-20} |"
 					);
 				}
 
-				MarsarahTweaks.LogInfo(""); // blank line for spacing
+				log.Info(""); // blank line for spacing
 			}*/
 		}
 	}

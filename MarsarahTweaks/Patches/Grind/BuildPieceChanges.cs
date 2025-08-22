@@ -13,6 +13,8 @@ namespace MarsarahTweaks.Patches.Grind
 {
 	internal class BuildPieceChanges
 	{
+		private static readonly LogManager log = new LogManager("Build Piece Changes", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
 		class BuildPiecesModifications_Patch
 		{
@@ -651,7 +653,7 @@ namespace MarsarahTweaks.Patches.Grind
 					{
 						CreateBackup(pieceName, req, null);
 
-						//MarsarahTweaks.LogInfo($"(Piece Amounts) Applying amounts for Piece {pieceName} - Resource {req.m_resItem.name}: {req.m_amount} -> {amountValue}");
+						log.Info($"(Piece Amounts) Applying amounts for Piece {pieceName} - Resource {req.m_resItem.name}: {req.m_amount} -> {amountValue}");
 						ApplyChanges(req, (null, amountValue), modifyResItem: false);
 					}
 
@@ -660,20 +662,20 @@ namespace MarsarahTweaks.Patches.Grind
 					{
 						CreateBackup(pieceName, req, materialValue);
 
-						//MarsarahTweaks.LogInfo($"(Piece Materials) Applying material for Piece {pieceName} - Resource {req.m_resItem.name} -> {materialValue}");
+						log.Info($"(Piece Materials) Applying material for Piece {pieceName} - Resource {req.m_resItem.name} -> {materialValue}");
 						ApplyChanges(req, (materialValue, null), modifyResItem: true);
 					}
 
 					// Restore backups when disabling features
 					if (!ConfigManager.BuildPieceAmountsEnabled.Value && newPieceAmounts.ContainsKey(pieceName) && amountsWasChanged)
 					{
-						//MarsarahTweaks.LogInfo($"(Gear Amounts) Was changed: {amountsWasChanged}");
+						log.Info($"(Gear Amounts) Was changed: {amountsWasChanged}");
 						if (RestoreBackup(pieceName, req, false))
 						{
 							// Remove backup unless materials modification still needs it
 							if (!hasPieceMaterialsChange || !newPieceMaterials[pieceName].ContainsKey(req.m_resItem.name))
 							{
-								//MarsarahTweaks.LogInfo($"(Piece Amounts) Removing backup for: {pieceName} - {req.m_resItem.name}");
+								log.Info($"(Piece Amounts) Removing backup for: {pieceName} - {req.m_resItem.name}");
 								defaultBuildPieceRequirements[pieceName].Remove(req.m_resItem.name);
 							}
 						}
@@ -681,7 +683,7 @@ namespace MarsarahTweaks.Patches.Grind
 
 					if (!ConfigManager.BuildPieceMaterialsEnabled.Value && newPieceMaterials.ContainsKey(pieceName) && materialsWasChanged)
 					{
-						//MarsarahTweaks.LogInfo($"(Gear Materials) Was changed: {materialsWasChanged}");
+						log.Info($"(Gear Materials) Was changed: {materialsWasChanged}");
 						if (RestoreBackup(pieceName, req, true))
 						{
 							if (hasPieceAmountsChange && newPieceAmounts[pieceName].ContainsKey(req.m_resItem.name))
@@ -689,13 +691,13 @@ namespace MarsarahTweaks.Patches.Grind
 								// Apply gear amounts modifications again after restoring
 								if (newPieceAmounts[pieceName].TryGetValue(req.m_resItem.name, out var restoredValue))
 								{
-									//MarsarahTweaks.LogInfo($"(Piece Materials - Amounts) Re-applying changes for: {pieceName} - {req.m_resItem.name}");
+									log.Info($"(Piece Materials - Amounts) Re-applying changes for: {pieceName} - {req.m_resItem.name}");
 									ApplyChanges(req, (null, restoredValue), false);
 								}
 							}
 							else if (!hasPieceAmountsChange || !newPieceAmounts[pieceName].ContainsKey(req.m_resItem.name))
 							{
-								//MarsarahTweaks.LogInfo($"(Piece Materials) Removing backup for: {pieceName} - {req.m_resItem.name}");
+								log.Info($"(Piece Materials) Removing backup for: {pieceName} - {req.m_resItem.name}");
 								defaultBuildPieceRequirements[pieceName].Remove(req.m_resItem.name);
 							}
 						}
@@ -705,7 +707,7 @@ namespace MarsarahTweaks.Patches.Grind
 				// Remove entire backup entry if empty
 				if (defaultBuildPieceRequirements.ContainsKey(pieceName) && defaultBuildPieceRequirements[pieceName].Count == 0)
 				{
-					//MarsarahTweaks.LogInfo($"(Cleanup) Removing backup for: {pieceName}");
+					log.Info($"(Cleanup) Removing backup for: {pieceName}");
 					defaultBuildPieceRequirements.Remove(pieceName);
 				}
 			}
@@ -716,12 +718,12 @@ namespace MarsarahTweaks.Patches.Grind
 		{
 			if (values.amount.HasValue && req.m_amount != values.amount.Value)
 			{
-				//MarsarahTweaks.LogInfo($"Applying amounts for Resource {req.m_resItem.name}: {req.m_amount} -> {values.amount.Value}");
+				log.Info($"Applying amounts for Resource {req.m_resItem.name}: {req.m_amount} -> {values.amount.Value}");
 				req.m_amount = values.amount.Value;
 			}
 			if (modifyResItem && !string.IsNullOrEmpty(values.newResItem) && req.m_resItem.name != values.newResItem)
 			{
-				//MarsarahTweaks.LogInfo($"Applying material for Resource {req.m_resItem.name} -> {values.newResItem}");
+				log.Info($"Applying material for Resource {req.m_resItem.name} -> {values.newResItem}");
 				req.m_resItem = ZNetScene.instance.GetPrefab(values.newResItem).GetComponent<ItemDrop>();
 			}
 		}
@@ -743,14 +745,14 @@ namespace MarsarahTweaks.Patches.Grind
 			{
 				if (newResItem != null && existingBackup.newResItem == null)
 				{
-					//MarsarahTweaks.LogInfo($"Updating backup for {pieceName} - oldResItem: {currentResItem} with newResItem: {newResItem}");
+					log.Info($"Updating backup for {pieceName} - oldResItem: {currentResItem} with newResItem: {newResItem}");
 					pieceBackup[currentResItem] = (existingBackup.originalResItem, newResItem, existingBackup.amount);
 				}
 			}
 			else
 			{
 				// Create a new backup for this resource without affecting existing ones
-				//MarsarahTweaks.LogInfo($"Creating new backup for {pieceName} - {currentResItem}");
+				log.Info($"Creating new backup for {pieceName} - {currentResItem}");
 				pieceBackup[currentResItem] = (currentResItem, newResItem, req.m_amount);
 			}
 		}
@@ -760,21 +762,21 @@ namespace MarsarahTweaks.Patches.Grind
 		{
 			if (!defaultBuildPieceRequirements.TryGetValue(pieceName, out var recipeBackup))
 			{
-				//MarsarahTweaks.LogInfo("Restore backup first check.");
+				log.Info("Restore backup first check.");
 				return false;
 			}
 
 			// Restoring original materials if any
-			//MarsarahTweaks.LogInfo($"Restore backup - Recipe name: {pieceName}, Given requirement: {req.m_resItem.name}");
+			log.Info($"Restore backup - Recipe name: {pieceName}, Given requirement: {req.m_resItem.name}");
 			foreach (var kvp in recipeBackup)
 			{
 				var (originalMaterial, newMaterial, amount) = kvp.Value;
 				{
-					//MarsarahTweaks.LogInfo($"Restore backup - values: {originalMaterial}, {newMaterial}, {restoreMaterials}");
+					log.Info($"Restore backup - values: {originalMaterial}, {newMaterial}, {restoreMaterials}");
 
 					if (req.m_resItem.name == newMaterial && restoreMaterials)
 					{
-						//MarsarahTweaks.LogInfo($"Restoring original material for {pieceName} from {req.m_resItem.name} to {originalMaterial}");
+						log.Info($"Restoring original material for {pieceName} from {req.m_resItem.name} to {originalMaterial}");
 						req.m_resItem = ZNetScene.instance.GetPrefab(originalMaterial).GetComponent<ItemDrop>();
 						break;
 					}
@@ -783,7 +785,7 @@ namespace MarsarahTweaks.Patches.Grind
 
 			if (recipeBackup.TryGetValue(req.m_resItem.name, out var originalValues))
 			{
-				//MarsarahTweaks.LogInfo($"Restoring backup for: {pieceName} - {req.m_resItem.name}");
+				log.Info($"Restoring backup for: {pieceName} - {req.m_resItem.name}");
 
 				// Restore original values
 				req.m_amount = originalValues.amount;
@@ -791,7 +793,7 @@ namespace MarsarahTweaks.Patches.Grind
 				return true;
 			}
 
-			//MarsarahTweaks.LogInfo("Restore backup - we got to the end.");
+			log.Info("Restore backup - we got to the end.");
 			return false; // No backup found
 		}
 	}

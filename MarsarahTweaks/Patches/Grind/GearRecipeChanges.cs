@@ -12,6 +12,8 @@ namespace MarsarahTweaks.Patches.Grind
 {
 	internal class GearRecipeChanges
 	{
+		private static readonly LogManager log = new LogManager("Gear Recipe Changes", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearRecipeModifications_Patch
 		{
@@ -1083,10 +1085,10 @@ namespace MarsarahTweaks.Patches.Grind
 				bool hasGearMaterialsChange = ConfigManager.GearRecipeMaterialsEnabled.Value && newGearRecipesMaterials.ContainsKey(recipe.name);
 				bool hasLinenCapeChange = ConfigManager.EarlyLinenCapeEnabled.Value && recipe.name == "Recipe_CapeLinen";
 
-				/*if (newGearRecipesAmounts.ContainsKey(recipe.name)) MarsarahTweaks.LogInfo($"Is in Gear Amounts list: {recipe.name}");
-				if (newGearRecipesMaterials.ContainsKey(recipe.name)) MarsarahTweaks.LogInfo($"Is in Gear Material list: {recipe.name}");
-				if (hasGearAmountsChange) MarsarahTweaks.LogInfo($"Will modify from Gear Amounts list: {recipe.name}");
-				if (hasGearMaterialsChange) MarsarahTweaks.LogInfo($"Will modify from Gear Materials list: {recipe.name}");*/
+				/*if (newGearRecipesAmounts.ContainsKey(recipe.name)) log.Info($"Is in Gear Amounts list: {recipe.name}");
+				if (newGearRecipesMaterials.ContainsKey(recipe.name)) log.Info($"Is in Gear Material list: {recipe.name}");
+				if (hasGearAmountsChange) log.Info($"Will modify from Gear Amounts list: {recipe.name}");
+				if (hasGearMaterialsChange) log.Info($"Will modify from Gear Materials list: {recipe.name}");*/
 
 				foreach (Piece.Requirement req in recipe.m_resources)
 				{
@@ -1095,7 +1097,7 @@ namespace MarsarahTweaks.Patches.Grind
 					{
 						CreateBackup(recipe.name, req, null);
 
-						//MarsarahTweaks.LogInfo($"(Gear Amounts) Applying changes for: {recipe.name} - {req.m_resItem.name}");
+						log.Info($"(Amounts) Applying changes for: {recipe.name} - {req.m_resItem.name}");
 						ApplyChanges(req, (null, amountValues.amount, amountValues.amountPerLevel), objDB, modifyResItem: false);
 					}
 
@@ -1104,14 +1106,14 @@ namespace MarsarahTweaks.Patches.Grind
 					{
 						CreateBackup(recipe.name, req, materialValues.newResItem);
 
-						//MarsarahTweaks.LogInfo($"(Gear Materials) Applying changes for: {recipe.name} - {req.m_resItem.name}");
+						log.Info($"(Materials) Applying changes for: {recipe.name} - {req.m_resItem.name}");
 						ApplyChanges(req, materialValues, objDB, modifyResItem: true);
 					}
 
 					// Restore backups when disabling features
 					if (!ConfigManager.GearRecipeAmountsEnabled.Value && newGearRecipesAmounts.ContainsKey(recipe.name) && amountsWasChanged)
 					{
-						//MarsarahTweaks.LogInfo($"(Gear Amounts) Was changed: {amountsWasChanged}");
+						log.Info($"(Amounts) Was changed: {amountsWasChanged}");
 						if (RestoreBackup(recipe.name, req, objDB, false))
 						{
 							// Remove backup unless materials modification still needs it
@@ -1119,7 +1121,7 @@ namespace MarsarahTweaks.Patches.Grind
 							{
 								if (!hasLinenCapeChange || !ConfigManager.EarlyLinenCapeEnabled.Value)
 								{
-									//MarsarahTweaks.LogInfo($"(Gear Amounts) Removing backup for: {recipe.name} - {req.m_resItem.name}");
+									log.Info($"(Amounts) Removing backup for: {recipe.name} - {req.m_resItem.name}");
 									defaultGearRecipeValues[recipe.name].Remove(req.m_resItem.name);
 								}
 							}
@@ -1128,7 +1130,7 @@ namespace MarsarahTweaks.Patches.Grind
 
 					if (!ConfigManager.GearRecipeMaterialsEnabled.Value && newGearRecipesMaterials.ContainsKey(recipe.name) && materialsWasChanged)
 					{
-						//MarsarahTweaks.LogInfo($"(Gear Materials) Was changed: {materialsWasChanged}");
+						log.Info($"(Materials) Was changed: {materialsWasChanged}");
 						if (RestoreBackup(recipe.name, req, objDB, true))
 						{
 							if (hasGearAmountsChange && newGearRecipesAmounts[recipe.name].ContainsKey(req.m_resItem.name))
@@ -1136,13 +1138,13 @@ namespace MarsarahTweaks.Patches.Grind
 								// Apply gear amounts modifications again after restoring
 								if (newGearRecipesAmounts[recipe.name].TryGetValue(req.m_resItem.name, out var restoredValues))
 								{
-									//MarsarahTweaks.LogInfo($"(Gear Materials - Amounts) Re-applying changes for: {recipe.name} - {req.m_resItem.name}");
+									log.Info($"(Materials - Amounts) Re-applying changes for: {recipe.name} - {req.m_resItem.name}");
 									ApplyChanges(req, (null, restoredValues.amount, restoredValues.amountPerLevel), objDB, false);
 								}
 							}
 							else if (!hasGearAmountsChange || !newGearRecipesAmounts[recipe.name].ContainsKey(req.m_resItem.name))
 							{
-								//MarsarahTweaks.LogInfo($"(Gear Materials) Removing backup for: {recipe.name} - {req.m_resItem.name}");
+								log.Info($"(Materials) Removing backup for: {recipe.name} - {req.m_resItem.name}");
 								defaultGearRecipeValues[recipe.name].Remove(req.m_resItem.name);
 							}
 						}
@@ -1152,7 +1154,7 @@ namespace MarsarahTweaks.Patches.Grind
 				// Remove entire backup entry if empty
 				if (defaultGearRecipeValues.ContainsKey(recipe.name) && defaultGearRecipeValues[recipe.name].Count == 0)
 				{
-					//MarsarahTweaks.LogInfo($"(Cleanup) Removing backup for: {recipe.name}");
+					log.Info($"(Cleanup) Removing backup for: {recipe.name}");
 					defaultGearRecipeValues.Remove(recipe.name);
 				}
 			}
@@ -1184,27 +1186,27 @@ namespace MarsarahTweaks.Patches.Grind
 			}
 			else if (wasChanged)
 			{
-				//MarsarahTweaks.LogInfo("Early Linen Cape: Backup beginning");
+				log.Info("Early Linen Cape: Backup beginning");
 				bool hasGearAmountsChange = ConfigManager.GearRecipeAmountsEnabled.Value && newGearRecipesAmounts.ContainsKey(recipe.name);
 
 				foreach (Piece.Requirement req in recipe.m_resources)
 				{
 					if (RestoreBackup(recipe.name, req, objDB, true))
 					{
-						//MarsarahTweaks.LogInfo($"Early Linen Cape: Backup restored for {req.m_resItem.name}");
+						log.Info($"Early Linen Cape: Backup restored for {req.m_resItem.name}");
 
 						if (hasGearAmountsChange && newGearRecipesAmounts[recipe.name].ContainsKey(req.m_resItem.name))
 						{
 							// Apply gear amounts modifications again after restoring
 							if (newGearRecipesAmounts[recipe.name].TryGetValue(req.m_resItem.name, out var restoredValues))
 							{
-								//MarsarahTweaks.LogInfo($"Early Linen Cape: Re-applying changes for: {recipe.name} - {req.m_resItem.name}");
+								log.Info($"Early Linen Cape: Re-applying changes for: {recipe.name} - {req.m_resItem.name}");
 								ApplyChanges(req, (null, restoredValues.amount, restoredValues.amountPerLevel), objDB, false);
 							}
 						}
 						else if (!hasGearAmountsChange || !newGearRecipesAmounts[recipe.name].ContainsKey(req.m_resItem.name))
 						{
-							//MarsarahTweaks.LogInfo($"Early Linen Cape: Removing backup for: {recipe.name} - {req.m_resItem.name}");
+							log.Info($"Early Linen Cape: Removing backup for: {recipe.name} - {req.m_resItem.name}");
 							defaultGearRecipeValues[recipe.name].Remove(req.m_resItem.name);
 						}
 					}
@@ -1212,7 +1214,7 @@ namespace MarsarahTweaks.Patches.Grind
 
 				if (!hasGearAmountsChange)
 				{
-					//MarsarahTweaks.LogInfo($"Early Linen Cape: Removing backup for {recipe.name}");
+					log.Info($"Early Linen Cape: Removing backup for {recipe.name}");
 					if (defaultGearRecipeValues.ContainsKey(recipe.name) && defaultGearRecipeValues[recipe.name].Count == 0)
 					{
 						defaultGearRecipeValues.Remove(recipe.name);
@@ -1256,14 +1258,14 @@ namespace MarsarahTweaks.Patches.Grind
 			{
 				if (newResItem != null && existingBackup.newResItem == null)
 				{
-					//MarsarahTweaks.LogInfo($"Updating backup for {recipeName} - {currentResItem} with newResItem: {newResItem}");
+					log.Info($"Updating backup for {recipeName} - {currentResItem} with newResItem: {newResItem}");
 					recipeBackup[currentResItem] = (existingBackup.originalResItem, newResItem, existingBackup.amount, existingBackup.amountPerLevel);
 				}
 			}
 			else
 			{
 				// Create a new backup for this resource without affecting existing ones
-				//MarsarahTweaks.LogInfo($"Creating new backup for {recipeName} - {currentResItem}");
+				log.Info($"Creating new backup for {recipeName} - {currentResItem}");
 				recipeBackup[currentResItem] = (currentResItem, newResItem, req.m_amount, req.m_amountPerLevel);
 			}
 		}
@@ -1274,21 +1276,21 @@ namespace MarsarahTweaks.Patches.Grind
 		{
 			if (!defaultGearRecipeValues.TryGetValue(recipeName, out var recipeBackup))
 			{
-				//MarsarahTweaks.LogInfo("Restore backup first check.");
+				//log.Info("Restore backup first check.");
 				return false;
 			}
 
 			// Restoring original materials if any
-			//MarsarahTweaks.LogInfo($"Restore backup - Recipe name: {recipeName}, Given requirement: {req.m_resItem.name}");
+			log.Info($"Restore backup - Recipe name: {recipeName}, Given requirement: {req.m_resItem.name}");
 			foreach (var kvp in recipeBackup)
 			{
 				var (originalMaterial, newMaterial, amount, amountPerLevel) = kvp.Value;
 				{
-					//MarsarahTweaks.LogInfo($"Restore backup - values: {originalMaterial}, {newMaterial}, {restoreMaterials}");
+					log.Info($"Restore backup - values: {originalMaterial}, {newMaterial}, {restoreMaterials}");
 
 					if (req.m_resItem.name == newMaterial && restoreMaterials)
 					{
-						//MarsarahTweaks.LogInfo($"Restoring original material for {recipeName} from {req.m_resItem.name} to {originalMaterial}");
+						log.Info($"Restoring original material for {recipeName} from {req.m_resItem.name} to {originalMaterial}");
 						req.m_resItem = objDB.GetItemPrefab(originalMaterial).GetComponent<ItemDrop>();
 						break;
 					}
@@ -1297,7 +1299,7 @@ namespace MarsarahTweaks.Patches.Grind
 
 			if (recipeBackup.TryGetValue(req.m_resItem.name, out var originalValues))
 			{
-				//MarsarahTweaks.LogInfo($"Restoring backup for: {recipeName} - {req.m_resItem.name}");
+				log.Info($"Restoring backup for: {recipeName} - {req.m_resItem.name}");
 
 				// Restore original values
 				req.m_amount = originalValues.amount;
@@ -1305,7 +1307,7 @@ namespace MarsarahTweaks.Patches.Grind
 
 				return true;
 			}
-			//MarsarahTweaks.LogInfo("Restore backup - we got to the end.");
+			//log.Info("Restore backup - we got to the end.");
 
 			return false; // No backup found
 		}

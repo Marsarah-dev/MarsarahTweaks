@@ -14,6 +14,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UITimeAndDay : UIController
 	{
+		private static readonly LogManager log = new LogManager("UI Time And Day", LogManager.LogLevel.Warning);
+
 		// UI data
 		public static string TimeString;
 		public static string TimeEmoji;

@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class WeatherChanges
 	{
+		private static readonly LogManager log = new LogManager("Weather Changes", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(EnvMan), "InitializeBiomeEnvSetup")]
 		class LessFog_Patch
 		{
@@ -32,14 +34,14 @@ namespace MarsarahTweaks.Patches.Features
 
 							if (weatherWeightChanges.TryGetValue((biome.m_name, environment.m_env.m_name), out float newWeight))
 							{
-								//MarsarahTweaks.LogInfo($"Changing old weather weight {environment.m_weight} -> {newWeight} for {environment.m_env.m_name} in biome {biome.m_name}");
+								log.Info($"Changing old weather weight {environment.m_weight} -> {newWeight} for {environment.m_env.m_name} in biome {biome.m_name}");
 								environment.m_weight = newWeight;
 							}
 
 							//totalWeightAfter += environment.m_weight;
 						}
 
-						//MarsarahTweaks.LogInfo($"Biome {biome.m_name}: Total weight before: {totalWeightBefore}, after: {totalWeightAfter}");
+						//log.Info($"Biome {biome.m_name}: Total weight before: {totalWeightBefore}, after: {totalWeightAfter}");
 					}
 				}
 			}

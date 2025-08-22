@@ -9,6 +9,8 @@ namespace MarsarahTweaks.Patches.Grind
 {
 	internal class DoubleBronzeCrafting
 	{
+		private static readonly LogManager log = new LogManager("Double Bronze", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class OthersSection_Patch
 		{
@@ -45,10 +47,12 @@ namespace MarsarahTweaks.Patches.Grind
 					if (!doubleBronzeOriginals.ContainsKey(recipe.name))
 					{
 						doubleBronzeOriginals[recipe.name] = recipe.m_amount;
+						log.Info($"Backed up {recipe.name}");
 					}
 
 					// Apply the modified amount
 					recipe.m_amount = doubleBronzeChanges[recipe.name];
+					log.Info($"Applied new values for {recipe.name}");
 				}
 			}
 			else if (wasChanged)
@@ -60,6 +64,7 @@ namespace MarsarahTweaks.Patches.Grind
 					if (recipe == null) continue;
 
 					recipe.m_amount = doubleBronzeOriginals[recipe.name];
+					log.Info($"Restored {recipe.name}");
 				}
 
 				// Clear stored originals when disabling to free memory

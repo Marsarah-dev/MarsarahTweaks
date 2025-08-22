@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class ClearMistlandsChanges
 	{
+		private static readonly LogManager log = new LogManager("Clear Mistlands", LogManager.LogLevel.Warning);
+
 		// Disable Mist Emitter
 		[HarmonyPatch(typeof(MistEmitter), "Update")]
 		class ClearMistlandsEmitter_Patch
@@ -23,6 +25,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (ConfigManager.ClearMistlandsEnabled.Value && GlobalKeyChecker.QueenDefeated)
 				{
 					__instance.gameObject.SetActive(false);
+					log.Info("Mist Emitter disabled");
 				}
 			}
 		}
@@ -40,6 +43,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (ConfigManager.ClearMistlandsEnabled.Value && GlobalKeyChecker.QueenDefeated)
 				{
 					__instance.gameObject.SetActive(false);
+					log.Info("Particle Mist disabled");
 				}
 			}
 		}

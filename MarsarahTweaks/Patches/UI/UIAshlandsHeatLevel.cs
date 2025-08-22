@@ -16,6 +16,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIAshlandsHeatLevel : UIController
 	{
+		private static readonly LogManager log = new LogManager("UI Ashlands Heat", LogManager.LogLevel.Warning);
+
 		// UI data
 		private static float heatThreshold;
 		private static float currentHeat;

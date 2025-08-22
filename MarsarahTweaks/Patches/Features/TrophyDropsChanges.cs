@@ -11,6 +11,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class TrophyDropsChanges
 	{
+		private static readonly LogManager log = new LogManager("Trophy Drops", LogManager.LogLevel.Warning);
+
 		// Eikthyr - Rancid Remains (10% -> 20%)
 		// The Elder - Surtling (5% -> 10%), Draugr Elite (10% -> 20%), Wraith (5% -> 20%)
 		// Bonemass - Cultist (10% -> 20%), Fenring (10% -> 20%), Stone Golem (5% -> 20%)
@@ -74,7 +76,7 @@ namespace MarsarahTweaks.Patches.Features
 				bool canMakeChanges = !progHaltEnabled || (progHaltEnabled && GlobalKeyChecker.IsBossDefeated(boss.Key));
 				if (!canMakeChanges)
 				{
-					//MarsarahTweaks.LogInfo($"Skipping trophy drops modifications for {boss.Key}");
+					log.Info($"Skipping trophy drops modifications for {boss.Key}");
 					continue; 
 				}
 
@@ -100,10 +102,10 @@ namespace MarsarahTweaks.Patches.Features
 								if (!originalTrophyDropRates[creature].ContainsKey(trophy))
 								{
 									originalTrophyDropRates[creature][trophy] = drop.m_chance; // Store original drop chance
-									//MarsarahTweaks.LogInfo($"[Trophy Drops] Backing up {trophy} drop rate ({drop.m_chance}) for {creature}");
+									log.Info($"Backing up {trophy} drop rate ({drop.m_chance}) for {creature}");
 								}
 
-								//MarsarahTweaks.LogInfo($"[Trophy Drops] Setting trophy: {trophy} drop rate: {rate} for creature: {creature}");
+								log.Info($"Setting trophy: {trophy} drop rate: {rate} for creature: {creature}");
 								drop.m_chance = rate;
 							}
 							else
@@ -111,7 +113,7 @@ namespace MarsarahTweaks.Patches.Features
 								// Restore backup
 								if (originalTrophyDropRates.TryGetValue(creature, out var originalTrophies) && originalTrophies.TryGetValue(trophy, out float originalRate))
 								{
-									//MarsarahTweaks.LogInfo($"[Trophy Drops] Restoring {trophy} drop rate ({originalRate}) for {creature}");
+									log.Info($"Restoring {trophy} drop rate ({originalRate}) for {creature}");
 									drop.m_chance = originalRate;
 
 									// Delete backup so we don't restore infinitely
@@ -119,7 +121,7 @@ namespace MarsarahTweaks.Patches.Features
 									if (originalTrophyDropRates[creature].Count == 0)
 									{
 										originalTrophyDropRates.Remove(creature);
-										//MarsarahTweaks.LogInfo($"[Trophy Drops] Cleared backup for {creature}");
+										log.Info($"Cleared backup for {creature}");
 									}
 								}
 							}
@@ -139,7 +141,7 @@ namespace MarsarahTweaks.Patches.Features
 				bool canMakeChanges = progHaltEnabled && !GlobalKeyChecker.IsBossDefeated(boss.Key);
 				if (!canMakeChanges)
 				{
-					//MarsarahTweaks.LogInfo($"[Trophy Drops Restore Special] Skipping trophy drops restore for {boss.Key}");
+					log.Info($"[Restore Special] Skipping trophy drops restore for {boss.Key}");
 					continue;
 				}
 
@@ -157,7 +159,7 @@ namespace MarsarahTweaks.Patches.Features
 						{
 							if (originalTrophyDropRates.TryGetValue(creature, out var originalTrophies) && originalTrophies.TryGetValue(trophy, out float originalRate))
 							{
-								//MarsarahTweaks.LogInfo($"[Trophy Drops Restore Special] Restoring {trophy} drop rate ({originalRate}) for {creature}");
+								log.Info($"[Restore Special] Restoring {trophy} drop rate ({originalRate}) for {creature}");
 								drop.m_chance = originalRate;
 
 								// Delete backup so we don't restore infinitely
@@ -165,7 +167,7 @@ namespace MarsarahTweaks.Patches.Features
 								if (originalTrophyDropRates[creature].Count == 0)
 								{
 									originalTrophyDropRates.Remove(creature);
-									//MarsarahTweaks.LogInfo($"[Trophy Drops Restore Special] Cleared backup for {creature}");
+									log.Info($"[Restore Special] Cleared backup for {creature}");
 								}
 							}
 						}

@@ -13,6 +13,8 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class SailingCameraChanges
 	{
+		private static readonly LogManager log = new LogManager("Sailing Camera", LogManager.LogLevel.Warning);
+
 		private static readonly Dictionary<string, float> shipOffsets = new Dictionary<string, float>()
 		{
 			{ "Raft", 2f },
@@ -76,7 +78,7 @@ namespace MarsarahTweaks.Patches.QOL
 							targetOffset = 0f; // Default if unknown ship
 						}
 
-						//MarsarahTweaks.LogInfo($"[SailingCamera] Controlling {prefabName}, offset set to {targetOffset:F1}");
+						log.Info($"Controlling {prefabName}, offset set to {targetOffset:F1}");
 					}
 					else
 					{

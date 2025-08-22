@@ -8,6 +8,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class TougherShipsChanges
 	{
+		private static readonly LogManager log = new LogManager("Tougher Ships", LogManager.LogLevel.Warning);
+
 		private static readonly Dictionary<string, float> originalHealthValues = new Dictionary<string, float>();
 
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
@@ -21,7 +23,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (__instance == null) return;
 
-				//MarsarahTweaks.LogInfo($"ZNetScene Awake: Updating {ConfigManager.Configs.TougherShips.Name}...");
+				log.Info($"ZNetScene Awake: Updating {ConfigManager.Configs.TougherShips.Name}...");
 				UpdateShipHP(__instance, false);
 			}
 		}
@@ -54,11 +56,11 @@ namespace MarsarahTweaks.Patches.Features
 
 			if (!originalHealthValues.ContainsKey(prefabName))
 			{
-				//MarsarahTweaks.LogInfo($"[Tougher Ships] Backing up original HP ({wearNTear.m_health}) for ship {prefabName}");
+				log.Info($"Backing up original HP ({wearNTear.m_health}) for ship {prefabName}");
 				originalHealthValues[prefabName] = wearNTear.m_health; // Store original HP
 			}
 
-			//MarsarahTweaks.LogInfo($"[Tougher Ships] Setting new HP ({newHealth}) for ship {prefabName}");
+			log.Info($"Setting new HP ({newHealth}) for ship {prefabName}");
 			wearNTear.m_health = newHealth;
 		}
 
@@ -72,7 +74,7 @@ namespace MarsarahTweaks.Patches.Features
 			WearNTear wearNTear = shipPrefab.GetComponent<WearNTear>();
 			if (wearNTear == null) return;
 
-			//MarsarahTweaks.LogInfo($"[Tougher Ships] Restoring old HP ({originalHealth}) for ship {prefabName}");
+			log.Info($"Restoring old HP ({originalHealth}) for ship {prefabName}");
 			wearNTear.m_health = originalHealth;
 
 			originalHealthValues.Remove(prefabName);

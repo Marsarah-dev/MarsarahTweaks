@@ -13,6 +13,8 @@ namespace MarsarahTweaks.Patches.BuildPieces
 {
 	internal class SilverSconce
 	{
+		private static readonly LogManager log = new LogManager("Silver Sconce", LogManager.LogLevel.Info);
+
 		private static bool initialized = false;
 		private static GameObject SilverSconcePrefab;
 		private static GameObject SilverSconcePrefabBlue;
@@ -85,7 +87,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			SilverSconcePrefab.SetActive(true);
 			SilverSconcePrefabBlue.SetActive(true);
 			SilverSconcePrefabGreen.SetActive(true);
-			MarsarahTweaks.LogInfo("[SilverSconce] Silver Sconces registered and ready.");
+			log.Info("Silver Sconces registered and ready.");
 		}
 
 		private static GameObject CloneBronzeSconcePrefab(string sourcePrefabName, string newPrefabName)
@@ -93,7 +95,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			GameObject prefab = MPrefabManager.ClonePrefab(sourcePrefabName, newPrefabName);
 			if (prefab == null)
 			{
-				MarsarahTweaks.LogError($"[SilverSconce] Cloning of {sourcePrefabName} failed.");
+				log.Error($"Cloning of {sourcePrefabName} failed.");
 			}
 
 			return prefab;
@@ -124,6 +126,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 					if (newCraftingStation != null)
 					{
 						piece.m_craftingStation = newCraftingStation;
+						log.Info($"Crafting station set to {newCraftingStation.name} for piece {piece.name}");
 					}
 				}
 			}
@@ -132,6 +135,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			if (fireplace != null)
 			{
 				fireplace.m_name = name;
+				log.Info($"Name set for Fireplace component");
 			}
 		}
 
@@ -147,7 +151,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MeshRenderer meshRenderer = prefab.GetComponentInChildren<MeshRenderer>();
 			if (meshRenderer == null)
 			{
-				MarsarahTweaks.LogWarn("[SilverSconce] Could not get MeshRenderer component.");
+				log.Error("Could not get MeshRenderer component.");
 				return;
 			}
 
@@ -155,7 +159,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			GameObject metalPrefab = MPrefabManager.GetPrefab(metalPrefabName); // SilverNecklace
 			if (metalPrefab == null)
 			{
-				MarsarahTweaks.LogError($"[SilverSconce] Could not find '{metalPrefabName}' prefab.");
+				log.Error($"Could not find '{metalPrefabName}' prefab.");
 				return;
 			}
 
@@ -163,7 +167,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MeshRenderer metalRenderer = metalPrefab.GetComponentInChildren<MeshRenderer>();
 			if (metalRenderer == null || metalRenderer.sharedMaterial == null)
 			{
-				MarsarahTweaks.LogError($"[SilverSconce] '{metalPrefabName}' has no MeshRenderer or material.");
+				log.Error($"'{metalPrefabName}' has no MeshRenderer or material.");
 				return;
 			}
 
@@ -171,7 +175,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			GameObject woodPrefab = MPrefabManager.GetPrefab(woodPrefabName); // yggashoot_log, StaffShield
 			if (woodPrefab == null)
 			{
-				MarsarahTweaks.LogError($"[SilverSconce] Could not find '{woodPrefabName}' prefab.");
+				log.Error($"Could not find '{woodPrefabName}' prefab.");
 				return;
 			}
 
@@ -179,7 +183,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MeshRenderer woodRenderer = woodPrefab.GetComponentInChildren<MeshRenderer>();
 			if (woodRenderer == null || woodRenderer.sharedMaterial == null)
 			{
-				MarsarahTweaks.LogError($"[SilverSconce] '{woodPrefabName}' has no MeshRenderer or material.");
+				log.Error($"'{woodPrefabName}' has no MeshRenderer or material.");
 				return;
 			}
 
@@ -205,19 +209,19 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			Fireplace fireplace = prefab.GetComponent<Fireplace>();
 			if (fireplace == null)
 			{
-				MarsarahTweaks.LogWarn($"[SilverSconce] No Fireplace component found on {prefab.name}");
+				log.Error($"No Fireplace component found on {prefab.name}");
 				return;
 			}
 
 			GameObject fuelItem = MPrefabManager.GetPrefab(fuelItemName);
 			if (fuelItem == null)
 			{
-				MarsarahTweaks.LogError($"[SilverSconce] Could not find fuel item '{fuelItemName}' for {prefab.name}");
+				log.Error($"Could not find fuel item '{fuelItemName}' for {prefab.name}");
 				return;
 			}
 
 			fireplace.m_fuelItem = fuelItem.GetComponent<ItemDrop>();
-			MarsarahTweaks.LogInfo($"[SilverSconce] Set fuel for {prefab.name} to {fuelItemName}");
+			log.Info($"Set fuel for {prefab.name} to {fuelItemName}");
 		}
 
 		private static void CopyLightSettings(string sourcePrefabName, GameObject targetPrefab)
@@ -225,14 +229,14 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			GameObject sourcePrefab = MPrefabManager.GetPrefab(sourcePrefabName);
 			if (sourcePrefab == null)
 			{
-				MarsarahTweaks.LogError($"[SilverSconce] Source prefab '{sourcePrefabName}' not found.");
+				log.Error($"Source prefab '{sourcePrefabName}' not found.");
 				return;
 			}
 
 			Transform sourceEnabled = sourcePrefab.transform.Find("_enabled");
 			if (sourceEnabled == null)
 			{
-				MarsarahTweaks.LogError($"[SilverSconce] Could not find '_enabled' child on {sourcePrefabName}.");
+				log.Error($"Could not find '_enabled' child on {sourcePrefabName}.");
 				return;
 			}
 
@@ -257,14 +261,14 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			if (fp != null)
 			{
 				fp.m_enabledObject = newEnabled;
-				//MarsarahTweaks.LogInfo($"[SilverSconce] Rebound Fireplace.m_enabledObject for {targetPrefab.name}");
+				log.Info($"Rebound Fireplace.m_enabledObject for {targetPrefab.name}");
 			}
 			else
 			{
-				MarsarahTweaks.LogWarn($"[SilverSconce] No Fireplace component found on {targetPrefab.name}");
+				log.Warn($"No Fireplace component found on {targetPrefab.name}");
 			}
 
-			//MarsarahTweaks.LogInfo($"[SilverSconce] Replaced '_enabled' from {sourcePrefabName} to {targetPrefab.name}");
+			log.Info($"Replaced '_enabled' from {sourcePrefabName} to {targetPrefab.name}");
 		}
 
 		private static void ConfigureSilverSconcePieceData(GameObject prefab, string resourceWood, string resourceMetal, string resourceFuel)
@@ -290,7 +294,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			Piece silverSconcePieceBlue = SilverSconcePrefabBlue?.GetComponent<Piece>();
 			if (silverSconcePiece == null || silverSconcePieceBlue == null)
 			{
-				MarsarahTweaks.LogWarn($"[SilverSconce] Piece component does not exist. No toggle made.");
+				log.Warn($"Piece component does not exist. No toggle made.");
 				return;
 			}
 
@@ -327,7 +331,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 
 			if (wood == null || metal == null || fuel == null)
 			{
-				MarsarahTweaks.LogError($"[SilverSconce] Missing one or more resource prefabs ({resourceWood}, {resourceMetal}, {resourceFuel}).");
+				log.Error($"Missing one or more resource prefabs ({resourceWood}, {resourceMetal}, {resourceFuel}).");
 				return;
 			}
 
@@ -338,8 +342,8 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				new Piece.Requirement { m_resItem = fuel, m_amount = ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, m_recover = true }
 			};
 
-			MarsarahTweaks.LogInfo($"[SilverSconce] Refreshed build requirements: Metal={piece.m_resources[1].m_amount}");
-			MarsarahTweaks.LogInfo($"[SilverSconce] Refreshed build requirements: Fuel={piece.m_resources[2].m_amount}");
+			log.Info($"Refreshed build requirements: Metal={piece.m_resources[1].m_amount}");
+			log.Info($"Refreshed build requirements: Fuel={piece.m_resources[2].m_amount}");
 		}
 	}
 }

@@ -6,6 +6,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class CraftableChain
 	{
+		private static readonly LogManager log = new LogManager("Craftable Chain", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class CraftableChain_Patch
 		{
@@ -32,12 +34,8 @@ namespace MarsarahTweaks.Patches.Features
 					if (chainRecipe != null)
 					{
 						objDB.m_recipes.Add(chainRecipe);
-						//MarsarahTweaks.LogInfo($"Chain recipe added: {chainRecipe.name}");
+						log.Info($"Chain recipe added: {chainRecipe.name}");
 					}
-					/*else
-					{
-						MarsarahTweaks.LogInfo("Failed to create chain recipe. Missing required items.");
-					}*/
 				}
 			}
 			else if (wasChanged)
@@ -47,7 +45,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (chainRecipe != null)
 				{
 					objDB.m_recipes.Remove(chainRecipe);
-					//MarsarahTweaks.LogInfo($"Chain recipe removed: {chainRecipe.name}");
+					log.Info($"Chain recipe removed: {chainRecipe.name}");
 				}
 			}
 		}
@@ -68,7 +66,7 @@ namespace MarsarahTweaks.Patches.Features
 
 			if (chainItem == null || ironItem == null || blackForge == null)
 			{
-				MarsarahTweaks.LogWarn("Failed to create chain recipe: missing required item or crafting station.");
+				log.Warn("Failed to create chain recipe: missing required item or crafting station.");
 				return null;
 			}
 

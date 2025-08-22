@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches
 {
 	public static class GlobalKeyChecker
 	{
+		private static readonly LogManager log = new LogManager("Global Key Checker", LogManager.LogLevel.Warning);
+
 		public static bool EikthyrDefeated = false;
 		public static bool ElderDefeated = false;
 		public static bool BonemassDefeated = false;
@@ -93,7 +96,7 @@ namespace MarsarahTweaks.Patches
 				return CheckGlobalKey(globalKey);
 			}
 
-			MarsarahTweaks.LogWarn($"[Warning] IsBossDefeated called with unknown boss: {boss}");
+			log.Warn($"IsBossDefeated called with unknown boss: {boss}");
 			return false; // Default to false if boss name is not found
 		}
 	}

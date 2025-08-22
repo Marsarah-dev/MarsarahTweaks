@@ -13,6 +13,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIBoatSpeed : UIController
 	{
+		private static readonly LogManager log = new LogManager("UI Boat Speed", LogManager.LogLevel.Warning);
+
 		// UI data
 		private static float boatSpeed;
 		private static bool showBoatSpeedUI;
@@ -64,8 +66,6 @@ namespace MarsarahTweaks.Patches.UI
 				{
 					CreateTextBasedUI(__instance);
 					CreateSymbolBasedUI(__instance);
-
-					//MarsarahTweaks.LogInfo("[Boat] Created UI");
 
 					if (!ConfigManager.UseSymbolsForUI.Value)
 					{

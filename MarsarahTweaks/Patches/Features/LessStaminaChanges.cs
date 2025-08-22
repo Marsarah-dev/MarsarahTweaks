@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class LessStaminaChanges
 	{
+		private static readonly LogManager log = new LogManager("Less Stamina", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(Player), nameof(Player.UseStamina))]
 		class LessStaminaUsage_Patch
 		{

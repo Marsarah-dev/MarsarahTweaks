@@ -11,6 +11,7 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal static class MoreUsableFuel
 	{
+		private static readonly LogManager log = new LogManager("More Usable Fuel", LogManager.LogLevel.Warning);
 
 		[HarmonyPatch(typeof(Smelter), "Awake")]
 		public static class AddAncientBarkToKiln_Patch
@@ -60,7 +61,7 @@ namespace MarsarahTweaks.Patches.Features
 
 			if (!barkPrefab || !coalPrefab)
 			{
-				//MarsarahTweaks.LogInfo("Missing prefab: AncientBark or Coal.");
+				log.Warn("Missing prefab: AncientBark or Coal.");
 				return;
 			}
 
@@ -80,7 +81,7 @@ namespace MarsarahTweaks.Patches.Features
 						m_to = coalDrop
 					};
 					kiln.m_conversion.Add(newWitheredBoneConversion);
-					//MarsarahTweaks.LogInfo("Added Ancient Bark as fuel for Kiln.");
+					log.Info("Added Ancient Bark as fuel for Kiln.");
 				}
 			}
 			else
@@ -88,7 +89,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (witheredBoneConversion != null)
 				{
 					kiln.m_conversion.Remove(witheredBoneConversion);
-					//MarsarahTweaks.LogInfo("Removed Ancient Bark as fuel from Kiln.");
+					log.Info("Removed Ancient Bark as fuel from Kiln.");
 				}
 			}
 		}
@@ -106,14 +107,14 @@ namespace MarsarahTweaks.Patches.Features
 			var prefab = ObjectDB.instance?.GetItemPrefab("WitheredBone");
 			if (!prefab)
 			{
-				//MarsarahTweaks.LogInfo("WitheredBone prefab not found.");
+				log.Warn("WitheredBone prefab not found.");
 				return;
 			}
 
 			var itemDrop = prefab.GetComponent<ItemDrop>();
 			if (!itemDrop)
 			{
-				//MarsarahTweaks.LogInfo("WitheredBone does not have ItemDrop component.");
+				log.Warn("WitheredBone does not have ItemDrop component.");
 				return;
 			}
 
@@ -122,7 +123,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (!sg.m_fuelItems.Contains(itemDrop))
 				{
 					sg.m_fuelItems.Add(itemDrop);
-					//MarsarahTweaks.LogInfo("Added WitheredBone as fuel for Shield Generator.");
+					log.Info("Added WitheredBone as fuel for Shield Generator.");
 				}
 			}
 			else
@@ -130,7 +131,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (sg.m_fuelItems.Contains(itemDrop))
 				{
 					sg.m_fuelItems.Remove(itemDrop);
-					//MarsarahTweaks.LogInfo("Removed WitheredBone as fuel from Shield Generator.");
+					log.Info("Removed WitheredBone as fuel from Shield Generator.");
 				}
 			}			
 		}

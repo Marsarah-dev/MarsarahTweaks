@@ -7,6 +7,8 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class FasterResourceDrops
 	{
+		private static readonly LogManager log = new LogManager("Faster Resource Drops", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(Ragdoll), "Awake")]
 		class FasterResourceDrops_Patch
 		{
@@ -21,10 +23,12 @@ namespace MarsarahTweaks.Patches.QOL
 					if (___m_ttl > 5f)
 					{
 						___m_ttl = 5f;
+						log.Info("Large monster ttl set to 5s");
 					}
 					else if (___m_ttl > 0.5f)
 					{
 						___m_ttl = 0.5f;
+						log.Info("Small monster ttl set to 0.5s");
 					}
 				}
 			}

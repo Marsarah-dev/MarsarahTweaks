@@ -6,6 +6,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class CharacterSpeedChanges
 	{
+		private static readonly LogManager log = new LogManager("Character Speed", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(Character), "Awake")]
 		class FasterCharacterSpeed_Patch
 		{
@@ -15,7 +17,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (!__instance.IsPlayer())
 				{
-					//MarsarahTweaks.LogInfo("Character Awake: Not a player, skipping speed modification.");
+					log.Info("Character Awake: Not a player, skipping speed modification.");
 					return;
 				}
 
@@ -26,7 +28,6 @@ namespace MarsarahTweaks.Patches.Features
 		// Backup Dictionary
 		private static Dictionary<string, float> originalSpeeds = new Dictionary<string, float>();
 
-		//private static void UpdateCharacterSpeed(float crouchSpeed, float walkSpeed, float speed, float swimSpeed, bool wasChanged)
 		public static void UpdateCharacterSpeed(Character character, bool wasChanged)
 		{
 			if (!wasChanged)
@@ -37,7 +38,7 @@ namespace MarsarahTweaks.Patches.Features
 				originalSpeeds["speed"] = character.m_speed;
 				originalSpeeds["swimSpeed"] = character.m_swimSpeed;
 
-				//MarsarahTweaks.LogInfo($"CharacterSpeedChanges: Backed up original speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
+				log.Info($"Backed up original speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
 			}
 
 			if (ConfigManager.FasterCharacterSpeedEnabled.Value)
@@ -48,7 +49,7 @@ namespace MarsarahTweaks.Patches.Features
 				character.m_speed = 5f;         // Default: 4
 				character.m_swimSpeed = 2.2f;   // Default: 2
 
-				//MarsarahTweaks.LogInfo($"CharacterSpeedChanges: Applied modified speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
+				log.Info($"Applied modified speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
 			}
 			else if (wasChanged && originalSpeeds.Count > 0)
 			{
@@ -58,13 +59,8 @@ namespace MarsarahTweaks.Patches.Features
 				character.m_speed = originalSpeeds["speed"];
 				character.m_swimSpeed = originalSpeeds["swimSpeed"];
 
-				//MarsarahTweaks.LogInfo($"CharacterSpeedChanges: Restored original speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
+				log.Info($"Restored original speed values - Crouch: {character.m_crouchSpeed}, Walk: {character.m_walkSpeed}, Run: {character.m_speed}, Swim: {character.m_swimSpeed}.");
 			}
 		}
-
-		/*public static void UpdateCharacterSpeedExternal(Character character, bool wasChanged)
-		{
-			UpdateCharacterSpeed(character.m_crouchSpeed, character.m_walkSpeed, character.m_speed, character.m_swimSpeed, wasChanged);
-		}*/
 	}
 }

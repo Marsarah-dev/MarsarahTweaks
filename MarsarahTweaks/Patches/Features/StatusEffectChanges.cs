@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class StatusEffectChanges
 	{
+		private static readonly LogManager log = new LogManager("Status Effects", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class StatusEffect_Patch
 		{
@@ -47,16 +49,16 @@ namespace MarsarahTweaks.Patches.Features
 					{
 						if (!originalDurations.ContainsKey(statusEffect.name))
 						{
-							//MarsarahTweaks.LogInfo($"Backing up Status Effect for: {statusEffect.name}. Value: {statusEffect.m_ttl}");
+							log.Info($"Backing up Status Effect for: {statusEffect.name}. Value: {statusEffect.m_ttl}");
 							originalDurations[statusEffect.name] = statusEffect.m_ttl;
 						}
 
-						//MarsarahTweaks.LogInfo($"Applying Status Effect for: {statusEffect.name}. Old value: {statusEffect.m_ttl}, New value: {newDuration}");
+						log.Info($"Applying Status Effect for: {statusEffect.name}. Old value: {statusEffect.m_ttl}, New value: {newDuration}");
 						statusEffect.m_ttl = newDuration;
 					}
 					else if (wasChanged && originalDurations.TryGetValue(statusEffect.name, out float originalValue))
 					{
-						//MarsarahTweaks.LogInfo($"Restoring Status Effect for: {statusEffect.name}. Restored value: {originalValue}");
+						log.Info($"Restoring Status Effect for: {statusEffect.name}. Restored value: {originalValue}");
 						statusEffect.m_ttl = originalValue;
 						originalDurations.Remove(statusEffect.name);
 					}

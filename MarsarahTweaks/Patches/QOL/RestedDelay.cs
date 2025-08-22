@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class RestedDelay
 	{
+		private static readonly LogManager log = new LogManager("Rested Delay", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(SE_Cozy), "Setup")] // OnEnable
 		class RestedDelay_Patch
 		{
@@ -20,7 +22,7 @@ namespace MarsarahTweaks.Patches.QOL
 				if (originalRestedDelay == -1f)
 				{
 					originalRestedDelay = __instance.m_delay;
-					//MarsarahTweaks.LogInfo($"Original rested delay saved: {originalRestedDelay}");
+					log.Info($"Original rested delay saved: {originalRestedDelay}");
 				}
 
 				if (ConfigManager.ShorterRestedDelayEnabled.Value)
@@ -28,7 +30,7 @@ namespace MarsarahTweaks.Patches.QOL
 					if (__instance.m_delay != newRestedDelay)
 					{
 						__instance.m_delay = 10f;
-						//MarsarahTweaks.LogInfo($"Rested delay set to {__instance.m_delay}");
+						log.Info($"Rested delay set to {__instance.m_delay}");
 					}
 				}
 				else
@@ -36,11 +38,11 @@ namespace MarsarahTweaks.Patches.QOL
 					if (__instance.m_delay != originalRestedDelay)
 					{
 						__instance.m_delay = originalRestedDelay;
-						//MarsarahTweaks.LogInfo($"Rested delay reverted to {__instance.m_delay}");
+						log.Info($"Rested delay reverted to {__instance.m_delay}");
 					}
 					else // Apparently it's automatically set to 20 if the config is off, even mid-game
 					{
-						//MarsarahTweaks.LogInfo($"Rested delay is at {__instance.m_delay}");
+						log.Info($"Rested delay is at {__instance.m_delay}");
 					}
 				}
 			}

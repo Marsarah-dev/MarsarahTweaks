@@ -11,6 +11,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class BetterDropsChanges
 	{
+		private static readonly LogManager log = new LogManager("Better Drops", LogManager.LogLevel.Warning);
+
 		// Eykthir - Ghost
 		// - Add Necklace: 1 (100% chance)
 		// Bonemass - Fenring
@@ -77,7 +79,7 @@ namespace MarsarahTweaks.Patches.Features
 			if (!originalDrops[creatureName].ContainsKey(item))
 			{
 				originalDrops[creatureName][item] = (drop.m_amountMin, drop.m_amountMax, drop.m_chance, removed, newlyAdded);
-				//MarsarahTweaks.LogInfo($"[Better Drops] Backing up drop {item} for {creatureName} (removed:{removed}, newlyAdded:{newlyAdded})");
+				log.Info($"Backing up drop {item} for {creatureName} (removed:{removed}, newlyAdded:{newlyAdded})");
 			}
 		}
 
@@ -93,7 +95,7 @@ namespace MarsarahTweaks.Patches.Features
 				bool canMakeChanges = !progHaltEnabled || (progHaltEnabled && GlobalKeyChecker.IsBossDefeated(boss.Key));
 				if (!canMakeChanges)
 				{
-					//MarsarahTweaks.LogInfo($"[Better Drops] Skipping drops modifications for {boss.Key}");
+					log.Info($"Skipping drops modifications for {boss.Key}");
 					continue;
 				}
 
@@ -118,7 +120,7 @@ namespace MarsarahTweaks.Patches.Features
 								if (existingDrop != null)
 								{
 									BackupDrop(creatureName, dropInfo.item, existingDrop, removed: true);
-									//MarsarahTweaks.LogInfo($"[Better Drops] Removing drop {dropInfo.item} from {creatureName}");
+									log.Info($"Removing drop {dropInfo.item} from {creatureName}");
 									creatureDrop.m_drops.Remove(existingDrop);
 								}
 								continue; // Skip adding or modifying this drop since it's marked for removal
@@ -139,7 +141,7 @@ namespace MarsarahTweaks.Patches.Features
 									m_dontScale = false
 								};
 								creatureDrop.m_drops.Add(existingDrop);
-								//MarsarahTweaks.LogInfo($"[Better Drops] Adding new drop {dropInfo.item} to {creatureName} (min:{dropInfo.min}, max:{dropInfo.max}, chance:{dropInfo.chance})");
+								log.Info($"Adding new drop {dropInfo.item} to {creatureName} (min:{dropInfo.min}, max:{dropInfo.max}, chance:{dropInfo.chance})");
 
 								// Backup newly added drop
 								BackupDrop(creatureName, dropInfo.item, existingDrop, newlyAdded: true);
@@ -150,7 +152,7 @@ namespace MarsarahTweaks.Patches.Features
 							if (existingDrop != null)
 							{
 								BackupDrop(creatureName, dropInfo.item, existingDrop);
-								//MarsarahTweaks.LogInfo($"[Better Drops] Updating drop {dropInfo.item} for {creatureName} (min:{dropInfo.min}, max:{dropInfo.max}, chance:{dropInfo.chance})");
+								log.Info($"Updating drop {dropInfo.item} for {creatureName} (min:{dropInfo.min}, max:{dropInfo.max}, chance:{dropInfo.chance})");
 
 								existingDrop.m_amountMin = dropInfo.min;
 								existingDrop.m_amountMax = dropInfo.max;
@@ -167,7 +169,7 @@ namespace MarsarahTweaks.Patches.Features
 									if (existingDrop != null)
 									{
 										creatureDrop.m_drops.Remove(existingDrop);
-										//MarsarahTweaks.LogInfo($"[Better Drops] Removed newly added drop {dropInfo.item} for {creatureName}");
+										log.Info($"Removed newly added drop {dropInfo.item} for {creatureName}");
 									}
 								}
 								else if (original.removed) // This drop was removed by Better Drops
@@ -186,7 +188,7 @@ namespace MarsarahTweaks.Patches.Features
 												m_dontScale = false
 											};
 											creatureDrop.m_drops.Add(existingDrop);
-											//MarsarahTweaks.LogInfo($"[Better Drops] Restored previously removed drop {dropInfo.item} for {creatureName}");
+											log.Info($"Restored previously removed drop {dropInfo.item} for {creatureName}");
 										}
 									}
 								}
@@ -197,7 +199,7 @@ namespace MarsarahTweaks.Patches.Features
 										existingDrop.m_amountMin = original.min;
 										existingDrop.m_amountMax = original.max;
 										existingDrop.m_chance = original.chance;
-										//MarsarahTweaks.LogInfo($"[Better Drops] Restored drop {dropInfo.item} for {creatureName} (min:{original.min}, max:{original.max}, chance:{original.chance})");
+										log.Info($"Restored drop {dropInfo.item} for {creatureName} (min:{original.min}, max:{original.max}, chance:{original.chance})");
 									}
 								}
 
@@ -206,7 +208,7 @@ namespace MarsarahTweaks.Patches.Features
 								if (backup.Count == 0)
 								{
 									originalDrops.Remove(creatureName);
-									//MarsarahTweaks.LogInfo($"[Better Drops] Cleared backup for {creatureName}");
+									log.Info($"Cleared backup for {creatureName}");
 								}
 							}
 						}
@@ -227,7 +229,7 @@ namespace MarsarahTweaks.Patches.Features
 				bool canRestore = progHaltEnabled && !GlobalKeyChecker.IsBossDefeated(boss.Key);
 				if (!canRestore)
 				{
-					//MarsarahTweaks.LogInfo($"[Better Drops Restore] Skipping drops restore for {boss.Key}");
+					log.Info($"Skipping drops restore for {boss.Key}");
 					continue;
 				}
 
@@ -251,7 +253,7 @@ namespace MarsarahTweaks.Patches.Features
 								if (existingDrop != null)
 								{
 									creatureDrop.m_drops.Remove(existingDrop);
-									//MarsarahTweaks.LogInfo($"[Better Drops Restore] Removed newly added drop {dropInfo.item} for {creatureName}");
+									log.Info($"Removed newly added drop {dropInfo.item} for {creatureName}");
 								}
 							}
 							else if (original.removed) // restore drops removed by Better Drops
@@ -270,7 +272,7 @@ namespace MarsarahTweaks.Patches.Features
 											m_dontScale = false
 										};
 										creatureDrop.m_drops.Add(existingDrop);
-										//MarsarahTweaks.LogInfo($"[Better Drops Restore] Restored previously removed drop {dropInfo.item} for {creatureName}");
+										log.Info($"Restored previously removed drop {dropInfo.item} for {creatureName}");
 									}
 								}
 							}
@@ -281,7 +283,7 @@ namespace MarsarahTweaks.Patches.Features
 									existingDrop.m_amountMin = original.min;
 									existingDrop.m_amountMax = original.max;
 									existingDrop.m_chance = original.chance;
-									//MarsarahTweaks.LogInfo($"[Better Drops Restore] Restored drop {dropInfo.item} for {creatureName} (min:{original.min}, max:{original.max}, chance:{original.chance})");
+									log.Info($"Restored drop {dropInfo.item} for {creatureName} (min:{original.min}, max:{original.max}, chance:{original.chance})");
 								}
 							}
 
@@ -290,7 +292,7 @@ namespace MarsarahTweaks.Patches.Features
 							if (creatureBackup.Count == 0)
 							{
 								originalDrops.Remove(creatureName);
-								//MarsarahTweaks.LogInfo($"[Better Drops Restore] Cleared backup for {creatureName}");
+								log.Info($"Cleared backup for {creatureName}");
 							}
 						}
 					}

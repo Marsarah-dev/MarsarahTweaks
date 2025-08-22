@@ -13,6 +13,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIEnemyDetector : UIController
 	{
+		private static readonly LogManager log = new LogManager("UI Enemy Detector", LogManager.LogLevel.Warning);
+
 		// UI data
 		public static int numEnemies;
 		public static int numEnemiesPassive;
@@ -72,8 +74,6 @@ namespace MarsarahTweaks.Patches.UI
 				{
 					CreateTextBasedUI(__instance);
 					CreateSymbolBasedUI(__instance);
-
-					//MarsarahTweaks.LogInfo("[Enemy] Created UI");
 
 					if (!ConfigManager.UseSymbolsForUI.Value)
 					{

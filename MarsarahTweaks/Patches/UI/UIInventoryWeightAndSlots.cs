@@ -13,6 +13,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIInventoryWeightAndSlots : UIController
 	{
+		private static readonly LogManager log = new LogManager("UI Inventory", LogManager.LogLevel.Warning);
+
 		// UI data
 		private static float currentWeight;
 		private static float maxWeight;

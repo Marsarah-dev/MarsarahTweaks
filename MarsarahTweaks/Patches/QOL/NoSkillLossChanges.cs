@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class NoSkillLossChanges
 	{
+		private static readonly LogManager log = new LogManager("No Skill Loss", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(Skills), "Awake")]
 		class NoSkilllLowerOnDeath_Patch
 		{
@@ -19,6 +21,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 				if (ConfigManager.NoSkillLowerOnDeathEnabled.Value)
 				{
+					log.Info("Updating death lower factor");
 					___m_DeathLowerFactor = 0f;
 				}
 			}

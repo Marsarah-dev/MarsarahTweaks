@@ -11,6 +11,8 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class WispRadiusChanges
 	{
+		private static readonly LogManager log = new LogManager("Wisp Radius", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(Demister), "OnEnable")]
 		class BiggerWispRadius_Patch
 		{
@@ -20,6 +22,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 				if (ConfigManager.BiggerWispRadiusEnabled.Value)
 				{
+					log.Info("Wisplight end range set to 30");
 					__instance.m_forceField.endRange = 30; // default 6, 8, 10, 15 (it changes) (30 in my mod)
 				}
 			}

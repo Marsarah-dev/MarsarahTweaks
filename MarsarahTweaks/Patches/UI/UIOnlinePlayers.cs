@@ -13,6 +13,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIOnlinePlayers : UIController
 	{
+		private static readonly LogManager log = new LogManager("UI Online Players", LogManager.LogLevel.Warning);
+
 		// UI data
 		private static List<PlayerInfo> playerInfoList = new List<PlayerInfo>();
 		private static int numOnlinePlayerSlots = 21; // 20 (for players) + 1 (for the header)
@@ -45,7 +47,7 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (Game.m_noMap && ConfigManager.OnlinePlayersUnderMinimap.Value)
 				{
-					MarsarahTweaks.LogInfo("Disabling OnlinePlayersUnderMinimap: no map is enabled.");
+					log.Info("Disabling OnlinePlayersUnderMinimap: no map is enabled.");
 					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
 				}
 			}
@@ -66,13 +68,13 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (Game.m_noMap && ConfigManager.OnlinePlayersUnderMinimap.Value)
 				{
-					MarsarahTweaks.LogInfo("Cannot enable 'Online Players Under Minimap' on a no map world.");
+					log.Warn("Cannot enable 'Online Players Under Minimap' on a no map world.");
 					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
 				}
 
 				if (minimalStatusEffectsLoaded && ConfigManager.OnlinePlayersUnderMinimap.Value)
 				{
-					MarsarahTweaks.LogInfo("Cannot enable 'Online Players Under Minimap' with 'Minimal Status Effects' enabled.");
+					log.Warn("Cannot enable 'Online Players Under Minimap' with 'Minimal Status Effects' enabled.");
 					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
 				}
 
@@ -226,11 +228,10 @@ namespace MarsarahTweaks.Patches.UI
 				// Check if UI already exists (list not empty and all elements are valid)
 				if (UIPlayerTexts.Count > 0 && UIPlayerTexts.All(t => t != null))
 				{
-					//MarsarahTweaks.LogInfo("[Warning] UI is already created");
 					return; // UI is already created, no need to recreate
 				}
 
-				//MarsarahTweaks.LogInfo($"Executing CreateUI");
+				//log.Info($"Executing CreateUI");
 
 				int UITextFontSize = 16;
 				string UITextFontName = "AveriaSansLibre-Bold";
@@ -291,10 +292,10 @@ namespace MarsarahTweaks.Patches.UI
 
 			private static void UpdatePartyUIPosition(Hud hud)
 			{
-				//MarsarahTweaks.LogInfo("[Info] UpdatePartyUICalled");
+				log.Info("UpdatePartyUICalled");
 				if (UIPartyArea == null) return;
 
-				//MarsarahTweaks.LogInfo($"Executing UpdatePartyUIPosition");
+				log.Info($"Executing UpdatePartyUIPosition");
 
 				// Set new parent first, keeping world position to avoid undesired shifts
 				if (!ConfigManager.OnlinePlayersUnderMinimap.Value)

@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIBossPowerExpiration
 	{
+		private static readonly LogManager log = new LogManager("UI Boss Power Expire", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(StatusEffect), nameof(StatusEffect.Stop))]
 		public class StatusEffectStopPatch
 		{
@@ -23,7 +25,7 @@ namespace MarsarahTweaks.Patches.UI
 				//string seName = __instance.name.ToLowerInvariant();
 				string seName = __instance.name;
 
-				//MarsarahTweaks.LogInfo($"SE Name: {seName}");
+				log.Info($"SE Name: {seName}");
 
 				if (seName.Contains("GP_"))
 				{

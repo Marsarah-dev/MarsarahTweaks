@@ -11,6 +11,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class BrighterLanterns
 	{
+		private static readonly LogManager log = new LogManager("Brighter Lanterns", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
 		class BrighterLanterns_Patch
 		{
@@ -58,6 +60,7 @@ namespace MarsarahTweaks.Patches.Features
 						lightFlicker.m_flickerIntensity,
 						lightFlicker.m_flickerSpeed
 					);
+					log.Info($"Backed up light data for {prefabName}");
 				}
 
 				// Apply new values
@@ -65,12 +68,14 @@ namespace MarsarahTweaks.Patches.Features
 				{
 					lightComponent.intensity = lightIntensity;
 					lightComponent.range = lightRange;
+					log.Info($"Applied new light data for {prefabName}");
 				}
 
 				if (lightFlicker != null)
 				{
 					lightFlicker.m_flickerIntensity = flickerIntensity;
 					lightFlicker.m_flickerSpeed = flickerSpeed;
+					log.Info($"Applied new light flicker data for {prefabName}");
 				}
 			}
 		}
@@ -90,6 +95,7 @@ namespace MarsarahTweaks.Patches.Features
 					{
 						lightComponent.intensity = intensity;
 						lightComponent.range = range;
+						log.Info($"Restored light data for {prefabName}");
 					}
 
 					LightFlicker lightFlicker = lanternPrefab.GetComponentInChildren<LightFlicker>();
@@ -97,6 +103,7 @@ namespace MarsarahTweaks.Patches.Features
 					{
 						lightFlicker.m_flickerIntensity = flickerIntensity;
 						lightFlicker.m_flickerSpeed = flickerSpeed;
+						log.Info($"Restored light flicker data for {prefabName}");
 					}
 				}
 			}

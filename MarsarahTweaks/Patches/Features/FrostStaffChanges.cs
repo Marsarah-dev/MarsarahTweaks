@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class FrostStaffChanges
 	{
+		private static readonly LogManager log = new LogManager("Frost Staff", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(Attack), "FireProjectileBurst")]
 		class IceStaffAccuracy_Patch
 		{
@@ -27,6 +29,7 @@ namespace MarsarahTweaks.Patches.Features
 						if (originalAccuracy == -1)
 						{
 							originalAccuracy = ___m_projectileAccuracy;
+							log.Info($"Backed up accuracy: {___m_projectileAccuracy}");
 						}
 
 						// Apply new accuracy
@@ -38,6 +41,7 @@ namespace MarsarahTweaks.Patches.Features
 						if (originalAccuracy != -1)
 						{
 							___m_projectileAccuracy = originalAccuracy;
+							log.Info($"Restored accuracy: {___m_projectileAccuracy}");
 						}
 					}
 				}

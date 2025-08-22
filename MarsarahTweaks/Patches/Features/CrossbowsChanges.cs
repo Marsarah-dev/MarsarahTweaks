@@ -12,6 +12,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class CrossbowsChanges
 	{
+		private static readonly LogManager log = new LogManager("Crossbow Changes", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearSpeedChanges_Patch
 		{
@@ -54,6 +56,7 @@ namespace MarsarahTweaks.Patches.Features
 						{
 							// Apply new relod time
 							crossbowItem.m_itemData.m_shared.m_attack.m_reloadTime = newCrossbowReloadTime;
+							log.Info($"Applied new Crossbow reload time of {newCrossbowReloadTime}s");
 						}
 					}
 				}

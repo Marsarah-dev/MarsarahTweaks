@@ -17,6 +17,8 @@ namespace MarsarahTweaks.Managers
 {
 	public static class ConfigManager
 	{
+		private static readonly LogManager log = new LogManager("Config Manager", LogManager.LogLevel.Warning);
+
 		private static ConfigFile Config;
 		private static readonly ConfigSync configSync = new ConfigSync(MarsarahTweaks.ModGUID)
 		{
@@ -330,13 +332,14 @@ namespace MarsarahTweaks.Managers
 			}
 			catch
 			{
-				MarsarahTweaks.LogError($"There was an issue loading {ConfigFileName}");
+				log.Error($"There was an issue loading {ConfigFileName}");
+				return;
 			}
 		}
 
 		private static void OnConfigChanged(string configName)
 		{
-			//MarsarahTweaks.LogInfo($"Config setting '{configName}' changed!");
+			log.Info($"Config setting '{configName}' changed!");
 			Config.Save();
 
 			if (ObjectDB.instance == null || ZNetScene.instance == null) return;
@@ -472,7 +475,7 @@ namespace MarsarahTweaks.Managers
 				switch (configName)
 				{
 					case var name when name == Configs.TougherShips.Name:
-						MarsarahTweaks.LogInfo($"ConfigManager Server: Reapplying modifications for {configName}...");
+						log.Info($"ConfigManager Server: Reapplying modifications for {configName}...");
 						TougherShipsChanges.UpdateShipHP(ZNetScene.instance, true);
 						break;
 				}
@@ -503,7 +506,6 @@ namespace MarsarahTweaks.Managers
 					break;
 
 				case var name when name == Configs.MoreUsableFuel.Name:
-					//MarsarahTweaks.LogInfo("Reapplying fuel modifications...");
 					MoreUsableFuel.UpdateMoreUsableFuel();
 					break;
 			}

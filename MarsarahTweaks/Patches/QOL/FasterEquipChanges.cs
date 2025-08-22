@@ -15,6 +15,8 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class FasterEquipChanges
 	{
+		private static readonly LogManager log = new LogManager("Faster Equip", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(Player), "QueueEquipAction")]
 		private static class EquipActionSpeed_Patch
 		{
@@ -31,7 +33,7 @@ namespace MarsarahTweaks.Patches.QOL
 						{
 							item.m_shared.m_equipDuration = 0;
 						}
-						//MarsarahTweaks.LogInfo($"Weapon {item.m_shared.m_name} - anim state: {item.m_shared.m_animationState}");
+						log.Info($"Weapon {item.m_shared.m_name} - anim state: {item.m_shared.m_animationState}");
 					}
 					if (item.IsEquipable() && !item.IsWeapon())
 					{
@@ -94,10 +96,10 @@ namespace MarsarahTweaks.Patches.QOL
 				if (name == "equip_hip")
 				{
 					float forwardSpeed = ___m_animator.GetFloat(___s_forwardSpeedID);
-					MarsarahTweaks.LogInfo($"[Equip] equip_hip triggered in ZSyncAnimation on {__instance.gameObject.name} - forward speed: {forwardSpeed}");
+					log.Info($"[Equip] equip_hip triggered in ZSyncAnimation on {__instance.gameObject.name} - forward speed: {forwardSpeed}");
 
 					//___m_animator.SetFloat(___s_forwardSpeedID, 5.0f);  // Reset speed - -surprisingly, this does not work
-					//MarsarahTweaks.LogInfo($"equip_hip triggered - Resetting forward speed to 5.0");
+					//log.Info($"equip_hip triggered - Resetting forward speed to 5.0");
 
 					// __instance.m_smoothCharacterSpeeds = false; // nogo
 				}
@@ -112,7 +114,7 @@ namespace MarsarahTweaks.Patches.QOL
 				if (!___m_nview.IsOwner()) return;
 
 				float newForwardSpeed = ___m_animator.GetFloat(___s_forwardSpeedID);
-				MarsarahTweaks.LogInfo($"SyncParameters - Forward Speed: {newForwardSpeed}");
+				log.Info($"SyncParameters - Forward Speed: {newForwardSpeed}");
 			}
 		}*/
 
@@ -133,7 +135,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 						if (Mathf.Abs(@float) > 0.01)
 						{
-							MarsarahTweaks.LogInfo($"num2: {num2} - float: {@float}");
+							log.Info($"num2: {num2} - float: {@float}");
 						}
 					}
 				}

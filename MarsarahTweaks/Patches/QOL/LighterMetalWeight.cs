@@ -13,6 +13,8 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class LighterMetalWeight
 	{
+		private static readonly LogManager log = new LogManager("Lighter Metal Weight", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class OthersSection_Patch
 		{
@@ -74,7 +76,7 @@ namespace MarsarahTweaks.Patches.QOL
 					// Set the reduced weight
 					if (metalWeightChanges.TryGetValue(item.name, out float newWeight))
 					{
-						//MarsarahTweaks.LogInfo($"Applying new weight for {item.name} from {itemDrop.m_itemData.m_shared.m_weight} to {newWeight}");
+						log.Info($"Applying new weight for {item.name} from {itemDrop.m_itemData.m_shared.m_weight} to {newWeight}");
 						itemDrop.m_itemData.m_shared.m_weight = newWeight;
 					}
 				}
@@ -92,7 +94,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 					if (metalWeightOriginals.TryGetValue(item.name, out float originalWeight))
 					{
-						//MarsarahTweaks.LogInfo($"Restoring original value for {item.name} from {itemDrop.m_itemData.m_shared.m_weight} to {originalWeight}");
+						log.Info($"Restoring original value for {item.name} from {itemDrop.m_itemData.m_shared.m_weight} to {originalWeight}");
 						itemDrop.m_itemData.m_shared.m_weight = originalWeight;
 					}
 				}

@@ -12,6 +12,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class GearSpeedChanges
 	{
+		private static readonly LogManager log = new LogManager("Gear Speed", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearSpeedChanges_Patch
 		{
@@ -72,13 +74,13 @@ namespace MarsarahTweaks.Patches.Features
 						if (!originalMovementModifiers.ContainsKey(itemName))
 						{
 							originalMovementModifiers[itemName] = currentModifier;
-							//MarsarahTweaks.LogInfo($"Backing up gear speed for {itemName}: {currentModifier}");
+							log.Info($"Backing up gear speed for {itemName}: {currentModifier}");
 						}
 
 						// Apply modification if different
 						if (currentModifier != newModifier)
 						{
-							//MarsarahTweaks.LogInfo($"Applying gear speed modification for {itemName}: {newModifier}");
+							log.Info($"Applying gear speed modification for {itemName}: {newModifier}");
 							item.m_itemData.m_shared.m_movementModifier = newModifier;
 						}
 					}
@@ -88,7 +90,7 @@ namespace MarsarahTweaks.Patches.Features
 					// Restore only if different
 					if (currentModifier != originalValue)
 					{
-						//MarsarahTweaks.LogInfo($"Restoring original gear speed for {itemName}: {originalValue}");
+						log.Info($"Restoring original gear speed for {itemName}: {originalValue}");
 						item.m_itemData.m_shared.m_movementModifier = originalValue;
 
 						originalMovementModifiers.Remove(itemName);

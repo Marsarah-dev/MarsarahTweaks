@@ -12,6 +12,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UILoadscreenTips
 	{
+		private static readonly LogManager log = new LogManager("UI Loadscreen", LogManager.LogLevel.Warning);
+
 		private static string loadingTipString;
 		private static string localizationLanguage;
 		private static readonly List<String> loadingTipStrings = new List<string>

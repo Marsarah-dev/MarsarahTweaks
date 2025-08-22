@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class LessFallDamage
 	{
+		private static readonly LogManager log = new LogManager("Less Fall Damage", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(SEMan), "ModifyFallDamage")]
 		class FallDamage_Patch
 		{
@@ -19,7 +21,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 				if (ConfigManager.LessFallDamageEnabled.Value)
 				{
-					//MarsarahTweaks.LogInfo($"Reducing fall damage...");
+					log.Info($"Reducing fall damage by 40%");
 					damage = damage * 0.6f;
 				}
 	}

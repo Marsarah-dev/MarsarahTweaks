@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class AshlandsEnemiesChanges
 	{
+		private static readonly LogManager log = new LogManager("Ashlands Enemies", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(SpawnSystem), "Awake")]
 		class LessAshlandsEnemiesAwake_Patch
 		{
@@ -43,25 +45,25 @@ namespace MarsarahTweaks.Patches.Features
 			foreach (SpawnSystemList spawnList in spawnSystem.m_spawnLists)
 			{
 				// Super cool log
-				//MarsarahTweaks.LogInfo($"| {"Enemy",-25} | {"MAX",-3} | {"Group Min",-9} | {"Group Max",-9} | {"Chance",-6} |");
-				//MarsarahTweaks.LogInfo(new string('-', 60)); // Separator line
+				//log.Info($"| {"Enemy",-25} | {"MAX",-3} | {"Group Min",-9} | {"Group Max",-9} | {"Chance",-6} |");
+				//log.Info(new string('-', 60)); // Separator line
 
 				foreach (SpawnSystem.SpawnData spawner in spawnList.m_spawners)
 				{
 					if (spawnAdjustments.TryGetValue(spawner.m_name, out var newValues))
 					{
-						//MarsarahTweaks.LogInfo($"| {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
+						//log.Info($"| {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
 
 						if (ConfigManager.LessAshlandsEnemiesEnabled.Value)
 						{
 							// Backup
 							if (!originalSpawnData.ContainsKey(spawner.m_name))
 							{
-								//MarsarahTweaks.LogInfo($"Backing up: | {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
+								log.Info($"Backing up: | {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
 								originalSpawnData[spawner.m_name] = (spawner.m_maxSpawned, spawner.m_groupSizeMin, spawner.m_groupSizeMax, spawner.m_spawnChance);
 							}
 
-							//string updateLogMessage = $"Updating {spawner.m_name}:";
+							string updateLogMessage = $"Updating {spawner.m_name}:";
 
 							// Apply the new values
 							if (newValues.maxSpawned.HasValue && spawner.m_maxSpawned != newValues.maxSpawned.Value)
@@ -85,10 +87,10 @@ namespace MarsarahTweaks.Patches.Features
 								spawner.m_spawnChance = newValues.spawnChance.Value;
 							}
 
-							//MarsarahTweaks.LogInfo($"Updated: | {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
+							log.Info($"Updated: | {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
 
 							// Remove trailing comma and log the update
-							//MarsarahTweaks.LogInfo(updateLogMessage.TrimEnd(','));
+							log.Info(updateLogMessage.TrimEnd(','));
 						}
 						else if (originalSpawnData.TryGetValue(spawner.m_name, out var originalSpawn))
 						{
@@ -98,7 +100,7 @@ namespace MarsarahTweaks.Patches.Features
 							spawner.m_groupSizeMax = originalSpawn.groupMax;
 							spawner.m_spawnChance = originalSpawn.spawnChance;
 
-							//MarsarahTweaks.LogInfo($"Restored: | {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
+							log.Info($"Restored: | {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
 
 							originalSpawnData.Remove(spawner.m_name);
 						}

@@ -12,6 +12,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class EarlyLinenCape
 	{
+		private static readonly LogManager log = new LogManager("Early Linen Cape", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
 		class EarlyLinenCape_Patch
 		{
@@ -27,7 +29,7 @@ namespace MarsarahTweaks.Patches.Features
 
 		public static void UpdateLinenCapeStats(bool wasChanged)
 		{
-			//MarsarahTweaks.LogInfo("Updating Linen Cape Stats");
+			log.Info("Updating Linen Cape Stats");
 			UpdatePoisonResist(wasChanged);
 			RenameLinenCape(wasChanged);
 		}
@@ -43,7 +45,7 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (ConfigManager.EarlyLinenCapeEnabled.Value)
 				{
-					//MarsarahTweaks.LogInfo("Setting Linen Cape Poison Resist");
+					log.Info("Setting Linen Cape Poison Resist");
 					HitData.DamageModPair damageModPairPoison = new HitData.DamageModPair();
 					damageModPairPoison.m_modifier = HitData.DamageModifier.Resistant;
 					damageModPairPoison.m_type = HitData.DamageType.Poison;
@@ -54,7 +56,7 @@ namespace MarsarahTweaks.Patches.Features
 				}
 				else if (wasChanged)
 				{
-					//MarsarahTweaks.LogInfo("Removing Linen Cape Poison Resist");
+					log.Info("Removing Linen Cape Poison Resist");
 					itemDrop.m_itemData.m_shared.m_damageModifiers.RemoveAll(mod => mod.m_type == HitData.DamageType.Poison);
 				}
 			}
@@ -63,7 +65,7 @@ namespace MarsarahTweaks.Patches.Features
 		// Apply new name for Linen Cape
 		private static void RenameLinenCape(bool wasChanged)
 		{
-			//MarsarahTweaks.LogInfo("Renaming Linen Cape");
+			log.Info("Renaming Linen Cape");
 
 			var localizationInstance = Localization.instance;
 
@@ -89,7 +91,11 @@ namespace MarsarahTweaks.Patches.Features
 					translationsDict["item_cape_linen"] = "Linen Cape";
 					translationsDict["item_cape_linen_description"] = "A simple traveler's cape.";
 				}
-				//MarsarahTweaks.LogInfo("Updated translation!");
+				log.Info("Updated translation!");
+			}
+			else
+			{
+				log.Warn("Could not update translation");
 			}
 
 			if (Player.m_localPlayer)

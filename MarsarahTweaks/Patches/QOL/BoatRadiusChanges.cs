@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class BoatRadiusChanges
 	{
+		private static readonly LogManager log = new LogManager("Boat Radius", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(Minimap), "UpdateExplore")]
 		class LargerBoatExploreRadius_Patch
 		{
@@ -25,13 +27,13 @@ namespace MarsarahTweaks.Patches.QOL
 					{
 						if (originalExploreRadius == -1f)
 						{
-							//MarsarahTweaks.LogInfo($"Backing up explore radius: {___m_exploreRadius}");
+							log.Info($"Backing up explore radius: {___m_exploreRadius}");
 							originalExploreRadius = ___m_exploreRadius;
 						}
 
 						if (___m_exploreRadius != 100f)
 						{
-							//MarsarahTweaks.LogInfo($"Applying new explore radius: 100");
+							log.Info($"Applying new explore radius: 100");
 							___m_exploreRadius = 100f;
 						}
 					}
@@ -39,7 +41,7 @@ namespace MarsarahTweaks.Patches.QOL
 					{
 						if (originalExploreRadius != -1f && ___m_exploreRadius != originalExploreRadius)
 						{
-							//MarsarahTweaks.LogInfo($"Restoring original explore radius: {originalExploreRadius}");
+							log.Info($"Restoring original explore radius: {originalExploreRadius}");
 							___m_exploreRadius = originalExploreRadius; // 50
 						}						
 					}
@@ -48,7 +50,7 @@ namespace MarsarahTweaks.Patches.QOL
 				{
 					if (originalExploreRadius != -1f && ___m_exploreRadius != originalExploreRadius)
 					{
-						//MarsarahTweaks.LogInfo($"Restoring original explore radius: {originalExploreRadius} due to config OFF");
+						log.Info($"Restoring original explore radius: {originalExploreRadius} due to config OFF");
 						___m_exploreRadius = originalExploreRadius; // 50
 					}
 				}

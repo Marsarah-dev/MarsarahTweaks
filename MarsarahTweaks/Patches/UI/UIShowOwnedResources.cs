@@ -13,6 +13,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIShowOwnedResources
 	{
+		private static readonly LogManager log = new LogManager("UI Show Owned Resources", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.SetupRequirement))]
 		class ShowOwnedResources_Patch
 		{

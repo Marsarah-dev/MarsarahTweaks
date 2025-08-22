@@ -14,6 +14,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UISummonCounter : UIController
 	{
+		private static readonly LogManager log = new LogManager("UI Summon Counter", LogManager.LogLevel.Warning);
+
 		// UI data
 		public static int numSummons;
 

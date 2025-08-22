@@ -3,6 +3,7 @@ using Jotunn;
 using Jotunn.Configs;
 using Jotunn.Entities;
 using Jotunn.Managers;
+using MarsarahTweaks.Patches.BuildPieces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,11 +18,13 @@ namespace MarsarahTweaks.Managers
 	// MPrefabManager: MarsarahTweaks prefab cloning and registration system
 	internal class MPrefabManager
 	{
+		private static readonly LogManager log = new LogManager("M Prefab Manager", LogManager.LogLevel.Info);
+
 		public static GameObject GetPrefab(string name)
 		{
 			if (string.IsNullOrEmpty(name))
 			{
-				MarsarahTweaks.LogError("[MPrefabManager] GetPrefab: Given prefab name is null or empty.");
+				log.Error("GetPrefab: Given prefab name is null or empty.");
 				return null;
 			}
 
@@ -32,20 +35,20 @@ namespace MarsarahTweaks.Managers
 		{
 			if (nameOfOriginal.IsNullOrWhiteSpace() || nameOfClone.IsNullOrWhiteSpace())
 			{
-				MarsarahTweaks.LogWarn("[MPrefabManager] Given strings for cloning are null or empty. Cannot clone prefab.");
+				log.Warn("Given strings for cloning are null or empty. Cannot clone prefab.");
 				return null;
 			}
 
 			if (GetPrefab(nameOfClone) != null)
 			{
-				MarsarahTweaks.LogWarn($"[MPrefabManager] A prefab named {nameOfClone} already exists in ZNetScene. Skipping clone.");
+				log.Warn($"A prefab named {nameOfClone} already exists in ZNetScene. Skipping clone.");
 				return null;
 			}
 
 			GameObject originalPrefab = GetPrefab(nameOfOriginal);
 			if (originalPrefab == null)
 			{
-				MarsarahTweaks.LogError($"[MPrefabManager] Original prefab {nameOfOriginal} not found.");
+				log.Error($"Original prefab {nameOfOriginal} not found.");
 				return null;
 			}
 
@@ -56,13 +59,13 @@ namespace MarsarahTweaks.Managers
 		{
 			if (originalPrefab == null || nameOfClone.IsNullOrWhiteSpace())
 			{
-				MarsarahTweaks.LogWarn("[MPrefabManager] Null original or empty clone name.");
+				log.Warn("Null original or empty clone name.");
 				return null;
 			}
 
 			if (GetPrefab(nameOfClone) != null)
 			{
-				MarsarahTweaks.LogWarn($"[MPrefabManager] A prefab named {nameOfClone} already exists in ZNetScene. Skipping clone.");
+				log.Warn($"A prefab named {nameOfClone} already exists in ZNetScene. Skipping clone.");
 				return null;
 			}
 
@@ -73,20 +76,20 @@ namespace MarsarahTweaks.Managers
 		{
 			if (prefab == null)
 			{
-				MarsarahTweaks.LogError("[MPrefabManager] Tried to register null prefab.");
+				log.Error("Tried to register null prefab.");
 				return;
 			}
 
 			ZNetScene znetScene = ZNetScene.instance;
 			if (znetScene == null)
 			{
-				MarsarahTweaks.LogError("[MPrefabManager] ZNetScene.instance is null. Cannot register prefab.");
+				log.Error("ZNetScene.instance is null. Cannot register prefab.");
 				return;
 			}
 
 			if (znetScene.GetPrefab(prefab.name) != null)
 			{
-				MarsarahTweaks.LogWarn($"[MPrefabManager] Prefab '{prefab.name}' already registered in ZNetScene.");
+				log.Warn($"Prefab '{prefab.name}' already registered in ZNetScene.");
 				return;
 			}
 
@@ -96,19 +99,19 @@ namespace MarsarahTweaks.Managers
 
 			if (GetPrefab(prefab.name) == null)
 			{
-				MarsarahTweaks.LogError($"[MPrefabManager] Failed to register prefab '{prefab.name}'!");
+				log.Error($"Failed to register prefab '{prefab.name}'!");
 			}
-			/*else
+			else
 			{
-				MarsarahTweaks.LogInfo($"[MPrefabManager] Registered prefab '{prefab.name}' to ZNetScene.");
-			}*/
+				log.Info($"Registered prefab '{prefab.name}' to ZNetScene.");
+			}
 		}
 
 		public static void RegisterItem(GameObject prefab)
 		{
 			if (prefab == null)
 			{
-				MarsarahTweaks.LogError("[MPrefabManager] Tried to register null prefab.");
+				log.Error("Tried to register null prefab.");
 				return;
 			}
 
@@ -120,7 +123,7 @@ namespace MarsarahTweaks.Managers
 		{
 			if (recipe == null)
 			{
-				MarsarahTweaks.LogError("[MPrefabManager] Tried to register null recipe.");
+				log.Error("Tried to register null recipe.");
 				return null;
 			}
 
@@ -134,13 +137,13 @@ namespace MarsarahTweaks.Managers
 		{
 			if (prefab == null)
 			{
-				MarsarahTweaks.LogWarn($"[MPrefabManager] Given prefab is null. Cannot add to build menu.");
+				log.Warn($"Given prefab is null. Cannot add to build menu.");
 				return;
 			}
 
 			if (pieceConfig == null)
 			{
-				MarsarahTweaks.LogWarn($"[MPrefabManager] Given piece config is null. Cannot add to build menu.");
+				log.Warn($"Given piece config is null. Cannot add to build menu.");
 				return;
 			}
 
@@ -152,7 +155,7 @@ namespace MarsarahTweaks.Managers
 		{
 			if (prefab == null)
 			{
-				MarsarahTweaks.LogError("[MPrefabManager] Tried to add null prefab to hammer.");
+				log.Error("Tried to add null prefab to hammer.");
 				return;
 			}
 
@@ -162,14 +165,14 @@ namespace MarsarahTweaks.Managers
 
 			if (table == null)
 			{
-				MarsarahTweaks.LogError("[MPrefabManager] Could not get Hammer piece table.");
+				log.Error("Could not get Hammer piece table.");
 				return;
 			}
 
 			if (!table.m_pieces.Contains(prefab))
 			{
 				table.m_pieces.Add(prefab);
-				MarsarahTweaks.LogInfo($"[MPrefabManager] Added '{prefab.name}' to hammer build menu.");
+				log.Info($"Added '{prefab.name}' to hammer build menu.");
 			}
 		}*/
 	}

@@ -31,6 +31,7 @@
  * 
  * A. Fixes
  *    - Remove fireplace pieces from the permament lights mod OR find an alternative solution for permanent lights
+ *    - Handle Dvergr Lantern for Smart Biome (see if it's needed to handle in the first place)
  * 
  * B. New UI
  *    1. Add 🧑‍🤝‍🧑 for Online players in alternate UI (too much headache to add now)
@@ -129,12 +130,11 @@ namespace MarsarahTweaks
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 
-		private static readonly bool showLogs = true; // Set to true to display logs
-
 		private readonly Harmony harmony = new Harmony(ModGUID);
 
 		void Awake()
 		{
+			LogManager.SetGlobalLogLevel(LogManager.LogLevel.Info); // None, Error, Warning, Info
 			ConfigManager.Init(Config);
 			//CustomConsoleCommandHandler.Init(); // Register new console commands
 			UISmartBiome.UpdateBiomeWeights(); // Set the correct biome weight dictionary at startup
@@ -151,61 +151,6 @@ namespace MarsarahTweaks
 		private void OnDestroy()
 		{
 			Config.Save();
-		}
-
-		// Logger =====================================================================
-		public static void LogInfo(string log, bool header = false, bool footer = false)
-		{
-			if (showLogs)
-			{
-				if (header)
-				{
-					Debug.Log("===================================================");
-				}
-
-				Debug.Log($"[Marsarah Tweaks] : {log}");
-
-				if (footer)
-				{
-					Debug.Log("===================================================");
-				}
-			}
-		}
-
-		public static void LogWarn(string log, bool header = false, bool footer = false)
-		{
-			if (showLogs)
-			{
-				if (header)
-				{
-					Debug.Log("===================================================");
-				}
-
-				Debug.LogWarning($"[Marsarah Tweaks] : {log}");
-
-				if (footer)
-				{
-					Debug.Log("===================================================");
-				}
-			}
-		}
-
-		public static void LogError(string log, bool header = false, bool footer = false)
-		{
-			if (showLogs)
-			{
-				if (header)
-				{
-					Debug.Log("===================================================");
-				}
-
-				Debug.LogError($"[Marsarah Tweaks] : {log}");
-
-				if (footer)
-				{
-					Debug.Log("===================================================");
-				}
-			}
 		}
 	}
 }

@@ -11,6 +11,8 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class FriendlyBallistas
 	{
+		private static readonly LogManager log = new LogManager("Friendly Ballistas", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(Turret), "UpdateTarget")]
 		class FriendlyBallistas_Patch
 		{
@@ -26,12 +28,12 @@ namespace MarsarahTweaks.Patches.QOL
 
 					if (___m_targetPlayers != newTargetsFriendly)
 					{
-						//MarsarahTweaks.LogInfo($"Applying new player targeting: {newTargetsFriendly}");
+						log.Info($"Applying new player targeting: {newTargetsFriendly}");
 						___m_targetPlayers = newTargetsFriendly;
 					}
 					if (___m_targetTamed != newTargetsFriendly)
 					{
-						//MarsarahTweaks.LogInfo($"Applying new tamed targeting: {newTargetsFriendly}");
+						log.Info($"Applying new tamed targeting: {newTargetsFriendly}");
 						___m_targetTamed = newTargetsFriendly;
 					}
 				}
@@ -39,12 +41,12 @@ namespace MarsarahTweaks.Patches.QOL
 				{
 					if (___m_targetPlayers != originalTargetsFriendly)
 					{
-						//MarsarahTweaks.LogInfo($"Restoring player targeting: {originalTargetsFriendly}");
+						log.Info($"Restoring player targeting: {originalTargetsFriendly}");
 						___m_targetPlayers = originalTargetsFriendly;
 					}
 					if (___m_targetTamed != originalTargetsFriendly)
 					{
-						//MarsarahTweaks.LogInfo($"Restoring tamed targeting: {originalTargetsFriendly}");
+						log.Info($"Restoring tamed targeting: {originalTargetsFriendly}");
 						___m_targetTamed = originalTargetsFriendly;
 					}
 				}

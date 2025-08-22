@@ -12,6 +12,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal static class PlayerLogoutAnnounce
 	{
+		private static readonly LogManager log = new LogManager("UIPlayer Logout", LogManager.LogLevel.Warning);
+
 		private static HashSet<string> _previousPeers = new HashSet<string>();
 		private const string LogoutRPC = "MarsarahTweaks_LogoutAnnounce";
 		private static bool _registered = false;
@@ -39,7 +41,7 @@ namespace MarsarahTweaks.Patches.UI
 				{
 					if (!currentPeers.Contains(prevName))
 					{
-						//MarsarahTweaks.LogInfo($"{prevName} logged out.");
+						log.Info($"{prevName} logged out.");
 						// Send to all clients
 						ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, LogoutRPC, prevName);
 					}
@@ -64,7 +66,7 @@ namespace MarsarahTweaks.Patches.UI
 
 			ZRoutedRpc.instance.Register<string>(LogoutRPC, OnPlayerLogoutRPC);
 			_registered = true;
-			//MarsarahTweaks.LogInfo("Registered LogoutAnnounce RPC", true);
+			log.Info("Registered LogoutAnnounce RPC", true);
 		}
 
 		private static void OnPlayerLogoutRPC(long sender, string playerName)

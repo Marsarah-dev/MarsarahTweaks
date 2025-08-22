@@ -12,6 +12,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UISmartBiome : UIController
 	{
+		private static readonly LogManager log = new LogManager("UI Smart Biome", LogManager.LogLevel.Warning);
+
 		// UI data
 		private static float playerArmor;
 		private static int playerArmorWeight;

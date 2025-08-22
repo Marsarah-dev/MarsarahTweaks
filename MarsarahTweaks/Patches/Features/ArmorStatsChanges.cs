@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class ArmorStatsChanges
 	{
+		private static readonly LogManager log = new LogManager("Armor Stats", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(Player), "UpdateStats", new Type[] { typeof(float) })]
 		class eitrFromMageGear_Patch
 		{

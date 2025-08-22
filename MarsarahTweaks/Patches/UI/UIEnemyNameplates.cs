@@ -18,6 +18,8 @@
 //{
 //	internal class UIEnemyNameplates
 //	{
+//		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Warning);
+//
 //		private static readonly FieldInfo _mHudsField = typeof(EnemyHud).GetField("m_huds", BindingFlags.Instance | BindingFlags.NonPublic);
 //		private static readonly FieldInfo _mNameField;
 //		private static readonly FieldInfo _mCharacterField;

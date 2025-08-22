@@ -12,6 +12,8 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIController
 	{
+		private static readonly LogManager log = new LogManager("UI Controller", LogManager.LogLevel.Warning);
+
 		public static bool showUI = true;
 		public static bool showPlayerList = true;
 
@@ -80,10 +82,10 @@ namespace MarsarahTweaks.Patches.UI
 					tmpText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, Color.black);
 				}
 			}
-			/*else
+			else
 			{
-				MarsarahTweaks.LogWarn($"[Boat UI] Font material for '{fontName}' is null or font is missing. Skipping outline setup.");
-			}*/
+				log.Warn($"[Boat UI] Font material for '{fontName}' is null or font is missing. Skipping outline setup.");
+			}
 
 			return tmpText;
 		}

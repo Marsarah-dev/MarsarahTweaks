@@ -11,6 +11,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class GearUpgradeChanges
 	{
+		private static readonly LogManager log = new LogManager("Gear Upgrade", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearUpgradeUnlock_Patch
 		{
@@ -106,12 +108,12 @@ namespace MarsarahTweaks.Patches.Features
 					// Backup original value if not already stored
 					if (!originalRecipeStationLevels.ContainsKey(recipeName))
 					{
-						//MarsarahTweaks.LogInfo($"Backing up {recipeName} min station level value: {recipe.m_minStationLevel}");
+						log.Info($"Backing up {recipeName} min station level value: {recipe.m_minStationLevel}");
 						originalRecipeStationLevels[recipeName] = recipe.m_minStationLevel;
 					}
 
 					// Apply new value
-					//MarsarahTweaks.LogInfo($"Applying new min station level for {recipeName}: {newStationLevel}");
+					log.Info($"Applying new min station level for {recipeName}: {newStationLevel}");
 					recipe.m_minStationLevel = newStationLevel;
 				}
 			}
@@ -126,7 +128,7 @@ namespace MarsarahTweaks.Patches.Features
 					if (recipe == null) continue;
 
 					// Restore original value
-					//MarsarahTweaks.LogInfo($"Restoring {recipeName} min station level value: {originalLevel}");
+					log.Info($"Restoring {recipeName} min station level value: {originalLevel}");
 					recipe.m_minStationLevel = originalLevel;
 				}
 

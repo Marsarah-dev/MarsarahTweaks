@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class AIFleeChanges
 	{
+		private static readonly LogManager log = new LogManager("AI Flee", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(MonsterAI), "Awake")]
 		class MonsterAIFlee_Patch
 		{
@@ -24,7 +26,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				if (thisBaseAI.name == "Boar(Clone)" || thisBaseAI.name == "Neck(Clone)")
 				{
-					//MarsarahTweaks.LogInfo($"This AI won't flee");
+					log.Info($"This AI won't flee");
 					___m_fleeIfNotAlerted = false;
 				}
 			}

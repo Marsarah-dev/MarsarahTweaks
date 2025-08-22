@@ -12,6 +12,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class ExtensionsChanges
 	{
+		private static readonly LogManager log = new LogManager("Extension Changes", LogManager.LogLevel.Warning);
+
 		internal static bool lastExtensionSetting = ConfigManager.ExtensionsChangesEnabled.Value;
 
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
@@ -67,7 +69,7 @@ namespace MarsarahTweaks.Patches.Features
 						// Backup
 						if (!originalSpaceRequirements.TryGetValue(pieceName, out float originalSpaceRequirement))
 						{
-							//MarsarahTweaks.LogInfo($"Backing up space requirement for {pieceName}");
+							log.Info($"Backing up space requirement for {pieceName}");
 							originalSpaceRequirements[pieceName] = actualPiece.m_spaceRequirement;
 						}
 
@@ -78,7 +80,7 @@ namespace MarsarahTweaks.Patches.Features
 				else if (originalSpaceRequirements.TryGetValue(pieceName, out float originalSpaceRequirement))
 				{
 					// Restore
-					//MarsarahTweaks.LogInfo($"Restoring space requirement for {pieceName}");
+					log.Info($"Restoring space requirement for {pieceName}");
 					actualPiece.m_spaceRequirement = originalSpaceRequirement;
 
 					originalSpaceRequirements.Remove(pieceName);
@@ -94,7 +96,7 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (!originalStationDistance.ContainsKey(extensioName))
 				{
-					//MarsarahTweaks.LogInfo($"Backing up build distance for {extensioName}");
+					log.Info($"Backing up build distance for {extensioName}");
 					originalStationDistance[extensioName] = extension.m_maxStationDistance;
 				}
 
@@ -102,7 +104,7 @@ namespace MarsarahTweaks.Patches.Features
 			}
 			else if (originalStationDistance.TryGetValue(extensioName, out float original))
 			{
-				//MarsarahTweaks.LogInfo($"Restoring build distance for {extensioName}");
+				log.Info($"Restoring build distance for {extensioName}");
 				extension.m_maxStationDistance = original;
 
 				originalStationDistance.Remove(extensioName);

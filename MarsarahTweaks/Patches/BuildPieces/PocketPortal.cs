@@ -19,6 +19,8 @@ namespace MarsarahTweaks.Patches.BuildPieces
 {
 	public static class PocketPortal
 	{
+		private static readonly LogManager log = new LogManager("Pocket Portal", LogManager.LogLevel.Warning);
+
 		private static bool initialized = false;
 		private static GameObject PocketPortalPrefab;
 		private static Recipe PortalCoreRecipe;
@@ -67,7 +69,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			ConfigurePocketPortalPieceData();			
 
 			PocketPortalPrefab.SetActive(true);
-			//MarsarahTweaks.LogInfo("[PocketPortal] Pocket Portal registered and ready.");
+			log.Info("Pocket Portal registered and ready.");
 		}
 
 		private static void ClonePocketPortalPrefab()
@@ -75,7 +77,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			PocketPortalPrefab = MPrefabManager.ClonePrefab("portal_wood", "pocket_portal");
 			if (PocketPortalPrefab == null)
 			{
-				MarsarahTweaks.LogError("[PocketPortal] Cloning of portal_wood failed.");
+				log.Error("Cloning of portal_wood failed.");
 			}
 		}
 
@@ -121,7 +123,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			GameObject pocketPortalEffectsPrefab = MPrefabManager.ClonePrefab("fx_portal_connected", "fx_pocket_portal_connected");
 			if (pocketPortalEffectsPrefab == null)
 			{
-				MarsarahTweaks.LogError("[PocketPortal] Failed to clone portal effect prefab!");
+				log.Error("Failed to clone portal effect prefab!");
 				return null;
 			}
 
@@ -144,7 +146,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			}
 			else
 			{
-				MarsarahTweaks.LogWarn("[PocketPortal] Could not find 'blue flames' particle system.");
+				log.Warn("Could not find 'blue flames' particle system.");
 			}
 
 			MPrefabManager.RegisterToZNetScene(pocketPortalEffectsPrefab);
@@ -157,7 +159,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			GameObject vanillaUnusedPortalPrefab = MPrefabManager.GetPrefab("portal");
 			if (vanillaUnusedPortalPrefab == null)
 			{
-				MarsarahTweaks.LogError("[PocketPortal] Unused portal prefab not found");
+				log.Error("Unused portal prefab not found");
 				return;
 			}
 
@@ -190,7 +192,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 
 					if (pocketPortalEffectsPrefab == null)
 					{
-						MarsarahTweaks.LogError("[PocketPortal] Custom effect prefab not found.");
+						log.Error("Custom effect prefab not found.");
 						return;
 					}
 
@@ -208,12 +210,12 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				}
 				else
 				{
-					MarsarahTweaks.LogWarn("[PocketPortal] TeleportWorld not found while assigning new target_found VFX.");
+					log.Warn("TeleportWorld not found while assigning new target_found VFX.");
 				}
 			}
 			else
 			{
-				MarsarahTweaks.LogWarn("[PocketPortal] Could not find _target_found in vanilla portal.");
+				log.Warn("Could not find _target_found in vanilla portal.");
 			}
 		}
 
@@ -251,7 +253,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			GameObject portalCorePrefab = MPrefabManager.ClonePrefab("SurtlingCore", "PortalCore");
 			if (portalCorePrefab == null)
 			{
-				MarsarahTweaks.LogError("[PortalCore] Cloning of SurtlingCore failed.");
+				log.Error("[PortalCore] Cloning of SurtlingCore failed.");
 				return null;
 			}
 
@@ -279,12 +281,12 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				}
 				else
 				{
-					MarsarahTweaks.LogWarn("[PortalCore] No Renderer found on 'attach/core' object");
+					log.Warn("[PortalCore] No Renderer found on 'attach/core' object");
 				}
 			}
 			else
 			{
-				MarsarahTweaks.LogWarn("[PortalCore] 'attach/core' child not found");
+				log.Warn("[PortalCore] 'attach/core' child not found");
 			}
 
 			// Find the Point Light child (SurtlingCore -> attach -> Point Light)
@@ -301,12 +303,12 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				}
 				else
 				{
-					MarsarahTweaks.LogWarn("[PortalCore] No Light component found on 'attach/Point Light'");
+					log.Warn("[PortalCore] No Light component found on 'attach/Point Light'");
 				}
 			}
 			else
 			{
-				MarsarahTweaks.LogWarn("[PortalCore] 'attach/Point Light' child not found");
+				log.Warn("[PortalCore] 'attach/Point Light' child not found");
 			}
 		}
 
@@ -315,12 +317,12 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			Sprite originalIcon = MPrefabManager.GetPrefab("SurtlingCore").GetComponent<ItemDrop>().m_itemData.m_shared.m_icons[0];
 			if (originalIcon == null)
 			{
-				MarsarahTweaks.LogWarn($"[PortalCore] Could not get icon for Surtling Core");
+				log.Warn($"[PortalCore] Could not get icon for Surtling Core");
 				return null;
 			}
 			if (originalIcon.texture == null)
 			{
-				MarsarahTweaks.LogWarn("[PortalCore] Original icon texture is null.");
+				log.Warn("[PortalCore] Original icon texture is null.");
 				return null;
 			}
 
@@ -398,7 +400,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			Piece pocketPortalPiece = PocketPortalPrefab.GetComponent<Piece>();
 			if (pocketPortalPiece == null)
 			{
-				MarsarahTweaks.LogWarn($"[PocketPortal] Piece component does not exist. No toggle made.");
+				log.Warn($"Piece component does not exist. No toggle made.");
 				return;
 			}
 
@@ -416,7 +418,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 		{
 			if (PortalCoreRecipe == null)
 			{
-				MarsarahTweaks.LogWarn($"[PortalCore] Recipe does not exist. No toggle made.");
+				log.Warn($"[PortalCore] Recipe does not exist. No toggle made.");
 				return;
 			}
 
@@ -440,7 +442,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				if (!__instance.PortalPrefabHash.Contains(hash))
 				{
 					__instance.PortalPrefabHash.Add(hash);
-					//MarsarahTweaks.LogInfo($"Registered pocket_portal prefab hash early: {hash}");
+					log.Info($"Registered pocket_portal prefab hash early: {hash}");
 				}
 			}
 		}
@@ -454,7 +456,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				GameObject portal = PocketPortalPrefab;
 				if (portal == null)
 				{
-					//MarsarahTweaks.LogWarn("[PocketPortal] ConnectPortals patch: prefab not ready yet.");
+					log.Warn("ConnectPortals patch: prefab not ready yet.");
 					return;
 				}
 
@@ -462,7 +464,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				{
 					__instance.m_portalPrefabs.Add(portal);
 					__instance.PortalPrefabHash.Add("pocket_portal".GetStableHashCode());
-					//MarsarahTweaks.LogInfo("[PocketPortal] Registered 'pocket_portal' in Game.m_portalPrefabs via ConnectPortals.");
+					log.Info("Registered 'pocket_portal' in Game.m_portalPrefabs via ConnectPortals.");
 				}
 			}
 		}
@@ -488,7 +490,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 					string authorId = PlatformManager.DistributionPlatform?.LocalUser?.PlatformUserID.ToString() ?? "";
 					zdo.Set(ZDOVars.s_tagauthor, authorId);
 
-					//MarsarahTweaks.LogInfo($"[PocketPortal] Auto-assigned missing tagauthor: {authorId}");
+					log.Info($"Auto-assigned missing tagauthor: {authorId}");
 				}
 			}
 		}
@@ -563,7 +565,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 
 			Tutorial.instance.m_texts.Add(customTutorial);
 
-			//MarsarahTweaks.LogInfo("Added custom tutorial text.");
+			log.Info("Added custom tutorial text.");
 		}
 
 		[HarmonyPatch(typeof(Player), "OnInventoryChanged")]
@@ -579,7 +581,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 					if (item.m_shared.m_name == "Portal Core")
 					{
 						__instance.ShowTutorial("portal_core_intro");
-						//MarsarahTweaks.LogInfo("Triggered Portal Core tutorial.");
+						log.Info("Triggered Portal Core tutorial.");
 						break;
 					}
 				}

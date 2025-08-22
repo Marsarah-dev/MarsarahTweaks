@@ -13,11 +13,11 @@
 //		private IEnumerator LogComponentsLater(GameObject go)
 //		{
 //			yield return new WaitForSeconds(0.5f); // Give time for initialization
-//			MarsarahTweaks.LogInfo($"[Delayed Check] {go.name} Components:");
+//			log.Info($"[Delayed Check] {go.name} Components:");
 
 //			foreach (Component comp in go.GetComponents<Component>())
 //			{
-//				MarsarahTweaks.LogInfo($"{go.name} - {comp}");
+//				log.Info($"{go.name} - {comp}");
 //			}
 
 //			Destroy(this); // Cleanup after logging
@@ -33,7 +33,7 @@
 //			yield return new WaitForSeconds(1f); // Give time for initialization
 //			foreach (var comp in GetComponents<Component>())
 //			{
-//				MarsarahTweaks.LogInfo($"[{gameObject.name}] - {comp.GetType().Name}");
+//				log.Info($"[{gameObject.name}] - {comp.GetType().Name}");
 //			}
 //		}
 //	}

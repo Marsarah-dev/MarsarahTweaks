@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class MinibossWeightChanges
 	{
+		private static readonly LogManager log = new LogManager("Hildir Weight", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(Player), "OnSpawned")]
 		class MinibossCarryWeight_Patch
 		{
@@ -32,6 +34,8 @@ namespace MarsarahTweaks.Patches.Features
 					1 => 325,  // One defeated
 					_ => 300   // None defeated
 				};
+
+				log.Info("Adjusted carry weight");
 			}
 		}
 	}

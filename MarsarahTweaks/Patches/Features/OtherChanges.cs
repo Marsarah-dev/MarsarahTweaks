@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class OtherChanges
 	{
+		private static readonly LogManager log = new LogManager("Other", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearRecipeModifications_Patch
 		{
@@ -60,6 +62,7 @@ namespace MarsarahTweaks.Patches.Features
 							{
 								// Backup recipe.m_amount
 								recipeBackups[recipeName] = (recipe.m_amount, resourceBackup);
+								log.Info($"Backed up amounts for {recipeName}");
 							}
 							else
 							{
@@ -69,6 +72,7 @@ namespace MarsarahTweaks.Patches.Features
 									{
 										// Backup only modified resource amounts
 										resourceBackup[req.m_resItem.name] = req.m_amount;
+										log.Info($"Backed up resources for {recipeName}");
 									}
 								}
 							}
@@ -78,6 +82,7 @@ namespace MarsarahTweaks.Patches.Features
 						if (resourceBackup.Count > 0 || entry.Value.ContainsKey("Amount"))
 						{
 							recipeBackups[recipeName] = (recipe.m_amount, resourceBackup);
+							log.Info($"Backed up amounts for {recipeName} for modified resources");
 						}
 					}
 
@@ -87,6 +92,7 @@ namespace MarsarahTweaks.Patches.Features
 						if (mod.Key == "Amount")
 						{
 							recipe.m_amount = mod.Value;
+							log.Info($"Applied new amount for {recipeName}");
 						}
 						else
 						{
@@ -95,6 +101,7 @@ namespace MarsarahTweaks.Patches.Features
 								if (req.m_resItem.name == mod.Key)
 								{
 									req.m_amount = mod.Value;
+									log.Info($"Applied new requirement for {recipeName}");
 								}
 							}
 						}
@@ -113,6 +120,7 @@ namespace MarsarahTweaks.Patches.Features
 					if (otherRecipeModifiers.TryGetValue(recipe.name, out var modifications) && modifications.ContainsKey("Amount"))
 					{
 						recipe.m_amount = entry.Value.recipeAmount;
+						log.Info($"Restored amount for {recipe.name}");
 					}
 
 					// Restore only modified resource amounts
@@ -125,6 +133,7 @@ namespace MarsarahTweaks.Patches.Features
 							if (entry.Value.resourceAmounts.TryGetValue(req.m_resItem.name, out int originalAmount))
 							{
 								req.m_amount = originalAmount;
+								log.Info($"Restored modified amount for {recipe.name}");
 							}
 						}
 					}

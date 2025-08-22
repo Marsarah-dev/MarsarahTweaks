@@ -10,6 +10,8 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class LargerPickupAreaChanges
 	{
+		private static readonly LogManager log = new LogManager("Larger Pickup Area", LogManager.LogLevel.Warning);
+
 		[HarmonyPatch(typeof(Player), "Awake")]
 		class LargerPickupArea_Patch
 		{
@@ -31,16 +33,16 @@ namespace MarsarahTweaks.Patches.QOL
 			{
 				if (originalPickupArea == -1f)
 				{
-					//MarsarahTweaks.LogInfo($"Backing up pickup area ({player.m_autoPickupRange})");
+					log.Info($"Backing up pickup area ({player.m_autoPickupRange})");
 					originalPickupArea = player.m_autoPickupRange;
 				}
 
-				//MarsarahTweaks.LogInfo($"Assigning new pickup area (3) - from {player.m_autoPickupRange}");
+				log.Info($"Assigning new pickup area (3) - from {player.m_autoPickupRange}");
 				player.m_autoPickupRange = 3f;
 			}
 			else if (wasChanged && originalPickupArea != -1f)
 			{
-				//MarsarahTweaks.LogInfo($"Restoring pickup area: {originalPickupArea} - from {player.m_autoPickupRange}");
+				log.Info($"Restoring pickup area: {originalPickupArea} - from {player.m_autoPickupRange}");
 				player.m_autoPickupRange = originalPickupArea;
 			}
 		}
