@@ -112,7 +112,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("12 - More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators");
 
 			public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("01 - Pocket Portal", "Adds a new portal that is built from a Portal Core that only takes one inventory slot which can be crafted at a Workbench starting with the Mountain area. Can only build one Pocket Portal per player. (Toggling mid-game requires reloading the build/crafting menu)");
-			public static readonly ConfigMetadata SilverSconce = new ConfigMetadata("02 - Silver Sconce", "Adds 3 Silver Sconce build pieces with different flame colors unlocked at the Mountain biome");
+			public static readonly ConfigMetadata BuildPiecesLighting = new ConfigMetadata("02 - Build Pieces - Lighting", "Adds new light sources (Silver Sconce, Green Standing Brazier) unlocked at the Mountain biome");
 
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
 			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("02 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
@@ -187,6 +187,9 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShorterRestedDelayEnabled;
 		public static ConfigEntry<bool> MoreUsableFuelEnabled;
 
+		public static ConfigEntry<bool> PocketPortalEnabled;
+		public static ConfigEntry<bool> BuildPiecesLightingEnabled;
+
 		public static ConfigEntry<bool> MoreLoadingTipsEnabled;
 		public static ConfigEntry<bool> ShowInventoryWeightAndSlots;
 		public static ConfigEntry<bool> ShowEnemyDetector;
@@ -203,9 +206,6 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> AnnouncePlayerLogout;
 		public static ConfigEntry<bool> ShowHeatLevelInAshlands;
 		public static ConfigEntry<bool> UseSymbolsForUI;
-
-		public static ConfigEntry<bool> PocketPortalEnabled;
-		public static ConfigEntry<bool> SilverSconceEnabled;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -271,7 +271,7 @@ namespace MarsarahTweaks.Managers
 
 			// ===== Build Pieces
 			PocketPortalEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.PocketPortal.Name, true, Configs.PocketPortal.Description);
-			SilverSconceEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.SilverSconce.Name, true, Configs.SilverSconce.Description);
+			BuildPiecesLightingEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.BuildPiecesLighting.Name, true, Configs.BuildPiecesLighting.Description);
 
 			// ===== UI
 			MoreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description, false);
@@ -368,6 +368,7 @@ namespace MarsarahTweaks.Managers
 					case var name when name == Configs.BuildPieceAmountsModifications.Name:
 						BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, true, false);
 						SilverSconce.RefreshSilverSconceRequirements();
+						GreenStandingBrazier.RefreshGreenBrazierRequirements();
 						break;
 
 					case var name when name == Configs.BuildPieceMaterialsModifications.Name:
@@ -413,6 +414,7 @@ namespace MarsarahTweaks.Managers
 					case var name when name == Configs.PermanentLightsModifications.Name:
 						PermanentLightsChanges.UpdateLightBuildPiecesAmounts(ZNetScene.instance, true);
 						SilverSconce.RefreshSilverSconceRequirements();
+						GreenStandingBrazier.RefreshGreenBrazierRequirements();
 						break;
 
 					case var name when name == Configs.CraftableChain.Name:
@@ -447,8 +449,9 @@ namespace MarsarahTweaks.Managers
 						PocketPortal.TogglePortalCoreVisibility();
 						break;
 
-					case var name when name == Configs.SilverSconce.Name:
+					case var name when name == Configs.BuildPiecesLighting.Name:
 						SilverSconce.ToggleSilverSconceVisibility();
+						GreenStandingBrazier.ToggleGreenBrazierVisibility();
 						break;
 
 					case var name when name == Configs.UIInventoryWeightAndSlots.Name:

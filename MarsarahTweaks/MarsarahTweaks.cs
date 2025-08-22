@@ -23,8 +23,8 @@
  *    - Silver Sconce
  *      - Added 3 tyes of Silver Sconces (red, blue and green flame) available in the Mountain biome
  *      
- *    - Green Standing Brazier (TODO)
- *      - Add a green version of the standing brazier
+ *    - Green Standing Brazier 
+ *      - Added a green version of the Standing Brazier
  * 
  * B. New QOL
  * 

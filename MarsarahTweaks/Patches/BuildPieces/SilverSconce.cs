@@ -13,7 +13,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 {
 	internal class SilverSconce
 	{
-		private static readonly LogManager log = new LogManager("Silver Sconce", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Silver Sconce", LogManager.LogLevel.Warning);
 
 		private static bool initialized = false;
 		private static GameObject SilverSconcePrefab;
@@ -64,14 +64,14 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			ModifySilverSconceMaterial(SilverSconcePrefabGreen, "SilverNecklace", "yggashoot_log");
 
 			// Modify the sconce fuel
-			ModifyFireplaceFuel(SilverSconcePrefabBlue, "GreydwarfEye");
-			ModifyFireplaceFuel(SilverSconcePrefabGreen, "Guck");
+			ModifySilverSconceFuel(SilverSconcePrefabBlue, "GreydwarfEye");
+			ModifySilverSconceFuel(SilverSconcePrefabGreen, "Guck");
 
 			// Modify silver sconce blue and green lights
-			CopyLightSettings("piece_groundtorch_blue", SilverSconcePrefabBlue);
-			CopyLightSettings("piece_groundtorch_green", SilverSconcePrefabGreen);
+			ModifyLightSettings("piece_groundtorch_blue", SilverSconcePrefabBlue);
+			ModifyLightSettings("piece_groundtorch_green", SilverSconcePrefabGreen);
 
-			// Modify Silver Sconce Ison
+			// Modify Silver Sconce Icon
 			ModifySilverSconceIcon(SilverSconcePrefabBlue, new Color(0.4f, 0.7f, 1f));
 			ModifySilverSconceIcon(SilverSconcePrefabGreen, new Color(0.2f, 1f, 0.4f));
 
@@ -208,7 +208,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			meshRenderer.materials = materials;
 		}
 
-		private static void ModifyFireplaceFuel(GameObject prefab, string fuelItemName)
+		private static void ModifySilverSconceFuel(GameObject prefab, string fuelItemName)
 		{
 			Fireplace fireplace = prefab.GetComponent<Fireplace>();
 			if (fireplace == null)
@@ -228,7 +228,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			log.Info($"Set fuel for {prefab.name} to {fuelItemName}");
 		}
 
-		private static void CopyLightSettings(string sourcePrefabName, GameObject targetPrefab)
+		private static void ModifyLightSettings(string sourcePrefabName, GameObject targetPrefab)
 		{
 			GameObject sourcePrefab = MPrefabManager.GetPrefab(sourcePrefabName);
 			if (sourcePrefab == null)
@@ -384,7 +384,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				return;
 			}
 
-			if (ConfigManager.SilverSconceEnabled.Value)
+			if (ConfigManager.BuildPiecesLightingEnabled.Value)
 			{
 				silverSconcePiece.m_enabled = true;
 				silverSconcePieceBlue.m_enabled = true;
@@ -425,7 +425,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			{
 				new Piece.Requirement { m_resItem = wood, m_amount = 2, m_recover = true },
 				new Piece.Requirement { m_resItem = metal, m_amount = ConfigManager.BuildPieceAmountsEnabled.Value? 1 : 2, m_recover = true },
-				new Piece.Requirement { m_resItem = fuel, m_amount = ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, m_recover = true }
+				new Piece.Requirement { m_resItem = fuel, m_amount = ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, m_recover = false }
 			};
 
 			log.Info($"Refreshed build requirements: Metal={piece.m_resources[1].m_amount}");

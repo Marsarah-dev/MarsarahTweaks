@@ -111,6 +111,7 @@
     <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\MPrefabManager.cs" />
     <Compile Include="MarsarahTweaks.cs" />
+    <Compile Include="Patches\BuildPieces\GreenStandingBrazier.cs" />
     <Compile Include="Patches\BuildPieces\SilverSconce.cs" />
     <Compile Include="Patches\Features\AIFleeChanges.cs" />
     <Compile Include="Patches\Features\ArmorStatsChanges.cs" />
