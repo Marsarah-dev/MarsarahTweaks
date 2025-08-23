@@ -53,8 +53,8 @@ namespace MarsarahTweaks.Patches.Features
 				{ ("Meadows", "Rain"), 0.1f },
 				{ ("Meadows", "ThunderStorm"), 0.1f },
 
-				{ ("Mountain", "SnowStorm"), 0.5f },
-				{ ("Mountain", "Snow"), 2.5f },
+				{ ("Mountain", "SnowStorm"), 0.2f }, // 0.5
+				{ ("Mountain", "Snow"), 1.5f }, // 2.5
 
 				{ ("Plains", "Heath clear"), 3f },
 				{ ("Plains", "Misty"), 0.1f },

@@ -40,6 +40,7 @@
  *      - Can choose a percentage in config
  * 
  * D. Other changes 
+ *    - Further reduced chance of Snowstorms in the Mountain biome from a weight of 0.5 to 0.2 (originally 1) and Snow from weight 2.5 to 1.5 (originally 5)
  *    
  *  
  * TODO
