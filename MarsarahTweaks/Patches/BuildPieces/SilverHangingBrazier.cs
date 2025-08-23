@@ -69,7 +69,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			ModifyLightSettings(SilverHangingBrazierPrefabGreen);
 
 			// Modify silver hanging brazier Icon
-			ModifySilverHangingBrazierIcon(SilverHangingBrazierPrefabBlue, new Color(0.3f, 0.85f, 1f)); // 0.4f, 0.7f, 1f
+			ModifySilverHangingBrazierIcon(SilverHangingBrazierPrefabBlue, new Color(0.3f, 0.85f, 1f));
 			ModifySilverHangingBrazierIcon(SilverHangingBrazierPrefabGreen, new Color(0.2f, 1f, 0.4f));
 
 			// Add silver hanging brazier to ZNetScene
@@ -131,13 +131,6 @@ namespace MarsarahTweaks.Patches.BuildPieces
 					}
 				}
 			}
-
-			/*Fireplace fireplace = prefab.GetComponent<Fireplace>();
-			if (fireplace != null)
-			{
-				fireplace.m_name = name;
-				log.Info($"Name set for Fireplace component");
-			}*/
 		}
 
 		private static void ScaleSilverHangingBrazier(GameObject prefab)
@@ -571,11 +564,11 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			RefreshSilverHangingBrazierRequirements(SilverHangingBrazierPrefabGreen, "Silver", "Guck", "Chain");
 		}
 
-		private static void RefreshSilverHangingBrazierRequirements(GameObject silverSconce, string resourceMetal, string resourceFuel, string resourceChain)
+		private static void RefreshSilverHangingBrazierRequirements(GameObject silverHanginhBrazier, string resourceMetal, string resourceFuel, string resourceChain)
 		{
-			if (silverSconce == null) return;
+			if (silverHanginhBrazier == null) return;
 
-			var piece = silverSconce.GetComponent<Piece>();
+			var piece = silverHanginhBrazier.GetComponent<Piece>();
 			if (piece == null) return;
 
 			// Clear & rebuild requirements

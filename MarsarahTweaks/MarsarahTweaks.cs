@@ -22,17 +22,17 @@
  *      
  *    - Silver Sconce
  *      - Added 3 tyes of Silver Sconces (red, blue and green flame) available in the Mountain biome
- *      - Fuel lasts longer per second than the normal sconce
+ *      - Fuel lasts longer than the normal sconce
  *      
  *    - Green Standing Brazier 
  *      - Added a green version of the Standing Brazier
  *      
  *    - Silver Hanging Brazier
  *      - Added 3 types of Silver Hanging Braziers (red, blue and green flame) available in the Mountain biome
- *      - Fuel lasts longer per second than the normal hanging brazier
+ *      - Fuel lasts longer than the normal hanging brazier
  *      
  *    - Blue and Green Dverger Lanterns
- *      - TODO: Add blue and green versions of the Dverger Lantern (both wall and standing)
+ *      - Added blue and green versions of the Dverger Lantern (both wall and standing)
  * 
  * B. New QOL
  * 
@@ -43,6 +43,14 @@
  *    
  *  
  * TODO
+ * 
+ * Prep for update
+ * - New Armor speed
+ * - Also check weapon and shileld speed (they were changed)
+ * - Forsaken powers CD's
+ * - New gear costs
+ * - Ghost, Bear and Vile trophy drop rate
+ * - Revert Ghost necklace drop from my own mod
  * 
  * A. Fixes
  *    - Remove fireplace pieces from the permament lights mod OR find an alternative solution for permanent lights
