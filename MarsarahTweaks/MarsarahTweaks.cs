@@ -22,11 +22,22 @@
  *      
  *    - Silver Sconce
  *      - Added 3 tyes of Silver Sconces (red, blue and green flame) available in the Mountain biome
+ *      - Fuel lasts longer per second than the normal sconce
  *      
  *    - Green Standing Brazier 
  *      - Added a green version of the Standing Brazier
+ *      
+ *    - Silver Hanging Brazier
+ *      - Added 3 types of Silver Hanging Braziers (red, blue and green flame) available in the Mountain biome
+ *      - Fuel lasts longer per second than the normal hanging brazier
+ *      
+ *    - Blue and Green Dverger Lanterns
+ *      - TODO: Add blue and green versions of the Dverger Lantern (both wall and standing)
  * 
  * B. New QOL
+ * 
+ *    - TODO: Add Less Fireplace Smoke
+ *      - Can choose a percentage in config
  * 
  * D. Other changes 
  *    
@@ -35,7 +46,8 @@
  * 
  * A. Fixes
  *    - Remove fireplace pieces from the permament lights mod OR find an alternative solution for permanent lights
- *    - Handle Dvergr Lantern for Smart Biome (see if it's needed to handle in the first place)
+ *      - Create a buildable piece that makes all lights permanent in an area around it
+ *    - Handle Dvergr Helmet for Smart Biome (see if it's needed to handle in the first place)
  * 
  * B. New UI
  *    1. Add 🧑‍🤝‍🧑 for Online players in alternate UI (too much headache to add now)
@@ -52,7 +64,7 @@
  *    ** Gear
  *    1. Staff of Fracturing - increase blast radius of splinters
  *    2. Add better gear set bonuses
- *    3.
+ *    3. 
  *    4. Add secondary attack to Staff of Protection that heals (like the Dverger Mage heal)
  *    
  *    ** Building

@@ -54,9 +54,9 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			SetupSilverSconceDefaults(SilverSconcePrefabGreen, "Green-burning Silver Sconce", "forge");
 
 			// Increase silver sconce size
-			ScaleSilverSconce(SilverSconcePrefab, Vector3.one * 1.1f);
-			ScaleSilverSconce(SilverSconcePrefabBlue, Vector3.one * 1.1f);
-			ScaleSilverSconce(SilverSconcePrefabGreen, Vector3.one * 1.1f);
+			ScaleSilverSconce(SilverSconcePrefab);
+			ScaleSilverSconce(SilverSconcePrefabBlue);
+			ScaleSilverSconce(SilverSconcePrefabGreen);
 
 			// Modify Silver Sconce material
 			ModifySilverSconceMaterial(SilverSconcePrefab, "SilverNecklace", "yggashoot_log");
@@ -143,9 +143,10 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			}
 		}
 
-		private static void ScaleSilverSconce(GameObject prefab, Vector3 scale)
+		private static void ScaleSilverSconce(GameObject prefab)
 		{
 			// Set the local scale of the prefab's root
+			Vector3 scale = Vector3.one * 1.1f;
 			prefab.transform.localScale = scale;
 		}
 
@@ -225,6 +226,8 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			}
 
 			fireplace.m_fuelItem = fuelItem.GetComponent<ItemDrop>();
+			fireplace.m_secPerFuel += 5000;
+			log.Info($"Sec Per Fuel: {fireplace.m_secPerFuel}");
 			log.Info($"Set fuel for {prefab.name} to {fuelItemName}");
 		}
 
@@ -378,7 +381,8 @@ namespace MarsarahTweaks.Patches.BuildPieces
 		{
 			Piece silverSconcePiece = SilverSconcePrefab?.GetComponent<Piece>();
 			Piece silverSconcePieceBlue = SilverSconcePrefabBlue?.GetComponent<Piece>();
-			if (silverSconcePiece == null || silverSconcePieceBlue == null)
+			Piece silverSconcePieceGreen = SilverSconcePrefabGreen?.GetComponent<Piece>();
+			if (silverSconcePiece == null || silverSconcePieceBlue == null || silverSconcePieceGreen == null)
 			{
 				log.Warn($"Piece component does not exist. No toggle made.");
 				return;
@@ -388,11 +392,13 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			{
 				silverSconcePiece.m_enabled = true;
 				silverSconcePieceBlue.m_enabled = true;
+				silverSconcePieceGreen.m_enabled = true;
 			}
 			else
 			{
 				silverSconcePiece.m_enabled = false;
 				silverSconcePieceBlue.m_enabled = false;
+				silverSconcePieceGreen.m_enabled = false;
 			}
 		}
 
