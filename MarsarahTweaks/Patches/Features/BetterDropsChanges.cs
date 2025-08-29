@@ -14,7 +14,7 @@ namespace MarsarahTweaks.Patches.Features
 		private static readonly LogManager log = new LogManager("Better Drops", LogManager.LogLevel.Warning);
 
 		// Eykthir - Ghost
-		// - Add Necklace: 1 (100% chance)
+		// - Add Necklace: 1 (100% chance) - scrapped since update
 		// Bonemass - Fenring
 		// - Fenris Hair: between 1 - 2
 		// - Fenris Claw (remove Wolf Fang): 1 (100% chance)
@@ -27,13 +27,13 @@ namespace MarsarahTweaks.Patches.Features
 		private static Dictionary<string, Dictionary<string, (int min, int max, float chance, bool removed, bool newlyAdded)>> originalDrops = new Dictionary<string, Dictionary<string, (int min, int max, float chance, bool removed, bool newlyAdded)>>();
 		private static readonly Dictionary<string, Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>> bossDropMappings = new Dictionary<string, Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>>()
 		{
-			["Eikthyr"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
+			/*["Eikthyr"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
 			{
 				["Ghost"] = new List<(string item, int min, int max, float chance, bool remove)>()
 				{
 					("SilverNecklace", 1, 1, 1f, false)
 				}
-			},
+			},*/
 
 			["Bonemass"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
 			{

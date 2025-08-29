@@ -8,7 +8,7 @@ using System.Xml.Linq;
 using UnityEngine;
 using MarsarahTweaks.Managers;
 
-namespace MarsarahTweaks.Patches.Features
+namespace MarsarahTweaks.Patches.QOL
 {
 	internal class PermanentLightsChanges
 	{
@@ -53,16 +53,16 @@ namespace MarsarahTweaks.Patches.Features
 		private static readonly Dictionary<string, Dictionary<string, int>> originalLightPieceCosts = new Dictionary<string, Dictionary<string, int>>();
 		public static readonly Dictionary<string, Dictionary<string, int>> lightPieceCostChanges = new Dictionary<string, Dictionary<string, int>>()
 		{
-			{ "$piece_firepit",				new Dictionary<string, int>() { { "Wood", 10 } } },
-			{ "$piece_hearth",				new Dictionary<string, int>() { { "Wood", 20 } } },
-			{ "$piece_sconce",				new Dictionary<string, int>() { { "Resin", 6 } } },
-			{ "$piece_groundtorch",			new Dictionary<string, int>() { { "Resin", 6 } } },
-			{ "$piece_groundtorchwood",		new Dictionary<string, int>() { { "Resin", 4 } } },
-			{ "$piece_groundtorchgreen",	new Dictionary<string, int>() { { "Guck", 6 } } },
-			{ "$piece_groundtorchblue",		new Dictionary<string, int>() { { "GreydwarfEye", 6 } } },
-			{ "$piece_brazierfloor01",		new Dictionary<string, int>() { { "Coal", 5 } } },
-			{ "$piece_brazierfloor02",		new Dictionary<string, int>() { { "GreydwarfEye", 5 } } },
-			{ "$piece_brazierceiling01",	new Dictionary<string, int>() { { "Coal", 5 } } }
+			{ "$piece_firepit",             new Dictionary<string, int>() { { "Wood", 10 } } },
+			{ "$piece_hearth",              new Dictionary<string, int>() { { "Wood", 20 } } },
+			{ "$piece_sconce",              new Dictionary<string, int>() { { "Resin", 6 } } },
+			{ "$piece_groundtorch",         new Dictionary<string, int>() { { "Resin", 6 } } },
+			{ "$piece_groundtorchwood",     new Dictionary<string, int>() { { "Resin", 4 } } },
+			{ "$piece_groundtorchgreen",    new Dictionary<string, int>() { { "Guck", 6 } } },
+			{ "$piece_groundtorchblue",     new Dictionary<string, int>() { { "GreydwarfEye", 6 } } },
+			{ "$piece_brazierfloor01",      new Dictionary<string, int>() { { "Coal", 5 } } },
+			{ "$piece_brazierfloor02",      new Dictionary<string, int>() { { "GreydwarfEye", 5 } } },
+			{ "$piece_brazierceiling01",    new Dictionary<string, int>() { { "Coal", 5 } } }
 		};
 
 		public static void UpdateLightBuildPiecesAmounts(ZNetScene znScene, bool wasChanged)

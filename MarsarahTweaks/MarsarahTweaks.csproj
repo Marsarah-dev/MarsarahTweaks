@@ -113,8 +113,11 @@
     <Compile Include="MarsarahTweaks.cs" />
     <Compile Include="Patches\BuildPieces\ColoredDvergerLanterns.cs" />
     <Compile Include="Patches\BuildPieces\GreenStandingBrazier.cs" />
+    <Compile Include="Patches\BuildPieces\MysticalLightWard.cs" />
     <Compile Include="Patches\BuildPieces\SilverHangingBrazier.cs" />
     <Compile Include="Patches\BuildPieces\SilverSconce.cs" />
+    <Compile Include="Patches\BuildPieces\SilverTableTorch.cs" />
+    <Compile Include="Patches\BuildPieces\GlacialStonePortal.cs" />
     <Compile Include="Patches\Features\AIFleeChanges.cs" />
     <Compile Include="Patches\Features\ArmorStatsChanges.cs" />
     <Compile Include="Patches\Features\AshlandsEnemiesChanges.cs" />
@@ -154,7 +157,7 @@
     <Compile Include="Patches\Features\MinibossWeightChanges.cs" />
     <Compile Include="Patches\QOL\NoSkillLossChanges.cs" />
     <Compile Include="Patches\Features\OtherChanges.cs" />
-    <Compile Include="Patches\Features\PermanentLightsChanges.cs" />
+    <Compile Include="Patches\QOL\PermanentLightsChanges.cs" />
     <Compile Include="Patches\PrefabHitLogger.cs" />
     <Compile Include="Patches\Features\ProgressionHalt.cs" />
     <Compile Include="Patches\Features\StatusEffectChanges.cs" />

@@ -1,17 +1,18 @@
 ﻿
 using BepInEx;
 using BepInEx.Configuration;
+using HarmonyLib;
 using MarsarahTweaks.Patches;
+using MarsarahTweaks.Patches.BuildPieces;
+using MarsarahTweaks.Patches.Features;
+using MarsarahTweaks.Patches.Grind;
+using MarsarahTweaks.Patches.QOL;
+using MarsarahTweaks.Patches.UI;
 using ServerSync;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.AccessControl;
 using UnityEngine;
-using MarsarahTweaks.Patches.Grind;
-using MarsarahTweaks.Patches.Features;
-using MarsarahTweaks.Patches.QOL;
-using MarsarahTweaks.Patches.UI;
-using MarsarahTweaks.Patches.BuildPieces;
 
 namespace MarsarahTweaks.Managers
 {
@@ -82,7 +83,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("13 - Reduced Crossbows Reload Time", "Crossbows Reload Time Reduced by 1s. (Toggling mid-game requires CLIENT relog)");
 			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("14 - Less Ashlands Enemies", "Numbers and spawn chance reduced for Ashlands enemies. (Toggling mid-game requires reloading area)");
 			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("15 - Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to max level within their respective biomes");
-			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("16 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
+			//
 			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("17 - Clear Mistlands after Queen", "Clear Mistlands mist after defeating the Queen. (Disabling mid-game requires CLIENT relog)");
 			public static readonly ConfigMetadata CraftableChain = new ConfigMetadata("18 - Craftable Chain", "Chain craftable at Black Forge");
 			public static readonly ConfigMetadata BrighterLanterns = new ConfigMetadata("19 - Brighter Lanterns", "Dvergr lanterns are brighter. (Toggling mid-game requires CLIENT relog or reloading area)");
@@ -93,7 +94,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata ExtensionsModifications = new ConfigMetadata("24 - Station Extensions Changes", "Decreases space requirement for workstation extensions and increases build distance to workstations (This does not increase workstation radius)");
 			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("25 - Stop Running Away", "Boars and Necks won't flee when alerted. (Toggling mid-game only affects new creatures)");
 			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("26 - Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Tick, Dverger, Seeker Soldier, Charred Warlock");
-			public static readonly ConfigMetadata DropsModifications = new ConfigMetadata("27 - Better Creature Drops", "Modifies the drops for the following creatures: Ghost (adds Necklace), Fenring (adds Fanris Hair and Fenris Claw, removes Wolf Fang), Bat (adds 50% Bloodbag drop), Dvergr (increases chance of Soft Tissue to 100% from 25%)");
+			public static readonly ConfigMetadata DropsModifications = new ConfigMetadata("27 - Better Creature Drops", "Modifies the drops for the following creatures: Fenring (adds Fanris Hair and Fenris Claw, removes Wolf Fang), Bat (adds 50% Bloodbag drop), Dvergr (increases chance of Soft Tissue to 100% from 25%)");
 			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("28 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000 (Toggling mid-game requires CLIENT relog or reloading area)");
 			public static readonly ConfigMetadata PortalsPerPlayer = new ConfigMetadata("29 - Max Portals Per Player", "Set the number of portals a player can build per world for each player. This number applies individually for the normal and the stone portal. Set to -1 for unlimited portals.");
 			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("30 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
@@ -110,9 +111,12 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata CameraSailingPosition = new ConfigMetadata("10 - Move Camera Up While Sailing", "Moves the camera a bit upwards when sailing to better see in front of the boat");
 			public static readonly ConfigMetadata ShorterRestedDelay = new ConfigMetadata("11 - Shorter Rested Delay", "Reduces the amount of time needed to get the rested buff from 20 to 10 seconds (Toggling mid-game requires re-entering the resting area)");
 			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("12 - More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators");
+			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("13 - Permanent Lights", "[Exclusive toggle with Mystical Light Ward] Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
 
 			public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("01 - Pocket Portal", "Adds a new portal that is built from a Portal Core that only takes one inventory slot which can be crafted at a Workbench starting with the Mountain area. Can only build one Pocket Portal per player. (Toggling mid-game requires reloading the build/crafting menu)");
-			public static readonly ConfigMetadata BuildPiecesLighting = new ConfigMetadata("02 - Build Pieces - Lighting", "Adds new light sources (Silver Sconce, Green Standing Brazier, Silver Hanging Brazier, Colored Dverger Lanterns) unlocked at the Mountain/Mistlands biomes respectively");
+			public static readonly ConfigMetadata GlacialStonePortal = new ConfigMetadata("02 - Glacial Stone Portal", "Enables the unused stone portal and adds it to the build menu. Works like any normal portal - not to be confused with the Stone Portal from Ashlands. Unlocked at the Mountain biome. (Toggling mid-game requires reloading the build/crafting menu)");
+			//public static readonly ConfigMetadata MysticalLightWard = new ConfigMetadata("02 - Mystical Light Ward", "[Exclusive toggle with Permanent Lights] Adds a new ward starting with the Mountain area. When built, all light sources in its area will be automatically refueled when reaching 0 fuel. (Toggling mid-game requires reloading the build/crafting menu)");
+			public static readonly ConfigMetadata BuildPiecesLighting = new ConfigMetadata("03 - Build Pieces - Lighting", "Adds new light sources (Silver Sconce, Green Standing Brazier, Silver Hanging Brazier, Colored Dverger Lanterns) unlocked at the Mountain/Mistlands biomes respectively. (Toggling mid-game requires reloading the build/crafting menu)");
 
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
 			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("02 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
@@ -158,7 +162,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ReducedCrossbowsReloadTimeEnabled;
 		public static ConfigEntry<bool> LessAshlandsEnemiesEnabled;
 		public static ConfigEntry<bool> GearUpgradeUnlockEnabled;
-		public static ConfigEntry<bool> PermanentLightsEnabled;
+		//
 		public static ConfigEntry<bool> ClearMistlandsEnabled;
 		public static ConfigEntry<bool> CraftableChainEnabled;
 		public static ConfigEntry<bool> BrighterLanternsEnabled;
@@ -186,8 +190,11 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> CameraUpWhenSailingEnabled;
 		public static ConfigEntry<bool> ShorterRestedDelayEnabled;
 		public static ConfigEntry<bool> MoreUsableFuelEnabled;
+		public static ConfigEntry<bool> PermanentLightsEnabled;
 
 		public static ConfigEntry<bool> PocketPortalEnabled;
+		public static ConfigEntry<bool> GlacialStonePortalEnabled;
+		//public static ConfigEntry<bool> MysticalLightWardEnabled;
 		public static ConfigEntry<bool> BuildPiecesLightingEnabled;
 
 		public static ConfigEntry<bool> MoreLoadingTipsEnabled;
@@ -239,7 +246,7 @@ namespace MarsarahTweaks.Managers
 			ReducedCrossbowsReloadTimeEnabled = CreateConfig(ConfigSections.Features, Configs.CrossbowsReloadModifications.Name, true, Configs.CrossbowsReloadModifications.Description);
 			LessAshlandsEnemiesEnabled = CreateConfig(ConfigSections.Features, Configs.AshlandsEnemiesModifications.Name, true, Configs.AshlandsEnemiesModifications.Description);
 			GearUpgradeUnlockEnabled = CreateConfig(ConfigSections.Features, Configs.GearUpgradeModifications.Name, true, Configs.GearUpgradeModifications.Description);
-			PermanentLightsEnabled = CreateConfig(ConfigSections.Features, Configs.PermanentLightsModifications.Name, true, Configs.PermanentLightsModifications.Description);
+			//
 			ClearMistlandsEnabled = CreateConfig(ConfigSections.Features, Configs.ClearMistlands.Name, true, Configs.ClearMistlands.Description);
 			CraftableChainEnabled = CreateConfig(ConfigSections.Features, Configs.CraftableChain.Name, true, Configs.CraftableChain.Description);
 			BrighterLanternsEnabled = CreateConfig(ConfigSections.Features, Configs.BrighterLanterns.Name, true, Configs.BrighterLanterns.Description);
@@ -268,9 +275,12 @@ namespace MarsarahTweaks.Managers
 			CameraUpWhenSailingEnabled = CreateConfig(ConfigSections.QOL, Configs.CameraSailingPosition.Name, true, Configs.CameraSailingPosition.Description);
 			ShorterRestedDelayEnabled = CreateConfig(ConfigSections.QOL, Configs.ShorterRestedDelay.Name, true, Configs.ShorterRestedDelay.Description);
 			MoreUsableFuelEnabled = CreateConfig(ConfigSections.QOL, Configs.MoreUsableFuel.Name, true, Configs.MoreUsableFuel.Description);
+			PermanentLightsEnabled = CreateConfig(ConfigSections.QOL, Configs.PermanentLightsModifications.Name, false, Configs.PermanentLightsModifications.Description);
 
 			// ===== Build Pieces
 			PocketPortalEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.PocketPortal.Name, true, Configs.PocketPortal.Description);
+			GlacialStonePortalEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.GlacialStonePortal.Name, true, Configs.GlacialStonePortal.Description);
+			//MysticalLightWardEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.MysticalLightWard.Name, true, Configs.MysticalLightWard.Description);
 			BuildPiecesLightingEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.BuildPiecesLighting.Name, true, Configs.BuildPiecesLighting.Description);
 
 			// ===== UI
@@ -291,6 +301,7 @@ namespace MarsarahTweaks.Managers
 			ShowHeatLevelInAshlands = CreateConfig(ConfigSections.UI, Configs.UIAshlandsHeatLevel.Name, true, Configs.UIAshlandsHeatLevel.Description, false);
 			UseSymbolsForUI = CreateConfig(ConfigSections.UI, Configs.UIUseSymbols.Name, true, Configs.UIUseSymbols.Description, false);
 
+			//HandleToggleExclusivity();
 			SetupWatcher();
 		}
 
@@ -368,6 +379,7 @@ namespace MarsarahTweaks.Managers
 					case var name when name == Configs.BuildPieceAmountsModifications.Name:
 						BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, true, false);
 						SilverSconce.RefreshSilverSconceRequirements();
+						//SilverTableTorch.RefreshSilverTorchRequirements();
 						GreenStandingBrazier.RefreshGreenBrazierRequirements();
 						SilverHangingBrazier.RefreshSilverHangingBrazierRequirements();
 						ColoredDvergerLanterns.RefreshColoredDvergrLanternsRequirements();
@@ -414,8 +426,15 @@ namespace MarsarahTweaks.Managers
 						break;
 
 					case var name when name == Configs.PermanentLightsModifications.Name:
+						/*log.Info($"Permanent Lights toggled: {PermanentLightsEnabled.Value}");
+						if (PermanentLightsEnabled.Value)
+						{
+							log.Warn("Permanent Lights toggled on. Turning off Mystical Light Ward, as these configs are mutually exclusive.");
+							MysticalLightWardEnabled.Value = false;
+						}*/
 						PermanentLightsChanges.UpdateLightBuildPiecesAmounts(ZNetScene.instance, true);
 						SilverSconce.RefreshSilverSconceRequirements();
+						//SilverTableTorch.RefreshSilverTorchRequirements();
 						GreenStandingBrazier.RefreshGreenBrazierRequirements();
 						SilverHangingBrazier.RefreshSilverHangingBrazierRequirements();
 						break;
@@ -453,10 +472,25 @@ namespace MarsarahTweaks.Managers
 						PocketPortal.TogglePortalCoreVisibility();
 						break;
 
+					case var name when name == Configs.GlacialStonePortal.Name:
+						GlacialStonePortal.TogglePortalVisibility();
+						break;
+
+					/*case var name when name == Configs.MysticalLightWard.Name:
+						log.Info($"Mystical Light Ward toggled: {PermanentLightsEnabled.Value}");
+						if (MysticalLightWardEnabled.Value)
+						{
+							log.Warn("Mystical Light Ward toggled on. Turning off Permanent Lights, as these configs are mutually exclusive.");
+							PermanentLightsEnabled.Value = false;
+						}
+						MysticalLightWard.ToggleMysticalWardVisibility();
+						break;*/
+
 					case var name when name == Configs.BuildPiecesLighting.Name:
 						SilverSconce.ToggleSilverSconceVisibility();
 						GreenStandingBrazier.ToggleGreenBrazierVisibility();
 						SilverHangingBrazier.ToggleSilverHangingBrazierVisibility();
+						//SilverTableTorch.ToggleSilverTorchVisibility();
 						ColoredDvergerLanterns.ToggleColoredDvergrLanternsVisibility();
 						break;
 
@@ -490,7 +524,7 @@ namespace MarsarahTweaks.Managers
 				}
 			}*/
 
-			// Handle both client aand server-side configs
+			// Handle both client and server-side configs
 			switch (configName)
 			{
 				case var name when name == Configs.AshlandsEnemiesModifications.Name:
@@ -519,5 +553,23 @@ namespace MarsarahTweaks.Managers
 					break;
 			}
 		}
+
+		/*[HarmonyPatch(typeof(ZNetScene), "Awake")]
+		public static class ZNetScene_Awake_Patch
+		{
+			private static void Postfix()
+			{
+				HandleToggleExclusivity();
+			}
+		}
+
+		private static void HandleToggleExclusivity()
+		{
+			if (PermanentLightsEnabled.Value && MysticalLightWardEnabled.Value)
+			{
+				log.Warn("Permanent Lights and Mystical Light Ward cannot be enabled at the same time. Falling back to Mystical Light Ward.");
+				PermanentLightsEnabled.Value = false;
+			}
+		}*/
 	}
 }

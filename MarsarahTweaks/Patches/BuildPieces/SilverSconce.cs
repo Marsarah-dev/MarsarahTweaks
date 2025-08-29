@@ -41,10 +41,8 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			// Clone Bronze Sconce
 			SilverSconcePrefab = CloneBronzeSconcePrefab("piece_walltorch", "piece_walltorch_silver");
 			if (SilverSconcePrefab == null) return;
-
 			SilverSconcePrefabBlue = CloneBronzeSconcePrefab("piece_walltorch", "piece_walltorch_silver_blue");
 			if (SilverSconcePrefabBlue == null) return;
-
 			SilverSconcePrefabGreen = CloneBronzeSconcePrefab("piece_walltorch", "piece_walltorch_silver_green");
 			if (SilverSconcePrefabGreen == null) return;
 

@@ -1,12 +1,13 @@
 ﻿using HarmonyLib;
+using MarsarahTweaks.Managers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.UI
 {

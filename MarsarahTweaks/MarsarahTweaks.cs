@@ -9,7 +9,6 @@
  * 
  * C. New Features
  *    - Better Creature Drops
- *      - Ghost: Added Silver Necklace drop
  *      - Fenring: Added Fenris Hair 1-2, Added Fenris Claw (replacing Wolf Fang)
  *      - Bat: Added Blood Bag 50% chance drop
  *      - Dverger Rogue, Mage and Ashlands Dvergr: Increased Soft Tissue chance to 100% (from 25%)
@@ -20,6 +19,10 @@
  *      - Seeker: Plains
  *      - Charred: Plains, Mistlands
  *      
+ * D. New QOL
+ * 
+ * E. New Build Pieces
+ * 
  *    - Silver Sconce
  *      - Added 3 tyes of Silver Sconces (red, blue and green flame) available in the Mountain biome
  *      - Fuel lasts longer than the normal sconce
@@ -33,17 +36,22 @@
  *      
  *    - Blue and Green Dverger Lanterns
  *      - Added blue and green versions of the Dverger Lantern (both wall and standing)
+ *      
+ *    - Glacial Portal
+ *      - Cloned the unused stone-like portal in the game and renamed it to Glacial Portal.
  * 
- * B. New QOL
- * 
- *    - TODO: Add Less Fireplace Smoke
- *      - Can choose a percentage in config
- * 
- * D. Other changes 
+ * F. Other changes 
  *    - Further reduced chance of Snowstorms in the Mountain biome from a weight of 0.5 to 0.2 (originally 1) and Snow from weight 2.5 to 1.5 (originally 5)
  *    
  *  
  * TODO
+ * 
+ * - In readmes mention that players should look for configs reshuffles
+ * 
+ * - Fill #16 slot in Features config (previous Permanent Lights)
+ * - Separate light sources in their own crafting tab when enabling this mod's light build pieces
+ * - Make the inactive blue stone portal buildable
+ * - Remove end-game raids from the Black Forest biome
  * 
  * Prep for update
  * - New Armor speed
@@ -51,15 +59,12 @@
  * - Forsaken powers CD's
  * - New gear costs
  * - Ghost, Bear and Vile trophy drop rate
- * - Revert Ghost necklace drop from my own mod
  * 
  * A. Fixes
- *    - Remove fireplace pieces from the permament lights mod OR find an alternative solution for permanent lights
- *      - Create a buildable piece that makes all lights permanent in an area around it
  *    - Handle Dvergr Helmet for Smart Biome (see if it's needed to handle in the first place)
  * 
  * B. New UI
- *    1. Add 🧑‍🤝‍🧑 for Online players in alternate UI (too much headache to add now)
+ *    1. Add 🧑‍🤝‍🧑 for Online players in alternate UI
  *    2. Add taming indicator for each creature in taming progress
  *    3. Better enemy nameplates
  *    4. Better item level indicator
@@ -77,7 +82,8 @@
  *    4. Add secondary attack to Staff of Protection that heals (like the Dverger Mage heal)
  *    
  *    ** Building
- *    1. 
+ *    1. Add Mystical Light Ward
+ *       - Remove permament lights section. Create a new ward that makes all lights permanent in an area around it (or refuels them if the fuel is smaller than a certain number)
  *    2. Add more Silver/Obsidian build pieces
  *    3. Add pre-attached signs to existing chests and counter + image with what it contains
  *       - Add snapping points to chests
@@ -90,7 +96,7 @@
  *    
  *    ** Other
  *    1. Add Better Roads (increase player speed on roads)
- *    2. 
+ *    2. Add Less Fireplace Smoke - Can choose a percentage in config
  *    3. Do something to wards
  *       - Increase HP, Stamina and Eitr (if the player has Eitr) of players within range
  *       - Passively heal surrounding build pieces
@@ -110,6 +116,8 @@
  *       - Less Fall Damage              -> Rename to Fall Damage Multiplier - Set to multiplier (0.6 means 40% less fall damage)
  *       - Shorter Rested Delay          -> Rename to Rested Delay           - Set to indicated value (default 20s)
  *    9. Make Fulings, Seekers and Charred spawn at night in later biomes (not in Meadows, BF and Swamp)
+ *    10. 
+ *    11. Make candles refillable with Resin
  *    
  *    ** Overhaul
  *    1. Add magic to Plains
@@ -171,6 +179,9 @@ namespace MarsarahTweaks
 		{
 			// Hide/display UI
 			UIController.UpdateUIDisplay();
+
+			// Handle toggle exclusivity between Permanent Lights and Mystical Light Ward
+			//ConfigManager.HandleToggleExclusivity();
 		}
 
 		private void OnDestroy()

@@ -47,7 +47,7 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (Game.m_noMap && ConfigManager.OnlinePlayersUnderMinimap.Value)
 				{
-					log.Info("Disabling OnlinePlayersUnderMinimap: no map is enabled.");
+					log.Warn("Disabling OnlinePlayersUnderMinimap: no map is enabled.");
 					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
 				}
 			}

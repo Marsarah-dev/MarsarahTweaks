@@ -456,7 +456,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				GameObject portal = PocketPortalPrefab;
 				if (portal == null)
 				{
-					log.Warn("ConnectPortals patch: prefab not ready yet.");
+					log.Info("ConnectPortals patch: prefab not ready yet.");
 					return;
 				}
 
@@ -503,9 +503,14 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			{
 				if (piece.name == PocketPortalPrefab.name && PlayerHasPocketPortal())
 				{
+					log.Info($"Player {__instance.name} has a Pocket Portal built");
 					__instance.Message(MessageHud.MessageType.Center, "You can only place one Pocket Portal.");
 					__result = false; // Prevent further execution
 					return false;     // Skip original method
+				}
+				else
+				{
+					log.Info($"Player {__instance.name} does not have a Pocket Portal built");
 				}
 
 				return true; // Let placement continue normally
@@ -515,26 +520,41 @@ namespace MarsarahTweaks.Patches.BuildPieces
 		private static bool PlayerHasPocketPortal()
 		{
 			if (ZNet.instance == null || ZDOMan.instance == null || Player.m_localPlayer == null)
+			{
+				log.Info($"Things are null");
 				return false;
+			}
 
 			string localPlayerName = Player.m_localPlayer.GetPlayerName();
 			int pocketPortalHash = PocketPortalPrefab.name.GetStableHashCode();
 
 			var zdoDictField = typeof(ZDOMan).GetField("m_objectsByID", BindingFlags.NonPublic | BindingFlags.Instance);
 			if (zdoDictField == null)
+			{
+				log.Info($"Reflection field is null");
 				return false;
+			}
 
 			Dictionary<ZDOID, ZDO> zdoDict = zdoDictField.GetValue(ZDOMan.instance) as Dictionary<ZDOID, ZDO>;
 			if (zdoDict == null)
+			{
+				log.Info($"ZDO Dict is null");
 				return false;
+			}
 
 			foreach (var zdo in zdoDict.Values)
 			{
 				if (zdo == null) continue;
 				if (zdo.GetPrefab() != pocketPortalHash) continue;
+				log.Info($"Checking prefab {zdo.GetPrefab()} - creator: {zdo.GetString(ZDOVars.s_creatorName)}");
 				if (zdo.GetString(ZDOVars.s_creatorName) == localPlayerName)
+				{
+					log.Info($"We have a pocket portal");
 					return true;
+				}
 			}
+
+			log.Info($"We did not find a pocket portal built by {localPlayerName}");
 
 			return false;
 		}

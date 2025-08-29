@@ -164,7 +164,7 @@ namespace MarsarahTweaks.Managers
 		{
 			if (prefab == null)
 			{
-				log.Error("Tried to add null prefab to hammer.");
+				log.Error("Tried to add null prefab to build menu.");
 				return;
 			}
 
