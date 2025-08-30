@@ -37,8 +37,8 @@
  *    - Blue and Green Dverger Lanterns
  *      - Added blue and green versions of the Dverger Lantern (both wall and standing)
  *      
- *    - Glacial Portal
- *      - Cloned the unused stone-like portal in the game and renamed it to Glacial Portal.
+ *    - Glacial Stone Portal
+ *      - Cloned the unused stone-like portal in the game and renamed it to Glacial Stone Portal.
  * 
  * F. Other changes 
  *    - Further reduced chance of Snowstorms in the Mountain biome from a weight of 0.5 to 0.2 (originally 1) and Snow from weight 2.5 to 1.5 (originally 5)

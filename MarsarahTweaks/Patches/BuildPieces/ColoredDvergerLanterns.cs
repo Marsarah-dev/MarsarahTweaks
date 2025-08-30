@@ -352,7 +352,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			var pieceConfig = new PieceConfig
 			{
 				PieceTable = "Hammer",
-				Category = "Furniture",
+				Category = "Extra Lights",
 				Requirements = new[]
 				{
 					new RequirementConfig(resourceMetal, ConfigManager.BuildPieceAmountsEnabled.Value? metalAmount - 1 : metalAmount, recover: true),

@@ -363,7 +363,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			var pieceConfig = new PieceConfig
 			{
 				PieceTable = "Hammer",
-				Category = "Furniture",
+				Category = "Extra Lights",
 				Requirements = new[]
 				{
 					new RequirementConfig(resourceWood, 2, recover: true), // ElderBark
