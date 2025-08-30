@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using MarsarahTweaks.Managers;
 
-namespace MarsarahTweaks.Patches.Features
+namespace MarsarahTweaks.Patches.Balance
 {
 	internal class SkeletonSharedData : MonoBehaviour
 	{

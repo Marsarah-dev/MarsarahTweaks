@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using MarsarahTweaks.Managers;
 
-namespace MarsarahTweaks.Patches.Features
+namespace MarsarahTweaks.Patches.Balance
 {
 	internal class CharacterSpeedChanges
 	{

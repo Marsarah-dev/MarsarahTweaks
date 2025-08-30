@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using MarsarahTweaks.Managers;
+using MarsarahTweaks.Patches.Balance;
 using System;
 using System.Collections;
 using System.Collections.Generic;

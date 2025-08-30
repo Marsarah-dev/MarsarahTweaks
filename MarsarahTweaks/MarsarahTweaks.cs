@@ -19,12 +19,15 @@
  *      - Seeker: Plains
  *      - Charred: Plains, Mistlands
  *      
+ *    - No end-game raids in early biomes
+ *      - Seeker and Charred raids do not trigger in the Black Forest biome
+ *      
  * D. New QOL
  * 
  * E. New Build Pieces
  * 
  *    - Silver Sconce
- *      - Added 3 tyes of Silver Sconces (red, blue and green flame) available in the Mountain biome
+ *      - Added 3 types of Silver Sconces (red, blue and green flame) available in the Mountain biome
  *      - Fuel lasts longer than the normal sconce
  *      
  *    - Green Standing Brazier 
@@ -142,6 +145,7 @@ using HarmonyLib;
 using Jotunn.Managers;
 using MarsarahTweaks.Managers;
 using MarsarahTweaks.Patches;
+using MarsarahTweaks.Patches.Balance;
 using MarsarahTweaks.Patches.Features;
 using MarsarahTweaks.Patches.QOL;
 using MarsarahTweaks.Patches.UI;

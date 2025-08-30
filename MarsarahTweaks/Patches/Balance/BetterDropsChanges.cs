@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static CharacterDrop;
 
-namespace MarsarahTweaks.Patches.Features
+namespace MarsarahTweaks.Patches.Balance
 {
 	internal class BetterDropsChanges
 	{

@@ -8,7 +8,7 @@ using UnityEngine;
 using System.Reflection;
 using MarsarahTweaks.Managers;
 
-namespace MarsarahTweaks.Patches.Features
+namespace MarsarahTweaks.Patches.Balance
 {
 	internal class EarlyLinenCape
 	{

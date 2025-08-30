@@ -13,7 +13,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 {
 	internal class GlacialStonePortal
 	{
-		private static readonly LogManager log = new LogManager("Glacial Stone Portal", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Glacial Stone Portal", LogManager.LogLevel.Warning);
 
 		private static bool initialized = false;
 		private static GameObject GlacialPortalPrefab;

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarsarahTweaks.Managers;
 
-namespace MarsarahTweaks.Patches.Features
+namespace MarsarahTweaks.Patches.Balance
 {
 	internal class FrostStaffChanges
 	{
