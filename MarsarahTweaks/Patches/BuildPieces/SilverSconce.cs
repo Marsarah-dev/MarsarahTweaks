@@ -298,7 +298,8 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				return null;
 			}
 
-			Rect atlasRect = new Rect(864, 848, 64, 64); // 872, 848
+			//Rect atlasRect = new Rect(864, 848, 64, 64); // 872, 848
+			Rect atlasRect = originalIcon.textureRect;
 
 			// Copy only the sub-region from the atlas
 			Texture2D croppedTex = new Texture2D((int)atlasRect.width, (int)atlasRect.height, TextureFormat.RGBA32, false);

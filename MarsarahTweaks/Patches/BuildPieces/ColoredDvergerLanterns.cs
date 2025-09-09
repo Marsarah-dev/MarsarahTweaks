@@ -251,12 +251,13 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				return null;
 			}
 
-			Rect atlasRect = new Rect(2136, 72, 64, 64); // 2136, 160
+			//Rect atlasRect = new Rect(2136, 72, 64, 64); // 2136, 160
+			Rect atlasRect = originalIcon.textureRect;
 
-			if (prefab.name.Contains("pole"))
+			/*if (prefab.name.Contains("pole"))
 			{
 				atlasRect = new Rect(1872, 214, 64, 64); // 1880, 288
-			}
+			}*/
 
 			// Copy only the sub-region from the atlas
 			Texture2D croppedTex = new Texture2D((int)atlasRect.width, (int)atlasRect.height, TextureFormat.RGBA32, false);
