@@ -59,6 +59,23 @@ namespace MarsarahTweaks.Patches.UI
 			}
 		}
 
+		[HarmonyPatch(typeof(Hud), "Awake")]
+		class InventoryWeightAndSlots_HUDAwakePatch
+		{
+			private static void Postfix(Hud __instance)
+			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
+				if (__instance == null) return;
+
+				if (ConfigManager.ShowInventoryWeightAndSlots.Value)
+				{
+					CreateTextBasedUI(__instance);
+					CreateSymbolBasedUI(__instance);
+				}
+			}
+		}
+
 		[HarmonyPatch(typeof(Hud), "Update")]
 		class EnemyDetector_HUDUpdatePatch
 		{
@@ -138,103 +155,6 @@ namespace MarsarahTweaks.Patches.UI
 				}
 			} 
 
-			private static void CreateTextBasedUI(Hud hud)
-			{
-				if (UIEnemyArea != null && UIEnemyText != null)
-					return;  // UI already exists, no need to create again
-
-				int UITextFontSize = 16;
-				string UITextFontName = "AveriaSansLibre-Bold";
-				Vector2 UIEnemyAreaSize = new Vector2(100f, 30f); // width, height;
-
-				// Enemy area object
-				UIEnemyArea = new GameObject("EnemyArea");
-				UIEnemyArea.layer = 5;
-				UIEnemyArea.transform.SetParent(hud.m_healthPanel.transform);
-				RectTransform enemyAreaTransform = UIEnemyArea.AddComponent<RectTransform>();
-				enemyAreaTransform.anchorMin = new Vector2(1f, 1f);
-				enemyAreaTransform.anchorMax = new Vector2(1f, 1f);
-				enemyAreaTransform.anchoredPosition = new Vector2(ConfigManager.ShowInventoryWeightAndSlots.Value ? 70f : -40f, -230f);
-				enemyAreaTransform.sizeDelta = UIEnemyAreaSize;
-				UIEnemyArea.transform.localScale = Vector3.one;  // Ensure correct scale
-
-				// Background texture
-				Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
-				Image enemyAreaBackground = UIEnemyArea.AddComponent<Image>();
-				enemyAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
-				enemyAreaBackground.sprite = sprite;
-				enemyAreaBackground.type = Image.Type.Sliced;
-
-				// Enemy area text object
-				UIEnemyText = CreateTextObject("EnemyText", UIEnemyArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleCenter, new Vector2(0f, 0f), UIEnemyAreaSize);
-			}
-
-			private static void CreateSymbolBasedUI(Hud hud)
-			{
-				if (UIEnemyArea2 != null && UIEnemyText2 != null && UIEnemyEmojiTMP != null) return;
-
-				int UITextFontSize = 16;
-				string UITextFontName = "AveriaSansLibre-Bold";
-				Vector2 UIEnemyAreaSize = new Vector2(50f, 30f); // width, height
-				float xOffset = ConfigManager.ShowInventoryWeightAndSlots.Value ? 122f : -65f; // 92 / 65
-				float yOffset = -230f;
-
-				// ==== Enemy Counter ====
-
-				// Enemy Area Object
-				UIEnemyArea2 = new GameObject("EnemyArea2");
-				UIEnemyArea2.layer = 5;
-				UIEnemyArea2.transform.SetParent(hud.m_healthPanel.transform); // health
-
-				RectTransform enemyAreaTransform = UIEnemyArea2.AddComponent<RectTransform>();
-				enemyAreaTransform.anchorMin = new Vector2(1f, 1f);
-				enemyAreaTransform.anchorMax = new Vector2(1f, 1f);
-				enemyAreaTransform.anchoredPosition = new Vector2(xOffset, yOffset); // 92f
-				enemyAreaTransform.sizeDelta = UIEnemyAreaSize;
-				UIEnemyArea2.transform.localScale = Vector3.one; // Ensure correct scale
-
-				// Background texture
-				Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
-				Image enemyAreaBackground = UIEnemyArea2.AddComponent<Image>();
-				enemyAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
-				enemyAreaBackground.sprite = sprite;
-				enemyAreaBackground.type = Image.Type.Sliced;
-
-				// Text overlay
-				UIEnemyText2 = CreateTextObject("EnemyText2", UIEnemyArea2, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-4f, 0f), UIEnemyAreaSize);
-
-				// Enemy icon
-				UIEnemyEmojiTMP = CreateTMPTextObject("EnemyEmojiTMP", UIEnemyArea2, Color.green, UITextFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UIEnemyAreaSize);
-
-				// ==== Friendly Counter ====
-
-				// Friendly Area Object
-				UIFriendlyArea = new GameObject("FriendlyArea");
-				UIFriendlyArea.layer = 5;
-				UIFriendlyArea.transform.SetParent(hud.m_healthPanel.transform); // health
-				xOffset += 54f;
-
-				RectTransform friendlyAreaTransform = UIFriendlyArea.AddComponent<RectTransform>();
-				friendlyAreaTransform.anchorMin = new Vector2(1f, 1f);
-				friendlyAreaTransform.anchorMax = new Vector2(1f, 1f);
-				friendlyAreaTransform.anchoredPosition = new Vector2(xOffset, yOffset); // 146f
-				friendlyAreaTransform.sizeDelta = UIEnemyAreaSize;
-				UIFriendlyArea.transform.localScale = Vector3.one;
-
-				// Background texture
-				Sprite spriteFriendly = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
-				Image friendlyAreaBackground = UIFriendlyArea.AddComponent<Image>();
-				friendlyAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
-				friendlyAreaBackground.sprite = sprite;
-				friendlyAreaBackground.type = Image.Type.Sliced;
-
-				// Text overlay
-				UIFriendlyText = CreateTextObject("FriendlyText", UIFriendlyArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-4f, 0f), UIEnemyAreaSize);
-
-				// Friendly icon
-				UIFriendlyEmojiTMP = CreateTMPTextObject("FriendlyEmojiTMP", UIFriendlyArea, Color.green, UITextFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UIEnemyAreaSize);
-			}
-
 			private static Color GetColorFromNum(int num)
 			{
 				if (num < 3) return Color.green;
@@ -242,6 +162,104 @@ namespace MarsarahTweaks.Patches.UI
 				if (num < 7) return new Color(1f, 0.549019f, 0f);
 				return Color.red;
 			}
+		}
+
+		private static void CreateTextBasedUI(Hud hud)
+		{
+			if (UIEnemyArea != null && UIEnemyText != null)
+				return;  // UI already exists, no need to create again
+
+			int UITextFontSize = 16;
+			string UITextFontName = "AveriaSansLibre-Bold";
+			Vector2 UIEnemyAreaSize = new Vector2(100f, 30f); // width, height;
+
+			// Enemy area object
+			UIEnemyArea = new GameObject("EnemyArea");
+			UIEnemyArea.layer = 5;
+			UIEnemyArea.transform.SetParent(hud.m_healthPanel.transform);
+			RectTransform enemyAreaTransform = UIEnemyArea.AddComponent<RectTransform>();
+			enemyAreaTransform.anchorMin = new Vector2(1f, 1f);
+			enemyAreaTransform.anchorMax = new Vector2(1f, 1f);
+			enemyAreaTransform.anchoredPosition = new Vector2(ConfigManager.ShowInventoryWeightAndSlots.Value ? 70f : -40f, -230f);
+			enemyAreaTransform.sizeDelta = UIEnemyAreaSize;
+			UIEnemyArea.transform.localScale = Vector3.one;  // Ensure correct scale
+
+			// Background texture
+			Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
+			Image enemyAreaBackground = UIEnemyArea.AddComponent<Image>();
+			enemyAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
+			enemyAreaBackground.sprite = sprite;
+			enemyAreaBackground.type = Image.Type.Sliced;
+
+			// Enemy area text object
+			UIEnemyText = CreateTextObject("EnemyText", UIEnemyArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleCenter, new Vector2(0f, 0f), UIEnemyAreaSize);
+		}
+
+		private static void CreateSymbolBasedUI(Hud hud)
+		{
+			if (UIEnemyArea2 != null && UIEnemyText2 != null && UIEnemyEmojiTMP != null) return;
+
+			int UITextFontSize = 16;
+			string UITextFontName = "AveriaSansLibre-Bold";
+			string UIEmojiFontName = "NotoEmoji-Regular SDF"; // NotoEmoji-Regular
+			Vector2 UIEnemyAreaSize = new Vector2(50f, 30f); // width, height
+			float xOffset = ConfigManager.ShowInventoryWeightAndSlots.Value ? 122f : -65f; // 92 / 65
+			float yOffset = -230f;
+
+			// ==== Enemy Counter ====
+
+			// Enemy Area Object
+			UIEnemyArea2 = new GameObject("EnemyArea2");
+			UIEnemyArea2.layer = 5;
+			UIEnemyArea2.transform.SetParent(hud.m_healthPanel.transform); // health
+
+			RectTransform enemyAreaTransform = UIEnemyArea2.AddComponent<RectTransform>();
+			enemyAreaTransform.anchorMin = new Vector2(1f, 1f);
+			enemyAreaTransform.anchorMax = new Vector2(1f, 1f);
+			enemyAreaTransform.anchoredPosition = new Vector2(xOffset, yOffset); // 92f
+			enemyAreaTransform.sizeDelta = UIEnemyAreaSize;
+			UIEnemyArea2.transform.localScale = Vector3.one; // Ensure correct scale
+
+			// Background texture
+			Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
+			Image enemyAreaBackground = UIEnemyArea2.AddComponent<Image>();
+			enemyAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
+			enemyAreaBackground.sprite = sprite;
+			enemyAreaBackground.type = Image.Type.Sliced;
+
+			// Text overlay
+			UIEnemyText2 = CreateTextObject("EnemyText2", UIEnemyArea2, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-4f, 0f), UIEnemyAreaSize);
+
+			// Enemy icon
+			UIEnemyEmojiTMP = CreateTMPTextObject("EnemyEmojiTMP", UIEnemyArea2, Color.green, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UIEnemyAreaSize);
+
+			// ==== Friendly Counter ====
+
+			// Friendly Area Object
+			UIFriendlyArea = new GameObject("FriendlyArea");
+			UIFriendlyArea.layer = 5;
+			UIFriendlyArea.transform.SetParent(hud.m_healthPanel.transform); // health
+			xOffset += 54f;
+
+			RectTransform friendlyAreaTransform = UIFriendlyArea.AddComponent<RectTransform>();
+			friendlyAreaTransform.anchorMin = new Vector2(1f, 1f);
+			friendlyAreaTransform.anchorMax = new Vector2(1f, 1f);
+			friendlyAreaTransform.anchoredPosition = new Vector2(xOffset, yOffset); // 146f
+			friendlyAreaTransform.sizeDelta = UIEnemyAreaSize;
+			UIFriendlyArea.transform.localScale = Vector3.one;
+
+			// Background texture
+			Sprite spriteFriendly = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
+			Image friendlyAreaBackground = UIFriendlyArea.AddComponent<Image>();
+			friendlyAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
+			friendlyAreaBackground.sprite = sprite;
+			friendlyAreaBackground.type = Image.Type.Sliced;
+
+			// Text overlay
+			UIFriendlyText = CreateTextObject("FriendlyText", UIFriendlyArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-4f, 0f), UIEnemyAreaSize);
+
+			// Friendly icon
+			UIFriendlyEmojiTMP = CreateTMPTextObject("FriendlyEmojiTMP", UIFriendlyArea, Color.green, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UIEnemyAreaSize);
 		}
 	}
 }

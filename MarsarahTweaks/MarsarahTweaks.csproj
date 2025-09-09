@@ -122,6 +122,7 @@
     <Compile Include="Patches\Balance\ArmorStatsChanges.cs" />
     <Compile Include="Patches\Features\AshlandsEnemiesChanges.cs" />
     <Compile Include="Patches\Balance\BetterDropsChanges.cs" />
+    <Compile Include="Patches\Features\HealStaff.cs" />
     <Compile Include="Patches\Features\MoreUsableFuel.cs" />
     <Compile Include="Patches\Features\NighttimeSpawnChanges.cs" />
     <Compile Include="Patches\BuildPieces\PocketPortal.cs" />

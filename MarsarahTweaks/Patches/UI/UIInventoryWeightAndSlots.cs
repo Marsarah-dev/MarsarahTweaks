@@ -55,6 +55,23 @@ namespace MarsarahTweaks.Patches.UI
 			}
 		}
 
+		[HarmonyPatch(typeof(Hud), "Awake")]
+		class InventoryWeightAndSlots_HUDAwakePatch
+		{
+			private static void Postfix(Hud __instance)
+			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
+				if (__instance == null) return;
+
+				if (ConfigManager.ShowInventoryWeightAndSlots.Value)
+				{
+					CreateTextBasedUI(__instance); // Create the text version of the UI if missing
+					CreateSymbolBasedUI(__instance); // Create the symbol/bar version of the UI if missing
+				}
+			}
+		}
+
 		[HarmonyPatch(typeof(Hud), "Update")]
 		class InventoryWeightAndSlots_HUDUpdatePatch
 		{
@@ -150,155 +167,7 @@ namespace MarsarahTweaks.Patches.UI
 					UIWeightBarEmojiArea?.SetActive(false);
 					UISlotsArea?.SetActive(false);
 				}
-			}
-
-			private static void CreateTextBasedUI(Hud hud)
-			{
-				if (UIInventoryArea != null && UIWeightText != null && UISlotText != null)
-					return;  // UI already exists, no need to create again
-
-				int UITextFontSize = 16;
-				string UITextFontName = "AveriaSansLibre-Bold";
-				Vector2 UIInventoryAreaSize = new Vector2(115f, 30f); // width, height
-
-				// Inventory area object
-				UIInventoryArea = new GameObject("InventoryArea");
-				UIInventoryArea.layer = 5;
-				UIInventoryArea.transform.SetParent(hud.m_healthPanel.transform);
-				RectTransform inventoryAreaTransform = UIInventoryArea.AddComponent<RectTransform>();
-				inventoryAreaTransform.anchorMin = new Vector2(1f, 1f);
-				inventoryAreaTransform.anchorMax = new Vector2(1f, 1f);
-				inventoryAreaTransform.anchoredPosition = new Vector2(-45f, -230f);
-				inventoryAreaTransform.sizeDelta = UIInventoryAreaSize;
-				UIInventoryArea.transform.localScale = Vector3.one;  // Ensure correct scale
-
-				// Background texture
-				Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
-				Image inventoryAreaBackground = UIInventoryArea.AddComponent<Image>();
-				inventoryAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
-				inventoryAreaBackground.sprite = sprite;
-				inventoryAreaBackground.type = Image.Type.Sliced;
-
-				// Inventory Weight Text
-				UIWeightText = CreateTextObject("WeightText", UIInventoryArea, Color.green, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(5f, 0f), UIInventoryAreaSize);
-
-				// Inventory Slots Text
-				UISlotText = CreateTextObject("SlotText", UIInventoryArea, Color.green, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-5f, 0f), UIInventoryAreaSize);
-			}
-
-			private static void CreateSymbolBasedUI(Hud hud)
-			{
-				if (UIWeightBarArea != null) return;
-
-				int UITextFontSize = 16;
-				string UITextFontName = "AveriaSansLibre-Bold";
-				Vector2 UIWeightAreaSize = new Vector2(100f, 30f); // width, height
-				Vector2 UIWeightAreaEmojiSize = new Vector2(30f, 30f); // width, height
-				float xOffset = -10f; // -40f
-				float yOffset = -230f;
-
-				// ======= Weight ========
-
-				// Inventory Area Object
-				UIWeightBarArea = new GameObject("WeightAreaBar");
-				UIWeightBarArea.layer = 5;
-				UIWeightBarArea.transform.SetParent(hud.m_healthPanel.transform); // health
-
-				RectTransform weightAreaTransform = UIWeightBarArea.AddComponent<RectTransform>();
-				weightAreaTransform.anchorMin = new Vector2(1f, 1f);
-				weightAreaTransform.anchorMax = new Vector2(1f, 1f);
-				weightAreaTransform.anchoredPosition = new Vector2(xOffset, yOffset); // -40f
-				weightAreaTransform.sizeDelta = UIWeightAreaSize;
-				UIWeightBarArea.transform.localScale = Vector3.one; // Ensure correct scale
-
-				// Background texture
-				GameObject weightBackgroundArea = new GameObject("WeightBarBackground");
-				weightBackgroundArea.transform.SetParent(UIWeightBarArea.transform, false);
-				Image weightBarBGImage = weightBackgroundArea.AddComponent<Image>();
-				RectTransform bgRect = weightBackgroundArea.GetComponent<RectTransform>();
-				bgRect.anchorMin = Vector2.zero;
-				bgRect.anchorMax = Vector2.one;
-				bgRect.offsetMin = Vector2.zero;
-				bgRect.offsetMax = Vector2.zero;
-				weightBarBGImage.color = new Color(0f, 0f, 0f, 0.4f); // semi-transparent dark
-
-				// Foreground Fill
-				GameObject fillArea = new GameObject("WeightBarFill");
-				fillArea.transform.SetParent(UIWeightBarArea.transform, false);
-				weightBarFill = fillArea.AddComponent<Image>();
-				RectTransform fillRect = fillArea.GetComponent<RectTransform>();
-				fillRect.anchorMin = Vector2.zero;
-				fillRect.anchorMax = Vector2.one;
-				fillRect.offsetMin = new Vector2(3f, 3f);   // left, bottom
-				fillRect.offsetMax = new Vector2(-3f, -3f); // right, top
-
-				Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault(s => s.name == "bar_monster_hp_5");
-				weightBarFill.sprite = sprite;
-				weightBarFill.type = Image.Type.Filled;
-				weightBarFill.fillMethod = Image.FillMethod.Horizontal;
-				weightBarFill.fillOrigin = (int)Image.OriginHorizontal.Left;
-				weightBarFill.fillAmount = 0f; // Initially empty
-
-				// Weight bar emoji object
-				UIWeightBarEmojiArea = new GameObject("WeightAreaEmoji");
-				UIWeightBarEmojiArea.layer = 5;
-				UIWeightBarEmojiArea.transform.SetParent(hud.m_healthPanel.transform); // health
-
-				xOffset -= 65f;
-				RectTransform weightAreaEmojiTransform = UIWeightBarEmojiArea.AddComponent<RectTransform>();
-				weightAreaEmojiTransform.anchorMin = new Vector2(1f, 1f);
-				weightAreaEmojiTransform.anchorMax = new Vector2(1f, 1f);
-				weightAreaEmojiTransform.anchoredPosition = new Vector2(xOffset, yOffset); // -105f
-				weightAreaEmojiTransform.sizeDelta = UIWeightAreaEmojiSize;
-				UIWeightBarEmojiArea.transform.localScale = Vector3.one; // Ensure correct scale
-
-				// Background texture for emoji area
-				GameObject weightEmojiBackgroundArea = new GameObject("WeightEmojiBackground");
-				weightEmojiBackgroundArea.transform.SetParent(UIWeightBarEmojiArea.transform, false);
-				Image weightEmojiBGImage = weightEmojiBackgroundArea.AddComponent<Image>();
-				RectTransform bgRectEmo = weightEmojiBackgroundArea.GetComponent<RectTransform>();
-				bgRectEmo.anchorMin = Vector2.zero;
-				bgRectEmo.anchorMax = Vector2.one;
-				bgRectEmo.offsetMin = Vector2.zero;
-				bgRectEmo.offsetMax = Vector2.zero;
-				weightEmojiBGImage.color = new Color(0f, 0f, 0f, 0.4f);
-
-				// Text overlay
-				UIWeightBarText = CreateTextObject("WeightText", UIWeightBarArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleCenter, new Vector2(0f, 0f), UIWeightAreaSize);
-
-				// Bag icon
-				UIWeightBarEmojiTMP = CreateTMPTextObject("WeightEmojiTMP", UIWeightBarEmojiArea, Color.green, UITextFontName, UITextFontSize + 4, TextAlignmentOptions.Midline, new Vector2(0f, 0f), UIWeightAreaSize);
-
-
-				// ======= Inventory Slots ========
-
-				Vector2 UISlotsAreaSize = new Vector2(50f, 30f); // width, height
-				xOffset = 68f; // 38
-
-				// Inventory Area Object
-				UISlotsArea = new GameObject("SlotsArea");
-				UISlotsArea.layer = 5;
-				UISlotsArea.transform.SetParent(hud.m_healthPanel.transform); // health
-
-				RectTransform slotsAreaTransform = UISlotsArea.AddComponent<RectTransform>();
-				slotsAreaTransform.anchorMin = new Vector2(1f, 1f);
-				slotsAreaTransform.anchorMax = new Vector2(1f, 1f);
-				slotsAreaTransform.anchoredPosition = new Vector2(xOffset, yOffset);
-				slotsAreaTransform.sizeDelta = UISlotsAreaSize;
-				UISlotsArea.transform.localScale = Vector3.one; 
-
-				Sprite spriteSlotsBackground = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
-				Image slotsAreaBackground = UISlotsArea.AddComponent<Image>();
-				slotsAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
-				slotsAreaBackground.sprite = spriteSlotsBackground;
-				slotsAreaBackground.type = Image.Type.Sliced;
-
-				// Text overlay
-				UISlotsText2 = CreateTextObject("slotsText", UISlotsArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-4f, 0f), UISlotsAreaSize);
-
-				// Bag icon
-				UISlotsEmojiTMP = CreateTMPTextObject("SlotsEmojiTMP", UISlotsArea, Color.green, UITextFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UISlotsAreaSize);
-			}
+			}			
 
 			private static Color GetColorFromPercent(float percent)
 			{
@@ -342,6 +211,155 @@ namespace MarsarahTweaks.Patches.UI
 
 				return color;
 			}
+		}
+
+		private static void CreateTextBasedUI(Hud hud)
+		{
+			if (UIInventoryArea != null && UIWeightText != null && UISlotText != null)
+				return;  // UI already exists, no need to create again
+
+			int UITextFontSize = 16;
+			string UITextFontName = "AveriaSansLibre-Bold";
+			Vector2 UIInventoryAreaSize = new Vector2(115f, 30f); // width, height
+
+			// Inventory area object
+			UIInventoryArea = new GameObject("InventoryArea");
+			UIInventoryArea.layer = 5;
+			UIInventoryArea.transform.SetParent(hud.m_healthPanel.transform);
+			RectTransform inventoryAreaTransform = UIInventoryArea.AddComponent<RectTransform>();
+			inventoryAreaTransform.anchorMin = new Vector2(1f, 1f);
+			inventoryAreaTransform.anchorMax = new Vector2(1f, 1f);
+			inventoryAreaTransform.anchoredPosition = new Vector2(-45f, -230f);
+			inventoryAreaTransform.sizeDelta = UIInventoryAreaSize;
+			UIInventoryArea.transform.localScale = Vector3.one;  // Ensure correct scale
+
+			// Background texture
+			Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
+			Image inventoryAreaBackground = UIInventoryArea.AddComponent<Image>();
+			inventoryAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
+			inventoryAreaBackground.sprite = sprite;
+			inventoryAreaBackground.type = Image.Type.Sliced;
+
+			// Inventory Weight Text
+			UIWeightText = CreateTextObject("WeightText", UIInventoryArea, Color.green, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(5f, 0f), UIInventoryAreaSize);
+
+			// Inventory Slots Text
+			UISlotText = CreateTextObject("SlotText", UIInventoryArea, Color.green, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-5f, 0f), UIInventoryAreaSize);
+		}
+
+		private static void CreateSymbolBasedUI(Hud hud)
+		{
+			if (UIWeightBarArea != null) return;
+
+			int UITextFontSize = 16;
+			string UITextFontName = "AveriaSansLibre-Bold";
+			string UIEmojiFontName = "NotoEmoji-Regular SDF"; // NotoEmoji-Regular SDF
+			Vector2 UIWeightAreaSize = new Vector2(100f, 30f); // width, height
+			Vector2 UIWeightAreaEmojiSize = new Vector2(30f, 30f); // width, height
+			float xOffset = -10f; // -40f
+			float yOffset = -230f;
+
+			// ======= Weight ========
+
+			// Inventory Area Object
+			UIWeightBarArea = new GameObject("WeightAreaBar");
+			UIWeightBarArea.layer = 5;
+			UIWeightBarArea.transform.SetParent(hud.m_healthPanel.transform); // health
+
+			RectTransform weightAreaTransform = UIWeightBarArea.AddComponent<RectTransform>();
+			weightAreaTransform.anchorMin = new Vector2(1f, 1f);
+			weightAreaTransform.anchorMax = new Vector2(1f, 1f);
+			weightAreaTransform.anchoredPosition = new Vector2(xOffset, yOffset); // -40f
+			weightAreaTransform.sizeDelta = UIWeightAreaSize;
+			UIWeightBarArea.transform.localScale = Vector3.one; // Ensure correct scale
+
+			// Background texture
+			GameObject weightBackgroundArea = new GameObject("WeightBarBackground");
+			weightBackgroundArea.transform.SetParent(UIWeightBarArea.transform, false);
+			Image weightBarBGImage = weightBackgroundArea.AddComponent<Image>();
+			RectTransform bgRect = weightBackgroundArea.GetComponent<RectTransform>();
+			bgRect.anchorMin = Vector2.zero;
+			bgRect.anchorMax = Vector2.one;
+			bgRect.offsetMin = Vector2.zero;
+			bgRect.offsetMax = Vector2.zero;
+			weightBarBGImage.color = new Color(0f, 0f, 0f, 0.4f); // semi-transparent dark
+
+			// Foreground Fill
+			GameObject fillArea = new GameObject("WeightBarFill");
+			fillArea.transform.SetParent(UIWeightBarArea.transform, false);
+			weightBarFill = fillArea.AddComponent<Image>();
+			RectTransform fillRect = fillArea.GetComponent<RectTransform>();
+			fillRect.anchorMin = Vector2.zero;
+			fillRect.anchorMax = Vector2.one;
+			fillRect.offsetMin = new Vector2(3f, 3f);   // left, bottom
+			fillRect.offsetMax = new Vector2(-3f, -3f); // right, top
+
+			Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault(s => s.name == "bar_monster_hp_5");
+			weightBarFill.sprite = sprite;
+			weightBarFill.type = Image.Type.Filled;
+			weightBarFill.fillMethod = Image.FillMethod.Horizontal;
+			weightBarFill.fillOrigin = (int)Image.OriginHorizontal.Left;
+			weightBarFill.fillAmount = 0f; // Initially empty
+
+			// Weight bar emoji object
+			UIWeightBarEmojiArea = new GameObject("WeightAreaEmoji");
+			UIWeightBarEmojiArea.layer = 5;
+			UIWeightBarEmojiArea.transform.SetParent(hud.m_healthPanel.transform); // health
+
+			xOffset -= 65f;
+			RectTransform weightAreaEmojiTransform = UIWeightBarEmojiArea.AddComponent<RectTransform>();
+			weightAreaEmojiTransform.anchorMin = new Vector2(1f, 1f);
+			weightAreaEmojiTransform.anchorMax = new Vector2(1f, 1f);
+			weightAreaEmojiTransform.anchoredPosition = new Vector2(xOffset, yOffset); // -105f
+			weightAreaEmojiTransform.sizeDelta = UIWeightAreaEmojiSize;
+			UIWeightBarEmojiArea.transform.localScale = Vector3.one; // Ensure correct scale
+
+			// Background texture for emoji area
+			GameObject weightEmojiBackgroundArea = new GameObject("WeightEmojiBackground");
+			weightEmojiBackgroundArea.transform.SetParent(UIWeightBarEmojiArea.transform, false);
+			Image weightEmojiBGImage = weightEmojiBackgroundArea.AddComponent<Image>();
+			RectTransform bgRectEmo = weightEmojiBackgroundArea.GetComponent<RectTransform>();
+			bgRectEmo.anchorMin = Vector2.zero;
+			bgRectEmo.anchorMax = Vector2.one;
+			bgRectEmo.offsetMin = Vector2.zero;
+			bgRectEmo.offsetMax = Vector2.zero;
+			weightEmojiBGImage.color = new Color(0f, 0f, 0f, 0.4f);
+
+			// Text overlay
+			UIWeightBarText = CreateTextObject("WeightText", UIWeightBarArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleCenter, new Vector2(0f, 0f), UIWeightAreaSize);
+
+			// Bag icon
+			UIWeightBarEmojiTMP = CreateTMPTextObject("WeightEmojiTMP", UIWeightBarEmojiArea, Color.green, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.Midline, new Vector2(0f, 0f), UIWeightAreaSize);
+
+
+			// ======= Inventory Slots ========
+
+			Vector2 UISlotsAreaSize = new Vector2(50f, 30f); // width, height
+			xOffset = 68f; // 38
+
+			// Inventory Area Object
+			UISlotsArea = new GameObject("SlotsArea");
+			UISlotsArea.layer = 5;
+			UISlotsArea.transform.SetParent(hud.m_healthPanel.transform); // health
+
+			RectTransform slotsAreaTransform = UISlotsArea.AddComponent<RectTransform>();
+			slotsAreaTransform.anchorMin = new Vector2(1f, 1f);
+			slotsAreaTransform.anchorMax = new Vector2(1f, 1f);
+			slotsAreaTransform.anchoredPosition = new Vector2(xOffset, yOffset);
+			slotsAreaTransform.sizeDelta = UISlotsAreaSize;
+			UISlotsArea.transform.localScale = Vector3.one;
+
+			Sprite spriteSlotsBackground = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
+			Image slotsAreaBackground = UISlotsArea.AddComponent<Image>();
+			slotsAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
+			slotsAreaBackground.sprite = spriteSlotsBackground;
+			slotsAreaBackground.type = Image.Type.Sliced;
+
+			// Text overlay
+			UISlotsText2 = CreateTextObject("slotsText", UISlotsArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-4f, 0f), UISlotsAreaSize);
+
+			// Bag icon
+			UISlotsEmojiTMP = CreateTMPTextObject("SlotsEmojiTMP", UISlotsArea, Color.green, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UISlotsAreaSize);
 		}
 	}
 }

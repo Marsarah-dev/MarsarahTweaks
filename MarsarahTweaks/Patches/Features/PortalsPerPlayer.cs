@@ -16,7 +16,7 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static GameObject PortalPrefab = MPrefabManager.GetPrefab("portal_wood");
 		private static GameObject PortalStonePrefab = MPrefabManager.GetPrefab("portal_stone");
-		private static GameObject PortalGlacialPrefab = MPrefabManager.GetPrefab("portal_glacial");
+		//private static GameObject PortalGlacialPrefab = MPrefabManager.GetPrefab("portal_glacial");
 
 		// Limit Portals per player
 		[HarmonyPatch(typeof(Player), nameof(Player.TryPlacePiece))]
@@ -24,7 +24,7 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			static bool Prefix(Player __instance, Piece piece, ref bool __result)
 			{
-				if (piece.name == PortalPrefab.name && PlayerReachedPortalLimit(PortalPrefab) || piece.name == PortalStonePrefab.name && PlayerReachedPortalLimit(PortalStonePrefab) || piece.name == PortalGlacialPrefab.name && PlayerReachedPortalLimit(PortalGlacialPrefab))
+				if (piece.name == PortalPrefab.name && PlayerReachedPortalLimit(PortalPrefab) || piece.name == PortalStonePrefab.name && PlayerReachedPortalLimit(PortalStonePrefab) /*|| piece.name == PortalGlacialPrefab.name && PlayerReachedPortalLimit(PortalGlacialPrefab)*/)
 				{
 					__instance.Message(MessageHud.MessageType.Center, "You reached the maximum number of allowed portals.");
 					__result = false;
@@ -40,7 +40,7 @@ namespace MarsarahTweaks.Patches.Features
 			if (ZNet.instance == null || ZDOMan.instance == null || Player.m_localPlayer == null) return false;
 			if (portalPrefab == null)
 			{
-				log.Error("Portal prefab is null");
+				log.Warn("Portal prefab is null");
 				return false;
 			}
 

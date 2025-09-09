@@ -43,7 +43,7 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static void UpdateAllKilns()
 		{
-			foreach (var kiln in UnityEngine.Object.FindObjectsOfType<Smelter>())
+			foreach (var kiln in UnityEngine.Object.FindObjectsByType<Smelter>(FindObjectsSortMode.None))
 			{
 				UpdateKiln(kiln);
 			}
@@ -96,7 +96,7 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static void UpdateAllShieldGenerators()
 		{
-			foreach (var sg in UnityEngine.Object.FindObjectsOfType<ShieldGenerator>())
+			foreach (var sg in UnityEngine.Object.FindObjectsByType<ShieldGenerator>(FindObjectsSortMode.None))
 			{
 				UpdateShieldGenerator(sg);
 			}

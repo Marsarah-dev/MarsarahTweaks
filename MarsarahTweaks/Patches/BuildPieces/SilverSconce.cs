@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 namespace MarsarahTweaks.Patches.BuildPieces
 {
@@ -363,7 +364,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			var pieceConfig = new PieceConfig
 			{
 				PieceTable = "Hammer",
-				Category = "Extra Lights",
+				Category = "Furniture", // Extra Lights
 				Requirements = new[]
 				{
 					new RequirementConfig(resourceWood, 2, recover: true), // ElderBark

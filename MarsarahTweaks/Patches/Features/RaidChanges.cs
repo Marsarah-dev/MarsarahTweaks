@@ -8,7 +8,7 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class RaidChanges
 	{
-		private static readonly LogManager log = new LogManager("Raid Changes", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Raid Changes", LogManager.LogLevel.Warning);
 
 		[HarmonyPatch(typeof(RandEventSystem), "Start")]
 		public static class RandEventSystem_Start_Patch

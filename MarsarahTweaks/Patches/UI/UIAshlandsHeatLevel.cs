@@ -19,6 +19,11 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly LogManager log = new LogManager("UI Ashlands Heat", LogManager.LogLevel.Warning);
 
 		// UI data
+		private static Image heatBarFill = null;
+		private static Image heatBarBGImage = null;
+		private static GameObject UIHeatBarArea = null;
+		private static Text heatBarText = null;
+		private static TMPro.TextMeshProUGUI heatBarEmojiTMP = null;
 		private static float heatThreshold;
 		private static float currentHeat;
 
@@ -36,15 +41,25 @@ namespace MarsarahTweaks.Patches.UI
 			}
 		}
 
+		[HarmonyPatch(typeof(Hud), "Awake")]
+		class InventoryWeightAndSlots_HUDAwakePatch
+		{
+			private static void Postfix(Hud __instance)
+			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
+				if (__instance == null) return;
+
+				if (ConfigManager.ShowInventoryWeightAndSlots.Value)
+				{
+					CreateUI(__instance);
+				}
+			}
+		}
+
 		[HarmonyPatch(typeof(Hud), "Update")]
 		static class HeatLevelHUDUpdate_Patch
 		{
-			private static Image heatBarFill = null;
-			private static Image heatBarBGImage = null;
-			private static GameObject UIHeatBarArea = null;
-			private static Text heatBarText = null;
-			private static TMPro.TextMeshProUGUI heatBarEmojiTMP = null;
-
 			private static void Postfix(Hud __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
@@ -144,77 +159,6 @@ namespace MarsarahTweaks.Patches.UI
 				}
 			}
 
-			private static void CreateUI(Hud hud)
-			{
-				if (UIHeatBarArea != null)
-					return;  // UI already exists, no need to create again
-
-				//Vector2 UIHeatAreaSize = new Vector2(30f, 150f); // width, height
-				Vector2 UIHeatAreaSize = new Vector2(200f, 25f); // width, height
-				int UITextFontSize = 13;
-				int UIEmojiFontSize = 10;
-				string UITextFontName = "AveriaSansLibre-Bold";
-				string UIEmojiFontName = "NotoEmoji-Regular";
-
-				// Heat Area Object
-				UIHeatBarArea = new GameObject("HeatBar");
-				UIHeatBarArea.layer = 5;
-				//UIHeatBarArea.transform.SetParent(hud.m_healthPanel.transform); // health
-				UIHeatBarArea.transform.SetParent(hud.m_rootObject.transform.parent, false); // main hud
-
-				RectTransform heatAreaTransform = UIHeatBarArea.AddComponent<RectTransform>();
-				//heatAreaTransform.anchorMin = new Vector2(1f, 1f);
-				heatAreaTransform.anchorMin = new Vector2(0.5f, 0.5f); // center
-				//heatAreaTransform.anchorMax = new Vector2(1f, 1f);
-				heatAreaTransform.anchorMax = new Vector2(0.5f, 0.5f); // center
-				heatAreaTransform.pivot = new Vector2(0.5f, 0.5f); // center
-				//heatAreaTransform.anchoredPosition = new Vector2(-66f, 55f); // above the food slots to the left of hp bar
-				//heatAreaTransform.anchoredPosition = new Vector2(0f, -420f); // under the stamina bar (using main root) 
-				heatAreaTransform.anchoredPosition = new Vector2(0f, 350f); // middle-up (using main root) 
-				heatAreaTransform.sizeDelta = UIHeatAreaSize;
-				UIHeatBarArea.transform.localScale = Vector3.one; // Ensure correct scale
-
-				// Background texture
-				GameObject heatBackgroundArea = new GameObject("HeatBarBackground");
-				heatBackgroundArea.transform.SetParent(UIHeatBarArea.transform, false);
-				heatBarBGImage = heatBackgroundArea.AddComponent<Image>();
-				RectTransform bgRect = heatBackgroundArea.GetComponent<RectTransform>();
-				bgRect.anchorMin = Vector2.zero;
-				bgRect.anchorMax = Vector2.one;
-				bgRect.offsetMin = Vector2.zero;
-				bgRect.offsetMax = Vector2.zero;
-				heatBarBGImage.color = new Color(0f, 0f, 0f, 0.4f); // semi-transparent dark
-				heatBarBGImage.enabled = false;
-
-				// Foreground Fill
-				GameObject fillArea = new GameObject("HeatBarFill");
-				fillArea.transform.SetParent(UIHeatBarArea.transform, false);
-				heatBarFill = fillArea.AddComponent<Image>();
-				RectTransform fillRect = fillArea.GetComponent<RectTransform>();
-				fillRect.anchorMin = Vector2.zero;
-				fillRect.anchorMax = Vector2.one;
-				fillRect.offsetMin = new Vector2(3f, 3f);   // left, bottom
-				fillRect.offsetMax = new Vector2(-3f, -3f); // right, top
-
-				Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault(s => s.name == "bar_monster_hp_5");
-				heatBarFill.sprite = sprite;
-				//heatBarFill.sprite = GenerateWhiteSprite();
-				heatBarFill.type = Image.Type.Filled;
-				//heatBarFill.fillMethod = Image.FillMethod.Vertical;
-				heatBarFill.fillMethod = Image.FillMethod.Horizontal;
-				//heatBarFill.fillOrigin = (int)Image.OriginVertical.Bottom;
-				heatBarFill.fillOrigin = (int)Image.OriginHorizontal.Left;
-				heatBarFill.fillAmount = 0f; // Initially empty
-				heatBarFill.enabled = false;
-
-				// Text overlay
-				heatBarText = CreateTextObject("HeatText", UIHeatBarArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleCenter, new Vector2(0f, 0f), UIHeatAreaSize);
-
-				// Flame Icon
-				//heatBarEmojiTMP = CreateTMPTextObject("HeatEmojiTMP", UIHeatBarArea, Color.red, UIEmojiFontName, UITextFontSize, TextAlignmentOptions.Top, new Vector2(0f, -3f), UIHeatAreaSize);
-				heatBarEmojiTMP = CreateTMPTextObject("HeatEmojiTMP", UIHeatBarArea, Color.red, UIEmojiFontName, UIEmojiFontSize, TextAlignmentOptions.MidlineRight, new Vector2(-2f, 0f), UIHeatAreaSize);
-			}
-
 			private static Sprite GenerateWhiteSprite()
 			{
 				Texture2D tex = new Texture2D(1, 1);
@@ -233,6 +177,77 @@ namespace MarsarahTweaks.Patches.UI
 			{
 				return Hud.IsUserHidden();
 			}
+		}
+
+		private static void CreateUI(Hud hud)
+		{
+			if (UIHeatBarArea != null)
+				return;  // UI already exists, no need to create again
+
+			//Vector2 UIHeatAreaSize = new Vector2(30f, 150f); // width, height
+			Vector2 UIHeatAreaSize = new Vector2(200f, 25f); // width, height
+			int UITextFontSize = 13;
+			int UIEmojiFontSize = 10;
+			string UITextFontName = "AveriaSansLibre-Bold";
+			string UIEmojiFontName = "NotoEmoji-Regular SDF"; // NotoEmoji-Regular
+
+			// Heat Area Object
+			UIHeatBarArea = new GameObject("HeatBar");
+			UIHeatBarArea.layer = 5;
+			//UIHeatBarArea.transform.SetParent(hud.m_healthPanel.transform); // health
+			UIHeatBarArea.transform.SetParent(hud.m_rootObject.transform.parent, false); // main hud
+
+			RectTransform heatAreaTransform = UIHeatBarArea.AddComponent<RectTransform>();
+			//heatAreaTransform.anchorMin = new Vector2(1f, 1f);
+			heatAreaTransform.anchorMin = new Vector2(0.5f, 0.5f); // center
+																   //heatAreaTransform.anchorMax = new Vector2(1f, 1f);
+			heatAreaTransform.anchorMax = new Vector2(0.5f, 0.5f); // center
+			heatAreaTransform.pivot = new Vector2(0.5f, 0.5f); // center
+															   //heatAreaTransform.anchoredPosition = new Vector2(-66f, 55f); // above the food slots to the left of hp bar
+															   //heatAreaTransform.anchoredPosition = new Vector2(0f, -420f); // under the stamina bar (using main root) 
+			heatAreaTransform.anchoredPosition = new Vector2(0f, 350f); // middle-up (using main root) 
+			heatAreaTransform.sizeDelta = UIHeatAreaSize;
+			UIHeatBarArea.transform.localScale = Vector3.one; // Ensure correct scale
+
+			// Background texture
+			GameObject heatBackgroundArea = new GameObject("HeatBarBackground");
+			heatBackgroundArea.transform.SetParent(UIHeatBarArea.transform, false);
+			heatBarBGImage = heatBackgroundArea.AddComponent<Image>();
+			RectTransform bgRect = heatBackgroundArea.GetComponent<RectTransform>();
+			bgRect.anchorMin = Vector2.zero;
+			bgRect.anchorMax = Vector2.one;
+			bgRect.offsetMin = Vector2.zero;
+			bgRect.offsetMax = Vector2.zero;
+			heatBarBGImage.color = new Color(0f, 0f, 0f, 0.4f); // semi-transparent dark
+			heatBarBGImage.enabled = false;
+
+			// Foreground Fill
+			GameObject fillArea = new GameObject("HeatBarFill");
+			fillArea.transform.SetParent(UIHeatBarArea.transform, false);
+			heatBarFill = fillArea.AddComponent<Image>();
+			RectTransform fillRect = fillArea.GetComponent<RectTransform>();
+			fillRect.anchorMin = Vector2.zero;
+			fillRect.anchorMax = Vector2.one;
+			fillRect.offsetMin = new Vector2(3f, 3f);   // left, bottom
+			fillRect.offsetMax = new Vector2(-3f, -3f); // right, top
+
+			Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault(s => s.name == "bar_monster_hp_5");
+			heatBarFill.sprite = sprite;
+			//heatBarFill.sprite = GenerateWhiteSprite();
+			heatBarFill.type = Image.Type.Filled;
+			//heatBarFill.fillMethod = Image.FillMethod.Vertical;
+			heatBarFill.fillMethod = Image.FillMethod.Horizontal;
+			//heatBarFill.fillOrigin = (int)Image.OriginVertical.Bottom;
+			heatBarFill.fillOrigin = (int)Image.OriginHorizontal.Left;
+			heatBarFill.fillAmount = 0f; // Initially empty
+			heatBarFill.enabled = false;
+
+			// Text overlay
+			heatBarText = CreateTextObject("HeatText", UIHeatBarArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleCenter, new Vector2(0f, 0f), UIHeatAreaSize);
+
+			// Flame Icon
+			//heatBarEmojiTMP = CreateTMPTextObject("HeatEmojiTMP", UIHeatBarArea, Color.red, UIEmojiFontName, UITextFontSize, TextAlignmentOptions.Top, new Vector2(0f, -3f), UIHeatAreaSize);
+			heatBarEmojiTMP = CreateTMPTextObject("HeatEmojiTMP", UIHeatBarArea, Color.red, UIEmojiFontName, UIEmojiFontSize, TextAlignmentOptions.MidlineRight, new Vector2(-2f, 0f), UIHeatAreaSize);
 		}
 	}
 }

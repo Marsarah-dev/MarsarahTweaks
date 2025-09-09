@@ -1,12 +1,13 @@
-﻿using System;
+﻿using HarmonyLib;
+using MarsarahTweaks.Managers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.UI
 {
@@ -16,6 +17,68 @@ namespace MarsarahTweaks.Patches.UI
 
 		public static bool showUI = true;
 		public static bool showPlayerList = true;
+
+		/*[HarmonyPatch(typeof(Hud), "Awake")]
+		static class BoatSpeedHUDUpdate_Patch
+		{
+			private static void Postfix(Hud __instance)
+			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
+				if (__instance == null) return;
+
+				
+				TMP_FontAsset replacement = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "Valheim-AveriaSansLibre");
+				FixMissingTMPFonts(replacement);
+			}
+		}
+
+		public static void FixMissingTMPFonts(TMP_FontAsset replacementFont)
+		{
+			if (replacementFont == null)
+			{
+				log.Warn("[TMPFontFixer] Replacement font is null! Cannot fix missing fonts.");
+				return;
+			}
+
+			TMP_Text[] allTMPTexts = Resources.FindObjectsOfTypeAll<TMP_Text>();
+			log.Info($"[TMPFontFixer] Found {allTMPTexts.Length} TMP_Text components in memory.");
+
+			int replacedCount = 0;
+
+			foreach (TMP_Text tmp in allTMPTexts)
+			{
+				if (tmp.font == null || tmp.font.name.Contains("LiberationSans"))
+				{
+					string oldFontName = tmp.font != null ? tmp.font.name : "null";
+					tmp.font = replacementFont;
+					replacedCount++;
+					log.Info($"[TMPFontFixer] Replaced font on '{tmp.name}' (was '{oldFontName}')");
+				}
+			}
+
+			log.Info($"[TMPFontFixer] Total fonts replaced: {replacedCount}");
+		}*/
+
+		public static void LogAllTMPFonts()
+		{
+			// Finds all TMP_FontAsset objects loaded in memory
+			var fonts = Resources.FindObjectsOfTypeAll<TMP_FontAsset>();
+
+			if (fonts.Length == 0)
+			{
+				Debug.LogWarning("[TMPDebug] No TMP_FontAssets found in memory!");
+				return;
+			}
+
+			Debug.Log($"[TMPDebug] {fonts.Length} TMP_FontAssets found in memory:");
+			foreach (var font in fonts.OrderBy(f => f.name))
+			{
+				// TMP_FontAsset is a ScriptableObject, so no gameObject exists
+				string info = font != null ? $"name: '{font.name}', hideFlags: {font.hideFlags}" : "null font";
+				Debug.Log($"[TMPDebug] {info}");
+			}
+		}
 
 		public static void UpdateUIDisplay()
 		{
@@ -72,19 +135,26 @@ namespace MarsarahTweaks.Patches.UI
 			tmpText.alignment = alignment;
 			tmpText.text = ""; // default
 
-			if (tmpText.font != null && tmpText.fontMaterial != null)
+			if (tmpText.font != null)
 			{
-				tmpText.fontMaterial = new Material(tmpText.fontMaterial);
+				// Ensure TMP has a proper material
+				tmpText.fontMaterial = tmpText.fontMaterial != null ? new Material(tmpText.fontMaterial) : tmpText.font.material;
 
-				if (tmpText.fontMaterial.HasProperty(ShaderUtilities.ID_OutlineWidth) && tmpText.fontMaterial.HasProperty(ShaderUtilities.ID_OutlineColor))
+				if (tmpText.fontMaterial.HasProperty(ShaderUtilities.ID_OutlineWidth) &&
+					tmpText.fontMaterial.HasProperty(ShaderUtilities.ID_OutlineColor))
 				{
 					tmpText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, 0.125f);
 					tmpText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, Color.black);
 				}
+
+				// Force TMP to register the font material immediately
+				tmpText.havePropertiesChanged = true;
+				tmpText.SetAllDirty();
+				tmpText.ForceMeshUpdate();
 			}
 			else
 			{
-				log.Warn($"[Boat UI] Font material for '{fontName}' is null or font is missing. Skipping outline setup.");
+				log.Warn($"Font material for '{fontName}' is null or font is missing. Skipping outline setup.");
 			}
 
 			return tmpText;

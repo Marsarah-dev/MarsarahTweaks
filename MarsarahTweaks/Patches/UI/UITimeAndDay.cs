@@ -95,6 +95,22 @@ namespace MarsarahTweaks.Patches.UI
 			}
 		}
 
+		[HarmonyPatch(typeof(Hud), "Awake")]
+		class InventoryWeightAndSlots_HUDAwakePatch
+		{
+			private static void Postfix(Hud __instance)
+			{
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
+				if (__instance == null) return;
+
+				if (ConfigManager.ShowInventoryWeightAndSlots.Value)
+				{
+					CreateUI(__instance);
+				}
+			}
+		}
+
 		[HarmonyPatch(typeof(Hud), "Update")]
 		class TimeAndDay_HUDUpdatePatch
 		{
@@ -145,41 +161,6 @@ namespace MarsarahTweaks.Patches.UI
 				}
 			}
 
-			private static void CreateUI(Hud hud)
-			{
-				if (UITimeText != null && UIDayText != null && UITimeEmojiTMP != null)
-					return;  // UI already exists, no need to create again
-
-				int UITextFontSize = 16;
-				string UITextFontName = "AveriaSansLibre-Bold";
-				Vector2 UITimeAreaSize = new Vector2(200f, 30f); // width, height
-				Vector2 UITimeAreaEmojiSize = new Vector2(30f, 30f); // width, height
-
-				// Day-Time area object
-				GameObject UITimeArea = new GameObject("TimeArea");
-				UITimeArea.layer = 5;
-				UITimeArea.transform.SetParent(hud.m_rootObject.transform);
-				RectTransform timeAreaTransform = UITimeArea.AddComponent<RectTransform>();
-				timeAreaTransform.anchorMin = new Vector2(1f, 1f);
-				timeAreaTransform.anchorMax = new Vector2(1f, 1f);
-				timeAreaTransform.anchoredPosition = new Vector2(-140f, -25f);
-				timeAreaTransform.sizeDelta = UITimeAreaSize;
-				UITimeArea.transform.localScale = Vector3.one;  // Ensure correct scale
-
-				// Special modification for text sizeDelta
-				UITimeAreaSize.x = UITimeAreaSize.x / 2;
-				float timeTextXPos = ConfigManager.UseSymbolsForUI.Value ? 20f : 40f;
-
-				// Time text
-				UITimeText = CreateTextObject("TimeText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(timeTextXPos, 0f), UITimeAreaSize);
-
-				// Day text
-				UIDayText = CreateTextObject("DayText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(-40f, 0f), UITimeAreaSize);
-
-				// Time emoji
-				UITimeEmojiTMP = CreateTMPTextObject("TimeEmojiTMP", UITimeArea, Color.white, UITextFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineRight, new Vector2(80f, 0f), UITimeAreaEmojiSize);
-			}
-
 			private static void UpdateTimePosition()
 			{
 				float xOffset = ConfigManager.UseSymbolsForUI.Value ? 20f : 40f;
@@ -197,6 +178,42 @@ namespace MarsarahTweaks.Patches.UI
 				if (word == "Afternoon") return Color.green;
 				return Color.white;
 			}
+		}
+
+		private static void CreateUI(Hud hud)
+		{
+			if (UITimeText != null && UIDayText != null && UITimeEmojiTMP != null)
+				return;  // UI already exists, no need to create again
+
+			int UITextFontSize = 16;
+			string UITextFontName = "AveriaSansLibre-Bold";
+			string UIEmojiFontName = "NotoEmoji-Regular SDF"; // NotoEmoji-Regular
+			Vector2 UITimeAreaSize = new Vector2(200f, 30f); // width, height
+			Vector2 UITimeAreaEmojiSize = new Vector2(30f, 30f); // width, height
+
+			// Day-Time area object
+			GameObject UITimeArea = new GameObject("TimeArea");
+			UITimeArea.layer = 5;
+			UITimeArea.transform.SetParent(hud.m_rootObject.transform);
+			RectTransform timeAreaTransform = UITimeArea.AddComponent<RectTransform>();
+			timeAreaTransform.anchorMin = new Vector2(1f, 1f);
+			timeAreaTransform.anchorMax = new Vector2(1f, 1f);
+			timeAreaTransform.anchoredPosition = new Vector2(-140f, -25f);
+			timeAreaTransform.sizeDelta = UITimeAreaSize;
+			UITimeArea.transform.localScale = Vector3.one;  // Ensure correct scale
+
+			// Special modification for text sizeDelta
+			UITimeAreaSize.x = UITimeAreaSize.x / 2;
+			float timeTextXPos = ConfigManager.UseSymbolsForUI.Value ? 20f : 40f;
+
+			// Time text
+			UITimeText = CreateTextObject("TimeText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(timeTextXPos, 0f), UITimeAreaSize);
+
+			// Day text
+			UIDayText = CreateTextObject("DayText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(-40f, 0f), UITimeAreaSize);
+
+			// Time emoji
+			UITimeEmojiTMP = CreateTMPTextObject("TimeEmojiTMP", UITimeArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineRight, new Vector2(80f, 0f), UITimeAreaEmojiSize);
 		}
 	}
 }

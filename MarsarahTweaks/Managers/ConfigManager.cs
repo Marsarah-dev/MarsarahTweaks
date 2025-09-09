@@ -83,6 +83,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata DeathRaiserModifications = new ConfigMetadata("09 - Better Death Raiser", "Adds a secondary attack that spawns archer skeletons. Primary attack will only spawn melee skeletons");
 			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("10 - Better Summoned Skeletons", "Increases summoned skeleton speed and add better looking gear according to Death Raiser level (stats not affected). (Toggling mid-game requires CLIENT relog for speed changes)");
 			public static readonly ConfigMetadata FrostStaffModifications = new ConfigMetadata("11 - Better Frost Staff Accuracy", "Improves Staff of Frost Accuracy");
+			//public static readonly ConfigMetadata HealStaffModifications = new ConfigMetadata("11a - Heal Staff Test", "Test Heal Staff");
 			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("12 - Reduced Crossbows Reload Time", "Crossbows Reload Time Reduced by 1s. (Toggling mid-game requires CLIENT relog)");
 			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("13 - Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Tick, Dverger, Seeker Soldier, Charred Warlock");
 			public static readonly ConfigMetadata DropsModifications = new ConfigMetadata("14 - Better Creature Drops", "Modifies the drops for the following creatures: Fenring (adds Fenris Hair and Fenris Claw, removes Wolf Fang), Bat (adds 50% Bloodbag drop), Dvergr (increases chance of Soft Tissue to 100% from 25%)");
@@ -118,13 +119,13 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata CameraSailingPosition = new ConfigMetadata("10 - Move Camera Up While Sailing", "Moves the camera a bit upwards when sailing to better see in front of the boat");
 			public static readonly ConfigMetadata ShorterRestedDelay = new ConfigMetadata("11 - Shorter Rested Delay", "Reduces the amount of time needed to get the rested buff from 20 to 10 seconds (Toggling mid-game requires re-entering the resting area)");
 			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("12 - More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators");
-			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("13 - Permanent Lights", "[Exclusive toggle with Mystical Light Ward] Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
+			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("13 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
 
 			// Build Pieces
 			public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("01 - Pocket Portal", "Adds a new portal that is built from a Portal Core that only takes one inventory slot which can be crafted at a Workbench starting with the Mountain area. Can only build one Pocket Portal per player. (Toggling mid-game requires reloading the build/crafting menu)");
-			public static readonly ConfigMetadata GlacialStonePortal = new ConfigMetadata("02 - Glacial Stone Portal", "Enables the unused stone portal and adds it to the build menu. Works like any normal portal - not to be confused with the Stone Portal from Ashlands. Unlocked at the Mountain biome. (Toggling mid-game requires reloading the build/crafting menu)");
+			//public static readonly ConfigMetadata GlacialStonePortal = new ConfigMetadata("02 - Glacial Stone Portal", "Enables the unused stone portal and adds it to the build menu. Works like any normal portal - not to be confused with the Stone Portal from Ashlands. Unlocked at the Mountain biome. (Toggling mid-game requires reloading the build/crafting menu)");
 			//public static readonly ConfigMetadata MysticalLightWard = new ConfigMetadata("02 - Mystical Light Ward", "[Exclusive toggle with Permanent Lights] Adds a new ward starting with the Mountain area. When built, all light sources in its area will be automatically refueled when reaching 0 fuel. (Toggling mid-game requires reloading the build/crafting menu)");
-			public static readonly ConfigMetadata BuildPiecesLighting = new ConfigMetadata("03 - Build Pieces - Lighting", "Adds new light sources (Silver Sconce, Green Standing Brazier, Silver Hanging Brazier, Colored Dverger Lanterns) unlocked at the Mountain/Mistlands biomes respectively. (Toggling mid-game requires reloading the build/crafting menu)");
+			public static readonly ConfigMetadata BuildPiecesLighting = new ConfigMetadata("02 - Extra Lights", "Adds new light sources (Silver Sconce, Green Standing Brazier, Silver Hanging Brazier, Colored Dverger Lanterns) unlocked at the Mountain/Mistlands biomes respectively. (Toggling mid-game requires reloading the build/crafting menu)");
 
 			// UI
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
@@ -169,6 +170,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> BetterDeathRaiserEnabled;
 		public static ConfigEntry<bool> BetterDeathRaiserSummonsEnabled;
 		public static ConfigEntry<bool> BetterFrostStaffAccuracyEnabled;
+		//public static ConfigEntry<bool> HealStaffEnabled;
 		public static ConfigEntry<bool> ReducedCrossbowsReloadTimeEnabled;
 		public static ConfigEntry<bool> BetterTrophyDropsEnabled;
 		public static ConfigEntry<bool> BetterDropsEnabled;
@@ -208,7 +210,7 @@ namespace MarsarahTweaks.Managers
 
 		// Build Pieces
 		public static ConfigEntry<bool> PocketPortalEnabled;
-		public static ConfigEntry<bool> GlacialStonePortalEnabled;
+		//public static ConfigEntry<bool> GlacialStonePortalEnabled;
 		//public static ConfigEntry<bool> MysticalLightWardEnabled;
 		public static ConfigEntry<bool> BuildPiecesLightingEnabled;
 
@@ -258,6 +260,7 @@ namespace MarsarahTweaks.Managers
 			BetterDeathRaiserEnabled = CreateConfig(ConfigSections.Balance, Configs.DeathRaiserModifications.Name, true, Configs.DeathRaiserModifications.Description);
 			BetterDeathRaiserSummonsEnabled = CreateConfig(ConfigSections.Balance, Configs.DeathRaiserSummonsModifications.Name, true, Configs.DeathRaiserSummonsModifications.Description);
 			BetterFrostStaffAccuracyEnabled = CreateConfig(ConfigSections.Balance, Configs.FrostStaffModifications.Name, true, Configs.FrostStaffModifications.Description);
+			//HealStaffEnabled = CreateConfig(ConfigSections.Balance, Configs.HealStaffModifications.Name, true, Configs.HealStaffModifications.Description);
 			ReducedCrossbowsReloadTimeEnabled = CreateConfig(ConfigSections.Balance, Configs.CrossbowsReloadModifications.Name, true, Configs.CrossbowsReloadModifications.Description);
 			BetterTrophyDropsEnabled = CreateConfig(ConfigSections.Balance, Configs.TrophyDropsModifications.Name, true, Configs.TrophyDropsModifications.Description);
 			BetterDropsEnabled = CreateConfig(ConfigSections.Balance, Configs.DropsModifications.Name, true, Configs.DropsModifications.Description);
@@ -297,7 +300,7 @@ namespace MarsarahTweaks.Managers
 
 			// ===== Build Pieces
 			PocketPortalEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.PocketPortal.Name, true, Configs.PocketPortal.Description);
-			GlacialStonePortalEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.GlacialStonePortal.Name, true, Configs.GlacialStonePortal.Description);
+			//GlacialStonePortalEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.GlacialStonePortal.Name, true, Configs.GlacialStonePortal.Description);
 			//MysticalLightWardEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.MysticalLightWard.Name, true, Configs.MysticalLightWard.Description);
 			BuildPiecesLightingEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.BuildPiecesLighting.Name, true, Configs.BuildPiecesLighting.Description);
 
@@ -373,7 +376,7 @@ namespace MarsarahTweaks.Managers
 
 			if (ObjectDB.instance == null || ZNetScene.instance == null) return;
 			if (ZNet.instance == null) return;
-			var spawnSystem = Object.FindObjectOfType<SpawnSystem>();
+			var spawnSystem = Object.FindFirstObjectByType<SpawnSystem>();
 
 			bool isDedicatedServer = ZNet.instance.IsDedicated();
 
@@ -490,9 +493,9 @@ namespace MarsarahTweaks.Managers
 						PocketPortal.TogglePortalCoreVisibility();
 						break;
 
-					case var name when name == Configs.GlacialStonePortal.Name:
+					/*case var name when name == Configs.GlacialStonePortal.Name:
 						GlacialStonePortal.TogglePortalVisibility();
-						break;
+						break;*/
 
 					/*case var name when name == Configs.MysticalLightWard.Name:
 						log.Info($"Mystical Light Ward toggled: {PermanentLightsEnabled.Value}");

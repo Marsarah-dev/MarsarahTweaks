@@ -4,6 +4,7 @@
  * 
  * A. Fixes
  *    - More Usable Fuel error message fixed when building or being nearby any Shield Generators
+ *    - Fixed UI emoji font issue after Valheim Unity Engine update
  *    
  * B. New UI
  * 
@@ -17,7 +18,7 @@
  *      - Fulings, Seeker and Charred do not spawn in early biomes at night when their relevant bosses are defeated
  *      - Fulings: Mountain
  *      - Seeker: Plains
- *      - Charred: Plains, Mistlands
+ *      - Charred: Plains, Mistlands (check Mistlands again)
  *      
  *    - No end-game raids in early biomes
  *      - Seeker and Charred raids do not trigger in the Black Forest biome
@@ -39,9 +40,6 @@
  *      
  *    - Blue and Green Dverger Lanterns
  *      - Added blue and green versions of the Dverger Lantern (both wall and standing)
- *      
- *    - Glacial Stone Portal
- *      - Cloned the unused stone-like portal in the game and renamed it to Glacial Stone Portal.
  * 
  * F. Other changes 
  *    - Further reduced chance of Snowstorms in the Mountain biome from a weight of 0.5 to 0.2 (originally 1) and Snow from weight 2.5 to 1.5 (originally 5)
@@ -51,10 +49,6 @@
  * 
  * - In readmes mention that players should look for configs reshuffles
  * 
- * - Fill #16 slot in Features config (previous Permanent Lights)
- * - Separate light sources in their own crafting tab when enabling this mod's light build pieces
- * - Make the inactive blue stone portal buildable
- * - Remove end-game raids from the Black Forest biome
  * 
  * Prep for update
  * - New Armor speed
@@ -62,6 +56,8 @@
  * - Forsaken powers CD's
  * - New gear costs
  * - Ghost, Bear and Vile trophy drop rate
+ * - Progression Halt for Brear and Vile
+ * - Gear recipes amounts/materials for the new weapons
  * 
  * A. Fixes
  *    - Handle Dvergr Helmet for Smart Biome (see if it's needed to handle in the first place)
@@ -118,7 +114,7 @@
  *       - Bigger Wisp Radius            -> Rename to Wisp Radius            - Set to indicated value
  *       - Less Fall Damage              -> Rename to Fall Damage Multiplier - Set to multiplier (0.6 means 40% less fall damage)
  *       - Shorter Rested Delay          -> Rename to Rested Delay           - Set to indicated value (default 20s)
- *    9. Make Fulings, Seekers and Charred spawn at night in later biomes (not in Meadows, BF and Swamp)
+ *    9. 
  *    10. 
  *    11. Make candles refillable with Resin
  *    
@@ -136,6 +132,10 @@
  *    7. 
  *    8. Faster smelting from all smelters and kiln
  *    
+ * E. Builds
+ * 
+ *    - Glacial Stone Portal (hidden)
+ *      - Cloned the unused stone-like portal in the game and renamed it to Glacial Stone Portal.
  *
  ***************************************************/
 
@@ -163,7 +163,7 @@ namespace MarsarahTweaks
 	public class MarsarahTweaks : BaseUnityPlugin
 	{
 		internal const string ModName = "MarsarahTweaks";
-		internal const string ModVersion = "1.4.0";
+		internal const string ModVersion = "1.4.1";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 

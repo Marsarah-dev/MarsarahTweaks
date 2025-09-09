@@ -28,7 +28,7 @@ namespace MarsarahTweaks.Patches.Features
 				UpdateExtensionsSpace(__instance);
 
 				// Add watcher
-				if (GameObject.FindObjectOfType<ExtensionWatcher>() == null)
+				if (GameObject.FindFirstObjectByType<ExtensionWatcher>() == null)
 				{
 					GameObject watcher = new GameObject("ExtensionWatcher");
 					GameObject.DontDestroyOnLoad(watcher);
@@ -116,7 +116,7 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			UpdateExtensionsSpace(ZNetScene.instance);
 
-			foreach (StationExtension ext in GameObject.FindObjectsOfType<StationExtension>())
+			foreach (StationExtension ext in GameObject.FindObjectsByType<StationExtension>(FindObjectsSortMode.None))
 			{
 				UpdateExtensionsRange(ext);
 			}
