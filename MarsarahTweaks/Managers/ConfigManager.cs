@@ -76,7 +76,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("02 - Gear Speed Modifications", "Removes speed penalty for heavy and mage armors; adds speed bonus to light armor. (Toggling mid-game requires CLIENT relog)");
 			public static readonly ConfigMetadata ExtraArmorStatsModifications = new ConfigMetadata("03 - Extra Armor Stats", "Heavy armor provides extra HP, light armor provides extra stamina, mage armor provides extra eitr");
 			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("04 - Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to max level within their respective biomes. Moves the Vilecage set to the  Workbench");
-			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("05 - Forsaken Powers Modifications", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)");
+			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("05 - Forsaken Powers Cooldowns", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)");
 			public static readonly ConfigMetadata CharacterSpeedModifications = new ConfigMetadata("06 - Faster Character Speed", "Faster character jog, walk, swim and crouch speeds (run excluded)");
 			public static readonly ConfigMetadata StatusEffectsModifications = new ConfigMetadata("07 - Shorter Wet And Potion Cooldowns", "Wet effect and potions cooldown timers reduced");
 			public static readonly ConfigMetadata LessStaminaModifications = new ConfigMetadata("08 - Less Stamina Usage", "Stamina use of all actions is reduced by 15%");
