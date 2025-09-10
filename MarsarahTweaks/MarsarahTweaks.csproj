@@ -198,6 +198,7 @@
   <ItemGroup>
     <Content Include="Readmes\MarsarahTweaks_Description_BBCode.txt" />
     <Content Include="Readmes\MarsarahTweaks_Readme.txt" />
+    <Content Include="Readmes\TODO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.40\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.40\build\ILRepack.Lib.MSBuild.Task.targets')" />

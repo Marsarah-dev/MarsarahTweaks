@@ -1,0 +1,133 @@
+﻿
+ ******* DONE, NOT RELEASED *******
+
+   A. Fixes
+      - More Usable Fuel error message fixed when building or being nearby any Shield Generators
+      - Fixed UI emoji font issue after Valheim Unity Engine update
+
+   B. Updates
+      - Cheaper Gear Recipe Amounts: 
+        - Added Vilebone set and the PAws of the Bear to the list of changes (no changes made for Bear set, or Vilebone Maulclaws)
+          - Vilebone Cage: Bear Hide craft: 4 > 5
+          - Vilebone Drapes: Bear Hide upgrade: 5/10/15 > 2/4/6
+          - Paws of the Bear: Leather Scraps craft: 4 > 2 
+        - Revisited Troll set costs
+          - Troll Leather Helmet: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+          - Troll Leather Tunic: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+          - Troll Leather Pants: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+
+      - Further reduced chance of Snowstorms in the Mountain biome from a weight of 0.5 to 0.2 (originally 1) and Snow from weight 2.5 to 1.5 (originally 5)
+
+   C. New Grind Reduction
+
+   D. New Balance
+      - Better Creature Drops
+        - Fenring: Added Fenris Hair 1-2, Added Fenris Claw (replacing Wolf Fang)
+        - Bat: Added Blood Bag 50% chance drop
+        - Dverger Rogue, Mage and Ashlands Dvergr: Increased Soft Tissue chance to 100% (from 25%)
+
+   E. New Features
+      - Stop Nighttime Invasion
+        - Fulings, Seeker and Charred do not spawn in early biomes at night when their relevant bosses are defeated
+        - Fulings: Mountain
+        - Seeker: Plains
+        - Charred: Plains
+        
+      - No end-game raids in early biomes
+        - Seeker and Charred raids do not trigger in the Black Forest biome
+
+   F. New QOL
+
+   G. New Build Pieces
+      - Silver Sconce
+        - Added 3 types of Silver Sconces (red, blue and green flame) available in the Mountain biome
+        - Fuel lasts longer than the normal sconce
+        
+      - Green Standing Brazier 
+        - Added a green version of the Standing Brazier
+        
+      - Silver Hanging Brazier
+        - Added 3 types of Silver Hanging Braziers (red, blue and green flame) available in the Mountain biome
+        - Fuel lasts longer than the normal hanging brazier
+        
+      - Blue and Green Dverger Lanterns
+        - Added blue and green versions of the Dverger Lantern (both wall and standing)
+
+   H. New UI
+
+
+ ******* TODO *******
+   * Notes
+     - In readmes mention that players should look for configs reshuffles
+   
+   
+   * Prep for update
+     - New gear costs (done)
+
+     - New gear speed
+     - New gear stats (hp/stamina/eitr)
+     - New gear hook into smart biome
+     - New gear upgrade min station level
+     - Also check weapon and shileld speed (they were changed)
+     - New build pieces costs (Bear Rug)
+     - Forsaken powers CD's
+     - Ghost, Bear and Vile trophy drop rate
+     - Progression Halt for Brear and Vile
+     - Gear recipes amounts/materials for the new weapons
+     - Move Vile set to Workbench from Forge and check min station value
+     - Bear and Vile trophy drop rates check
+
+   A. Fixes
+      - Handle Dvergr Helmet for Smart Biome (see if it's needed to handle in the first place)
+
+   B. Updates
+
+   C. New Grind Reduction
+      - Increase Scrap Iron drop amount from Muddy Piles
+
+   D. New Balance
+      - Staff of Fracturing - increase blast radius of splinters
+      - Add better gear set bonuses
+
+   E. New Features
+      - Add secondary attack to Staff of Protection that heals (like the Dverger Mage heal)
+      - Add Better Roads (increase player speed on roads)
+      - Create a Vote to Sleep section, where a player can trigger a vote to sleep and if the majority votes yes, then time is skipped as sleeping.
+        - If one or more players are in combat (enemies nearby), then the vote is entirely skipped and no time is passed.
+      - Destroy ship with a hammer
+
+   F. New QOL
+      - Add Less Fireplace Smoke - Can choose a percentage in config
+      - Recreate the Better Sorting section
+      - Make candles refillable with Resin
+      - Increase Maypole range
+      - Remove character speed slow when performing specific actions (equip, eat)
+      - Faster smelting from all smelters and kiln
+
+   G. New Build Pieces
+      - Add Mystical Light Ward
+        - Remove permament lights section. Create a new ward that makes all lights permanent in an area around it (or refuels them if the fuel is smaller than a certain number)
+      - Create a smart dropbox - Everything placed in it will automatically be moved to nearby chests that have an item of the respective type
+
+   H. New UI
+      - Add 🧑‍🤝‍🧑 for Online players in alternate UI
+      - Add taming indicator for each creature in taming progress
+      - Better enemy nameplates
+      - Better item level indicator
+      - Show player HP and death count next to online indicator (or color their names with red if they have the corpse run buff)
+      - Make my UI elements draggable
+      - Create Smart Pins - admin predefines pins and players can only put the predefined pins on map
+
+   I. Other
+      - Swap relevant configs from bool to numbers where applicable
+        - Less Stamina Usage            -> Rename to Stamina Usage          - Value indicates percentage of stamina used. Posisive numbers increase it
+        - Reduced Crossbows Reload Time -> Rename to Crossbows Reload Time  - Change the mod to set it to the indicated value instead of subtracting/adding
+        - Hildir Weight Rewards         ->                                  - Set extra weight per chest delivered
+        - Lighter Metal Weight          -> Rename to Metal Weight           - Set number for all metals (default values between 8 and 12)
+        - Larger Pickup Area            -> Rename to Pickup Area            - Set to indicated number (default 2)
+        - Larger Boat Explore Radius    -> Rename to Boat Explore Radius    - Set to multiplier (2 means 2x the radius) / Or set to indicated value
+        - Bigger Wisp Radius            -> Rename to Wisp Radius            - Set to indicated value
+        - Less Fall Damage              -> Rename to Fall Damage Multiplier - Set to multiplier (0.6 means 40% less fall damage)
+        - Shorter Rested Delay          -> Rename to Rested Delay           - Set to indicated value (default 20s)
+
+

@@ -36,17 +36,18 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "ArmorPaddedCuirass", 0f }, { "ArmorCarapaceChest", 0f }, { "ArmorFlametalChest", 0f },
 			{ "ArmorMageChest", 0f }, { "ArmorMageChest_Ashlands", 0f },
 			{ "ArmorTrollLeatherChest", 0.02f }, { "ArmorAshlandsMediumChest", 0.02f },
-			{ "ArmorRootChest", 0.01f },
+			{ "ArmorRootChest", 0.01f }, { "ArmorBerserkerChest", 0.02f }, { "ArmorBerserkerUndeadChest", 0.02f },
 
 			// Legs
 			{ "ArmorBronzeLegs", 0f }, { "ArmorIronLegs", 0f }, { "ArmorWolfLegs", 0f },
 			{ "ArmorPaddedGreaves", 0f }, { "ArmorCarapaceLegs", 0f }, { "ArmorFlametalLegs", 0f },
 			{ "ArmorMageLegs", 0f }, { "ArmorMageLegs_Ashlands", 0f },
 			{ "ArmorTrollLeatherLegs", 0.02f }, { "ArmorAshlandsMediumlegs", 0.02f },
-			{ "ArmorRootLegs", 0.01f },
+			{ "ArmorRootLegs", 0.01f }, { "ArmorBerserkerLegs", 0.02f }, { "ArmorBerserkerUndeadLegs", 0.02f },
 
 			// Two-handed weapons
-			{ "Battleaxe", -0.05f }, { "BattleaxeCrystal", -0.05f },
+			{ "Battleaxe", -0.10f }, { "BattleaxeCrystal", -0.10f }, { "BattleaxeBlackmetal", -0.10f }, { "BattleaxeSkullSplittur", -0.10f }, 
+			{ "SledgeStagbreaker", -0.10f }, { "SledgeIron", -0.10f }, { "SledgeDemolisher", -0.10f },
 
 			// Shields
 			{ "ShieldFlametalTower", -0.10f }, { "ShieldBlackmetalTower", -0.10f },

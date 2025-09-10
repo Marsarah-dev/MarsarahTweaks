@@ -342,6 +342,12 @@ namespace MarsarahTweaks.Patches.Grind
 					{ "BlackMetal", (10, 5) } // 25, 15
 				}
 			},
+			{ "Recipe_Battleaxe_Blackmetal", new Dictionary<string, (int?, int?)>
+				{
+					{ "FineWood", (null, 2) }, // 10, 0
+					{ "BlackMetal", (15, 7) } // 30, 15
+				}
+			},
 			{ "Recipe_ShieldBlackmetal", new Dictionary<string, (int?, int?)>
 				{
 					{ "Chain", (null, 0) } // 5, 2
@@ -405,6 +411,14 @@ namespace MarsarahTweaks.Patches.Grind
 				{
 					{ "Iron", (15, 5) }, // 30, 15
 					{ "Bronze", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_Battleaxe_SkullSplittur", new Dictionary<string, (int?, int?)>
+				{
+					{ "Iron", (15, 5) }, // 30, 15
+					{ "YggdrasilWood", (10, 2) }, // 15, 5
+					{ "Eitr", (null, 2) } // 10, 0
 				}
 			},
 			{
