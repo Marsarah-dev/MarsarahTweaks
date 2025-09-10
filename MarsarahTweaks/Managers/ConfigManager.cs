@@ -513,6 +513,7 @@ namespace MarsarahTweaks.Managers
 						SilverHangingBrazier.ToggleSilverHangingBrazierVisibility();
 						//SilverTableTorch.ToggleSilverTorchVisibility();
 						ColoredDvergerLanterns.ToggleColoredDvergrLanternsVisibility();
+						//BuildPieceHelper.UpdateCategory();
 						break;
 
 					case var name when name == Configs.UIInventoryWeightAndSlots.Name:

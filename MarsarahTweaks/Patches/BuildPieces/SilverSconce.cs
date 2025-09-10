@@ -85,7 +85,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			ConfigureSilverSconcePieceData(SilverSconcePrefabGreen, "ElderBark", "Silver", "Guck");
 
 			// Toggle visibility
-			ToggleSilverSconceVisibility();
+			//ToggleSilverSconceVisibility();
 
 			SilverSconcePrefab.SetActive(true);
 			SilverSconcePrefabBlue.SetActive(true);
@@ -365,7 +365,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			var pieceConfig = new PieceConfig
 			{
 				PieceTable = "Hammer",
-				Category = "Furniture", // Extra Lights
+				Category = "Extra Lights", // Extra Lights
 				Requirements = new[]
 				{
 					new RequirementConfig(resourceWood, 2, recover: true), // ElderBark
@@ -377,29 +377,52 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MPrefabManager.AddToBuildMenu(prefab, pieceConfig);
 		}
 
-		public static void ToggleSilverSconceVisibility()
+		public static bool ToggleSilverSconceVisibility()
 		{
-			Piece silverSconcePiece = SilverSconcePrefab?.GetComponent<Piece>();
-			Piece silverSconcePieceBlue = SilverSconcePrefabBlue?.GetComponent<Piece>();
-			Piece silverSconcePieceGreen = SilverSconcePrefabGreen?.GetComponent<Piece>();
-			if (silverSconcePiece == null || silverSconcePieceBlue == null || silverSconcePieceGreen == null)
+			bool toggled = false;
+			bool enabled = ConfigManager.BuildPiecesLightingEnabled.Value;
+
+			toggled = TogglePiece(SilverSconcePrefab?.GetComponent<Piece>(), enabled);
+			toggled = toggled && TogglePiece(SilverSconcePrefabBlue?.GetComponent<Piece>(), enabled);
+			toggled = toggled && TogglePiece(SilverSconcePrefabGreen?.GetComponent<Piece>(), enabled);
+
+			return toggled;
+		}
+
+		private static bool TogglePiece(Piece piece, bool enabled)
+		{
+			if (piece == null)
 			{
-				log.Warn($"Piece component does not exist. No toggle made.");
-				return;
+				log.Warn("Piece is null.");
+				return false;
+			}
+			if (ObjectDB.instance == null)
+			{
+				log.Warn("ObjDB is not ready yet.");
+				return false;
 			}
 
-			if (ConfigManager.BuildPiecesLightingEnabled.Value)
+			PieceTable hammer = ObjectDB.instance.GetItemPrefab("Hammer").GetComponent<ItemDrop>().m_itemData.m_shared.m_buildPieces;
+			if (hammer == null) return false;
+
+			piece.m_enabled = enabled;
+
+			if (enabled)
 			{
-				silverSconcePiece.m_enabled = true;
-				silverSconcePieceBlue.m_enabled = true;
-				silverSconcePieceGreen.m_enabled = true;
+				if (!hammer.m_pieces.Contains(piece.gameObject))
+				{
+					hammer.m_pieces.Add(piece.gameObject);
+				}
 			}
 			else
 			{
-				silverSconcePiece.m_enabled = false;
-				silverSconcePieceBlue.m_enabled = false;
-				silverSconcePieceGreen.m_enabled = false;
+				if (hammer.m_pieces.Contains(piece.gameObject))
+				{
+					hammer.m_pieces.Remove(piece.gameObject);
+				}
 			}
+
+			return true;
 		}
 
 		public static void RefreshSilverSconceRequirements()

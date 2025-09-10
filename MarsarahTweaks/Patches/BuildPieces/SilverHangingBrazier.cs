@@ -83,7 +83,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			ConfigureSilverHangingBrazierPieceData(SilverHangingBrazierPrefabGreen, "Silver", "Guck", "Chain");
 
 			// Toggle visibility
-			ToggleSilverHangingBrazierVisibility();
+			//ToggleSilverHangingBrazierVisibility();
 
 			SilverHangingBrazierPrefab.SetActive(true);
 			SilverHangingBrazierPrefabBlue.SetActive(true);
@@ -521,7 +521,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			var pieceConfig = new PieceConfig
 			{
 				PieceTable = "Hammer",
-				Category = "Furniture", // Extra Lights
+				Category = "Extra Lights", // Extra Lights
 				Requirements = new[]
 				{
 					new RequirementConfig(resourceMetal, ConfigManager.BuildPieceAmountsEnabled.Value? 3 : 5, recover: true),
@@ -533,29 +533,52 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MPrefabManager.AddToBuildMenu(prefab, pieceConfig);
 		}
 
-		public static void ToggleSilverHangingBrazierVisibility()
+		public static bool ToggleSilverHangingBrazierVisibility()
 		{
-			Piece silverHangingBrazierPiece = SilverHangingBrazierPrefab?.GetComponent<Piece>();
-			Piece silverHangingBrazierPieceBlue = SilverHangingBrazierPrefabBlue?.GetComponent<Piece>();
-			Piece silverHangingBrazierPieceGreen = SilverHangingBrazierPrefabGreen?.GetComponent<Piece>();
-			if (silverHangingBrazierPiece == null || silverHangingBrazierPieceBlue == null || silverHangingBrazierPieceGreen == null)
+			bool toggled = false;
+			bool enabled = ConfigManager.BuildPiecesLightingEnabled.Value;
+
+			toggled = TogglePiece(SilverHangingBrazierPrefab?.GetComponent<Piece>(), enabled);
+			toggled = toggled && TogglePiece(SilverHangingBrazierPrefabBlue?.GetComponent<Piece>(), enabled);
+			toggled = toggled && TogglePiece(SilverHangingBrazierPrefabGreen?.GetComponent<Piece>(), enabled);
+
+			return toggled;
+		}
+
+		private static bool TogglePiece(Piece piece, bool enabled)
+		{
+			if (piece == null)
 			{
-				log.Warn($"Piece component does not exist. No toggle made.");
-				return;
+				log.Warn("Piece is null.");
+				return false;
+			}
+			if (ObjectDB.instance == null)
+			{
+				log.Warn("ObjDB is not ready yet.");
+				return false;
 			}
 
-			if (ConfigManager.BuildPiecesLightingEnabled.Value)
+			PieceTable hammer = ObjectDB.instance.GetItemPrefab("Hammer").GetComponent<ItemDrop>().m_itemData.m_shared.m_buildPieces;
+			if (hammer == null) return false;
+
+			piece.m_enabled = enabled;
+
+			if (enabled)
 			{
-				silverHangingBrazierPiece.m_enabled = true;
-				silverHangingBrazierPieceBlue.m_enabled = true;
-				silverHangingBrazierPieceGreen.m_enabled = true;
+				if (!hammer.m_pieces.Contains(piece.gameObject))
+				{
+					hammer.m_pieces.Add(piece.gameObject);
+				}
 			}
 			else
 			{
-				silverHangingBrazierPiece.m_enabled = false;
-				silverHangingBrazierPieceBlue.m_enabled = false;
-				silverHangingBrazierPieceGreen.m_enabled = false;
+				if (hammer.m_pieces.Contains(piece.gameObject))
+				{
+					hammer.m_pieces.Remove(piece.gameObject);
+				}
 			}
+
+			return true;
 		}
 
 		public static void RefreshSilverHangingBrazierRequirements()
