@@ -23,6 +23,7 @@ namespace MarsarahTweaks.Patches.Balance
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
 				UpdateGearRecipeUnlock(__instance, false);
+				UpdateGearRecipeStations(__instance, false);
 			}
 		}
 
@@ -70,10 +71,11 @@ namespace MarsarahTweaks.Patches.Balance
 			// Station Level 1
 			{ "Recipe_HelmetLeather", 1 }, { "Recipe_ArmorLeatherChest", 1 }, { "Recipe_ArmorLeatherLegs", 1 },
 			{ "Recipe_CapeDeerHide", 1 }, { "Recipe_HelmetTrollLeather", 1 }, { "Recipe_ArmorTrollLeatherChest", 1 },
-			{ "Recipe_ArmorTrollLeatherLegs", 1 }, { "Recipe_CapeTrollHide", 1 }, { "Recipe_SledgeStagbreaker", 1 },
-			{ "Recipe_HelmetMage_Ashlands", 1 }, { "Recipe_ArmorMageChest_Ashlands", 1 }, { "Recipe_ArmorMageLegs_Ashlands", 1 },
-			{ "Recipe_CapeAsksvin", 1 }, { "Recipe_StaffClusterbomb", 1 }, { "Recipe_StaffGreenRoots", 1 },
-			{ "Recipe_StaffLightning", 1 }, { "Recipe_StaffRedTroll", 1 },
+			{ "Recipe_ArmorTrollLeatherLegs", 1 }, { "Recipe_CapeTrollHide", 1 }, { "Recipe_HelmetBerserker", 1 },
+			{ "Recipe_ArmorBerserkerChest", 1 }, { "Recipe_ArmorBerserkerLegs", 1 }, { "Recipe_FistBjornClaw", 1 },
+			{ "Recipe_SledgeStagbreaker", 1 }, { "Recipe_HelmetMage_Ashlands", 1 }, { "Recipe_ArmorMageChest_Ashlands", 1 }, 
+			{ "Recipe_ArmorMageLegs_Ashlands", 1 }, { "Recipe_CapeAsksvin", 1 }, { "Recipe_StaffClusterbomb", 1 }, 
+			{ "Recipe_StaffGreenRoots", 1 }, { "Recipe_StaffLightning", 1 }, { "Recipe_StaffRedTroll", 1 },
 
 			// Station Level 2
 			{ "Recipe_HelmetMedium_Ashlands", 2 }, { "Recipe_ArmorMediumChest_Ashlands", 2 }, { "Recipe_ArmorMediumLegs_Ashlands", 2 },
@@ -91,6 +93,12 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "Recipe_BowAshlands_Blood", 3 }, { "Recipe_BowAshlands_Lightning", 3 }, { "Recipe_BowAshlands_Nature", 3 },
 			{ "Recipe_CrossbowRipper_Blood", 3 }, { "Recipe_CrossbowRipper_Lightning", 3 }, { "Recipe_CrossbowRipper_Nature", 3 },
 			{ "Recipe_SwordFire", 3 }, // Dyrnwyn
+		};
+
+		private static readonly Dictionary<string, string> originalRecipeStations = new Dictionary<string, string>();
+		private static readonly Dictionary<string, string> newRecipeStations = new Dictionary<string, string>()
+		{
+			{ "Recipe_HelmetBerserkerUndead", "piece_workbench" }, { "Recipe_ArmorBerserkerUndeadChest", "piece_workbench" }, { "Recipe_ArmorBerserkerUndeadLegs", "piece_workbench" }
 		};
 
 		public static void UpdateGearRecipeUnlock(ObjectDB objDB, bool wasChanged)
@@ -134,6 +142,63 @@ namespace MarsarahTweaks.Patches.Balance
 
 				// Remove backups after restoring
 				originalRecipeStationLevels.Clear();
+			}
+		}
+
+		public static void UpdateGearRecipeStations(ObjectDB objDB, bool wasChanged)
+		{
+			if (ConfigManager.GearUpgradeUnlockEnabled.Value)
+			{
+				foreach (var entry in newRecipeStations)
+				{
+					string recipeName = entry.Key;
+					string newStation = entry.Value;
+
+					Recipe recipe = objDB.m_recipes.Find(r => r.name == recipeName);
+					if (recipe == null) continue;
+
+					// Backup original value if not already stored
+					if (!originalRecipeStations.ContainsKey(recipeName))
+					{
+						string original = recipe.m_craftingStation != null ? recipe.m_craftingStation.name : "null";
+						log.Info($"Backing up {recipeName} crafting station value: {original}");
+						originalRecipeStations[recipeName] = original;
+					}
+
+					// Apply new value
+					CraftingStation stationPrefab = ZNetScene.instance.GetPrefab(newStation)?.GetComponent<CraftingStation>();
+					if (stationPrefab == null)
+					{
+						log.Warn($"Could not find crafting station '{newStation}' for {recipeName}");
+						continue;
+					}
+
+					log.Info($"Applying new crafting station for {recipeName}: {newStation}");
+					recipe.m_craftingStation = stationPrefab;
+				}
+			}
+			else if (wasChanged)
+			{
+				foreach (var entry in originalRecipeStations)
+				{
+					string recipeName = entry.Key;
+					string originalStation = entry.Value;
+
+					Recipe recipe = objDB.m_recipes.Find(r => r.name == recipeName);
+					if (recipe == null) continue;
+
+					CraftingStation stationPrefab = null;
+					if (originalStation != "null")
+					{
+						stationPrefab = ZNetScene.instance.GetPrefab(originalStation)?.GetComponent<CraftingStation>();
+					}
+
+					log.Info($"Restoring {recipeName} crafting station value: {originalStation}");
+					recipe.m_craftingStation = stationPrefab;
+				}
+
+				// Remove backups after restoring
+				originalRecipeStations.Clear();
 			}
 		}
 	}
