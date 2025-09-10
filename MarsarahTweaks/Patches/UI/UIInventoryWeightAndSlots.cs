@@ -329,7 +329,7 @@ namespace MarsarahTweaks.Patches.UI
 			UIWeightBarText = CreateTextObject("WeightText", UIWeightBarArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleCenter, new Vector2(0f, 0f), UIWeightAreaSize);
 
 			// Bag icon
-			UIWeightBarEmojiTMP = CreateTMPTextObject("WeightEmojiTMP", UIWeightBarEmojiArea, Color.green, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.Midline, new Vector2(0f, 0f), UIWeightAreaSize);
+			UIWeightBarEmojiTMP = CreateTMPTextObject("WeightEmojiTMP", UIWeightBarEmojiArea, Color.green, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.Midline, new Vector2(0f, 0f), UIWeightAreaSize, log);
 
 
 			// ======= Inventory Slots ========
@@ -359,7 +359,7 @@ namespace MarsarahTweaks.Patches.UI
 			UISlotsText2 = CreateTextObject("slotsText", UISlotsArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-4f, 0f), UISlotsAreaSize);
 
 			// Bag icon
-			UISlotsEmojiTMP = CreateTMPTextObject("SlotsEmojiTMP", UISlotsArea, Color.green, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UISlotsAreaSize);
+			UISlotsEmojiTMP = CreateTMPTextObject("SlotsEmojiTMP", UISlotsArea, Color.green, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UISlotsAreaSize, log);
 		}
 	}
 }

@@ -214,7 +214,7 @@ namespace MarsarahTweaks.Patches.UI
 			summonsAreaBackground.enabled = showUI;
 
 			UISummonsText = CreateTextObject("SummonsText", UISummonsArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleCenter, new Vector2(0f, 0f), UISumonsAreaSizeDefault);
-			UISummonsTextTMP = CreateTMPTextObject("SummonsText", UISummonsArea, Color.white, UIEmojiFontName, UITextFontSize, TextAlignmentOptions.Midline, new Vector2(0f, 0f), UISumonsAreaSize);
+			UISummonsTextTMP = CreateTMPTextObject("SummonsText", UISummonsArea, Color.white, UIEmojiFontName, UITextFontSize, TextAlignmentOptions.Midline, new Vector2(0f, 0f), UISumonsAreaSize, log);
 		}
 	}
 }

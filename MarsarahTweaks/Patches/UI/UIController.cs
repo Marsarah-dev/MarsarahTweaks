@@ -117,7 +117,7 @@ namespace MarsarahTweaks.Patches.UI
 			return text;
 		}
 
-		public static TextMeshProUGUI CreateTMPTextObject(string name, GameObject parent, Color textColor, string fontName, int fontSize, TextAlignmentOptions alignment, Vector2 position, Vector2 sizeDelta)
+		public static TextMeshProUGUI CreateTMPTextObject(string name, GameObject parent, Color textColor, string fontName, int fontSize, TextAlignmentOptions alignment, Vector2 position, Vector2 sizeDelta, LogManager specificLog)
 		{
 			GameObject textObject = new GameObject(name);
 			textObject.layer = 5;
@@ -154,7 +154,7 @@ namespace MarsarahTweaks.Patches.UI
 			}
 			else
 			{
-				log.Warn($"Font material for '{fontName}' is null or font is missing. Skipping outline setup.");
+				specificLog.Warn($"Font material for '{fontName}' is null or font is missing. Skipping outline setup.");
 			}
 
 			return tmpText;

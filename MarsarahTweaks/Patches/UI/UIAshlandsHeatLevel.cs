@@ -247,7 +247,7 @@ namespace MarsarahTweaks.Patches.UI
 
 			// Flame Icon
 			//heatBarEmojiTMP = CreateTMPTextObject("HeatEmojiTMP", UIHeatBarArea, Color.red, UIEmojiFontName, UITextFontSize, TextAlignmentOptions.Top, new Vector2(0f, -3f), UIHeatAreaSize);
-			heatBarEmojiTMP = CreateTMPTextObject("HeatEmojiTMP", UIHeatBarArea, Color.red, UIEmojiFontName, UIEmojiFontSize, TextAlignmentOptions.MidlineRight, new Vector2(-2f, 0f), UIHeatAreaSize);
+			heatBarEmojiTMP = CreateTMPTextObject("HeatEmojiTMP", UIHeatBarArea, Color.red, UIEmojiFontName, UIEmojiFontSize, TextAlignmentOptions.MidlineRight, new Vector2(-2f, 0f), UIHeatAreaSize, log);
 		}
 	}
 }

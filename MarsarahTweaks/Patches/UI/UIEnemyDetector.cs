@@ -231,7 +231,7 @@ namespace MarsarahTweaks.Patches.UI
 			UIEnemyText2 = CreateTextObject("EnemyText2", UIEnemyArea2, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-4f, 0f), UIEnemyAreaSize);
 
 			// Enemy icon
-			UIEnemyEmojiTMP = CreateTMPTextObject("EnemyEmojiTMP", UIEnemyArea2, Color.green, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UIEnemyAreaSize);
+			UIEnemyEmojiTMP = CreateTMPTextObject("EnemyEmojiTMP", UIEnemyArea2, Color.green, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UIEnemyAreaSize, log);
 
 			// ==== Friendly Counter ====
 
@@ -259,7 +259,7 @@ namespace MarsarahTweaks.Patches.UI
 			UIFriendlyText = CreateTextObject("FriendlyText", UIFriendlyArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-4f, 0f), UIEnemyAreaSize);
 
 			// Friendly icon
-			UIFriendlyEmojiTMP = CreateTMPTextObject("FriendlyEmojiTMP", UIFriendlyArea, Color.green, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UIEnemyAreaSize);
+			UIFriendlyEmojiTMP = CreateTMPTextObject("FriendlyEmojiTMP", UIFriendlyArea, Color.green, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UIEnemyAreaSize, log);
 		}
 	}
 }

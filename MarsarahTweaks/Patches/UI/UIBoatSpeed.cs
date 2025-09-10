@@ -219,7 +219,7 @@ namespace MarsarahTweaks.Patches.UI
 			UIBoatText2 = CreateTextObject("BoatText2", UIBoatArea2, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-4f, 0f), UIBoatAreaSize);
 
 			// Enemy icon
-			UIBoatEmojiTMP = CreateTMPTextObject("BoatEmojiTMP", UIBoatArea2, Color.white, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UIBoatAreaSize);
+			UIBoatEmojiTMP = CreateTMPTextObject("BoatEmojiTMP", UIBoatArea2, Color.white, UIEmojiFontName, UITextFontSize + 4, TextAlignmentOptions.MidlineLeft, new Vector2(4f, 0f), UIBoatAreaSize, log);
 		}
 	}
 }

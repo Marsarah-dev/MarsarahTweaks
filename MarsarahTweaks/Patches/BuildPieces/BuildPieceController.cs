@@ -48,7 +48,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 		{
 			if (piece == null)
 			{
-				specificLog.Warn("Piece is null.");
+				//specificLog.Warn("Piece is null.");
 				return false;
 			}
 			if (ObjectDB.instance == null)
