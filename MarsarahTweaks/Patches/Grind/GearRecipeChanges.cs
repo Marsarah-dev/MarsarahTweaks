@@ -23,6 +23,8 @@ namespace MarsarahTweaks.Patches.Grind
 
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
+				//LogRecipes(__instance);
+
 				if (ConfigManager.GearRecipeAmountsEnabled.Value || ConfigManager.GearRecipeMaterialsEnabled.Value)
 				{
 					UpdateGearRecipes(__instance, false, false);
@@ -101,6 +103,13 @@ namespace MarsarahTweaks.Patches.Grind
 			{ "Recipe_ArrowFlint", new Dictionary<string, (int?, int?)>
 				{
 					{ "Wood", (5, null) } // 8, null
+				}
+			},
+
+			// Bear
+			{ "Recipe_FistBjornClaw", new Dictionary<string, (int?, int?)>
+				{
+					{ "LeatherScraps", (2, null) }, // 4, 2
 				}
 			},
 
@@ -691,20 +700,19 @@ namespace MarsarahTweaks.Patches.Grind
 			{
 				"Recipe_HelmetTrollLeather", new Dictionary<string, (int?, int?)>
 				{
-					{ "TrollHide", (null, 3) }, // 5, 2
 					{ "BoneFragments", (0, 0) } // 3, 1
 				}
 			},
 			{
 				"Recipe_ArmorTrollLeatherChest", new Dictionary<string, (int?, int?)>
 				{
-					{ "TrollHide", (6, 3) } // 5, 2
+					{ "TrollHide", (6, null) } // 5, 2
 				}
 			},
 			{
 				"Recipe_ArmorTrollLeatherLegs", new Dictionary<string, (int?, int?)>
 				{
-					{ "TrollHide", (6, 3) } // 5, 2
+					{ "TrollHide", (6, null) } // 5, 2
 				}
 			},
 			{
@@ -714,6 +722,8 @@ namespace MarsarahTweaks.Patches.Grind
 					{ "BoneFragments", (5, 3) } // 10, 5
 				}
 			},
+
+			// Bear
 
 			// Root
 			{
@@ -812,6 +822,20 @@ namespace MarsarahTweaks.Patches.Grind
 				{
 					{ "Silver", (2, 1) }, // 4, 2
 					{ "WolfPelt", (5, 1) } // 6, 4
+				}
+			},
+
+			// Vilebone
+			{
+				"Recipe_ArmorBerserkerUndeadChest", new Dictionary<string, (int?, int?)>
+				{
+					{ "BjornHide", (5, null) } // 4, 2
+				}
+			},
+			{
+				"Recipe_ArmorBerserkerUndeadLegs", new Dictionary<string, (int?, int?)>
+				{
+					{ "BjornHide", (null, 2) } // 10, 5
 				}
 			},
 
@@ -1310,6 +1334,55 @@ namespace MarsarahTweaks.Patches.Grind
 			//log.Info("Restore backup - we got to the end.");
 
 			return false; // No backup found
+		}
+
+		// Log Recipes
+		private static void LogRecipes(ObjectDB objDb)
+		{
+			if (objDb == null)
+			{
+				log.Warn("ObjectDB is null, cannot log recipes.");
+				return;
+			}
+
+			log.Info("=== Listing all Recipes in ObjectDB ===");
+
+			foreach (Recipe recipe in objDb.m_recipes)
+			{
+				if (recipe == null || recipe.m_item == null || recipe.m_item.m_itemData == null)
+					continue;
+
+				string recipeName = recipe.name;
+				string itemName = recipe.m_item.m_itemData.m_shared.m_name;
+				int minStationLevel = recipe.m_minStationLevel;
+
+				string station = recipe.m_craftingStation != null
+					? recipe.m_craftingStation.m_name
+					: "None";
+
+				log.Info($"Recipe: {recipeName}");
+				log.Info($"   Produces: {itemName}");
+				log.Info($"   Station: {station} (min level {minStationLevel})");
+
+				if (recipe.m_resources != null && recipe.m_resources.Length > 0)
+				{
+					log.Info("   Requirements:");
+					foreach (var req in recipe.m_resources)
+					{
+						if (req?.m_resItem != null)
+						{
+							string resName = req.m_resItem.name;
+							log.Info($"      - {resName} x{req.m_amount} (upgrade: {req.m_amountPerLevel})");
+						}
+					}
+				}
+				else
+				{
+					log.Info("   Requirements: None");
+				}
+			}
+
+			log.Info("=== End of Recipes List ===");
 		}
 	}
 }

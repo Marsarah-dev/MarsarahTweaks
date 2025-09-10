@@ -6,9 +6,21 @@
  *    - More Usable Fuel error message fixed when building or being nearby any Shield Generators
  *    - Fixed UI emoji font issue after Valheim Unity Engine update
  *    
- * B. New UI
+ * B. Updates
+ *    - Cheaper Gear Recipe Amounts: 
+ *      - Added Vilebone set and the PAws of the Bear to the list of changes (no changes made for Bear set, or Vilebone Maulclaws)
+ *        - Vilebone Cage: Bear Hide craft: 4 > 5
+ *        - Vilebone Drapes: Bear Hide upgrade: 5/10/15 > 2/4/6
+ *        - Paws of the Bear: Leather Scraps craft: 4 > 2 
+ *      - Revisited Troll set costs
+ *        - Troll Leather Helmet: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+ *        - Troll Leather Tunic: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+ *        - Troll Leather Pants: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+ *      
+ *    
+ * C. New UI
  * 
- * C. New Features
+ * D. New Features
  *    - Better Creature Drops
  *      - Fenring: Added Fenris Hair 1-2, Added Fenris Claw (replacing Wolf Fang)
  *      - Bat: Added Blood Bag 50% chance drop
@@ -23,9 +35,9 @@
  *    - No end-game raids in early biomes
  *      - Seeker and Charred raids do not trigger in the Black Forest biome
  *      
- * D. New QOL
+ * E. New QOL
  * 
- * E. New Build Pieces
+ * F. New Build Pieces
  * 
  *    - Silver Sconce
  *      - Added 3 types of Silver Sconces (red, blue and green flame) available in the Mountain biome
@@ -41,7 +53,7 @@
  *    - Blue and Green Dverger Lanterns
  *      - Added blue and green versions of the Dverger Lantern (both wall and standing)
  * 
- * F. Other changes 
+ * G. Other changes 
  *    - Further reduced chance of Snowstorms in the Mountain biome from a weight of 0.5 to 0.2 (originally 1) and Snow from weight 2.5 to 1.5 (originally 5)
  *    
  *  
@@ -51,13 +63,16 @@
  * 
  * 
  * Prep for update
- * - New Armor speed
+ * - New gear costs
+ * - New gear speed
+ * - New gear hook into smart biome
+ * - New gear upgrade min station level
  * - Also check weapon and shileld speed (they were changed)
  * - Forsaken powers CD's
- * - New gear costs
  * - Ghost, Bear and Vile trophy drop rate
  * - Progression Halt for Brear and Vile
  * - Gear recipes amounts/materials for the new weapons
+ * - Move Vile set to Workbench from Forge and check min station value
  * 
  * A. Fixes
  *    - Handle Dvergr Helmet for Smart Biome (see if it's needed to handle in the first place)

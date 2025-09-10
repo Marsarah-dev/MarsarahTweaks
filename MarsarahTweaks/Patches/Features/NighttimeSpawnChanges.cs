@@ -10,7 +10,7 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class NighttimeSpawnChanges
 	{
-		private static readonly LogManager log = new LogManager("Night Spawns", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Night Spawns", LogManager.LogLevel.Warning);
 
 		[HarmonyPatch(typeof(SpawnSystem), "Awake")]
 		class NighttimeSpawn_Patch

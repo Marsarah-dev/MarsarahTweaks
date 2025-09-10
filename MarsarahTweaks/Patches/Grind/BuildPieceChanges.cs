@@ -26,6 +26,8 @@ namespace MarsarahTweaks.Patches.Grind
 
 				if (!ConfigManager.BuildPieceAmountsEnabled.Value && !ConfigManager.BuildPieceMaterialsEnabled.Value) return;
 
+				//LogPrefabs(__instance);
+				//LogBuildPieces(__instance);
 				UpdateBuildPieces(__instance, false, false);
 			}
 		}
@@ -795,6 +797,77 @@ namespace MarsarahTweaks.Patches.Grind
 
 			log.Info("Restore backup - we got to the end.");
 			return false; // No backup found
+		}
+
+
+		// LogBuildPieces
+		public static void LogBuildPieces(ZNetScene znScene)
+		{
+			if (znScene == null)
+			{
+				log.Warn("ZNetScene is null. Cannot log build pieces.");
+				return;
+			}
+
+			log.Info("=== Logging All Build Pieces ===");
+
+			foreach (GameObject prefab in znScene.m_prefabs)
+			{
+				Piece piece = prefab.GetComponent<Piece>();
+				if (piece == null) continue;
+
+				// Header
+				log.Info($"[Piece] Name: {piece.m_name}, Prefab: {prefab.name}");
+
+				// Requirements
+				if (piece.m_resources != null && piece.m_resources.Length > 0)
+				{
+					foreach (var req in piece.m_resources)
+					{
+						if (req?.m_resItem == null) continue;
+						log.Info($"   - Resource: {req.m_resItem.name}, Amount: {req.m_amount}");
+					}
+				}
+				else
+				{
+					log.Info("   (No build requirements)");
+				}
+			}
+
+			log.Info("=== Finished Logging Build Pieces ===");
+		}
+
+		// Log Prefabs
+		private static void LogPrefabs(ZNetScene znScene)
+		{
+			if (znScene == null)
+			{
+				log.Warn("ZNetScene is null, cannot log prefabs.");
+				return;
+			}
+
+			log.Info("=== Listing all Prefabs in ZNetScene ===");
+
+			foreach (GameObject prefab in znScene.m_prefabs)
+			{
+				if (prefab == null) continue;
+
+				string name = prefab.name;
+
+				// Try to detect if it’s a Piece, ItemDrop, Character, etc.
+				Piece piece = prefab.GetComponent<Piece>();
+				ItemDrop item = prefab.GetComponent<ItemDrop>();
+				Character character = prefab.GetComponent<Character>();
+
+				string type = "Generic GameObject";
+				if (piece != null) type = "Build Piece";
+				else if (item != null) type = "Item";
+				else if (character != null) type = "Character";
+
+				log.Info($"Prefab: {name} ({type})");
+			}
+
+			log.Info("=== End of Prefabs List ===");
 		}
 	}
 }
