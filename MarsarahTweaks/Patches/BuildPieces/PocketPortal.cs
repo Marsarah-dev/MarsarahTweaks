@@ -326,7 +326,8 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				return null;
 			}
 
-			Rect rect = new Rect(360, 1340, 64, 64); // This is the location of the SurtlingCore icon in the game's atlas
+			//Rect rect = new Rect(360, 1340, 64, 64); // This is the location of the SurtlingCore icon in the game's atlas
+			Rect rect = originalIcon.textureRect;
 
 			// Copy only the icon's sub-region from the large texture
 			Texture2D croppedTex = new Texture2D((int)rect.width, (int)rect.height, TextureFormat.RGBA32, false);
