@@ -85,11 +85,14 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "$item_legs_flametal", (22, 0, 0) },
 
 			// Hybrid (HP & Stamina)
-			{ "$item_helmet_medium_ashlands", (5, 5, 0) },
-			{ "$item_chest_medium_ashlands", (10, 8, 0) },
-			{ "$item_legs_medium_ashlands", (10, 7, 0) },
+			{ "$item_helmet_medium_ashlands", (5, 8, 0) },
+			{ "$item_chest_medium_ashlands", (10, 12, 0) },
+			{ "$item_legs_medium_ashlands", (10, 10, 0) },
 
 			// Light Armor (Stamina Bonus)
+			{ "$item_helmet_berserker", (0, 1, 0) },
+			{ "$item_chest_berserker", (0, 2, 0) },
+			{ "$item_legs_berserker", (0, 2, 0) },
 			{ "$item_helmet_trollleather", (0, 1, 0) },
 			{ "$item_chest_trollleather", (0, 2, 0) },
 			{ "$item_legs_trollleather", (0, 2, 0) },
@@ -99,6 +102,9 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "$item_helmet_fenris", (0, 4, 0) },
 			{ "$item_chest_fenris", (0, 6, 0) },
 			{ "$item_legs_fenris", (0, 5, 0) },
+			{ "$item_helmet_berserker_undead", (0, 5, 0) },
+			{ "$item_chest_berserker_undead", (0, 8, 0) },
+			{ "$item_legs_berserker_undead", (0, 7, 0) },
 
 			// Mage Gear (Eitr Bonus)
 			{ "$item_helmet_mage", (0, 0, 10) },

@@ -7,7 +7,7 @@
 
    B. Updates
       - Cheaper Gear Recipe Amounts: 
-        - Added Vilebone set and the PAws of the Bear to the list of changes (no changes made for Bear set, or Vilebone Maulclaws)
+        - Added Vilebone set and the Paws of the Bear to the list of changes (no changes made for Bear set, or Vilebone Maulclaws)
           - Vilebone Cage: Bear Hide craft: 4 > 5
           - Vilebone Drapes: Bear Hide upgrade: 5/10/15 > 2/4/6
           - Paws of the Bear: Leather Scraps craft: 4 > 2 
@@ -15,6 +15,39 @@
           - Troll Leather Helmet: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
           - Troll Leather Tunic: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
           - Troll Leather Pants: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+        - Black Metal Battleaxe
+          - Fine Wood upgrade: 0/0/0 > 2/4/6
+          - Black Metal Craft: 30 > 15
+          - Black Metal Upgrade: 15/30/45 > 7/14/21
+        - Skull Splittur
+          - Iron craft: 30 > 15
+          - Iron upgrade: 15/30/45 > 5/10/15
+          - Yggdrasil Wood craft: 15 > 10
+          - Yggdrasil Wood upgrade: 5/10/15 > 2/4/6
+
+      - Gear Speed Modifications:
+        - Patterns of the Bear: 0% > 2%
+        - Loincloth of the Bear: 0% > 2%
+        - Vilebone Cage: 0% > 2%
+        - Vilebone Drapes: 0% > 2%
+        - Stagbreaker: -15% > -10%
+        - Iron Sledge: -15% > -10%
+        - Demolisher: -15% > -10%
+        - Battleaxe: -15% > -10%
+        - Crystal Battleaxe: -15% > -10%
+        - Black Metal Battleaxe: -15% > -10%
+        - Skull Splittur: -15% > -10%
+
+      - Extra Armor Stats (Stamina):
+        - Headdress of the Bear: 1
+        - Patterns of the Bear: 2
+        - Loincloth of the Bear: 2
+        - Vilebone Visage: 5
+        - Vilebone Cage: 8
+        - Vilebone Drapes: 7
+        - Hood of Ask: 5 > 8
+        - Robes of Ask: 8 > 12
+        - Trousers of Ask: 7 > 10
 
       - Further reduced chance of Snowstorms in the Mountain biome from a weight of 0.5 to 0.2 (originally 1) and Snow from weight 2.5 to 1.5 (originally 5)
 
@@ -63,12 +96,11 @@
    
    * Prep for update
      - New gear costs (done)
+     - New gear speed (done)
+     - New gear stats (hp/stamina/eitr) (done)
 
-     - New gear speed
-     - New gear stats (hp/stamina/eitr)
      - New gear hook into smart biome
      - New gear upgrade min station level
-     - Also check weapon and shileld speed (they were changed)
      - New build pieces costs (Bear Rug)
      - Forsaken powers CD's
      - Ghost, Bear and Vile trophy drop rate
