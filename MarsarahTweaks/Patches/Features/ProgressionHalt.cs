@@ -788,6 +788,8 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (__instance == null) return;
 
+				//TrophyDropsChanges.LogTrophies(__instance);
+
 				bool bossStateChanged = false;
 
 				if (GlobalKeyChecker.EikthyrDefeated != lastEikthyrDefeated)

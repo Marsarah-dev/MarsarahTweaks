@@ -60,6 +60,9 @@
         - Bonemass: reduced CD from 17.5 mins to 15 mins
         - Yagluth: reduced CD from 17.5 mins to 15 mins
 
+      - Better Trophy Drop Rates:
+        - Increased the trophy drop rates for the following creatures from 10% to 20%: Ghost, Bear, Vile
+
       - Further reduced chance of Snowstorms in the Mountain biome from a weight of 0.5 to 0.2 (originally 1) and Snow from weight 2.5 to 1.5 (originally 5)
 
    C. New Grind Reduction
@@ -113,8 +116,8 @@
      - New gear upgrade min station level (also move vile set to workbench) (done)
      - New build pieces costs (Bear Rug) (no change needed)
      - Forsaken powers CD's (done)
+     - Ghost, Bear and Vile trophy drop rate (done)
 
-     - Ghost, Bear and Vile trophy drop rate
      - Progression Halt for Brear and Vile
      - Gear recipes amounts/materials for the new weapons
      - Move Vile set to Workbench from Forge and check min station value

@@ -85,7 +85,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata FrostStaffModifications = new ConfigMetadata("11 - Better Frost Staff Accuracy", "Improves Staff of Frost Accuracy");
 			//public static readonly ConfigMetadata HealStaffModifications = new ConfigMetadata("11a - Heal Staff Test", "Test Heal Staff");
 			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("12 - Reduced Crossbows Reload Time", "Crossbows Reload Time Reduced by 1s. (Toggling mid-game requires CLIENT relog)");
-			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("13 - Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Tick, Dverger, Seeker Soldier, Charred Warlock");
+			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("13 - Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Ghost, Bear, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Vile, Tick, Dverger, Seeker Soldier, Charred Warlock");
 			public static readonly ConfigMetadata DropsModifications = new ConfigMetadata("14 - Better Creature Drops", "Modifies the drops for the following creatures: Fenring (adds Fenris Hair and Fenris Claw, removes Wolf Fang), Bat (adds 50% Bloodbag drop), Dvergr (increases chance of Soft Tissue to 100% from 25%)");
 
 			// Features

@@ -13,10 +13,10 @@ namespace MarsarahTweaks.Patches.Balance
 	{
 		private static readonly LogManager log = new LogManager("Trophy Drops", LogManager.LogLevel.Warning);
 
-		// Eikthyr - Rancid Remains (10% -> 20%)
+		// Eikthyr - Rancid Remains (10% -> 20%), Ghost (10% -> 20%), Bear (10% -> 20%)
 		// The Elder - Surtling (5% -> 10%), Draugr Elite (10% -> 20%), Wraith (5% -> 20%)
 		// Bonemass - Cultist (10% -> 20%), Fenring (10% -> 20%), Stone Golem (5% -> 20%)
-		// Moder - Deathsquito (5% -> 10%), Fuling Berserker (5% -> 10%)
+		// Moder - Deathsquito (5% -> 10%), Fuling Berserker (5% -> 10%), Vile (10% -> 20%)
 		// Yagluth - Tick (5% -> 10%), Dverger (5% -> 10%), Seeker Soldier (5% -> 20%)
 		// The Queen - Charred Warlock (5% -> 20%)
 
@@ -26,7 +26,9 @@ namespace MarsarahTweaks.Patches.Balance
 		{
 			{ "Eikthyr", new List<(string, string, float)>
 				{
-					("Skeleton_Poison", "TrophySkeletonPoison", 0.2f)
+					("Skeleton_Poison", "TrophySkeletonPoison", 0.2f),
+					("Ghost", "TrophyGhost", 0.2f),
+					("Bjorn", "TrophyBjorn", 0.2f)
 				}
 			},
 			{ "The Elder", new List<(string, string, float)>
@@ -46,7 +48,8 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "Moder", new List<(string, string, float)>
 				{
 					("Deathsquito", "TrophyDeathsquito", 0.1f),
-					("GoblinBrute", "TrophyGoblinBrute", 0.1f)
+					("GoblinBrute", "TrophyGoblinBrute", 0.1f),
+					("Unbjorn", "TrophyBjornUndead", 0.2f)
 				}
 			},
 			{ "Yagluth", new List<(string, string, float)>
@@ -174,6 +177,51 @@ namespace MarsarahTweaks.Patches.Balance
 					}
 				}
 			}
+		}
+
+		private static bool trophiesLogged = false;
+
+		public static void LogTrophies(ZNetScene instance)
+		{
+			if (instance == null)
+			{
+				log.Warn("Cannot log trophies because ZNetScene instance is null.");
+				return;
+			}
+
+			if (trophiesLogged) return;
+
+			log.Info("=== TROPHY DROP LOGGER START ===");
+
+			foreach (GameObject prefab in instance.m_prefabs)
+			{
+				if (prefab == null) continue;
+
+				CharacterDrop dropper = prefab.GetComponent<CharacterDrop>();
+				if (dropper == null || dropper.m_drops == null || dropper.m_drops.Count == 0)
+					continue;
+
+				List<string> trophyDrops = new List<string>();
+				foreach (CharacterDrop.Drop drop in dropper.m_drops)
+				{
+					if (drop?.m_prefab == null) continue;
+
+					// Only care about trophy drops
+					if (drop.m_prefab.name.ToLower().Contains("trophy"))
+					{
+						string entry = $"{drop.m_prefab.name}: {drop.m_chance * 100f:0.##}%";
+						trophyDrops.Add(entry);
+					}
+				}
+
+				if (trophyDrops.Count > 0)
+				{
+					log.Info($"Creature: {prefab.name} | Trophies: {string.Join(", ", trophyDrops)}");
+				}
+			}
+
+			log.Info("=== TROPHY DROP LOGGER END ===");
+			trophiesLogged = true;
 		}
 	}
 }
