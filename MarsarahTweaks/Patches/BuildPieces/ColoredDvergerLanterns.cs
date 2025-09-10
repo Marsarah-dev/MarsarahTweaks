@@ -77,14 +77,32 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MPrefabManager.RegisterToZNetScene(DvergrLanternPolePrefabGreen);
 
 			// Configure the Piece data and add to buiild menu
-			ConfigureColoredDvergrLanternPieceData(DvergrLanternPrefabBlue);
-			ConfigureColoredDvergrLanternPieceData(DvergrLanternPrefabGreen);
-			ConfigureColoredDvergrLanternPieceData(DvergrLanternPolePrefabBlue);
-			ConfigureColoredDvergrLanternPieceData(DvergrLanternPolePrefabGreen);
+			BuildPieceController.ConfigurePiece(DvergrLanternPrefabBlue, "Extra Lights", new[]
+			{
+				BuildPieceController.MakeRequirement("Copper", ConfigManager.BuildPieceAmountsEnabled.Value ? 1 : 2),
+				BuildPieceController.MakeRequirement("Lantern", 1),
+				BuildPieceController.MakeRequirement("Chain", 1)
+			});
+			BuildPieceController.ConfigurePiece(DvergrLanternPrefabGreen, "Extra Lights", new[]
+			{
+				BuildPieceController.MakeRequirement("Copper", ConfigManager.BuildPieceAmountsEnabled.Value ? 1 : 2),
+				BuildPieceController.MakeRequirement("Lantern", 1),
+				BuildPieceController.MakeRequirement("Chain", 1)
+			});
+			BuildPieceController.ConfigurePiece(DvergrLanternPolePrefabBlue, "Extra Lights", new[]
+			{
+				BuildPieceController.MakeRequirement("Copper", ConfigManager.BuildPieceAmountsEnabled.Value ? 2 : 3),
+				BuildPieceController.MakeRequirement("Lantern", 1),
+				BuildPieceController.MakeRequirement("Chain", 1)
+			});
+			BuildPieceController.ConfigurePiece(DvergrLanternPolePrefabGreen, "Extra Lights", new[]
+			{
+				BuildPieceController.MakeRequirement("Copper", ConfigManager.BuildPieceAmountsEnabled.Value ? 2 : 3),
+				BuildPieceController.MakeRequirement("Lantern", 1),
+				BuildPieceController.MakeRequirement("Chain", 1)
+			});
 
-			// Toggle visibility
-			//ToggleVisibility();
-
+			// Set active
 			DvergrLanternPrefabBlue.SetActive(true);
 			DvergrLanternPrefabGreen.SetActive(true);
 			DvergrLanternPolePrefabBlue.SetActive(true);
@@ -296,22 +314,6 @@ namespace MarsarahTweaks.Patches.BuildPieces
 						targetTint.b * intensity,
 						c.a
 					);
-
-					/*float maxChannel = Mathf.Max(c.r, Mathf.Max(c.g, c.b));
-					float intensity = maxChannel; // use strongest channel as brightness
-
-					pixels[i] = new Color(
-						targetTint.r * intensity,
-						targetTint.g * intensity,
-						targetTint.b * intensity,
-						c.a
-					);*/
-
-					/*float intensity = (c.r * 0.299f + c.g * 0.587f + c.b * 0.114f);
-					float brightnessBoost = 1.2f; // tweak until matches originals
-
-					pixels[i] = targetTint * (intensity * brightnessBoost);
-					pixels[i].a = c.a;*/
 				}
 				else
 				{
@@ -340,31 +342,6 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			return newIcon;
 		}
 
-		private static void ConfigureColoredDvergrLanternPieceData(GameObject prefab)
-		{
-			string resourceMetal = "Copper";
-			string resourceFuel = "Lantern";
-			string resourceChain = "Chain";
-
-			log.Info($"Prefab name: {prefab.name}");
-			int metalAmount = prefab.name.Contains("pole") ? 3 : 2;
-			log.Info($"Metal amount: {metalAmount}");
-
-			var pieceConfig = new PieceConfig
-			{
-				PieceTable = "Hammer",
-				Category = "Extra Lights", // Extra Lights
-				Requirements = new[]
-				{
-					new RequirementConfig(resourceMetal, ConfigManager.BuildPieceAmountsEnabled.Value? metalAmount - 1 : metalAmount, recover: true),
-					new RequirementConfig(resourceFuel, 1, recover: true),
-					new RequirementConfig(resourceChain, 1, recover: true)
-				}
-			};
-
-			MPrefabManager.AddToBuildMenu(prefab, pieceConfig);
-		}
-
 		public static bool ToggleVisibility()
 		{
 			bool enabled = ConfigManager.BuildPiecesLightingEnabled.Value;
@@ -380,44 +357,30 @@ namespace MarsarahTweaks.Patches.BuildPieces
 
 		public static void RefreshColoredDvergrLanternsRequirements()
 		{
-			RefreshColoredDvergrLanternRequirements(DvergrLanternPrefabBlue);
-			RefreshColoredDvergrLanternRequirements(DvergrLanternPrefabGreen);
-			RefreshColoredDvergrLanternRequirements(DvergrLanternPolePrefabBlue);
-			RefreshColoredDvergrLanternRequirements(DvergrLanternPolePrefabGreen);
-		}
-
-		private static void RefreshColoredDvergrLanternRequirements(GameObject coloredDvergrLantern)
-		{
-			if (coloredDvergrLantern == null) return;
-
-			string resourceMetal = "Copper";
-			string resourceFuel = "Lantern";
-			string resourceChain = "Chain";
-
-			int metalAmount = coloredDvergrLantern.name.Contains("pole") ? 3 : 2;
-
-			var piece = coloredDvergrLantern.GetComponent<Piece>();
-			if (piece == null) return;
-
-			// Clear & rebuild requirements
-			var metal = MPrefabManager.GetPrefab(resourceMetal)?.GetComponent<ItemDrop>();
-			var fuel = MPrefabManager.GetPrefab(resourceFuel)?.GetComponent<ItemDrop>();
-			var chain = MPrefabManager.GetPrefab(resourceChain)?.GetComponent<ItemDrop>();
-
-			if (metal == null || fuel == null || chain == null)
-			{
-				log.Error($"Missing one or more resource prefabs ({resourceMetal}, {resourceFuel}, {resourceChain}).");
-				return;
-			}
-
-			piece.m_resources = new[]
-			{
-				new Piece.Requirement { m_resItem = metal, m_amount = ConfigManager.BuildPieceAmountsEnabled.Value? metalAmount - 1 : metalAmount, m_recover = true },
-				new Piece.Requirement { m_resItem = fuel, m_amount = 1, m_recover = true },
-				new Piece.Requirement { m_resItem = chain, m_amount = 1, m_recover = true }
-			};
-
-			log.Info($"Refreshed build requirements: Metal={piece.m_resources[0].m_amount}");
+			BuildPieceController.RefreshPieceRequirements(DvergrLanternPrefabBlue.GetComponent<Piece>(),
+				new Dictionary<string, int>
+				{
+					{ "Copper", ConfigManager.BuildPieceAmountsEnabled.Value? 1 : 2 }
+				}
+			);
+			BuildPieceController.RefreshPieceRequirements(DvergrLanternPrefabGreen.GetComponent<Piece>(),
+				new Dictionary<string, int>
+				{
+					{ "Copper", ConfigManager.BuildPieceAmountsEnabled.Value? 1 : 2 }
+				}
+			);
+			BuildPieceController.RefreshPieceRequirements(DvergrLanternPolePrefabBlue.GetComponent<Piece>(),
+				new Dictionary<string, int>
+				{
+					{ "Copper", ConfigManager.BuildPieceAmountsEnabled.Value? 2 : 3 }
+				}
+			);
+			BuildPieceController.RefreshPieceRequirements(DvergrLanternPolePrefabGreen.GetComponent<Piece>(),
+				new Dictionary<string, int>
+				{
+					{ "Copper", ConfigManager.BuildPieceAmountsEnabled.Value? 2 : 3 }
+				}
+			);
 		}
 
 		public static void UpdateColoredDvergrLanternsIntensity()

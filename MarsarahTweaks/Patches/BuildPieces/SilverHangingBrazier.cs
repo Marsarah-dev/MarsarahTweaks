@@ -78,13 +78,26 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MPrefabManager.RegisterToZNetScene(SilverHangingBrazierPrefabGreen);
 
 			// Configure the Piece data and add to buiild menu
-			ConfigureSilverHangingBrazierPieceData(SilverHangingBrazierPrefab, "Silver", "Coal", "Chain");
-			ConfigureSilverHangingBrazierPieceData(SilverHangingBrazierPrefabBlue, "Silver", "GreydwarfEye", "Chain");
-			ConfigureSilverHangingBrazierPieceData(SilverHangingBrazierPrefabGreen, "Silver", "Guck", "Chain");
+			BuildPieceController.ConfigurePiece(SilverHangingBrazierPrefab, "Extra Lights", new[]
+			{
+				BuildPieceController.MakeRequirement("Silver", ConfigManager.BuildPieceAmountsEnabled.Value ? 3 : 5),
+				BuildPieceController.MakeRequirement("Coal", ConfigManager.PermanentLightsEnabled.Value ? 5 : 2, false),
+				BuildPieceController.MakeRequirement("Chain", 1)
+			});
+			BuildPieceController.ConfigurePiece(SilverHangingBrazierPrefabBlue, "Extra Lights", new[]
+			{
+				BuildPieceController.MakeRequirement("Silver", ConfigManager.BuildPieceAmountsEnabled.Value ? 3 : 5),
+				BuildPieceController.MakeRequirement("GreydwarfEye", ConfigManager.PermanentLightsEnabled.Value ? 5 : 2, false),
+				BuildPieceController.MakeRequirement("Chain", 1)
+			});
+			BuildPieceController.ConfigurePiece(SilverHangingBrazierPrefabGreen, "Extra Lights", new[]
+			{
+				BuildPieceController.MakeRequirement("Silver", ConfigManager.BuildPieceAmountsEnabled.Value ? 3 : 5),
+				BuildPieceController.MakeRequirement("Guck", ConfigManager.PermanentLightsEnabled.Value ? 5 : 2, false),
+				BuildPieceController.MakeRequirement("Chain", 1)
+			});
 
-			// Toggle visibility
-			//ToggleVisibility();
-
+			// Set active
 			SilverHangingBrazierPrefab.SetActive(true);
 			SilverHangingBrazierPrefabBlue.SetActive(true);
 			SilverHangingBrazierPrefabGreen.SetActive(true);
@@ -516,23 +529,6 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			return newIcon;
 		}
 
-		private static void ConfigureSilverHangingBrazierPieceData(GameObject prefab, string resourceMetal, string resourceFuel, string resourceChain)
-		{
-			var pieceConfig = new PieceConfig
-			{
-				PieceTable = "Hammer",
-				Category = "Extra Lights", // Extra Lights
-				Requirements = new[]
-				{
-					new RequirementConfig(resourceMetal, ConfigManager.BuildPieceAmountsEnabled.Value? 3 : 5, recover: true),
-					new RequirementConfig(resourceFuel, ConfigManager.PermanentLightsEnabled.Value ? 5 : 2, recover: false),
-					new RequirementConfig(resourceChain, 1, recover: true)
-				}
-			};
-
-			MPrefabManager.AddToBuildMenu(prefab, pieceConfig);
-		}
-
 		public static bool ToggleVisibility()
 		{
 			bool enabled = ConfigManager.BuildPiecesLightingEnabled.Value;
@@ -547,38 +543,27 @@ namespace MarsarahTweaks.Patches.BuildPieces
 
 		public static void RefreshSilverHangingBrazierRequirements()
 		{
-			RefreshSilverHangingBrazierRequirements(SilverHangingBrazierPrefab, "Silver", "Coal", "Chain");
-			RefreshSilverHangingBrazierRequirements(SilverHangingBrazierPrefabBlue, "Silver", "GreydwarfEye", "Chain");
-			RefreshSilverHangingBrazierRequirements(SilverHangingBrazierPrefabGreen, "Silver", "Guck", "Chain");
-		}
-
-		private static void RefreshSilverHangingBrazierRequirements(GameObject silverHanginhBrazier, string resourceMetal, string resourceFuel, string resourceChain)
-		{
-			if (silverHanginhBrazier == null) return;
-
-			var piece = silverHanginhBrazier.GetComponent<Piece>();
-			if (piece == null) return;
-
-			// Clear & rebuild requirements
-			var metal = MPrefabManager.GetPrefab(resourceMetal)?.GetComponent<ItemDrop>();
-			var fuel = MPrefabManager.GetPrefab(resourceFuel)?.GetComponent<ItemDrop>();
-			var chain = MPrefabManager.GetPrefab(resourceChain)?.GetComponent<ItemDrop>();
-
-			if (metal == null || fuel == null || chain == null)
-			{
-				log.Error($"Missing one or more resource prefabs ({resourceMetal}, {resourceFuel}, {resourceChain}).");
-				return;
-			}
-
-			piece.m_resources = new[]
-			{
-				new Piece.Requirement { m_resItem = metal, m_amount = ConfigManager.BuildPieceAmountsEnabled.Value? 3 : 5, m_recover = true },
-				new Piece.Requirement { m_resItem = fuel, m_amount = ConfigManager.PermanentLightsEnabled.Value ? 5 : 2, m_recover = false },
-				new Piece.Requirement { m_resItem = chain, m_amount = 1, m_recover = true }
-			};
-
-			log.Info($"Refreshed build requirements: Metal={piece.m_resources[0].m_amount}");
-			log.Info($"Refreshed build requirements: Fuel={piece.m_resources[1].m_amount}");
+			BuildPieceController.RefreshPieceRequirements(SilverHangingBrazierPrefab.GetComponent<Piece>(),
+				new Dictionary<string, int>
+				{
+					{ "Silver", ConfigManager.BuildPieceAmountsEnabled.Value? 3 : 5 },
+					{ "Coal", ConfigManager.PermanentLightsEnabled.Value ? 5 : 2 }
+				}
+			);
+			BuildPieceController.RefreshPieceRequirements(SilverHangingBrazierPrefabBlue.GetComponent<Piece>(),
+				new Dictionary<string, int>
+				{
+					{ "Silver", ConfigManager.BuildPieceAmountsEnabled.Value? 3 : 5 },
+					{ "GreydwarfEye", ConfigManager.PermanentLightsEnabled.Value ? 5 : 2 }
+				}
+			);
+			BuildPieceController.RefreshPieceRequirements(SilverHangingBrazierPrefabGreen.GetComponent<Piece>(),
+				new Dictionary<string, int>
+				{
+					{ "Silver", ConfigManager.BuildPieceAmountsEnabled.Value? 3 : 5 },
+					{ "Guck", ConfigManager.PermanentLightsEnabled.Value ? 5 : 2 }
+				}
+			);
 		}
 	}
 }

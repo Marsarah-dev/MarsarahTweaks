@@ -66,7 +66,14 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MPrefabManager.RegisterToZNetScene(PocketPortalPrefab);
 
 			// Configure the Piece data and add to buiild menu
-			ConfigurePocketPortalPieceData();			
+			BuildPieceController.ConfigurePiece(PocketPortalPrefab, "Misc", new[]
+			{
+				BuildPieceController.MakeRequirement("PortalCore", 1)
+			});
+
+			TogglePocketPortalVisibility();
+
+			//ConfigurePocketPortalPieceData();			
 
 			PocketPortalPrefab.SetActive(true);
 			log.Info("Pocket Portal registered and ready.");
@@ -102,7 +109,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			}
 		}
 
-		private static void ConfigurePocketPortalPieceData()
+		/*private static void ConfigurePocketPortalPieceData()
 		{
 			var pieceConfig = new PieceConfig
 			{
@@ -116,7 +123,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 
 			MPrefabManager.AddToBuildMenu(PocketPortalPrefab, pieceConfig);
 			TogglePocketPortalVisibility();
-		}
+		}*/
 
 		private static GameObject RegisterPocketPortalEffects()
 		{

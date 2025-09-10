@@ -79,14 +79,27 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MPrefabManager.RegisterToZNetScene(SilverSconcePrefabBlue);
 			MPrefabManager.RegisterToZNetScene(SilverSconcePrefabGreen);
 
-			// Configure the Piece data and add to buiild menu
-			ConfigureSilverSconcePieceData(SilverSconcePrefab, "ElderBark", "Silver", "Resin");
-			ConfigureSilverSconcePieceData(SilverSconcePrefabBlue, "ElderBark", "Silver", "GreydwarfEye");
-			ConfigureSilverSconcePieceData(SilverSconcePrefabGreen, "ElderBark", "Silver", "Guck");
+			// Configure the Piece data and add to build menu
+			BuildPieceController.ConfigurePiece(SilverSconcePrefab, "Extra Lights", new[]
+			{
+				BuildPieceController.MakeRequirement("ElderBark", 2),
+				BuildPieceController.MakeRequirement("Silver", ConfigManager.BuildPieceAmountsEnabled.Value ? 1 : 2),
+				BuildPieceController.MakeRequirement("Resin", ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, false)
+			});
+			BuildPieceController.ConfigurePiece(SilverSconcePrefabBlue, "Extra Lights", new[]
+			{
+				BuildPieceController.MakeRequirement("ElderBark", 2),
+				BuildPieceController.MakeRequirement("Silver", ConfigManager.BuildPieceAmountsEnabled.Value ? 1 : 2),
+				BuildPieceController.MakeRequirement("GreydwarfEye", ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, false)
+			});
+			BuildPieceController.ConfigurePiece(SilverSconcePrefabGreen, "Extra Lights", new[]
+			{
+				BuildPieceController.MakeRequirement("ElderBark", 2),
+				BuildPieceController.MakeRequirement("Silver", ConfigManager.BuildPieceAmountsEnabled.Value ? 1 : 2),
+				BuildPieceController.MakeRequirement("Guck", ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, false)
+			});
 
-			// Toggle visibility
-			//ToggleVisibility();
-
+			// Set active
 			SilverSconcePrefab.SetActive(true);
 			SilverSconcePrefabBlue.SetActive(true);
 			SilverSconcePrefabGreen.SetActive(true);
@@ -360,23 +373,6 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			return newIcon;
 		}
 
-		private static void ConfigureSilverSconcePieceData(GameObject prefab, string resourceWood, string resourceMetal, string resourceFuel)
-		{
-			var pieceConfig = new PieceConfig
-			{
-				PieceTable = "Hammer",
-				Category = "Extra Lights", // Extra Lights
-				Requirements = new[]
-				{
-					new RequirementConfig(resourceWood, 2, recover: true), // ElderBark
-					new RequirementConfig(resourceMetal, ConfigManager.BuildPieceAmountsEnabled.Value? 1 : 2, recover: true), // Silver
-					new RequirementConfig(resourceFuel, ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, recover: false) // Resin
-				}
-			};
-
-			MPrefabManager.AddToBuildMenu(prefab, pieceConfig);
-		}
-
 		public static bool ToggleVisibility()
 		{
 			bool enabled = ConfigManager.BuildPiecesLightingEnabled.Value;
@@ -391,38 +387,27 @@ namespace MarsarahTweaks.Patches.BuildPieces
 
 		public static void RefreshSilverSconceRequirements()
 		{
-			RefreshSilverSconceRequirements(SilverSconcePrefab, "ElderBark", "Silver", "Resin");
-			RefreshSilverSconceRequirements(SilverSconcePrefabBlue, "ElderBark", "Silver", "GreydwarfEye");
-			RefreshSilverSconceRequirements(SilverSconcePrefabGreen, "ElderBark", "Silver", "Guck");
-		}
-
-		private static void RefreshSilverSconceRequirements(GameObject silverSconce, string resourceWood, string resourceMetal, string resourceFuel)
-		{
-			if (silverSconce == null) return;
-
-			var piece = silverSconce.GetComponent<Piece>();
-			if (piece == null) return;
-
-			// Clear & rebuild requirements
-			var wood = MPrefabManager.GetPrefab(resourceWood)?.GetComponent<ItemDrop>();
-			var metal = MPrefabManager.GetPrefab(resourceMetal)?.GetComponent<ItemDrop>();
-			var fuel = MPrefabManager.GetPrefab(resourceFuel)?.GetComponent<ItemDrop>();
-
-			if (wood == null || metal == null || fuel == null)
-			{
-				log.Error($"Missing one or more resource prefabs ({resourceWood}, {resourceMetal}, {resourceFuel}).");
-				return;
-			}
-
-			piece.m_resources = new[]
-			{
-				new Piece.Requirement { m_resItem = wood, m_amount = 2, m_recover = true },
-				new Piece.Requirement { m_resItem = metal, m_amount = ConfigManager.BuildPieceAmountsEnabled.Value? 1 : 2, m_recover = true },
-				new Piece.Requirement { m_resItem = fuel, m_amount = ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, m_recover = false }
-			};
-
-			log.Info($"Refreshed build requirements: Metal={piece.m_resources[1].m_amount}");
-			log.Info($"Refreshed build requirements: Fuel={piece.m_resources[2].m_amount}");
+			BuildPieceController.RefreshPieceRequirements(SilverSconcePrefab.GetComponent<Piece>(),
+				new Dictionary<string, int>
+				{
+					{ "Silver", ConfigManager.BuildPieceAmountsEnabled.Value ? 1 : 2 },
+					{ "Resin", ConfigManager.PermanentLightsEnabled.Value ? 6 : 2 }
+				}
+			);
+			BuildPieceController.RefreshPieceRequirements(SilverSconcePrefabBlue.GetComponent<Piece>(),
+				new Dictionary<string, int>
+				{
+					{ "Silver", ConfigManager.BuildPieceAmountsEnabled.Value ? 1 : 2 },
+					{ "GreydwarfEye", ConfigManager.PermanentLightsEnabled.Value ? 6 : 2 }
+				}
+			);
+			BuildPieceController.RefreshPieceRequirements(SilverSconcePrefabGreen.GetComponent<Piece>(),
+				new Dictionary<string, int>
+				{
+					{ "Silver", ConfigManager.BuildPieceAmountsEnabled.Value ? 1 : 2 },
+					{ "Guck", ConfigManager.PermanentLightsEnabled.Value ? 6 : 2 }
+				}
+			);
 		}
 	}
 }

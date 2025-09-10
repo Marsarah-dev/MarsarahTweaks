@@ -58,11 +58,14 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MPrefabManager.RegisterToZNetScene(GreenBrazierPrefab);
 
 			// Configure the Piece data and add to buiild menu
-			ConfigureGreenBrazierPieceData();
+			BuildPieceController.ConfigurePiece(GreenBrazierPrefab, "Extra Lights", new[]
+			{
+				BuildPieceController.MakeRequirement("Bronze", ConfigManager.BuildPieceAmountsEnabled.Value ? 3 : 5),
+				BuildPieceController.MakeRequirement("Guck", ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, false),
+				BuildPieceController.MakeRequirement("WolfClaw", 3)
+			});
 
-			// Toggle visibility
-			//ToggleVisibility();
-
+			// Set active
 			GreenBrazierPrefab.SetActive(true);
 			log.Info("Green Brazier registered and ready.");
 		}
@@ -340,23 +343,6 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			return newIcon;
 		}
 
-		private static void ConfigureGreenBrazierPieceData()
-		{
-			var pieceConfig = new PieceConfig
-			{
-				PieceTable = "Hammer",
-				Category = "Extra Lights", // Extra Lights
-				Requirements = new[]
-				{
-					new RequirementConfig("Bronze", ConfigManager.BuildPieceAmountsEnabled.Value ? 3 : 5, recover: true),
-					new RequirementConfig("Guck", ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, recover: false),
-					new RequirementConfig("WolfClaw", 3, recover: true)
-				}
-			};
-
-			MPrefabManager.AddToBuildMenu(GreenBrazierPrefab, pieceConfig);
-		}
-
 		public static bool ToggleVisibility()
 		{
 			bool enabled = ConfigManager.BuildPiecesLightingEnabled.Value;
@@ -369,31 +355,13 @@ namespace MarsarahTweaks.Patches.BuildPieces
 
 		public static void RefreshGreenBrazierRequirements()
 		{
-			if (GreenBrazierPrefab == null) return;
-
-			var piece = GreenBrazierPrefab.GetComponent<Piece>();
-			if (piece == null) return;
-
-			// Clear & rebuild requirements
-			var metal = MPrefabManager.GetPrefab("Bronze")?.GetComponent<ItemDrop>();
-			var fuel = MPrefabManager.GetPrefab("Guck")?.GetComponent<ItemDrop>();
-			var claw = MPrefabManager.GetPrefab("WolfClaw")?.GetComponent<ItemDrop>();
-
-			if (claw == null || metal == null || fuel == null)
-			{
-				log.Error($"Missing one or more resource prefabs (Bronze, Guck, WolfClaw).");
-				return;
-			}
-
-			piece.m_resources = new[]
-			{
-				new Piece.Requirement { m_resItem = metal, m_amount = ConfigManager.BuildPieceAmountsEnabled.Value? 3 : 5, m_recover = true },
-				new Piece.Requirement { m_resItem = fuel, m_amount = ConfigManager.PermanentLightsEnabled.Value ? 6 : 2, m_recover = false },
-				new Piece.Requirement { m_resItem = claw, m_amount = 3, m_recover = true }
-			};
-
-			log.Info($"Refreshed build requirements: Metal={piece.m_resources[1].m_amount}");
-			log.Info($"Refreshed build requirements: Fuel={piece.m_resources[2].m_amount}");
+			BuildPieceController.RefreshPieceRequirements(GreenBrazierPrefab.GetComponent<Piece>(),
+				new Dictionary<string, int>
+				{
+					{ "Bronze", ConfigManager.BuildPieceAmountsEnabled.Value? 3 : 5 },
+					{ "Guck", ConfigManager.PermanentLightsEnabled.Value ? 5 : 2 }
+				}
+			);
 		}
 	}
 }
