@@ -84,6 +84,9 @@ namespace MarsarahTweaks.Patches.UI
 			{ "$item_legs_leather", 2 },
 
 			// Black Forest
+			{ "$item_helmet_berserker", 5 },
+			{ "$item_chest_berserker", 5 },
+			{ "$item_legs_berserker", 5 },
 			{ "$item_helmet_trollleather", 5 },
 			{ "$item_chest_trollleather", 5 },
 			{ "$item_legs_trollleather", 5 },
@@ -108,6 +111,9 @@ namespace MarsarahTweaks.Patches.UI
 			{ "$item_legs_wolf", 11 },
 
 			// Plains
+			{ "$item_helmet_berserker_undead", 14 },
+			{ "$item_chest_berserker_undead", 14 },
+			{ "$item_legs_berserker_undead", 14 },
 			{ "$item_helmet_padded", 14 },
 			{ "$item_chest_pcuirass", 14 },
 			{ "$item_legs_pgreaves", 14 },
