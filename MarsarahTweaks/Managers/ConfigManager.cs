@@ -508,11 +508,11 @@ namespace MarsarahTweaks.Managers
 						break;*/
 
 					case var name when name == Configs.BuildPiecesLighting.Name:
-						SilverSconce.ToggleSilverSconceVisibility();
-						GreenStandingBrazier.ToggleGreenBrazierVisibility();
-						SilverHangingBrazier.ToggleSilverHangingBrazierVisibility();
+						SilverSconce.ToggleVisibility();
+						GreenStandingBrazier.ToggleVisibility();
+						SilverHangingBrazier.ToggleVisibility();
 						//SilverTableTorch.ToggleSilverTorchVisibility();
-						ColoredDvergerLanterns.ToggleColoredDvergrLanternsVisibility();
+						ColoredDvergerLanterns.ToggleVisibility();
 						//BuildPieceHelper.UpdateCategory();
 						break;
 

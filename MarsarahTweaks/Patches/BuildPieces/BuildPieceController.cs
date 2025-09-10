@@ -23,13 +23,13 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			static void Postfix()
 			{
 				if (initialized) return;
-				bool toggled = false;
+				bool toggled = true;
 				
 				// Run initial visibility sync
-				toggled = SilverSconce.ToggleSilverSconceVisibility();
-				toggled = toggled && ColoredDvergerLanterns.ToggleColoredDvergrLanternsVisibility();
-				toggled = toggled && GreenStandingBrazier.ToggleGreenBrazierVisibility();
-				toggled = toggled && SilverHangingBrazier.ToggleSilverHangingBrazierVisibility();
+				toggled &= SilverSconce.ToggleVisibility();
+				toggled &= ColoredDvergerLanterns.ToggleVisibility();
+				toggled &= GreenStandingBrazier.ToggleVisibility();
+				toggled &= SilverHangingBrazier.ToggleVisibility();
 
 				initialized = toggled;
 
@@ -39,9 +39,45 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				}
 				else
 				{
-					log.Info("Visibility did not initialize.");
+					log.Info("Initial build piece visibility not ready.");
 				}
 			}
+		}
+
+		public static bool TogglePiece(Piece piece, bool enabled, LogManager specificLog)
+		{
+			if (piece == null)
+			{
+				specificLog.Warn("Piece is null.");
+				return false;
+			}
+			if (ObjectDB.instance == null)
+			{
+				specificLog.Warn("ObjDB is not ready yet.");
+				return false;
+			}
+
+			PieceTable hammer = ObjectDB.instance.GetItemPrefab("Hammer").GetComponent<ItemDrop>().m_itemData.m_shared.m_buildPieces;
+			if (hammer == null) return false;
+
+			piece.m_enabled = enabled;
+
+			if (enabled)
+			{
+				if (!hammer.m_pieces.Contains(piece.gameObject))
+				{
+					hammer.m_pieces.Add(piece.gameObject);
+				}
+			}
+			else
+			{
+				if (hammer.m_pieces.Contains(piece.gameObject))
+				{
+					hammer.m_pieces.Remove(piece.gameObject);
+				}
+			}
+
+			return true;
 		}
 	}
 }

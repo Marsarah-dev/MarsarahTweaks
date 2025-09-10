@@ -85,7 +85,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			ConfigureSilverSconcePieceData(SilverSconcePrefabGreen, "ElderBark", "Silver", "Guck");
 
 			// Toggle visibility
-			//ToggleSilverSconceVisibility();
+			//ToggleVisibility();
 
 			SilverSconcePrefab.SetActive(true);
 			SilverSconcePrefabBlue.SetActive(true);
@@ -377,52 +377,16 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MPrefabManager.AddToBuildMenu(prefab, pieceConfig);
 		}
 
-		public static bool ToggleSilverSconceVisibility()
+		public static bool ToggleVisibility()
 		{
-			bool toggled = false;
 			bool enabled = ConfigManager.BuildPiecesLightingEnabled.Value;
+			bool toggled = true;
 
-			toggled = TogglePiece(SilverSconcePrefab?.GetComponent<Piece>(), enabled);
-			toggled = toggled && TogglePiece(SilverSconcePrefabBlue?.GetComponent<Piece>(), enabled);
-			toggled = toggled && TogglePiece(SilverSconcePrefabGreen?.GetComponent<Piece>(), enabled);
+			toggled &= BuildPieceController.TogglePiece(SilverSconcePrefab?.GetComponent<Piece>(), enabled, log);
+			toggled &= BuildPieceController.TogglePiece(SilverSconcePrefabBlue?.GetComponent<Piece>(), enabled, log);
+			toggled &= BuildPieceController.TogglePiece(SilverSconcePrefabGreen?.GetComponent<Piece>(), enabled, log);
 
 			return toggled;
-		}
-
-		private static bool TogglePiece(Piece piece, bool enabled)
-		{
-			if (piece == null)
-			{
-				log.Warn("Piece is null.");
-				return false;
-			}
-			if (ObjectDB.instance == null)
-			{
-				log.Warn("ObjDB is not ready yet.");
-				return false;
-			}
-
-			PieceTable hammer = ObjectDB.instance.GetItemPrefab("Hammer").GetComponent<ItemDrop>().m_itemData.m_shared.m_buildPieces;
-			if (hammer == null) return false;
-
-			piece.m_enabled = enabled;
-
-			if (enabled)
-			{
-				if (!hammer.m_pieces.Contains(piece.gameObject))
-				{
-					hammer.m_pieces.Add(piece.gameObject);
-				}
-			}
-			else
-			{
-				if (hammer.m_pieces.Contains(piece.gameObject))
-				{
-					hammer.m_pieces.Remove(piece.gameObject);
-				}
-			}
-
-			return true;
 		}
 
 		public static void RefreshSilverSconceRequirements()

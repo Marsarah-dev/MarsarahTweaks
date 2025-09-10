@@ -83,7 +83,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			ConfigureColoredDvergrLanternPieceData(DvergrLanternPolePrefabGreen);
 
 			// Toggle visibility
-			//ToggleColoredDvergrLanternsVisibility();
+			//ToggleVisibility();
 
 			DvergrLanternPrefabBlue.SetActive(true);
 			DvergrLanternPrefabGreen.SetActive(true);
@@ -365,53 +365,17 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MPrefabManager.AddToBuildMenu(prefab, pieceConfig);
 		}
 
-		public static bool ToggleColoredDvergrLanternsVisibility()
+		public static bool ToggleVisibility()
 		{
-			bool toggled = false;
 			bool enabled = ConfigManager.BuildPiecesLightingEnabled.Value;
+			bool toggled = true;
 
-			toggled = TogglePiece(DvergrLanternPrefabBlue?.GetComponent<Piece>(), enabled);
-			toggled = toggled && TogglePiece(DvergrLanternPrefabGreen?.GetComponent<Piece>(), enabled);
-			toggled = toggled && TogglePiece(DvergrLanternPolePrefabBlue?.GetComponent<Piece>(), enabled);
-			toggled = toggled && TogglePiece(DvergrLanternPolePrefabGreen?.GetComponent<Piece>(), enabled);
+			toggled &= BuildPieceController.TogglePiece(DvergrLanternPrefabBlue?.GetComponent<Piece>(), enabled, log);
+			toggled &= BuildPieceController.TogglePiece(DvergrLanternPrefabGreen?.GetComponent<Piece>(), enabled, log);
+			toggled &= BuildPieceController.TogglePiece(DvergrLanternPolePrefabBlue?.GetComponent<Piece>(), enabled, log);
+			toggled &= BuildPieceController.TogglePiece(DvergrLanternPolePrefabGreen?.GetComponent<Piece>(), enabled, log);
 
 			return toggled;
-		}
-
-		private static bool TogglePiece(Piece piece, bool enabled)
-		{
-			if (piece == null)
-			{
-				log.Warn("Piece is null.");
-				return false;
-			}
-			if (ObjectDB.instance == null)
-			{
-				log.Warn("ObjDB is not ready yet.");
-				return false;
-			}
-
-			PieceTable hammer = ObjectDB.instance.GetItemPrefab("Hammer").GetComponent<ItemDrop>().m_itemData.m_shared.m_buildPieces;
-			if (hammer == null) return false;
-
-			piece.m_enabled = enabled;
-
-			if (enabled)
-			{
-				if (!hammer.m_pieces.Contains(piece.gameObject))
-				{
-					hammer.m_pieces.Add(piece.gameObject);
-				}
-			}
-			else
-			{
-				if (hammer.m_pieces.Contains(piece.gameObject))
-				{
-					hammer.m_pieces.Remove(piece.gameObject);
-				}
-			}
-
-			return true;
 		}
 
 		public static void RefreshColoredDvergrLanternsRequirements()

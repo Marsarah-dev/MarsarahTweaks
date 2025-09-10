@@ -83,7 +83,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			ConfigureSilverHangingBrazierPieceData(SilverHangingBrazierPrefabGreen, "Silver", "Guck", "Chain");
 
 			// Toggle visibility
-			//ToggleSilverHangingBrazierVisibility();
+			//ToggleVisibility();
 
 			SilverHangingBrazierPrefab.SetActive(true);
 			SilverHangingBrazierPrefabBlue.SetActive(true);
@@ -533,52 +533,16 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			MPrefabManager.AddToBuildMenu(prefab, pieceConfig);
 		}
 
-		public static bool ToggleSilverHangingBrazierVisibility()
+		public static bool ToggleVisibility()
 		{
-			bool toggled = false;
 			bool enabled = ConfigManager.BuildPiecesLightingEnabled.Value;
+			bool toggled = true;
 
-			toggled = TogglePiece(SilverHangingBrazierPrefab?.GetComponent<Piece>(), enabled);
-			toggled = toggled && TogglePiece(SilverHangingBrazierPrefabBlue?.GetComponent<Piece>(), enabled);
-			toggled = toggled && TogglePiece(SilverHangingBrazierPrefabGreen?.GetComponent<Piece>(), enabled);
+			toggled &= BuildPieceController.TogglePiece(SilverHangingBrazierPrefab?.GetComponent<Piece>(), enabled, log);
+			toggled &= BuildPieceController.TogglePiece(SilverHangingBrazierPrefabBlue?.GetComponent<Piece>(), enabled, log);
+			toggled &= BuildPieceController.TogglePiece(SilverHangingBrazierPrefabGreen?.GetComponent<Piece>(), enabled, log);
 
 			return toggled;
-		}
-
-		private static bool TogglePiece(Piece piece, bool enabled)
-		{
-			if (piece == null)
-			{
-				log.Warn("Piece is null.");
-				return false;
-			}
-			if (ObjectDB.instance == null)
-			{
-				log.Warn("ObjDB is not ready yet.");
-				return false;
-			}
-
-			PieceTable hammer = ObjectDB.instance.GetItemPrefab("Hammer").GetComponent<ItemDrop>().m_itemData.m_shared.m_buildPieces;
-			if (hammer == null) return false;
-
-			piece.m_enabled = enabled;
-
-			if (enabled)
-			{
-				if (!hammer.m_pieces.Contains(piece.gameObject))
-				{
-					hammer.m_pieces.Add(piece.gameObject);
-				}
-			}
-			else
-			{
-				if (hammer.m_pieces.Contains(piece.gameObject))
-				{
-					hammer.m_pieces.Remove(piece.gameObject);
-				}
-			}
-
-			return true;
 		}
 
 		public static void RefreshSilverHangingBrazierRequirements()
