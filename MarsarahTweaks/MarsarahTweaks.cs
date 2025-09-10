@@ -18,7 +18,7 @@
  *      - Fulings, Seeker and Charred do not spawn in early biomes at night when their relevant bosses are defeated
  *      - Fulings: Mountain
  *      - Seeker: Plains
- *      - Charred: Plains, Mistlands (check Mistlands again)
+ *      - Charred: Plains
  *      
  *    - No end-game raids in early biomes
  *      - Seeker and Charred raids do not trigger in the Black Forest biome
@@ -163,7 +163,7 @@ namespace MarsarahTweaks
 	public class MarsarahTweaks : BaseUnityPlugin
 	{
 		internal const string ModName = "MarsarahTweaks";
-		internal const string ModVersion = "1.4.1";
+		internal const string ModVersion = "1.4.2";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 

@@ -10,7 +10,7 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class NighttimeSpawnChanges
 	{
-		private static readonly LogManager log = new LogManager("Night Spawns", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Night Spawns", LogManager.LogLevel.Info);
 
 		[HarmonyPatch(typeof(SpawnSystem), "Awake")]
 		class NighttimeSpawn_Patch
@@ -22,6 +22,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (__instance == null) return;
 
 				UpdateNighttimeSpawns(__instance);
+				//LogNighttimeSpawns(__instance);
 			}
 		}
 
@@ -31,8 +32,10 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			{ "Goblin", (Heightmap.Biome.Mountain, "defeated_goblinking") },
 			{ "Seeker defeated queen other biomes", (Heightmap.Biome.Plains, "defeated_queen") },
-			{ "Charred Melee [Other biomes when Fader is defeated]", (Heightmap.Biome.Plains | Heightmap.Biome.Mistlands, "defeated_fader") },
-			{ "Charred Archer [Other biomes when Fader is defeated]", (Heightmap.Biome.Plains | Heightmap.Biome.Mistlands, "defeated_fader") }
+			{ "Charred Melee [Other biomes when Fader is defeated]", (Heightmap.Biome.Plains, "defeated_fader") },
+			{ "Charred Archer [Other biomes when Fader is defeated]", (Heightmap.Biome.Plains, "defeated_fader") }
+			//{ "Charred Melee [Other biomes when Fader is defeated]", (Heightmap.Biome.Plains | Heightmap.Biome.Mistlands, "defeated_fader") },
+			//{ "Charred Archer [Other biomes when Fader is defeated]", (Heightmap.Biome.Plains | Heightmap.Biome.Mistlands, "defeated_fader") }
 		};
 
 		public static void UpdateNighttimeSpawns(SpawnSystem spawnSystem)
@@ -75,9 +78,12 @@ namespace MarsarahTweaks.Patches.Features
 					}
 				}
 			}
+		}
 
+		private static void LogNighttimeSpawns(SpawnSystem spawnSystem)
+		{
 			// For logging
-			/*foreach (SpawnSystemList spawnList in spawnSystem.m_spawnLists)
+			foreach (SpawnSystemList spawnList in spawnSystem.m_spawnLists)
 			{
 				// Print the biomes this list covers
 				string biomes = spawnList.m_biomeFolded != null && spawnList.m_biomeFolded.Count > 0
@@ -100,7 +106,7 @@ namespace MarsarahTweaks.Patches.Features
 				}
 
 				log.Info(""); // blank line for spacing
-			}*/
+			}
 		}
 	}
 }

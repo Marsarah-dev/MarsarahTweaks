@@ -14,7 +14,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 {
 	internal class BuildPieceController
 	{
-		private static readonly LogManager log = new LogManager("Build Piece Controller", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Build Piece Controller", LogManager.LogLevel.Warning);
 
 		[HarmonyPatch(typeof(Player), "Awake")]
 		internal static class ObjectDB_Awake_Patch
@@ -96,43 +96,6 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				}
 			}
 		}
-
-		/*public static void RefreshPieceRequirements(Piece piece, int amount1, int amount2, int amount3)
-		{
-			if (piece == null)
-			{
-				log.Warn("Cannot configure a null piece.");
-				return;
-			}
-
-			if (piece.m_resources == null)
-			{
-				log.Warn($"Resources for piece '{piece.name}' is null.");
-				return;
-			}
-
-			if (piece.m_resources.Length > 0) piece.m_resources[0].m_amount = amount1;
-			if (piece.m_resources.Length > 1) piece.m_resources[1].m_amount = amount2;
-			if (piece.m_resources.Length > 2) piece.m_resources[2].m_amount = amount3;
-
-			log.Info($"Refreshed requirements for '{piece.name}'");
-		}*/
-
-		/*public static void RefreshPieceRequirements(Piece piece, params Func<int>[] amountFuncs)
-		{
-			if (piece == null)
-			{
-				log.Warn("Cannot configure null piece.");
-				return;
-			}
-
-			for (int i = 0; i < piece.m_resources.Length && i < amountFuncs.Length; i++)
-			{
-				piece.m_resources[i].m_amount = amountFuncs[i]();
-			}
-
-			log.Info($"Refreshed requirements for '{piece.name}': " + string.Join(", ", piece.m_resources.Select(r => $"{r.m_resItem.name}={r.m_amount}")));
-		}*/
 
 		public static bool TogglePiece(Piece piece, bool enabled, LogManager specificLog)
 		{
