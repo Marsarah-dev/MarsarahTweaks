@@ -17,8 +17,8 @@
           - Troll Leather Pants: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
         - Black Metal Battleaxe
           - Fine Wood upgrade: 0/0/0 > 2/4/6
-          - Black Metal Craft: 30 > 15
-          - Black Metal Upgrade: 15/30/45 > 7/14/21
+          - Black Metal craft: 30 > 15
+          - Black Metal upgrade: 15/30/45 > 7/14/21
         - Skull Splittur
           - Iron craft: 30 > 15
           - Iron upgrade: 15/30/45 > 5/10/15
@@ -79,38 +79,39 @@
         - Dverger Rogue, Mage and Ashlands Dvergr: Increased Soft Tissue chance to 100% (from 25%)
 
    E. New Features
+      - No End-game Raids in Early Biomes
+        - Seeker and Charred raids do not trigger in the Black Forest biome
+
       - Stop Nighttime Invasion
         - Fulings, Seeker and Charred do not spawn in early biomes at night when their relevant bosses are defeated
         - Fulings: Mountain
         - Seeker: Plains
         - Charred: Plains
-        
-      - No end-game raids in early biomes
-        - Seeker and Charred raids do not trigger in the Black Forest biome
 
    F. New QOL
 
    G. New Build Pieces
+      - Green Standing Brazier 
+        - Added a green version of the Standing Brazier
+
       - Silver Sconce
         - Added 3 types of Silver Sconces (red, blue and green flame) available in the Mountain biome
         - Fuel lasts longer than the normal sconce
-        
-      - Green Standing Brazier 
-        - Added a green version of the Standing Brazier
+        - Build Cost: Silver, Ancient Bark and the respective fuel: Resin, Greydwarf Eye or Guck
         
       - Silver Hanging Brazier
         - Added 3 types of Silver Hanging Braziers (red, blue and green flame) available in the Mountain biome
         - Fuel lasts longer than the normal hanging brazier
+        - Build Cost: Silver, Chain and the respective fuel: Coal, Greydwarf Eye or Guck
         
       - Blue and Green Dverger Lanterns
         - Added blue and green versions of the Dverger Lantern (both wall and standing)
+        - Build costs are the same as the normal Dverger Lantern build pieces
 
    H. New UI
 
 
  ******* TODO *******
-   * Notes
-     - In readmes mention that players should look for configs reshuffles
    
    * Prep for update
      - New gear costs (done)
@@ -123,6 +124,7 @@
      - Ghost, Bear and Vile trophy drop rate (done)
      - Progression Halt for Ghost, Bear and Vile (done)
 
+     - Look into Creature Unleveler (Ghost, Bear and Vile)
      - Check new Trinkets build costs
        - Recipe_TrinketFlametalEitr - remove GemstoneRed or replace with SulfurStone
        - Recipe_TrinketIronStamina - replace TrophySurtling with something else (maybe)

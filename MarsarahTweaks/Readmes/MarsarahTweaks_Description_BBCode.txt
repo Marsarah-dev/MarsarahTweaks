@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.3.2  
+[b]Version:[/b] 1.4.2  
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -36,6 +36,7 @@ From version 1.3.0 [b]Jotunn[/b] is also required: [url=https://thunderstore.io/
 Or use a mod manager.
 
 > ⚠️ [b]Note:[/b] This mod must be installed on both the [b]server[/b] and [b]all clients[/b].
+> ⚠️ [b]Note:[/b] Configs may be renamed or reshuffled upon mod updates, so always check the config file when updating this mod.
 
 [line]
 
@@ -68,7 +69,7 @@ Useful for dedicated servers to maintain consistent settings.
 
 [size=4][b]🛠️ Grind Reduction[/b][/size]
 
-All features below are synced with the server and can be toggled mid-game.
+All features below are synced with the server.
 
 [line]
 
@@ -152,7 +153,7 @@ All features below are synced with the server and can be toggled mid-game.
   • Material: Bloodstone → Iolite
 
 
-[size=4][b]🏗️ Cheaper Build Piece Amounts[/b][/size]
+[size=4][b]🏗️ Cheaper Build Pieces Amounts[/b][/size]
 
 📜 Reduces the [b]amount[/b] of materials required to craft vanilla build pieces.
 
@@ -164,7 +165,7 @@ All features below are synced with the server and can be toggled mid-game.
 - Works with mods that add new build pieces (but does not affect them)  
 
 
-[size=4][b]🏚️ Alternate Build Piece Materials[/b][/size]
+[size=4][b]🏚️ Alternate Build Pieces Materials[/b][/size]
 
 📜 Alters some [b]material types[/b] required for specific vanilla build pieces.  
 - Pairs well with the Cheaper Build Piece Amounts option
@@ -198,42 +199,11 @@ All features below are synced with the server and can be toggled mid-game.
 
 [line]
 
-[size=4][b]✨ Features[/b][/size]
+[size=4][b]⚖️ Balance[/b][/size]
 
-All features below are synced with the server and can be toggled mid-game (with relog/crafting menu reopen as needed).
+All features below are synced with the server.
 
 [line]
-
-[size=4][b]⏸️ Automatic Progression Halt[/b][/size]
-
-📜 Creatures and destroyable objects do not drop any items unless the previous biome boss has been defeated.  
-📜 Pickable items and chests cannot be picked/opened under the same conditions.  
-- Resources from each biome are automatically unlocked when the relevant boss is defeated. There is no need for client relogs or server restarts. However, the immediate area will need to be reloaded by leaving until unloaded by distance.
-
-🔄 Toggling mid-game requires [b]client[/b] relog or reloading area. 
-- Reloading area means walking/teleporting away from the current zone and coming back. This only applies for destroyable objects like Copper Mines. Pickables and chests will be affected immediately. Creatures will be affected if they are new.
-
-[b]❗ Conflicts:[/b] This only applies to vanilla game prefabs. Any mod that adds new prefabs (creatures, resources, pickables) will [b]not[/b] be included in the Progression Halt system.
-
-[b]🔧 Specific boss halts[/b]
-
-- Eikthyr: Black Forest objects and creatures
-- The Elder: Swamp objects and creatures
-- Bonemass: Mountain and Ocean objects and creatures (ocean halted by Bonemass by default)
-- Moder: Plains objects and creatures
-- Yagluth: Mistlands objects and creatures
-- The Queen: Ashlands objects and creatures
-
-
-[size=4][b]⏸️ Halt Ocean Behind Elder[/b][/size]
-
-📜 Halts Ocean biome resources (Leviathans and Serpents) behind The Elder instead of Bonemass. Requires Automatic Progression Halt to be enabled.   
-- NOTE: Ocean biome resources provide Mountain-tier gear and food (so it makes more sense to halt them behind Bonemass), but this option is here if players still want ocean resources earlier.
-
-🔄 Toggling mid-game requires [b]client[/b] relog or reloading area. 
-
-[b]❗ Conflicts:[/b] Same as above.
-
 
 [size=4][b]🧥 Early Linen Cape[/b][/size]
 
@@ -266,15 +236,71 @@ All features below are synced with the server and can be toggled mid-game (with 
 - [b]Heavy Gear:[/b] -5% → 0%  
 - [b]Mage Gear:[/b] -2% → 0%  
 - [b]Light Gear Bonuses:[/b]  
-  • Troll/Ask: +2%  
+  • Troll, Bear, Vilebone and Ask: +2%  
   • Root: +1%  
 - [b]Weapon Penalties:[/b]  
-  • Battleaxe & Crystal Battleaxe: -20% → -5%  
+  • Battleaxes & Sledgehammers: -15% → -10%  
 - [b]Shield Penalties:[/b]  
-  • Tower Shields: -20% → -10%
+  • Tower Shields: -15% → -10%
 
 
-[size=4][b]⚡ Forsaken Powers Modifications[/b][/size]
+[size=4][b]🛡️ Extra Armor Stats[/b][/size]
+
+📜 Enhances gear with [b]extra stats[/b] based on armor class:
+
+- [b]Heavy Armor:[/b] Adds HP  
+- [b]Light Armor:[/b] Adds Stamina  
+- [b]Mage Armor:[/b] Adds Eitr (not regen)
+
+🔄 Changes apply instantly without relog if toggled mid-game (may need [b]client[/b] relog for tooltip refresh)
+
+[b]❗ Conflicts:[/b] Mods that add HP/Stamina/Eitr to armor  
+✅ Compatible with custom armor mods — only vanilla gear is affected
+
+[b]🔧 Stat Bonuses by Armor Set:[/b]
+
+[b]HP (Heavy Armor):[/b]
+
+- [b]Set: Total HP - Breakdown (Head / Chest / Legs)[/b]
+- [b]Bronze:[/b] 10 - 2  / 4  / 4
+- [b]Iron:[/b] 20 - 4  / 8  / 8
+- [b]Silver:[/b] 30 - 8  / 12 / 10
+- [b]Padded:[/b] 40 - 10 / 16 / 14
+- [b]Carapace:[/b] 50 - 12 / 20 / 18
+- [b]Flametal:[/b] 60 - 14 / 24 / 22
+- [b]Ask:[/b] 25 - 5  / 10 / 10
+
+[b]Stamina (Light Armor):[/b]
+
+- [b]Set: Total HP - Breakdown (Head / Chest / Legs)[/b]
+- [b]Troll:[/b] 5  - 1 / 2 / 2
+- [b]Bear:[/b] 5  - 1 / 2 / 2
+- [b]Root:[/b] 10 - 3 / 4 / 3
+- [b]Fenris:[/b] 15 - 4 / 6 / 5
+- [b]Vilebone:[/b] 20 - 5 / 8 / 7
+- [b]Ask:[/b] 30 - 8 / 12 / 10
+
+[b]Eitr (Mage Armor):[/b]
+
+- [b]Set: Total HP - Breakdown (Head / Chest / Legs)[/b]
+- [b]Eitr-Weave:[/b] 50 - 10 / 20 / 20
+- [b]Embla:[/b] 75 - 15 / 30 / 30
+
+
+[size=4][b]🔧 Gear Upgrade Unlock[/b][/size]
+
+📜 Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to lvl 4 within their respective biomes.  
+- This is accomplished by reducing the crafting workstation level requirements for Leather Set, Troll Set, Bronze Set, all Mistlands sets, and all Ashlands sets.  
+- NOTE: Special Ashlands weapons that use gems can be crafted to lvl 3 (e.g. Klossen max level upgrade is 3 (from 2)).
+
+📜 The Vilebone Set recipe is moved to the Workbench as a crafting station (from Forge).
+
+🔄 Can be enabled/disabled during gameplay, but requires the relevant crafting menu to be reopened to take effect.
+
+[b]❗ Conflicts:[/b] Mods that modify the required station level for the named sets.
+
+
+[size=4][b]⚡ Forsaken Powers Cooldowns[/b][/size]
 
 📜 Adjusts [b]cooldowns[/b] and [b]durations[/b] of each Forsaken Power for more flexible usage.
 
@@ -286,9 +312,9 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 - [b]Eikthyr Power:[/b] Cooldown: 15 min, Duration: 10 min  
 - [b]Elder Power:[/b] Cooldown: 15 min, Duration: 10 min  
-- [b]Bonemass Power:[/b] Cooldown: 17.5 min, Duration: 7.5 min  
+- [b]Bonemass Power:[/b] Cooldown: 15 min, Duration: 7.5 min  
 - [b]Moder Power:[/b] Cooldown: 15 min, Duration: 10 min  
-- [b]Yagluth Power:[/b] Cooldown: 17.5 min, Duration: 7.5 min  
+- [b]Yagluth Power:[/b] Cooldown: 15 min, Duration: 7.5 min  
 - [b]Queen Power:[/b] Cooldown: 15 min, Duration: 7.5 min  
 - [b]Fader Power:[/b] Cooldown: 15 min, Duration: 7.5 min
 
@@ -340,47 +366,6 @@ All features below are synced with the server and can be toggled mid-game (with 
 ✅ Compatible with mods that modify stamina on a per-item basis
 
 
-[size=4][b]🛡️ Extra Armor Stats[/b][/size]
-
-📜 Enhances gear with [b]extra stats[/b] based on armor class:
-
-- [b]Heavy Armor:[/b] Adds HP  
-- [b]Light Armor:[/b] Adds Stamina  
-- [b]Mage Armor:[/b] Adds Eitr (not regen)
-
-🔄 Changes apply instantly without relog if toggled mid-game (may need [b]client[/b] relog for tooltip refresh)
-
-[b]❗ Conflicts:[/b] Mods that add HP/Stamina/Eitr to armor  
-✅ Compatible with custom armor mods — only vanilla gear is affected
-
-[b]🔧 Stat Bonuses by Armor Set:[/b]
-
-[b]HP (Heavy Armor):[/b]
-
-- [b]Set: Total HP - Breakdown (Head / Chest / Legs)[/b]
-- [b]Bronze:[/b] 10 - 2  / 4  / 4
-- [b]Iron:[/b] 20 - 4  / 8  / 8
-- [b]Silver:[/b] 30 - 8  / 12 / 10
-- [b]Padded:[/b] 40 - 10 / 16 / 14
-- [b]Carapace:[/b] 50 - 12 / 20 / 18
-- [b]Flametal:[/b] 60 - 14 / 24 / 22
-- [b]Ask:[/b] 25 - 5  / 10 / 10
-
-[b]Stamina (Light Armor):[/b]
-
-- [b]Set: Total HP - Breakdown (Head / Chest / Legs)[/b]
-- [b]Troll:[/b] 5  - 1 / 2 / 2
-- [b]Root:[/b] 10 - 3 / 4 / 3
-- [b]Fenris:[/b] 15 - 4 / 6 / 5
-- [b]Ask:[/b] 20 - 5 / 8 / 7
-
-[b]Eitr (Mage Armor):[/b]
-
-- [b]Set: Total HP - Breakdown (Head / Chest / Legs)[/b]
-- [b]Eitr-Weave:[/b] 50 - 10 / 20 / 20
-- [b]Embla:[/b] 75 - 15 / 30 / 30
-
-
 [size=4][b]💀 Better Death Raiser[/b][/size]
 
 📜 Modifies the way the Death Raiser summons Skeletons:
@@ -422,6 +407,131 @@ All features below are synced with the server and can be toggled mid-game (with 
 [b]❗ Conflicts:[/b] Mods that modify Crossbows reload time.
 
 
+[size=4][b]🎯 Better Trophy Drop Rates[/b][/size]
+
+📜 Increases trophy drop rate for some creatures.
+
+🔄 Can be enabled/disabled during gameplay, but the changes will only apply to newly spawned creatures.
+
+[b]❗ Conflicts:[/b] Incompatible with any mod that modifies creature trophy drop rates.
+
+[b]🔧 Changes[/b]
+
+- [b]Rancid Remains:[/b] 10% → 20%
+- [b]Ghost:[/b] 10% → 20%
+- [b]Bear:[/b] 10% → 20%
+- [b]Surtling:[/b] 5%  → 10%
+- [b]Draugr Elite:[/b] 10% → 20%
+- [b]Wraith:[/b] 5%  → 20%
+- [b]Cultist:[/b] 10% → 20%
+- [b]Fenring:[/b] 10% → 20%
+- [b]Stone Golem:[/b] 5%  → 20%
+- [b]Deathsquito:[/b] 5%  → 10%
+- [b]Fuling Berserker:[/b] 5%  → 10%
+- [b]Vile:[/b] 10%  → 20%
+- [b]Tick:[/b] 5%  → 10%
+- [b]Dverger:[/b] 5%  → 10%
+- [b]Seeker Soldier:[/b] 5%  → 20%
+- [b]Charred Warlock:[/b] 5%  → 20%
+
+
+[size=4][b]🐗 Better Creature Drops[/b][/size]
+
+📜 Modifies the drop rates and type of items for Fenring, Bat and Dverger.
+
+🔄 Can be enabled/disabled during gameplay, but the changes will only apply to newly spawned creatures.
+
+[b]❗ Conflicts:[/b] Incompatible with any mod that modifies creature drop rates and drop types.
+
+[b]🔧 Changes[/b]
+
+- [b]Fenring:[/b]    
+  - Added Fenris Hair: (between 1 - 2 drops)
+  - Replaced Wolf Fang with Fenris Claw
+- [b]Bat:[/b] 
+  - Added Blood Bag (50% chance drop, in addition to Leather Scraps)
+- [b]Dverger Rogue, Mage and Ashlands Dvergr:[/b] 
+  - Increased Soft Tissue drop chance to 100% (from 25%)
+
+
+[line]
+
+[size=4][b]✨ Features[/b][/size]
+
+All features below are synced with the server.
+
+[line]
+
+[size=4][b]⏸️ Automatic Progression Halt[/b][/size]
+
+📜 Creatures and destroyable objects do not drop any items unless the previous biome boss has been defeated.  
+📜 Pickable items and chests cannot be picked/opened under the same conditions.  
+- Resources from each biome are automatically unlocked when the relevant boss is defeated. There is no need for client relogs or server restarts. However, the immediate area will need to be reloaded by leaving until unloaded by distance.
+
+🔄 Toggling mid-game requires [b]client[/b] relog or reloading area. 
+- Reloading area means walking/teleporting away from the current zone and coming back. This only applies for destroyable objects like Copper Mines. Pickables and chests will be affected immediately. Creatures will be affected if they are new.
+
+[b]❗ Conflicts:[/b] This only applies to vanilla game prefabs. Any mod that adds new prefabs (creatures, resources, pickables) will [b]not[/b] be included in the Progression Halt system.
+
+[b]🔧 Specific boss halts[/b]
+
+- Eikthyr: Black Forest objects and creatures
+- The Elder: Swamp objects and creatures
+- Bonemass: Mountain and Ocean objects and creatures (ocean halted by Bonemass by default)
+- Moder: Plains objects and creatures
+- Yagluth: Mistlands objects and creatures
+- The Queen: Ashlands objects and creatures
+
+
+[size=4][b]⏸️ Halt Ocean Behind Elder[/b][/size]
+
+📜 Halts Ocean biome resources (Leviathans and Serpents) behind The Elder instead of Bonemass. Requires Automatic Progression Halt to be enabled.   
+- NOTE: Ocean biome resources provide Mountain-tier gear and food (so it makes more sense to halt them behind Bonemass), but this option is here if players still want ocean resources earlier.
+
+🔄 Toggling mid-game requires [b]client[/b] relog or reloading area. 
+
+[b]❗ Conflicts:[/b] Same as above.
+
+
+[size=4][b]👹 Creature Unleveler By Boss[/b][/size]
+
+📜 Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss.  
+- This happens in a staggered way and will not affect creatures from a biome whose boss has not been defeated.  
+- Changes are automatically applied when a boss is defeated, including when reverting the boss global key with console commands.  
+- If defeating bosses in an unordered way, the changes still apply in their natural order.  
+- Some creatures that did not have stars will now gain stars (e.g. Abomination, Lox, Deathsquito)
+- Specific details can be found in the readme file in the [b]Docs[/b] tab 
+
+🔄 Can be enabled/disabled during gameplay, but changes will only be applied to new areas and newly spawned creatures.  
+- For example, if the mod was enabled and a 2-star Troll was spawned, the Troll will retain its level even if the config is toggled OFF afterwards. Same applies when toggling ON, when defeating bosses or reverting with console commands.
+
+[b]❗ Conflicts:[/b]  Mods that change creature levels. (e.g. Creature Level And Loot Control)
+
+
+[size=4][b]🚫 No End-game Raids in Early Biomes[/b][/size]
+
+📜 Seeker and Charred raids do not trigger in the Black Forest biome.
+
+🔄 Can be enabled/disabled during gameplay.
+
+[b]❗ Conflicts:[/b]  Mods that modify base raids.
+
+
+[size=4][b]🌙 Stop Nighttime Invasion[/b][/size]
+
+📜 Fulings, Seeker and Charred do not spawn in early biomes at night when their relevant bosses are defeated.
+
+🔄 Toggling mid-game requires reloading area if there are already night spawns in place.
+
+[b]❗ Conflicts:[/b]  Mods that modify creature spawner data.
+
+[b]🔧 Changes[/b]
+
+- Fulings: Can spawn in the Mountain biome
+- Seeker: Can spawn in the Plains biome
+- Charred: Can spawn in the Plains biome
+
+
 [size=4][b]🔥 Less Ashlands Enemies[/b][/size]
 
 📜 Reduced the spawn rate and numbers of enemies in Ashlands.  
@@ -435,29 +545,6 @@ All features below are synced with the server and can be toggled mid-game (with 
 [b]❗ Conflicts:[/b] Mods that modify Ashlands enemy spawn data.
 
 
-[size=4][b]🔧 Gear Upgrade Unlock[/b][/size]
-
-📜 Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to lvl 4 within their respective biomes.  
-- This is accomplished by reducing the crafting workstation level requirements for Leather Set, Troll Set, Bronze Set, all Mistlands sets, and all Ashlands sets.  
-- NOTE: Special Ashlands weapons that use gems can be crafted to lvl 3 (e.g. Klossen max level upgrade is 3 (from 2)).
-
-🔄 Can be enabled/disabled during gameplay, but requires the relevant crafting menu to be reopened to take effect.
-
-[b]❗ Conflicts:[/b] Mods that modify the required station level for the named sets.
-
-
-[size=4][b]💡 Permanent Lights[/b][/size]
-
-📜 Makes all light sources permanent and modifies the build costs of light source pieces to use maximum amount of their respective fuel type (wood, resin, coal etc).  
-- Fireplace now has an additional 20 Wood cost.  
-- Campfire and Fireplace Wood is refundable when destroyed.
-
-🔄 Changes apply instantly without relog if toggled mid-game
-
-[b]❗ Conflicts:[/b] Mods that modify light source fuel or build piece costs.  
-✅ Compatible with mods that add new light sources. This will make them permanent, but will not modify their build costs.
-
-
 [size=4][b]🌫️ Clear Mistlands After Queen[/b][/size]
 
 📜 Clears Mistlands mist after defeating the Queen.  
@@ -466,6 +553,15 @@ All features below are synced with the server and can be toggled mid-game (with 
 🔄 Disabling mid-game requires [b]client[/b] relog if the Queen is defeated. Enabling mid-game will apply changes immediately.
 
 [b]❗ Conflicts:[/b] Mods that modify Mistlands mist.
+
+
+[size=4][b]🌤️ Clearer Weather[/b][/size]
+
+📜 Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively.
+
+🔄 Toggling mid-game requires [b]client[/b] relog.
+
+[b]❗ Conflicts:[/b]  Weather or seasons mods.
 
 
 [size=4][b]⚙️ Craftable Chain[/b][/size]
@@ -487,28 +583,14 @@ All features below are synced with the server and can be toggled mid-game (with 
 [b]❗ Conflicts:[/b]  Mods that modify Dverger Lanterns luminosity.
 
 
-[size=4][b]🌤️ Clearer Weather[/b][/size]
+[size=4][b]🛠️ Station Extensions Changes[/b][/size]
 
-📜 Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively.
+📜 Decreases space requirement for workstation extensions and increases build distance to workstations.  
+- This does not increase workstations radius.
 
-🔄 Toggling mid-game requires [b]client[/b] relog.
+🔄 Can be enabled/disabled during gameplay, but requires reloading the build menu.
 
-[b]❗ Conflicts:[/b]  Weather or seasons mods.
-
-
-[size=4][b]👹 Creature Unleveler By Boss[/b][/size]
-
-📜 Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss.  
-- This happens in a staggered way and will not affect creatures from a biome whose boss has not been defeated.  
-- Changes are automatically applied when a boss is defeated, including when reverting the boss global key with console commands.  
-- If defeating bosses in an unordered way, the changes still apply in their natural order.  
-- Some creatures that did not have stars will now gain stars (e.g. Abomination, Lox, Deathsquito)
-- Specific details can be found in the readme file in the [b]Docs[/b] tab 
-
-🔄 Can be enabled/disabled during gameplay, but changes will only be applied to new areas and newly spawned creatures.  
-- For example, if the mod was enabled and a 2-star Troll was spawned, the Troll will retain its level even if the config is toggled OFF afterwards. Same applies when toggling ON, when defeating bosses or reverting with console commands.
-
-[b]❗ Conflicts:[/b]  Mods that change creature levels. (e.g. Creature Level And Loot Control)
+[b]❗ Conflicts:[/b] Mods that modify station extensions.
 
 
 [size=4][b]🏋️‍♀️ Hildir Weight Rewards[/b][/size]
@@ -522,16 +604,6 @@ All features below are synced with the server and can be toggled mid-game (with 
 [b]❗ Conflicts:[/b] No known conflicts.
 
 
-[size=4][b]🛠️ Station Extensions Changes[/b][/size]
-
-📜 Decreases space requirement for workstation extensions and increases build distance to workstations.  
-- This does not increase workstations radius.
-
-🔄 Can be enabled/disabled during gameplay, but requires reloading the build menu.
-
-[b]❗ Conflicts:[/b] Mods that modify station extensions.
-
-
 [size=4][b]🐗 Stop Running Away[/b][/size]
 
 📜 Boars and Necks won't flee when alerted.
@@ -539,31 +611,6 @@ All features below are synced with the server and can be toggled mid-game (with 
 🔄 Toggling mid-game only affects newly spawned creatures.
 
 [b]❗ Conflicts:[/b] Mods that change Boar and Neck AI behavior.
-
-
-[size=4][b]🎯 Better Trophy Drop Rates[/b][/size]
-
-📜 Increases trophy drop rate for some creatures.
-
-🔄 Can be enabled/disabled during gameplay, but the changes will only apply to newly spawned creatures.
-
-[b]❗ Conflicts:[/b] Incompatible with any mod that modifies creature trophy drop rates.
-
-[b]🔧 Changes[/b]
-
-- [b]Rancid Remains:[/b] 10% → 20%
-- [b]Surtling:[/b] 5%  → 10%
-- [b]Draugr Elite:[/b] 10% → 20%
-- [b]Wraith:[/b] 5%  → 20%
-- [b]Cultist:[/b] 10% → 20%
-- [b]Fenring:[/b] 10% → 20%
-- [b]Stone Golem:[/b] 5%  → 20%
-- [b]Deathsquito:[/b] 5%  → 10%
-- [b]Fuling Berserker:[/b] 5%  → 10%
-- [b]Tick:[/b] 5%  → 10%
-- [b]Dverger:[/b] 5%  → 10%
-- [b]Seeker Soldier:[/b] 5%  → 20%
-- [b]Charred Warlock:[/b] 5%  → 20%
 
 
 [size=4][b]🚢 Tougher Ships[/b][/size]
@@ -580,26 +627,6 @@ All features below are synced with the server and can be toggled mid-game (with 
 - [b]Karve:[/b] 500  → 650
 - [b]Longship:[/b] 1000 → 1250
 - [b]Drakkar:[/b] 3000 → 4000
-
-
-[size=4][b]🚪 Pocket Portal[/b][/size]
-
-📜 Adds a new portal that is functionally equal to the normal portal but is built from a special material, the Portal Core.
-- The Portal Core takes takes only one inventory slot and can be crafted at a lvl 4 Workbench with resources gathered from the Mountain and Black Forest biomes.  
-- The portal's shape is exactly the same as a normal portal, but has blue effects.
-- It does [b]not[/b] allow the carying of metal or other prohibited items through it. It functions like a normal portal and can connect to any other portal.
-- Can craft and carry any number of Portal Cores, but can only build one Pocket Portal per player. 
-
-🔄 Toggling mid-game requires reloading the build/crafting menu. 
-- Even if this config is disabled, the prefabs are still crated and existing portals or cores will not be removed from the world or inventory. Only the ability to craft them is affected by the toggle.
-
-[b]❗ Conflicts:[/b] No known conflicts. Requires Jotunn.
-
-[b]🔧 Portal Core Resource Requirements:[/b]
-- [b]Surtling Core:[/b] 5
-- [b]Fine Wood:[/b] 20
-- [b]Freeze Gland:[/b] 5
-- [b]Obsidian:[/b] 20
 
 
 [size=4][b]🚪 Max Portals Per Player[/b][/size]
@@ -633,7 +660,7 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 [size=4][b]✨ QOL[/b][/size]
 
-All features below are synced with the server and can be toggled mid-game (with relog/reload area as specified).
+All features below are synced with the server.
 
 [line]
 
@@ -766,6 +793,75 @@ All features below are synced with the server and can be toggled mid-game (with 
 
 [b]❗ Conflicts:[/b] No known conflicts.
 
+
+[size=4][b]💡 Permanent Lights[/b][/size]
+
+📜 Makes all light sources permanent and modifies the build costs of light source pieces to use maximum amount of their respective fuel type (wood, resin, coal etc).  
+- Fireplace now has an additional 20 Wood cost.  
+- Campfire and Fireplace Wood is refundable when destroyed.
+
+🔄 Changes apply instantly without relog if toggled mid-game
+
+[b]❗ Conflicts:[/b] Mods that modify light source fuel or build piece costs.  
+✅ Compatible with mods that add new light sources. This will make them permanent, but will not modify their build costs.
+
+
+[line]
+
+[size=4][b]🔨 Build Pieces[/b][/size]
+
+All features below are synced with the server.
+
+[line]
+
+[size=4][b]🚪 Pocket Portal[/b][/size]
+
+📜 Adds a new portal that is functionally equal to the normal portal but is built from a special material, the Portal Core.
+- The Portal Core takes takes only one inventory slot and can be crafted at a lvl 4 Workbench with resources gathered from the Mountain and Black Forest biomes.  
+- The portal's shape is exactly the same as a normal portal, but has blue effects.
+- It does [b]not[/b] allow the carying of metal or other prohibited items through it. It functions like a normal portal and can connect to any other portal.
+- Can craft and carry any number of Portal Cores, but can only build one Pocket Portal per player. 
+
+🔄 Toggling mid-game requires reloading the build/crafting menu. 
+- Even if this config is disabled, the prefabs are still created and existing portals or cores will not be removed from the world or inventory. Only the ability to craft them is affected by the toggle.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+[b]🔧 Portal Core Resource Requirements:[/b]
+- [b]Surtling Core:[/b] 5
+- [b]Fine Wood:[/b] 20
+- [b]Freeze Gland:[/b] 5
+- [b]Obsidian:[/b] 20
+
+
+[size=4][b]💡 Extra Lights[/b][/size]
+
+📜 Adds new light sources in the 'Extra Lights' category in the build menu.  
+[b]NOTE:[/b] The build costs depend on whether Cheapper Build Piece Amounts or Permanent Lights are enabled or not. 
+
+🔄 Toggling mid-game requires reloading the build/crafting menu. 
+- Even if this config is disabled, the prefabs are still created and existing lights will not be removed from the world. Only the ability to build them is affected by the toggle.
+
+[b]❗ Conflicts:[/b] No known conflicts.
+
+[b]🔧 Specific Additions:[/b]
+
+- [b]Green Standing Brazier[/b]
+  - Added a green version of the Standing Brazier
+
+- [b]Silver Sconce[/b]
+  - Added 3 types of Silver Sconces (red, blue and green flame) available in the Mountain biome
+  - Fuel lasts longer than the normal sconce
+  - Build Cost: Silver, Ancient Bark and the respective fuel: Resin, Greydwarf Eye or Guck
+
+- [b]Silver Hanging Brazier[/b]
+  - Added 3 types of Silver Hanging Braziers (red, blue and green flame) available in the Mountain biome
+  - Fuel lasts longer than the normal hanging brazier
+  - Build Cost: Silver, Chain and the respective fuel: Coal, Greydwarf Eye or Guck
+
+- [b]Blue and Green Dverger Lanterns[/b]
+  - Added blue and green versions of the Dverger Lantern (both wall and pole)
+  - Build costs are the same as the normal Dverger Lantern build pieces
 
 [line]
 
@@ -944,6 +1040,16 @@ All configs can be toggled mid-game.
 
 [size=5][b]🔮 Future Plans[/b][/size]
 
+- Add the Bear and Vile to the Creature Unleveler feature, but will need to play it out first before I see how it feels.
+- Look into the new trinket system and see if there is a need to balance build costs or adrenaline costs.
+- Add an alternate way to Permanent Lights that makes things more immersive than the current option. Will probably keep both options available when I implement the alternative.
+- Look into adding a secondary attack tot he Staff of Protection that heals, or add the Dverger Heal Staff as a playable item.
+- Look into the sorting options for crafting recipes. My previous mod had a section that would reorder the crafting recipes by biome, but it broke with the Bog witch update. I'm looking into how to re-implement that.
+- Remove the player charatcter speed slow when eating.
+- Create a Smart Dropbox
+- Add taming progress indicators in the UI
+
+The above are just ideas I gathered and are not guaranteed to be implemented. 
 More features will be added over time. Config descriptions will be updated with known compatibility issues.  
 If using other mods that overlap in functionality, disable affected sections in this mod’s config to avoid conflicts.
 
@@ -963,6 +1069,110 @@ Blaxxun-bloop - for ServerSync
 
 
 [size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
+
+v1.4.2
+- [b]Fixes:[/b]
+  - More Usable Fuel error message fixed when building or being nearby any Shield Generators
+  - Fixed UI emoji font issue after Valheim Unity Engine update
+
+- [b]Updates:[/b]
+  - Cheaper Gear Recipe Amounts: 
+     - Added Vilebone set and the Paws of the Bear to the list of changes (no changes made for Bear set, or Vilebone Maulclaws)
+       - Vilebone Cage: Bear Hide craft: 4 > 5
+       - Vilebone Drapes: Bear Hide upgrade: 5/10/15 > 2/4/6
+       - Paws of the Bear: Leather Scraps craft: 4 > 2 
+     - Revisited Troll set costs
+       - Troll Leather Helmet: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+       - Troll Leather Tunic: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+       - Troll Leather Pants: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+     - Black Metal Battleaxe
+       - Fine Wood upgrade: 0/0/0 > 2/4/6
+       - Black Metal craft: 30 > 15
+       - Black Metal upgrade: 15/30/45 > 7/14/21
+     - Skull Splittur
+       - Iron craft: 30 > 15
+       - Iron upgrade: 15/30/45 > 5/10/15
+       - Yggdrasil Wood craft: 15 > 10
+       - Yggdrasil Wood upgrade: 5/10/15 > 2/4/6
+
+  - Gear Speed Modifications:
+    - Patterns of the Bear: 0% > 2%
+    - Loincloth of the Bear: 0% > 2%
+    - Vilebone Cage: 0% > 2%
+    - Vilebone Drapes: 0% > 2%
+    - Stagbreaker: -15% > -10%
+    - Iron Sledge: -15% > -10%
+    - Demolisher: -15% > -10%
+    - Battleaxe: -15% > -10%
+    - Crystal Battleaxe: -15% > -10%
+    - Black Metal Battleaxe: -15% > -10%
+    - Skull Splittur: -15% > -10%
+
+  - Extra Armor Stats (Stamina):
+    - Headdress of the Bear: 1
+    - Patterns of the Bear: 2
+    - Loincloth of the Bear: 2
+    - Vilebone Visage: 5
+    - Vilebone Cage: 8
+    - Vilebone Drapes: 7
+    - Hood of Ask: 5 > 8
+    - Robes of Ask: 8 > 12
+    - Trousers of Ask: 7 > 10
+
+  - Smart Biome Indicator:
+    - Added the Bear and Vilebone sets to the list of gear to calculate the biome difficulty indicator
+
+  - Gear Upgrade Unlock:
+    - Included the Bear set to match Troll and Bronze upgrade unlocks
+    - Moved the Vilebone set recipe from the Forge to the Workbench
+
+  - Forsaken Powers Cooldowns:
+    - Bonemass: reduced CD from 17.5 mins to 15 mins
+    - Yagluth: reduced CD from 17.5 mins to 15 mins
+    - Note: Now all powers have a cooldown of 15 mins
+
+  - Better Trophy Drop Rates:
+    - Increased the trophy drop rates for the following creatures from 10% to 20%: Ghost, Bear, Vile
+
+  - Progression Halt:
+    - Added Ghost, Bear and Vile to the halt list of their respective bosses
+
+  - Clearer Weather:
+    - Further reduced chance of Snowstorms in the Mountain biome from a weight of 0.5 to 0.2 (originally 1) and Snow from weight 2.5 to 1.5 (originally 5)
+
+- [b]New Balance Features:[/b]
+  - Better Creature Drops
+    - Fenring: Added Fenris Hair 1-2, Added Fenris Claw (replacing Wolf Fang)
+    - Bat: Added Blood Bag 50% chance drop
+    - Dverger Rogue, Mage and Ashlands Dvergr: Increased Soft Tissue chance to 100% (from 25%)
+
+- [b]New Features:[/b]
+  - No end-game raids in early biomes
+    - Seeker and Charred raids do not trigger in the Black Forest biome
+
+  - Stop Nighttime Invasion
+    - Fulings, Seeker and Charred do not spawn in early biomes at night when their relevant bosses are defeated
+    - Fulings: Mountain
+    - Seeker: Plains
+    - Charred: Plains
+
+- [b]New Build Pieces:[/b]
+  - Green Standing Brazier 
+    - Added a green version of the Standing Brazier
+
+  - Silver Sconce
+    - Added 3 types of Silver Sconces (red, blue and green flame) available in the Mountain biome
+    - Fuel lasts longer than the normal sconce
+    - Build Cost: Silver, Ancient Bark and the respective fuel: Resin, Greydwarf Eye or Guck
+        
+  - Silver Hanging Brazier
+    - Added 3 types of Silver Hanging Braziers (red, blue and green flame) available in the Mountain biome
+    - Fuel lasts longer than the normal hanging brazier
+    - Build Cost: Silver, Chain and the respective fuel: Coal, Greydwarf Eye or Guck
+        
+  - Blue and Green Dverger Lanterns
+    - Added blue and green versions of the Dverger Lantern (both wall and standing)
+    - Build costs are the same as the normal Dverger Lantern build pieces
 
 v1.3.2
 - [b]Progression Halt Fixes[/b]: 

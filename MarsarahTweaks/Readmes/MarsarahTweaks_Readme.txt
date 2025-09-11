@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.3.2
+Marsarah Tweaks v1.4.2
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 
@@ -22,6 +22,7 @@ INSTALLATION
 Or use a mod manager.
 
 NOTE: This mod needs to be installed on the SERVER and all CLIENTS
+NOTE: Configs may be renamed or reshuffled upon mod updates, so always check the config file when updating this mod
 
 CONFIGURATION
 ================================================================
@@ -117,6 +118,9 @@ MOD CONFIGS
   • Craft (Wood):                8        → 5
 
 >> Black Forest <<
+- Paws of the Bear
+  • Craft (Leather Scraps):      4        → 2
+
 - Copper Knife
   • Upgrade (Wood):              0/0/0    → 1/2/3
   • Upgrade (Copper):            4/8/12   → 3/6/9
@@ -283,6 +287,11 @@ MOD CONFIGS
   • Upgrade (Fine Wood):         0/0/0    → 2/4/6
   • Upgrade (Black Metal):       10/20/30 → 5/10/15
 
+- Black Metal Battleaxe
+  • Craft (Black Metal):         30       → 15
+  • Upgrade (Fine Wood):         0/0/0    → 2/4/6
+  • Upgrade (Black Metal):       15/30/45 → 7/14/21
+
 - Black Metal Shield
   • Upgrade (Chain):             2/4/6    → 0/0/0
 
@@ -328,6 +337,12 @@ MOD CONFIGS
   • Craft (Bronze):              20       → 10
   • Upgrade (Iron):              15/30/45 → 5/10/15
   • Upgrade (Bronze):            10/20/30 → 5/10/15
+
+- Skull Splittur
+  • Craft (Iron):                30       → 15
+  • Craft (Yggdrasil Wood):      15       → 10
+  • Upgrade (Iron):              15/30/45 → 5/10/15
+  • Upgrade (Yggdrasil Wood):    5/10/15 → 2/4/6
 
 - Carapace Shield
   • Upgrade (Refined Eitr):      3/6/9    → 2/4/6
@@ -473,16 +488,13 @@ MOD CONFIGS
 
 - Troll Leather Helmet
   • Craft (Bone Fragments):      3        → 0
-  • Upgrade (Troll Hide):        2/4/6    → 3/6/9
   • Upgrade (Bone Fragments):    1/2/3    → 0/0/0
 
 - Troll Leather Tunic
   • Craft (Troll Hide):          5        → 6
-  • Upgrade (Troll Hide):        2/4/6    → 3/6/9
 
 - Troll Leather Pants
   • Craft (Troll Hide):          5        → 6
-  • Upgrade (Troll Hide):        2/4/6    → 3/6/9
 
 - Troll Hide Cape
   • Craft (Troll Hide):          10       → 4
@@ -556,8 +568,14 @@ MOD CONFIGS
 - Wolf Fur Cape
   • Craft (Wolf Pelt):           6        → 5
   • Craft (Silver):              4        → 2
-  v Upgrade (Wolf Pelt):         4/8/12   → 1/2/3
+  • Upgrade (Wolf Pelt):         4/8/12   → 1/2/3
   • Upgrade (Silver):            2/4/6    → 1/2/3
+
+- Vilebone Cage
+  • Craft (Bear Hide):           4        > 5
+
+- Vilebone Drapes
+  • Upgrade (Bear Hide):         5/10/15  > 2/4/6
 
 - Padded Helmet
   • Craft (Iron):                10       → 5
@@ -1304,44 +1322,8 @@ The following foods have the stack size increased to 20
 - Uncooked Piquant Pie  
 
 
-========================= [Features] ===========================
+========================= [Balance] ============================
 ► All configs in this section are synced with server.
-
------------------ [Automatic Progression Halt] -----------------
-
-► Description:
-  Creatures and destroyable objects do not drop any items unless the previous biome boss has been defeated.
-  Pickable items and chests cannot be picked/opened under the same conditions.
-  Resources from each biome are automatically unlocked when the relevant boss is defeated. There is no need for CLIENT relogs or SERVER restarts. However, the immediate area will need to be reloaded by leaving until unloaded by distance.
-
-► Mid-Game Toggling:
-  Toggling mid-game requires CLIENT relog or reloading area. Reloading area means walking/teleporting away from the current zone and coming back. This only applies for destroyable objects like Copper Mines. Pickables and chests will be affected immediately. Creatures will be affected if they are new.
-
-► Conflicts:
-  This only applies to vanilla game prefabs. Any mod that adds new prefabs (creatures, resources, pickables) will NOT be included in the Progression Halt system.
-
-► Specific boss halts
-
-- Eikthyr: Black Forest objects and creatures
-- The Elder: Swamp objects and creatures
-- Bonemass: Mountain and Ocean objects and creatures (ocean halted by Bonemass by default)
-- Moder: Plains objects and creatures
-- Yagluth: Mistlands objects and creatures
-- The Queen: Ashlands objects and creatures
-
-
-------------------- [Halt Ocean Behind Elder] ------------------
-
-► Description:
-  Halts Ocean biome resources (Leviathans and Serpents) behind The Elder instead of Bonemass. Requires Automatic Progression Halt to be enabled.   
-  NOTE: Ocean biome resources provide Mountain-tier gear and food (so it makes more sense to halt them behind Bonemass), but this option is here if players still want ocean resources earlier.
-
-► Mid-Game Toggling:
-  Toggling mid-game requires CLIENT relog or reloading area.
-
-► Conflicts:
-  Same as above.
-
 
 --------------------- [Early Linen Cape] -----------------------
 
@@ -1379,13 +1361,64 @@ The following foods have the stack size increased to 20
 ▼ Changes:
 - All metal chest and leg pieces speed penalty:  -5%  → 0%
 - All mage chest and leg pieces speed penalty:   -2%  → 0%
-- Troll & Ask chest and leg pieces speed bonus:  0%   → 2% 
+- Troll, Bear, Vile & Ask chest and leg pieces speed bonus:  0%   → 2% 
 - Root armor chest and leg pieces speed bonus:   0%   → 1%
-- Battleaxe and Crystal Battleaxe speed penalty: -20% → -5% 
-- Tower Shields speed penalty:                   -20% → -10%
+- Battleaxes and Sledgehammers speed penalty:    -15% → -10% 
+- Tower Shields speed penalty:                   -15% → -10%
 
 
----------------- [Forsaken Powers Modifications] ---------------
+---------------------- [Extra Armor Stats] ---------------------
+
+► Description:
+  Heavy armor provides extra HP. 
+  Light armor provides extra Stamina.
+  Mage armor provides extra Eitr (Not Eitr regen).
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  Incompatible with other mods that add hp/stamina/eitr to armor.
+  Compatible with custom armor mods, since this only modifies vanilla gear.
+
+▼ Changes:
+- HP values:      total (head, chest, legs):
+  • Bronze set:   10    (2,    4,     4)
+  • Iron set:     20    (4,    8,     8)
+  • Silver set:   30    (8,    12,    10)
+  • Padded set:   40    (10,   16,    14)
+  • Carapace set: 50    (12,   20,    18)
+  • Flametal set: 60    (14,   24,    22)
+  • Ask set:      25    (5,    10,    10)
+- Stamina values: total (head, chest, legs):
+  • Troll set:    5     (1,    2,     2)
+  • Bear set:     5     (1,    2,     2)
+  • Root set:     10    (3,    4,     3)
+  • Fenris set:   15    (4,    6,     5)
+  • Vilebone set: 20    (5,    8,     7)
+  • Ask set:      30    (8,    12,    10)
+- Eitr values:    total (head, chest, legs):
+  • Eitr-Weave:   50    (10,   20,    20)
+  • Embla set:    75    (15,   30,    30)
+
+
+-------------------- [Gear Upgrade Unlock] ---------------------
+
+► Description:
+  Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to lvl 4 within their respective biomes.
+  This is accomplished by reducing the crafting workstation level requirements for Leather Set, Troll Set, Bronze Set, all Mistlands sets, and all Ashlands sets.
+  NOTE: Special Ashlands weapons that use gems can be crafted to lvl 3 (e.g. Klossen max level upgrade is 3 (from 2)).
+
+  The Vilebone Set recipe is moved to the Workbench as a crafting station (from Forge).
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay, but requires the relevant crafting menu to be reopened to take effect.
+
+► Conflicts:
+  Incompatible with other mods that modify the required station level for the named sets.
+
+
+------------------ [Forsaken Powers Cooldowns] -----------------
 
 ► Description:
   Modifies Forsaken Powers cooldown and duration timers individually.
@@ -1406,7 +1439,7 @@ The following foods have the stack size increased to 20
   • Duration: 10 mins
 
 - Bonemass power: 
-  • Cooldown: 17.5 mins
+  • Cooldown: 15 mins
   • Duration: 7.5 mins
 
 - Moder power: 
@@ -1414,7 +1447,7 @@ The following foods have the stack size increased to 20
   • Duration: 10 mins
 
 - Yagluth power: 
-  • Cooldown: 17.5 mins
+  • Cooldown: 15 mins
   • Duration: 7.5 mins
 
 - Queen power: 
@@ -1477,39 +1510,6 @@ The following foods have the stack size increased to 20
 ► Conflicts:
   Incompatible with other mods that modify all player stamina usage generally.
   Compatible with mods that modify stamina values independently for weapons for example.
-
-
----------------------- [Extra Armor Stats] ---------------------
-
-► Description:
-  Heavy armor provides extra HP. 
-  Light armor provides extra Stamina.
-  Mage armor provides extra Eitr (Not Eitr regen).
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  Incompatible with other mods that add hp/stamina/eitr to armor.
-  Compatible with custom armor mods, since this only modifies vanilla gear.
-
-▼ Changes:
-- HP values:      total (head, chest, legs):
-  • Bronze set:   10    (2,    4,     4)
-  • Iron set:     20    (4,    8,     8)
-  • Silver set:   30    (8,    12,    10)
-  • Padded set:   40    (10,   16,    14)
-  • Carapace set: 50    (12,   20,    18)
-  • Flametal set: 60    (14,   24,    22)
-  • Ask set:      25    (5,    10,    10)
-- Stamina values: total (head, chest, legs):
-  • Troll set:    5     (1,    2,     2)
-  • Root set:     10    (3,    4,     3)
-  • Fenris set:   15    (4,    6,     5)
-  • Ask set:      20    (5,    8,     7)
-- Eitr values:    total (head, chest, legs):
-  • Eitr-Weave:   50    (10,   20,    20)
-  • Embla set:    75    (15,   30,    30)
 
 
 ------------------- [Better Death Raiser] ----------------------
@@ -1619,142 +1619,96 @@ The following foods have the stack size increased to 20
   Incompatible with other mods that modify Crossbows reload time.
 
 
--------------------- [Less Ashlands Enemies] -------------------
+------------------ [Better Trophy Drop Rates] ------------------
 
 ► Description:
-  Reduced the spawn rate and numbers of enemies in Ashlands.
-  NOTE: This does NOT modify enemy levels or levelup chances (starred enemies).
+  Increases trophy drop rate for some creatures.
 
 ► Mid-Game Toggling:
-  Toggling mid-game requires reloading area. This means moving to a new unloaded area will apply the new/old spawn values depending on the toggle. Areas that are currently active (having a player present) will retain the old config spawn data.
-  Teleporting or simply walking away for a certain distance will make changes take effect if this config is toggled mid-game.
+  Can be enabled/disabled during gameplay, but the changes will only apply to newly spawned creatures.
 
 ► Conflicts:
-  Incompatible with other mods that modify Ashlands enemy spawn data.
+  Incompatible with any mod that modifies creature trophy drop rates.
 
-▼ Changes (only modified creatures are listed):
+▼ Changes:
 
-- Fallen Valkyrie
-  • Spawn chance:   20% → 15%
-
-- Asksvin (day)
-  • Max spawned:    2   → 1
-  • Min group size: 2   → 1
-  • Max group size: 3   → 2
-  • Spawn chance:   30% → 20%
-
-- Asksvin (night)
-  • Max spawned:    3   → 2
-  • Spawn chance:   45% → 35%
-
-- Volture
-  • Max spawned:    3   → 2
-
-- Charred Twitcher (day)
-  • Max spawned:    3   → 2
-  • Min group size: 2   → 1
-  • Max group size: 4   → 2
-  • Spawn chance:   40% → 35%
-
-- Charred Twitcher (night)
-  • Max spawned:    4   → 3
-  • Min group size: 3   → 2
-  • Max group size: 6   → 3
-
-- Charred Marksman
-  • Max spawned:    4   → 2
-  • Spawn chance:   35% → 30%
-
-- Charred Warrior
-  • Max spawned:    4   → 2
-  • Spawn chance:   35% → 30%
-
-- Lava Blob
-  • Max spawned:    2   → 1
-  • Max group size: 2   → 1
-  • Spawn chance:   25% → 20%
+- Rancid Remains:   10% → 20% 
+- Ghost:            10% → 20% 
+- Bear:             10% → 20% 
+- Surtling:         5%  → 10% 
+- Draugr Elite:     10% → 20% 
+- Wraith:           5%  → 20% 
+- Cultist:          10% → 20% 
+- Fenring:          10% → 20% 
+- Stone Golem:      5%  → 20% 
+- Deathsquito:      5%  → 10% 
+- Fuling Berserker: 5%  → 10% 
+- Vile:             10% → 20% 
+- Tick:             5%  → 10% 
+- Dverger:          5%  → 10% 
+- Seeker Soldier:   5%  → 20% 
+- Charred Warlock:  5%  → 20% 
 
 
--------------------- [Gear Upgrade Unlock] ---------------------
+-------------------- [Better Creature Drops] -------------------
 
 ► Description:
-  Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to lvl 4 within their respective biomes.
-  This is accomplished by reducing the crafting workstation level requirements for Leather Set, Troll Set, Bronze Set, all Mistlands sets, and all Ashlands sets.
-  NOTE: Special Ashlands weapons that use gems can be crafted to lvl 3 (e.g. Klossen max level upgrade is 3 (from 2)).
+  Modifies the drop rates and type of items for Fenring, Bat and Dverger
 
 ► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay, but requires the relevant crafting menu to be reopened to take effect.
+  Can be enabled/disabled during gameplay, but the changes will only apply to newly spawned creatures.
 
 ► Conflicts:
-  Incompatible with other mods that modify the required station level for the named sets.
+  Incompatible with any mod that modifies creature drop rates and drop types.
+
+▼ Changes:
+
+- Fenring:    
+  - Added Fenris Hair: (between 1 - 2 drops)
+  - Replaced Wolf Fang with Fenris Claw
+- Bat: 
+  - Added Blood Bag (50% chance drop, in addition to Leather Scraps)
+- Dverger Rogue, Mage and Ashlands Dvergr: 
+  - Increased Soft Tissue drop chance to 100% (from 25%)
 
 
----------------------- [Permanent Lights] ----------------------
+========================= [Features] ===========================
+► All configs in this section are synced with server.
+
+----------------- [Automatic Progression Halt] -----------------
 
 ► Description:
-  Makes all light sources permanent.
-  Modifies the build costs of light source pieces to use maximum amount of their respective fuel type (wood, resin, coal etc).
-  NOTE: Fireplace now has an additional 20 Wood cost.
-  NOTE: Campfire and Fireplace Wood is refundable when destroyed.
+  Creatures and destroyable objects do not drop any items unless the previous biome boss has been defeated.
+  Pickable items and chests cannot be picked/opened under the same conditions.
+  Resources from each biome are automatically unlocked when the relevant boss is defeated. There is no need for CLIENT relogs or SERVER restarts. However, the immediate area will need to be reloaded by leaving until unloaded by distance.
 
 ► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
+  Toggling mid-game requires CLIENT relog or reloading area. Reloading area means walking/teleporting away from the current zone and coming back. This only applies for destroyable objects like Copper Mines. Pickables and chests will be affected immediately. Creatures will be affected if they are new.
 
 ► Conflicts:
-  Incompatible with other mods that modify light source fuel.
-  Incompatible with other mods that modify build piece costs.
-  Compatible with mods that add new light sources. This will make them permanent, but will not modify their build costs.
+  This only applies to vanilla game prefabs. Any mod that adds new prefabs (creatures, resources, pickables) will NOT be included in the Progression Halt system.
+
+► Specific boss halts
+
+- Eikthyr: Black Forest objects and creatures
+- The Elder: Swamp objects and creatures
+- Bonemass: Mountain and Ocean objects and creatures (ocean halted by Bonemass by default)
+- Moder: Plains objects and creatures
+- Yagluth: Mistlands objects and creatures
+- The Queen: Ashlands objects and creatures
 
 
------------------ [Clear Mistlands After Queen] ----------------
+------------------- [Halt Ocean Behind Elder] ------------------
 
 ► Description:
-  Clears Mistlands mist after defeating the Queen.
-  Changes will be applied immediately when the Queen is defeated. No relogs or restarts needed.
+  Halts Ocean biome resources (Leviathans and Serpents) behind The Elder instead of Bonemass. Requires Automatic Progression Halt to be enabled.   
+  NOTE: Ocean biome resources provide Mountain-tier gear and food (so it makes more sense to halt them behind Bonemass), but this option is here if players still want ocean resources earlier.
 
 ► Mid-Game Toggling:
-  Disabling mid-game requires CLIENT relog if the Queen is defeated.
-  Enabling mid-game will apply changes immediately.
+  Toggling mid-game requires CLIENT relog or reloading area.
 
 ► Conflicts:
-  Incompatible with other mods that modify Mistlands mist.
-
-
------------------------ [Craftable Chain] ----------------------
-
-► Description:
-  Adds a Chain recipe at the Black Forge.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay, but requires the Black Forge crafting menu to be reopened to take effect.
-
-► Conflicts:
-  Possibly incompatible with mods that add the same recipe at the normal Forge (not tested).
-
-
------------------------ [Brighter Lanterns] --------------------
-
-► Description:
-  Makes Dverger Lanterns brighter.
-  NOTE: Standing lanterns are a bit brighter than the wall mount lanterns.
-
-► Mid-Game Toggling:
-  Toggling mid-game requires either CLIENT relog or reloading area (moving/teleporting away from current zone and coming back).
-
-► Conflicts:
-  Incompatible with other mods that modify Dverger Lanterns luminosity.
-
-
------------------------ [Clearer Weather] ----------------------
-
-► Description:
-  Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively.
-
-► Mid-Game Toggling:
-  Toggling mid-game requires CLIENT relog.
-
-► Conflicts:
-  Incompatible with any weather or seasons mod.
+  Same as above.
 
 
 ------------------ [Creature Unleveler By Boss] ----------------
@@ -1862,18 +1816,141 @@ The following foods have the stack size increased to 20
     - Max stars:       0  → 1
 
 
------------------- [Hildir Weight Rewards] ---------------------
+-------------- [No End-game Raids in Early Biomes] -------------
 
 ► Description:
-  Increases base carry weight by 25 when turning in Hildir chests (for each chest).
-  This will apply for all characters in the world, but will require CLIENT relogs.
-  NOTE: Changes are NOT applied when defeating the minibosses, but when turning in the chests.
+  Seeker and Charred raids do not trigger in the Black Forest biome.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  Incompatible with other mods that modify base raids.
+
+
+------------------- [Stop Nighttime Invasion] -------------------
+
+► Description:
+  Fulings, Seeker and Charred do not spawn in early biomes at night when their relevant bosses are defeated.
+
+► Mid-Game Toggling:
+  Toggling mid-game requires reloading area if there are already night spawns in place.
+
+► Conflicts:
+  Incompatible with other mods that modify creature spawner data.
+
+▼ Changes:
+
+- Fulings: Can spawn in the Mountain biome
+- Seeker: Can spawn in the Plains biome
+- Charred: Can spawn in the Plains biome
+
+
+-------------------- [Less Ashlands Enemies] -------------------
+
+► Description:
+  Reduced the spawn rate and numbers of enemies in Ashlands.
+  NOTE: This does NOT modify enemy levels or levelup chances (starred enemies).
+
+► Mid-Game Toggling:
+  Toggling mid-game requires reloading area. This means moving to a new unloaded area will apply the new/old spawn values depending on the toggle. Areas that are currently active (having a player present) will retain the old config spawn data.
+  Teleporting or simply walking away for a certain distance will make changes take effect if this config is toggled mid-game.
+
+► Conflicts:
+  Incompatible with other mods that modify Ashlands enemy spawn data.
+
+▼ Changes (only modified creatures are listed):
+
+- Fallen Valkyrie
+  • Spawn chance:   20% → 15%
+
+- Asksvin (day)
+  • Max spawned:    2   → 1
+  • Min group size: 2   → 1
+  • Max group size: 3   → 2
+  • Spawn chance:   30% → 20%
+
+- Asksvin (night)
+  • Max spawned:    3   → 2
+  • Spawn chance:   45% → 35%
+
+- Volture
+  • Max spawned:    3   → 2
+
+- Charred Twitcher (day)
+  • Max spawned:    3   → 2
+  • Min group size: 2   → 1
+  • Max group size: 4   → 2
+  • Spawn chance:   40% → 35%
+
+- Charred Twitcher (night)
+  • Max spawned:    4   → 3
+  • Min group size: 3   → 2
+  • Max group size: 6   → 3
+
+- Charred Marksman
+  • Max spawned:    4   → 2
+  • Spawn chance:   35% → 30%
+
+- Charred Warrior
+  • Max spawned:    4   → 2
+  • Spawn chance:   35% → 30%
+
+- Lava Blob
+  • Max spawned:    2   → 1
+  • Max group size: 2   → 1
+  • Spawn chance:   25% → 20%
+
+
+----------------- [Clear Mistlands After Queen] ----------------
+
+► Description:
+  Clears Mistlands mist after defeating the Queen.
+  Changes will be applied immediately when the Queen is defeated. No relogs or restarts needed.
+
+► Mid-Game Toggling:
+  Disabling mid-game requires CLIENT relog if the Queen is defeated.
+  Enabling mid-game will apply changes immediately.
+
+► Conflicts:
+  Incompatible with other mods that modify Mistlands mist.
+
+
+----------------------- [Clearer Weather] ----------------------
+
+► Description:
+  Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively.
 
 ► Mid-Game Toggling:
   Toggling mid-game requires CLIENT relog.
 
 ► Conflicts:
-  No known conflicts.
+  Incompatible with any weather or seasons mod.
+
+
+----------------------- [Craftable Chain] ----------------------
+
+► Description:
+  Adds a Chain recipe at the Black Forge.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay, but requires the Black Forge crafting menu to be reopened to take effect.
+
+► Conflicts:
+  Possibly incompatible with mods that add the same recipe at the normal Forge (not tested).
+
+
+----------------------- [Brighter Lanterns] --------------------
+
+► Description:
+  Makes Dverger Lanterns brighter.
+  NOTE: Standing lanterns are a bit brighter than the wall mount lanterns.
+
+► Mid-Game Toggling:
+  Toggling mid-game requires either CLIENT relog or reloading area (moving/teleporting away from current zone and coming back).
+
+► Conflicts:
+  Incompatible with other mods that modify Dverger Lanterns luminosity.
 
 
 ----------------- [Station Extensions Changes] -----------------
@@ -1889,6 +1966,20 @@ The following foods have the stack size increased to 20
   Incompatible with any mod that modifies station extensions.
 
 
+------------------ [Hildir Weight Rewards] ---------------------
+
+► Description:
+  Increases base carry weight by 25 when turning in Hildir chests (for each chest).
+  This will apply for all characters in the world, but will require CLIENT relogs.
+  NOTE: Changes are NOT applied when defeating the minibosses, but when turning in the chests.
+
+► Mid-Game Toggling:
+  Toggling mid-game requires CLIENT relog.
+
+► Conflicts:
+  No known conflicts.
+
+
 --------------------- [Stop Running Away] ----------------------
 
 ► Description:
@@ -1899,34 +1990,6 @@ The following foods have the stack size increased to 20
 
 ► Conflicts:
   Incompatible with any mod that changes Boar and Neck AI behavior.
-
-
------------------- [Better Trophy Drop Rates] ------------------
-
-► Description:
-  Increases trophy drop rate for some creatures.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay, but the changes will only apply to newly spawned creatures.
-
-► Conflicts:
-  Incompatible with any mod that modifies creature trophy drop rates.
-
-▼ Changes:
-
-- Rancid Remains:   10% → 20% 
-- Surtling:         5%  → 10% 
-- Draugr Elite:     10% → 20% 
-- Wraith:           5%  → 20% 
-- Cultist:          10% → 20% 
-- Fenring:          10% → 20% 
-- Stone Golem:      5%  → 20% 
-- Deathsquito:      5%  → 10% 
-- Fuling Berserker: 5%  → 10% 
-- Tick:             5%  → 10% 
-- Dverger:          5%  → 10% 
-- Seeker Soldier:   5%  → 20% 
-- Charred Warlock:  5%  → 20% 
 
 
 ----------------------- [Tougher Ships] ------------------------
@@ -1945,27 +2008,6 @@ The following foods have the stack size increased to 20
 - Karve:    500  → 650
 - Longship: 1000 → 1250
 - Drakkar:  3000 → 4000
-
-
------------------------ [Pocket Portal] ------------------------
-
-► Description:
-  Adds a new portal that is functionally equal to the normal portal but is built from a special material, the Portal Core.
-  The Portal Core takes takes only one inventory slot and can be crafted at a lvl 4 Workbench with resources gathered from the Mountain and Black Forest biomes.  
-  The portal's shape is exactly the same as a normal portal, but has blue effects.
-  It does not allow the carying of metal or other prohibited items through it. It functions like a normal portal and can connect to any other portal.
-  Can craft and carry any number of Portal Cores, but can only build one Pocket Portal per player. 
-
-► Mid-Game Toggling: Toggling mid-game requires reloading the build/crafting menu. 
-  Even if this config is disabled, the prefabs are still crated and existing portals or cores will not be removed from the world or inventory. Only the ability to craft them is affected by the toggle.
-
-► Conflicts: No known conflicts. Requires Jotunn.
-
-▼ Portal Core Resource Requirements:
-- Surtling Core: 5
-- Fine Wood:     20
-- Freeze Gland:  5
-- Obsidian:      20
 
 
 ------------------ [Max Portals Per Player] --------------------
@@ -2155,6 +2197,81 @@ The following foods have the stack size increased to 20
 
 ► Conflicts:
   No known conflicts.
+
+
+---------------------- [Permanent Lights] ----------------------
+
+► Description:
+  Makes all light sources permanent.
+  Modifies the build costs of light source pieces to use maximum amount of their respective fuel type (wood, resin, coal etc).
+  NOTE: Fireplace now has an additional 20 Wood cost.
+  NOTE: Campfire and Fireplace Wood is refundable when destroyed.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  Incompatible with other mods that modify light source fuel.
+  Incompatible with other mods that modify build piece costs.
+  Compatible with mods that add new light sources. This will make them permanent, but will not modify their build costs.
+
+
+======================= [Build Pieces] =========================
+► All configs in this section are synced with server.
+
+----------------------- [Pocket Portal] ------------------------
+
+► Description:
+  Adds a new portal that is functionally equal to the normal portal but is built from a special material, the Portal Core.
+  The Portal Core takes takes only one inventory slot and can be crafted at a lvl 4 Workbench with resources gathered from the Mountain and Black Forest biomes.  
+  The portal's shape is exactly the same as a normal portal, but has blue effects.
+  It does not allow the carying of metal or other prohibited items through it. It functions like a normal portal and can connect to any other portal.
+  Can craft and carry any number of Portal Cores, but can only build one Pocket Portal per player. 
+
+► Mid-Game Toggling: Toggling mid-game requires reloading the build/crafting menu. 
+  Even if this config is disabled, the prefabs are still created and existing portals or cores will not be removed from the world or inventory. Only the ability to craft them is affected by the toggle.
+
+► Conflicts: No known conflicts. Requires Jotunn.
+
+▼ Portal Core Resource Requirements:
+- Surtling Core: 5
+- Fine Wood:     20
+- Freeze Gland:  5
+- Obsidian:      20
+
+
+------------------------ [Extra Lights] ------------------------
+
+► Description:
+  Adds new light sources in the 'Extra Lights' category in the build menu.
+
+  NOTE: The build costs depend on whether Cheapper Build Piece Amounts or Permanent Lights are enabled or not.
+
+► Mid-Game Toggling:
+  Toggling mid-game requires reloading the build/crafting menu. 
+  Even if this config is disabled, the prefabs are still created and existing lights will not be removed from the world. Only the ability to build them is affected by the toggle.
+
+► Conflicts:
+  No known conflicts.
+
+▼ Specific Additions:
+
+- Green Standing Brazier 
+  - Added a green version of the Standing Brazier
+
+- Silver Sconce
+  - Added 3 types of Silver Sconces (red, blue and green flame) available in the Mountain biome
+  - Fuel lasts longer than the normal sconce
+  - Build Cost: Silver, Ancient Bark and the respective fuel: Resin, Greydwarf Eye or Guck
+
+- Silver Hanging Brazier
+  - Added 3 types of Silver Hanging Braziers (red, blue and green flame) available in the Mountain biome
+  - Fuel lasts longer than the normal hanging brazier
+  - Build Cost: Silver, Chain and the respective fuel: Coal, Greydwarf Eye or Guck
+
+- Blue and Green Dverger Lanterns
+  - Added blue and green versions of the Dverger Lantern (both wall and pole)
+  - Build costs are the same as the normal Dverger Lantern build pieces
 
 
 ============================ [UI] ==============================
@@ -2374,6 +2491,111 @@ The following foods have the stack size increased to 20
 VERSION HISTORY
 ================================================================
 
+v1.4.2
+- Fixes:
+  - More Usable Fuel error message fixed when building or being nearby any Shield Generators
+  - Fixed UI emoji font issue after Valheim Unity Engine update
+
+- Updates:
+  - Cheaper Gear Recipe Amounts: 
+     - Added Vilebone set and the Paws of the Bear to the list of changes (no changes made for Bear set, or Vilebone Maulclaws)
+       - Vilebone Cage: Bear Hide craft: 4 > 5
+       - Vilebone Drapes: Bear Hide upgrade: 5/10/15 > 2/4/6
+       - Paws of the Bear: Leather Scraps craft: 4 > 2 
+     - Revisited Troll set costs
+       - Troll Leather Helmet: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+       - Troll Leather Tunic: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+       - Troll Leather Pants: Troll Hide upgrade: 3/6/9 > 2/4/6 (back to vanilla values)
+     - Black Metal Battleaxe
+       - Fine Wood upgrade: 0/0/0 > 2/4/6
+       - Black Metal craft: 30 > 15
+       - Black Metal upgrade: 15/30/45 > 7/14/21
+     - Skull Splittur
+       - Iron craft: 30 > 15
+       - Iron upgrade: 15/30/45 > 5/10/15
+       - Yggdrasil Wood craft: 15 > 10
+       - Yggdrasil Wood upgrade: 5/10/15 > 2/4/6
+
+  - Gear Speed Modifications:
+    - Patterns of the Bear: 0% > 2%
+    - Loincloth of the Bear: 0% > 2%
+    - Vilebone Cage: 0% > 2%
+    - Vilebone Drapes: 0% > 2%
+    - Stagbreaker: -15% > -10%
+    - Iron Sledge: -15% > -10%
+    - Demolisher: -15% > -10%
+    - Battleaxe: -15% > -10%
+    - Crystal Battleaxe: -15% > -10%
+    - Black Metal Battleaxe: -15% > -10%
+    - Skull Splittur: -15% > -10%
+
+  - Extra Armor Stats (Stamina):
+    - Headdress of the Bear: 1
+    - Patterns of the Bear: 2
+    - Loincloth of the Bear: 2
+    - Vilebone Visage: 5
+    - Vilebone Cage: 8
+    - Vilebone Drapes: 7
+    - Hood of Ask: 5 > 8
+    - Robes of Ask: 8 > 12
+    - Trousers of Ask: 7 > 10
+
+  - Smart Biome Indicator:
+    - Added the Bear and Vilebone sets to the list of gear to calculate the biome difficulty indicator
+
+  - Gear Upgrade Unlock:
+    - Included the Bear set to match Troll and Bronze upgrade unlocks
+    - Moved the Vilebone set recipe from the Forge to the Workbench
+
+  - Forsaken Powers Cooldowns:
+    - Bonemass: reduced CD from 17.5 mins to 15 mins
+    - Yagluth: reduced CD from 17.5 mins to 15 mins
+    - Note: Now all powers have a cooldown of 15 mins
+
+  - Better Trophy Drop Rates:
+    - Increased the trophy drop rates for the following creatures from 10% to 20%: Ghost, Bear, Vile
+
+  - Progression Halt:
+    - Added Ghost, Bear and Vile to the halt list of their respective bosses
+
+  - Clearer Weather:
+    - Further reduced chance of Snowstorms in the Mountain biome from a weight of 0.5 to 0.2 (originally 1) and Snow from weight 2.5 to 1.5 (originally 5)
+
+- New Balance Features
+  - Better Creature Drops
+    - Fenring: Added Fenris Hair 1-2, Added Fenris Claw (replacing Wolf Fang)
+    - Bat: Added Blood Bag 50% chance drop
+    - Dverger Rogue, Mage and Ashlands Dvergr: Increased Soft Tissue chance to 100% (from 25%)
+
+- New Features
+  - No end-game raids in early biomes
+    - Seeker and Charred raids do not trigger in the Black Forest biome
+
+  - Stop Nighttime Invasion
+    - Fulings, Seeker and Charred do not spawn in early biomes at night when their relevant bosses are defeated
+    - Fulings: Mountain
+    - Seeker: Plains
+    - Charred: Plains
+
+- New Build Pieces
+  - Green Standing Brazier 
+    - Added a green version of the Standing Brazier
+
+  - Silver Sconce
+    - Added 3 types of Silver Sconces (red, blue and green flame) available in the Mountain biome
+    - Fuel lasts longer than the normal sconce
+    - Build Cost: Silver, Ancient Bark and the respective fuel: Resin, Greydwarf Eye or Guck
+        
+  - Silver Hanging Brazier
+    - Added 3 types of Silver Hanging Braziers (red, blue and green flame) available in the Mountain biome
+    - Fuel lasts longer than the normal hanging brazier
+    - Build Cost: Silver, Chain and the respective fuel: Coal, Greydwarf Eye or Guck
+        
+  - Blue and Green Dverger Lanterns
+    - Added blue and green versions of the Dverger Lantern (both wall and standing)
+    - Build costs are the same as the normal Dverger Lantern build pieces
+
+v1.3.2
 - Fixes:
   - Progression Halt: 
     - Fixed broken gravestones dropping Grausten
@@ -2400,7 +2622,7 @@ VERSION HISTORY
      - Mead base: Animal Whispers: Carrot 10 > 5
 
 v1.3.1
-- All UI configs are no longer synced with server. Players can individually configure this mod's UI elements individually.
+- All UI configs are no longer synced with server. Players can individually configure this mod's UI elements.
 - Show Online Players Under Minimap cannot be toggled on with Minimal Status Effects installed.
 
 v1.3.0
