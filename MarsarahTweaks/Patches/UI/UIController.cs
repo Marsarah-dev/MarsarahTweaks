@@ -18,47 +18,24 @@ namespace MarsarahTweaks.Patches.UI
 		public static bool showUI = true;
 		public static bool showPlayerList = true;
 
-		/*[HarmonyPatch(typeof(Hud), "Awake")]
-		static class BoatSpeedHUDUpdate_Patch
+		// This is needed since Unity 6 update to set the default font for TMP fonts since LiberationSans is missing and was default
+		[HarmonyPatch(typeof(Hud), "Awake")]
+		static class HudAwakePatch
 		{
-			private static void Postfix(Hud __instance)
+			static void Prefix()
 			{
-				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
-
-				if (__instance == null) return;
-
-				
-				TMP_FontAsset replacement = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "Valheim-AveriaSansLibre");
-				FixMissingTMPFonts(replacement);
-			}
-		}
-
-		public static void FixMissingTMPFonts(TMP_FontAsset replacementFont)
-		{
-			if (replacementFont == null)
-			{
-				log.Warn("[TMPFontFixer] Replacement font is null! Cannot fix missing fonts.");
-				return;
-			}
-
-			TMP_Text[] allTMPTexts = Resources.FindObjectsOfTypeAll<TMP_Text>();
-			log.Info($"[TMPFontFixer] Found {allTMPTexts.Length} TMP_Text components in memory.");
-
-			int replacedCount = 0;
-
-			foreach (TMP_Text tmp in allTMPTexts)
-			{
-				if (tmp.font == null || tmp.font.name.Contains("LiberationSans"))
+				var notoEmoji = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "NotoEmoji-Regular SDF");
+				if (notoEmoji != null)
 				{
-					string oldFontName = tmp.font != null ? tmp.font.name : "null";
-					tmp.font = replacementFont;
-					replacedCount++;
-					log.Info($"[TMPFontFixer] Replaced font on '{tmp.name}' (was '{oldFontName}')");
+					TMP_Settings.defaultFontAsset = notoEmoji;
+					log.Info("Set default TMP font asset to NotoEmoji-Regular SDF");
+				}
+				else
+				{
+					log.Warn("NotoEmoji font not found.");
 				}
 			}
-
-			log.Info($"[TMPFontFixer] Total fonts replaced: {replacedCount}");
-		}*/
+		}
 
 		public static void LogAllTMPFonts()
 		{

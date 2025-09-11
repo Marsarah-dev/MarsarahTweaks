@@ -59,18 +59,20 @@
       - Forsaken Powers Cooldowns:
         - Bonemass: reduced CD from 17.5 mins to 15 mins
         - Yagluth: reduced CD from 17.5 mins to 15 mins
+        - Note: Now all powers have a cooldown of 15 mins
 
       - Better Trophy Drop Rates:
         - Increased the trophy drop rates for the following creatures from 10% to 20%: Ghost, Bear, Vile
 
       - Progression Halt:
-        - Added Ghost, Bear and vile to the halt list of their respective bosses
+        - Added Ghost, Bear and Vile to the halt list of their respective bosses
 
-      - Further reduced chance of Snowstorms in the Mountain biome from a weight of 0.5 to 0.2 (originally 1) and Snow from weight 2.5 to 1.5 (originally 5)
+      - Clearer Weather:
+        - Further reduced chance of Snowstorms in the Mountain biome from a weight of 0.5 to 0.2 (originally 1) and Snow from weight 2.5 to 1.5 (originally 5)
 
    C. New Grind Reduction
 
-   D. New Balance
+   D. New Balance feature
       - Better Creature Drops
         - Fenring: Added Fenris Hair 1-2, Added Fenris Claw (replacing Wolf Fang)
         - Bat: Added Blood Bag 50% chance drop
@@ -110,7 +112,6 @@
    * Notes
      - In readmes mention that players should look for configs reshuffles
    
-   
    * Prep for update
      - New gear costs (done)
      - New gear speed (done)
@@ -122,9 +123,25 @@
      - Ghost, Bear and Vile trophy drop rate (done)
      - Progression Halt for Ghost, Bear and Vile (done)
 
-     - Gear recipes amounts/materials for the new weapons
-     - Move Vile set to Workbench from Forge and check min station value
-     - Check ttl for new creatures
+     - Check new Trinkets build costs
+       - Recipe_TrinketFlametalEitr - remove GemstoneRed or replace with SulfurStone
+       - Recipe_TrinketIronStamina - replace TrophySurtling with something else (maybe)
+       - Recipe_TrinketSilverDamage - replace TrophyFenring with wolf trophy (maybe)
+       - Recipe_TrinketSilverResist - replace TrophySGolem with drake trophy (maybe)
+     - Check new Trinkets adrenaline costs
+       * Heart of the Forest
+       * Bronze Pendant
+       * Iron Brooch
+       * Nimble Anklet
+       * Crystal Heart
+       * Wolf Sight
+       * Fins of Destiny
+       * Evasion Mantle
+       * Bracelets of the Brave
+       * Pulsating Earrings
+       * Resounding Shackle
+       * Jörmundling
+       * Brimstone
 
    A. Fixes
       - Handle Dvergr Helmet for Smart Biome (see if it's needed to handle in the first place)
