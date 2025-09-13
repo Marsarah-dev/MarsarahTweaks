@@ -34,10 +34,6 @@ namespace MarsarahTweaks.Features.UI
 		// GuiBar internals
 		private static readonly FieldInfo guiBar_m_width_Field;
 
-		// Track previous health per character
-		private class FloatWrapper { public float Value; }
-		private static readonly ConditionalWeakTable<Character, FloatWrapper> _previousHealth = new ConditionalWeakTable<Character, FloatWrapper>();
-
 		static UIEnemyNameplates()
 		{
 			m_hudsField = typeof(EnemyHud).GetField("m_huds", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -62,121 +58,106 @@ namespace MarsarahTweaks.Features.UI
 			}
 		}
 
-		// ---------- ShowHud patch ----------
 		[HarmonyPatch(typeof(EnemyHud), "ShowHud")]
 		public static class EnemyHud_ShowHud_CustomBar_Patch
 		{
 			private static void Postfix(EnemyHud __instance, Character c)
 			{
-				try
+				if (c == null || m_hudsField == null) return;
+
+				var huds = m_hudsField.GetValue(__instance) as IDictionary;
+				if (huds == null || !huds.Contains(c)) return;
+
+				var hudData = huds[c];
+				if (hudData == null) return;
+
+				var guiObj = hud_m_gui_Field?.GetValue(hudData) as GameObject;
+				if (guiObj == null) return;
+
+				var healthTransform = guiObj.transform.Find("Health") as RectTransform;
+				if (healthTransform == null) return;
+
+				healthTransform.sizeDelta = new Vector2(BarWidth, BarHeight);
+
+				var fastObj = hud_m_healthFast_Field?.GetValue(hudData);
+				var slowObj = hud_m_healthSlow_Field?.GetValue(hudData);
+
+				ApplyBarSize(fastObj, BarHeight);
+				ApplyBarColor(fastObj, Color.red);
+
+				ApplyBarSize(slowObj, BarHeight);
+				ApplyBarColor(slowObj, Color.yellow);
+
+				if (fastObj is GuiBar fastBar && slowObj is GuiBar slowBar)
 				{
-					if (c == null || m_hudsField == null) return;
-
-					var huds = m_hudsField.GetValue(__instance) as IDictionary;
-					if (huds == null || !huds.Contains(c)) return;
-
-					var hudData = huds[c];
-					if (hudData == null) return;
-
-					var guiObj = hud_m_gui_Field?.GetValue(hudData) as GameObject;
-					if (guiObj == null) return;
-
-					var healthTransform = guiObj.transform.Find("Health") as RectTransform;
-					if (healthTransform == null) return;
-
-					healthTransform.sizeDelta = new Vector2(BarWidth, BarHeight);
-
-					var fastObj = hud_m_healthFast_Field?.GetValue(hudData);
-					var slowObj = hud_m_healthSlow_Field?.GetValue(hudData);
-
-					ApplyBarSizeAndColor(fastObj, BarHeight, Color.red);
-					ApplyBarSizeAndColor(slowObj, BarHeight, new Color(0.3f, 0.3f, 0.3f, 1f));
-
-					var bgImage = healthTransform.GetComponent<Image>();
-					if (bgImage != null)
-						bgImage.color = new Color(0.1f, 0.1f, 0.1f, 0.5f);
+					// Ensure slow bar is behind fast bar
+					slowBar.m_bar.SetAsFirstSibling(); // behind
+					fastBar.m_bar.SetAsLastSibling();  // on top
 				}
-				catch (Exception ex)
-				{
-					log.Error($"ShowHud postfix error: {ex}");
-				}
+
+				var bgImage = healthTransform.GetComponent<Image>();
+				if (bgImage != null)
+					bgImage.color = new Color(0.1f, 0.1f, 0.1f, 0.5f);
 			}
 		}
 
-		// ---------- UpdateHuds patch ----------
 		[HarmonyPatch(typeof(EnemyHud), "UpdateHuds")]
 		public static class EnemyHud_UpdateHuds_CustomBar_Patch
 		{
 			private static void Postfix(EnemyHud __instance)
 			{
-				try
+				if (m_hudsField == null) return;
+
+				var huds = m_hudsField.GetValue(__instance) as IDictionary;
+				if (huds == null) return;
+
+				foreach (DictionaryEntry entry in huds)
 				{
-					if (m_hudsField == null) return;
+					var hudData = entry.Value;
+					if (hudData == null) continue;
 
-					var huds = m_hudsField.GetValue(__instance) as IDictionary;
-					if (huds == null) return;
+					var character = hud_m_character_Field?.GetValue(hudData) as Character;
+					if (character == null || character.IsDead()) continue;
 
-					foreach (DictionaryEntry entry in huds)
+					float currentHealth = character.GetHealth();
+					float maxHealth = character.GetMaxHealth();
+					float frac = Mathf.Clamp01(currentHealth / Math.Max(1f, maxHealth));
+
+					var fastObj = hud_m_healthFast_Field?.GetValue(hudData);
+					var slowObj = hud_m_healthSlow_Field?.GetValue(hudData);
+
+					// --- Fast bar updates ---
+					UpdateGuiBar(fastObj, frac);
+
+					// --- Slow bar ---
+					// Only update height to match fast bar; leave width and color alone
+					if (slowObj is GuiBar slowBar && fastObj is GuiBar fastBar)
 					{
-						var hudData = entry.Value;
-						if (hudData == null) continue;
-
-						var character = hud_m_character_Field?.GetValue(hudData) as Character;
-						if (character == null || character.IsDead()) continue;
-
-						float currentHealth = character.GetHealth();
-						float maxHealth = character.GetMaxHealth();
-						float frac = Mathf.Clamp01(currentHealth / Math.Max(1f, maxHealth));
-
-						var fastObj = hud_m_healthFast_Field?.GetValue(hudData);
-						var slowObj = hud_m_healthSlow_Field?.GetValue(hudData);
-
-						// Fast bar
-						UpdateGuiBar(fastObj, frac);
-
-						// Slow bar
-						UpdateGuiBar(slowObj, frac, smooth: true, speed: SlowFollowSpeed, color: new Color(0.3f, 0.3f, 0.3f, 1f));
-
-						// Orange trail
-						FloatWrapper wrapper;
-						if (!_previousHealth.TryGetValue(character, out wrapper))
+						RectTransform slowRect = slowBar.m_bar;
+						RectTransform fastRect = fastBar.m_bar;
+						if (slowRect != null && fastRect != null)
 						{
-							wrapper = new FloatWrapper { Value = currentHealth };
-							_previousHealth.Add(character, wrapper);
-						}
-
-						if (currentHealth < wrapper.Value)
-							SpawnTrailBar(fastObj, wrapper.Value / maxHealth, frac);
-
-						wrapper.Value = currentHealth;
-
-						// Color overrides
-						if (character.IsTamed())
-						{
-							ApplyBarColor(fastObj, Color.green);
-							ApplyBarColor(slowObj, new Color(0f, 0.5f, 0f, 1f));
-						}
-						else if (character.IsBoss())
-						{
-							ApplyBarColor(fastObj, Color.magenta);
-							ApplyBarColor(slowObj, Color.gray);
-						}
-						else
-						{
-							ApplyBarColor(fastObj, Color.red);
+							slowRect.sizeDelta = new Vector2(slowRect.sizeDelta.x, fastRect.sizeDelta.y);
 						}
 					}
-				}
-				catch (Exception ex)
-				{
-					log.Error($"UpdateHuds postfix error: {ex}");
+
+					// --- Color overrides ---
+					if (character.IsTamed())
+					{
+						ApplyBarColor(fastObj, Color.green);
+					}
+					else if (character.IsBoss())
+					{
+						ApplyBarColor(fastObj, Color.magenta);
+					}
+					else
+					{
+						ApplyBarColor(fastObj, Color.red);
+					}
 				}
 			}
-
-			private static void UpdateGuiBar(object guiBarObj, float fraction, bool smooth = false, float speed = 3f, Color? color = null)
+			private static void UpdateGuiBar(object guiBarObj, float fraction)
 			{
-				if (guiBarObj == null) return;
-
 				GuiBar guiBar = guiBarObj as GuiBar;
 				if (guiBar == null) return;
 
@@ -184,96 +165,27 @@ namespace MarsarahTweaks.Features.UI
 				if (rect != null)
 				{
 					float baseWidth = guiBar_m_width_Field?.GetValue(guiBar) is float f ? f : BarWidth;
-					float targetWidth = baseWidth * fraction;
-					rect.sizeDelta = smooth ? new Vector2(Mathf.Lerp(rect.sizeDelta.x, targetWidth, Time.deltaTime * speed), rect.sizeDelta.y) : new Vector2(targetWidth, rect.sizeDelta.y);
-				}
-
-				if (color.HasValue)
-					guiBar.SetColor(color.Value);
-			}
-
-			private static void SpawnTrailBar(object fastObj, float startFrac, float endFrac)
-			{
-				if (fastObj == null) return;
-
-				GuiBar fastGui = fastObj as GuiBar;
-				if (fastGui == null) return;
-
-				RectTransform fastRect = fastGui.m_bar;
-				if (fastRect == null) return;
-
-				var trailGO = GameObject.Instantiate(fastRect.gameObject, fastRect.parent);
-				var trailRect = trailGO.GetComponent<RectTransform>();
-				float baseWidth = guiBar_m_width_Field?.GetValue(fastGui) is float f ? f : BarWidth;
-				trailRect.SetAsFirstSibling();
-				trailRect.sizeDelta = new Vector2(baseWidth * startFrac, trailRect.sizeDelta.y);
-
-				var image = trailGO.GetComponent<Image>();
-				if (image != null) image.color = new Color(1f, 0.65f, 0f, 1f);
-
-				trailGO.AddComponent<TrailBarAnimator>().Init(fastObj, startFrac, endFrac, TrailDuration);
-			}
-
-			private class TrailBarAnimator : MonoBehaviour
-			{
-				private RectTransform rect;
-				private float startWidth;
-				private float targetWidth;
-				private float duration;
-				private float elapsed;
-
-				public void Init(object guiBarObj, float startFrac, float endFrac, float duration)
-				{
-					GuiBar guiBar = guiBarObj as GuiBar;
-					if (guiBar == null) return;
-
-					rect = GetComponent<RectTransform>();
-					startWidth = rect.sizeDelta.x;
-					float baseWidth = guiBar_m_width_Field?.GetValue(guiBar) is float f ? f : BarWidth;
-					targetWidth = baseWidth * endFrac;
-					this.duration = duration;
-					elapsed = 0f;
-				}
-
-				private void Update() // MC: check this
-				{
-					if (rect == null) { Destroy(this); return; }
-
-					elapsed += Time.deltaTime;
-					float t = Mathf.Clamp01(elapsed / duration);
-					float width = Mathf.Lerp(startWidth, targetWidth, t);
-					rect.sizeDelta = new Vector2(width, rect.sizeDelta.y);
-
-					if (t >= 1f) Destroy(gameObject);
+					rect.sizeDelta = new Vector2(baseWidth * fraction, rect.sizeDelta.y);
 				}
 			}
 		}
-		
-		private static void ApplyBarSizeAndColor(object guiBarObj, float height, Color color)
+		private static void ApplyBarSize(object guiBarObj, float height)
 		{
 			if (guiBarObj == null) return;
-
-			GuiBar guiBar = guiBarObj as GuiBar;
-			if (guiBar == null) return;
-
-			RectTransform barRect = guiBar.m_bar;
-			if (barRect != null)
+			if (guiBarObj is GuiBar guiBar)
 			{
-				float baseWidth = guiBar_m_width_Field?.GetValue(guiBar) is float f ? f : BarWidth;
-				barRect.sizeDelta = new Vector2(baseWidth, height);
+				RectTransform barRect = guiBar.m_bar;
+				if (barRect != null)
+				{
+					barRect.sizeDelta = new Vector2(barRect.sizeDelta.x, height);
+				}
 			}
-
-			guiBar.SetColor(color);
 		}
 
 		private static void ApplyBarColor(object guiBarObj, Color color)
 		{
 			if (guiBarObj == null) return;
-
-			GuiBar guiBar = guiBarObj as GuiBar;
-			if (guiBar == null) return;
-
-			guiBar.SetColor(color);
+			if (guiBarObj is GuiBar guiBar) guiBar.SetColor(color);
 		}
 	}
 }
