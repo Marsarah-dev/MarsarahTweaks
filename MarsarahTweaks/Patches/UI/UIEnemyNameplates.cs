@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 using MarsarahTweaks.Managers;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,259 +12,310 @@ using UnityEngine.UI;
 
 namespace MarsarahTweaks.Features.UI
 {
-	internal class UIEnemyNameplates
+	internal static class UIEnemyNameplates
 	{
 		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Info);
 
-		private const float BarYOffset = 0f;
-		private const float BarWidth = 100f;
+		// Default sizes (tweakable)
 		private const float BarHeight = 12f;
-		private const string CustomBarName = "MarsarahCustomHealthBar";
-		private const string CustomSFillName = CustomBarName + "_SFill";
-		private const string CustomBGName = CustomBarName + "_BG";
+		private const float BarWidth = 100f;
+		private const float SlowFollowSpeed = 3f;
+		private const float TrailDuration = 1f; // how long the orange bar takes to shrink
 
-		// Track created bars per HudData (not Character)
-		private static readonly Dictionary<object, (Image fill, Image sFill, Image background, RectTransform fillRect)> _customBars
-			= new Dictionary<object, (Image, Image, Image, RectTransform)>();
+		// Reflection cache
+		private static readonly FieldInfo m_hudsField;
+		private static readonly Type hudDataType;
+		private static readonly FieldInfo hud_m_gui_Field;
+		private static readonly FieldInfo hud_m_character_Field;
+		private static readonly FieldInfo hud_m_healthFast_Field;
+		private static readonly FieldInfo hud_m_healthSlow_Field;
+		private static readonly FieldInfo hud_m_name_Field;
 
-		private static readonly Color FillColor = Color.red;
-		private static readonly Color StaticFillColor = new Color(0.3f, 0.3f, 0.3f, 1f);
-		private static readonly Color BackgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.5f);
+		// GuiBar internals
+		private static readonly Type guiBarType;
+		private static readonly FieldInfo guiBar_m_bar_Field;
+		private static readonly FieldInfo guiBar_m_width_Field;
+		private static readonly MethodInfo guiBar_SetColor_Method;
 
+		// Track previous health per character
+		private class FloatWrapper { public float Value; }
+		private static readonly ConditionalWeakTable<Character, FloatWrapper> _previousHealth = new ConditionalWeakTable<Character, FloatWrapper>();
+
+		static UIEnemyNameplates()
+		{
+			try
+			{
+				var enemyHudType = typeof(EnemyHud);
+				m_hudsField = enemyHudType.GetField("m_huds", BindingFlags.NonPublic | BindingFlags.Instance);
+				hudDataType = enemyHudType.GetNestedType("HudData", BindingFlags.NonPublic | BindingFlags.Instance);
+
+				if (m_hudsField == null || hudDataType == null)
+				{
+					log.Error("Failed to locate EnemyHud.m_huds or nested type HudData via reflection.");
+					return;
+				}
+
+				hud_m_gui_Field = hudDataType.GetField("m_gui", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+				hud_m_character_Field = hudDataType.GetField("m_character", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+				hud_m_healthFast_Field = hudDataType.GetField("m_healthFast", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+				hud_m_healthSlow_Field = hudDataType.GetField("m_healthSlow", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+				hud_m_name_Field = hudDataType.GetField("m_name", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+				guiBarType = hud_m_healthFast_Field?.FieldType
+					?? AppDomain.CurrentDomain.GetAssemblies()
+						.SelectMany(a => a.GetTypesSafe())
+						.FirstOrDefault(t => t.Name.Equals("GuiBar", StringComparison.OrdinalIgnoreCase));
+
+				if (guiBarType != null)
+				{
+					guiBar_m_bar_Field = guiBarType.GetField("m_bar", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+					guiBar_m_width_Field = guiBarType.GetField("m_width", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+					guiBar_SetColor_Method = guiBarType.GetMethod("SetColor", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+				}
+				else
+				{
+					log.Warn("Could not resolve GuiBar type via reflection. Resizing / color calls will be limited.");
+				}
+			}
+			catch (Exception ex)
+			{
+				log.Error($"Reflection static init failed: {ex}");
+			}
+		}
+
+		private static IEnumerable<Type> GetTypesSafe(this Assembly asm)
+		{
+			try { return asm.GetTypes(); }
+			catch { return Array.Empty<Type>(); }
+		}
+
+		// ---------- ShowHud patch ----------
 		[HarmonyPatch(typeof(EnemyHud), "ShowHud")]
 		public static class EnemyHud_ShowHud_CustomBar_Patch
 		{
 			private static void Postfix(EnemyHud __instance, Character c)
 			{
-				if (c == null) return;
-
-				var hudsField = typeof(EnemyHud).GetField("m_huds", BindingFlags.NonPublic | BindingFlags.Instance);
-				if (!(hudsField?.GetValue(__instance) is System.Collections.IDictionary huds)) return;
-				if (!huds.Contains(c)) return;
-
-				var hudData = huds[c];
-				if (hudData == null) return;
-
-				var hudDataType = typeof(EnemyHud).GetNestedType("HudData", BindingFlags.NonPublic);
-				if (hudDataType == null) return;
-
-				var guiField = hudDataType.GetField("m_gui", BindingFlags.Public | BindingFlags.Instance);
-				var hudGO = guiField?.GetValue(hudData) as GameObject;
-				if (hudGO == null) return;
-
-				// Disable vanilla container
-				var healthTransform = hudGO.transform.Find("Health");
-				if (healthTransform != null)
-					healthTransform.gameObject.SetActive(false);
-
-				// Only create if missing or destroyed
-				if (_customBars.TryGetValue(hudData, out var existing))
+				try
 				{
-					if (existing.fill == null || existing.fill.gameObject == null)
-					{
-						_customBars.Remove(hudData);
-					}
-					else
-					{
-						return;
-					}
+					if (c == null || m_hudsField == null) return;
+
+					var huds = m_hudsField.GetValue(__instance) as IDictionary;
+					if (huds == null || !huds.Contains(c)) return;
+
+					var hudData = huds[c];
+					if (hudData == null) return;
+
+					var guiObj = hud_m_gui_Field?.GetValue(hudData) as GameObject;
+					if (guiObj == null) return;
+
+					var healthTransform = guiObj.transform.Find("Health") as RectTransform;
+					if (healthTransform == null) return;
+
+					healthTransform.sizeDelta = new Vector2(BarWidth, BarHeight);
+
+					var fastObj = hud_m_healthFast_Field?.GetValue(hudData);
+					var slowObj = hud_m_healthSlow_Field?.GetValue(hudData);
+
+					ApplyBarSizeAndColor(fastObj, BarHeight, Color.red);
+					ApplyBarSizeAndColor(slowObj, BarHeight, new Color(0.3f, 0.3f, 0.3f, 1f));
+
+					var bgImage = healthTransform.GetComponent<Image>();
+					if (bgImage != null)
+						bgImage.color = new Color(0.1f, 0.1f, 0.1f, 0.5f);
 				}
-
-				float horizontalPadding = 6f;
-				float verticalPadding = 6f;
-
-				// --- Background ---
-				var bgGO = new GameObject(CustomBGName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-				bgGO.transform.SetParent(hudGO.transform, false);
-
-				var bgRect = bgGO.GetComponent<RectTransform>();
-				bgRect.anchoredPosition = new Vector2(0f, BarYOffset);
-				bgRect.sizeDelta = new Vector2(BarWidth + horizontalPadding, BarHeight + verticalPadding);
-
-				var bgImage = bgGO.GetComponent<Image>();
-				bgImage.color = BackgroundColor;
-				bgImage.type = Image.Type.Sliced;
-
-				// --- Static Fill ---
-				var sFillGO = new GameObject(CustomSFillName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-				sFillGO.transform.SetParent(bgGO.transform, false);
-				sFillGO.transform.SetAsFirstSibling();
-
-				var sFillRect = sFillGO.GetComponent<RectTransform>();
-				sFillRect.anchorMin = new Vector2(0f, 0.5f);
-				sFillRect.anchorMax = new Vector2(0f, 0.5f);
-				sFillRect.pivot = new Vector2(0f, 0.5f);
-				sFillRect.anchoredPosition = new Vector2(horizontalPadding / 2f, 0f);
-				sFillRect.sizeDelta = new Vector2(BarWidth, BarHeight);
-
-				var sFillImage = sFillGO.GetComponent<Image>();
-				sFillImage.color = StaticFillColor;
-				sFillImage.type = Image.Type.Sliced;
-
-				// --- Main Fill ---
-				var fillGO = new GameObject(CustomBarName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-				fillGO.transform.SetParent(bgGO.transform, false);
-
-				var fillRect = fillGO.GetComponent<RectTransform>();
-				fillRect.anchorMin = new Vector2(0f, 0.5f);
-				fillRect.anchorMax = new Vector2(0f, 0.5f);
-				fillRect.pivot = new Vector2(0f, 0.5f);
-				fillRect.anchoredPosition = new Vector2(horizontalPadding / 2f, 0f);
-				fillRect.sizeDelta = new Vector2(BarWidth, BarHeight);
-
-				var fillImage = fillGO.GetComponent<Image>();
-				Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault(s => s.name == "bar_monster_hp_5");
-				if (sprite != null) fillImage.sprite = sprite;
-				fillImage.fillMethod = Image.FillMethod.Horizontal;
-				fillImage.fillOrigin = (int)Image.OriginHorizontal.Left;
-				fillImage.color = FillColor;
-				fillImage.type = Image.Type.Filled;
-
-				// Hook into vanilla fast/slow
-				var healthFast = healthTransform?.Find("fast")?.GetComponent<Image>();
-				var healthSlow = healthTransform?.Find("slow")?.GetComponent<Image>();
-
-				// Store all references for UpdateHuds
-				_customBars[hudData] = (fillImage, sFillImage, bgImage, fillRect);
-
-				log.Info($"Created custom HP bar for {c.name}");
+				catch (Exception ex)
+				{
+					log.Error($"ShowHud postfix error: {ex}");
+				}
 			}
 		}
 
-
+		// ---------- UpdateHuds patch ----------
 		[HarmonyPatch(typeof(EnemyHud), "UpdateHuds")]
 		public static class EnemyHud_UpdateHuds_CustomBar_Patch
 		{
 			private static void Postfix(EnemyHud __instance)
 			{
-				foreach (var kvp in _customBars)
+				try
 				{
-					var hudData = kvp.Key;
-					var (fill, sFill, bg, fillRect) = kvp.Value;
+					if (m_hudsField == null) return;
 
-					if (hudData == null || fill == null || !fill || sFill == null || !sFill || bg == null || !bg)
-						continue;
+					var huds = m_hudsField.GetValue(__instance) as IDictionary;
+					if (huds == null) return;
 
-					fill.enabled = true;
-					sFill.enabled = true;
-					bg.enabled = true;
+					foreach (DictionaryEntry entry in huds)
+					{
+						var hudData = entry.Value;
+						if (hudData == null) continue;
 
-					// Get Character from HudData
-					var hudDataType = hudData.GetType();
-					var charField = hudDataType.GetField("m_character", BindingFlags.Public | BindingFlags.Instance);
-					var c = charField?.GetValue(hudData) as Character;
-					if (c == null) continue;
+						var character = hud_m_character_Field?.GetValue(hudData) as Character;
+						if (character == null || character.IsDead()) continue;
 
-					float currentHealth = c.GetHealth();
-					float maxHealth = c.GetMaxHealth();
-					float fillPercent = maxHealth > 0 ? currentHealth / maxHealth : 0f;
+						float currentHealth = character.GetHealth();
+						float maxHealth = character.GetMaxHealth();
+						float frac = Mathf.Clamp01(currentHealth / Math.Max(1f, maxHealth));
 
-					// Just update fillAmount instead of resizing
-					fill.fillAmount = fillPercent;
+						var fastObj = hud_m_healthFast_Field?.GetValue(hudData);
+						var slowObj = hud_m_healthSlow_Field?.GetValue(hudData);
 
-					// Optional: static fill can follow too (e.g. background dimming)
-					sFill.fillAmount = 1f; // keep full, or set = fillPercent if you want it to shrink
+						// Fast bar
+						UpdateGuiBar(fastObj, frac);
+
+						// Slow bar
+						UpdateGuiBar(slowObj, frac, smooth: true, speed: SlowFollowSpeed, color: new Color(0.3f, 0.3f, 0.3f, 1f));
+
+						// Orange trail
+						FloatWrapper wrapper;
+						if (!_previousHealth.TryGetValue(character, out wrapper))
+						{
+							wrapper = new FloatWrapper { Value = currentHealth };
+							_previousHealth.Add(character, wrapper);
+						}
+
+						if (currentHealth < wrapper.Value)
+							SpawnTrailBar(fastObj, wrapper.Value / maxHealth, frac);
+
+						wrapper.Value = currentHealth;
+
+						// Color overrides
+						if (character.IsTamed())
+						{
+							ApplyBarColor(fastObj, Color.green);
+							ApplyBarColor(slowObj, new Color(0f, 0.5f, 0f, 1f));
+						}
+						else if (character.IsBoss())
+						{
+							ApplyBarColor(fastObj, Color.magenta);
+							ApplyBarColor(slowObj, Color.gray);
+						}
+						else
+						{
+							ApplyBarColor(fastObj, Color.red);
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					log.Error($"UpdateHuds postfix error: {ex}");
+				}
+			}
+
+			private static void UpdateGuiBar(object guiBarObj, float fraction, bool smooth = false, float speed = 3f, Color? color = null)
+			{
+				if (guiBarObj == null || guiBar_m_bar_Field == null) return;
+
+				var rect = guiBar_m_bar_Field.GetValue(guiBarObj) as RectTransform;
+				if (rect != null)
+				{
+					float baseWidth = GetGuiBarBaseWidth(guiBarObj);
+					float targetWidth = baseWidth * fraction;
+					rect.sizeDelta = smooth ? new Vector2(Mathf.Lerp(rect.sizeDelta.x, targetWidth, Time.deltaTime * speed), rect.sizeDelta.y) : new Vector2(targetWidth, rect.sizeDelta.y);
+				}
+
+				if (color.HasValue)
+					ApplyBarColor(guiBarObj, color.Value);
+			}
+
+			private static void SpawnTrailBar(object fastObj, float startFrac, float endFrac)
+			{
+				if (fastObj == null || guiBar_m_bar_Field == null) return;
+
+				var fastRect = guiBar_m_bar_Field.GetValue(fastObj) as RectTransform;
+				if (fastRect == null) return;
+
+				var trailGO = GameObject.Instantiate(fastRect.gameObject, fastRect.parent);
+				var trailRect = trailGO.GetComponent<RectTransform>();
+				trailRect.SetAsFirstSibling();
+				trailRect.sizeDelta = new Vector2(GetGuiBarBaseWidth(fastObj) * startFrac, trailRect.sizeDelta.y);
+
+				var image = trailGO.GetComponent<Image>();
+				if (image != null) image.color = new Color(1f, 0.65f, 0f, 1f);
+
+				trailGO.AddComponent<TrailBarAnimator>().Init(fastObj, startFrac, endFrac, TrailDuration);
+			}
+
+			private class TrailBarAnimator : MonoBehaviour
+			{
+				private RectTransform rect;
+				private float startWidth;
+				private float targetWidth;
+				private float duration;
+				private float elapsed;
+
+				public void Init(object guiBarObj, float startFrac, float endFrac, float duration)
+				{
+					rect = GetComponent<RectTransform>();
+					startWidth = rect.sizeDelta.x;
+					targetWidth = GetGuiBarBaseWidth(guiBarObj) * endFrac;
+					this.duration = duration;
+					elapsed = 0f;
+				}
+
+				private void Update()
+				{
+					if (rect == null) { Destroy(this); return; }
+
+					elapsed += Time.deltaTime;
+					float t = Mathf.Clamp01(elapsed / duration);
+					float width = Mathf.Lerp(startWidth, targetWidth, t);
+					rect.sizeDelta = new Vector2(width, rect.sizeDelta.y);
+
+					if (t >= 1f) Destroy(gameObject);
 				}
 			}
 		}
 
-
-
-
-
-
-
-
-
-
-
-		// Logs
-
-		/*[HarmonyPatch(typeof(EnemyHud), "ShowHud")]
-		public static class EnemyHud_ShowHud_Log_Patch
+		// ---------- Common helpers ----------
+		private static float GetGuiBarBaseWidth(object guiBarObj)
 		{
-			private static void Postfix(EnemyHud __instance, Character c)
+			if (guiBarObj == null) return BarWidth;
+			try
 			{
-				// Access private m_huds field
-				var hudsField = typeof(EnemyHud).GetField("m_huds", BindingFlags.NonPublic | BindingFlags.Instance);
-				if (hudsField == null) { log.Warn("Failed to get m_huds field"); return; }
-
-				if (!(hudsField.GetValue(__instance) is System.Collections.IDictionary huds))
-				{ log.Warn("m_huds is null or not IDictionary"); return; }
-
-				if (!huds.Contains(c))
+				if (guiBar_m_width_Field != null)
 				{
-					log.Warn($"m_huds does not contain character {c?.name ?? "null"}");
-					return;
+					var val = guiBar_m_width_Field.GetValue(guiBarObj);
+					if (val is float f) return f;
+					if (val is double d) return (float)d;
+					if (val is int i) return i;
+					if (val != null && float.TryParse(val.ToString(), out var parsed)) return parsed;
 				}
-
-				var hudData = huds[c];
-				if (hudData == null)
-				{
-					log.Warn($"hudData for {c?.name ?? "null"} is null");
-					return;
-				}
-
-				var hudDataType = typeof(EnemyHud).GetNestedType("HudData", BindingFlags.NonPublic);
-				if (hudDataType == null) { log.Warn("Failed to get HudData type"); return; }
-
-				var characterField = hudDataType.GetField("m_character", BindingFlags.Public | BindingFlags.Instance);
-				var hudCharacter = characterField?.GetValue(hudData) as Character;
-
-				var guiField = hudDataType.GetField("m_gui", BindingFlags.Public | BindingFlags.Instance);
-				var hudGO = guiField?.GetValue(hudData) as GameObject;
-				if (hudGO == null) { log.Warn($"hudGO for {c?.name ?? "null"} is null"); return; }
-
-				log.Info($"[ShowHud] character: {c?.name ?? "null"}");
-
-				var nameField = hudDataType.GetField("m_name", BindingFlags.Public | BindingFlags.Instance);
-				var nameText = nameField?.GetValue(hudData) as TextMeshProUGUI;
-				if (nameText != null)
-					log.Info($"  Name: text='{nameText.text}', pos={nameText.rectTransform.anchoredPosition}, size={nameText.rectTransform.sizeDelta}");
-
-				void LogBar(string fieldName)
-				{
-					var m_barField = typeof(GuiBar).GetField("m_bar", BindingFlags.Public | BindingFlags.Instance);
-					var bar = hudDataType.GetField(fieldName, BindingFlags.Public | BindingFlags.Instance)?.GetValue(hudData) as GuiBar;
-					if (bar == null) { log.Warn($"Bar {fieldName} is null"); return; }
-
-					float barWidth = 0f;
-					var m_widthField = typeof(GuiBar).GetField("m_width", BindingFlags.NonPublic | BindingFlags.Instance);
-					if (m_widthField != null) barWidth = (float)m_widthField.GetValue(bar);
-
-					float currentValue = 0f;
-					var m_valueField = typeof(GuiBar).GetField("m_value", BindingFlags.NonPublic | BindingFlags.Instance);
-					if (m_valueField != null) currentValue = (float)m_valueField.GetValue(bar);
-
-					float maxValue = 0f;
-					var m_maxField = typeof(GuiBar).GetField("m_maxValue", BindingFlags.NonPublic | BindingFlags.Instance);
-					if (m_maxField != null) maxValue = (float)m_maxField.GetValue(bar);
-
-					var barRT = m_barField.GetValue(bar) as RectTransform;
-
-					log.Info($"    {fieldName}: m_width={barWidth}, sizeDelta={barRT?.sizeDelta ?? Vector2.zero}, localScale={barRT?.localScale ?? Vector3.zero}, active={bar?.gameObject.activeSelf}, currentValue={currentValue}, maxValue={maxValue}, fill={(maxValue > 0f ? currentValue / maxValue : 0f):P0}");
-				}
-
-				LogBar("m_healthFast");
-				LogBar("m_healthSlow");
-				LogBar("m_healthFastFriendly");
-
-				if (hudCharacter != null)
-					log.Info($"  CurrentHealth={hudCharacter.GetHealth():0}/{hudCharacter.GetMaxHealth():0}");
 			}
+			catch { }
+			return BarWidth;
+		}
+		
+		private static void ApplyBarSizeAndColor(object guiBarObj, float height, Color color)
+		{
+			if (guiBarObj == null) return;
+			try
+			{
+				if (guiBar_m_bar_Field != null)
+				{
+					var barRect = guiBar_m_bar_Field.GetValue(guiBarObj) as RectTransform;
+					if (barRect != null)
+						barRect.sizeDelta = new Vector2(GetGuiBarBaseWidth(guiBarObj), height);
+				}
+
+				ApplyBarColor(guiBarObj, color);
+			}
+			catch (Exception ex) { log.Warn($"ApplyBarSizeAndColor failed: {ex.Message}"); }
 		}
 
-		[HarmonyPatch(typeof(EnemyHud), "UpdateHuds")]
-		public static class EnemyHud_UpdateHuds_Log_Patch
+		private static void ApplyBarColor(object guiBarObj, Color color)
 		{
-			private static void Postfix(EnemyHud __instance)
+			if (guiBarObj == null) return;
+			try
 			{
-				// Just log frame info and number of HUDs
-				var hudsField = typeof(EnemyHud).GetField("m_huds", BindingFlags.NonPublic | BindingFlags.Instance);
-				if (!(hudsField?.GetValue(__instance) is System.Collections.IDictionary huds)) return;
-
-				log.Info($"[UpdateHuds] frame={Time.frameCount}, hudCount={huds.Count}");
+				if (guiBar_SetColor_Method != null)
+					guiBar_SetColor_Method.Invoke(guiBarObj, new object[] { color });
+				else
+				{
+					var colorField = guiBarObj.GetType().GetField("m_color", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+					if (colorField != null && colorField.FieldType == typeof(Color))
+						colorField.SetValue(guiBarObj, color);
+				}
 			}
-		}*/
+			catch (Exception ex) { log.Warn($"ApplyBarColor failed: {ex.Message}"); }
+		}
 	}
 }
