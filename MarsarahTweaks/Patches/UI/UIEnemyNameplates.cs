@@ -32,10 +32,7 @@ namespace MarsarahTweaks.Features.UI
 		private static readonly FieldInfo hud_m_name_Field;
 
 		// GuiBar internals
-		private static readonly Type guiBarType;
-		private static readonly FieldInfo guiBar_m_bar_Field;
 		private static readonly FieldInfo guiBar_m_width_Field;
-		private static readonly MethodInfo guiBar_SetColor_Method;
 
 		// Track previous health per character
 		private class FloatWrapper { public float Value; }
@@ -43,50 +40,26 @@ namespace MarsarahTweaks.Features.UI
 
 		static UIEnemyNameplates()
 		{
-			try
+			m_hudsField = typeof(EnemyHud).GetField("m_huds", BindingFlags.NonPublic | BindingFlags.Instance);
+			hudDataType = typeof(EnemyHud).GetNestedType("HudData", BindingFlags.NonPublic | BindingFlags.Instance);
+
+			if (m_hudsField == null || hudDataType == null)
 			{
-				var enemyHudType = typeof(EnemyHud);
-				m_hudsField = enemyHudType.GetField("m_huds", BindingFlags.NonPublic | BindingFlags.Instance);
-				hudDataType = enemyHudType.GetNestedType("HudData", BindingFlags.NonPublic | BindingFlags.Instance);
-
-				if (m_hudsField == null || hudDataType == null)
-				{
-					log.Error("Failed to locate EnemyHud.m_huds or nested type HudData via reflection.");
-					return;
-				}
-
-				hud_m_gui_Field = hudDataType.GetField("m_gui", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				hud_m_character_Field = hudDataType.GetField("m_character", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				hud_m_healthFast_Field = hudDataType.GetField("m_healthFast", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				hud_m_healthSlow_Field = hudDataType.GetField("m_healthSlow", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				hud_m_name_Field = hudDataType.GetField("m_name", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-				guiBarType = hud_m_healthFast_Field?.FieldType
-					?? AppDomain.CurrentDomain.GetAssemblies()
-						.SelectMany(a => a.GetTypesSafe())
-						.FirstOrDefault(t => t.Name.Equals("GuiBar", StringComparison.OrdinalIgnoreCase));
-
-				if (guiBarType != null)
-				{
-					guiBar_m_bar_Field = guiBarType.GetField("m_bar", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-					guiBar_m_width_Field = guiBarType.GetField("m_width", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-					guiBar_SetColor_Method = guiBarType.GetMethod("SetColor", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				}
-				else
-				{
-					log.Warn("Could not resolve GuiBar type via reflection. Resizing / color calls will be limited.");
-				}
+				log.Error("Failed to locate EnemyHud.m_huds or nested type HudData via reflection.");
+				return;
 			}
-			catch (Exception ex)
+
+			hud_m_gui_Field = hudDataType.GetField("m_gui", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			hud_m_character_Field = hudDataType.GetField("m_character", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			hud_m_healthFast_Field = hudDataType.GetField("m_healthFast", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			hud_m_healthSlow_Field = hudDataType.GetField("m_healthSlow", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			hud_m_name_Field = hudDataType.GetField("m_name", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+			guiBar_m_width_Field = typeof(GuiBar).GetField("m_width", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (guiBar_m_width_Field == null)
 			{
-				log.Error($"Reflection static init failed: {ex}");
+				log.Warn("Could not resolve GuiBar.m_width via reflection. Resizing may fallback to default width.");
 			}
-		}
-
-		private static IEnumerable<Type> GetTypesSafe(this Assembly asm)
-		{
-			try { return asm.GetTypes(); }
-			catch { return Array.Empty<Type>(); }
 		}
 
 		// ---------- ShowHud patch ----------
@@ -202,31 +175,38 @@ namespace MarsarahTweaks.Features.UI
 
 			private static void UpdateGuiBar(object guiBarObj, float fraction, bool smooth = false, float speed = 3f, Color? color = null)
 			{
-				if (guiBarObj == null || guiBar_m_bar_Field == null) return;
+				if (guiBarObj == null) return;
 
-				var rect = guiBar_m_bar_Field.GetValue(guiBarObj) as RectTransform;
+				GuiBar guiBar = guiBarObj as GuiBar;
+				if (guiBar == null) return;
+
+				RectTransform rect = guiBar.m_bar;
 				if (rect != null)
 				{
-					float baseWidth = GetGuiBarBaseWidth(guiBarObj);
+					float baseWidth = guiBar_m_width_Field?.GetValue(guiBar) is float f ? f : BarWidth;
 					float targetWidth = baseWidth * fraction;
 					rect.sizeDelta = smooth ? new Vector2(Mathf.Lerp(rect.sizeDelta.x, targetWidth, Time.deltaTime * speed), rect.sizeDelta.y) : new Vector2(targetWidth, rect.sizeDelta.y);
 				}
 
 				if (color.HasValue)
-					ApplyBarColor(guiBarObj, color.Value);
+					guiBar.SetColor(color.Value);
 			}
 
 			private static void SpawnTrailBar(object fastObj, float startFrac, float endFrac)
 			{
-				if (fastObj == null || guiBar_m_bar_Field == null) return;
+				if (fastObj == null) return;
 
-				var fastRect = guiBar_m_bar_Field.GetValue(fastObj) as RectTransform;
+				GuiBar fastGui = fastObj as GuiBar;
+				if (fastGui == null) return;
+
+				RectTransform fastRect = fastGui.m_bar;
 				if (fastRect == null) return;
 
 				var trailGO = GameObject.Instantiate(fastRect.gameObject, fastRect.parent);
 				var trailRect = trailGO.GetComponent<RectTransform>();
+				float baseWidth = guiBar_m_width_Field?.GetValue(fastGui) is float f ? f : BarWidth;
 				trailRect.SetAsFirstSibling();
-				trailRect.sizeDelta = new Vector2(GetGuiBarBaseWidth(fastObj) * startFrac, trailRect.sizeDelta.y);
+				trailRect.sizeDelta = new Vector2(baseWidth * startFrac, trailRect.sizeDelta.y);
 
 				var image = trailGO.GetComponent<Image>();
 				if (image != null) image.color = new Color(1f, 0.65f, 0f, 1f);
@@ -244,14 +224,18 @@ namespace MarsarahTweaks.Features.UI
 
 				public void Init(object guiBarObj, float startFrac, float endFrac, float duration)
 				{
+					GuiBar guiBar = guiBarObj as GuiBar;
+					if (guiBar == null) return;
+
 					rect = GetComponent<RectTransform>();
 					startWidth = rect.sizeDelta.x;
-					targetWidth = GetGuiBarBaseWidth(guiBarObj) * endFrac;
+					float baseWidth = guiBar_m_width_Field?.GetValue(guiBar) is float f ? f : BarWidth;
+					targetWidth = baseWidth * endFrac;
 					this.duration = duration;
 					elapsed = 0f;
 				}
 
-				private void Update()
+				private void Update() // MC: check this
 				{
 					if (rect == null) { Destroy(this); return; }
 
@@ -264,58 +248,32 @@ namespace MarsarahTweaks.Features.UI
 				}
 			}
 		}
-
-		// ---------- Common helpers ----------
-		private static float GetGuiBarBaseWidth(object guiBarObj)
-		{
-			if (guiBarObj == null) return BarWidth;
-			try
-			{
-				if (guiBar_m_width_Field != null)
-				{
-					var val = guiBar_m_width_Field.GetValue(guiBarObj);
-					if (val is float f) return f;
-					if (val is double d) return (float)d;
-					if (val is int i) return i;
-					if (val != null && float.TryParse(val.ToString(), out var parsed)) return parsed;
-				}
-			}
-			catch { }
-			return BarWidth;
-		}
 		
 		private static void ApplyBarSizeAndColor(object guiBarObj, float height, Color color)
 		{
 			if (guiBarObj == null) return;
-			try
-			{
-				if (guiBar_m_bar_Field != null)
-				{
-					var barRect = guiBar_m_bar_Field.GetValue(guiBarObj) as RectTransform;
-					if (barRect != null)
-						barRect.sizeDelta = new Vector2(GetGuiBarBaseWidth(guiBarObj), height);
-				}
 
-				ApplyBarColor(guiBarObj, color);
+			GuiBar guiBar = guiBarObj as GuiBar;
+			if (guiBar == null) return;
+
+			RectTransform barRect = guiBar.m_bar;
+			if (barRect != null)
+			{
+				float baseWidth = guiBar_m_width_Field?.GetValue(guiBar) is float f ? f : BarWidth;
+				barRect.sizeDelta = new Vector2(baseWidth, height);
 			}
-			catch (Exception ex) { log.Warn($"ApplyBarSizeAndColor failed: {ex.Message}"); }
+
+			guiBar.SetColor(color);
 		}
 
 		private static void ApplyBarColor(object guiBarObj, Color color)
 		{
 			if (guiBarObj == null) return;
-			try
-			{
-				if (guiBar_SetColor_Method != null)
-					guiBar_SetColor_Method.Invoke(guiBarObj, new object[] { color });
-				else
-				{
-					var colorField = guiBarObj.GetType().GetField("m_color", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-					if (colorField != null && colorField.FieldType == typeof(Color))
-						colorField.SetValue(guiBarObj, color);
-				}
-			}
-			catch (Exception ex) { log.Warn($"ApplyBarColor failed: {ex.Message}"); }
+
+			GuiBar guiBar = guiBarObj as GuiBar;
+			if (guiBar == null) return;
+
+			guiBar.SetColor(color);
 		}
 	}
 }
