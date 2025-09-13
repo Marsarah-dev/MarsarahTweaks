@@ -191,6 +191,7 @@
   <ItemGroup>
     <None Include="ILRepack.targets" />
     <None Include="Assets\marsabundle" />
+    <None Include="Readmes\CHANGELOG.md" />
     <None Include="Readmes\MarsarahTweaks_DescriptionT.md" />
     <None Include="packages.config" />
     <None Include="Readmes\MarsarahTweaks_DescriptionN%28unused%29.md" />

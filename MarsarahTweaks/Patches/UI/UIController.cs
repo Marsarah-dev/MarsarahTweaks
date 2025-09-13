@@ -96,6 +96,8 @@ namespace MarsarahTweaks.Patches.UI
 
 		public static TextMeshProUGUI CreateTMPTextObject(string name, GameObject parent, Color textColor, string fontName, int fontSize, TextAlignmentOptions alignment, Vector2 position, Vector2 sizeDelta, LogManager specificLog)
 		{
+			//LogAllTMPFonts();
+
 			GameObject textObject = new GameObject(name);
 			textObject.layer = 5;
 			textObject.transform.SetParent(parent.transform, false);

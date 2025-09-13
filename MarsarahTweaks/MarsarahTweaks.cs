@@ -23,7 +23,7 @@ namespace MarsarahTweaks
 	public class MarsarahTweaks : BaseUnityPlugin
 	{
 		internal const string ModName = "MarsarahTweaks";
-		internal const string ModVersion = "1.4.2";
+		internal const string ModVersion = "1.4.3";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 
@@ -31,7 +31,7 @@ namespace MarsarahTweaks
 
 		void Awake()
 		{
-			LogManager.SetGlobalLogLevel(LogManager.LogLevel.Warning); // None, Error, Warning, Info
+			LogManager.SetGlobalLogLevel(LogManager.LogLevel.Info); // None, Error, Warning, Info
 			ConfigManager.Init(Config);
 			//CustomConsoleCommandHandler.Init(); // Register new console commands
 			UISmartBiome.UpdateBiomeWeights(); // Set the correct biome weight dictionary at startup

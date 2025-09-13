@@ -138,12 +138,12 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("08 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
 			public static readonly ConfigMetadata UIOnlinePlayers = new ConfigMetadata("09 - Show Online Players", "Shows online players on the bottom right of the screen (Not displayed if only one player is online)");
 			public static readonly ConfigMetadata UIOnlinePlayersUnderMinimap = new ConfigMetadata("10 - Show Online Players Under Minimap", "Shows online players under minimap instead of bottom right when Show Online Players is enabled");
-			//public static readonly ConfigMetadata EnemyNameplates = new ConfigMetadata("11 - Better Enemy Nameplates", "Displays current and max HP of enemies and colors name according to alerted/aggravated status");
 			public static readonly ConfigMetadata UIShowOwnedResources = new ConfigMetadata("11 - Show Owned Resources In Build Menu", "Displays the total amount of resources in the player's inventory in addition to the required resource amount for the selected piece or recipe in the build or crafting menu");
 			public static readonly ConfigMetadata UIShowPowerExpiration = new ConfigMetadata("12 - Show Boss Power Expiration Message", "Displays a message in the center of the screen when any Forsaken Power expires");
 			public static readonly ConfigMetadata UIPlayerLogoutAnnounce = new ConfigMetadata("13 - Player Logout Announce", "Displays a message when a player logs out in the top-left corner of the screen and in the chat window");
 			public static readonly ConfigMetadata UIAshlandsHeatLevel = new ConfigMetadata("14 - Show Heat Meter in Ashlands", "Shows a heat meter at the top-center of the screen when in Ashlands water or lava");
 			public static readonly ConfigMetadata UIUseSymbols = new ConfigMetadata("15 - Alternate UI Layout", "Use symbols instead of words in this mod's UI elements (Enemy Counter, Summons Counter, etc). Also repositions the boat speed widget to the minimap");
+			public static readonly ConfigMetadata EnemyNameplates = new ConfigMetadata("16 - Better Enemy Nameplates", "Displays current and max HP of enemies and colors name according to alerted/aggravated status");
 		}
 
 		// Config entries
@@ -225,12 +225,12 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShowSummonCounter;
 		public static ConfigEntry<bool> ShowOnlinePlayers;
 		public static ConfigEntry<bool> OnlinePlayersUnderMinimap;
-		//public static ConfigEntry<bool> BetterEnemyNameplates;
 		public static ConfigEntry<bool> ShowOwnedResources;
 		public static ConfigEntry<bool> ShowBossExpirationMessage;
 		public static ConfigEntry<bool> AnnouncePlayerLogout;
 		public static ConfigEntry<bool> ShowHeatLevelInAshlands;
 		public static ConfigEntry<bool> UseSymbolsForUI;
+		public static ConfigEntry<bool> BetterEnemyNameplates;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -315,12 +315,12 @@ namespace MarsarahTweaks.Managers
 			ShowSummonCounter = CreateConfig(ConfigSections.UI, Configs.UISummonCounter.Name, true, Configs.UISummonCounter.Description, false);
 			ShowOnlinePlayers = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayers.Name, true, Configs.UIOnlinePlayers.Description, false);
 			OnlinePlayersUnderMinimap = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayersUnderMinimap.Name, false, Configs.UIOnlinePlayersUnderMinimap.Description, false);
-			//BetterEnemyNameplates = CreateConfig(ConfigSections.UI, Configs.EnemyNameplates.Name, true, Configs.EnemyNameplates.Description, false);
 			ShowOwnedResources = CreateConfig(ConfigSections.UI, Configs.UIShowOwnedResources.Name, true, Configs.UIShowOwnedResources.Description, false);
 			ShowBossExpirationMessage = CreateConfig(ConfigSections.UI, Configs.UIShowPowerExpiration.Name, true, Configs.UIShowPowerExpiration.Description, false);
 			AnnouncePlayerLogout = CreateConfig(ConfigSections.UI, Configs.UIPlayerLogoutAnnounce.Name, true, Configs.UIPlayerLogoutAnnounce.Description, false);
 			ShowHeatLevelInAshlands = CreateConfig(ConfigSections.UI, Configs.UIAshlandsHeatLevel.Name, true, Configs.UIAshlandsHeatLevel.Description, false);
 			UseSymbolsForUI = CreateConfig(ConfigSections.UI, Configs.UIUseSymbols.Name, true, Configs.UIUseSymbols.Description, false);
+			BetterEnemyNameplates = CreateConfig(ConfigSections.UI, Configs.EnemyNameplates.Name, true, Configs.EnemyNameplates.Description, false);
 
 			//HandleToggleExclusivity();
 			SetupWatcher();
