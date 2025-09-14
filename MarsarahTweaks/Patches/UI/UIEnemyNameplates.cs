@@ -30,9 +30,20 @@ namespace MarsarahTweaks.Features.UI
 		private static readonly FieldInfo hud_m_healthFast_Field;
 		private static readonly FieldInfo hud_m_healthSlow_Field;
 		private static readonly FieldInfo hud_m_name_Field;
+		private static readonly FieldInfo hud_m_alerted_Field;
+		private static readonly FieldInfo hud_m_aware_Field;
 
 		// GuiBar internals
 		private static readonly FieldInfo guiBar_m_width_Field;
+
+		// Text 
+		private class HpTexts
+		{
+			public TextMeshProUGUI Left;
+			public TextMeshProUGUI Right;
+		}
+
+		private static readonly ConditionalWeakTable<object, HpTexts> _hpTextCache = new ConditionalWeakTable<object, HpTexts>();
 
 		static UIEnemyNameplates()
 		{
@@ -50,6 +61,9 @@ namespace MarsarahTweaks.Features.UI
 			hud_m_healthFast_Field = hudDataType.GetField("m_healthFast", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			hud_m_healthSlow_Field = hudDataType.GetField("m_healthSlow", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			hud_m_name_Field = hudDataType.GetField("m_name", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			hud_m_alerted_Field = hudDataType.GetField("m_alerted", BindingFlags.Public | BindingFlags.Instance);
+			hud_m_aware_Field = hudDataType.GetField("m_aware", BindingFlags.Public | BindingFlags.Instance);
+
 
 			guiBar_m_width_Field = typeof(GuiBar).GetField("m_width", BindingFlags.NonPublic | BindingFlags.Instance);
 			if (guiBar_m_width_Field == null)
@@ -98,6 +112,8 @@ namespace MarsarahTweaks.Features.UI
 				var bgImage = healthTransform.GetComponent<Image>();
 				if (bgImage != null)
 					bgImage.color = new Color(0.1f, 0.1f, 0.1f, 0.5f);
+
+				AddHpText(hudData, healthTransform);
 			}
 		}
 
@@ -154,6 +170,33 @@ namespace MarsarahTweaks.Features.UI
 					{
 						ApplyBarColor(fastObj, Color.red);
 					}
+
+					// Update text
+					if (_hpTextCache.TryGetValue(hudData, out var hpTexts))
+					{
+						hpTexts.Left.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
+						hpTexts.Right.text = $"{Mathf.RoundToInt(frac * 100f)}%";
+					}
+
+					// --- Custom alerted/aware handling ---
+					var alertedObj = hud_m_alerted_Field?.GetValue(hudData) as RectTransform;
+					var awareObj = hud_m_aware_Field?.GetValue(hudData) as RectTransform;
+					alertedObj?.gameObject.SetActive(false);
+					awareObj?.gameObject.SetActive(false);
+
+					var nameText = hud_m_name_Field?.GetValue(hudData) as TextMeshProUGUI;
+					if (nameText != null && character.GetBaseAI() is BaseAI ai)
+					{
+						bool hasTarget = ai.HaveTarget();
+						bool isAlerted = ai.IsAlerted();
+
+						if (isAlerted)
+							nameText.color = Color.red;
+						else if (hasTarget)
+							nameText.color = Color.yellow;
+						else
+							nameText.color = Color.white;
+					}
 				}
 			}
 			private static void UpdateGuiBar(object guiBarObj, float fraction)
@@ -169,6 +212,7 @@ namespace MarsarahTweaks.Features.UI
 				}
 			}
 		}
+
 		private static void ApplyBarSize(object guiBarObj, float height)
 		{
 			if (guiBarObj == null) return;
@@ -186,6 +230,68 @@ namespace MarsarahTweaks.Features.UI
 		{
 			if (guiBarObj == null) return;
 			if (guiBarObj is GuiBar guiBar) guiBar.SetColor(color);
+		}
+
+		private static void AddHpText(object hudData, RectTransform healthTransform)
+		{
+			if (_hpTextCache.TryGetValue(hudData, out var existing))
+				return; // already created
+
+			var font = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "Valheim-AveriaSansLibre");
+			if (font == null) log.Warn("Valheim-AveriaSansLibre not found!");
+
+			// Left text (cur / max)
+			GameObject leftObj = new GameObject("HpTextLeft", typeof(RectTransform));
+			leftObj.transform.SetParent(healthTransform, false);
+
+			RectTransform leftRect = leftObj.GetComponent<RectTransform>();
+			leftRect.anchorMin = new Vector2(0f, 0.5f);
+			leftRect.anchorMax = new Vector2(0f, 0.5f);
+			leftRect.pivot = new Vector2(0f, 0.5f);
+			leftRect.anchoredPosition = new Vector2(3f, 0f);
+
+			/*leftRect.anchorMin = new Vector2(0.5f, 0.5f);
+			leftRect.anchorMax = new Vector2(0.5f, 0.5f);
+			leftRect.pivot = new Vector2(0.5f, 0.5f);
+			leftRect.anchoredPosition = Vector2.zero;*/
+
+			var leftText = leftObj.AddComponent<TextMeshProUGUI>();
+			leftText.font = font;
+			leftText.fontSize = 12f;
+			leftText.alignment = TextAlignmentOptions.Left;
+			//leftText.alignment = TextAlignmentOptions.Center;
+			leftText.color = Color.white;
+			leftText.enabled = true;
+
+			// Right text (%)
+			GameObject rightObj = new GameObject("HpTextRight", typeof(RectTransform));
+			rightObj.transform.SetParent(healthTransform, false);
+
+			RectTransform rightRect = rightObj.GetComponent<RectTransform>();
+			rightRect.anchorMin = new Vector2(1f, 0.5f);
+			rightRect.anchorMax = new Vector2(1f, 0.5f);
+			rightRect.pivot = new Vector2(1f, 0.5f);
+			rightRect.anchoredPosition = new Vector2(-3f, 0f);
+
+			/*rightRect.anchorMin = new Vector2(0.5f, 0.5f);
+			rightRect.anchorMax = new Vector2(0.5f, 0.5f);
+			rightRect.pivot = new Vector2(0.5f, 0.5f);
+			rightRect.anchoredPosition = Vector2.zero;*/
+
+			var rightText = rightObj.AddComponent<TextMeshProUGUI>();
+			rightText.font = font;
+			rightText.fontSize = 12f;
+			rightText.alignment = TextAlignmentOptions.Right;
+			//rightText.alignment = TextAlignmentOptions.Center;
+			rightText.color = Color.white;
+			rightText.enabled = true;
+
+			// Store both
+			_hpTextCache.Add(hudData, new HpTexts
+			{
+				Left = leftText,
+				Right = rightText
+			});
 		}
 	}
 }
