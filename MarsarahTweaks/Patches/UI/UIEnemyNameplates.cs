@@ -73,6 +73,21 @@ namespace MarsarahTweaks.Features.UI
 			}
 		}
 
+		[HarmonyPatch(typeof(EnemyHud), "Awake")]
+		public static class EmenyHud_Awake_Patch
+		{
+			private static void Postfix(ref EnemyHud __instance)
+			{
+				if (__instance == null) return;
+
+				/*float maxDistance = 10f; 
+				__instance.m_maxShowDistance = Mathf.Max(__instance.m_maxShowDistance, maxDistance);*/
+
+				float distanceMultiplier = 2f;
+				__instance.m_maxShowDistance *= distanceMultiplier;
+			}
+		}
+
 		[HarmonyPatch(typeof(EnemyHud), "ShowHud")]
 		public static class EnemyHud_ShowHud_CustomBar_Patch
 		{
@@ -185,11 +200,30 @@ namespace MarsarahTweaks.Features.UI
 						hpTexts.Right.text = $"{Mathf.RoundToInt(frac * 100f)}%";
 
 						// update emoji for tamed creatures
-						if (character.IsTamed())
+						if (character.TryGetComponent<Tameable>(out var tameable))
 						{
-							var tameable = character.GetComponent<Tameable>();
-							if (tameable != null)
+							// Show taming progress for untamed creatures
+							if (!tameable.IsTamed())
 							{
+								// Use reflection to call private GetTameness()
+								var getTamenessMethod = typeof(Tameable).GetMethod("GetTameness", BindingFlags.NonPublic | BindingFlags.Instance);
+								int tamingProgress = 0;
+								if (getTamenessMethod != null)
+									tamingProgress = (int)getTamenessMethod.Invoke(tameable, null);
+
+								string status = tameable.GetStatusString();
+
+								hpTexts.Emoji.text = $"Taming: {tamingProgress}%";
+								hpTexts.Emoji.color = status switch
+								{
+									"$hud_tamehungry" => new Color(1f, 0.549f, 0f),
+									"$hud_tamefrightened" => Color.red,
+									_ => Color.cyan
+								};
+							}
+							else
+							{
+								// Post-tamed emoji logic
 								bool hungry = tameable.IsHungry();
 								if (hasTarget)
 								{
