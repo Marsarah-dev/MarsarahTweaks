@@ -19,8 +19,6 @@ namespace MarsarahTweaks.Features.UI
 		// Default sizes (tweakable)
 		private const float BarHeight = 12f;
 		private const float BarWidth = 100f;
-		private const float SlowFollowSpeed = 3f;
-		private const float TrailDuration = 1f; // how long the orange bar takes to shrink
 
 		// Reflection cache
 		private static readonly FieldInfo m_hudsField;
@@ -32,6 +30,7 @@ namespace MarsarahTweaks.Features.UI
 		private static readonly FieldInfo hud_m_name_Field;
 		private static readonly FieldInfo hud_m_alerted_Field;
 		private static readonly FieldInfo hud_m_aware_Field;
+		private static readonly MethodInfo GetTamenessMethod;
 
 		// GuiBar internals
 		private static readonly FieldInfo guiBar_m_width_Field;
@@ -71,7 +70,9 @@ namespace MarsarahTweaks.Features.UI
 			{
 				log.Warn("Could not resolve GuiBar.m_width via reflection. Resizing may fallback to default width.");
 			}
-		}
+
+			GetTamenessMethod = typeof(Tameable).GetMethod("GetTameness", BindingFlags.NonPublic | BindingFlags.Instance);
+	}
 
 		[HarmonyPatch(typeof(EnemyHud), "Awake")]
 		public static class EmenyHud_Awake_Patch
@@ -112,19 +113,25 @@ namespace MarsarahTweaks.Features.UI
 				var fastObj = hud_m_healthFast_Field?.GetValue(hudData);
 				var slowObj = hud_m_healthSlow_Field?.GetValue(hudData);
 
-				ApplyBarSize(fastObj, BarHeight);
-				ApplyBarColor(fastObj, Color.red);
-
-				ApplyBarSize(slowObj, BarHeight);
-				ApplyBarColor(slowObj, Color.yellow);
-
 				if (fastObj is GuiBar fastBar && slowObj is GuiBar slowBar)
 				{
-					// Ensure slow bar is behind fast bar
-					slowBar.m_bar.SetAsFirstSibling(); // behind
-					fastBar.m_bar.SetAsLastSibling();  // on top
-				}
+					// Apply to bars (height only!)
+					ApplyBarSize(fastBar.m_bar, BarHeight);
+					ApplyBarColor(fastBar, Color.red);
 
+					ApplyBarSize(slowBar.m_bar, BarHeight);
+					ApplyBarColor(slowBar, Color.yellow);
+
+					// Ensure layering
+					slowBar.m_bar.SetAsFirstSibling();
+					fastBar.m_bar.SetAsLastSibling();
+
+					// For bosses: stretch background to full boss width
+					if (c.IsBoss() && guiBar_m_width_Field?.GetValue(fastBar) is float bossWidth)
+					{
+						healthTransform.sizeDelta = new Vector2(bossWidth, BarHeight);
+					}
+				}
 				var bgImage = healthTransform.GetComponent<Image>();
 				if (bgImage != null)
 					bgImage.color = new Color(0.1f, 0.1f, 0.1f, 0.5f);
@@ -158,11 +165,10 @@ namespace MarsarahTweaks.Features.UI
 					var fastObj = hud_m_healthFast_Field?.GetValue(hudData);
 					var slowObj = hud_m_healthSlow_Field?.GetValue(hudData);
 
-					// --- Fast bar updates ---
+					// Fast bar updates
 					UpdateGuiBar(fastObj, frac);
 
-					// --- Slow bar ---
-					// Only update height to match fast bar; leave width and color alone
+					// Slow bar updates
 					if (slowObj is GuiBar slowBar && fastObj is GuiBar fastBar)
 					{
 						RectTransform slowRect = slowBar.m_bar;
@@ -173,7 +179,7 @@ namespace MarsarahTweaks.Features.UI
 						}
 					}
 
-					// --- Color overrides ---
+					// Color overrides
 					if (character.IsTamed())
 					{
 						ApplyBarColor(fastObj, Color.green);
@@ -195,31 +201,35 @@ namespace MarsarahTweaks.Features.UI
 					// Update text
 					if (_hpTextCache.TryGetValue(hudData, out var hpTexts))
 					{
-						// update left / right text
+						// Update left / right text
 						hpTexts.Left.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
 						hpTexts.Right.text = $"{Mathf.RoundToInt(frac * 100f)}%";
 
-						// update emoji for tamed creatures
+						// Update emoji for tamed creatures
 						if (character.TryGetComponent<Tameable>(out var tameable))
 						{
 							// Show taming progress for untamed creatures
 							if (!tameable.IsTamed())
 							{
-								// Use reflection to call private GetTameness()
-								var getTamenessMethod = typeof(Tameable).GetMethod("GetTameness", BindingFlags.NonPublic | BindingFlags.Instance);
 								int tamingProgress = 0;
-								if (getTamenessMethod != null)
-									tamingProgress = (int)getTamenessMethod.Invoke(tameable, null);
+								if (GetTamenessMethod != null)
+									tamingProgress = (int)GetTamenessMethod.Invoke(tameable, null);
 
 								string status = tameable.GetStatusString();
 
-								hpTexts.Emoji.text = $"Taming: {tamingProgress}%";
-								hpTexts.Emoji.color = status switch
+								if (tamingProgress == 0)
+									hpTexts.Emoji.text = "";
+								else
 								{
-									"$hud_tamehungry" => new Color(1f, 0.549f, 0f),
-									"$hud_tamefrightened" => Color.red,
-									_ => Color.cyan
-								};
+									hpTexts.Emoji.text = $"Taming: {tamingProgress}%";
+									log.Info($"Creature: {character.name} - Status: {status}");
+									hpTexts.Emoji.color = status switch
+									{
+										"$hud_tamehungry" => new Color(1f, 0.549f, 0f),
+										"$hud_tamefrightened" => Color.red,
+										_ => Color.cyan // $hud_tameinprogress
+									};
+								}
 							}
 							else
 							{
@@ -246,7 +256,7 @@ namespace MarsarahTweaks.Features.UI
 						}
 					}
 
-					// --- Custom alerted/aware handling ---
+					// Custom alerted/aware handling
 					var alertedObj = hud_m_alerted_Field?.GetValue(hudData) as RectTransform;
 					var awareObj = hud_m_aware_Field?.GetValue(hudData) as RectTransform;
 					alertedObj?.gameObject.SetActive(false);
@@ -264,6 +274,7 @@ namespace MarsarahTweaks.Features.UI
 					}
 				}
 			}
+
 			private static void UpdateGuiBar(object guiBarObj, float fraction)
 			{
 				GuiBar guiBar = guiBarObj as GuiBar;
@@ -277,18 +288,10 @@ namespace MarsarahTweaks.Features.UI
 				}
 			}
 		}
-
-		private static void ApplyBarSize(object guiBarObj, float height)
+		private static void ApplyBarSize(RectTransform rect, float height)
 		{
-			if (guiBarObj == null) return;
-			if (guiBarObj is GuiBar guiBar)
-			{
-				RectTransform barRect = guiBar.m_bar;
-				if (barRect != null)
-				{
-					barRect.sizeDelta = new Vector2(barRect.sizeDelta.x, height);
-				}
-			}
+			if (rect == null) return;
+			rect.sizeDelta = new Vector2(rect.sizeDelta.x, height);
 		}
 
 		private static void ApplyBarColor(object guiBarObj, Color color)
@@ -351,7 +354,7 @@ namespace MarsarahTweaks.Features.UI
 			rightText.color = Color.white;
 			rightText.enabled = true;
 
-			// --- Emoji text (bottom-right, below the bar) ---
+			// Emoji text (bottom-right, below the bar)
 			GameObject emojiObj = new GameObject("HpEmoji", typeof(RectTransform));
 			emojiObj.transform.SetParent(healthTransform, false);
 

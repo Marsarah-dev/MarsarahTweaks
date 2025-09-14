@@ -19,6 +19,8 @@
 
 
  ******* TODO *******
+
+ - Fix the Extra Lights section showing when nothing is unlocked
    
    * Prep for update
      - New gear costs (done)

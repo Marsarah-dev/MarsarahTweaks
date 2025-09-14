@@ -143,7 +143,10 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIPlayerLogoutAnnounce = new ConfigMetadata("13 - Player Logout Announce", "Displays a message when a player logs out in the top-left corner of the screen and in the chat window");
 			public static readonly ConfigMetadata UIAshlandsHeatLevel = new ConfigMetadata("14 - Show Heat Meter in Ashlands", "Shows a heat meter at the top-center of the screen when in Ashlands water or lava");
 			public static readonly ConfigMetadata UIUseSymbols = new ConfigMetadata("15 - Alternate UI Layout", "Use symbols instead of words in this mod's UI elements (Enemy Counter, Summons Counter, etc). Also repositions the boat speed widget to the minimap");
-			public static readonly ConfigMetadata EnemyNameplates = new ConfigMetadata("16 - Better Enemy Nameplates", "Displays current and max HP of enemies and colors name according to alerted/aggravated status");
+			public static readonly ConfigMetadata EnemyNameplates = new ConfigMetadata("16 - Better Enemy Nameplates", "Modifies the size and colors of enemy nameplates and colors the name according to alerted/aggravated status");
+			public static readonly ConfigMetadata EnemyHp = new ConfigMetadata("17 - Show Enemy HP", "Displays current and max HP of enemies. Better Enemy Nameplates must be enabled");
+			public static readonly ConfigMetadata EnemyHpPercent = new ConfigMetadata("18 - Show Enemy HP Percent", "Displays current HP percentage of enemies. Better Enemy Nameplates must be enabled");
+			public static readonly ConfigMetadata TamingProgress = new ConfigMetadata("19 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing. Better Enemy Nameplates must be enabled");
 		}
 
 		// Config entries
@@ -231,6 +234,9 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShowHeatLevelInAshlands;
 		public static ConfigEntry<bool> UseSymbolsForUI;
 		public static ConfigEntry<bool> BetterEnemyNameplates;
+		public static ConfigEntry<bool> ShowEnemyHp;
+		public static ConfigEntry<bool> ShowEnemyHpPercent;
+		public static ConfigEntry<bool> ShowTamingProgress;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -321,6 +327,9 @@ namespace MarsarahTweaks.Managers
 			ShowHeatLevelInAshlands = CreateConfig(ConfigSections.UI, Configs.UIAshlandsHeatLevel.Name, true, Configs.UIAshlandsHeatLevel.Description, false);
 			UseSymbolsForUI = CreateConfig(ConfigSections.UI, Configs.UIUseSymbols.Name, true, Configs.UIUseSymbols.Description, false);
 			BetterEnemyNameplates = CreateConfig(ConfigSections.UI, Configs.EnemyNameplates.Name, true, Configs.EnemyNameplates.Description, false);
+			ShowEnemyHp = CreateConfig(ConfigSections.UI, Configs.EnemyHp.Name, true, Configs.EnemyHp.Description, false);
+			ShowEnemyHpPercent = CreateConfig(ConfigSections.UI, Configs.EnemyHpPercent.Name, true, Configs.EnemyHpPercent.Description, false);
+			ShowTamingProgress = CreateConfig(ConfigSections.UI, Configs.TamingProgress.Name, true, Configs.TamingProgress.Description, false);
 
 			//HandleToggleExclusivity();
 			SetupWatcher();
