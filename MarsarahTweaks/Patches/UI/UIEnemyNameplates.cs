@@ -41,6 +41,7 @@ namespace MarsarahTweaks.Features.UI
 		{
 			public TextMeshProUGUI Left;
 			public TextMeshProUGUI Right;
+			public TextMeshProUGUI Emoji;
 		}
 
 		private static readonly ConditionalWeakTable<object, HpTexts> _hpTextCache = new ConditionalWeakTable<object, HpTexts>();
@@ -171,11 +172,44 @@ namespace MarsarahTweaks.Features.UI
 						ApplyBarColor(fastObj, Color.red);
 					}
 
+					// Get chjaracter AI and status
+					BaseAI ai = character.GetBaseAI();
+					bool isAlerted = ai?.IsAlerted() ?? false;
+					bool hasTarget = ai?.HaveTarget() ?? false;
+
 					// Update text
 					if (_hpTextCache.TryGetValue(hudData, out var hpTexts))
 					{
+						// update left / right text
 						hpTexts.Left.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
 						hpTexts.Right.text = $"{Mathf.RoundToInt(frac * 100f)}%";
+
+						// update emoji for tamed creatures
+						if (character.IsTamed())
+						{
+							var tameable = character.GetComponent<Tameable>();
+							if (tameable != null)
+							{
+								bool hungry = tameable.IsHungry();
+								if (hasTarget)
+								{
+									hpTexts.Emoji.text = "😡";
+									hpTexts.Emoji.color = Color.red;
+								}
+								else if (hungry)
+								{
+									hpTexts.Emoji.text = "☹"; // 😋
+									hpTexts.Emoji.color = new Color(1f, 0.549019f, 0f);
+								}
+								else if (!isAlerted)
+								{
+									hpTexts.Emoji.text = "🙂"; // 😄
+									hpTexts.Emoji.color = Color.yellow;
+								}
+								else
+									hpTexts.Emoji.text = "";
+							}
+						}
 					}
 
 					// --- Custom alerted/aware handling ---
@@ -185,11 +219,8 @@ namespace MarsarahTweaks.Features.UI
 					awareObj?.gameObject.SetActive(false);
 
 					var nameText = hud_m_name_Field?.GetValue(hudData) as TextMeshProUGUI;
-					if (nameText != null && character.GetBaseAI() is BaseAI ai)
+					if (nameText != null)
 					{
-						bool hasTarget = ai.HaveTarget();
-						bool isAlerted = ai.IsAlerted();
-
 						if (isAlerted)
 							nameText.color = Color.red;
 						else if (hasTarget)
@@ -286,11 +317,30 @@ namespace MarsarahTweaks.Features.UI
 			rightText.color = Color.white;
 			rightText.enabled = true;
 
-			// Store both
+			// --- Emoji text (bottom-right, below the bar) ---
+			GameObject emojiObj = new GameObject("HpEmoji", typeof(RectTransform));
+			emojiObj.transform.SetParent(healthTransform, false);
+
+			RectTransform emojiRect = emojiObj.GetComponent<RectTransform>();
+			emojiRect.anchorMin = new Vector2(1f, 0f);
+			emojiRect.anchorMax = new Vector2(1f, 0f);
+			emojiRect.pivot = new Vector2(1f, 0f);
+			emojiRect.anchoredPosition = new Vector2(-3f, -14f); // slightly below the bar
+
+			var emojiText = emojiObj.AddComponent<TextMeshProUGUI>();
+			emojiText.font = font;
+			emojiText.fontSize = 11f;
+			emojiText.alignment = TextAlignmentOptions.BottomRight;
+			emojiText.color = Color.white;
+			emojiText.enabled = true;
+			emojiText.text = ""; // start empty
+
+			// Store all three
 			_hpTextCache.Add(hudData, new HpTexts
 			{
 				Left = leftText,
-				Right = rightText
+				Right = rightText,
+				Emoji = emojiText
 			});
 		}
 	}
