@@ -16,9 +16,14 @@ namespace MarsarahTweaks.Features.UI
 	{
 		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Info);
 
-		// Default sizes (tweakable)
+		// New sizes
 		private const float BarHeight = 12f;
-		private const float BarWidth = 100f;
+		private const float BarHeightBoss = 16f;
+		//private const float BarWidth = 100f;
+
+		// Backups
+		private static float VanillaBarHeight = -1f; // for all enemies
+		private static float VanillaBarBossHeight = -1f; // for all enemies
 
 		// Reflection cache
 		private static readonly FieldInfo m_hudsField;
@@ -38,9 +43,9 @@ namespace MarsarahTweaks.Features.UI
 		// Text 
 		private class HpTexts
 		{
-			public TextMeshProUGUI Left;
-			public TextMeshProUGUI Right;
-			public TextMeshProUGUI Emoji;
+			public TextMeshProUGUI HP;
+			public TextMeshProUGUI HpPercent;
+			public TextMeshProUGUI Taming;
 		}
 
 		private static readonly ConditionalWeakTable<object, HpTexts> _hpTextCache = new ConditionalWeakTable<object, HpTexts>();
@@ -64,7 +69,6 @@ namespace MarsarahTweaks.Features.UI
 			hud_m_alerted_Field = hudDataType.GetField("m_alerted", BindingFlags.Public | BindingFlags.Instance);
 			hud_m_aware_Field = hudDataType.GetField("m_aware", BindingFlags.Public | BindingFlags.Instance);
 
-
 			guiBar_m_width_Field = typeof(GuiBar).GetField("m_width", BindingFlags.NonPublic | BindingFlags.Instance);
 			if (guiBar_m_width_Field == null)
 			{
@@ -80,9 +84,6 @@ namespace MarsarahTweaks.Features.UI
 			private static void Postfix(ref EnemyHud __instance)
 			{
 				if (__instance == null) return;
-
-				/*float maxDistance = 10f; 
-				__instance.m_maxShowDistance = Mathf.Max(__instance.m_maxShowDistance, maxDistance);*/
 
 				float distanceMultiplier = 2f;
 				__instance.m_maxShowDistance *= distanceMultiplier;
@@ -108,33 +109,41 @@ namespace MarsarahTweaks.Features.UI
 				var healthTransform = guiObj.transform.Find("Health") as RectTransform;
 				if (healthTransform == null) return;
 
-				healthTransform.sizeDelta = new Vector2(BarWidth, BarHeight);
+				// Modify background size
+				float targetHeight;
+				if (c.IsBoss())
+				{
+					if (VanillaBarBossHeight < 0f) VanillaBarBossHeight = healthTransform.sizeDelta.y;
+					targetHeight = BarHeightBoss;
+				}
+				else
+				{
+					if (VanillaBarHeight < 0f) VanillaBarHeight = healthTransform.sizeDelta.y;
+					targetHeight = BarHeight;
+				}
+				healthTransform.sizeDelta = new Vector2(healthTransform.sizeDelta.x, targetHeight);
 
 				var fastObj = hud_m_healthFast_Field?.GetValue(hudData);
 				var slowObj = hud_m_healthSlow_Field?.GetValue(hudData);
 
 				if (fastObj is GuiBar fastBar && slowObj is GuiBar slowBar)
 				{
-					// Apply to bars (height only!)
-					ApplyBarSize(fastBar.m_bar, BarHeight);
-					ApplyBarColor(fastBar, Color.red);
+					// Modify height for moving bars
+					fastBar.m_bar.sizeDelta = new Vector2(fastBar.m_bar.sizeDelta.x, targetHeight);
+					slowBar.m_bar.sizeDelta = new Vector2(slowBar.m_bar.sizeDelta.x, targetHeight);
 
-					ApplyBarSize(slowBar.m_bar, BarHeight);
-					ApplyBarColor(slowBar, Color.yellow);
+					// Modify colors
+					if (c.IsBoss())
+						fastBar.SetColor(Color.magenta);
+					else if (c.IsTamed() || c.IsPlayer())
+						fastBar.SetColor(Color.green);
+					else
+						fastBar.SetColor(Color.red);
 
 					// Ensure layering
 					slowBar.m_bar.SetAsFirstSibling();
 					fastBar.m_bar.SetAsLastSibling();
-
-					// For bosses: stretch background to full boss width
-					if (c.IsBoss() && guiBar_m_width_Field?.GetValue(fastBar) is float bossWidth)
-					{
-						healthTransform.sizeDelta = new Vector2(bossWidth, BarHeight);
-					}
 				}
-				var bgImage = healthTransform.GetComponent<Image>();
-				if (bgImage != null)
-					bgImage.color = new Color(0.1f, 0.1f, 0.1f, 0.5f);
 
 				AddHpText(hudData, healthTransform);
 			}
@@ -155,45 +164,15 @@ namespace MarsarahTweaks.Features.UI
 					var hudData = entry.Value;
 					if (hudData == null) continue;
 
+					// Modify bar layout
+
+					// Creature-specific info
 					var character = hud_m_character_Field?.GetValue(hudData) as Character;
 					if (character == null || character.IsDead()) continue;
 
 					float currentHealth = character.GetHealth();
 					float maxHealth = character.GetMaxHealth();
 					float frac = Mathf.Clamp01(currentHealth / Math.Max(1f, maxHealth));
-
-					var fastObj = hud_m_healthFast_Field?.GetValue(hudData);
-					var slowObj = hud_m_healthSlow_Field?.GetValue(hudData);
-
-					// Fast bar updates
-					UpdateGuiBar(fastObj, frac);
-
-					// Slow bar updates
-					if (slowObj is GuiBar slowBar && fastObj is GuiBar fastBar)
-					{
-						RectTransform slowRect = slowBar.m_bar;
-						RectTransform fastRect = fastBar.m_bar;
-						if (slowRect != null && fastRect != null)
-						{
-							slowRect.sizeDelta = new Vector2(slowRect.sizeDelta.x, fastRect.sizeDelta.y);
-						}
-					}
-
-					// Color overrides
-					if (character.IsTamed())
-					{
-						ApplyBarColor(fastObj, Color.green);
-					}
-					else if (character.IsBoss())
-					{
-						ApplyBarColor(fastObj, Color.magenta);
-					}
-					else
-					{
-						ApplyBarColor(fastObj, Color.red);
-					}
-
-					// Get chjaracter AI and status
 					BaseAI ai = character.GetBaseAI();
 					bool isAlerted = ai?.IsAlerted() ?? false;
 					bool hasTarget = ai?.HaveTarget() ?? false;
@@ -202,10 +181,10 @@ namespace MarsarahTweaks.Features.UI
 					if (_hpTextCache.TryGetValue(hudData, out var hpTexts))
 					{
 						// Update left / right text
-						hpTexts.Left.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
-						hpTexts.Right.text = $"{Mathf.RoundToInt(frac * 100f)}%";
+						hpTexts.HP.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
+						hpTexts.HpPercent.text = $"{Mathf.RoundToInt(frac * 100f)}%";
 
-						// Update emoji for tamed creatures
+						// Update tamed creatures progress
 						if (character.TryGetComponent<Tameable>(out var tameable))
 						{
 							// Show taming progress for untamed creatures
@@ -217,41 +196,18 @@ namespace MarsarahTweaks.Features.UI
 
 								string status = tameable.GetStatusString();
 
-								if (tamingProgress == 0)
-									hpTexts.Emoji.text = "";
-								else
+								hpTexts.Taming.gameObject.SetActive(tamingProgress != 0f);
+								hpTexts.Taming.text = $"Taming: {tamingProgress}%";
+								hpTexts.Taming.color = status switch
 								{
-									hpTexts.Emoji.text = $"Taming: {tamingProgress}%";
-									log.Info($"Creature: {character.name} - Status: {status}");
-									hpTexts.Emoji.color = status switch
-									{
-										"$hud_tamehungry" => new Color(1f, 0.549f, 0f),
-										"$hud_tamefrightened" => Color.red,
-										_ => Color.cyan // $hud_tameinprogress
-									};
-								}
+									"$hud_tamehungry" => new Color(1f, 0.549f, 0f),
+									"$hud_tamefrightened" => Color.red,
+									_ => Color.cyan // $hud_tameinprogress, hud_tamehappy
+								};
 							}
-							else
+							else if (hpTexts.Taming.gameObject.activeSelf == true)
 							{
-								// Post-tamed emoji logic
-								bool hungry = tameable.IsHungry();
-								if (hasTarget)
-								{
-									hpTexts.Emoji.text = "😡";
-									hpTexts.Emoji.color = Color.red;
-								}
-								else if (hungry)
-								{
-									hpTexts.Emoji.text = "☹"; // 😋
-									hpTexts.Emoji.color = new Color(1f, 0.549019f, 0f);
-								}
-								else if (!isAlerted)
-								{
-									hpTexts.Emoji.text = "🙂"; // 😄
-									hpTexts.Emoji.color = Color.yellow;
-								}
-								else
-									hpTexts.Emoji.text = "";
+								hpTexts.Taming.gameObject.SetActive(false);
 							}
 						}
 					}
@@ -274,30 +230,6 @@ namespace MarsarahTweaks.Features.UI
 					}
 				}
 			}
-
-			private static void UpdateGuiBar(object guiBarObj, float fraction)
-			{
-				GuiBar guiBar = guiBarObj as GuiBar;
-				if (guiBar == null) return;
-
-				RectTransform rect = guiBar.m_bar;
-				if (rect != null)
-				{
-					float baseWidth = guiBar_m_width_Field?.GetValue(guiBar) is float f ? f : BarWidth;
-					rect.sizeDelta = new Vector2(baseWidth * fraction, rect.sizeDelta.y);
-				}
-			}
-		}
-		private static void ApplyBarSize(RectTransform rect, float height)
-		{
-			if (rect == null) return;
-			rect.sizeDelta = new Vector2(rect.sizeDelta.x, height);
-		}
-
-		private static void ApplyBarColor(object guiBarObj, Color color)
-		{
-			if (guiBarObj == null) return;
-			if (guiBarObj is GuiBar guiBar) guiBar.SetColor(color);
 		}
 
 		private static void AddHpText(object hudData, RectTransform healthTransform)
@@ -308,7 +240,7 @@ namespace MarsarahTweaks.Features.UI
 			var font = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "Valheim-AveriaSansLibre");
 			if (font == null) log.Warn("Valheim-AveriaSansLibre not found!");
 
-			// Left text (cur / max)
+			// HP text (cur / max)
 			GameObject leftObj = new GameObject("HpTextLeft", typeof(RectTransform));
 			leftObj.transform.SetParent(healthTransform, false);
 
@@ -331,7 +263,7 @@ namespace MarsarahTweaks.Features.UI
 			leftText.color = Color.white;
 			leftText.enabled = true;
 
-			// Right text (%)
+			// HpPercent text (%)
 			GameObject rightObj = new GameObject("HpTextRight", typeof(RectTransform));
 			rightObj.transform.SetParent(healthTransform, false);
 
@@ -354,7 +286,7 @@ namespace MarsarahTweaks.Features.UI
 			rightText.color = Color.white;
 			rightText.enabled = true;
 
-			// Emoji text (bottom-right, below the bar)
+			// Taming text (bottom-right, below the bar)
 			GameObject emojiObj = new GameObject("HpEmoji", typeof(RectTransform));
 			emojiObj.transform.SetParent(healthTransform, false);
 
@@ -375,9 +307,9 @@ namespace MarsarahTweaks.Features.UI
 			// Store all three
 			_hpTextCache.Add(hudData, new HpTexts
 			{
-				Left = leftText,
-				Right = rightText,
-				Emoji = emojiText
+				HP = leftText,
+				HpPercent = rightText,
+				Taming = emojiText
 			});
 		}
 	}
