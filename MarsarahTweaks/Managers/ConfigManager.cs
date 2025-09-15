@@ -58,6 +58,25 @@ namespace MarsarahTweaks.Managers
 			}
 		}
 
+		// Enums for ItemQuality config
+		public enum ItemQualitySymbol
+		{
+			Star,        // ★
+			Circle,      // ●
+			Diamond,     // ◆
+			EmptyDiamond // ◇
+		}
+
+		public enum ItemQualityColor
+		{
+			White,
+			Yellow,
+			Green,
+			Red,
+			Blue,
+			Cyan
+		}
+
 		// Grouped Config Metadata (for easy expansion)
 		public static class Configs
 		{
@@ -147,6 +166,10 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata EnemyHp = new ConfigMetadata("17 - Show Enemy HP", "Displays current and max HP of enemies. Better Enemy Nameplates must be enabled");
 			public static readonly ConfigMetadata EnemyHpPercent = new ConfigMetadata("18 - Show Enemy HP Percent", "Displays current HP percentage of enemies. Better Enemy Nameplates must be enabled");
 			public static readonly ConfigMetadata TamingProgress = new ConfigMetadata("19 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing. Better Enemy Nameplates must be enabled");
+			public static readonly ConfigMetadata ItemQualityIndicator = new ConfigMetadata("20 - Better Item Quality Indicator", "Changes the indicator for armor and weapons from numbers to symbols");
+			public static readonly ConfigMetadata ItemQualityIndicatorVertical = new ConfigMetadata("21 - Use Vertical Alignment for Item Quality", "Position the symbols vertically instead of horizontally for item quality. Better Item Quality Inicator needs to be enabled");
+			public static readonly ConfigMetadata ItemQualitySymbol = new ConfigMetadata("22 - Symbol For Item Quality", "Choose the symbol used for the item quality indicator. Better Item Quality Inicator needs to be enabled");
+			public static readonly ConfigMetadata ItemQualityColor = new ConfigMetadata("23 - Color For Item Quality", "Choose the color used for the item quality indicator. Better Item Quality Inicator needs to be enabled");
 		}
 
 		// Config entries
@@ -237,6 +260,10 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShowEnemyHp;
 		public static ConfigEntry<bool> ShowEnemyHpPercent;
 		public static ConfigEntry<bool> ShowTamingProgress;
+		public static ConfigEntry<bool> BetterItemQualityIndicator;
+		public static ConfigEntry<bool> ItemQualityIndicatorVertical;
+		public static ConfigEntry<ItemQualitySymbol> ItemQualitySymbolChoice;
+		public static ConfigEntry<ItemQualityColor> ItemQualityColorChoice;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -330,6 +357,10 @@ namespace MarsarahTweaks.Managers
 			ShowEnemyHp = CreateConfig(ConfigSections.UI, Configs.EnemyHp.Name, true, Configs.EnemyHp.Description, false);
 			ShowEnemyHpPercent = CreateConfig(ConfigSections.UI, Configs.EnemyHpPercent.Name, true, Configs.EnemyHpPercent.Description, false);
 			ShowTamingProgress = CreateConfig(ConfigSections.UI, Configs.TamingProgress.Name, true, Configs.TamingProgress.Description, false);
+			BetterItemQualityIndicator = CreateConfig(ConfigSections.UI, Configs.ItemQualityIndicator.Name, true, Configs.ItemQualityIndicator.Description, false);
+			ItemQualityIndicatorVertical = CreateConfig(ConfigSections.UI, Configs.ItemQualityIndicatorVertical.Name, true, Configs.ItemQualityIndicatorVertical.Description, false);
+			ItemQualitySymbolChoice = CreateConfig(ConfigSections.UI, Configs.ItemQualitySymbol.Name, ItemQualitySymbol.Star, Configs.ItemQualitySymbol.Description, false);
+			ItemQualityColorChoice = CreateConfig(ConfigSections.UI, Configs.ItemQualityColor.Name, ItemQualityColor.Yellow, Configs.ItemQualityColor.Description, false);
 
 			//HandleToggleExclusivity();
 			SetupWatcher();

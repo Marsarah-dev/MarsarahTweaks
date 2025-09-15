@@ -8,14 +8,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using static ItemDrop.ItemData;
 
 namespace MarsarahTweaks.Features.UI
 {
 	internal static class UIEnemyNameplates
 	{
-		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Warning);
 
 		// New sizes
 		private const float BarHeight = 12f;
@@ -323,6 +321,43 @@ namespace MarsarahTweaks.Features.UI
 			UpdateTamingText(character, hpTexts.Taming, enableTamingText);
 		}
 
+		private static void UpdateHpTextLayout(HpTexts hpTexts, bool enableBoth)
+		{
+			// HP (left or centered)
+			var hpRect = hpTexts.HP.rectTransform;
+			if (enableBoth)
+			{
+				hpRect.anchorMin = hpRect.anchorMax = new Vector2(0f, 0.5f);
+				hpRect.pivot = new Vector2(0f, 0.5f);
+				hpRect.anchoredPosition = new Vector2(3f, 0f);
+				hpTexts.HP.alignment = TextAlignmentOptions.Left;
+			}
+			else
+			{
+				hpRect.anchorMin = hpRect.anchorMax = new Vector2(0.5f, 0.5f);
+				hpRect.pivot = new Vector2(0.5f, 0.5f);
+				hpRect.anchoredPosition = Vector2.zero;
+				hpTexts.HP.alignment = TextAlignmentOptions.Center;
+			}
+
+			// HP percent (right or centered)
+			var hpPercentRect = hpTexts.HpPercent.rectTransform;
+			if (enableBoth)
+			{
+				hpPercentRect.anchorMin = hpPercentRect.anchorMax = new Vector2(1f, 0.5f);
+				hpPercentRect.pivot = new Vector2(1f, 0.5f);
+				hpPercentRect.anchoredPosition = new Vector2(-3f, 0f);
+				hpTexts.HpPercent.alignment = TextAlignmentOptions.Right;
+			}
+			else
+			{
+				hpPercentRect.anchorMin = hpPercentRect.anchorMax = new Vector2(0.5f, 0.5f);
+				hpPercentRect.pivot = new Vector2(0.5f, 0.5f);
+				hpPercentRect.anchoredPosition = Vector2.zero;
+				hpTexts.HpPercent.alignment = TextAlignmentOptions.Center;
+			}
+		}
+
 		private static void UpdateTamingText(Character character, TextMeshProUGUI tamingText, bool enabledByConfig)
 		{
 			if (!enabledByConfig)
@@ -362,43 +397,6 @@ namespace MarsarahTweaks.Features.UI
 			else
 			{
 				tamingText.gameObject.SetActive(false);
-			}
-		}
-
-		private static void UpdateHpTextLayout(HpTexts hpTexts, bool enableBoth)
-		{
-			// HP (left or centered)
-			var hpRect = hpTexts.HP.rectTransform;
-			if (enableBoth)
-			{
-				hpRect.anchorMin = hpRect.anchorMax = new Vector2(0f, 0.5f);
-				hpRect.pivot = new Vector2(0f, 0.5f);
-				hpRect.anchoredPosition = new Vector2(3f, 0f);
-				hpTexts.HP.alignment = TextAlignmentOptions.Left;
-			}
-			else
-			{
-				hpRect.anchorMin = hpRect.anchorMax = new Vector2(0.5f, 0.5f);
-				hpRect.pivot = new Vector2(0.5f, 0.5f);
-				hpRect.anchoredPosition = Vector2.zero;
-				hpTexts.HP.alignment = TextAlignmentOptions.Center;
-			}
-
-			// HP percent (right or centered)
-			var hpPercentRect = hpTexts.HpPercent.rectTransform;
-			if (enableBoth)
-			{
-				hpPercentRect.anchorMin = hpPercentRect.anchorMax = new Vector2(1f, 0.5f);
-				hpPercentRect.pivot = new Vector2(1f, 0.5f);
-				hpPercentRect.anchoredPosition = new Vector2(-3f, 0f);
-				hpTexts.HpPercent.alignment = TextAlignmentOptions.Right;
-			}
-			else
-			{
-				hpPercentRect.anchorMin = hpPercentRect.anchorMax = new Vector2(0.5f, 0.5f);
-				hpPercentRect.pivot = new Vector2(0.5f, 0.5f);
-				hpPercentRect.anchoredPosition = Vector2.zero;
-				hpTexts.HpPercent.alignment = TextAlignmentOptions.Center;
 			}
 		}
 

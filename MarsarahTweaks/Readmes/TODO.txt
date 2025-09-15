@@ -16,6 +16,8 @@
    G. New Build Pieces
 
    H. New UI
+      - Added Better Enemy Nameplates
+      - Added Better Item Quality Indicator
 
 
  ******* TODO *******
