@@ -170,6 +170,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata ItemQualityIndicatorVertical = new ConfigMetadata("21 - Use Vertical Alignment for Item Quality", "Position the symbols vertically instead of horizontally for item quality. Better Item Quality Inicator needs to be enabled");
 			public static readonly ConfigMetadata ItemQualitySymbol = new ConfigMetadata("22 - Symbol For Item Quality", "Choose the symbol used for the item quality indicator. Better Item Quality Inicator needs to be enabled");
 			public static readonly ConfigMetadata ItemQualityColor = new ConfigMetadata("23 - Color For Item Quality", "Choose the color used for the item quality indicator. Better Item Quality Inicator needs to be enabled");
+			public static readonly ConfigMetadata ItemDurabilityColor = new ConfigMetadata("24 - Colored Item Durability Bar", "Color item durability bar according to curent durability");
 		}
 
 		// Config entries
@@ -264,6 +265,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ItemQualityIndicatorVertical;
 		public static ConfigEntry<ItemQualitySymbol> ItemQualitySymbolChoice;
 		public static ConfigEntry<ItemQualityColor> ItemQualityColorChoice;
+		public static ConfigEntry<bool> ColoredItemDurabilityBar;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -361,6 +363,7 @@ namespace MarsarahTweaks.Managers
 			ItemQualityIndicatorVertical = CreateConfig(ConfigSections.UI, Configs.ItemQualityIndicatorVertical.Name, true, Configs.ItemQualityIndicatorVertical.Description, false);
 			ItemQualitySymbolChoice = CreateConfig(ConfigSections.UI, Configs.ItemQualitySymbol.Name, ItemQualitySymbol.Star, Configs.ItemQualitySymbol.Description, false);
 			ItemQualityColorChoice = CreateConfig(ConfigSections.UI, Configs.ItemQualityColor.Name, ItemQualityColor.Yellow, Configs.ItemQualityColor.Description, false);
+			ColoredItemDurabilityBar = CreateConfig(ConfigSections.UI, Configs.ItemDurabilityColor.Name, true, Configs.ItemDurabilityColor.Description, false);
 
 			//HandleToggleExclusivity();
 			SetupWatcher();

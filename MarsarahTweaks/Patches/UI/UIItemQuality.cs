@@ -14,7 +14,7 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIItemQuality
 	{
-		private static readonly LogManager log = new LogManager("UI Item Quality", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("UI Item Quality", LogManager.LogLevel.Warning);
 
 		// Reflection cache
 		private static readonly FieldInfo inventoryField = null;
@@ -22,10 +22,6 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly Type elementType = null;
 		private static readonly FieldInfo qualityField = null;
 		private static readonly FieldInfo iconField = null;
-
-		// Symbol data
-		private static char Symbol = '★'; // ★ ◆ ◇ ✚ ⚔
-		private static Color SymbolColor = Color.yellow;
 
 		static UIItemQuality()
 		{
@@ -62,7 +58,7 @@ namespace MarsarahTweaks.Patches.UI
 			}
 		}
 
-		// Helpers
+		// Helper
 		private static void DrawSymbols(TMP_Text textComponent, int quality)
 		{
 			if (textComponent == null) return;
@@ -70,59 +66,39 @@ namespace MarsarahTweaks.Patches.UI
 			bool vertical = ConfigManager.ItemQualityIndicatorVertical.Value;
 			textComponent.textWrappingMode = TextWrappingModes.PreserveWhitespaceNoWrap;
 
-			switch (ConfigManager.ItemQualitySymbolChoice.Value)
+			// Resolve symbol based on config
+			char symbol = ConfigManager.ItemQualitySymbolChoice.Value switch
 			{
-				case ItemQualitySymbol.Star:
-					Symbol = '★';
-					break;
-				case ItemQualitySymbol.Circle:
-					Symbol = '●';
-					break;
-				case ItemQualitySymbol.Diamond:
-					Symbol = '◆';
-					break;
-				case ItemQualitySymbol.EmptyDiamond:
-					Symbol = '◇';
-					break;
-			}
+				ItemQualitySymbol.Star => '★',
+				ItemQualitySymbol.Circle => '●',
+				ItemQualitySymbol.Diamond => '◆',
+				ItemQualitySymbol.EmptyDiamond => '◇',
+				_ => '★'
+			};
 
+			// Build symbol text
 			string symbolText;
 			if (quality >= 5)
-			{
-				symbolText = $"{quality}x {Symbol}"; // "7x ★"
-			}
+				symbolText = $"{quality}x {symbol}";
 			else
-			{
-				if (!vertical)
-					symbolText = new string(Symbol, quality); // "★★★"
-				else
-					symbolText = string.Join("\n", new string(Symbol, quality).ToCharArray()); // "★\n★\n★"
-			}
+				symbolText = vertical
+					? string.Join("\n", new string(symbol, quality).ToCharArray())
+					: new string(symbol, quality);
 
-			switch (ConfigManager.ItemQualityColorChoice.Value)
+			// Resolve color based on config
+			Color symbolColor = ConfigManager.ItemQualityColorChoice.Value switch
 			{
-				case ItemQualityColor.White:
-					SymbolColor = Color.white;
-					break;
-				case ItemQualityColor.Yellow:
-					SymbolColor = Color.yellow;
-					break;
-				case ItemQualityColor.Green:
-					SymbolColor = Color.green;
-					break;
-				case ItemQualityColor.Red:
-					SymbolColor = Color.red;
-					break;
-				case ItemQualityColor.Blue:
-					SymbolColor = Color.blue;
-					break;
-				case ItemQualityColor.Cyan:
-					SymbolColor = Color.cyan;
-					break;
-			}
+				ItemQualityColor.White => Color.white,
+				ItemQualityColor.Yellow => Color.yellow,
+				ItemQualityColor.Green => Color.green,
+				ItemQualityColor.Red => Color.red,
+				ItemQualityColor.Blue => Color.blue,
+				ItemQualityColor.Cyan => Color.cyan,
+				_ => Color.yellow
+			};
 
 			textComponent.text = symbolText;
-			textComponent.color = SymbolColor;
+			textComponent.color = symbolColor;
 			textComponent.fontSize = 7f; 
 			textComponent.alignment = (!vertical) ? TextAlignmentOptions.MidlineRight : TextAlignmentOptions.TopRight;
 			textComponent.rectTransform.pivot = (!vertical) ? new Vector2(1f, 0.5f) : new Vector2(1f, 1f);
