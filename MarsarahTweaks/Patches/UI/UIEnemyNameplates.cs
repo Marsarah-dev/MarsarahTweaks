@@ -148,7 +148,7 @@ namespace MarsarahTweaks.Features.UI
 					// Update text
 					UpdateText(character, hudData, ConfigManager.BetterEnemyNameplates.Value);
 
-					// Custom alerted/aware handling
+					// Update alerted/aware
 					UpdateAlertAndName(character, hudData, ConfigManager.BetterEnemyNameplates.Value);
 				}
 			}
@@ -200,96 +200,116 @@ namespace MarsarahTweaks.Features.UI
 			}
 		}
 
-		private static void AddHpText(object hudData, RectTransform healthTransform, bool enable)
+		private static void AddHpText(object hudData, RectTransform healthTransform, bool enableMainBars)
 		{
 			if (_hpTextCache.TryGetValue(hudData, out var existing))
 				return; // already created
+
+			bool enableHpText = ConfigManager.ShowEnemyHp.Value && enableMainBars;
+			bool enableHpPercent = ConfigManager.ShowEnemyHpPercent.Value && enableMainBars;
+			bool enableTamingText = ConfigManager.ShowTamingProgress.Value && enableMainBars;
+			bool enableBothHpTexts = enableHpText && enableHpPercent;
 
 			var font = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "Valheim-AveriaSansLibre");
 			if (font == null) log.Warn("Valheim-AveriaSansLibre not found!");
 
 			// HP text (cur / max)
-			GameObject leftObj = new GameObject("HpTextLeft", typeof(RectTransform));
-			leftObj.transform.SetParent(healthTransform, false);
+			GameObject hpTextObj = new GameObject("HpText", typeof(RectTransform));
+			hpTextObj.SetActive(enableHpText);
+			hpTextObj.transform.SetParent(healthTransform, false);
 
-			RectTransform leftRect = leftObj.GetComponent<RectTransform>();
-			leftRect.anchorMin = new Vector2(0f, 0.5f);
-			leftRect.anchorMax = new Vector2(0f, 0.5f);
-			leftRect.pivot = new Vector2(0f, 0.5f);
-			leftRect.anchoredPosition = new Vector2(3f, 0f);
+			RectTransform hpTextRect = hpTextObj.GetComponent<RectTransform>();
+			if (enableBothHpTexts)
+			{
+				hpTextRect.anchorMin = new Vector2(0f, 0.5f);
+				hpTextRect.anchorMax = new Vector2(0f, 0.5f);
+				hpTextRect.pivot = new Vector2(0f, 0.5f);
+				hpTextRect.anchoredPosition = new Vector2(3f, 0f);
+			}
+			else
+			{
+				hpTextRect.anchorMin = new Vector2(0.5f, 0.5f);
+				hpTextRect.anchorMax = new Vector2(0.5f, 0.5f);
+				hpTextRect.pivot = new Vector2(0.5f, 0.5f);
+				hpTextRect.anchoredPosition = Vector2.zero;
+			}
 
-			/*leftRect.anchorMin = new Vector2(0.5f, 0.5f);
-			leftRect.anchorMax = new Vector2(0.5f, 0.5f);
-			leftRect.pivot = new Vector2(0.5f, 0.5f);
-			leftRect.anchoredPosition = Vector2.zero;*/
-
-			var leftText = leftObj.AddComponent<TextMeshProUGUI>();
-			leftText.font = font;
-			leftText.fontSize = 12f;
-			leftText.alignment = TextAlignmentOptions.Left;
-			//leftText.alignment = TextAlignmentOptions.Center;
-			leftText.color = Color.white;
-			//leftText.enabled = enable;
+			var hpText = hpTextObj.AddComponent<TextMeshProUGUI>();
+			hpText.font = font;
+			hpText.fontSize = 12f;
+			hpText.alignment = enableBothHpTexts ? TextAlignmentOptions.Left : TextAlignmentOptions.Center;
+			hpText.color = Color.white;
 
 			// HpPercent text (%)
-			GameObject rightObj = new GameObject("HpTextRight", typeof(RectTransform));
-			rightObj.transform.SetParent(healthTransform, false);
+			GameObject hpPercentObj = new GameObject("HpPercentText", typeof(RectTransform));
+			hpPercentObj.SetActive(enableHpPercent);
+			hpPercentObj.transform.SetParent(healthTransform, false);
 
-			RectTransform rightRect = rightObj.GetComponent<RectTransform>();
-			rightRect.anchorMin = new Vector2(1f, 0.5f);
-			rightRect.anchorMax = new Vector2(1f, 0.5f);
-			rightRect.pivot = new Vector2(1f, 0.5f);
-			rightRect.anchoredPosition = new Vector2(-3f, 0f);
+			RectTransform hpPercentRect = hpPercentObj.GetComponent<RectTransform>();
+			if (enableBothHpTexts)
+			{
+				hpPercentRect.anchorMin = new Vector2(1f, 0.5f);
+				hpPercentRect.anchorMax = new Vector2(1f, 0.5f);
+				hpPercentRect.pivot = new Vector2(1f, 0.5f);
+				hpPercentRect.anchoredPosition = new Vector2(-3f, 0f);
+			}
+			else
+			{
+				hpPercentRect.anchorMin = new Vector2(0.5f, 0.5f);
+				hpPercentRect.anchorMax = new Vector2(0.5f, 0.5f);
+				hpPercentRect.pivot = new Vector2(0.5f, 0.5f);
+				hpPercentRect.anchoredPosition = Vector2.zero;
+			}
 
-			/*rightRect.anchorMin = new Vector2(0.5f, 0.5f);
-			rightRect.anchorMax = new Vector2(0.5f, 0.5f);
-			rightRect.pivot = new Vector2(0.5f, 0.5f);
-			rightRect.anchoredPosition = Vector2.zero;*/
-
-			var rightText = rightObj.AddComponent<TextMeshProUGUI>();
-			rightText.font = font;
-			rightText.fontSize = 12f;
-			rightText.alignment = TextAlignmentOptions.Right;
-			//rightText.alignment = TextAlignmentOptions.Center;
-			rightText.color = Color.white;
-			//rightText.enabled = enable;
+			var hpPercentText = hpPercentObj.AddComponent<TextMeshProUGUI>();
+			hpPercentText.font = font;
+			hpPercentText.fontSize = 12f;
+			hpPercentText.alignment = enableBothHpTexts ? TextAlignmentOptions.Right : TextAlignmentOptions.Center;
+			hpPercentText.color = Color.white;
 
 			// Taming text (bottom-right, below the bar)
-			GameObject emojiObj = new GameObject("HpEmoji", typeof(RectTransform));
-			emojiObj.transform.SetParent(healthTransform, false);
+			GameObject tamingObj = new GameObject("TamingText", typeof(RectTransform));
+			tamingObj.SetActive(enableTamingText);
+			tamingObj.transform.SetParent(healthTransform, false);
 
-			RectTransform emojiRect = emojiObj.GetComponent<RectTransform>();
-			emojiRect.anchorMin = new Vector2(1f, 0f);
-			emojiRect.anchorMax = new Vector2(1f, 0f);
-			emojiRect.pivot = new Vector2(1f, 0f);
-			emojiRect.anchoredPosition = new Vector2(-3f, -14f); // slightly below the bar
+			RectTransform tamingRect = tamingObj.GetComponent<RectTransform>();
+			tamingRect.anchorMin = new Vector2(1f, 0f);
+			tamingRect.anchorMax = new Vector2(1f, 0f);
+			tamingRect.pivot = new Vector2(1f, 0f);
+			tamingRect.anchoredPosition = new Vector2(-3f, -14f); // slightly below the bar
 
-			var emojiText = emojiObj.AddComponent<TextMeshProUGUI>();
-			emojiText.font = font;
-			emojiText.fontSize = 11f;
-			emojiText.alignment = TextAlignmentOptions.BottomRight;
-			emojiText.color = Color.white;
-			//emojiText.enabled = enable;
-			emojiText.text = ""; // start empty
+			var tamingText = tamingObj.AddComponent<TextMeshProUGUI>();
+			tamingText.font = font;
+			tamingText.fontSize = 11f;
+			tamingText.alignment = TextAlignmentOptions.BottomRight;
+			tamingText.color = Color.white;
+			tamingText.text = ""; // start empty
 
 			// Store all three
 			_hpTextCache.Add(hudData, new HpTexts
 			{
-				HP = leftText,
-				HpPercent = rightText,
-				Taming = emojiText
+				HP = hpText,
+				HpPercent = hpPercentText,
+				Taming = tamingText
 			});
 		}
 
-		private static void UpdateText(Character character, object hudData, bool enable)
+		private static void UpdateText(Character character, object hudData, bool enableMainBars)
 		{
 			if (!_hpTextCache.TryGetValue(hudData, out var hpTexts)) return;
 
-			hpTexts.HP.gameObject.SetActive(enable);
-			hpTexts.HpPercent.gameObject.SetActive(enable);
-			hpTexts.Taming.gameObject.SetActive(enable); 
+			bool enableHpText = ConfigManager.ShowEnemyHp.Value && enableMainBars;
+			bool enableHpPercent = ConfigManager.ShowEnemyHpPercent.Value && enableMainBars;
+			bool enableTamingText = ConfigManager.ShowTamingProgress.Value && enableMainBars;
+			bool enableBothHpTexts = enableHpText && enableHpPercent;
 
-			if (!enable) return;
+			hpTexts.HP.gameObject.SetActive(enableHpText);
+			hpTexts.HpPercent.gameObject.SetActive(enableHpPercent);
+			hpTexts.Taming.gameObject.SetActive(enableTamingText); 
+
+			if (!enableMainBars) return;
+
+			UpdateHpTextLayout(hpTexts, enableBothHpTexts);
 
 			// Update left / right text
 			float currentHealth = character.GetHealth();
@@ -300,38 +320,85 @@ namespace MarsarahTweaks.Features.UI
 			hpTexts.HpPercent.text = $"{Mathf.RoundToInt(frac * 100f)}%";
 
 			// Update tamed creatures progress
-			if (character.TryGetComponent<Tameable>(out var tameable))
-			{
-				UpdateTamingText(tameable, hpTexts.Taming);
-			}
+			UpdateTamingText(character, hpTexts.Taming, enableTamingText);
 		}
 
-		private static void UpdateTamingText(Tameable tameable, TextMeshProUGUI tamingText)
+		private static void UpdateTamingText(Character character, TextMeshProUGUI tamingText, bool enabledByConfig)
 		{
-			if (!tameable.IsTamed())
+			if (!enabledByConfig)
 			{
-				int tamingProgress = 0;
-				if (GetTamenessMethod != null)
-					tamingProgress = (int)GetTamenessMethod.Invoke(tameable, null);
+				tamingText.gameObject.SetActive(false);
+				return;
+			}
 
-				tamingText.gameObject.SetActive(tamingProgress != 0);
-
-				if (tamingProgress != 0)
+			if (character.TryGetComponent<Tameable>(out var tameable))
+			{
+				if (!tameable.IsTamed())
 				{
-					string status = tameable.GetStatusString();
+					int tamingProgress = 0;
+					if (GetTamenessMethod != null)
+						tamingProgress = (int)GetTamenessMethod.Invoke(tameable, null);
 
-					tamingText.text = $"Taming: {tamingProgress}%";
-					tamingText.color = status switch
+					tamingText.gameObject.SetActive(tamingProgress != 0);
+
+					if (tamingProgress != 0)
 					{
-						"$hud_tamehungry" => new Color(1f, 0.549f, 0f),
-						"$hud_tamefrightened" => Color.red,
-						_ => Color.cyan // $hud_tameinprogress, hud_tamehappy
-					};
+						string status = tameable.GetStatusString();
+
+						tamingText.text = $"Taming: {tamingProgress}%";
+						tamingText.color = status switch
+						{
+							"$hud_tamehungry" => new Color(1f, 0.549f, 0f),
+							"$hud_tamefrightened" => Color.red,
+							_ => Color.cyan // $hud_tameinprogress, hud_tamehappy
+						};
+					}
+				}
+				else
+				{
+					tamingText.gameObject.SetActive(false);
 				}
 			}
 			else
 			{
 				tamingText.gameObject.SetActive(false);
+			}
+		}
+
+		private static void UpdateHpTextLayout(HpTexts hpTexts, bool enableBoth)
+		{
+			// HP (left or centered)
+			var hpRect = hpTexts.HP.rectTransform;
+			if (enableBoth)
+			{
+				hpRect.anchorMin = hpRect.anchorMax = new Vector2(0f, 0.5f);
+				hpRect.pivot = new Vector2(0f, 0.5f);
+				hpRect.anchoredPosition = new Vector2(3f, 0f);
+				hpTexts.HP.alignment = TextAlignmentOptions.Left;
+			}
+			else
+			{
+				hpRect.anchorMin = hpRect.anchorMax = new Vector2(0.5f, 0.5f);
+				hpRect.pivot = new Vector2(0.5f, 0.5f);
+				hpRect.anchoredPosition = Vector2.zero;
+				hpTexts.HP.alignment = TextAlignmentOptions.Center;
+			}
+
+			// HP percent (right or centered)
+			var hpPercentRect = hpTexts.HpPercent.rectTransform;
+			if (enableBoth)
+			{
+				hpPercentRect.anchorMin = hpPercentRect.anchorMax = new Vector2(1f, 0.5f);
+				hpPercentRect.pivot = new Vector2(1f, 0.5f);
+				hpPercentRect.anchoredPosition = new Vector2(-3f, 0f);
+				hpTexts.HpPercent.alignment = TextAlignmentOptions.Right;
+			}
+			else
+			{
+				hpPercentRect.anchorMin = hpPercentRect.anchorMax = new Vector2(0.5f, 0.5f);
+				hpPercentRect.pivot = new Vector2(0.5f, 0.5f);
+				hpPercentRect.anchoredPosition = Vector2.zero;
+				hpTexts.HpPercent.alignment = TextAlignmentOptions.Center;
 			}
 		}
 
