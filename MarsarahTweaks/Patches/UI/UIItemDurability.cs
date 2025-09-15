@@ -3,14 +3,16 @@ using MarsarahTweaks.Managers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIItemDurability
 	{
-		private static readonly LogManager log = new LogManager("UI Item Durability", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("UI Item Durability", LogManager.LogLevel.Warning);
 
 		// Reflection cache for HotkeyBar
 		private static readonly FieldInfo hotkeyItemsField = null;
@@ -23,7 +25,11 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly Type elementType = null;
 		private static readonly FieldInfo durabilityField = null;
 
-		// Static constructor for all reflection
+		// Custom sprite
+		private static readonly Sprite CustomSprite = null;
+		private static Sprite DefaultSprite = null;
+
+		// Static constructor for all reflection and other data
 		static UIItemDurability()
 		{
 			// HotkeyBar
@@ -37,6 +43,32 @@ namespace MarsarahTweaks.Patches.UI
 			elementsField = typeof(InventoryGrid).GetField("m_elements", BindingFlags.NonPublic | BindingFlags.Instance);
 			elementType = elementsField.FieldType.GetGenericArguments()[0]; // Element type inside List<Element>
 			durabilityField = elementType.GetField("m_durability", BindingFlags.Public | BindingFlags.Instance);
+
+			// Other stuff
+			CustomSprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault(s => s.name == "bar_stagger"); // bar_monster_hp_5, bar_food_8, bar_stagger
+			InitDefaultSprite();
+
+			// Debug: log all available sprites once
+			/*foreach (var s in Resources.FindObjectsOfTypeAll<Sprite>())
+			{
+				log.Info($"Found sprite: {s.name}");
+			}*/
+		}
+
+		private static void InitDefaultSprite()
+		{
+			if (DefaultSprite != null) return;
+
+			var anyBar = Resources.FindObjectsOfTypeAll<GuiBar>().FirstOrDefault();
+			if (anyBar != null)
+			{
+				var img = anyBar.m_bar?.GetComponent<Image>();
+				if (img != null)
+				{
+					DefaultSprite = img.sprite;
+					log.Info($"Cached default sprite at startup: {(DefaultSprite != null ? DefaultSprite.name : "null")}");
+				}
+			}
 		}
 
 		[HarmonyPatch(typeof(HotkeyBar), "UpdateIcons")]
@@ -44,7 +76,6 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static void Postfix(HotkeyBar __instance, Player player)
 			{
-				if (!ConfigManager.ColoredItemDurabilityBar.Value) return;
 				if (!player || player.IsDead()) return;
 
 				var items = (List<ItemDrop.ItemData>)hotkeyItemsField.GetValue(__instance);
@@ -53,24 +84,36 @@ namespace MarsarahTweaks.Patches.UI
 				for (int i = 0; i < items.Count && i < elements.Count; i++)
 				{
 					var item = items[i];
-					if (item == null || !item.m_shared.m_useDurability) continue;
+					if (item == null || !item.m_shared.m_useDurability)
+						continue;
 
 					var elementData = elements[item.m_gridPos.x];
 					var durabilityBar = (GuiBar)hotkeyDurabilityField.GetValue(elementData);
 					if (durabilityBar == null) continue;
 
-					float durabilityPercent = item.GetDurabilityPercentage();
-					durabilityBar.SetColor(GetDurabilityColor(durabilityPercent));
+					// Update color
+					if (ConfigManager.ColoredItemDurabilityBar.Value)
+					{
+						float durabilityPercent = item.GetDurabilityPercentage();
+						durabilityBar.SetColor(GetDurabilityColor(durabilityPercent));
+					}
+
+					var barImage = durabilityBar.m_bar?.GetComponent<Image>();
+					if (barImage == null) continue;
+
+					// Apply sprite based on config
+					barImage.sprite = ConfigManager.ColoredItemDurabilityBar.Value && CustomSprite != null ? CustomSprite : DefaultSprite;
 				}
 			}
 		}
+
 
 		[HarmonyPatch(typeof(InventoryGrid), "UpdateGui")]
 		public static class ItemDurability_InventoryGridPatch
 		{
 			private static void Postfix(InventoryGrid __instance)
 			{
-				if (!ConfigManager.ColoredItemDurabilityBar.Value) return;
+				//if (!ConfigManager.ColoredItemDurabilityBar.Value) return;
 
 				var inventory = inventoryField.GetValue(__instance) as Inventory;
 				if (inventory == null) return;
@@ -90,8 +133,19 @@ namespace MarsarahTweaks.Patches.UI
 					var durabilityBar = durabilityField.GetValue(elemObj) as GuiBar;
 					if (durabilityBar == null) continue;
 
-					float durabilityPercent = item.GetDurabilityPercentage();
-					durabilityBar.SetColor(GetDurabilityColor(durabilityPercent));
+					// Update color
+					if (ConfigManager.ColoredItemDurabilityBar.Value)
+					{
+						float durabilityPercent = item.GetDurabilityPercentage();
+						durabilityBar.SetColor(GetDurabilityColor(durabilityPercent));
+					}
+
+					if (CustomSprite == null) continue;
+					var barImage = durabilityBar.m_bar.GetComponent<Image>();
+					if (barImage == null) continue;
+
+					// Apply sprite based on config
+					barImage.sprite = ConfigManager.ColoredItemDurabilityBar.Value && CustomSprite != null ? CustomSprite : DefaultSprite;
 				}
 			}
 		}
