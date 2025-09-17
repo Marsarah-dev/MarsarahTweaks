@@ -10,9 +10,9 @@ using UnityEngine.UI;
 
 namespace MarsarahTweaks.Patches.UI
 {
-	internal class UIItemDurability
+	internal class UIItemDurability : UIController
 	{
-		private static readonly LogManager log = new LogManager("UI Item Durability", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("UI Item Durability", LogManager.LogLevel.Info);
 
 		// Reflection cache for HotkeyBar
 		private static readonly FieldInfo hotkeyItemsField = null;
@@ -76,6 +76,12 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static void Postfix(HotkeyBar __instance, Player player)
 			{
+				if (BetterUILoaded && ConfigManager.ColoredItemDurabilityBar.Value)
+				{
+					log.Warn("Cannot enable 'Colored Item Durability Bar' with 'BetterUI' installed. Letting BetterUI handle the durability indicator.");
+					ConfigManager.ColoredItemDurabilityBar.Value = false;
+				}
+
 				if (!player || player.IsDead()) return;
 
 				var items = (List<ItemDrop.ItemData>)hotkeyItemsField.GetValue(__instance);
@@ -113,7 +119,11 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static void Postfix(InventoryGrid __instance)
 			{
-				//if (!ConfigManager.ColoredItemDurabilityBar.Value) return;
+				if (BetterUILoaded && ConfigManager.ColoredItemDurabilityBar.Value)
+				{
+					log.Warn("Cannot enable 'Colored Item Durability Bar' with 'BetterUI' installed. Letting BetterUI handle the durability indicator.");
+					ConfigManager.ColoredItemDurabilityBar.Value = false;
+				}
 
 				var inventory = inventoryField.GetValue(__instance) as Inventory;
 				if (inventory == null) return;

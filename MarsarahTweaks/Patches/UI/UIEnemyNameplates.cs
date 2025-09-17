@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using MarsarahTweaks.Managers;
+using MarsarahTweaks.Patches.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ using UnityEngine;
 
 namespace MarsarahTweaks.Features.UI
 {
-	internal static class UIEnemyNameplates
+	internal class UIEnemyNameplates : UIController
 	{
-		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Info);
 
 		// New sizes
 		private const float BarHeight = 12f;
@@ -35,7 +36,6 @@ namespace MarsarahTweaks.Features.UI
 		private static readonly FieldInfo hud_m_name_Field;
 		private static readonly FieldInfo hud_m_alerted_Field;
 		private static readonly FieldInfo hud_m_aware_Field;
-		private static readonly MethodInfo GetTamenessMethod;
 
 		// GuiBar internals
 		private static readonly FieldInfo guiBar_m_width_Field;
@@ -45,7 +45,6 @@ namespace MarsarahTweaks.Features.UI
 		{
 			public TextMeshProUGUI HP;
 			public TextMeshProUGUI HpPercent;
-			public TextMeshProUGUI Taming;
 		}
 
 		private static readonly ConditionalWeakTable<object, HpTexts> _hpTextCache = new ConditionalWeakTable<object, HpTexts>();
@@ -74,9 +73,7 @@ namespace MarsarahTweaks.Features.UI
 			{
 				log.Warn("Could not resolve GuiBar.m_width via reflection. Resizing may fallback to default width.");
 			}
-
-			GetTamenessMethod = typeof(Tameable).GetMethod("GetTameness", BindingFlags.NonPublic | BindingFlags.Instance);
-	}
+		}
 
 		[HarmonyPatch(typeof(EnemyHud), "Awake")]
 		public static class EmenyHud_Awake_Patch
@@ -84,6 +81,7 @@ namespace MarsarahTweaks.Features.UI
 			private static void Postfix(ref EnemyHud __instance)
 			{
 				if (__instance == null) return;
+				if (BetterUILoaded) return;
 
 				if (ConfigManager.BetterEnemyNameplates.Value)
 				{
@@ -104,6 +102,7 @@ namespace MarsarahTweaks.Features.UI
 			private static void Postfix(EnemyHud __instance, Character c)
 			{
 				if (c == null || m_hudsField == null) return;
+				if (BetterUILoaded) return;
 
 				var huds = m_hudsField.GetValue(__instance) as IDictionary;
 				if (huds == null || !huds.Contains(c)) return;
@@ -130,6 +129,12 @@ namespace MarsarahTweaks.Features.UI
 		{
 			private static void Postfix(EnemyHud __instance)
 			{
+				if (BetterUILoaded && ConfigManager.BetterEnemyNameplates.Value)
+				{
+					log.Warn("Cannot enable 'Better Enemy Nameplates' with 'BetterUI' installed. Letting BetterUI handle enemy nameplates.");
+					ConfigManager.BetterEnemyNameplates.Value = false;
+				}
+
 				if (m_hudsField == null) return;
 
 				var huds = m_hudsField.GetValue(__instance) as IDictionary;
@@ -143,8 +148,8 @@ namespace MarsarahTweaks.Features.UI
 					var character = hud_m_character_Field?.GetValue(hudData) as Character;
 					if (character == null || character.IsDead()) continue;
 
-					// Update text
-					UpdateText(character, hudData, ConfigManager.BetterEnemyNameplates.Value);
+					// Update HP text
+					UpdateHpText(character, hudData, ConfigManager.BetterEnemyNameplates.Value);
 
 					// Update alerted/aware
 					UpdateAlertAndName(character, hudData, ConfigManager.BetterEnemyNameplates.Value);
@@ -205,18 +210,17 @@ namespace MarsarahTweaks.Features.UI
 
 			bool enableHpText = ConfigManager.ShowEnemyHp.Value && enableMainBars;
 			bool enableHpPercent = ConfigManager.ShowEnemyHpPercent.Value && enableMainBars;
-			bool enableTamingText = ConfigManager.ShowTamingProgress.Value && enableMainBars;
 			bool enableBothHpTexts = enableHpText && enableHpPercent;
 
-			var font = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "Valheim-AveriaSansLibre");
-			if (font == null) log.Warn("Valheim-AveriaSansLibre not found!");
+			string UITMPFontName = "Valheim-AveriaSansLibre";
+			Vector2 UITextAreaSize = new Vector2(100f, 14f); // width, height
+			int UITextFontSize = 12;
 
 			// HP text (cur / max)
-			GameObject hpTextObj = new GameObject("HpText", typeof(RectTransform));
-			hpTextObj.SetActive(enableHpText);
-			hpTextObj.transform.SetParent(healthTransform, false);
+			var hpText = CreateTMPTextObject("HpText", healthTransform.gameObject, Color.white, UITMPFontName, UITextFontSize, enableBothHpTexts ? TextAlignmentOptions.Left : TextAlignmentOptions.Center, Vector2.zero, UITextAreaSize, log);
+			hpText.gameObject.SetActive(enableHpText);
 
-			RectTransform hpTextRect = hpTextObj.GetComponent<RectTransform>();
+			RectTransform hpTextRect = hpText.GetComponent<RectTransform>();
 			if (enableBothHpTexts)
 			{
 				hpTextRect.anchorMin = new Vector2(0f, 0.5f);
@@ -232,18 +236,11 @@ namespace MarsarahTweaks.Features.UI
 				hpTextRect.anchoredPosition = Vector2.zero;
 			}
 
-			var hpText = hpTextObj.AddComponent<TextMeshProUGUI>();
-			hpText.font = font;
-			hpText.fontSize = 12f;
-			hpText.alignment = enableBothHpTexts ? TextAlignmentOptions.Left : TextAlignmentOptions.Center;
-			hpText.color = Color.white;
-
 			// HpPercent text (%)
-			GameObject hpPercentObj = new GameObject("HpPercentText", typeof(RectTransform));
-			hpPercentObj.SetActive(enableHpPercent);
-			hpPercentObj.transform.SetParent(healthTransform, false);
+			var hpPercentText = CreateTMPTextObject("HpPercentText", healthTransform.gameObject, Color.white, UITMPFontName, UITextFontSize, enableBothHpTexts ? TextAlignmentOptions.Right : TextAlignmentOptions.Center, Vector2.zero, UITextAreaSize, log);
+			hpPercentText.gameObject.SetActive(enableHpPercent);
 
-			RectTransform hpPercentRect = hpPercentObj.GetComponent<RectTransform>();
+			RectTransform hpPercentRect = hpPercentText.GetComponent<RectTransform>();
 			if (enableBothHpTexts)
 			{
 				hpPercentRect.anchorMin = new Vector2(1f, 0.5f);
@@ -259,51 +256,24 @@ namespace MarsarahTweaks.Features.UI
 				hpPercentRect.anchoredPosition = Vector2.zero;
 			}
 
-			var hpPercentText = hpPercentObj.AddComponent<TextMeshProUGUI>();
-			hpPercentText.font = font;
-			hpPercentText.fontSize = 12f;
-			hpPercentText.alignment = enableBothHpTexts ? TextAlignmentOptions.Right : TextAlignmentOptions.Center;
-			hpPercentText.color = Color.white;
-
-			// Taming text (bottom-right, below the bar)
-			GameObject tamingObj = new GameObject("TamingText", typeof(RectTransform));
-			tamingObj.SetActive(enableTamingText);
-			tamingObj.transform.SetParent(healthTransform, false);
-
-			RectTransform tamingRect = tamingObj.GetComponent<RectTransform>();
-			tamingRect.anchorMin = new Vector2(1f, 0f);
-			tamingRect.anchorMax = new Vector2(1f, 0f);
-			tamingRect.pivot = new Vector2(1f, 0f);
-			tamingRect.anchoredPosition = new Vector2(-3f, -14f); // slightly below the bar
-
-			var tamingText = tamingObj.AddComponent<TextMeshProUGUI>();
-			tamingText.font = font;
-			tamingText.fontSize = 11f;
-			tamingText.alignment = TextAlignmentOptions.BottomRight;
-			tamingText.color = Color.white;
-			tamingText.text = ""; // start empty
-
-			// Store all three
+			// Store cache
 			_hpTextCache.Add(hudData, new HpTexts
 			{
 				HP = hpText,
-				HpPercent = hpPercentText,
-				Taming = tamingText
+				HpPercent = hpPercentText
 			});
 		}
 
-		private static void UpdateText(Character character, object hudData, bool enableMainBars)
+		private static void UpdateHpText(Character character, object hudData, bool enableMainBars)
 		{
 			if (!_hpTextCache.TryGetValue(hudData, out var hpTexts)) return;
 
 			bool enableHpText = ConfigManager.ShowEnemyHp.Value && enableMainBars;
 			bool enableHpPercent = ConfigManager.ShowEnemyHpPercent.Value && enableMainBars;
-			bool enableTamingText = ConfigManager.ShowTamingProgress.Value && enableMainBars;
 			bool enableBothHpTexts = enableHpText && enableHpPercent;
 
 			hpTexts.HP.gameObject.SetActive(enableHpText);
 			hpTexts.HpPercent.gameObject.SetActive(enableHpPercent);
-			hpTexts.Taming.gameObject.SetActive(enableTamingText); 
 
 			if (!enableMainBars) return;
 
@@ -316,9 +286,6 @@ namespace MarsarahTweaks.Features.UI
 
 			hpTexts.HP.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
 			hpTexts.HpPercent.text = $"{Mathf.RoundToInt(frac * 100f)}%";
-
-			// Update tamed creatures progress
-			UpdateTamingText(character, hpTexts.Taming, enableTamingText);
 		}
 
 		private static void UpdateHpTextLayout(HpTexts hpTexts, bool enableBoth)
@@ -358,48 +325,6 @@ namespace MarsarahTweaks.Features.UI
 			}
 		}
 
-		private static void UpdateTamingText(Character character, TextMeshProUGUI tamingText, bool enabledByConfig)
-		{
-			if (!enabledByConfig)
-			{
-				tamingText.gameObject.SetActive(false);
-				return;
-			}
-
-			if (character.TryGetComponent<Tameable>(out var tameable))
-			{
-				if (!tameable.IsTamed())
-				{
-					int tamingProgress = 0;
-					if (GetTamenessMethod != null)
-						tamingProgress = (int)GetTamenessMethod.Invoke(tameable, null);
-
-					tamingText.gameObject.SetActive(tamingProgress != 0);
-
-					if (tamingProgress != 0)
-					{
-						string status = tameable.GetStatusString();
-
-						tamingText.text = $"Taming: {tamingProgress}%";
-						tamingText.color = status switch
-						{
-							"$hud_tamehungry" => new Color(1f, 0.549f, 0f),
-							"$hud_tamefrightened" => Color.red,
-							_ => Color.cyan // $hud_tameinprogress, hud_tamehappy
-						};
-					}
-				}
-				else
-				{
-					tamingText.gameObject.SetActive(false);
-				}
-			}
-			else
-			{
-				tamingText.gameObject.SetActive(false);
-			}
-		}
-
 		private static void UpdateAlertAndName(Character character, object hudData, bool enable)
 		{
 			var alertedObj = hud_m_alerted_Field?.GetValue(hudData) as RectTransform;
@@ -427,7 +352,9 @@ namespace MarsarahTweaks.Features.UI
 						nameText.color = Color.white;
 				}
 				else
+				{
 					nameText.color = Color.white;
+				}
 			}
 		}
 	}

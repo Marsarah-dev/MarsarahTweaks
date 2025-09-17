@@ -2,7 +2,7 @@
  ******* DONE, NOT RELEASED *******
 
    A. Fixes
-      - Fixed Blue Silver Brazier flame and coal position to avoid shadow flickers under it
+      - Fixed Blue Silver Hanging Brazier flame and coal position to avoid shadow flickers under it
 
    B. Updates
       
@@ -25,6 +25,8 @@
  ******* TODO *******
 
  - Automatically disable Nameplates, item quality and item durability configs if BetterUI is detected
+ - Add automatic toggles to configs if conflicting mods are present
+ - check.implement BetterEnemyNamepletes for players
  - Fix weather weights - need to look into weather schedule
  - Add new clause for Permissions in readme: "You are free to take inspiration or implement similar features, but please do so with your own code and assets."
    
@@ -78,6 +80,7 @@
       - Create a Vote to Sleep section, where a player can trigger a vote to sleep and if the majority votes yes, then time is skipped as sleeping.
         - If one or more players are in combat (enemies nearby), then the vote is entirely skipped and no time is passed.
       - Destroy ship with a hammer
+      - Make Boar eat Yellor Mushrooms
 
    F. New QOL
       - Add Less Fireplace Smoke - Can choose a percentage in config

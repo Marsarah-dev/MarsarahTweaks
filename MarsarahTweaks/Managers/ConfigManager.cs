@@ -165,7 +165,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata EnemyNameplates = new ConfigMetadata("16 - Better Enemy Nameplates", "Modifies the size and colors of enemy nameplates and colors the name according to alerted/aggravated status");
 			public static readonly ConfigMetadata EnemyHp = new ConfigMetadata("17 - Show Enemy HP", "Displays current and max HP of enemies. Better Enemy Nameplates must be enabled");
 			public static readonly ConfigMetadata EnemyHpPercent = new ConfigMetadata("18 - Show Enemy HP Percent", "Displays current HP percentage of enemies. Better Enemy Nameplates must be enabled");
-			public static readonly ConfigMetadata TamingProgress = new ConfigMetadata("19 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing. Better Enemy Nameplates must be enabled");
+			public static readonly ConfigMetadata TamingProgress = new ConfigMetadata("19 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing under the HP bar. This is independent of Better Enemy Nameplates");
 			public static readonly ConfigMetadata ItemQualityIndicator = new ConfigMetadata("20 - Better Item Quality Indicator", "Changes the indicator for armor and weapons from numbers to symbols");
 			public static readonly ConfigMetadata ItemQualityIndicatorVertical = new ConfigMetadata("21 - Use Vertical Alignment for Item Quality", "Position the symbols vertically instead of horizontally for item quality. Better Item Quality Inicator needs to be enabled");
 			public static readonly ConfigMetadata ItemQualitySymbol = new ConfigMetadata("22 - Symbol For Item Quality", "Choose the symbol used for the item quality indicator. Better Item Quality Inicator needs to be enabled");

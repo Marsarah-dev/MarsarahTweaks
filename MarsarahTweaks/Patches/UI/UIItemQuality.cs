@@ -4,6 +4,7 @@ using MarsarahTweaks.Managers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
@@ -13,9 +14,9 @@ using static MarsarahTweaks.Managers.ConfigManager;
 
 namespace MarsarahTweaks.Patches.UI
 {
-	internal class UIItemQuality
+	internal class UIItemQuality : UIController
 	{
-		private static readonly LogManager log = new LogManager("UI Item Quality", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("UI Item Quality", LogManager.LogLevel.Info);
 
 		// Backup
 		private static readonly Dictionary<TMP_Text, (float fontSize, Color color)> _originalStyles = new Dictionary<TMP_Text, (float fontSize, Color color)>();
@@ -41,6 +42,12 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static void Postfix(ref InventoryGrid __instance, ref Player player, ItemDrop.ItemData dragItem)
 			{
+				if (BetterUILoaded && ConfigManager.BetterItemQualityIndicator.Value)
+				{
+					log.Warn("Cannot enable 'Better Item Quality Indicator' with 'BetterUI' installed. Letting BetterUI handle the quality indicator.");
+					ConfigManager.BetterItemQualityIndicator.Value = false;
+				}
+
 				var inventory = inventoryField.GetValue(__instance) as Inventory;
 				if (inventory == null) return;
 				var elements = elementsField.GetValue(__instance) as IList;
@@ -79,7 +86,6 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		// Helpers
-
 		public static void UpdateSymbols()
 		{
 			log.Info("UpdateSymbols called");

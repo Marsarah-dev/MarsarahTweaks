@@ -184,6 +184,7 @@
     <Compile Include="Patches\UI\UIShowOwnedResources.cs" />
     <Compile Include="Patches\UI\UISmartBiome.cs" />
     <Compile Include="Patches\UI\UISummonCounter.cs" />
+    <Compile Include="Patches\UI\UITamingProgress.cs" />
     <Compile Include="Patches\UI\UITimeAndDay.cs" />
     <Compile Include="Patches\WeaponStaminaChanges.cs" />
     <Compile Include="Patches\Features\WeatherChanges.cs" />
