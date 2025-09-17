@@ -18,11 +18,15 @@
    H. New UI
       - Added Better Enemy Nameplates
       - Added Better Item Quality Indicator
+      - Added Item Durability Color
 
 
  ******* TODO *******
 
- - Fix the Extra Lights section showing when nothing is unlocked
+ - Fix Better Item Quality Indicator toggle off to restore font size and color
+ - Fix Blue Silver Brazier flame position
+ - Fix weather weights - need to look into weather schedule
+ - Add new clause for Permissions in readme: "You are free to take inspiration or implement similar features, but please do so with your own code and assets."
    
    * Prep for update
      - New gear costs (done)

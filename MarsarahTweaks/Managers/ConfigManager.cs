@@ -575,6 +575,10 @@ namespace MarsarahTweaks.Managers
 					case var name when name == Configs.UISmartBiome.Name:
 						UISmartBiome.UpdateBiomeWeights();
 						break;
+
+					case var name when name == Configs.ItemQualityIndicator.Name:
+						UIItemQuality.UpdateSymbols();
+						break;
 				}
 			}
 

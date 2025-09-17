@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
 using static MarsarahTweaks.Managers.ConfigManager;
 
@@ -15,6 +16,9 @@ namespace MarsarahTweaks.Patches.UI
 	internal class UIItemQuality
 	{
 		private static readonly LogManager log = new LogManager("UI Item Quality", LogManager.LogLevel.Warning);
+
+		// Backup
+		private static readonly Dictionary<TMP_Text, (float fontSize, Color color)> _originalStyles = new Dictionary<TMP_Text, (float fontSize, Color color)>();
 
 		// Reflection cache
 		private static readonly FieldInfo inventoryField = null;
@@ -37,31 +41,84 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static void Postfix(ref InventoryGrid __instance, ref Player player, ItemDrop.ItemData dragItem)
 			{
-				if (!ConfigManager.BetterItemQualityIndicator.Value) return;
-
 				var inventory = inventoryField.GetValue(__instance) as Inventory;
 				if (inventory == null) return;
+				var elements = elementsField.GetValue(__instance) as IList;
+				if (elements == null) return;
 
 				int width = inventory.GetWidth();
 				foreach (var item in inventory.GetAllItems())
 				{
 					int index = item.m_gridPos.y * width + item.m_gridPos.x;
-					var elements = elementsField.GetValue(__instance) as IList; // use cached
-					if (elements == null || index < 0 || index >= elements.Count)
+					if (index < 0 || index >= elements.Count)
 						continue;
 
 					var elemObj = elements[index];
 					var qualityText = qualityField.GetValue(elemObj) as TMP_Text;
-					if (qualityText != null && item.m_shared.m_maxQuality > 1)
+					if (qualityText == null || item.m_shared.m_maxQuality <= 1)
+						continue;
+
+					if (ConfigManager.BetterItemQualityIndicator.Value)
+					{
+						// Apply symbols
 						DrawSymbols(qualityText, item.m_quality);
+					}
+					else
+					{
+						// Restore font/color if backup exists
+						if (_originalStyles.TryGetValue(qualityText, out var backup))
+						{
+							qualityText.fontSize = backup.fontSize;
+							qualityText.color = backup.color;
+							_originalStyles.Remove(qualityText);
+							log.Info("Restored font and color");
+						}
+					}
 				}
 			}
 		}
 
-		// Helper
+		// Helpers
+
+		public static void UpdateSymbols()
+		{
+			log.Info("UpdateSymbols called");
+			if (Player.m_localPlayer == null) return;
+			log.Info($"Player: {Player.m_localPlayer.name}");
+
+			var gridType = typeof(InventoryGrid);
+
+			// Find UpdateGui(Player, ItemDrop.ItemData)
+			var updateGui = gridType.GetMethod("UpdateGui",
+				BindingFlags.Instance | BindingFlags.NonPublic);
+			if (updateGui == null)
+			{
+				log.Error("Could not find InventoryGrid.UpdateGui");
+				return;
+			}
+
+			// Access private field m_dragItem
+			var dragItemField = gridType.GetField("m_dragItem",
+				BindingFlags.Instance | BindingFlags.NonPublic);
+
+			foreach (var grid in UnityEngine.Object.FindObjectsByType<InventoryGrid>(FindObjectsSortMode.None))
+			{
+				var dragItem = dragItemField?.GetValue(grid);
+				log.Info("Invoking UpdateGui");
+				updateGui.Invoke(grid, new object[] { Player.m_localPlayer, dragItem });
+			}
+		}
+
 		private static void DrawSymbols(TMP_Text textComponent, int quality)
 		{
 			if (textComponent == null) return;
+
+			// Backup original once
+			if (!_originalStyles.ContainsKey(textComponent))
+			{
+				_originalStyles[textComponent] = (textComponent.fontSize, textComponent.color);
+				log.Info("Backed up font and color");
+			}
 
 			bool vertical = ConfigManager.ItemQualityIndicatorVertical.Value;
 			textComponent.textWrappingMode = TextWrappingModes.PreserveWhitespaceNoWrap;
@@ -97,6 +154,7 @@ namespace MarsarahTweaks.Patches.UI
 				_ => Color.yellow
 			};
 
+			// Apply symbol formatting
 			textComponent.text = symbolText;
 			textComponent.color = symbolColor;
 			textComponent.fontSize = 7f; 

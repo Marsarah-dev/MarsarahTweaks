@@ -16,25 +16,26 @@ namespace MarsarahTweaks.Patches.BuildPieces
 	{
 		private static readonly LogManager log = new LogManager("Build Piece Controller", LogManager.LogLevel.Warning);
 
-		[HarmonyPatch(typeof(Player), "Awake")]
-		internal static class ObjectDB_Awake_Patch
+		[HarmonyPatch(typeof(Player), "OnSpawned")] // Awake
+		internal static class Player_Awake_Patch
 		{
-			private static bool initialized;
+			//private static bool initialized;
 
 			static void Postfix()
 			{
-				if (initialized) return;
+				//if (initialized) return;
 				bool toggled = true;
-				
+
 				// Run initial visibility sync
 				toggled &= SilverSconce.ToggleVisibility();
 				toggled &= ColoredDvergerLanterns.ToggleVisibility();
 				toggled &= GreenStandingBrazier.ToggleVisibility();
 				toggled &= SilverHangingBrazier.ToggleVisibility();
 
-				initialized = toggled;
+				//initialized = toggled;
 
-				if (initialized)
+				//if (initialized)
+				if (toggled)
 				{
 					log.Info("Initial build piece visibility toggled.");
 				}
