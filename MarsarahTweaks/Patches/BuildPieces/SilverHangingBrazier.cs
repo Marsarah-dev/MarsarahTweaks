@@ -271,13 +271,36 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				GameObject clone = UnityEngine.Object.Instantiate(sourceTransform.gameObject, targetPrefab.transform);
 				clone.name = variant;
 
+				foreach (Transform child in clone.transform)
+				{
+					log.Info($"Child of {variant}: {child.name}");
+				}
+
 				// Copy transforms exactly
 				clone.transform.localPosition = sourceTransform.localPosition;
 				clone.transform.localRotation = sourceTransform.localRotation;
 				clone.transform.localScale = sourceTransform.localScale;
 
 				// Apply upward offset (adjust Y as needed)
-				clone.transform.localPosition += new Vector3(0f, 0.5f, 0f);
+				clone.transform.localPosition += new Vector3(0f, 0.46f, 0f); // This is the correct position for light to avoid weird shadow flickering below the sconce
+
+				// Adjust coal child position separately
+				foreach (Transform child in clone.transform)
+				{
+					switch (child.name)
+					{
+						// Lift coal meshes slightly to prevent clipping
+						case "Quad (1)":
+						case "Coal":
+						case "Coal (1)":
+						case "Coal (2)":
+						case "Coal (3)":
+						case "Coal (4)":
+						case "Coal (5)":
+							child.localPosition += new Vector3(0f, 0.04f, 0f); // Adjustment upwards to avoid clipping
+							break;
+					}
+				}
 
 				if (variant == "_enabled_high")
 					clone.SetActive(true);

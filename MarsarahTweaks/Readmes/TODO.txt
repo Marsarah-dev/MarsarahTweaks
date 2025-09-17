@@ -2,6 +2,7 @@
  ******* DONE, NOT RELEASED *******
 
    A. Fixes
+      - Fixed Blue Silver Brazier flame and coal position to avoid shadow flickers under it
 
    B. Updates
       
@@ -23,8 +24,7 @@
 
  ******* TODO *******
 
- - Fix Better Item Quality Indicator toggle off to restore font size and color
- - Fix Blue Silver Brazier flame position
+ - Automatically disable Nameplates, item quality and item durability configs if BetterUI is detected
  - Fix weather weights - need to look into weather schedule
  - Add new clause for Permissions in readme: "You are free to take inspiration or implement similar features, but please do so with your own code and assets."
    
