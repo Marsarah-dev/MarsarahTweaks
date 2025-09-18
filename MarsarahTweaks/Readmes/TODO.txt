@@ -17,6 +17,7 @@
    G. New Build Pieces
 
    H. New UI
+      - NOTE: Auto-detects BetterUI and disables overlapping configs
       - Added Better Enemy Nameplates
       - Added Better Item Quality Indicator
       - Added Item Durability Color
@@ -24,10 +25,10 @@
 
  ******* TODO *******
 
- - Automatically disable Nameplates, item quality and item durability configs if BetterUI is detected
  - Add automatic toggles to configs if conflicting mods are present
- - check.implement BetterEnemyNamepletes for players
+ - Check/implement BetterEnemyNamepletes for players
  - Fix weather weights - need to look into weather schedule
+ - Add SmartDropbox
  - Add new clause for Permissions in readme: "You are free to take inspiration or implement similar features, but please do so with your own code and assets."
    
    * Prep for update
@@ -80,7 +81,7 @@
       - Create a Vote to Sleep section, where a player can trigger a vote to sleep and if the majority votes yes, then time is skipped as sleeping.
         - If one or more players are in combat (enemies nearby), then the vote is entirely skipped and no time is passed.
       - Destroy ship with a hammer
-      - Make Boar eat Yellor Mushrooms
+      - Make Boar eat Yellow Mushrooms
 
    F. New QOL
       - Add Less Fireplace Smoke - Can choose a percentage in config
@@ -104,6 +105,7 @@
       - Make my UI elements draggable
       - Create Smart Pins - admin predefines pins and players can only put the predefined pins on map
       - Add a message in the center of the HUD when a trinket is triggered
+      - Modify the symbols next to time of day to indicate weather, not time of day
 
    I. Other
       - Swap relevant configs from bool to numbers where applicable

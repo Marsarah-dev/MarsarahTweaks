@@ -58,7 +58,7 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static bool lastOnlinePlayersUnderMinimap = ConfigManager.OnlinePlayersUnderMinimap.Value;
 			private static readonly float UIPartyPlayerTextDistanceV = -25f; // goes down;
-			private static readonly bool minimalStatusEffectsLoaded = AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "MinimalStatusEffects");
+			//private static readonly bool minimalStatusEffectsLoaded = AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "MinimalStatusEffects");
 
 			private static void Postfix(Hud __instance)
 			{
@@ -72,11 +72,13 @@ namespace MarsarahTweaks.Patches.UI
 					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
 				}
 
-				if (minimalStatusEffectsLoaded && ConfigManager.OnlinePlayersUnderMinimap.Value)
+				/*if (minimalStatusEffectsLoaded && ConfigManager.OnlinePlayersUnderMinimap.Value)
 				{
 					log.Warn("Cannot enable 'Online Players Under Minimap' with 'Minimal Status Effects' enabled.");
 					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
-				}
+				}*/
+
+				//CompatibilityManager.DisableIfIncompatible(CompatibilityManager.MinimalStatusEffects, ConfigManager.OnlinePlayersUnderMinimap);
 
 				if (ConfigManager.ShowOnlinePlayers.Value)
 				{

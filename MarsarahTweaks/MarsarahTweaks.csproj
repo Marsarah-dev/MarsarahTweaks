@@ -109,6 +109,7 @@
     <Compile Include="Managers\AssetManager.cs" />
     <Compile Include="Managers\ConfigManager.cs" />
     <Compile Include="Managers\LogManager.cs" />
+    <Compile Include="Managers\CompatibilityManager.cs" />
     <Compile Include="Managers\MPrefabManager.cs" />
     <Compile Include="MarsarahTweaks.cs" />
     <Compile Include="Patches\BuildPieces\BuildPieceController.cs" />

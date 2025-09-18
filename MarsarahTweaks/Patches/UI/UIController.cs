@@ -21,12 +21,12 @@ namespace MarsarahTweaks.Patches.UI
 		internal static bool showPlayerList = true;
 
 		// Other data
-		internal static readonly bool BetterUILoaded = false;
+		/*internal static readonly bool BetterUILoaded = false;
 
 		static UIController()
 		{
 			BetterUILoaded = AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "BetterUI");
-		}
+		}*/
 
 		// This is needed since Unity 6 update to set the default font for TMP fonts since LiberationSans is missing and was default
 		[HarmonyPatch(typeof(Hud), "Awake")]

@@ -29,6 +29,8 @@ namespace MarsarahTweaks
 
 		private readonly Harmony harmony = new Harmony(ModGUID);
 
+		private static readonly LogManager log = new LogManager("Main", LogManager.LogLevel.Info);
+
 		void Awake()
 		{
 			LogManager.SetGlobalLogLevel(LogManager.LogLevel.Info); // None, Error, Warning, Info
@@ -37,6 +39,13 @@ namespace MarsarahTweaks
 			UISmartBiome.UpdateBiomeWeights(); // Set the correct biome weight dictionary at startup
 
 			harmony.PatchAll();
+		}
+
+		private void Start()
+		{
+			CompatibilityManager.Initialize();
+			CompatibilityManager.UpdateIncompatibilities();
+			//CompatibilityManager.DumpAllLoadedMods();
 		}
 
 		void Update()

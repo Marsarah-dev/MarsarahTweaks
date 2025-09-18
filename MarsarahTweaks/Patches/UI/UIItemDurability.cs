@@ -12,7 +12,7 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIItemDurability : UIController
 	{
-		private static readonly LogManager log = new LogManager("UI Item Durability", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("UI Item Durability", LogManager.LogLevel.Warning);
 
 		// Reflection cache for HotkeyBar
 		private static readonly FieldInfo hotkeyItemsField = null;
@@ -76,11 +76,13 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static void Postfix(HotkeyBar __instance, Player player)
 			{
-				if (BetterUILoaded && ConfigManager.ColoredItemDurabilityBar.Value)
+				/*if (BetterUILoaded && ConfigManager.ColoredItemDurabilityBar.Value)
 				{
 					log.Warn("Cannot enable 'Colored Item Durability Bar' with 'BetterUI' installed. Letting BetterUI handle the durability indicator.");
 					ConfigManager.ColoredItemDurabilityBar.Value = false;
-				}
+				}*/
+
+				//CompatibilityManager.DisableIfIncompatible(CompatibilityManager.BetterUI, ConfigManager.ColoredItemDurabilityBar, "Letting BetterUI handle the durability indicator.");
 
 				if (!player || player.IsDead()) return;
 
@@ -113,17 +115,18 @@ namespace MarsarahTweaks.Patches.UI
 			}
 		}
 
-
 		[HarmonyPatch(typeof(InventoryGrid), "UpdateGui")]
 		public static class ItemDurability_InventoryGridPatch
 		{
 			private static void Postfix(InventoryGrid __instance)
 			{
-				if (BetterUILoaded && ConfigManager.ColoredItemDurabilityBar.Value)
+				/*if (BetterUILoaded && ConfigManager.ColoredItemDurabilityBar.Value)
 				{
 					log.Warn("Cannot enable 'Colored Item Durability Bar' with 'BetterUI' installed. Letting BetterUI handle the durability indicator.");
 					ConfigManager.ColoredItemDurabilityBar.Value = false;
-				}
+				}*/
+
+				//CompatibilityManager.DisableIfIncompatible(CompatibilityManager.BetterUI, ConfigManager.ColoredItemDurabilityBar, "Letting BetterUI handle the durability indicator.");
 
 				var inventory = inventoryField.GetValue(__instance) as Inventory;
 				if (inventory == null) return;

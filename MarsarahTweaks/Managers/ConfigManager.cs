@@ -417,6 +417,8 @@ namespace MarsarahTweaks.Managers
 			log.Info($"Config setting '{configName}' changed!");
 			Config.Save();
 
+			CompatibilityManager.UpdateIncompatibilities();
+
 			if (ObjectDB.instance == null || ZNetScene.instance == null) return;
 			if (ZNet.instance == null) return;
 			var spawnSystem = Object.FindFirstObjectByType<SpawnSystem>();

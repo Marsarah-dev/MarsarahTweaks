@@ -14,7 +14,7 @@ namespace MarsarahTweaks.Features.UI
 {
 	internal class UIEnemyNameplates : UIController
 	{
-		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Warning);
 
 		// New sizes
 		private const float BarHeight = 12f;
@@ -81,7 +81,7 @@ namespace MarsarahTweaks.Features.UI
 			private static void Postfix(ref EnemyHud __instance)
 			{
 				if (__instance == null) return;
-				if (BetterUILoaded) return;
+				if (CompatibilityManager.BetterUI.Loaded) return;
 
 				if (ConfigManager.BetterEnemyNameplates.Value)
 				{
@@ -102,7 +102,7 @@ namespace MarsarahTweaks.Features.UI
 			private static void Postfix(EnemyHud __instance, Character c)
 			{
 				if (c == null || m_hudsField == null) return;
-				if (BetterUILoaded) return;
+				if (CompatibilityManager.BetterUI.Loaded) return;
 
 				var huds = m_hudsField.GetValue(__instance) as IDictionary;
 				if (huds == null || !huds.Contains(c)) return;
@@ -129,11 +129,13 @@ namespace MarsarahTweaks.Features.UI
 		{
 			private static void Postfix(EnemyHud __instance)
 			{
-				if (BetterUILoaded && ConfigManager.BetterEnemyNameplates.Value)
+				/*if (BetterUILoaded && ConfigManager.BetterEnemyNameplates.Value)
 				{
 					log.Warn("Cannot enable 'Better Enemy Nameplates' with 'BetterUI' installed. Letting BetterUI handle enemy nameplates.");
 					ConfigManager.BetterEnemyNameplates.Value = false;
-				}
+				}*/
+
+				//CompatibilityManager.DisableIfIncompatible(CompatibilityManager.BetterUI, ConfigManager.BetterEnemyNameplates, "Letting BetterUI handle enemy nameplates.");
 
 				if (m_hudsField == null) return;
 
@@ -284,7 +286,7 @@ namespace MarsarahTweaks.Features.UI
 			float maxHealth = character.GetMaxHealth();
 			float frac = Mathf.Clamp01(currentHealth / Math.Max(1f, maxHealth));
 
-			hpTexts.HP.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
+			hpTexts.HP.text = $"{Mathf.CeilToInt(currentHealth)} - {Mathf.CeilToInt(maxHealth)}";
 			hpTexts.HpPercent.text = $"{Mathf.RoundToInt(frac * 100f)}%";
 		}
 
