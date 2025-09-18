@@ -33,6 +33,7 @@ namespace MarsarahTweaks.Features.UI
 		private static readonly FieldInfo hud_m_character_Field;
 		private static readonly FieldInfo hud_m_healthFast_Field;
 		private static readonly FieldInfo hud_m_healthSlow_Field;
+		private static readonly FieldInfo hud_m_healthFastFriendly_Field;
 		private static readonly FieldInfo hud_m_name_Field;
 		private static readonly FieldInfo hud_m_alerted_Field;
 		private static readonly FieldInfo hud_m_aware_Field;
@@ -64,6 +65,7 @@ namespace MarsarahTweaks.Features.UI
 			hud_m_character_Field = hudDataType.GetField("m_character", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			hud_m_healthFast_Field = hudDataType.GetField("m_healthFast", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			hud_m_healthSlow_Field = hudDataType.GetField("m_healthSlow", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			hud_m_healthFastFriendly_Field = hudDataType.GetField("m_healthFastFriendly", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			hud_m_name_Field = hudDataType.GetField("m_name", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			hud_m_alerted_Field = hudDataType.GetField("m_alerted", BindingFlags.Public | BindingFlags.Instance);
 			hud_m_aware_Field = hudDataType.GetField("m_aware", BindingFlags.Public | BindingFlags.Instance);
@@ -118,8 +120,9 @@ namespace MarsarahTweaks.Features.UI
 
 				GuiBar fastBar = hud_m_healthFast_Field?.GetValue(hudData) as GuiBar;
 				GuiBar slowBar = hud_m_healthSlow_Field?.GetValue(hudData) as GuiBar;
+				GuiBar fastFriendlyBar = hud_m_healthFastFriendly_Field?.GetValue(hudData) as GuiBar;
 
-				ApplyBarSettings(c, healthTransform, fastBar, slowBar, ConfigManager.BetterEnemyNameplates.Value);
+				ApplyBarSettings(c, healthTransform, fastBar, slowBar, fastFriendlyBar, ConfigManager.BetterEnemyNameplates.Value);
 				AddHpText(hudData, healthTransform, ConfigManager.BetterEnemyNameplates.Value);
 			}
 		}
@@ -151,7 +154,7 @@ namespace MarsarahTweaks.Features.UI
 			}
 		}
 
-		private static void ApplyBarSettings(Character c, RectTransform health, GuiBar fastBar, GuiBar slowBar, bool enable)
+		private static void ApplyBarSettings(Character c, RectTransform health, GuiBar fastBar, GuiBar slowBar, GuiBar fastFriendlyBar, bool enable)
 		{
 			// Backup
 			if (!c.IsBoss() && DefaultBarHeight == -1f)
@@ -179,6 +182,8 @@ namespace MarsarahTweaks.Features.UI
 			health.sizeDelta = new Vector2(health.sizeDelta.x, targetHeight);
 			fastBar.m_bar.sizeDelta = new Vector2(fastBar.m_bar.sizeDelta.x, targetHeight);
 			slowBar.m_bar.sizeDelta = new Vector2(slowBar.m_bar.sizeDelta.x, targetHeight);
+			if (fastFriendlyBar != null)
+				fastFriendlyBar.m_bar.sizeDelta = new Vector2(fastFriendlyBar.m_bar.sizeDelta.x, targetHeight);
 
 			_lastBarHeight[health] = targetHeight;
 

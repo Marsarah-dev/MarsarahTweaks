@@ -19,10 +19,10 @@
    G. New Build Pieces
 
    H. New UI
-      - NOTE: Auto-detects BetterUI and disables overlapping configs
       - Added Better Enemy Nameplates
       - Added Better Item Quality Indicator
       - Added Item Durability Color
+      - The symbols next to the time of day now indicate current weather as well. If the weather is clear, then the symbol changes according to the time of day
 
 
  ******* TODO *******
