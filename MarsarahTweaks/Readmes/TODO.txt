@@ -5,6 +5,7 @@
       - Fixed Blue Silver Hanging Brazier flame and coal position to avoid shadow flickers under it
 
    B. Updates
+      - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed.
       
    C. New Grind Reduction
 

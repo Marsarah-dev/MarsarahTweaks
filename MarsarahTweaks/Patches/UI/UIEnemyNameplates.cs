@@ -17,7 +17,7 @@ namespace MarsarahTweaks.Features.UI
 		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Warning);
 
 		// New sizes
-		private const float BarHeight = 12f;
+		private const float BarHeight = 14f;
 		private const float BarHeightBoss = 18f;
 
 		// Backups
@@ -208,7 +208,7 @@ namespace MarsarahTweaks.Features.UI
 
 			string UITMPFontName = "Valheim-AveriaSansLibre";
 			Vector2 UITextAreaSize = new Vector2(100f, 14f); // width, height
-			int UITextFontSize = 12;
+			int UITextFontSize = 11;
 
 			// HP text (cur / max)
 			var hpText = CreateTMPTextObject("HpText", healthTransform.gameObject, Color.white, UITMPFontName, UITextFontSize, enableBothHpTexts ? TextAlignmentOptions.Left : TextAlignmentOptions.Center, Vector2.zero, UITextAreaSize, log);
@@ -220,14 +220,14 @@ namespace MarsarahTweaks.Features.UI
 				hpTextRect.anchorMin = new Vector2(0f, 0.5f);
 				hpTextRect.anchorMax = new Vector2(0f, 0.5f);
 				hpTextRect.pivot = new Vector2(0f, 0.5f);
-				hpTextRect.anchoredPosition = new Vector2(3f, 0f);
+				hpTextRect.anchoredPosition = new Vector2(3f, 1f);
 			}
 			else
 			{
 				hpTextRect.anchorMin = new Vector2(0.5f, 0.5f);
 				hpTextRect.anchorMax = new Vector2(0.5f, 0.5f);
 				hpTextRect.pivot = new Vector2(0.5f, 0.5f);
-				hpTextRect.anchoredPosition = Vector2.zero;
+				hpTextRect.anchoredPosition = new Vector2(0f, 1f);
 			}
 
 			// HpPercent text (%)
@@ -240,14 +240,14 @@ namespace MarsarahTweaks.Features.UI
 				hpPercentRect.anchorMin = new Vector2(1f, 0.5f);
 				hpPercentRect.anchorMax = new Vector2(1f, 0.5f);
 				hpPercentRect.pivot = new Vector2(1f, 0.5f);
-				hpPercentRect.anchoredPosition = new Vector2(-3f, 0f);
+				hpPercentRect.anchoredPosition = new Vector2(-3f, 1f);
 			}
 			else
 			{
 				hpPercentRect.anchorMin = new Vector2(0.5f, 0.5f);
 				hpPercentRect.anchorMax = new Vector2(0.5f, 0.5f);
 				hpPercentRect.pivot = new Vector2(0.5f, 0.5f);
-				hpPercentRect.anchoredPosition = Vector2.zero;
+				hpPercentRect.anchoredPosition = new Vector2(0f, 1f);
 			}
 
 			// Store cache
@@ -291,14 +291,14 @@ namespace MarsarahTweaks.Features.UI
 			{
 				hpRect.anchorMin = hpRect.anchorMax = new Vector2(0f, 0.5f);
 				hpRect.pivot = new Vector2(0f, 0.5f);
-				hpRect.anchoredPosition = new Vector2(3f, 0f);
+				hpRect.anchoredPosition = new Vector2(3f, 1f);
 				hpTexts.HP.alignment = TextAlignmentOptions.Left;
 			}
 			else
 			{
 				hpRect.anchorMin = hpRect.anchorMax = new Vector2(0.5f, 0.5f);
 				hpRect.pivot = new Vector2(0.5f, 0.5f);
-				hpRect.anchoredPosition = Vector2.zero;
+				hpRect.anchoredPosition = new Vector2(0f, 1f);
 				hpTexts.HP.alignment = TextAlignmentOptions.Center;
 			}
 
@@ -308,14 +308,14 @@ namespace MarsarahTweaks.Features.UI
 			{
 				hpPercentRect.anchorMin = hpPercentRect.anchorMax = new Vector2(1f, 0.5f);
 				hpPercentRect.pivot = new Vector2(1f, 0.5f);
-				hpPercentRect.anchoredPosition = new Vector2(-3f, 0f);
+				hpPercentRect.anchoredPosition = new Vector2(-3f, 1f);
 				hpTexts.HpPercent.alignment = TextAlignmentOptions.Right;
 			}
 			else
 			{
 				hpPercentRect.anchorMin = hpPercentRect.anchorMax = new Vector2(0.5f, 0.5f);
 				hpPercentRect.pivot = new Vector2(0.5f, 0.5f);
-				hpPercentRect.anchoredPosition = Vector2.zero;
+				hpPercentRect.anchoredPosition = new Vector2(0f, 1f);
 				hpTexts.HpPercent.alignment = TextAlignmentOptions.Center;
 			}
 		}
