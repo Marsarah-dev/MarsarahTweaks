@@ -3,6 +3,7 @@
 
    A. Fixes
       - Fixed Blue Silver Hanging Brazier flame and coal position to avoid shadow flickers under it
+      - Fixed Clearer Weather feature to apply defined weather weights properly every time the weather is calculated (initially they were applied only at logon)
 
    B. Updates
       - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed.
@@ -26,7 +27,6 @@
 
  ******* TODO *******
 
- - Add automatic toggles to configs if conflicting mods are present
  - Check/implement BetterEnemyNamepletes for players
  - Fix weather weights - need to look into weather schedule
  - Add SmartDropbox

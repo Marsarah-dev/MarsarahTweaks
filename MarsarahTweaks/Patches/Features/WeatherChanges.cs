@@ -1,67 +1,131 @@
 ﻿using HarmonyLib;
+using MarsarahTweaks.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MarsarahTweaks.Managers;
+using UnityEngine;
 
 namespace MarsarahTweaks.Patches.Features
 {
 	internal class WeatherChanges
 	{
-		private static readonly LogManager log = new LogManager("Weather Changes", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Weather Changes", LogManager.LogLevel.Info);
 
-		[HarmonyPatch(typeof(EnvMan), "InitializeBiomeEnvSetup")]
-		class LessFog_Patch
+		private static bool applied = false;
+
+		// New weather values
+		public static readonly Dictionary<(Heightmap.Biome, string), float> weatherWeightChanges = new Dictionary<(Heightmap.Biome, string), float>()
 		{
-			private static void Postfix(EnvMan __instance)
-			{
-				// Run on both server and client - no checks made
+			{ (Heightmap.Biome.Meadows, "Misty"), 0.1f },        // 0.2
+			{ (Heightmap.Biome.Meadows, "Rain"), 0.1f },         // 0.2
+			{ (Heightmap.Biome.Meadows, "ThunderStorm"), 0.1f }, // 0.2
 
+			{ (Heightmap.Biome.Mountain, "SnowStorm"), 0.5f },   // 1
+
+			{ (Heightmap.Biome.Plains, "Heath clear"), 3f },     // 2
+			{ (Heightmap.Biome.Plains, "Misty"), 0.1f },         // 0.4
+			{ (Heightmap.Biome.Plains, "LightRain"), 0.1f },     // 0.4
+
+			{ (Heightmap.Biome.Ocean, "Misty"), 0.05f },         // 0.1
+		};
+
+		// Backup dictionary
+		private static readonly Dictionary<EnvEntry, float> originalWeights = new Dictionary<EnvEntry, float>();
+
+		[HarmonyPatch(typeof(EnvMan), "SelectWeightedEnvironment")]
+		class Patch_SelectWeightedEnvironment
+		{
+			static void Prefix(List<EnvEntry> environments, EnvMan __instance)
+			{
+				if (environments == null || environments.Count == 0) return;
+
+				// Only proceed if config enabled
 				if (ConfigManager.ClearerWeatherEnabled.Value)
 				{
-					foreach (BiomeEnvSetup biome in __instance.m_biomes)
+					if (!applied)
 					{
-						//float totalWeightBefore = 0f;
-						//float totalWeightAfter = 0f;
+						var biome = GetBiomeForEnvironments(environments, __instance);
 
-						foreach (EnvEntry environment in biome.m_environments)
+						foreach (var e in environments)
 						{
-							if (environment?.m_env == null) continue; // Prevent null reference errors
+							// Backup original if not already
+							if (!originalWeights.ContainsKey(e))
+								originalWeights[e] = e.m_weight;
 
-							//totalWeightBefore += environment.m_weight;
-
-							if (weatherWeightChanges.TryGetValue((biome.m_name, environment.m_env.m_name), out float newWeight))
+							if (biome.HasValue && weatherWeightChanges.TryGetValue((biome.Value, e.m_env.m_name), out float newWeight))
 							{
-								log.Info($"Changing old weather weight {environment.m_weight} -> {newWeight} for {environment.m_env.m_name} in biome {biome.m_name}");
-								environment.m_weight = newWeight;
+								log.Info($"Changing weight for {e.m_env.m_name} in {biome.Value}: {e.m_weight} -> {newWeight}");
+								e.m_weight = newWeight;
 							}
-
-							//totalWeightAfter += environment.m_weight;
 						}
-
-						//log.Info($"Biome {biome.m_name}: Total weight before: {totalWeightBefore}, after: {totalWeightAfter}");
 					}
+
+					applied = true;
+				}
+				else if (applied)
+				{
+					// Restore original weights if config disabled
+					foreach (var e in environments)
+					{
+						if (originalWeights.TryGetValue(e, out float originalWeight))
+						{
+							e.m_weight = originalWeight;
+							log.Info($"Restored original weight for {e.m_env.m_name}: {originalWeight}");
+						}
+					}
+
+					applied = false;
 				}
 			}
 
-			// Weather weight changes dictionary
-			static readonly Dictionary<(string biome, string env), float> weatherWeightChanges = new Dictionary<(string biome, string env), float>()
+			static void Postfix(EnvSetup __result, List<EnvEntry> environments, EnvMan __instance)
 			{
-				{ ("Meadows", "Misty"), 0.1f },
-				{ ("Meadows", "Rain"), 0.1f },
-				{ ("Meadows", "ThunderStorm"), 0.1f },
+				if (!ConfigManager.ClearerWeatherEnabled.Value) return;
 
-				{ ("Mountain", "SnowStorm"), 0.2f }, // 0.5
-				{ ("Mountain", "Snow"), 1.5f }, // 2.5
+				if (__result != null && environments != null)
+				{
+					var biome = GetBiomeForEnvironments(environments, __instance);
 
-				{ ("Plains", "Heath clear"), 3f },
-				{ ("Plains", "Misty"), 0.1f },
-				{ ("Plains", "LightRain"), 0.1f },
-
-				{ ("Ocean", "Misty"), 0.5f }
-			};
+					if (biome.HasValue)
+					{
+						log.Info($"Selected environment: {__result.m_name} in biome {biome.Value}");
+						MessageHud.instance.ShowMessage(MessageHud.MessageType.TopLeft,	$"Selected environment: {__result.m_name} in {biome.Value}");
+					}
+				}
+			}
 		}
+
+		private static Heightmap.Biome? GetBiomeForEnvironments(List<EnvEntry> envs, EnvMan envMan)
+		{
+			foreach (var biomeSetup in envMan.m_biomes)
+			{
+				if (biomeSetup.m_environments == envs)
+					return biomeSetup.m_biome;
+			}
+			return null;
+		}
+
+		/*[HarmonyPatch(typeof(EnvMan), "Awake")]
+		class Patch_EnvMan_Awake
+		{
+			static void Postfix(EnvMan __instance)
+			{
+				log.Info("---- Biome → Environment list ----", header: true);
+
+				foreach (var biomeSetup in __instance.m_biomes)
+				{
+					string biomeName = biomeSetup.m_biome.ToString();
+
+					foreach (var entry in biomeSetup.m_environments)
+					{
+						log.Info($"Biome: {biomeName}, Env: {entry.m_env.m_name}, Default weight: {entry.m_weight}");
+					}
+				}
+
+				log.Info("---- End list ----", footer: true);
+			}
+		}*/
 	}
 }
