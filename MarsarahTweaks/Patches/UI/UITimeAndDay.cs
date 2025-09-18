@@ -28,6 +28,58 @@ namespace MarsarahTweaks.Patches.UI
 		private static TMPro.TextMeshProUGUI UITimeEmojiTMP = null;
 		private static Color UITimeEmojiColor;
 
+		private static readonly Dictionary<(Heightmap.Biome, string), string> WeatherEmojis = new Dictionary<(Heightmap.Biome, string), string>()
+		{
+			// Meadows
+			{ (Heightmap.Biome.Meadows, "Clear"), "☀️" },
+			{ (Heightmap.Biome.Meadows, "Rain"), "🌧" },
+			{ (Heightmap.Biome.Meadows, "Misty"), "🌫" },
+			{ (Heightmap.Biome.Meadows, "ThunderStorm"), "⛈" },
+			{ (Heightmap.Biome.Meadows, "LightRain"), "🌦" },
+
+			// BlackForest
+			{ (Heightmap.Biome.BlackForest, "DeepForest Mist"), "🌫" },
+			{ (Heightmap.Biome.BlackForest, "Rain"), "🌧" },
+			{ (Heightmap.Biome.BlackForest, "Misty"), "🌫" },
+			{ (Heightmap.Biome.BlackForest, "ThunderStorm"), "⛈" },
+
+			// Swamp
+			{ (Heightmap.Biome.Swamp, "SwampRain"), "🌧" },
+
+			// Mountain
+			{ (Heightmap.Biome.Mountain, "SnowStorm"), "🌨️" },
+			{ (Heightmap.Biome.Mountain, "Snow"), "❄️" },
+
+			// DeepNorth
+			{ (Heightmap.Biome.DeepNorth, "Twilight_SnowStorm"), "🌨️" },
+			{ (Heightmap.Biome.DeepNorth, "Twilight_Snow"), "❄️" },
+			{ (Heightmap.Biome.DeepNorth, "Twilight_Clear"), "☀️" },
+
+			// Plains
+			{ (Heightmap.Biome.Plains, "Heath clear"), "☀️" },
+			{ (Heightmap.Biome.Plains, "Misty"), "🌫" },
+			{ (Heightmap.Biome.Plains, "LightRain"), "🌦" },
+
+			// Ocean
+			{ (Heightmap.Biome.Ocean, "Clear"), "☀️" },
+			{ (Heightmap.Biome.Ocean, "Rain"), "🌧" },
+			{ (Heightmap.Biome.Ocean, "LightRain"), "🌦" },
+			{ (Heightmap.Biome.Ocean, "Misty"), "🌫" },
+			{ (Heightmap.Biome.Ocean, "ThunderStorm"), "⛈" },
+			{ (Heightmap.Biome.Ocean, "Ashlands_SeaStorm"), "🌪" },
+
+			// Mistlands
+			{ (Heightmap.Biome.Mistlands, "Mistlands_clear"), "☀️" },
+			{ (Heightmap.Biome.Mistlands, "Mistlands_rain"), "🌧" },
+			{ (Heightmap.Biome.Mistlands, "Mistlands_thunder"), "⛈" },
+
+			// AshLands
+			{ (Heightmap.Biome.AshLands, "Ashlands_ashrain"), "☀️" },  // 🔥 
+			{ (Heightmap.Biome.AshLands, "Ashlands_misty"), "🌫" },
+			{ (Heightmap.Biome.AshLands, "Ashlands_CinderRain"), "🌋" }, // cinder rain
+			{ (Heightmap.Biome.AshLands, "Ashlands_storm"), "🌪" }
+		};
+
 		[HarmonyPatch(typeof(EnvMan), "Update")]
 		class TimeAndDay_EnvManPatch
 		{
@@ -53,7 +105,8 @@ namespace MarsarahTweaks.Patches.UI
 						string minutesString = minutes < 10 ? "0" + minutes.ToString() : minutes.ToString();
 						TimeString = "Time " + hoursString + ":" + minutesString;
 					}
-					TimeEmoji = GetEmojiFromFraction(___m_smoothDayFraction);
+					//TimeEmoji = GetEmojiFromFraction(___m_smoothDayFraction);
+					TimeEmoji = GetEmojiForCurrentWeather(___m_smoothDayFraction);
 					UITimeEmojiColor = GetColorFromFraction(___m_smoothDayFraction);
 				}
 			}
@@ -92,6 +145,34 @@ namespace MarsarahTweaks.Patches.UI
 				if (dayFraction < 0.75f) return Color.yellow;
 				if (dayFraction < 0.80f) return new Color(1f, 0.549019f, 0f);
 				return Color.white;
+			}
+
+			private static string GetEmojiForCurrentWeather(float dayFraction)
+			{
+				var envMan = EnvMan.instance;
+				if (envMan == null)
+					return "❓";
+
+				var currentEnvField = typeof(EnvMan).GetField("m_currentEnv", BindingFlags.NonPublic | BindingFlags.Instance);
+				if (currentEnvField == null)
+					return "❓";
+
+				var currentEnv = currentEnvField.GetValue(envMan) as EnvSetup;
+				if (currentEnv == null)
+					return "❓";
+
+				// Use the biome directly from EnvMan
+				var currentBiomeField = typeof(EnvMan).GetField("m_currentBiome", BindingFlags.NonPublic | BindingFlags.Instance);
+				Heightmap.Biome biome = Heightmap.Biome.Meadows; // fallback
+				if (currentBiomeField != null)
+					biome = (Heightmap.Biome)currentBiomeField.GetValue(envMan);
+
+				string emoji = WeatherEmojis.TryGetValue((biome, currentEnv.m_name), out var e) ? e : "❓";
+
+				if (emoji == "☀️") // only override for clear-weather types
+					emoji = GetEmojiFromFraction(dayFraction);
+
+				return emoji ?? "❓";
 			}
 		}
 

@@ -27,6 +27,7 @@
 
  ******* TODO *******
 
+ - Fix BetterEnemyNameplates for Neutral creatures (the default healthbar does not disappear) (check tamed too)
  - Check/implement BetterEnemyNamepletes for players
  - Fix weather weights - need to look into weather schedule
  - Add SmartDropbox

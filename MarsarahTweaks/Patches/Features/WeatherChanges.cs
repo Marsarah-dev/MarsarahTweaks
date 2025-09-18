@@ -11,7 +11,7 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class WeatherChanges
 	{
-		private static readonly LogManager log = new LogManager("Weather Changes", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Weather Changes", LogManager.LogLevel.Warning);
 
 		private static bool applied = false;
 
@@ -41,7 +41,6 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (environments == null || environments.Count == 0) return;
 
-				// Only proceed if config enabled
 				if (ConfigManager.ClearerWeatherEnabled.Value)
 				{
 					if (!applied)
@@ -91,7 +90,7 @@ namespace MarsarahTweaks.Patches.Features
 					if (biome.HasValue)
 					{
 						log.Info($"Selected environment: {__result.m_name} in biome {biome.Value}");
-						MessageHud.instance.ShowMessage(MessageHud.MessageType.TopLeft,	$"Selected environment: {__result.m_name} in {biome.Value}");
+						//MessageHud.instance.ShowMessage(MessageHud.MessageType.TopLeft,	$"Selected environment: {__result.m_name} in {biome.Value}");
 					}
 				}
 			}
@@ -107,24 +106,32 @@ namespace MarsarahTweaks.Patches.Features
 			return null;
 		}
 
-		/*[HarmonyPatch(typeof(EnvMan), "Awake")]
+		// Helper to print available weathers
+		/*private static bool printed = false;
+		 
+		[HarmonyPatch(typeof(EnvMan), "Update")]
 		class Patch_EnvMan_Awake
 		{
 			static void Postfix(EnvMan __instance)
 			{
-				log.Info("---- Biome → Environment list ----", header: true);
-
-				foreach (var biomeSetup in __instance.m_biomes)
+				if (!printed)
 				{
-					string biomeName = biomeSetup.m_biome.ToString();
+					log.Info("---- Biome → Environment list ----", header: true);
 
-					foreach (var entry in biomeSetup.m_environments)
+					foreach (var biomeSetup in __instance.m_biomes)
 					{
-						log.Info($"Biome: {biomeName}, Env: {entry.m_env.m_name}, Default weight: {entry.m_weight}");
-					}
-				}
+						string biomeName = biomeSetup.m_biome.ToString();
 
-				log.Info("---- End list ----", footer: true);
+						foreach (var entry in biomeSetup.m_environments)
+						{
+							log.Info($"Biome: {biomeName}, Env: {entry.m_env.m_name}, Default weight: {entry.m_weight}");
+						}
+					}
+
+					log.Info("---- End list ----", footer: true);
+
+					printed = true;
+				}				
 			}
 		}*/
 	}
