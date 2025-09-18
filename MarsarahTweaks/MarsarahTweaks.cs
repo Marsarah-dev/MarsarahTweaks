@@ -29,8 +29,6 @@ namespace MarsarahTweaks
 
 		private readonly Harmony harmony = new Harmony(ModGUID);
 
-		private static readonly LogManager log = new LogManager("Main", LogManager.LogLevel.Info);
-
 		void Awake()
 		{
 			LogManager.SetGlobalLogLevel(LogManager.LogLevel.Info); // None, Error, Warning, Info

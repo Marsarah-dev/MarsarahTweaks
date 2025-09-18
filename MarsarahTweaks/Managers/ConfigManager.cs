@@ -357,7 +357,7 @@ namespace MarsarahTweaks.Managers
 			UseSymbolsForUI = CreateConfig(ConfigSections.UI, Configs.UIUseSymbols.Name, true, Configs.UIUseSymbols.Description, false);
 			BetterEnemyNameplates = CreateConfig(ConfigSections.UI, Configs.EnemyNameplates.Name, true, Configs.EnemyNameplates.Description, false);
 			ShowEnemyHp = CreateConfig(ConfigSections.UI, Configs.EnemyHp.Name, true, Configs.EnemyHp.Description, false);
-			ShowEnemyHpPercent = CreateConfig(ConfigSections.UI, Configs.EnemyHpPercent.Name, true, Configs.EnemyHpPercent.Description, false);
+			ShowEnemyHpPercent = CreateConfig(ConfigSections.UI, Configs.EnemyHpPercent.Name, false, Configs.EnemyHpPercent.Description, false);
 			ShowTamingProgress = CreateConfig(ConfigSections.UI, Configs.TamingProgress.Name, true, Configs.TamingProgress.Description, false);
 			BetterItemQualityIndicator = CreateConfig(ConfigSections.UI, Configs.ItemQualityIndicator.Name, true, Configs.ItemQualityIndicator.Description, false);
 			ItemQualityIndicatorVertical = CreateConfig(ConfigSections.UI, Configs.ItemQualityIndicatorVertical.Name, true, Configs.ItemQualityIndicatorVertical.Description, false);

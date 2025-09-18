@@ -42,14 +42,6 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static void Postfix(ref InventoryGrid __instance, ref Player player, ItemDrop.ItemData dragItem)
 			{
-				/*if (BetterUILoaded && ConfigManager.BetterItemQualityIndicator.Value)
-				{
-					log.Warn("Cannot enable 'Better Item Quality Indicator' with 'BetterUI' installed. Letting BetterUI handle the quality indicator.");
-					ConfigManager.BetterItemQualityIndicator.Value = false;
-				}*/
-
-				//CompatibilityManager.DisableIfIncompatible(CompatibilityManager.BetterUI, ConfigManager.BetterItemQualityIndicator, "Letting BetterUI handle the quality indicator.");
-
 				var inventory = inventoryField.GetValue(__instance) as Inventory;
 				if (inventory == null) return;
 				var elements = elementsField.GetValue(__instance) as IList;

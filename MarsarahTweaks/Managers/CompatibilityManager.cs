@@ -6,7 +6,7 @@ namespace MarsarahTweaks.Managers
 {
 	internal static class CompatibilityManager
 	{
-		private static readonly LogManager log = new LogManager("Compatibility Manager", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Compatibility Manager", LogManager.LogLevel.Warning);
 
 		// All loaded mods (GUID -> Name)
 		private static readonly Dictionary<string, string> LoadedMods = new Dictionary<string, string>();
@@ -97,7 +97,7 @@ namespace MarsarahTweaks.Managers
 		{
 			if (mod.Loaded && config.Value)
 			{
-				log.Warn($"Cannot enable '{config.Definition.Key}' because {mod.Name} is loaded. {additionalReason}");
+				log.Warn($"Automatically disabling '{config.Definition.Key}' because '{mod.Name}' mod is loaded. {additionalReason}");
 				config.Value = false;
 			}
 		}
@@ -108,6 +108,23 @@ namespace MarsarahTweaks.Managers
 			DisableIfIncompatible(BetterUI, ConfigManager.BetterEnemyNameplates, "Letting BetterUI handle enemy nameplates.");
 			DisableIfIncompatible(BetterUI, ConfigManager.BetterItemQualityIndicator, "Letting BetterUI handle the quality indicator.");
 			DisableIfIncompatible(BetterUI, ConfigManager.ColoredItemDurabilityBar, "Letting BetterUI handle the durability indicator.");
+			DisableIfIncompatible(CraftFromContainers, ConfigManager.ShowOwnedResources);
+			DisableIfIncompatible(DeezMistyBalls, ConfigManager.BiggerWispRadiusEnabled);
+			DisableIfIncompatible(MistBeGone, ConfigManager.ClearMistlandsEnabled);
+			DisableIfIncompatible(InstantMonsterDrop, ConfigManager.FasterResourceDropsEnabled);
+			DisableIfIncompatible(InstantEquip, ConfigManager.FasterEquipEnabled);
+			DisableIfIncompatible(EternalFire, ConfigManager.PermanentLightsEnabled);
+			DisableIfIncompatible(FuelEternal, ConfigManager.PermanentLightsEnabled);
+			DisableIfIncompatible(TorchesEternal, ConfigManager.PermanentLightsEnabled);
+			DisableIfIncompatible(TorchesEternal2, ConfigManager.PermanentLightsEnabled);
+			DisableIfIncompatible(ForsakenPowerOverhaul, ConfigManager.LongerForsakenPowersEnabled);
+			DisableIfIncompatible(TripleBronze, ConfigManager.DoubleBronzeEnabled);
+			DisableIfIncompatible(BiggerPickupRadius, ConfigManager.LargerPickupAreaEnabled);
+			DisableIfIncompatible(CreatureLevelLootControl, ConfigManager.CreatureUnlevelerEnabled);
+			DisableIfIncompatible(Sailing, ConfigManager.LargerBoatExploreRadiusEnabled);
+			DisableIfIncompatible(Sailing, ConfigManager.CameraUpWhenSailingEnabled);
+			DisableIfIncompatible(Seasonality, ConfigManager.ClearerWeatherEnabled);
+			DisableIfIncompatible(Seasons, ConfigManager.ClearerWeatherEnabled);
 		}
 
 		// Optional: log all loaded mods for debugging

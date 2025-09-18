@@ -129,14 +129,6 @@ namespace MarsarahTweaks.Features.UI
 		{
 			private static void Postfix(EnemyHud __instance)
 			{
-				/*if (BetterUILoaded && ConfigManager.BetterEnemyNameplates.Value)
-				{
-					log.Warn("Cannot enable 'Better Enemy Nameplates' with 'BetterUI' installed. Letting BetterUI handle enemy nameplates.");
-					ConfigManager.BetterEnemyNameplates.Value = false;
-				}*/
-
-				//CompatibilityManager.DisableIfIncompatible(CompatibilityManager.BetterUI, ConfigManager.BetterEnemyNameplates, "Letting BetterUI handle enemy nameplates.");
-
 				if (m_hudsField == null) return;
 
 				var huds = m_hudsField.GetValue(__instance) as IDictionary;
@@ -286,7 +278,8 @@ namespace MarsarahTweaks.Features.UI
 			float maxHealth = character.GetMaxHealth();
 			float frac = Mathf.Clamp01(currentHealth / Math.Max(1f, maxHealth));
 
-			hpTexts.HP.text = $"{Mathf.CeilToInt(currentHealth)} - {Mathf.CeilToInt(maxHealth)}";
+			//hpTexts.HP.text = $"{Mathf.CeilToInt(currentHealth)} - {Mathf.CeilToInt(maxHealth)}";
+			hpTexts.HP.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
 			hpTexts.HpPercent.text = $"{Mathf.RoundToInt(frac * 100f)}%";
 		}
 

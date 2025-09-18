@@ -78,8 +78,6 @@ namespace MarsarahTweaks.Patches.UI
 					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
 				}*/
 
-				//CompatibilityManager.DisableIfIncompatible(CompatibilityManager.MinimalStatusEffects, ConfigManager.OnlinePlayersUnderMinimap);
-
 				if (ConfigManager.ShowOnlinePlayers.Value)
 				{
 					CreateUI(__instance); // Create UI if missing
