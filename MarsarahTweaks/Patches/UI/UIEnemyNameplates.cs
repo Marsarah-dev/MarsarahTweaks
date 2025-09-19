@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
+using static MarsarahTweaks.Managers.ConfigManager;
 
 namespace MarsarahTweaks.Features.UI
 {
@@ -207,9 +208,11 @@ namespace MarsarahTweaks.Features.UI
 			if (_hpTextCache.TryGetValue(hudData, out var existing))
 				return; // already created
 
-			bool enableHpText = ConfigManager.ShowEnemyHp.Value && enableMainBars;
-			bool enableHpPercent = ConfigManager.ShowEnemyHpPercent.Value && enableMainBars;
-			bool enableBothHpTexts = enableHpText && enableHpPercent;
+			EnemyHPMode mode = ConfigManager.NameplateHpMode.Value;
+
+			bool enableHpText = (mode == EnemyHPMode.HpOnly || mode == EnemyHPMode.HpAndPercent) && enableMainBars;
+			bool enableHpPercent = (mode == EnemyHPMode.PercentOnly || mode == EnemyHPMode.HpAndPercent) && enableMainBars;
+			bool enableBothHpTexts = (mode == EnemyHPMode.HpAndPercent) && enableMainBars;
 
 			string UITMPFontName = "Valheim-AveriaSansLibre";
 			Vector2 UITextAreaSize = new Vector2(100f, 14f); // width, height
@@ -267,9 +270,11 @@ namespace MarsarahTweaks.Features.UI
 		{
 			if (!_hpTextCache.TryGetValue(hudData, out var hpTexts)) return;
 
-			bool enableHpText = ConfigManager.ShowEnemyHp.Value && enableMainBars;
-			bool enableHpPercent = ConfigManager.ShowEnemyHpPercent.Value && enableMainBars;
-			bool enableBothHpTexts = enableHpText && enableHpPercent;
+			EnemyHPMode mode = ConfigManager.NameplateHpMode.Value;
+
+			bool enableHpText = (mode == EnemyHPMode.HpOnly || mode == EnemyHPMode.HpAndPercent) && enableMainBars;
+			bool enableHpPercent = (mode == EnemyHPMode.PercentOnly || mode == EnemyHPMode.HpAndPercent) && enableMainBars;
+			bool enableBothHpTexts = (mode == EnemyHPMode.HpAndPercent) && enableMainBars;
 
 			hpTexts.HP.gameObject.SetActive(enableHpText);
 			hpTexts.HpPercent.gameObject.SetActive(enableHpPercent);
