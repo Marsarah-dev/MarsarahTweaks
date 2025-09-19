@@ -115,18 +115,19 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Beehive), nameof(Beehive.GetHoverText))]
 		internal static class DetailedHoverBeehive_Patch
 		{
-			private static void Postfix(Beehive __instance, ref string __result)
+			private static bool Prefix(Beehive __instance, ref string __result)
 			{
-				if (!ConfigManager.DetailedHoverInfo.Value) return;
+				if (!ConfigManager.DetailedHoverInfo.Value) return true;
 
-				// Skip if player has no access
-				/*if (!PrivateArea.CheckAccess(__instance.transform.position, 0f, flash: false))
+				// Skip if player has no access and add custom message
+				if (!PrivateArea.CheckAccess(__instance.transform.position, 0f, flash: false))
 				{
 					__result = Localization.instance.Localize(__instance.m_name + "\n$piece_noaccess");
-					return;
-				}*/
+					return false;
+				}
 
 				__result = GetBeehiveHover(__instance, __result);
+				return false;
 			}
 
 			private static string GetBeehiveHover(Beehive beehive, string originalHoverText = null)
@@ -156,29 +157,30 @@ namespace MarsarahTweaks.Patches.UI
 				string progressText = "";
 				BeeHoverMode beeMode = ConfigManager.BeehiveHoverMode.Value;
 
+				float produced = nview.GetZDO().GetFloat("product");
+				float remaining = beehive.m_secPerUnit - produced;
+
+				// Build raw progress text depending on mode
 				if (honeyLevel < beehive.m_maxHoney)
 				{
-					float produced = nview.GetZDO().GetFloat("product");
-					float remaining = beehive.m_secPerUnit - produced;
 					if (beeMode == BeeHoverMode.RemainingTime)
 						progressText = $"{FormatTime(remaining)}";
 					else if (beeMode == BeeHoverMode.Percent)
-						progressText = $"{produced / beehive.m_secPerUnit:P0}";
+						progressText = $"{produced / beehive.m_secPerUnit:0%}";
 					else if (beeMode == BeeHoverMode.PercentAndTime)
-						progressText = $"{produced / beehive.m_secPerUnit:P0} - {FormatTime(remaining)}";
+						progressText = $"{produced / beehive.m_secPerUnit:0%} - {FormatTime(remaining)}";
 				}
 
 				string useKeyColored = $"[<color=#ffff00ff><b>{Localization.instance.Localize("$KEY_Use")}</b></color>]";
 
-				string hoverText;
-				if (honeyLevel > 0)
-				{
-					hoverText = $"{Localization.instance.Localize(beehive.m_name)} ( {progressText}, {productName} x {honeyLevel} )\n{useKeyColored} {Localization.instance.Localize("$piece_beehive_extract")}";
-				}
-				else
-				{
-					hoverText = $"{Localization.instance.Localize(beehive.m_name)} ( {progressText}, {Localization.instance.Localize("$piece_container_empty")} )\n{useKeyColored} {Localization.instance.Localize("$piece_beehive_check")}";
-				}
+				// Apply colors using the new helpers
+				string progressTextColored = GetColoredProgress(progressText, honeyLevel, beehive.m_maxHoney, produced, beehive.m_secPerUnit);
+				string productNameColored = GetColoredProduct(productName, honeyLevel, beehive.m_maxHoney);
+				string honeyLevelColored = GetColoredHoneyCount(honeyLevel, beehive.m_maxHoney);
+				string emptyColored = GetColoredEmpty();
+
+				// Build hover text
+				string hoverText = BuildBeehiveHoverText(beehive, progressTextColored, productNameColored, honeyLevelColored, emptyColored, honeyLevel, useKeyColored);
 
 				if (_lastHoverText != hoverText)
 				{
@@ -195,6 +197,103 @@ namespace MarsarahTweaks.Patches.UI
 				int secs = Mathf.FloorToInt(seconds % 60f);
 				return mins > 0f ? $"{mins}m {secs}s" : $"{secs}s";
 			}
-		}		
+
+			private static string BuildBeehiveHoverText(Beehive beehive, string progressText, string productNameColored, string honeyLevelColored, string emptyColored, int honeyLevel, string useKeyColored) 
+			{
+				string name = Localization.instance.Localize(beehive.m_name);
+
+				string mainText;
+				if (honeyLevel == beehive.m_maxHoney)
+				{
+					mainText = $"{productNameColored} {honeyLevelColored}";
+				}
+				else if (honeyLevel > 0)
+				{
+					mainText = $"{progressText}, {productNameColored} {honeyLevelColored}";
+				}
+				else
+				{
+					mainText = $"{progressText}, {emptyColored}";
+				}
+
+				string actionText = honeyLevel > 0
+					? Localization.instance.Localize("$piece_beehive_extract")
+					: Localization.instance.Localize("$piece_beehive_check");
+
+				return $"{name} ( {mainText} )\n{useKeyColored} {actionText}";
+			}
+
+
+			// ---------- Generic painter ----------
+			private static string PaintText(string text, Color col)
+			{
+				string hex = ColorUtility.ToHtmlStringRGBA(col);
+				return $"<color=#{hex}>{text}</color>";
+			}
+
+			// ---------- Color resolvers ----------
+			private static Color GetProgressColor(int honeyLevel, int maxHoney, float produced, float secPerUnit)
+			{
+				// default: work in progress
+				Color col = Color.cyan;
+
+				// Fully ready
+				if (honeyLevel >= maxHoney && produced >= secPerUnit)
+				{
+					col = Color.green;
+				}
+
+				return col;
+			}
+
+			private static Color GetHoneyColor(int honeyLevel, int maxHoney)
+			{
+				float fill = maxHoney > 0 ? (float)honeyLevel / maxHoney : 0f;
+
+				return fill < 0.5f
+					? Color.Lerp(Color.red, Color.yellow, fill / 0.5f)      // red → yellow
+					: Color.Lerp(Color.yellow, Color.green, (fill - 0.5f) / 0.5f); // yellow → green
+			}
+
+			private static Color GetEmptyColor()
+			{
+				// orange-red for empty
+				return new Color(1f, 0.4f, 0f);
+			}
+
+			// ---------- Formatters ----------
+			private static string GetColoredProgress(string progressText, int honeyLevel, int maxHoney, float produced, float secPerUnit)
+			{
+				if (!ConfigManager.ColoredHoverInfo.Value || string.IsNullOrEmpty(progressText))
+					return progressText;
+
+				return PaintText(progressText, GetProgressColor(honeyLevel, maxHoney, produced, secPerUnit));
+			}
+
+			private static string GetColoredHoneyCount(int honeyLevel, int maxHoney)
+			{
+				if (!ConfigManager.ColoredHoverInfo.Value)
+					return "x" + honeyLevel;
+
+				return PaintText("x" + honeyLevel, GetHoneyColor(honeyLevel, maxHoney));
+			}
+
+			private static string GetColoredProduct(string productName, int honeyLevel, int maxHoney)
+			{
+				if (!ConfigManager.ColoredHoverInfo.Value || string.IsNullOrEmpty(productName))
+					return productName;
+
+				// product shares honey’s color logic
+				return PaintText(productName, GetHoneyColor(honeyLevel, maxHoney));
+			}
+
+			private static string GetColoredEmpty()
+			{
+				if (!ConfigManager.ColoredHoverInfo.Value)
+					return Localization.instance.Localize("$piece_container_empty");
+
+				return PaintText(Localization.instance.Localize("$piece_container_empty"), GetEmptyColor());
+			}
+		}
 	}
 }
