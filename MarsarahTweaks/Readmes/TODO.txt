@@ -21,15 +21,17 @@
    H. New UI
       - Added Better Enemy Nameplates
       - Added Better Item Quality Indicator
-      - Added Item Durability Color
+      - Added Better Item Durability Bar
+      - Added Detailed Hover Information (chests)
       - The symbols next to the time of day now indicate current weather as well. If the weather is clear, then the symbol changes according to the time of day
 
 
  ******* TODO *******
 
- - Fix BetterEnemyNameplates for Neutral creatures (the default healthbar does not disappear) (check tamed too)
  - Check/implement BetterEnemyNamepletes for players
- - Fix weather weights - need to look into weather schedule
+ - Implement chest hover empty slots, fermenter and plants remaining time 
+ - Implement skill progress message
+ - See if I can merge some configs (Better Nameplates, Better Item Quality)
  - Add SmartDropbox
  - Add new clause for Permissions in readme: "You are free to take inspiration or implement similar features, but please do so with your own code and assets."
    

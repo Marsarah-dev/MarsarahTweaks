@@ -108,6 +108,7 @@ namespace MarsarahTweaks.Managers
 			DisableIfIncompatible(BetterUI, ConfigManager.BetterEnemyNameplates, "Letting BetterUI handle enemy nameplates.");
 			DisableIfIncompatible(BetterUI, ConfigManager.BetterItemQualityIndicator, "Letting BetterUI handle the quality indicator.");
 			DisableIfIncompatible(BetterUI, ConfigManager.ColoredItemDurabilityBar, "Letting BetterUI handle the durability indicator.");
+			DisableIfIncompatible(BetterUI, ConfigManager.DetailedHoverInfo, "Letting BetterUI handle hover information.");
 			DisableIfIncompatible(CraftFromContainers, ConfigManager.ShowOwnedResources);
 			DisableIfIncompatible(DeezMistyBalls, ConfigManager.BiggerWispRadiusEnabled);
 			DisableIfIncompatible(MistBeGone, ConfigManager.ClearMistlandsEnabled);
