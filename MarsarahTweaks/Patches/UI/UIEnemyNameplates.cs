@@ -208,7 +208,7 @@ namespace MarsarahTweaks.Features.UI
 			if (_hpTextCache.TryGetValue(hudData, out var existing))
 				return; // already created
 
-			EnemyHPMode mode = ConfigManager.NameplateHpMode.Value;
+			EnemyHPMode mode = ConfigManager.NameplateHpModeChoice.Value;
 
 			bool enableHpText = (mode == EnemyHPMode.HpOnly || mode == EnemyHPMode.HpAndPercent) && enableMainBars;
 			bool enableHpPercent = (mode == EnemyHPMode.PercentOnly || mode == EnemyHPMode.HpAndPercent) && enableMainBars;
@@ -270,7 +270,7 @@ namespace MarsarahTweaks.Features.UI
 		{
 			if (!_hpTextCache.TryGetValue(hudData, out var hpTexts)) return;
 
-			EnemyHPMode mode = ConfigManager.NameplateHpMode.Value;
+			EnemyHPMode mode = ConfigManager.NameplateHpModeChoice.Value;
 
 			bool enableHpText = (mode == EnemyHPMode.HpOnly || mode == EnemyHPMode.HpAndPercent) && enableMainBars;
 			bool enableHpPercent = (mode == EnemyHPMode.PercentOnly || mode == EnemyHPMode.HpAndPercent) && enableMainBars;

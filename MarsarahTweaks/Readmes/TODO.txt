@@ -22,7 +22,10 @@
       - Added Better Enemy Nameplates
       - Added Better Item Quality Indicator
       - Added Better Item Durability Bar
-      - Added Detailed Hover Information (chests)
+      - Added Detailed Hover Information 
+        - Chests
+        - Beehives
+        - Plants
       - The symbols next to the time of day now indicate current weather as well. If the weather is clear, then the symbol changes according to the time of day
 
 

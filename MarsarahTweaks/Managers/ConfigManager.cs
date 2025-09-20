@@ -92,6 +92,13 @@ namespace MarsarahTweaks.Managers
 			PercentAndTime
 		}
 
+		public enum PlantHoverMode
+		{
+			RemainingTime,
+			Percent,
+			PercentAndTime
+		}
+
 		// Grouped Config Metadata (for easy expansion)
 		public static class Configs
 		{
@@ -177,20 +184,21 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIPlayerLogoutAnnounce = new ConfigMetadata("13 - Player Logout Announce", "Displays a message when a player logs out in the top-left corner of the screen and in the chat window");
 			public static readonly ConfigMetadata UIAshlandsHeatLevel = new ConfigMetadata("14 - Show Heat Meter in Ashlands", "Shows a heat meter at the top-center of the screen when in Ashlands water or lava");
 			public static readonly ConfigMetadata UIUseSymbols = new ConfigMetadata("15 - Alternate UI Layout", "Use symbols instead of words in this mod's UI elements (Enemy Counter, Summons Counter, etc). Also repositions the boat speed widget to the minimap");
-			public static readonly ConfigMetadata EnemyNameplates = new ConfigMetadata("16 - Better Enemy Nameplates", "Modifies the size and colors of enemy nameplates and colors the name according to alerted/aggravated status");
-			public static readonly ConfigMetadata HpMode = new ConfigMetadata("17 - Nameplate HP Mode", "Choose the method of displaying enemy HP. Requires Better Enemy Nameplates");
+			public static readonly ConfigMetadata UIEnemyNameplates = new ConfigMetadata("16 - Better Enemy Nameplates", "Modifies the size and colors of enemy nameplates and colors the name according to alerted/aggravated status");
+			public static readonly ConfigMetadata UIEnemyHpMode = new ConfigMetadata("17 - Nameplate HP Mode", "Choose the method of displaying enemy HP. Requires Better Enemy Nameplates");
 			//public static readonly ConfigMetadata EnemyHp = new ConfigMetadata("17 - Show Enemy HP", "Displays current and max HP of enemies. Requires Better Enemy Nameplates");
 			//public static readonly ConfigMetadata EnemyHpPercent = new ConfigMetadata("18 - Show Enemy HP Percent", "Displays current HP percentage of enemies. Requires Better Enemy Nameplates");
-			public static readonly ConfigMetadata TamingProgress = new ConfigMetadata("18 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing under the HP bar. This is independent of Better Enemy Nameplates");
-			public static readonly ConfigMetadata ItemQualityIndicator = new ConfigMetadata("19 - Better Item Quality Indicator", "Changes the indicator for armor and weapons from numbers to symbols");
-			public static readonly ConfigMetadata ItemQualityIndicatorVertical = new ConfigMetadata("20 - Use Vertical Alignment for Item Quality", "Position the symbols vertically instead of horizontally for item quality. Requires Better Item Quality Inicator");
-			public static readonly ConfigMetadata ItemQualitySymbol = new ConfigMetadata("21 - Symbol For Item Quality", "Choose the symbol used for the item quality indicator. Requires Better Item Quality Inicator");
-			public static readonly ConfigMetadata ItemQualityColor = new ConfigMetadata("22 - Color For Item Quality", "Choose the color used for the item quality indicator. Requires Better Item Quality Inicator");
-			public static readonly ConfigMetadata ItemDurabilityColor = new ConfigMetadata("23 - Better Item Durability Bar", "Colors the item durability bar according to curent durability and modifies the sprite texture");
-			public static readonly ConfigMetadata DetailedHovers = new ConfigMetadata("24 - Detailed Hover Information", "Shows extra information like number of available spaces in chests or remaining time for fermenters, beehives, smelters, cooking stations, and plants");
-			public static readonly ConfigMetadata ColoredHovers = new ConfigMetadata("25 - Use Dynamic Colors For Hover Info", "Colors the hover text based on chest fill or progress. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata ChestSingleItem = new ConfigMetadata("26 - Chest Hover - Show Info For Single Item", "If a container has only one type of item, its name and quantity are also displayed in the hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata BeeHoverModeMeta = new ConfigMetadata("27 - Beehive Hover Mode", "Choose the method of displaying Beehive hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UITamingProgress = new ConfigMetadata("18 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing under the HP bar. This is independent of Better Enemy Nameplates");
+			public static readonly ConfigMetadata UIItemQualityIndicator = new ConfigMetadata("19 - Better Item Quality Indicator", "Changes the indicator for armor and weapons from numbers to symbols");
+			public static readonly ConfigMetadata UIItemQualityIndicatorVertical = new ConfigMetadata("20 - Use Vertical Alignment for Item Quality", "Position the symbols vertically instead of horizontally for item quality. Requires Better Item Quality Inicator");
+			public static readonly ConfigMetadata UIItemQualitySymbol = new ConfigMetadata("21 - Symbol For Item Quality", "Choose the symbol used for the item quality indicator. Requires Better Item Quality Inicator");
+			public static readonly ConfigMetadata UIItemQualityColor = new ConfigMetadata("22 - Color For Item Quality", "Choose the color used for the item quality indicator. Requires Better Item Quality Inicator");
+			public static readonly ConfigMetadata UIItemDurabilityColor = new ConfigMetadata("23 - Better Item Durability Bar", "Colors the item durability bar according to curent durability and modifies the sprite texture");
+			public static readonly ConfigMetadata UIDetailedHovers = new ConfigMetadata("24 - Detailed Hover Information", "Shows extra information like number of available spaces in chests or remaining time for fermenters, beehives, smelters, cooking stations, and plants");
+			public static readonly ConfigMetadata UIColoredHovers = new ConfigMetadata("25 - Use Dynamic Colors For Hover Info", "Colors the hover text based on chest fill or progress. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIChestSingleItem = new ConfigMetadata("26 - Chest Hover - Show Info For Single Item", "If a container has only one type of item, its name and quantity are also displayed in the hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIBeeHoverMode = new ConfigMetadata("27 - Beehive Hover Mode", "Choose the method of displaying Beehive hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIPlantHoverMode = new ConfigMetadata("28 - Plant Hover Mode", "Choose the method of displaying Plant hover info. Requires Detailed Hover Information");
 		}
 
 		// Config entries
@@ -278,7 +286,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShowHeatLevelInAshlands;
 		public static ConfigEntry<bool> UseSymbolsForUI;
 		public static ConfigEntry<bool> BetterEnemyNameplates;
-		public static ConfigEntry<EnemyHPMode> NameplateHpMode;
+		public static ConfigEntry<EnemyHPMode> NameplateHpModeChoice;
 		//public static ConfigEntry<bool> ShowEnemyHp;
 		//public static ConfigEntry<bool> ShowEnemyHpPercent;
 		public static ConfigEntry<bool> ShowTamingProgress;
@@ -290,7 +298,8 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> DetailedHoverInfo;
 		public static ConfigEntry<bool> ColoredHoverInfo;
 		public static ConfigEntry<bool> ShowSingleItemChestHover;
-		public static ConfigEntry<BeeHoverMode> BeehiveHoverMode;
+		public static ConfigEntry<BeeHoverMode> BeehiveHoverModeChoice;
+		public static ConfigEntry<PlantHoverMode> PlantHoverModeChoice;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -380,20 +389,21 @@ namespace MarsarahTweaks.Managers
 			AnnouncePlayerLogout = CreateConfig(ConfigSections.UI, Configs.UIPlayerLogoutAnnounce.Name, true, Configs.UIPlayerLogoutAnnounce.Description, false);
 			ShowHeatLevelInAshlands = CreateConfig(ConfigSections.UI, Configs.UIAshlandsHeatLevel.Name, true, Configs.UIAshlandsHeatLevel.Description, false);
 			UseSymbolsForUI = CreateConfig(ConfigSections.UI, Configs.UIUseSymbols.Name, true, Configs.UIUseSymbols.Description, false);
-			BetterEnemyNameplates = CreateConfig(ConfigSections.UI, Configs.EnemyNameplates.Name, true, Configs.EnemyNameplates.Description, false);
-			NameplateHpMode = CreateConfig(ConfigSections.UI, Configs.HpMode.Name, EnemyHPMode.HpOnly, Configs.HpMode.Description, false);
+			BetterEnemyNameplates = CreateConfig(ConfigSections.UI, Configs.UIEnemyNameplates.Name, true, Configs.UIEnemyNameplates.Description, false);
+			NameplateHpModeChoice = CreateConfig(ConfigSections.UI, Configs.UIEnemyHpMode.Name, EnemyHPMode.HpOnly, Configs.UIEnemyHpMode.Description, false);
 			//ShowEnemyHp = CreateConfig(ConfigSections.UI, Configs.EnemyHp.Name, true, Configs.EnemyHp.Description, false);
 			//ShowEnemyHpPercent = CreateConfig(ConfigSections.UI, Configs.EnemyHpPercent.Name, false, Configs.EnemyHpPercent.Description, false);
-			ShowTamingProgress = CreateConfig(ConfigSections.UI, Configs.TamingProgress.Name, true, Configs.TamingProgress.Description, false);
-			BetterItemQualityIndicator = CreateConfig(ConfigSections.UI, Configs.ItemQualityIndicator.Name, true, Configs.ItemQualityIndicator.Description, false);
-			ItemQualityIndicatorVertical = CreateConfig(ConfigSections.UI, Configs.ItemQualityIndicatorVertical.Name, true, Configs.ItemQualityIndicatorVertical.Description, false);
-			ItemQualitySymbolChoice = CreateConfig(ConfigSections.UI, Configs.ItemQualitySymbol.Name, ItemQualitySymbol.Star, Configs.ItemQualitySymbol.Description, false);
-			ItemQualityColorChoice = CreateConfig(ConfigSections.UI, Configs.ItemQualityColor.Name, ItemQualityColor.Yellow, Configs.ItemQualityColor.Description, false);
-			ColoredItemDurabilityBar = CreateConfig(ConfigSections.UI, Configs.ItemDurabilityColor.Name, true, Configs.ItemDurabilityColor.Description, false);
-			DetailedHoverInfo = CreateConfig(ConfigSections.UI, Configs.DetailedHovers.Name, true, Configs.DetailedHovers.Description, false);
-			ColoredHoverInfo = CreateConfig(ConfigSections.UI, Configs.ColoredHovers.Name, true, Configs.ColoredHovers.Description, false);
-			ShowSingleItemChestHover = CreateConfig(ConfigSections.UI, Configs.ChestSingleItem.Name, false, Configs.ChestSingleItem.Description, false);
-			BeehiveHoverMode = CreateConfig(ConfigSections.UI, Configs.BeeHoverModeMeta.Name, BeeHoverMode.RemainingTime, Configs.BeeHoverModeMeta.Description, false);
+			ShowTamingProgress = CreateConfig(ConfigSections.UI, Configs.UITamingProgress.Name, true, Configs.UITamingProgress.Description, false);
+			BetterItemQualityIndicator = CreateConfig(ConfigSections.UI, Configs.UIItemQualityIndicator.Name, true, Configs.UIItemQualityIndicator.Description, false);
+			ItemQualityIndicatorVertical = CreateConfig(ConfigSections.UI, Configs.UIItemQualityIndicatorVertical.Name, false, Configs.UIItemQualityIndicatorVertical.Description, false);
+			ItemQualitySymbolChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualitySymbol.Name, ItemQualitySymbol.Star, Configs.UIItemQualitySymbol.Description, false);
+			ItemQualityColorChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualityColor.Name, ItemQualityColor.Yellow, Configs.UIItemQualityColor.Description, false);
+			ColoredItemDurabilityBar = CreateConfig(ConfigSections.UI, Configs.UIItemDurabilityColor.Name, true, Configs.UIItemDurabilityColor.Description, false);
+			DetailedHoverInfo = CreateConfig(ConfigSections.UI, Configs.UIDetailedHovers.Name, true, Configs.UIDetailedHovers.Description, false);
+			ColoredHoverInfo = CreateConfig(ConfigSections.UI, Configs.UIColoredHovers.Name, true, Configs.UIColoredHovers.Description, false);
+			ShowSingleItemChestHover = CreateConfig(ConfigSections.UI, Configs.UIChestSingleItem.Name, false, Configs.UIChestSingleItem.Description, false);
+			BeehiveHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIBeeHoverMode.Name, BeeHoverMode.RemainingTime, Configs.UIBeeHoverMode.Description, false);
+			PlantHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIPlantHoverMode.Name, PlantHoverMode.RemainingTime, Configs.UIPlantHoverMode.Description, false);
 
 			//HandleToggleExclusivity();
 			SetupWatcher();
@@ -608,7 +618,7 @@ namespace MarsarahTweaks.Managers
 						UISmartBiome.UpdateBiomeWeights();
 						break;
 
-					case var name when name == Configs.ItemQualityIndicator.Name:
+					case var name when name == Configs.UIItemQualityIndicator.Name:
 						UIItemQuality.UpdateSymbols();
 						break;
 				}
