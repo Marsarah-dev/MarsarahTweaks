@@ -103,6 +103,9 @@ namespace MarsarahTweaks.Patches.UI
 
 					// Apply sprite based on config
 					barImage.sprite = ConfigManager.ColoredItemDurabilityBar.Value && CustomSprite != null ? CustomSprite : DefaultSprite;
+
+					// Flash if durability is 0
+					FlashDurabilityBarAtZero(durabilityBar, item);
 				}
 			}
 		}
@@ -143,6 +146,9 @@ namespace MarsarahTweaks.Patches.UI
 
 					// Apply sprite based on config
 					barImage.sprite = ConfigManager.ColoredItemDurabilityBar.Value && CustomSprite != null ? CustomSprite : DefaultSprite;
+
+					// Flash if durability is 0
+					FlashDurabilityBarAtZero(durabilityBar, item);
 				}
 			}
 		}
@@ -154,6 +160,24 @@ namespace MarsarahTweaks.Patches.UI
 				return Color.Lerp(Color.yellow, Color.green, (percent - 0.5f) * 2f);
 			else
 				return Color.Lerp(Color.red, Color.yellow, percent * 2f);
+		}
+
+		// Flash bar if durability is 0
+		private static void FlashDurabilityBarAtZero(GuiBar bar, ItemDrop.ItemData item)
+		{
+			if (bar == null || item == null || bar.m_bar == null) return;
+
+			var barImage = bar.m_bar.GetComponent<Image>();
+			if (barImage == null) return;
+
+			float percent = item.GetDurabilityPercentage();
+			if (percent <= 0f)
+			{
+				// Vanilla-like pulsing effect
+				Color c = barImage.color;
+				c.a = 0.5f + 0.5f * Mathf.Sin(Time.time * 10f); // pulsate alpha
+				barImage.color = c;
+			}
 		}
 	}
 }

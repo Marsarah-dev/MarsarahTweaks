@@ -99,6 +99,13 @@ namespace MarsarahTweaks.Managers
 			PercentAndTime
 		}
 
+		public enum PlantHoverMode
+		{
+			RemainingTime,
+			Percent,
+			PercentAndTime
+		}
+
 		public enum FermenterHoverMode
 		{
 			RemainingTime,
@@ -113,7 +120,7 @@ namespace MarsarahTweaks.Managers
 			PercentAndTime
 		}
 
-		public enum PlantHoverMode
+		public enum SmelterHoverMode
 		{
 			RemainingTime,
 			Percent,
@@ -220,9 +227,10 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIChestSingleItem = new ConfigMetadata("26 - Chest Hover - Show Info For Single Item", "If a container has only one type of item, its name and quantity are also displayed in the hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIcontainerHoverMode = new ConfigMetadata("27 - Container Hover Mode", "Choose the method of displaying Container hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIBeeHoverMode = new ConfigMetadata("28 - Beehive Hover Mode", "Choose the method of displaying Beehive hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIFermenterHoverMode = new ConfigMetadata("29 - Fermenter Hover Mode", "Choose the method of displaying Fermenter hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UICookingStationHoverMode = new ConfigMetadata("30 - CookingStation Hover Mode", "Choose the method of displaying Cooking Station hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIPlantHoverMode = new ConfigMetadata("31 - Plant Hover Mode", "Choose the method of displaying Plant hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIPlantHoverMode = new ConfigMetadata("29 - Plant Hover Mode", "Choose the method of displaying Plant hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIFermenterHoverMode = new ConfigMetadata("30 - Fermenter Hover Mode", "Choose the method of displaying Fermenter hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UICookingStationHoverMode = new ConfigMetadata("31 - CookingStation Hover Mode", "Choose the method of displaying Cooking Station hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UISmelterHoverMode = new ConfigMetadata("32 - Smelter Hover Mode", "Choose the method of displaying Smelter hover info. Requires Detailed Hover Information");
 		}
 
 		// Config entries
@@ -324,9 +332,10 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShowSingleItemChestHover;
 		public static ConfigEntry<ContainerHoverMode> ContainerHoverModeChoice;
 		public static ConfigEntry<BeeHoverMode> BeehiveHoverModeChoice;
+		public static ConfigEntry<PlantHoverMode> PlantHoverModeChoice;
 		public static ConfigEntry<FermenterHoverMode> FermenterHoverModeChoice;
 		public static ConfigEntry<CookingStationHoverMode> CookingStationHoverModeChoice;
-		public static ConfigEntry<PlantHoverMode> PlantHoverModeChoice;
+		public static ConfigEntry<SmelterHoverMode> SmelterHoverModeChoice;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -431,9 +440,10 @@ namespace MarsarahTweaks.Managers
 			ShowSingleItemChestHover = CreateConfig(ConfigSections.UI, Configs.UIChestSingleItem.Name, false, Configs.UIChestSingleItem.Description, false);
 			ContainerHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIcontainerHoverMode.Name, ContainerHoverMode.CurrentPerMax, Configs.UIcontainerHoverMode.Description, false);
 			BeehiveHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIBeeHoverMode.Name, BeeHoverMode.RemainingTime, Configs.UIBeeHoverMode.Description, false);
+			PlantHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIPlantHoverMode.Name, PlantHoverMode.RemainingTime, Configs.UIPlantHoverMode.Description, false);
 			FermenterHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIFermenterHoverMode.Name, FermenterHoverMode.RemainingTime, Configs.UIFermenterHoverMode.Description, false);
 			CookingStationHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UICookingStationHoverMode.Name, CookingStationHoverMode.RemainingTime, Configs.UICookingStationHoverMode.Description, false);
-			PlantHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIPlantHoverMode.Name, PlantHoverMode.RemainingTime, Configs.UIPlantHoverMode.Description, false);
+			SmelterHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UISmelterHoverMode.Name, SmelterHoverMode.RemainingTime, Configs.UISmelterHoverMode.Description, false);
 
 			//HandleToggleExclusivity();
 			SetupWatcher();

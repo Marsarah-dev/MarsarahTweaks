@@ -20,6 +20,7 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly FieldInfo NViewFieldBeehive = typeof(Beehive).GetField("m_nview", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly FieldInfo NViewFieldCookingStation = typeof(CookingStation).GetField("m_nview", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly FieldInfo FermenterExposedField = typeof(Fermenter).GetField("m_exposed", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly FieldInfo HaveRoofField = typeof(Smelter).GetField("m_haveRoof", BindingFlags.Instance | BindingFlags.NonPublic);
 		private static readonly MethodInfo GetHoneyLevelMethod = typeof(Beehive).GetMethod("GetHoneyLevel", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetTimeSincePlantedMethod = typeof(Plant).GetMethod("TimeSincePlanted", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetGrowTimeMethod = typeof(Plant).GetMethod("GetGrowTime", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -28,6 +29,9 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly MethodInfo GetFermentationTimeMethod = typeof(Fermenter).GetMethod("GetFermentationTime", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetSlotMethod = typeof(CookingStation).GetMethod("GetSlot", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetItemConversionMethod = typeof(CookingStation).GetMethod("GetItemConversion", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly MethodInfo GetProcessedQueueSizeMethod = typeof(Smelter).GetMethod("GetProcessedQueueSize", BindingFlags.Instance | BindingFlags.NonPublic);
+		private static readonly MethodInfo GetQueueSizeMethod = typeof(Smelter).GetMethod("GetQueueSize", BindingFlags.Instance | BindingFlags.NonPublic);
+		private static readonly MethodInfo GetBakeTimerMethod = typeof(Smelter).GetMethod("GetBakeTimer", BindingFlags.Instance | BindingFlags.NonPublic);
 
 
 		// Log cache
@@ -583,9 +587,17 @@ namespace MarsarahTweaks.Patches.UI
 		// ---------- Generic time formatter ----------
 		private static string FormatTime(float seconds)
 		{
-			int mins = Mathf.FloorToInt(seconds / 60f);
-			int secs = Mathf.FloorToInt(seconds % 60f);
-			return mins > 0f ? $"{mins}m {secs}s" : $"{secs}s";
+			int totalSeconds = Mathf.FloorToInt(seconds);
+			int hrs = totalSeconds / 3600;
+			int mins = (totalSeconds % 3600) / 60;
+			int secs = totalSeconds % 60;
+
+			if (hrs > 0)
+				return $"{hrs}h {mins}m {secs}s";
+			else if (mins > 0)
+				return $"{mins}m {secs}s";
+			else
+				return $"{secs}s";
 		}
 
 		// ---------- Percent color -----------
