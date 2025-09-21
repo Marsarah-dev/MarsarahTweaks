@@ -45,44 +45,48 @@ namespace MarsarahTweaks.Patches.UI
 
 			public static string GetContainerHover(Container container, Inventory inventory)
 			{
-				int used = inventory.NrOfItems();
-				int max = inventory.GetWidth() * inventory.GetHeight();
+				ContainerHoverMode containerMode = ConfigManager.ContainerHoverModeChoice.Value;
 
-				string ratioText = GetColoredRatio(used, max);
-				string itemsLine = GetInventorySummary(inventory);
+				int max = inventory.GetWidth() * inventory.GetHeight();
+				string containerText = "";
+
+				switch (containerMode)
+				{
+					case ContainerHoverMode.CurrentPerMax:
+						int used = inventory.NrOfItems();
+						string usedPerMaxText = $"{used}/{max}";
+						containerText = PaintTextIfEnabled(usedPerMaxText, GetInventoryRatioColor(used, max));
+						break;
+					case ContainerHoverMode.AmountOfFreeSlots:
+						int emptySlots = inventory.GetEmptySlots();
+						string emptySlotsText = $"{emptySlots}";
+						containerText = $"Free Slots: {PaintTextIfEnabled(emptySlotsText, GetInventoryEmptySlotsColor(emptySlots, max))}";
+						break;
+					case ContainerHoverMode.Percent:
+						float usedPercentRaw = inventory.SlotsUsedPercentage();
+						float usedPercentNormalized = usedPercentRaw / 100f;
+						string usedPercentText = $"{usedPercentRaw}%";
+						containerText = PaintTextIfEnabled(usedPercentText, GetPercentColorInverted(usedPercentNormalized));
+						break;
+				}
 
 				string localizedName = Localization.instance.Localize(container.m_name);
 				string localizedUse = Localization.instance.Localize("$KEY_Use");
 				string localizedOpen = Localization.instance.Localize("$piece_container_open");
 				string localizedStack = Localization.instance.Localize("$msg_stackall_hover");
 				string useKeyColored = $"[<color=#ffff00ff><b>{localizedUse}</b></color>]";
+				string oneItemsLine = GetOneItemInventory(inventory);
 
-				string composed = itemsLine != ""
-					? $"{localizedName} ({ratioText})\n{itemsLine}\n{useKeyColored} {localizedOpen} {localizedStack}"
-					: $"{localizedName} ({ratioText})\n{useKeyColored} {localizedOpen} {localizedStack}";
+				string finalText = oneItemsLine != ""
+					? $"{localizedName} ({containerText})\n{oneItemsLine}\n{useKeyColored} {localizedOpen} {localizedStack}"
+					: $"{localizedName} ({containerText})\n{useKeyColored} {localizedOpen} {localizedStack}";
 
-				LogHoverText(composed);
+				LogHoverText(finalText);
 
-				return composed;
+				return finalText;
 			}
 
-			private static string GetColoredRatio(int used, int max)
-			{
-				float fill = max > 0 ? (float)used / max : 0f;
-				Color col = Color.white;
-
-				if (ConfigManager.ColoredHoverInfo.Value)
-				{
-					col = fill < 0.5f
-						? Color.Lerp(Color.green, Color.yellow, fill / 0.5f)
-						: Color.Lerp(Color.yellow, Color.red, (fill - 0.5f) / 0.5f);
-				}
-
-				string hex = ColorUtility.ToHtmlStringRGBA(col);
-				return $"<color=#{hex}>{used}/{max}</color>";
-			}
-
-			private static string GetInventorySummary(Inventory inventory)
+			private static string GetOneItemInventory(Inventory inventory)
 			{
 				if (!ConfigManager.ShowSingleItemChestHover.Value) return "";
 
@@ -102,6 +106,22 @@ namespace MarsarahTweaks.Patches.UI
 				}
 
 				return "";
+			}
+
+			private static Color GetInventoryRatioColor(int used, int max)
+			{
+				float fill = max > 0 ? (float)used / max : 0f;
+				return fill < 0.5f
+					? Color.Lerp(Color.green, Color.yellow, fill / 0.5f)
+					: Color.Lerp(Color.yellow, Color.red, (fill - 0.5f) / 0.5f);
+			}
+
+			private static Color GetInventoryEmptySlotsColor(int empty, int max)
+			{
+				float fill = max > 0 ? (float)empty / max : 0f;
+				return fill < 0.5f
+					? Color.Lerp(Color.red, Color.yellow, fill / 0.5f)
+					: Color.Lerp(Color.yellow, Color.green, (fill - 0.5f) / 0.5f);
 			}
 
 			private static void LogHoverText(string composed)
@@ -156,31 +176,34 @@ namespace MarsarahTweaks.Patches.UI
 
 				BeeHoverMode beeMode = ConfigManager.BeehiveHoverModeChoice.Value;
 				string progressText = "";
+				float honeyPercent;
+				string percentText;
+				string timeText;
 
 				switch (beeMode)
 				{
 					case BeeHoverMode.Percent:
 						// Percentage colored based on honey level like growth percent
-						float honeyPercent = Mathf.Clamp01(produced / beehive.m_secPerUnit);
-						string percentText = $"{honeyPercent:0%}";
-						progressText = PaintTextIfEnabled(percentText, GetHoneyColor(honeyLevel, beehive.m_maxHoney));
+						honeyPercent = Mathf.Clamp01(produced / beehive.m_secPerUnit);
+						percentText = $"{honeyPercent:0%}";
+						progressText = PaintTextIfEnabled(percentText, GetPercentColor(honeyPercent));
 						break;
 
 					case BeeHoverMode.RemainingTime:
 						// Time left is cyan
-						string timeText = FormatTime(remaining);
+						timeText = FormatTime(remaining);
 						progressText = PaintTextIfEnabled(timeText, Color.cyan);
 						break;
 
 					case BeeHoverMode.PercentAndTime:
-						float honeyPct = Mathf.Clamp01(produced / beehive.m_secPerUnit);
-						string pctText = $"{honeyPct:0%}";
-						string pctColored = PaintTextIfEnabled(pctText, GetHoneyColor(honeyLevel, beehive.m_maxHoney));
+						honeyPercent = Mathf.Clamp01(produced / beehive.m_secPerUnit);
+						percentText = $"{honeyPercent:0%}";
+						string percentColored = PaintTextIfEnabled(percentText, GetPercentColor(honeyPercent));
 
-						string timeLeft = FormatTime(remaining);
-						string timeColored = PaintTextIfEnabled(timeLeft, Color.cyan);
+						timeText = FormatTime(remaining);
+						string timeColored = PaintTextIfEnabled(timeText, Color.cyan);
 
-						progressText = $"{pctColored} - {timeColored}";
+						progressText = $"{percentColored} - {timeColored}";
 						break;
 				}
 
@@ -209,11 +232,6 @@ namespace MarsarahTweaks.Patches.UI
 			}
 
 			// ---------- Colors ----------
-			private static Color GetProgressColor(int honeyLevel, int maxHoney, float produced, float secPerUnit)
-			{
-				return (honeyLevel >= maxHoney && produced >= secPerUnit) ? Color.green : Color.cyan;
-			}
-
 			private static Color GetHoneyColor(int honeyLevel, int maxHoney)
 			{
 				float fill = maxHoney > 0 ? (float)honeyLevel / maxHoney : 0f;
@@ -260,15 +278,15 @@ namespace MarsarahTweaks.Patches.UI
 				float growTime = (float)GetGrowTimeMethod.Invoke(plant, null);
 
 				string growthLine = "";
-				float growthPercent = -1f;
-				string percentText = "";
+				float growthPercent;
+				string percentText;
 
 				switch (plantMode)
 				{
 					case PlantHoverMode.Percent:
 						growthPercent = Mathf.Clamp01((float)(age / growTime));
 						percentText = $"{growthPercent:0%}";
-						growthLine = PaintTextIfEnabled(percentText, GetColorForGrowth(growthPercent));
+						growthLine = PaintTextIfEnabled(percentText, GetPercentColor(growthPercent));
 						break;
 					case PlantHoverMode.RemainingTime:
 						float remaining = Mathf.Max(0f, growTime - (float)age);
@@ -278,7 +296,7 @@ namespace MarsarahTweaks.Patches.UI
 					case PlantHoverMode.PercentAndTime:
 						growthPercent = Mathf.Clamp01((float)(age / growTime));
 						percentText = $"{growthPercent:0%}";
-						string percentColored = PaintTextIfEnabled(percentText, GetColorForGrowth(growthPercent));
+						string percentColored = PaintTextIfEnabled(percentText, GetPercentColor(growthPercent));
 
 						remaining = Mathf.Max(0f, growTime - (float)age);
 						timeLeftText = FormatTime(remaining);
@@ -302,15 +320,6 @@ namespace MarsarahTweaks.Patches.UI
 
 				return hoverText;
 			}
-
-			// ---------- Colors ----------
-			private static Color GetColorForGrowth(float growFactor)
-			{
-				// 0% = red, 50% = yellow, 100% = green
-				return growFactor < 0.5f
-					? Color.Lerp(Color.red, Color.yellow, growFactor / 0.5f)
-					: Color.Lerp(Color.yellow, Color.green, (growFactor - 0.5f) / 0.5f);
-			}
 		}
 
 		// ---------- Generic time formatter ----------
@@ -319,6 +328,23 @@ namespace MarsarahTweaks.Patches.UI
 			int mins = Mathf.FloorToInt(seconds / 60f);
 			int secs = Mathf.FloorToInt(seconds % 60f);
 			return mins > 0f ? $"{mins}m {secs}s" : $"{secs}s";
+		}
+
+		// ---------- Percent color -----------
+		private static Color GetPercentColor(float percent)
+		{
+			// 0% = red, 50% = yellow, 100% = green
+			return percent < 0.5f
+				? Color.Lerp(Color.red, Color.yellow, percent / 0.5f)
+				: Color.Lerp(Color.yellow, Color.green, (percent - 0.5f) / 0.5f);
+		}
+
+		private static Color GetPercentColorInverted(float percent)
+		{
+			// 0% = green, 50% = yellow, 100% = red
+			return percent < 0.5f
+				? Color.Lerp(Color.green, Color.yellow, percent / 0.5f)
+				: Color.Lerp(Color.yellow, Color.red, (percent - 0.5f) / 0.5f);
 		}
 
 		// ---------- Generic painter ----------

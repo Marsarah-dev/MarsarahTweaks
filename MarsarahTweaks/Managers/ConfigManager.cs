@@ -85,6 +85,13 @@ namespace MarsarahTweaks.Managers
 			Cyan
 		}
 
+		public enum ContainerHoverMode
+		{
+			CurrentPerMax,
+			AmountOfFreeSlots,
+			Percent
+		}
+
 		public enum BeeHoverMode
 		{
 			RemainingTime,
@@ -197,8 +204,9 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIDetailedHovers = new ConfigMetadata("24 - Detailed Hover Information", "Shows extra information like number of available spaces in chests or remaining time for fermenters, beehives, smelters, cooking stations, and plants");
 			public static readonly ConfigMetadata UIColoredHovers = new ConfigMetadata("25 - Use Dynamic Colors For Hover Info", "Colors the hover text based on chest fill or progress. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIChestSingleItem = new ConfigMetadata("26 - Chest Hover - Show Info For Single Item", "If a container has only one type of item, its name and quantity are also displayed in the hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIBeeHoverMode = new ConfigMetadata("27 - Beehive Hover Mode", "Choose the method of displaying Beehive hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIPlantHoverMode = new ConfigMetadata("28 - Plant Hover Mode", "Choose the method of displaying Plant hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIcontainerHoverMode = new ConfigMetadata("27 - Container Hover Mode", "Choose the method of displaying Container hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIBeeHoverMode = new ConfigMetadata("28 - Beehive Hover Mode", "Choose the method of displaying Beehive hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIPlantHoverMode = new ConfigMetadata("29 - Plant Hover Mode", "Choose the method of displaying Plant hover info. Requires Detailed Hover Information");
 		}
 
 		// Config entries
@@ -298,6 +306,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> DetailedHoverInfo;
 		public static ConfigEntry<bool> ColoredHoverInfo;
 		public static ConfigEntry<bool> ShowSingleItemChestHover;
+		public static ConfigEntry<ContainerHoverMode> ContainerHoverModeChoice;
 		public static ConfigEntry<BeeHoverMode> BeehiveHoverModeChoice;
 		public static ConfigEntry<PlantHoverMode> PlantHoverModeChoice;
 
@@ -402,6 +411,7 @@ namespace MarsarahTweaks.Managers
 			DetailedHoverInfo = CreateConfig(ConfigSections.UI, Configs.UIDetailedHovers.Name, true, Configs.UIDetailedHovers.Description, false);
 			ColoredHoverInfo = CreateConfig(ConfigSections.UI, Configs.UIColoredHovers.Name, true, Configs.UIColoredHovers.Description, false);
 			ShowSingleItemChestHover = CreateConfig(ConfigSections.UI, Configs.UIChestSingleItem.Name, false, Configs.UIChestSingleItem.Description, false);
+			ContainerHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIcontainerHoverMode.Name, ContainerHoverMode.CurrentPerMax, Configs.UIcontainerHoverMode.Description, false);
 			BeehiveHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIBeeHoverMode.Name, BeeHoverMode.RemainingTime, Configs.UIBeeHoverMode.Description, false);
 			PlantHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIPlantHoverMode.Name, PlantHoverMode.RemainingTime, Configs.UIPlantHoverMode.Description, false);
 
