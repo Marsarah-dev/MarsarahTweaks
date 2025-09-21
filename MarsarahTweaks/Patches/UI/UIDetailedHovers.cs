@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using System.Xml.Linq;
 using TMPro;
 using UnityEngine;
 using static MarsarahTweaks.Managers.ConfigManager;
@@ -16,7 +17,8 @@ namespace MarsarahTweaks.Patches.UI
 
 		// Cache the FieldInfo for performance
 		private static readonly FieldInfo InventoryField = typeof(Container).GetField("m_inventory", BindingFlags.NonPublic | BindingFlags.Instance);
-		private static readonly FieldInfo NViewField = typeof(Beehive).GetField("m_nview", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly FieldInfo NViewFieldBeehive = typeof(Beehive).GetField("m_nview", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly FieldInfo NViewFieldCookingStation = typeof(CookingStation).GetField("m_nview", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly FieldInfo FermenterExposedField = typeof(Fermenter).GetField("m_exposed", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetHoneyLevelMethod = typeof(Beehive).GetMethod("GetHoneyLevel", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetTimeSincePlantedMethod = typeof(Plant).GetMethod("TimeSincePlanted", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -24,6 +26,9 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly MethodInfo GetFermenterStatusMethod = typeof(Fermenter).GetMethod("GetStatus", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetFermenterContentNameMethod = typeof(Fermenter).GetMethod("GetContentName", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetFermentationTimeMethod = typeof(Fermenter).GetMethod("GetFermentationTime", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly MethodInfo GetSlotMethod = typeof(CookingStation).GetMethod("GetSlot", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly MethodInfo GetItemConversionMethod = typeof(CookingStation).GetMethod("GetItemConversion", BindingFlags.NonPublic | BindingFlags.Instance);
+
 
 		// Log cache
 		private static string _lastHoverText = "";
@@ -152,14 +157,14 @@ namespace MarsarahTweaks.Patches.UI
 			{
 				string name = Localization.instance.Localize(beehive.m_name);
 
-				if (GetHoneyLevelMethod == null || NViewField == null)
+				if (GetHoneyLevelMethod == null || NViewFieldBeehive == null)
 				{
 					log.Warn("Beehive reflection fields not found.");
 					return name;
 				}
 
 				int honeyLevel = (int)GetHoneyLevelMethod.Invoke(beehive, null);
-				ZNetView nview = NViewField.GetValue(beehive) as ZNetView;
+				ZNetView nview = NViewFieldBeehive.GetValue(beehive) as ZNetView;
 				if (nview == null)
 				{
 					log.Warn("Beehive m_nview is null.");
@@ -432,6 +437,146 @@ namespace MarsarahTweaks.Patches.UI
 						// Vanilla handles "Empty" state
 						return null;
 				}
+			}
+		}
+
+		[HarmonyPatch(typeof(CookingStation), "GetHoverText")]
+		internal static class CookingStationHoverPatch
+		{
+			private static bool Prefix(CookingStation __instance, ref string __result)
+			{
+				if (!ConfigManager.DetailedHoverInfo.Value)
+					return true; // vanilla
+
+				// Only owners see slot timers
+				ZNetView nview = NViewFieldCookingStation.GetValue(__instance) as ZNetView;
+				if (nview == null)
+				{
+					log.Warn("Beehive m_nview is null.");
+					return true;
+				}
+
+				if (!nview.IsOwner())
+					return true;
+
+				string hover = GetCookingStationHover(__instance);
+				if (hover != null)
+				{
+					__result = hover;
+					return false;
+				}
+
+				return true; // fallback to vanilla
+			}
+
+			private static string GetCookingStationHover(CookingStation station)
+			{
+				if (GetSlotMethod == null || GetItemConversionMethod == null)
+				{
+					log.Warn("CookingStation reflection not found.");
+					return null;
+				}
+
+				string stationName = Localization.instance.Localize(station.m_name);
+				string slotInfo = "";
+				int activeSlots = 0;
+
+				for (int i = 0; i < station.m_slots.Length; i++)
+				{
+					object[] args = { i, null, 0f, null };
+					GetSlotMethod.Invoke(station, args);
+
+					string itemName = args[1] as string;
+					float cookedTime = (float)args[2];
+
+					if (string.IsNullOrEmpty(itemName) || itemName == station.m_overCookedItem?.name)
+						continue;
+
+					var itemConv = (CookingStation.ItemConversion)GetItemConversionMethod.Invoke(station, new object[] { itemName });
+					if (itemConv == null)
+						continue;
+
+					activeSlots++;
+
+					string displayText = BuildCookingSlotText(itemConv, cookedTime, station);
+					slotInfo += "\n" + displayText;
+				}
+
+				if (activeSlots == 0)
+					return null; // vanilla handles empty
+
+				string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
+				string localizedCook = Localization.instance.Localize("$piece_cstand_cook");
+
+				return (activeSlots >= station.m_slots.Length)
+					? $"{stationName}{slotInfo}"
+					: $"{stationName}\n{useKeyColored} {localizedCook} {slotInfo}";
+			}
+
+			private static string BuildCookingSlotText(CookingStation.ItemConversion conv, float cookedTime, CookingStation station)
+			{
+				float cookTime = conv.m_cookTime;
+				float overCookTime = cookTime * 2f;
+
+				string targetName = Localization.instance.Localize(conv.m_to.GetHoverName());
+				string overCookedName = Localization.instance.Localize(station.m_overCookedItem.GetHoverName());
+
+				switch (ConfigManager.CookingStationHoverModeChoice.Value)
+				{
+					case CookingStationHoverMode.Percent:
+						if (cookedTime > cookTime)
+						{
+							float percent = Mathf.Clamp01((cookedTime - cookTime) / cookTime);
+							string percentText = $"{percent:0%}";
+							return $"{overCookedName}: {PaintTextIfEnabled(percentText, GetPercentColorInverted(percent))}";
+						}
+						else
+						{
+							float percent = Mathf.Clamp01(cookedTime / cookTime);
+							string percentText = $"{percent:0%}";
+							return $"{targetName}: {PaintTextIfEnabled(percentText, GetPercentColor(percent))}";
+						}
+
+					case CookingStationHoverMode.RemainingTime:
+						if (cookedTime > cookTime)
+						{
+							float remaining = Mathf.Max(0f, overCookTime - cookedTime);
+							string time = FormatTime(remaining);
+							return $"{overCookedName}: {PaintTextIfEnabled(time, Color.red)}";
+						}
+						else
+						{
+							float remaining = Mathf.Max(0f, cookTime - cookedTime);
+							string time = FormatTime(remaining);
+							return $"{targetName}: {PaintTextIfEnabled(time, Color.cyan)}";
+						}
+
+					case CookingStationHoverMode.PercentAndTime:
+						if (cookedTime > cookTime)
+						{
+							float percent = Mathf.Clamp01((cookedTime - cookTime) / cookTime);
+							string percentText = $"{percent:0%}";
+							string percentColored = PaintTextIfEnabled(percentText, GetPercentColorInverted(percent));
+
+							float remaining = Mathf.Max(0f, overCookTime - cookedTime);
+							string time = PaintTextIfEnabled(FormatTime(remaining), Color.red);
+
+							return $"{overCookedName}: {percentColored} - {time}";
+						}
+						else
+						{
+							float percent = Mathf.Clamp01(cookedTime / cookTime);
+							string percentText = $"{percent:0%}";
+							string percentColored = PaintTextIfEnabled(percentText, GetPercentColor(percent));
+
+							float remaining = Mathf.Max(0f, cookTime - cookedTime);
+							string time = PaintTextIfEnabled(FormatTime(remaining), Color.cyan);
+
+							return $"{targetName}: {percentColored} - {time}";
+						}
+				}
+
+				return null;
 			}
 		}
 

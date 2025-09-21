@@ -25,6 +25,8 @@
       - Added Detailed Hover Information 
         - Chests
         - Beehives
+        - Fermenters
+        - Cooking Stations
         - Plants
       - The symbols next to the time of day now indicate current weather as well. If the weather is clear, then the symbol changes according to the time of day
 
@@ -32,7 +34,6 @@
  ******* TODO *******
 
  - FormatTime shows hours too if minutes above 60
- - Hover for chests: Color 'Empty' word
  - Item durability bar: flash the bar when durability is 0
  - Check/implement BetterEnemyNamepletes for players
  - Implement chest hover empty slots, fermenter and plants remaining time 
