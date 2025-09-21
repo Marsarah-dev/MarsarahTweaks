@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using MarsarahTweaks.Managers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
@@ -16,9 +17,13 @@ namespace MarsarahTweaks.Patches.UI
 		// Cache the FieldInfo for performance
 		private static readonly FieldInfo InventoryField = typeof(Container).GetField("m_inventory", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly FieldInfo NViewField = typeof(Beehive).GetField("m_nview", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly FieldInfo FermenterExposedField = typeof(Fermenter).GetField("m_exposed", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetHoneyLevelMethod = typeof(Beehive).GetMethod("GetHoneyLevel", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetTimeSincePlantedMethod = typeof(Plant).GetMethod("TimeSincePlanted", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetGrowTimeMethod = typeof(Plant).GetMethod("GetGrowTime", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly MethodInfo GetFermenterStatusMethod = typeof(Fermenter).GetMethod("GetStatus", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly MethodInfo GetFermenterContentNameMethod = typeof(Fermenter).GetMethod("GetContentName", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly MethodInfo GetFermentationTimeMethod = typeof(Fermenter).GetMethod("GetFermentationTime", BindingFlags.NonPublic | BindingFlags.Instance);
 
 		// Log cache
 		private static string _lastHoverText = "";
@@ -71,10 +76,9 @@ namespace MarsarahTweaks.Patches.UI
 				}
 
 				string localizedName = Localization.instance.Localize(container.m_name);
-				string localizedUse = Localization.instance.Localize("$KEY_Use");
 				string localizedOpen = Localization.instance.Localize("$piece_container_open");
 				string localizedStack = Localization.instance.Localize("$msg_stackall_hover");
-				string useKeyColored = $"[<color=#ffff00ff><b>{localizedUse}</b></color>]";
+				string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
 				string oneItemsLine = GetOneItemInventory(inventory);
 
 				string finalText = oneItemsLine != ""
@@ -122,15 +126,6 @@ namespace MarsarahTweaks.Patches.UI
 				return fill < 0.5f
 					? Color.Lerp(Color.red, Color.yellow, fill / 0.5f)
 					: Color.Lerp(Color.yellow, Color.green, (fill - 0.5f) / 0.5f);
-			}
-
-			private static void LogHoverText(string composed)
-			{
-				if (_lastHoverText != composed)
-				{
-					_lastHoverText = composed;
-					log.Info($"UIDetailedHovers hover updated: {composed}", header: true);
-				}
 			}
 		}
 
@@ -210,8 +205,7 @@ namespace MarsarahTweaks.Patches.UI
 				string productName = Localization.instance.Localize(beehive.m_honeyItem.m_itemData.m_shared.m_name);
 				string productColored = PaintTextIfEnabled(productName, GetHoneyColor(honeyLevel, beehive.m_maxHoney));
 				string honeyCountColored = PaintTextIfEnabled("x" + honeyLevel, GetHoneyColor(honeyLevel, beehive.m_maxHoney));
-
-				string useKeyColored = $"[<color=#ffff00ff><b>{Localization.instance.Localize("$KEY_Use")}</b></color>]";
+				string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
 
 				string hoverText;
 				if (honeyLevel == beehive.m_maxHoney)
@@ -269,7 +263,7 @@ namespace MarsarahTweaks.Patches.UI
 				if (GetTimeSincePlantedMethod == null)
 				{
 					log.Warn("Plant reflection fields not found.");
-					return Localization.instance.Localize(plant.m_name);
+					return name;
 				}
 
 				PlantHoverMode plantMode = ConfigManager.PlantHoverModeChoice.Value;
@@ -280,6 +274,8 @@ namespace MarsarahTweaks.Patches.UI
 				string growthLine = "";
 				float growthPercent;
 				string percentText;
+				float remaining;
+				string timeLeftText;
 
 				switch (plantMode)
 				{
@@ -289,8 +285,8 @@ namespace MarsarahTweaks.Patches.UI
 						growthLine = PaintTextIfEnabled(percentText, GetPercentColor(growthPercent));
 						break;
 					case PlantHoverMode.RemainingTime:
-						float remaining = Mathf.Max(0f, growTime - (float)age);
-						string timeLeftText = FormatTime(remaining);
+						remaining = Mathf.Max(0f, growTime - (float)age);
+						timeLeftText = FormatTime(remaining);
 						growthLine = PaintTextIfEnabled(timeLeftText, Color.cyan);
 						break;
 					case PlantHoverMode.PercentAndTime:
@@ -306,7 +302,7 @@ namespace MarsarahTweaks.Patches.UI
 						break;
 				}
 
-				string useKeyColored = $"[<color=#ffff00ff><b>{Localization.instance.Localize("$KEY_Use")}</b></color>]";
+				string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
 
 				string hoverText;
 				if (age >= growTime) // Plant is grown
@@ -319,6 +315,123 @@ namespace MarsarahTweaks.Patches.UI
 				}
 
 				return hoverText;
+			}
+		}
+
+		[HarmonyPatch(typeof(Fermenter), nameof(Fermenter.GetHoverText))]
+		internal static class DetailedHoverFermenter_Patch
+		{
+			private static bool Prefix(Fermenter __instance, ref string __result)
+			{
+				if (!ConfigManager.DetailedHoverInfo.Value)
+					return true; // fall back to vanilla
+
+				// Skip if player has no access
+				if (!PrivateArea.CheckAccess(__instance.transform.position, 0f, flash: false))
+				{
+					__result = Localization.instance.Localize(__instance.m_name + "\n$piece_noaccess");
+					return false;
+				}
+
+				string customFermenterString = GetFermenterHover(__instance);
+				if (customFermenterString == null)
+					return true; // fall back to vanilla
+
+				__result = customFermenterString;
+				return false;
+			}
+
+			// ---------- Hover builder ----------
+			private static string GetFermenterHover(Fermenter fermenter)
+			{
+				string name = Localization.instance.Localize(fermenter.m_name);
+
+				if (FermenterExposedField == null || GetFermenterStatusMethod == null || GetFermenterContentNameMethod == null || GetFermentationTimeMethod == null)
+				{
+					log.Warn("Fermenter reflection fields not found.");
+					return null;
+				}
+
+				object statusObj = GetFermenterStatusMethod.Invoke(fermenter, null);
+				if (statusObj == null)
+				{
+					log.Warn("Fermenter.GetStatus returned null.");
+					return null;
+				}
+				Type statusType = GetFermenterStatusMethod.ReturnType;
+				string statusName = Enum.GetName(statusType, statusObj);
+
+				switch (statusName)
+				{
+					case "Fermenting":
+					{
+						LogHoverText($"Switch case - {statusName}");
+						FermenterHoverMode fermenterMode = ConfigManager.FermenterHoverModeChoice.Value;
+						string contentName = Localization.instance.Localize((string)GetFermenterContentNameMethod.Invoke(fermenter, null));
+						string localizedExposed = Localization.instance.Localize("$piece_fermenter_exposed");
+						string localizedFermenting = Localization.instance.Localize("$piece_fermenter_fermenting");
+						string hoverText = null;
+
+						double timePassed = (double)GetFermentationTimeMethod.Invoke(fermenter, null);
+						float totalTime = fermenter.m_fermentationDuration;
+						float percent;
+						string percentText;
+						string percentColored;
+						float remaining;
+						string timeText;
+						string timeColored;
+
+						// If exposed → special message
+						bool fermenterExposed = (bool)FermenterExposedField.GetValue(fermenter);
+						if (fermenterExposed)
+						{
+							return $"{name} ( {contentName} )\n{localizedExposed}";
+						}
+
+						switch (fermenterMode)
+						{
+							case FermenterHoverMode.Percent:
+								percent = Mathf.Clamp01((float)(timePassed / totalTime));
+								percentText = $"{percent:0%}";
+								percentColored = PaintTextIfEnabled(percentText, GetPercentColor(percent));
+								hoverText = $"{name} ( {contentName} )\n{localizedFermenting}: {percentColored}";
+								break;
+							case FermenterHoverMode.RemainingTime:
+								remaining = Mathf.Max(0f, totalTime - (float)timePassed);
+								timeText = FormatTime(remaining);
+								timeColored = PaintTextIfEnabled(timeText, Color.cyan);
+								hoverText = $"{name} ( {contentName} )\n{localizedFermenting}: {timeColored}";
+								break;
+							case FermenterHoverMode.PercentAndTime:
+								percent = Mathf.Clamp01((float)(timePassed / totalTime));
+								percentText = $"{percent:0%}";
+								percentColored = PaintTextIfEnabled(percentText, GetPercentColor(percent));
+								remaining = Mathf.Max(0f, totalTime - (float)timePassed);
+								timeText = FormatTime(remaining);
+								timeColored = PaintTextIfEnabled(timeText, Color.cyan);
+								hoverText = $"{name} ( {contentName} )\n{localizedFermenting}: {percentColored} - {timeColored}";
+								break;
+						}
+
+						return hoverText;
+					}
+
+					case "Ready":
+					{
+						LogHoverText($"Switch case - {statusName}");
+						string contentName = (string)GetFermenterContentNameMethod.Invoke(fermenter, null);
+						string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
+						string localizedReady = PaintTextIfEnabled(Localization.instance.Localize("$piece_fermenter_ready"), Color.green);
+						string localizedTap = Localization.instance.Localize("$piece_fermenter_tap");
+
+						return Localization.instance.Localize($"{name} ( {localizedReady} )\n{contentName}\n{useKeyColored} {localizedTap}");
+					}
+
+					default:
+						LogHoverText($"Switch case - {statusName}");
+						// Vanilla handles "Empty" state
+						return null;
+				}
 			}
 		}
 
@@ -355,9 +468,23 @@ namespace MarsarahTweaks.Patches.UI
 		}
 
 		// ---------- Generic painter if enabled ----------
-		private static string PaintTextIfEnabled(string text, Color col)
+		private static string PaintTextIfEnabled(string text, Color col, bool bold = false)
 		{
-			return ConfigManager.ColoredHoverInfo.Value ? PaintText(text, col) : text;
+			if (!ConfigManager.ColoredHoverInfo.Value)
+				return bold ? $"<b>{text}</b>" : text;
+
+			string colored = PaintText(text, col);
+			return bold ? $"<b>{colored}</b>" : colored;
+		}
+
+		// ---------- Log text only when changed ----------
+		private static void LogHoverText(string composed)
+		{
+			if (_lastHoverText != composed)
+			{
+				_lastHoverText = composed;
+				log.Info($"UIDetailedHovers hover updated: {composed}", header: true);
+			}
 		}
 	}
 }
