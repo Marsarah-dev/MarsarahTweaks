@@ -6,7 +6,7 @@
       - Fixed Clearer Weather feature to apply defined weather weights properly every time the weather is calculated (initially they were applied only at logon)
 
    B. Updates
-      - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed.
+      - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed. Logs are printed to know exactly which mod overlaps with which config when this happens.
       
    C. New Grind Reduction
 
@@ -33,9 +33,19 @@
 
  ******* TODO *******
 
- - Check/implement BetterEnemyNamepletes for players
+public enum SkillXPNotificationStyle
+{
+    FloatingBar,
+    CornerStack,
+    RadialFill, 
+    Top-Left message
+}
+
+ - Fix Summon counter spacing
+ - Combine the two UI layouts in an enum toggle
  - Implement skill progress message
- - See if I can merge some configs (Better Nameplates, Better Item Quality)
+ - Implement player login screen stats
+ - Implement Player Inspector - see other player stats that are currently logged into the world
  - Add SmartDropbox
  - Add new clause for Permissions in readme: "You are free to take inspiration or implement similar features, but please do so with your own code and assets."
    

@@ -121,8 +121,7 @@ namespace MarsarahTweaks.Patches.UI
 				// Ensure TMP has a proper material
 				tmpText.fontMaterial = tmpText.fontMaterial != null ? new Material(tmpText.fontMaterial) : tmpText.font.material;
 
-				if (tmpText.fontMaterial.HasProperty(ShaderUtilities.ID_OutlineWidth) &&
-					tmpText.fontMaterial.HasProperty(ShaderUtilities.ID_OutlineColor))
+				if (tmpText.fontMaterial.HasProperty(ShaderUtilities.ID_OutlineWidth) && tmpText.fontMaterial.HasProperty(ShaderUtilities.ID_OutlineColor))
 				{
 					tmpText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, 0.125f);
 					tmpText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, Color.black);

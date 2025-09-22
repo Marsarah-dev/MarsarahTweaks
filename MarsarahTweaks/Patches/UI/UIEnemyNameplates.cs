@@ -9,19 +9,21 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static MarsarahTweaks.Managers.ConfigManager;
 
 namespace MarsarahTweaks.Features.UI
 {
 	internal class UIEnemyNameplates : UIController
 	{
-		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Info);
 
 		// New sizes
 		private const float BarHeight = 14f;
 		private const float BarHeightBoss = 18f;
 
 		// Backups
+		//private static Color? defaultBackgroundColor = null;
 		private static float DefaultDistance = -1f;
 		private static float DefaultBarHeight = -1f;
 		private static float DefaultBarHeightBoss = -1f;
@@ -124,7 +126,7 @@ namespace MarsarahTweaks.Features.UI
 				GuiBar fastFriendlyBar = hud_m_healthFastFriendly_Field?.GetValue(hudData) as GuiBar;
 
 				ApplyBarSettings(c, healthTransform, fastBar, slowBar, fastFriendlyBar, ConfigManager.BetterEnemyNameplates.Value);
-				AddHpText(hudData, healthTransform, ConfigManager.BetterEnemyNameplates.Value);
+				AddHpText(c, hudData, healthTransform, ConfigManager.BetterEnemyNameplates.Value);
 			}
 		}
 
@@ -135,7 +137,7 @@ namespace MarsarahTweaks.Features.UI
 			{
 				if (m_hudsField == null) return;
 
-				var huds = m_hudsField.GetValue(__instance) as IDictionary;
+				IDictionary huds = m_hudsField.GetValue(__instance) as IDictionary;
 				if (huds == null) return;
 
 				foreach (DictionaryEntry entry in huds)
@@ -155,14 +157,23 @@ namespace MarsarahTweaks.Features.UI
 			}
 		}
 
-		private static void ApplyBarSettings(Character c, RectTransform health, GuiBar fastBar, GuiBar slowBar, GuiBar fastFriendlyBar, bool enable)
+		private static void ApplyBarSettings(Character character, RectTransform health, GuiBar fastBar, GuiBar slowBar, GuiBar fastFriendlyBar, bool enable)
 		{
+			if (character == null || health == null) return;
+
+			// Store default background color
+			/*if (defaultBackgroundColor == null)
+			{
+				defaultBackgroundColor = GetBackgroundColor(health);
+				log.Info("Default background color set.");
+			}*/
+
 			// Backup
-			if (!c.IsBoss() && DefaultBarHeight == -1f)
+			if (!character.IsBoss() && DefaultBarHeight == -1f)
 			{
 				DefaultBarHeight = health.sizeDelta.y;
 			}
-			if (c.IsBoss() && DefaultBarHeightBoss == -1f)
+			if (character.IsBoss() && DefaultBarHeightBoss == -1f)
 			{
 				DefaultBarHeightBoss = health.sizeDelta.y;
 			}
@@ -170,40 +181,74 @@ namespace MarsarahTweaks.Features.UI
 			float targetHeight;
 			if (enable)
 			{
-				targetHeight = c.IsBoss() ? BarHeightBoss : BarHeight;
+				targetHeight = character.IsBoss() ? BarHeightBoss : BarHeight;
 			}
 			else
 			{
-				targetHeight = c.IsBoss() ? DefaultBarHeightBoss : DefaultBarHeight;
+				targetHeight = character.IsBoss() ? DefaultBarHeightBoss : DefaultBarHeight;
 			}
 
 			if (_lastBarHeight.TryGetValue(health, out float lastHeight) && lastHeight == targetHeight)
 				return; // nothing to do
 
 			health.sizeDelta = new Vector2(health.sizeDelta.x, targetHeight);
-			fastBar.m_bar.sizeDelta = new Vector2(fastBar.m_bar.sizeDelta.x, targetHeight);
-			slowBar.m_bar.sizeDelta = new Vector2(slowBar.m_bar.sizeDelta.x, targetHeight);
+			if (fastBar != null) 
+				fastBar.m_bar.sizeDelta = new Vector2(fastBar.m_bar.sizeDelta.x, targetHeight);
+			if (slowBar != null)
+				slowBar.m_bar.sizeDelta = new Vector2(slowBar.m_bar.sizeDelta.x, targetHeight);
 			if (fastFriendlyBar != null)
+			{
 				fastFriendlyBar.m_bar.sizeDelta = new Vector2(fastFriendlyBar.m_bar.sizeDelta.x, targetHeight);
+			}
 
 			_lastBarHeight[health] = targetHeight;
+			Color bossFillColor = Color.magenta;
+			Color neutralFillColor = Color.yellow;
+			Color playerFillColor = Color.green;
+			Color enemyFillColor = Color.red;
+			//Color friendlyBackgroundColor = new Color(0.4f, 0.4f, 0.45f);
+			//Color enemyBackgroundColor = defaultBackgroundColor.HasValue ? defaultBackgroundColor.Value : new Color(0.1f, 0.1f, 0.1f);
+			//Color(0.2f, 0.15f, 0.1f); // Color(0.1f, 0.15f, 0.2f) (this 7); // Color(0.15f, 0.05f, 0.15f); // Color(0.15f, 0.15f, 0.05f); // Color(0.05f, 0.15f, 0.15f); // Color(0.25f, 0.2f, 0.15f); // Color(0.1f, 0.2f, 0.1f); // Color(0.2f, 0.2f, 0.25f) (this 1);
+			// Color(0.2f, 0.2f, 0.25f) (this 1); - Color(0.3f, 0.3f, 0.35f); Color(0.4f, 0.4f, 0.45f);
+			// Color(0.1f, 0.15f, 0.2f) (this 7); - Color(0.2f, 0.25f, 0.3f); Color(0.25f, 0.3f, 0.35f);
 
 			if (enable)
 			{
-				if (c.IsBoss())
-					fastBar.SetColor(Color.magenta);
-				else if (c.IsTamed() || c.IsPlayer())
-					fastBar.SetColor(Color.green);
+				if (character.IsBoss())
+				{
+					fastBar?.SetColor(bossFillColor);
+					//SetBackgroundColor(fastBar, enemyBackgroundColor);
+				}
+				else if (character.IsTamed())
+				{
+					fastBar?.SetColor(neutralFillColor);
+					fastFriendlyBar?.SetColor(neutralFillColor);
+					//SetBackgroundColor(fastFriendlyBar, friendlyBackgroundColor);
+				}
+				else if (character.IsPlayer())
+				{
+					fastBar?.SetColor(playerFillColor);
+					fastFriendlyBar?.SetColor(playerFillColor);
+					//SetBackgroundColor(fastBar, friendlyBackgroundColor);
+				}
 				else
-					fastBar.SetColor(Color.red);
+				{
+					fastBar?.SetColor(enemyFillColor);
+					fastFriendlyBar?.SetColor(neutralFillColor);
+					//SetBackgroundColor(fastBar, enemyBackgroundColor);
+					//SetBackgroundColor(fastFriendlyBar, friendlyBackgroundColor);
+				}
 			}
 			else
 			{
-				fastBar.SetColor(Color.red);
+				fastBar?.SetColor(enemyFillColor);
+				fastFriendlyBar?.SetColor(playerFillColor);
+				//SetBackgroundColor(fastBar, enemyBackgroundColor);
+				//SetBackgroundColor(fastFriendlyBar, enemyBackgroundColor);
 			}
 		}
 
-		private static void AddHpText(object hudData, RectTransform healthTransform, bool enableMainBars)
+		private static void AddHpText(Character character, object hudData, RectTransform healthTransform, bool enableMainBars)
 		{
 			if (_hpTextCache.TryGetValue(hudData, out var existing))
 				return; // already created
@@ -288,9 +333,33 @@ namespace MarsarahTweaks.Features.UI
 			float maxHealth = character.GetMaxHealth();
 			float frac = Mathf.Clamp01(currentHealth / Math.Max(1f, maxHealth));
 
-			//hpTexts.HP.text = $"{Mathf.CeilToInt(currentHealth)} - {Mathf.CeilToInt(maxHealth)}";
 			hpTexts.HP.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
 			hpTexts.HpPercent.text = $"{Mathf.RoundToInt(frac * 100f)}%";
+
+			Color colorForFriendly = Color.black;
+			Color colorForHostile = Color.white;
+
+			if (character.IsTamed() || character.IsPlayer())
+			{
+				hpTexts.HP.color = colorForFriendly;
+				hpTexts.HpPercent.color = colorForFriendly;
+			}
+			else
+			{
+				BaseAI characterAi = character.GetBaseAI();
+				bool isEnemy = characterAi != null && characterAi.IsEnemy(Player.m_localPlayer);
+
+				if (!isEnemy) // neutral/friendly NPC
+				{
+					hpTexts.HP.color = colorForFriendly;
+					hpTexts.HpPercent.color = colorForFriendly;
+				}
+				else // hostile
+				{
+					hpTexts.HP.color = colorForHostile;
+					hpTexts.HpPercent.color = colorForHostile;
+				}
+			}
 		}
 
 		private static void UpdateHpTextLayout(HpTexts hpTexts, bool enableBoth)
@@ -361,6 +430,58 @@ namespace MarsarahTweaks.Features.UI
 					nameText.color = Color.white;
 				}
 			}
+		}
+
+		// Helpers
+		private static void SetBackgroundColor(GuiBar bar, Color color)
+		{
+			if (bar == null || bar.m_bar == null)
+			{
+				log.Warn("[BackgroundChange] Bar or bar.m_bar is null");
+				return;
+			}
+
+			// climb to the root health container: the parent of the bar's parent
+			RectTransform healthContainer = bar.m_bar.parent?.parent as RectTransform;
+			if (healthContainer == null)
+			{
+				log.Warn("[BackgroundChange] Could not find health container");
+				return;
+			}
+
+			var images = healthContainer.GetComponentsInChildren<Image>(true);
+			foreach (var img in images)
+			{
+				log.Info($"Image name: {img.name}");
+				if (img.name == "bkg")
+				{
+					img.color = color;
+					log.Info($"[BackgroundChange] Changed {img.name} to {img.color}");
+					break;
+				}
+			}
+		}
+
+		private static Color GetBackgroundColor(RectTransform health)
+		{
+			if (health == null)
+			{
+				log.Warn("[GetBackgroundColor] health is null");
+				return Color.clear;
+			}
+
+			var images = health.GetComponentsInChildren<Image>(true);
+			foreach (var img in images)
+			{
+				if (img.name == "bkg")
+				{
+					log.Info($"[GetBackgroundColor] Found {img.name} with color {img.color}");
+					return img.color;
+				}
+			}
+
+			log.Warn("[GetBackgroundColor] No 'bkg' image found under health");
+			return Color.clear;
 		}
 	}
 }
