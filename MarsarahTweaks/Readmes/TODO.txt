@@ -8,6 +8,7 @@
 
    B. Updates
       - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed. Logs are printed to know exactly which mod overlaps with which config when this happens.
+      - Converted the "Alternate UI Layout" config toggle into an Enum choice named "UI Layout Mode" to make it more obvious as to what that config was doing.
       
    C. New Grind Reduction
 
@@ -42,7 +43,6 @@ public enum SkillXPNotificationStyle
     Top-Left message
 }
 
- - Combine the two UI layouts in an enum toggle
  - Implement skill progress message
  - Implement player login screen stats
  - Implement Player Inspector - see other player stats that are currently logged into the world

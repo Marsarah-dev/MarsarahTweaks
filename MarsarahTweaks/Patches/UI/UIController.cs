@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static MarsarahTweaks.Managers.ConfigManager;
 
 namespace MarsarahTweaks.Patches.UI
 {
@@ -142,7 +143,9 @@ namespace MarsarahTweaks.Patches.UI
 
 		public static void UpdateUIPositions()
 		{
-			if (!ConfigManager.UseSymbolsForUI.Value)
+			bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
+
+			if (!newUI)
 			{
 				// Base position
 				float xOffset = -45f;

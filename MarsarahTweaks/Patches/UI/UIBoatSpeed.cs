@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MarsarahTweaks.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using MarsarahTweaks.Managers;
+using static MarsarahTweaks.Managers.ConfigManager;
 
 namespace MarsarahTweaks.Patches.UI
 {
@@ -81,10 +82,12 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (ConfigManager.ShowBoatSpeed.Value)
 				{
+					bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
+
 					CreateTextBasedUI(__instance);
 					CreateSymbolBasedUI(__instance);
 
-					if (!ConfigManager.UseSymbolsForUI.Value)
+					if (!newUI)
 					{
 						UIBoatArea?.SetActive(showBoatSpeedUI && showUI);
 						UIBoatArea2?.SetActive(false);
@@ -134,12 +137,14 @@ namespace MarsarahTweaks.Patches.UI
 			if (UIBoatArea != null && UIBoatText != null && UIBoatTextTitle != null)
 				return;  // UI already exists, no need to create again
 
+			bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
+
 			int UITextFontSize = 16;
 			string UITextFontName = "AveriaSansLibre-Bold";
 			Vector2 UIBoatAreaSize;
 			Vector2 UIBoatAreaSizeDefault = new Vector2(155f, 30f); // width, height
 
-			if (!ConfigManager.UseSymbolsForUI.Value)
+			if (!newUI)
 				UIBoatAreaSize = UIBoatAreaSizeDefault;
 			else
 				UIBoatAreaSize = new Vector2(155f, 30f);

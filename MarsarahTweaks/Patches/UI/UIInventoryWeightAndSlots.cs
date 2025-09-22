@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MarsarahTweaks.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using MarsarahTweaks.Managers;
+using static MarsarahTweaks.Managers.ConfigManager;
 
 namespace MarsarahTweaks.Patches.UI
 {
@@ -83,10 +84,12 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (ConfigManager.ShowInventoryWeightAndSlots.Value)
 				{
+					bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
+
 					CreateTextBasedUI(__instance); // Create the text version of the UI if missing
 					CreateSymbolBasedUI(__instance); // Create the symbol/bar version of the UI if missing
 
-					if (!ConfigManager.UseSymbolsForUI.Value)
+					if (!newUI)
 					{
 						UIInventoryArea?.SetActive(showUI);
 						UIWeightBarArea?.SetActive(false);

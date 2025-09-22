@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using MarsarahTweaks.Managers;
+using Splatform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static MarsarahTweaks.Managers.ConfigManager;
 
 namespace MarsarahTweaks.Patches.UI
 {
@@ -195,7 +197,7 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Hud), "Update")]
 		class TimeAndDay_HUDUpdatePatch
 		{
-			private static bool lastUseSymbolsForUI = ConfigManager.UseSymbolsForUI.Value;
+			private static UIMode lastUImode = ConfigManager.UILayoutChoice.Value;
 
 			private static void Postfix(Hud __instance)
 			{
@@ -205,20 +207,22 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (ConfigManager.ShowTimeAndDay.Value)
 				{
+					bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
+
 					CreateUI(__instance); // Create UI if missing
 
 					// Handle where to display the time text when toggling
-					if (ConfigManager.UseSymbolsForUI.Value != lastUseSymbolsForUI)
+					if (ConfigManager.UILayoutChoice.Value != lastUImode)
 					{
-						lastUseSymbolsForUI = ConfigManager.UseSymbolsForUI.Value;
-						UpdateTimePosition();
+						lastUImode = ConfigManager.UILayoutChoice.Value;
+						UpdateTimePosition(newUI);
 					}
 
 					bool showTimeUI = Game.m_noMap ? showUI : showUI && Minimap.instance != null && Minimap.instance.m_mapSmall != null && Minimap.instance.m_mapSmall.activeInHierarchy;
 
 					UITimeText.enabled = showTimeUI;
 					UIDayText.enabled = showTimeUI;
-					UITimeEmojiTMP.enabled = ConfigManager.UseSymbolsForUI.Value ? showTimeUI : false;
+					UITimeEmojiTMP.enabled = newUI ? showTimeUI : false;
 
 					if (showTimeUI)
 					{
@@ -242,9 +246,9 @@ namespace MarsarahTweaks.Patches.UI
 				}
 			}
 
-			private static void UpdateTimePosition()
+			private static void UpdateTimePosition(bool newUI)
 			{
-				float xOffset = ConfigManager.UseSymbolsForUI.Value ? 20f : 40f;
+				float xOffset = newUI ? 20f : 40f;
 				UITimeText.GetComponent<RectTransform>().anchoredPosition = new Vector2(xOffset, 0f);
 			}
 
@@ -266,6 +270,8 @@ namespace MarsarahTweaks.Patches.UI
 			if (UITimeText != null && UIDayText != null && UITimeEmojiTMP != null)
 				return;  // UI already exists, no need to create again
 
+			bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
+
 			int UITextFontSize = 16;
 			string UITextFontName = "AveriaSansLibre-Bold";
 			string UIEmojiFontName = "NotoEmoji-Regular SDF"; // NotoEmoji-Regular
@@ -285,7 +291,7 @@ namespace MarsarahTweaks.Patches.UI
 
 			// Special modification for text sizeDelta
 			UITimeAreaSize.x = UITimeAreaSize.x / 2;
-			float timeTextXPos = ConfigManager.UseSymbolsForUI.Value ? 20f : 40f;
+			float timeTextXPos = newUI ? 20f : 40f;
 
 			// Time text
 			UITimeText = CreateTextObject("TimeText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(timeTextXPos, 0f), UITimeAreaSize);

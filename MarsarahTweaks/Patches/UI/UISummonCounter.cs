@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static Heightmap;
+using static MarsarahTweaks.Managers.ConfigManager;
 
 namespace MarsarahTweaks.Patches.UI
 {
@@ -93,7 +94,6 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Hud), "Update")]
 		class SummonCounter_HUDUpdatePatch
 		{
-			private static bool lastUseSymbolInsteadOfWords = ConfigManager.UseSymbolsForUI.Value;
 			private static void Postfix(Hud __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
@@ -102,12 +102,14 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (ConfigManager.ShowSummonCounter.Value)
 				{
+					bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
+
 					CreateTextBasedUI(__instance);
 					CreateSymbolBasedUI(__instance);
 
 					bool showSummonsCounter = showUI && (numSummons != 0);
 
-					if (!ConfigManager.UseSymbolsForUI.Value)
+					if (!newUI)
 					{
 						UISummonsArea?.SetActive(showSummonsCounter);
 						UISummonsArea2?.SetActive(false);

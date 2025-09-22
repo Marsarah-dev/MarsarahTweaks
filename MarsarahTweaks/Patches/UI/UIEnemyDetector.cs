@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MarsarahTweaks.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using MarsarahTweaks.Managers;
+using static MarsarahTweaks.Managers.ConfigManager;
 
 namespace MarsarahTweaks.Patches.UI
 {
@@ -87,10 +88,12 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (ConfigManager.ShowEnemyDetector.Value)
 				{
+					bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
+
 					CreateTextBasedUI(__instance);
 					CreateSymbolBasedUI(__instance);
 
-					if (!ConfigManager.UseSymbolsForUI.Value)
+					if (!newUI)
 					{
 						UIEnemyArea?.SetActive(showUI);
 						UIEnemyArea2?.SetActive(false);

@@ -59,6 +59,12 @@ namespace MarsarahTweaks.Managers
 		}
 
 		// Config Enums
+		public enum UIMode
+		{
+			New,
+			Old
+		}
+
 		public enum EnemyHPMode
 		{
 			HpOnly,
@@ -198,24 +204,22 @@ namespace MarsarahTweaks.Managers
 
 			// UI
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
-			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("02 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
-			public static readonly ConfigMetadata UIEnemyDetector = new ConfigMetadata("03 - Show Enemy Detector", "Shows enemy detector on the bottom left of the screen");
-			public static readonly ConfigMetadata UIBoatSpeed = new ConfigMetadata("04 - Show Boat Speed", "Shows boat speed when using a boat on the bottom left of the screen");
-			public static readonly ConfigMetadata UITimeAndDay = new ConfigMetadata("05 - Show Time And Day", "Shows time and day above the minimap");
-			public static readonly ConfigMetadata UITimeAndDay24H = new ConfigMetadata("06 - Time - 24 Hour Format", "Use 24 Hour time format when Show Time And Day is enabled");
-			public static readonly ConfigMetadata UISmartBiome = new ConfigMetadata("07 - Smart Biome Indicator", "Shows smart biome text on minimap (colored according to worn armor relative to current biome)");
-			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("08 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
-			public static readonly ConfigMetadata UIOnlinePlayers = new ConfigMetadata("09 - Show Online Players", "Shows online players on the bottom right of the screen (Not displayed if only one player is online)");
-			public static readonly ConfigMetadata UIOnlinePlayersUnderMinimap = new ConfigMetadata("10 - Show Online Players Under Minimap", "Shows online players under minimap instead of bottom right when Show Online Players is enabled");
-			public static readonly ConfigMetadata UIShowOwnedResources = new ConfigMetadata("11 - Show Owned Resources In Build Menu", "Displays the total amount of resources in the player's inventory in addition to the required resource amount for the selected piece or recipe in the build or crafting menu");
-			public static readonly ConfigMetadata UIShowPowerExpiration = new ConfigMetadata("12 - Show Boss Power Expiration Message", "Displays a message in the center of the screen when any Forsaken Power expires");
-			public static readonly ConfigMetadata UIPlayerLogoutAnnounce = new ConfigMetadata("13 - Player Logout Announce", "Displays a message when a player logs out in the top-left corner of the screen and in the chat window");
-			public static readonly ConfigMetadata UIAshlandsHeatLevel = new ConfigMetadata("14 - Show Heat Meter in Ashlands", "Shows a heat meter at the top-center of the screen when in Ashlands water or lava");
-			public static readonly ConfigMetadata UIUseSymbols = new ConfigMetadata("15 - Alternate UI Layout", "Use symbols instead of words in this mod's UI elements (Enemy Counter, Summons Counter, etc). Also repositions the boat speed widget to the minimap");
+			public static readonly ConfigMetadata UILayoutMode = new ConfigMetadata("02 - UI Layout Mode", "Choose the layout of the UI elements added by this mod");
+			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("03 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
+			public static readonly ConfigMetadata UIEnemyDetector = new ConfigMetadata("04 - Show Enemy Detector", "Shows enemy detector on the bottom left of the screen");
+			public static readonly ConfigMetadata UIBoatSpeed = new ConfigMetadata("05 - Show Boat Speed", "Shows boat speed when using a boat on the bottom left of the screen");
+			public static readonly ConfigMetadata UITimeAndDay = new ConfigMetadata("06 - Show Time And Day", "Shows time and day above the minimap");
+			public static readonly ConfigMetadata UITimeAndDay24H = new ConfigMetadata("07 - Time - 24 Hour Format", "Use 24 Hour time format when Show Time And Day is enabled");
+			public static readonly ConfigMetadata UISmartBiome = new ConfigMetadata("08 - Smart Biome Indicator", "Shows smart biome text on minimap (colored according to worn armor relative to current biome)");
+			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("09 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
+			public static readonly ConfigMetadata UIOnlinePlayers = new ConfigMetadata("10 - Show Online Players", "Shows online players on the bottom right of the screen (Not displayed if only one player is online)");
+			public static readonly ConfigMetadata UIOnlinePlayersUnderMinimap = new ConfigMetadata("11 - Show Online Players Under Minimap", "Shows online players under minimap instead of bottom right when Show Online Players is enabled");
+			public static readonly ConfigMetadata UIShowOwnedResources = new ConfigMetadata("12 - Show Owned Resources In Build Menu", "Displays the total amount of resources in the player's inventory in addition to the required resource amount for the selected piece or recipe in the build or crafting menu");
+			public static readonly ConfigMetadata UIShowPowerExpiration = new ConfigMetadata("13 - Show Boss Power Expiration Message", "Displays a message in the center of the screen when any Forsaken Power expires");
+			public static readonly ConfigMetadata UIPlayerLogoutAnnounce = new ConfigMetadata("14 - Player Logout Announce", "Displays a message when a player logs out in the top-left corner of the screen and in the chat window");
+			public static readonly ConfigMetadata UIAshlandsHeatLevel = new ConfigMetadata("15 - Show Heat Meter in Ashlands", "Shows a heat meter at the top-center of the screen when in Ashlands water or lava");
 			public static readonly ConfigMetadata UIEnemyNameplates = new ConfigMetadata("16 - Better Enemy Nameplates", "Modifies the size and colors of enemy nameplates and colors the name according to alerted/aggravated status");
 			public static readonly ConfigMetadata UIEnemyHpMode = new ConfigMetadata("17 - Nameplate HP Mode", "Choose the method of displaying enemy HP. Requires Better Enemy Nameplates");
-			//public static readonly ConfigMetadata EnemyHp = new ConfigMetadata("17 - Show Enemy HP", "Displays current and max HP of enemies. Requires Better Enemy Nameplates");
-			//public static readonly ConfigMetadata EnemyHpPercent = new ConfigMetadata("18 - Show Enemy HP Percent", "Displays current HP percentage of enemies. Requires Better Enemy Nameplates");
 			public static readonly ConfigMetadata UITamingProgress = new ConfigMetadata("18 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing under the HP bar. This is independent of Better Enemy Nameplates");
 			public static readonly ConfigMetadata UIItemQualityIndicator = new ConfigMetadata("19 - Better Item Quality Indicator", "Changes the indicator for armor and weapons from numbers to symbols");
 			public static readonly ConfigMetadata UIItemQualityIndicatorVertical = new ConfigMetadata("20 - Use Vertical Alignment for Item Quality", "Position the symbols vertically instead of horizontally for item quality. Requires Better Item Quality Inicator");
@@ -303,6 +307,7 @@ namespace MarsarahTweaks.Managers
 
 		// UI
 		public static ConfigEntry<bool> MoreLoadingTipsEnabled;
+		public static ConfigEntry<UIMode> UILayoutChoice;
 		public static ConfigEntry<bool> ShowInventoryWeightAndSlots;
 		public static ConfigEntry<bool> ShowEnemyDetector;
 		public static ConfigEntry<bool> ShowBoatSpeed;
@@ -316,11 +321,8 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShowBossExpirationMessage;
 		public static ConfigEntry<bool> AnnouncePlayerLogout;
 		public static ConfigEntry<bool> ShowHeatLevelInAshlands;
-		public static ConfigEntry<bool> UseSymbolsForUI;
 		public static ConfigEntry<bool> BetterEnemyNameplates;
 		public static ConfigEntry<EnemyHPMode> NameplateHpModeChoice;
-		//public static ConfigEntry<bool> ShowEnemyHp;
-		//public static ConfigEntry<bool> ShowEnemyHpPercent;
 		public static ConfigEntry<bool> ShowTamingProgress;
 		public static ConfigEntry<bool> BetterItemQualityIndicator;
 		public static ConfigEntry<bool> ItemQualityIndicatorVertical;
@@ -411,6 +413,7 @@ namespace MarsarahTweaks.Managers
 
 			// ===== UI
 			MoreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description, false);
+			UILayoutChoice = CreateConfig(ConfigSections.UI, Configs.UILayoutMode.Name, UIMode.New, Configs.UILayoutMode.Description, false);
 			ShowInventoryWeightAndSlots = CreateConfig(ConfigSections.UI, Configs.UIInventoryWeightAndSlots.Name, true, Configs.UIInventoryWeightAndSlots.Description, false);
 			ShowEnemyDetector = CreateConfig(ConfigSections.UI, Configs.UIEnemyDetector.Name, true, Configs.UIEnemyDetector.Description, false);
 			ShowBoatSpeed = CreateConfig(ConfigSections.UI, Configs.UIBoatSpeed.Name, true, Configs.UIBoatSpeed.Description, false);
@@ -424,11 +427,8 @@ namespace MarsarahTweaks.Managers
 			ShowBossExpirationMessage = CreateConfig(ConfigSections.UI, Configs.UIShowPowerExpiration.Name, true, Configs.UIShowPowerExpiration.Description, false);
 			AnnouncePlayerLogout = CreateConfig(ConfigSections.UI, Configs.UIPlayerLogoutAnnounce.Name, true, Configs.UIPlayerLogoutAnnounce.Description, false);
 			ShowHeatLevelInAshlands = CreateConfig(ConfigSections.UI, Configs.UIAshlandsHeatLevel.Name, true, Configs.UIAshlandsHeatLevel.Description, false);
-			UseSymbolsForUI = CreateConfig(ConfigSections.UI, Configs.UIUseSymbols.Name, true, Configs.UIUseSymbols.Description, false);
 			BetterEnemyNameplates = CreateConfig(ConfigSections.UI, Configs.UIEnemyNameplates.Name, true, Configs.UIEnemyNameplates.Description, false);
 			NameplateHpModeChoice = CreateConfig(ConfigSections.UI, Configs.UIEnemyHpMode.Name, EnemyHPMode.HpOnly, Configs.UIEnemyHpMode.Description, false);
-			//ShowEnemyHp = CreateConfig(ConfigSections.UI, Configs.EnemyHp.Name, true, Configs.EnemyHp.Description, false);
-			//ShowEnemyHpPercent = CreateConfig(ConfigSections.UI, Configs.EnemyHpPercent.Name, false, Configs.EnemyHpPercent.Description, false);
 			ShowTamingProgress = CreateConfig(ConfigSections.UI, Configs.UITamingProgress.Name, true, Configs.UITamingProgress.Description, false);
 			BetterItemQualityIndicator = CreateConfig(ConfigSections.UI, Configs.UIItemQualityIndicator.Name, true, Configs.UIItemQualityIndicator.Description, false);
 			ItemQualityIndicatorVertical = CreateConfig(ConfigSections.UI, Configs.UIItemQualityIndicatorVertical.Name, false, Configs.UIItemQualityIndicatorVertical.Description, false);
