@@ -16,7 +16,7 @@ namespace MarsarahTweaks.Features.UI
 {
 	internal class UIEnemyNameplates : UIController
 	{
-		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("UI Enemy Nameplates", LogManager.LogLevel.Warning);
 
 		// New sizes
 		private const float BarHeight = 14f;

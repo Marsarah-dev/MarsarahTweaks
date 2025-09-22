@@ -4,6 +4,7 @@
    A. Fixes
       - Fixed Blue Silver Hanging Brazier flame and coal position to avoid shadow flickers under it
       - Fixed Clearer Weather feature to apply defined weather weights properly every time the weather is calculated (initially they were applied only at logon)
+      - Fixed the text and symbol spacing for the Summons Counter that was broken during the Call to Arms update
 
    B. Updates
       - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed. Logs are printed to know exactly which mod overlaps with which config when this happens.
@@ -41,7 +42,6 @@ public enum SkillXPNotificationStyle
     Top-Left message
 }
 
- - Fix Summon counter spacing
  - Combine the two UI layouts in an enum toggle
  - Implement skill progress message
  - Implement player login screen stats

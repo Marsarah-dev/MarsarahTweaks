@@ -68,7 +68,7 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (__instance == null) return;
 
-				if (ConfigManager.ShowInventoryWeightAndSlots.Value)
+				if (ConfigManager.ShowEnemyDetector.Value)
 				{
 					CreateTextBasedUI(__instance);
 					CreateSymbolBasedUI(__instance);
@@ -79,8 +79,6 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Hud), "Update")]
 		class EnemyDetector_HUDUpdatePatch
 		{
-			private static bool lastUseSymbolInsteadOfWords = ConfigManager.UseSymbolsForUI.Value;
-
 			private static void Postfix(Hud __instance)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;

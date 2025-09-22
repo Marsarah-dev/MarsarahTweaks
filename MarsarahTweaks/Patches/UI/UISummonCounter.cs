@@ -1,14 +1,15 @@
 ﻿using HarmonyLib;
+using MarsarahTweaks.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static Heightmap;
-using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.UI
 {
@@ -20,10 +21,12 @@ namespace MarsarahTweaks.Patches.UI
 		public static int numSummons;
 
 		// UI elements
-		private static Text UISummonsText;
-		private static TMPro.TextMeshProUGUI UISummonsTextTMP = null;
-		private static Image summonsAreaBackground;
 		private static GameObject UISummonsArea = null;
+		private static Text UISummonsText = null;
+
+		private static GameObject UISummonsArea2 = null;
+		private static Text UISummonsText2 = null;
+		private static TMPro.TextMeshProUGUI UISummonsTextTMP = null;
 
 		[HarmonyPatch(typeof(Player), "Update")]
 		class SummonCounters_PlayerPatch
@@ -79,9 +82,10 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (__instance == null) return;
 
-				if (ConfigManager.ShowInventoryWeightAndSlots.Value)
+				if (ConfigManager.ShowSummonCounter.Value)
 				{
-					CreateUI(__instance);
+					CreateTextBasedUI(__instance);
+					CreateSymbolBasedUI(__instance);
 				}
 			}
 		}
@@ -98,51 +102,45 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (ConfigManager.ShowSummonCounter.Value)
 				{
-					CreateUI(__instance); // Create UI if missing
+					CreateTextBasedUI(__instance);
+					CreateSymbolBasedUI(__instance);
 
-					// Handle summon counter position according to the use of symbols or not
-					if (lastUseSymbolInsteadOfWords != ConfigManager.UseSymbolsForUI.Value)
+					bool showSummonsCounter = showUI && (numSummons != 0);
+
+					if (!ConfigManager.UseSymbolsForUI.Value)
 					{
-						lastUseSymbolInsteadOfWords = ConfigManager.UseSymbolsForUI.Value;
-						UpdateSummonCounterPosition();
-					}
+						UISummonsArea?.SetActive(showSummonsCounter);
+						UISummonsArea2?.SetActive(false);
 
-					UISummonsText.enabled = showUI && (numSummons != 0);
-					UISummonsTextTMP.enabled = showUI && (numSummons != 0);
-					summonsAreaBackground.enabled = showUI && (numSummons != 0);
-
-					if (showUI)
-					{
-						if (numSummons != 0)
+						if (showSummonsCounter)
 						{
 							UISummonsText.color = GetColorFromNum(numSummons);
-							UISummonsTextTMP.color = GetColorFromNum(numSummons);
-							if (!ConfigManager.UseSymbolsForUI.Value)
-							{
-								UISummonsText.text = "Summons " + numSummons.ToString();
-								UISummonsTextTMP.text = "";
-							}
-							else
-							{
-								UISummonsText.text = "";
-								UISummonsTextTMP.text = "💀 " + numSummons.ToString();
-							}
+							UISummonsText.text = "Summons " + numSummons.ToString();
 						}
-						else
+					}
+					else
+					{
+						UISummonsArea?.SetActive(false);
+						UISummonsArea2?.SetActive(showSummonsCounter);
+
+						if (showSummonsCounter)
 						{
-							UISummonsText.text = "";
-							UISummonsTextTMP.text = "";
+							UISummonsText2.color = GetColorFromNum(numSummons);
+							UISummonsTextTMP.color = GetColorFromNum(numSummons);
+
+							UISummonsText2.text = numSummons.ToString();
+							UISummonsTextTMP.text = "💀";
 						}
 					}
 				}
 				else
 				{
-					if (UISummonsText != null)
-						UISummonsText.enabled = false;
-					if (UISummonsTextTMP != null)
-						UISummonsTextTMP.enabled = false;
-					if (summonsAreaBackground != null)
-						summonsAreaBackground.enabled = false;
+					// We're calling create here to make sure objects are safe to access
+					CreateTextBasedUI(__instance);
+					CreateSymbolBasedUI(__instance);
+
+					UISummonsArea?.SetActive(false);
+					UISummonsArea2?.SetActive(false);
 				}
 			}
 
@@ -153,68 +151,70 @@ namespace MarsarahTweaks.Patches.UI
 				if (num >= 3) return Color.green;
 				return Color.white;
 			}
-
-			private static void UpdateSummonCounterPosition()
-			{
-				if (UISummonsArea == null) return;
-
-				Vector2 UISumonsAreaSize;
-
-				if (!ConfigManager.UseSymbolsForUI.Value)
-					UISumonsAreaSize = new Vector2(100f, 30f); // width, height
-				else
-					UISumonsAreaSize = new Vector2(49f, 30f); // width, height
-
-				RectTransform summonsAreaTransform = UISummonsArea.GetComponent<RectTransform>();
-				summonsAreaTransform.sizeDelta = UISumonsAreaSize;
-
-				if (!ConfigManager.UseSymbolsForUI.Value)
-					summonsAreaTransform.anchoredPosition = new Vector2(63f, -85f);				
-				else
-					summonsAreaTransform.anchoredPosition = new Vector2(38f, -85f);
-			}
 		}
 
-		private static void CreateUI(Hud hud)
+		private static void CreateTextBasedUI(Hud hud)
 		{
-			if (UISummonsText != null && UISummonsTextTMP != null && summonsAreaBackground != null)
-				return;  // UI already exists, no need to create again
+			if (UISummonsArea != null && UISummonsText != null)
+				return;  // UI already exists
 
 			int UITextFontSize = 16;
 			string UITextFontName = "AveriaSansLibre-Bold";
-			string UIEmojiFontName = "NotoEmoji-Regular SDF"; // NotoEmoji-Regular
-			Vector2 UISumonsAreaSize;
-			Vector2 UISumonsAreaSizeDefault = new Vector2(100f, 30f); // width, height
-
-			if (!ConfigManager.UseSymbolsForUI.Value)
-				UISumonsAreaSize = UISumonsAreaSizeDefault;
-			else
-				UISumonsAreaSize = new Vector2(49f, 30f);
+			Vector2 UISumonsAreaSize = new Vector2(100f, 30f); // width, height
 
 			// Summons area object
 			UISummonsArea = new GameObject("SummonsArea");
 			UISummonsArea.layer = 5;
 			UISummonsArea.transform.SetParent(hud.m_healthPanel.transform);
+
 			RectTransform summonsAreaTransform = UISummonsArea.AddComponent<RectTransform>();
 			summonsAreaTransform.anchorMin = new Vector2(1f, 1f);
 			summonsAreaTransform.anchorMax = new Vector2(1f, 1f);
-			if (!ConfigManager.UseSymbolsForUI.Value)
-				summonsAreaTransform.anchoredPosition = new Vector2(63f, -85f); // above the boss buff, to the right of hp bar
-			else
-				summonsAreaTransform.anchoredPosition = new Vector2(38f, -85f); // above the boss buff, to the right of hp bar
+			summonsAreaTransform.anchoredPosition = new Vector2(63f, -85f); // above the boss buff, to the right of hp bar
 			summonsAreaTransform.sizeDelta = UISumonsAreaSize;
 			UISummonsArea.transform.localScale = Vector3.one;  // Ensure correct scale
 
 			// Background texture
 			Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
-			summonsAreaBackground = UISummonsArea.AddComponent<Image>();
-			summonsAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
-			summonsAreaBackground.sprite = sprite;
-			summonsAreaBackground.type = Image.Type.Sliced;
-			summonsAreaBackground.enabled = showUI;
+			Image SummonsAreaBackground = UISummonsArea.AddComponent<Image>();
+			SummonsAreaBackground.color = new Color(0f, 0f, 0f, 0.4f);
+			SummonsAreaBackground.sprite = sprite;
+			SummonsAreaBackground.type = Image.Type.Sliced;
 
-			UISummonsText = CreateTextObject("SummonsText", UISummonsArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleCenter, new Vector2(0f, 0f), UISumonsAreaSizeDefault);
-			UISummonsTextTMP = CreateTMPTextObject("SummonsText", UISummonsArea, Color.white, UIEmojiFontName, UITextFontSize, TextAlignmentOptions.Midline, new Vector2(0f, 0f), UISumonsAreaSize, log);
+			UISummonsText = CreateTextObject("SummonsText", UISummonsArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleCenter, new Vector2(0f, 0f), UISumonsAreaSize);
+		}
+
+		private static void CreateSymbolBasedUI(Hud hud)
+		{
+			if (UISummonsArea2 != null && UISummonsText2 != null && UISummonsTextTMP != null)
+				return;  // UI already exists
+
+			int UITextFontSize = 16;
+			string UITextFontName = "AveriaSansLibre-Bold";
+			string UIEmojiFontName = "NotoEmoji-Regular SDF"; // NotoEmoji-Regular
+			Vector2 UISumonsAreaSize = new Vector2(49f, 30f);
+
+			// Summons area object
+			UISummonsArea2 = new GameObject("SummonsArea2");
+			UISummonsArea2.layer = 5;
+			UISummonsArea2.transform.SetParent(hud.m_healthPanel.transform);
+
+			RectTransform summonsAreaTransform = UISummonsArea2.AddComponent<RectTransform>();
+			summonsAreaTransform.anchorMin = new Vector2(1f, 1f);
+			summonsAreaTransform.anchorMax = new Vector2(1f, 1f);
+			summonsAreaTransform.anchoredPosition = new Vector2(38f, -85f); // above the boss buff, to the right of hp bar
+			summonsAreaTransform.sizeDelta = UISumonsAreaSize;
+			UISummonsArea.transform.localScale = Vector3.one;  // Ensure correct scale
+
+			// Background texture
+			Sprite sprite = Resources.FindObjectsOfTypeAll<Sprite>().FirstOrDefault((Sprite tempSprite) => tempSprite.name == "InputFieldBackground");
+			Image SummonsAreaBackground2 = UISummonsArea2.AddComponent<Image>();
+			SummonsAreaBackground2.color = new Color(0f, 0f, 0f, 0.4f);
+			SummonsAreaBackground2.sprite = sprite;
+			SummonsAreaBackground2.type = Image.Type.Sliced;
+
+			UISummonsText2 = CreateTextObject("SummonsText2", UISummonsArea2, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(-5f, 0f), UISumonsAreaSize);
+			UISummonsTextTMP = CreateTMPTextObject("SummonsEmojiTMP", UISummonsArea2, Color.white, UIEmojiFontName, UITextFontSize, TextAlignmentOptions.MidlineLeft, new Vector2(5f, 0f), UISumonsAreaSize, log);
 		}
 	}
 }
