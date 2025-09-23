@@ -66,12 +66,13 @@ namespace MarsarahTweaks.Managers
 			Off
 		}
 
-		public enum EnemyHPMode
+		public enum EnemyNameplateMode
 		{
-			HpOnly,
-			PercentOnly,
-			HpAndPercent,
-			Off
+			BarsOnly,        // health bar only, no numbers
+			BarsWithHealth,  // bar + HP value (100/100)
+			BarsWithPercent, // bar + percent (75%)
+			BarsWithBoth,    // bar + HP + percent
+			Off              // vanilla
 		}
 
 		public enum ItemQualitySymbol
@@ -228,8 +229,8 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIShowPowerExpiration = new ConfigMetadata("13 - Show Boss Power Expiration Message", "Displays a message in the center of the screen when any Forsaken Power expires");
 			public static readonly ConfigMetadata UIPlayerLogoutAnnounce = new ConfigMetadata("14 - Player Logout Announce", "Displays a message when a player logs out in the top-left corner of the screen and in the chat window");
 			public static readonly ConfigMetadata UIAshlandsHeatLevel = new ConfigMetadata("15 - Show Heat Meter in Ashlands", "Shows a heat meter at the top-center of the screen when in Ashlands water or lava");
-			public static readonly ConfigMetadata UIEnemyNameplates = new ConfigMetadata("16 - Better Enemy Nameplates", "Modifies the size and colors of enemy nameplates and colors the name according to alerted/aggravated status");
-			public static readonly ConfigMetadata UIEnemyHpMode = new ConfigMetadata("17 - Nameplate HP Mode", "Choose the method of displaying enemy HP. Requires Better Enemy Nameplates");
+			//public static readonly ConfigMetadata UIEnemyNameplates = new ConfigMetadata("16 - Better Enemy Nameplates", "Modifies the size and colors of enemy nameplates and colors the name according to alerted/aggravated status");
+			public static readonly ConfigMetadata UIEnemyNameplateMode = new ConfigMetadata("17 - Nameplate HP Mode", "Choose the method of displaying enemy HP. Requires Better Enemy Nameplates");
 			public static readonly ConfigMetadata UITamingProgress = new ConfigMetadata("18 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing under the HP bar. This is independent of Better Enemy Nameplates");
 			public static readonly ConfigMetadata UIItemQualityIndicator = new ConfigMetadata("19 - Better Item Quality Indicator", "Changes the indicator for armor and weapons from numbers to symbols");
 			public static readonly ConfigMetadata UIItemQualityIndicatorVertical = new ConfigMetadata("20 - Use Vertical Alignment for Item Quality", "Position the symbols vertically instead of horizontally for item quality. Requires Better Item Quality Inicator");
@@ -332,8 +333,8 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShowBossExpirationMessage;
 		public static ConfigEntry<bool> AnnouncePlayerLogout;
 		public static ConfigEntry<bool> ShowHeatLevelInAshlands;
-		public static ConfigEntry<bool> BetterEnemyNameplates;
-		public static ConfigEntry<EnemyHPMode> NameplateHpModeChoice;
+		//public static ConfigEntry<bool> BetterEnemyNameplates;
+		public static ConfigEntry<EnemyNameplateMode> EnemyNameplateChoice;
 		public static ConfigEntry<bool> ShowTamingProgress;
 		public static ConfigEntry<bool> BetterItemQualityIndicator;
 		public static ConfigEntry<bool> ItemQualityIndicatorVertical;
@@ -439,8 +440,8 @@ namespace MarsarahTweaks.Managers
 			ShowBossExpirationMessage = CreateConfig(ConfigSections.UI, Configs.UIShowPowerExpiration.Name, true, Configs.UIShowPowerExpiration.Description, false);
 			AnnouncePlayerLogout = CreateConfig(ConfigSections.UI, Configs.UIPlayerLogoutAnnounce.Name, true, Configs.UIPlayerLogoutAnnounce.Description, false);
 			ShowHeatLevelInAshlands = CreateConfig(ConfigSections.UI, Configs.UIAshlandsHeatLevel.Name, true, Configs.UIAshlandsHeatLevel.Description, false);
-			BetterEnemyNameplates = CreateConfig(ConfigSections.UI, Configs.UIEnemyNameplates.Name, true, Configs.UIEnemyNameplates.Description, false);
-			NameplateHpModeChoice = CreateConfig(ConfigSections.UI, Configs.UIEnemyHpMode.Name, EnemyHPMode.HpOnly, Configs.UIEnemyHpMode.Description, false);
+			//BetterEnemyNameplates = CreateConfig(ConfigSections.UI, Configs.UIEnemyNameplates.Name, true, Configs.UIEnemyNameplates.Description, false);
+			EnemyNameplateChoice = CreateConfig(ConfigSections.UI, Configs.UIEnemyNameplateMode.Name, EnemyNameplateMode.BarsWithHealth, Configs.UIEnemyNameplateMode.Description, false);
 			ShowTamingProgress = CreateConfig(ConfigSections.UI, Configs.UITamingProgress.Name, true, Configs.UITamingProgress.Description, false);
 			BetterItemQualityIndicator = CreateConfig(ConfigSections.UI, Configs.UIItemQualityIndicator.Name, true, Configs.UIItemQualityIndicator.Description, false);
 			ItemQualityIndicatorVertical = CreateConfig(ConfigSections.UI, Configs.UIItemQualityIndicatorVertical.Name, false, Configs.UIItemQualityIndicatorVertical.Description, false);

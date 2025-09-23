@@ -88,7 +88,7 @@ namespace MarsarahTweaks.Features.UI
 				if (__instance == null) return;
 				if (CompatibilityManager.BetterUI.Loaded) return;
 
-				if (ConfigManager.BetterEnemyNameplates.Value)
+				if (ConfigManager.EnemyNameplateChoice.Value != EnemyNameplateMode.Off)
 				{
 					float distanceMultiplier = 2f;
 					DefaultDistance = __instance.m_maxShowDistance;
@@ -125,8 +125,10 @@ namespace MarsarahTweaks.Features.UI
 				GuiBar slowBar = hud_m_healthSlow_Field?.GetValue(hudData) as GuiBar;
 				GuiBar fastFriendlyBar = hud_m_healthFastFriendly_Field?.GetValue(hudData) as GuiBar;
 
-				ApplyBarSettings(c, healthTransform, fastBar, slowBar, fastFriendlyBar, ConfigManager.BetterEnemyNameplates.Value);
-				AddHpText(c, hudData, healthTransform, ConfigManager.BetterEnemyNameplates.Value);
+				bool enemyNaplatesEnabled = ConfigManager.EnemyNameplateChoice.Value != EnemyNameplateMode.Off;
+
+				ApplyBarSettings(c, healthTransform, fastBar, slowBar, fastFriendlyBar, enemyNaplatesEnabled);
+				AddHpText(c, hudData, healthTransform, enemyNaplatesEnabled);
 			}
 		}
 
@@ -140,6 +142,8 @@ namespace MarsarahTweaks.Features.UI
 				IDictionary huds = m_hudsField.GetValue(__instance) as IDictionary;
 				if (huds == null) return;
 
+				bool enemyNaplatesEnabled = ConfigManager.EnemyNameplateChoice.Value != EnemyNameplateMode.Off;
+
 				foreach (DictionaryEntry entry in huds)
 				{
 					var hudData = entry.Value;
@@ -148,11 +152,8 @@ namespace MarsarahTweaks.Features.UI
 					var character = hud_m_character_Field?.GetValue(hudData) as Character;
 					if (character == null || character.IsDead()) continue;
 
-					// Update HP text
-					UpdateHpText(character, hudData, ConfigManager.BetterEnemyNameplates.Value);
-
-					// Update alerted/aware
-					UpdateAlertAndName(character, hudData, ConfigManager.BetterEnemyNameplates.Value);
+					UpdateHpText(character, hudData, enemyNaplatesEnabled);
+					UpdateAlertAndName(character, hudData, enemyNaplatesEnabled);
 				}
 			}
 		}
@@ -160,13 +161,6 @@ namespace MarsarahTweaks.Features.UI
 		private static void ApplyBarSettings(Character character, RectTransform health, GuiBar fastBar, GuiBar slowBar, GuiBar fastFriendlyBar, bool enable)
 		{
 			if (character == null || health == null) return;
-
-			// Store default background color
-			/*if (defaultBackgroundColor == null)
-			{
-				defaultBackgroundColor = GetBackgroundColor(health);
-				log.Info("Default background color set.");
-			}*/
 
 			// Backup
 			if (!character.IsBoss() && DefaultBarHeight == -1f)
@@ -208,7 +202,6 @@ namespace MarsarahTweaks.Features.UI
 			Color enemyFillColor = Color.red;
 			//Color friendlyBackgroundColor = new Color(0.4f, 0.4f, 0.45f);
 			//Color enemyBackgroundColor = defaultBackgroundColor.HasValue ? defaultBackgroundColor.Value : new Color(0.1f, 0.1f, 0.1f);
-			//Color(0.2f, 0.15f, 0.1f); // Color(0.1f, 0.15f, 0.2f) (this 7); // Color(0.15f, 0.05f, 0.15f); // Color(0.15f, 0.15f, 0.05f); // Color(0.05f, 0.15f, 0.15f); // Color(0.25f, 0.2f, 0.15f); // Color(0.1f, 0.2f, 0.1f); // Color(0.2f, 0.2f, 0.25f) (this 1);
 			// Color(0.2f, 0.2f, 0.25f) (this 1); - Color(0.3f, 0.3f, 0.35f); Color(0.4f, 0.4f, 0.45f);
 			// Color(0.1f, 0.15f, 0.2f) (this 7); - Color(0.2f, 0.25f, 0.3f); Color(0.25f, 0.3f, 0.35f);
 
@@ -217,34 +210,27 @@ namespace MarsarahTweaks.Features.UI
 				if (character.IsBoss())
 				{
 					fastBar?.SetColor(bossFillColor);
-					//SetBackgroundColor(fastBar, enemyBackgroundColor);
 				}
 				else if (character.IsTamed())
 				{
 					fastBar?.SetColor(neutralFillColor);
 					fastFriendlyBar?.SetColor(neutralFillColor);
-					//SetBackgroundColor(fastFriendlyBar, friendlyBackgroundColor);
 				}
 				else if (character.IsPlayer())
 				{
 					fastBar?.SetColor(playerFillColor);
 					fastFriendlyBar?.SetColor(playerFillColor);
-					//SetBackgroundColor(fastBar, friendlyBackgroundColor);
 				}
 				else
 				{
 					fastBar?.SetColor(enemyFillColor);
 					fastFriendlyBar?.SetColor(neutralFillColor);
-					//SetBackgroundColor(fastBar, enemyBackgroundColor);
-					//SetBackgroundColor(fastFriendlyBar, friendlyBackgroundColor);
 				}
 			}
 			else
 			{
 				fastBar?.SetColor(enemyFillColor);
 				fastFriendlyBar?.SetColor(playerFillColor);
-				//SetBackgroundColor(fastBar, enemyBackgroundColor);
-				//SetBackgroundColor(fastFriendlyBar, enemyBackgroundColor);
 			}
 		}
 
@@ -253,11 +239,11 @@ namespace MarsarahTweaks.Features.UI
 			if (_hpTextCache.TryGetValue(hudData, out var existing))
 				return; // already created
 
-			EnemyHPMode mode = ConfigManager.NameplateHpModeChoice.Value;
+			EnemyNameplateMode mode = ConfigManager.EnemyNameplateChoice.Value;
 
-			bool enableHpText = (mode == EnemyHPMode.HpOnly || mode == EnemyHPMode.HpAndPercent) && enableMainBars;
-			bool enableHpPercent = (mode == EnemyHPMode.PercentOnly || mode == EnemyHPMode.HpAndPercent) && enableMainBars;
-			bool enableBothHpTexts = (mode == EnemyHPMode.HpAndPercent) && enableMainBars;
+			bool enableHpText = (mode == EnemyNameplateMode.BarsWithHealth || mode == EnemyNameplateMode.BarsWithBoth) && enableMainBars;
+			bool enableHpPercent = (mode == EnemyNameplateMode.BarsWithPercent || mode == EnemyNameplateMode.BarsWithBoth) && enableMainBars;
+			bool enableBothHpTexts = (mode == EnemyNameplateMode.BarsWithBoth) && enableMainBars;
 
 			string UITMPFontName = "Valheim-AveriaSansLibre";
 			Vector2 UITextAreaSize = new Vector2(100f, 14f); // width, height
@@ -315,11 +301,11 @@ namespace MarsarahTweaks.Features.UI
 		{
 			if (!_hpTextCache.TryGetValue(hudData, out var hpTexts)) return;
 
-			EnemyHPMode mode = ConfigManager.NameplateHpModeChoice.Value;
+			EnemyNameplateMode mode = ConfigManager.EnemyNameplateChoice.Value;
 
-			bool enableHpText = (mode == EnemyHPMode.HpOnly || mode == EnemyHPMode.HpAndPercent) && enableMainBars;
-			bool enableHpPercent = (mode == EnemyHPMode.PercentOnly || mode == EnemyHPMode.HpAndPercent) && enableMainBars;
-			bool enableBothHpTexts = (mode == EnemyHPMode.HpAndPercent) && enableMainBars;
+			bool enableHpText = (mode == EnemyNameplateMode.BarsWithHealth || mode == EnemyNameplateMode.BarsWithBoth) && enableMainBars;
+			bool enableHpPercent = (mode == EnemyNameplateMode.BarsWithPercent || mode == EnemyNameplateMode.BarsWithBoth) && enableMainBars;
+			bool enableBothHpTexts = (mode == EnemyNameplateMode.BarsWithBoth) && enableMainBars;
 
 			hpTexts.HP.gameObject.SetActive(enableHpText);
 			hpTexts.HpPercent.gameObject.SetActive(enableHpPercent);
