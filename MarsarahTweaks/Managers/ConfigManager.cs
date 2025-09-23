@@ -82,6 +82,13 @@ namespace MarsarahTweaks.Managers
 			Off              // vanilla
 		}
 
+		public enum ItemQualityMode
+		{
+			Horizontal,
+			Vertical,
+			Off
+		}
+
 		public enum ItemQualitySymbol
 		{
 			Star,        // ★
@@ -235,10 +242,9 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIShowPowerExpiration = new ConfigMetadata("13 - Show Boss Power Expiration Message", "Displays a message in the center of the screen when any Forsaken Power expires");
 			public static readonly ConfigMetadata UIPlayerLogoutAnnounce = new ConfigMetadata("14 - Player Logout Announce", "Displays a message when a player logs out in the top-left corner of the screen and in the chat window");
 			public static readonly ConfigMetadata UIAshlandsHeatLevel = new ConfigMetadata("15 - Show Heat Meter in Ashlands", "Shows a heat meter at the top-center of the screen when in Ashlands water or lava");
-			public static readonly ConfigMetadata UIEnemyNameplateMode = new ConfigMetadata("17 - Enemy Nameplate Mode", "Choose the method of displaying enemy nameplates.");
+			public static readonly ConfigMetadata UIEnemyNameplateMode = new ConfigMetadata("17 - Enemy Nameplate Mode", "Changes the way enemy nameplates are displayed by changing bar style and colors and alerted/aggravated status. Has different ways of showing HP");
 			public static readonly ConfigMetadata UITamingProgress = new ConfigMetadata("18 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing under the HP bar. This is independent of Enemy Nameplate Mode");
-			public static readonly ConfigMetadata UIItemQualityIndicator = new ConfigMetadata("19 - Better Item Quality Indicator", "Changes the indicator for armor and weapons from numbers to symbols");
-			public static readonly ConfigMetadata UIItemQualityIndicatorVertical = new ConfigMetadata("20 - Use Vertical Alignment for Item Quality", "Position the symbols vertically instead of horizontally for item quality. Requires Better Item Quality Inicator");
+			public static readonly ConfigMetadata UIItemQualityIndicatorMode = new ConfigMetadata("20 - Item Quality Indicator Mode", "Changes the way item quality is displayed by converting the vanilla number to symbols.");
 			public static readonly ConfigMetadata UIItemQualitySymbol = new ConfigMetadata("21 - Symbol For Item Quality", "Choose the symbol used for the item quality indicator. Requires Better Item Quality Inicator");
 			public static readonly ConfigMetadata UIItemQualityColor = new ConfigMetadata("22 - Color For Item Quality", "Choose the color used for the item quality indicator. Requires Better Item Quality Inicator");
 			public static readonly ConfigMetadata UIItemDurabilityColor = new ConfigMetadata("23 - Better Item Durability Bar", "Colors the item durability bar according to curent durability and modifies the sprite texture");
@@ -339,8 +345,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShowHeatLevelInAshlands;
 		public static ConfigEntry<EnemyNameplateMode> EnemyNameplateChoice;
 		public static ConfigEntry<bool> ShowTamingProgress;
-		public static ConfigEntry<bool> BetterItemQualityIndicator;
-		public static ConfigEntry<bool> ItemQualityIndicatorVertical;
+		public static ConfigEntry<ItemQualityMode> ItemQualityIndicatorChoice;
 		public static ConfigEntry<ItemQualitySymbol> ItemQualitySymbolChoice;
 		public static ConfigEntry<ItemQualityColor> ItemQualityColorChoice;
 		public static ConfigEntry<bool> ColoredItemDurabilityBar;
@@ -444,8 +449,7 @@ namespace MarsarahTweaks.Managers
 			ShowHeatLevelInAshlands = CreateConfig(ConfigSections.UI, Configs.UIAshlandsHeatLevel.Name, true, Configs.UIAshlandsHeatLevel.Description, false);
 			EnemyNameplateChoice = CreateConfig(ConfigSections.UI, Configs.UIEnemyNameplateMode.Name, EnemyNameplateMode.BarsWithHealth, Configs.UIEnemyNameplateMode.Description, false);
 			ShowTamingProgress = CreateConfig(ConfigSections.UI, Configs.UITamingProgress.Name, true, Configs.UITamingProgress.Description, false);
-			BetterItemQualityIndicator = CreateConfig(ConfigSections.UI, Configs.UIItemQualityIndicator.Name, true, Configs.UIItemQualityIndicator.Description, false);
-			ItemQualityIndicatorVertical = CreateConfig(ConfigSections.UI, Configs.UIItemQualityIndicatorVertical.Name, false, Configs.UIItemQualityIndicatorVertical.Description, false);
+			ItemQualityIndicatorChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualityIndicatorMode.Name, ItemQualityMode.Horizontal, Configs.UIItemQualityIndicatorMode.Description, false);
 			ItemQualitySymbolChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualitySymbol.Name, ItemQualitySymbol.Star, Configs.UIItemQualitySymbol.Description, false);
 			ItemQualityColorChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualityColor.Name, ItemQualityColor.Yellow, Configs.UIItemQualityColor.Description, false);
 			ColoredItemDurabilityBar = CreateConfig(ConfigSections.UI, Configs.UIItemDurabilityColor.Name, true, Configs.UIItemDurabilityColor.Description, false);
@@ -673,7 +677,7 @@ namespace MarsarahTweaks.Managers
 						UISmartBiome.UpdateBiomeWeights();
 						break;
 
-					case var name when name == Configs.UIItemQualityIndicator.Name:
+					case var name when name == Configs.UIItemQualityIndicatorMode.Name:
 						UIItemQuality.UpdateSymbols();
 						break;
 				}

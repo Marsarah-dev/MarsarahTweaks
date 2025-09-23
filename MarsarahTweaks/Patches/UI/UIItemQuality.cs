@@ -59,7 +59,9 @@ namespace MarsarahTweaks.Patches.UI
 					if (qualityText == null || item.m_shared.m_maxQuality <= 1)
 						continue;
 
-					if (ConfigManager.BetterItemQualityIndicator.Value)
+					bool itemQualityIndicatorOn = ConfigManager.ItemQualityIndicatorChoice.Value != ItemQualityMode.Off;
+
+					if (itemQualityIndicatorOn)
 					{
 						// Apply symbols
 						DrawSymbols(qualityText, item.m_quality);
@@ -120,7 +122,7 @@ namespace MarsarahTweaks.Patches.UI
 				log.Info("Backed up font and color");
 			}
 
-			bool vertical = ConfigManager.ItemQualityIndicatorVertical.Value;
+			bool vertical = ConfigManager.ItemQualityIndicatorChoice.Value == ItemQualityMode.Vertical;
 			textComponent.textWrappingMode = TextWrappingModes.PreserveWhitespaceNoWrap;
 
 			// Resolve symbol based on config
