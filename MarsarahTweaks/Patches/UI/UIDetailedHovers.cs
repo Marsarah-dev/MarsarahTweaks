@@ -627,7 +627,7 @@ namespace MarsarahTweaks.Patches.UI
 		// ---------- Generic painter if enabled ----------
 		private static string PaintTextIfEnabled(string text, Color col, bool bold = false)
 		{
-			if (ConfigManager.DetailedHoverInfoChoice.Value != HoverInfoMode.Colored)
+			if (ConfigManager.DetailedHoverInfoChoice.Value != HoverInfoMode.ColoredText)
 				return bold ? $"<b>{text}</b>" : text;
 
 			string colored = PaintText(text, col);

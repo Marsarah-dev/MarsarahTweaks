@@ -11,7 +11,8 @@
       - Converted the "Alternate UI Layout" config toggle into a multiple choice config named "UI Layout Mode" to make it more obvious as to what that config was doing.
         - Options: New, Old, Off. 
         - UI can still be toggled with the Insert key (and Home key for online player list) like before, but the Off toggle from the config will override this.
-      - Merged configs: Show Online Players and Show Online Players Under Minimap. Can now choose the mode from a multiple choice config.
+      - Merged configs: Show Online Players and Show Online Players Under Minimap. Can now choose the mode from a single multiple choice config.
+      - Merged configs: Show Time And Day and Time - 24 Hour Format. Can now choose the time format from a single multiple choice config.
       
    C. New Grind Reduction
 
@@ -37,8 +38,6 @@
 
 
  ******* TODO *******
-
-Time and day + 24h format merge
 
  - Revamp UI configs
  - For Cooking Stations, change the name that shows to current item, not target item (or maybe both?)

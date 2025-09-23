@@ -91,11 +91,11 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (__instance == null) return;
 
-				if (ConfigManager.ShowTimeAndDay.Value)
+				if (ConfigManager.TimeAndDayChoice.Value != TimeAndDayMode.Off)
 				{
 					CurrentDay = Traverse.Create((object)EnvMan.instance).Method("GetCurrentDay", Array.Empty<object>()).GetValue<int>();
 
-					if (!ConfigManager.TimeFormat24H.Value)
+					if (ConfigManager.TimeAndDayChoice.Value == TimeAndDayMode.DayPhases)
 					{
 						TimeString = GetStringFromFraction(___m_smoothDayFraction);
 					}
@@ -205,7 +205,7 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (__instance == null) return;
 
-				if (ConfigManager.ShowTimeAndDay.Value)
+				if (ConfigManager.TimeAndDayChoice.Value != TimeAndDayMode.Off)
 				{
 					bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
 

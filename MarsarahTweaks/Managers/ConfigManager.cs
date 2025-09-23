@@ -66,6 +66,13 @@ namespace MarsarahTweaks.Managers
 			Off
 		}
 
+		public enum TimeAndDayMode
+		{
+			DigitalClock,
+			DayPhases,
+			Off
+		}
+
 		public enum OnlinePlayersMode
 		{
 			BottomRight,
@@ -240,8 +247,9 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("03 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
 			public static readonly ConfigMetadata UIEnemyDetector = new ConfigMetadata("04 - Show Enemy Detector", "Shows enemy detector on the bottom left of the screen");
 			public static readonly ConfigMetadata UIBoatSpeed = new ConfigMetadata("05 - Show Boat Speed", "Shows boat speed when using a boat on the bottom left of the screen");
-			public static readonly ConfigMetadata UITimeAndDay = new ConfigMetadata("06 - Show Time And Day", "Shows time and day above the minimap");
-			public static readonly ConfigMetadata UITimeAndDay24H = new ConfigMetadata("07 - Time - 24 Hour Format", "Use 24 Hour time format when Show Time And Day is enabled");
+			//public static readonly ConfigMetadata UITimeAndDay = new ConfigMetadata("06 - Show Time And Day", "Shows time and day above the minimap");
+			//public static readonly ConfigMetadata UITimeAndDay24H = new ConfigMetadata("07 - Time - 24 Hour Format", "Use 24 Hour time format when Show Time And Day is enabled");
+			public static readonly ConfigMetadata UITimeAndDayMode = new ConfigMetadata("07 - Show Time And Day", "Shows the time and current day above the minimap. Can choose different time formats");
 			public static readonly ConfigMetadata UISmartBiome = new ConfigMetadata("08 - Smart Biome Indicator", "Shows smart biome text on minimap (colored according to worn armor relative to current biome)");
 			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("09 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
 			public static readonly ConfigMetadata UIOnlinePlayersMode = new ConfigMetadata("11 - Show Online Players", "Choose the method of displaying a list of online players (Not displayed if only one player is online)");
@@ -340,8 +348,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShowInventoryWeightAndSlots;
 		public static ConfigEntry<bool> ShowEnemyDetector;
 		public static ConfigEntry<bool> ShowBoatSpeed;
-		public static ConfigEntry<bool> ShowTimeAndDay;
-		public static ConfigEntry<bool> TimeFormat24H;
+		public static ConfigEntry<TimeAndDayMode> TimeAndDayChoice;
 		public static ConfigEntry<bool> ShowSmartBiome;
 		public static ConfigEntry<bool> ShowSummonCounter;
 		public static ConfigEntry<OnlinePlayersMode> OnlinePlayersChoice;
@@ -443,8 +450,7 @@ namespace MarsarahTweaks.Managers
 			ShowInventoryWeightAndSlots = CreateConfig(ConfigSections.UI, Configs.UIInventoryWeightAndSlots.Name, true, Configs.UIInventoryWeightAndSlots.Description, false);
 			ShowEnemyDetector = CreateConfig(ConfigSections.UI, Configs.UIEnemyDetector.Name, true, Configs.UIEnemyDetector.Description, false);
 			ShowBoatSpeed = CreateConfig(ConfigSections.UI, Configs.UIBoatSpeed.Name, true, Configs.UIBoatSpeed.Description, false);
-			ShowTimeAndDay = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay.Name, true, Configs.UITimeAndDay.Description, false);
-			TimeFormat24H = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay24H.Name, true, Configs.UITimeAndDay24H.Description, false);
+			TimeAndDayChoice = CreateConfig(ConfigSections.UI, Configs.UITimeAndDayMode.Name, TimeAndDayMode.DigitalClock, Configs.UITimeAndDayMode.Description, false);
 			ShowSmartBiome = CreateConfig(ConfigSections.UI, Configs.UISmartBiome.Name, true, Configs.UISmartBiome.Description, false);
 			ShowSummonCounter = CreateConfig(ConfigSections.UI, Configs.UISummonCounter.Name, true, Configs.UISummonCounter.Description, false);
 			OnlinePlayersChoice = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayersMode.Name, OnlinePlayersMode.BottomRight, Configs.UIOnlinePlayersMode.Description, false);
@@ -458,7 +464,7 @@ namespace MarsarahTweaks.Managers
 			ItemQualitySymbolChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualitySymbol.Name, ItemQualitySymbol.Star, Configs.UIItemQualitySymbol.Description, false);
 			ItemQualityColorChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualityColor.Name, ItemQualityColor.Yellow, Configs.UIItemQualityColor.Description, false);
 			ColoredItemDurabilityBar = CreateConfig(ConfigSections.UI, Configs.UIItemDurabilityColor.Name, true, Configs.UIItemDurabilityColor.Description, false);
-			DetailedHoverInfoChoice = CreateConfig(ConfigSections.UI, Configs.UIHoverInfoMode.Name, HoverInfoMode.Colored, Configs.UIHoverInfoMode.Description, false);
+			DetailedHoverInfoChoice = CreateConfig(ConfigSections.UI, Configs.UIHoverInfoMode.Name, HoverInfoMode.ColoredText, Configs.UIHoverInfoMode.Description, false);
 			ShowSingleItemChestHover = CreateConfig(ConfigSections.UI, Configs.UIChestSingleItem.Name, false, Configs.UIChestSingleItem.Description, false);
 			ContainerHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIContainerHoverMode.Name, ContainerHoverMode.CurrentPerMax, Configs.UIContainerHoverMode.Description, false);
 			BeehiveHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIBeeHoverMode.Name, BeeHoverMode.RemainingTime, Configs.UIBeeHoverMode.Description, false);
