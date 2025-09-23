@@ -30,7 +30,8 @@ namespace MarsarahTweaks.Patches.UI
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
-				if (ConfigManager.ShowOnlinePlayers.Value && ShowUI)
+				bool onlinePlayersON = ConfigManager.OnlinePlayersChoice.Value != ConfigManager.OnlinePlayersMode.Off;
+				if (onlinePlayersON && ShowUI)
 				{
 					//if (___m_players.Count != 0)
 					playerInfoList = ___m_players;
@@ -45,10 +46,12 @@ namespace MarsarahTweaks.Patches.UI
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
-				if (Game.m_noMap && ConfigManager.OnlinePlayersUnderMinimap.Value)
+				bool onlinePlayersUnderMinimap = ConfigManager.OnlinePlayersChoice.Value == ConfigManager.OnlinePlayersMode.UnderMinimap;
+
+				if (Game.m_noMap && onlinePlayersUnderMinimap)
 				{
-					log.Warn("Disabling OnlinePlayersUnderMinimap: no map is enabled.");
-					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
+					log.Warn("Online Players Under Minimap cannot be selected when no map is enabled. Falling back to bottom-right.");
+					ConfigManager.OnlinePlayersChoice.Value = ConfigManager.OnlinePlayersMode.BottomRight;
 				}
 			}
 		}
@@ -56,9 +59,9 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Hud), "Update")]
 		class OnlinePlayers_HUDUpdatePatch
 		{
-			private static bool lastOnlinePlayersUnderMinimap = ConfigManager.OnlinePlayersUnderMinimap.Value;
+			//private static bool lastOnlinePlayersUnderMinimap = ConfigManager.OnlinePlayersUnderMinimap.Value;
+			private static ConfigManager.OnlinePlayersMode lastOnlinePlayersMode = ConfigManager.OnlinePlayersChoice.Value;
 			private static readonly float UIPartyPlayerTextDistanceV = -25f; // goes down;
-			//private static readonly bool minimalStatusEffectsLoaded = AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "MinimalStatusEffects");
 
 			private static void Postfix(Hud __instance)
 			{
@@ -66,26 +69,23 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (__instance == null) return;
 
-				if (Game.m_noMap && ConfigManager.OnlinePlayersUnderMinimap.Value)
+				bool onlinePlayersUnderMinimap = ConfigManager.OnlinePlayersChoice.Value == ConfigManager.OnlinePlayersMode.UnderMinimap;
+				bool onlinePlayersEnabled = ConfigManager.OnlinePlayersChoice.Value != ConfigManager.OnlinePlayersMode.Off;
+
+				if (Game.m_noMap && onlinePlayersUnderMinimap)
 				{
-					log.Warn("Cannot enable 'Online Players Under Minimap' on a no map world.");
-					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
+					log.Warn("Online Players Under Minimap cannot be selected when no map is enabled. Falling back to bottom-right.");
+					ConfigManager.OnlinePlayersChoice.Value = ConfigManager.OnlinePlayersMode.BottomRight;
 				}
 
-				/*if (minimalStatusEffectsLoaded && ConfigManager.OnlinePlayersUnderMinimap.Value)
-				{
-					log.Warn("Cannot enable 'Online Players Under Minimap' with 'Minimal Status Effects' enabled.");
-					ConfigManager.OnlinePlayersUnderMinimap.Value = false;
-				}*/
-
-				if (ConfigManager.ShowOnlinePlayers.Value)
+				if (onlinePlayersEnabled)
 				{
 					CreateUI(__instance); // Create UI if missing
 
 					// Handle where to display the online list when toggling
-					if (ConfigManager.OnlinePlayersUnderMinimap.Value != lastOnlinePlayersUnderMinimap)
+					if (ConfigManager.OnlinePlayersChoice.Value != lastOnlinePlayersMode)
 					{
-						lastOnlinePlayersUnderMinimap = ConfigManager.OnlinePlayersUnderMinimap.Value;
+						lastOnlinePlayersMode = ConfigManager.OnlinePlayersChoice.Value;
 						UpdatePartyUIPosition(__instance);
 					}
 
@@ -112,7 +112,7 @@ namespace MarsarahTweaks.Patches.UI
 							{
 								//UIPartyArea.SetActive(true);   // Show it when not in load screen
 
-								if (ConfigManager.OnlinePlayersUnderMinimap.Value)
+								if (onlinePlayersUnderMinimap)
 								{
 									// Check if minimap is visible
 									bool minimapVisible = Minimap.instance.m_mapSmall.activeInHierarchy;
@@ -141,7 +141,7 @@ namespace MarsarahTweaks.Patches.UI
 
 					if (!onePlayer)
 					{
-						if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
+						if (!onlinePlayersUnderMinimap)
 						{
 							bool shouldShowOnlineHeader = ShowUI && !Chat.instance.IsChatDialogWindowVisible();
 							bool shouldShowPlayerList = ShowUI && ShowPlayerList && !Chat.instance.IsChatDialogWindowVisible();
@@ -231,7 +231,7 @@ namespace MarsarahTweaks.Patches.UI
 					return; // UI is already created, no need to recreate
 				}
 
-				//log.Info($"Executing CreateUI");
+				bool onlinePlayersUnderMinimap = ConfigManager.OnlinePlayersChoice.Value == ConfigManager.OnlinePlayersMode.UnderMinimap;
 
 				int UITextFontSize = 16;
 				string UITextFontName = "AveriaSansLibre-Bold";
@@ -241,14 +241,14 @@ namespace MarsarahTweaks.Patches.UI
 				UIPartyArea = new GameObject("PartyArea");
 				UIPartyArea.SetActive(false); // Hide the UI initially
 				UIPartyArea.layer = 5;
-				if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
+				if (!onlinePlayersUnderMinimap)
 					UIPartyArea.transform.SetParent(hud.m_rootObject.transform.parent); // Attach to the HUD root parent (entire UI)
 				else
 					UIPartyArea.transform.SetParent(hud.m_rootObject.transform); // Attach to the Mnimap
 
 				RectTransform partyAreaTransform = UIPartyArea.AddComponent<RectTransform>();
 				
-				if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
+				if (!onlinePlayersUnderMinimap)
 				{
 					partyAreaTransform.anchorMin = new Vector2(1f, 0f);
 					partyAreaTransform.anchorMax = new Vector2(1f, 0f);
@@ -278,8 +278,8 @@ namespace MarsarahTweaks.Patches.UI
 				for (int i = 0; i < numOnlinePlayerSlots; i++)
 				{
 					// Determine text alignment and row growth direction
-					TextAnchor alignment = ConfigManager.OnlinePlayersUnderMinimap.Value ? TextAnchor.MiddleLeft : TextAnchor.MiddleRight;
-					Vector2 anchoredPosition = ConfigManager.OnlinePlayersUnderMinimap.Value ? new Vector2(0f, UIPartyPlayerTextDistanceV * i) : new Vector2(0f, -UIPartyPlayerTextDistanceV * i);
+					TextAnchor alignment = onlinePlayersUnderMinimap ? TextAnchor.MiddleLeft : TextAnchor.MiddleRight;
+					Vector2 anchoredPosition = onlinePlayersUnderMinimap ? new Vector2(0f, UIPartyPlayerTextDistanceV * i) : new Vector2(0f, -UIPartyPlayerTextDistanceV * i);
 
 					// Create the text object
 					Text UIPlayerText = CreateTextObject($"PartyText_{i}", UIPartyArea, Color.white, UITextFontName, UITextFontSize, alignment, anchoredPosition, UIPartyAreaSize);
@@ -292,13 +292,15 @@ namespace MarsarahTweaks.Patches.UI
 
 			private static void UpdatePartyUIPosition(Hud hud)
 			{
+				bool onlinePlayersUnderMinimap = ConfigManager.OnlinePlayersChoice.Value == ConfigManager.OnlinePlayersMode.UnderMinimap;
+
 				log.Info("UpdatePartyUICalled");
 				if (UIPartyArea == null) return;
 
 				log.Info($"Executing UpdatePartyUIPosition");
 
 				// Set new parent first, keeping world position to avoid undesired shifts
-				if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
+				if (!onlinePlayersUnderMinimap)
 				{
 					UIPartyArea.transform.SetParent(hud.m_rootObject.transform.parent, false); // Attach to the HUD root parent (entire UI)
 				}
@@ -309,7 +311,7 @@ namespace MarsarahTweaks.Patches.UI
 
 				RectTransform partyAreaTransform = UIPartyArea.GetComponent<RectTransform>();
 
-				if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
+				if (!onlinePlayersUnderMinimap)
 				{
 					// Move to absolute bottom-right of the screen
 					partyAreaTransform.anchorMin = new Vector2(1f, 0f);
@@ -336,10 +338,10 @@ namespace MarsarahTweaks.Patches.UI
 						RectTransform textTransform = UIPlayerText.GetComponent<RectTransform>();
 
 						// Update alignment
-						UIPlayerText.alignment = ConfigManager.OnlinePlayersUnderMinimap.Value ? TextAnchor.MiddleLeft : TextAnchor.MiddleRight;
+						UIPlayerText.alignment = onlinePlayersUnderMinimap ? TextAnchor.MiddleLeft : TextAnchor.MiddleRight;
 
 						// Update text position within container
-						textTransform.anchoredPosition = ConfigManager.OnlinePlayersUnderMinimap.Value
+						textTransform.anchoredPosition = onlinePlayersUnderMinimap
 							? new Vector2(0f, UIPartyPlayerTextDistanceV * i) // Move down from top
 							: new Vector2(0f, -UIPartyPlayerTextDistanceV * i); // Move up from bottom
 					}

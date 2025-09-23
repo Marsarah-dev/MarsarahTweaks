@@ -8,9 +8,10 @@
 
    B. Updates
       - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed. Logs are printed to know exactly which mod overlaps with which config when this happens.
-      - Converted the "Alternate UI Layout" config toggle into an Enum choice named "UI Layout Mode" to make it more obvious as to what that config was doing.
+      - Converted the "Alternate UI Layout" config toggle into a multiple choice config named "UI Layout Mode" to make it more obvious as to what that config was doing.
         - Options: New, Old, Off. 
         - UI can still be toggled with the Insert key (and Home key for online player list) like before, but the Off toggle from the config will override this.
+      - Merged configs: Show Online Players and Show Online Players Under Minimap. Can now choose the mode from a multiple choice config.
       
    C. New Grind Reduction
 
@@ -37,8 +38,6 @@
 
  ******* TODO *******
 
-Enemy Nameplates (16+17) → merge into one enum (EnemyNameplatesMode).
-
 Item Quality (19–22) → merge 19+20 into one enum, keep 21+22 as sub-options.
 
 Hover Info (24–32) → remove master toggle, make each hover element independent with Off option. Merge 25 into individual hover configs.
@@ -46,7 +45,6 @@ Hover Info (24–32) → remove master toggle, make each hover element independe
 Chest Hover (26+27) → merge into single enum.
 
  - Revamp UI configs
- - Merge Show Online Players and Show Online Players under minimap
  - For Cooking Stations, change the name that shows to current item, not target item (or maybe both?)
  - Add Cooking Oven hover info
  - Add Smelter (all types) and Kiln hover info

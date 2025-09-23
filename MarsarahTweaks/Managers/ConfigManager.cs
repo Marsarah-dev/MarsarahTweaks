@@ -66,6 +66,13 @@ namespace MarsarahTweaks.Managers
 			Off
 		}
 
+		public enum OnlinePlayersMode
+		{
+			BottomRight,
+			UnderMinimap,
+			Off
+		}
+
 		public enum EnemyNameplateMode
 		{
 			BarsOnly,        // health bar only, no numbers
@@ -223,15 +230,13 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UITimeAndDay24H = new ConfigMetadata("07 - Time - 24 Hour Format", "Use 24 Hour time format when Show Time And Day is enabled");
 			public static readonly ConfigMetadata UISmartBiome = new ConfigMetadata("08 - Smart Biome Indicator", "Shows smart biome text on minimap (colored according to worn armor relative to current biome)");
 			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("09 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
-			public static readonly ConfigMetadata UIOnlinePlayers = new ConfigMetadata("10 - Show Online Players", "Shows online players on the bottom right of the screen (Not displayed if only one player is online)");
-			public static readonly ConfigMetadata UIOnlinePlayersUnderMinimap = new ConfigMetadata("11 - Show Online Players Under Minimap", "Shows online players under minimap instead of bottom right when Show Online Players is enabled");
+			public static readonly ConfigMetadata UIOnlinePlayersMode = new ConfigMetadata("11 - Show Online Players", "Choose the method of displaying a list of online players (Not displayed if only one player is online)");
 			public static readonly ConfigMetadata UIShowOwnedResources = new ConfigMetadata("12 - Show Owned Resources In Build Menu", "Displays the total amount of resources in the player's inventory in addition to the required resource amount for the selected piece or recipe in the build or crafting menu");
 			public static readonly ConfigMetadata UIShowPowerExpiration = new ConfigMetadata("13 - Show Boss Power Expiration Message", "Displays a message in the center of the screen when any Forsaken Power expires");
 			public static readonly ConfigMetadata UIPlayerLogoutAnnounce = new ConfigMetadata("14 - Player Logout Announce", "Displays a message when a player logs out in the top-left corner of the screen and in the chat window");
 			public static readonly ConfigMetadata UIAshlandsHeatLevel = new ConfigMetadata("15 - Show Heat Meter in Ashlands", "Shows a heat meter at the top-center of the screen when in Ashlands water or lava");
-			//public static readonly ConfigMetadata UIEnemyNameplates = new ConfigMetadata("16 - Better Enemy Nameplates", "Modifies the size and colors of enemy nameplates and colors the name according to alerted/aggravated status");
-			public static readonly ConfigMetadata UIEnemyNameplateMode = new ConfigMetadata("17 - Nameplate HP Mode", "Choose the method of displaying enemy HP. Requires Better Enemy Nameplates");
-			public static readonly ConfigMetadata UITamingProgress = new ConfigMetadata("18 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing under the HP bar. This is independent of Better Enemy Nameplates");
+			public static readonly ConfigMetadata UIEnemyNameplateMode = new ConfigMetadata("17 - Enemy Nameplate Mode", "Choose the method of displaying enemy nameplates.");
+			public static readonly ConfigMetadata UITamingProgress = new ConfigMetadata("18 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing under the HP bar. This is independent of Enemy Nameplate Mode");
 			public static readonly ConfigMetadata UIItemQualityIndicator = new ConfigMetadata("19 - Better Item Quality Indicator", "Changes the indicator for armor and weapons from numbers to symbols");
 			public static readonly ConfigMetadata UIItemQualityIndicatorVertical = new ConfigMetadata("20 - Use Vertical Alignment for Item Quality", "Position the symbols vertically instead of horizontally for item quality. Requires Better Item Quality Inicator");
 			public static readonly ConfigMetadata UIItemQualitySymbol = new ConfigMetadata("21 - Symbol For Item Quality", "Choose the symbol used for the item quality indicator. Requires Better Item Quality Inicator");
@@ -240,7 +245,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIDetailedHovers = new ConfigMetadata("24 - Detailed Hover Information", "Shows extra information like number of available spaces in chests or remaining time for fermenters, beehives, smelters, cooking stations, and plants");
 			public static readonly ConfigMetadata UIColoredHovers = new ConfigMetadata("25 - Use Dynamic Colors For Hover Info", "Colors the hover text based on chest fill or progress. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIChestSingleItem = new ConfigMetadata("26 - Chest Hover - Show Info For Single Item", "If a container has only one type of item, its name and quantity are also displayed in the hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIcontainerHoverMode = new ConfigMetadata("27 - Container Hover Mode", "Choose the method of displaying Container hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIContainerHoverMode = new ConfigMetadata("27 - Container Hover Mode", "Choose the method of displaying Container hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIBeeHoverMode = new ConfigMetadata("28 - Beehive Hover Mode", "Choose the method of displaying Beehive hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIPlantHoverMode = new ConfigMetadata("29 - Plant Hover Mode", "Choose the method of displaying Plant hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIFermenterHoverMode = new ConfigMetadata("30 - Fermenter Hover Mode", "Choose the method of displaying Fermenter hover info. Requires Detailed Hover Information");
@@ -327,13 +332,11 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> TimeFormat24H;
 		public static ConfigEntry<bool> ShowSmartBiome;
 		public static ConfigEntry<bool> ShowSummonCounter;
-		public static ConfigEntry<bool> ShowOnlinePlayers;
-		public static ConfigEntry<bool> OnlinePlayersUnderMinimap;
+		public static ConfigEntry<OnlinePlayersMode> OnlinePlayersChoice;
 		public static ConfigEntry<bool> ShowOwnedResources;
 		public static ConfigEntry<bool> ShowBossExpirationMessage;
 		public static ConfigEntry<bool> AnnouncePlayerLogout;
 		public static ConfigEntry<bool> ShowHeatLevelInAshlands;
-		//public static ConfigEntry<bool> BetterEnemyNameplates;
 		public static ConfigEntry<EnemyNameplateMode> EnemyNameplateChoice;
 		public static ConfigEntry<bool> ShowTamingProgress;
 		public static ConfigEntry<bool> BetterItemQualityIndicator;
@@ -434,13 +437,11 @@ namespace MarsarahTweaks.Managers
 			TimeFormat24H = CreateConfig(ConfigSections.UI, Configs.UITimeAndDay24H.Name, true, Configs.UITimeAndDay24H.Description, false);
 			ShowSmartBiome = CreateConfig(ConfigSections.UI, Configs.UISmartBiome.Name, true, Configs.UISmartBiome.Description, false);
 			ShowSummonCounter = CreateConfig(ConfigSections.UI, Configs.UISummonCounter.Name, true, Configs.UISummonCounter.Description, false);
-			ShowOnlinePlayers = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayers.Name, true, Configs.UIOnlinePlayers.Description, false);
-			OnlinePlayersUnderMinimap = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayersUnderMinimap.Name, false, Configs.UIOnlinePlayersUnderMinimap.Description, false);
+			OnlinePlayersChoice = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayersMode.Name, OnlinePlayersMode.BottomRight, Configs.UIOnlinePlayersMode.Description, false);
 			ShowOwnedResources = CreateConfig(ConfigSections.UI, Configs.UIShowOwnedResources.Name, true, Configs.UIShowOwnedResources.Description, false);
 			ShowBossExpirationMessage = CreateConfig(ConfigSections.UI, Configs.UIShowPowerExpiration.Name, true, Configs.UIShowPowerExpiration.Description, false);
 			AnnouncePlayerLogout = CreateConfig(ConfigSections.UI, Configs.UIPlayerLogoutAnnounce.Name, true, Configs.UIPlayerLogoutAnnounce.Description, false);
 			ShowHeatLevelInAshlands = CreateConfig(ConfigSections.UI, Configs.UIAshlandsHeatLevel.Name, true, Configs.UIAshlandsHeatLevel.Description, false);
-			//BetterEnemyNameplates = CreateConfig(ConfigSections.UI, Configs.UIEnemyNameplates.Name, true, Configs.UIEnemyNameplates.Description, false);
 			EnemyNameplateChoice = CreateConfig(ConfigSections.UI, Configs.UIEnemyNameplateMode.Name, EnemyNameplateMode.BarsWithHealth, Configs.UIEnemyNameplateMode.Description, false);
 			ShowTamingProgress = CreateConfig(ConfigSections.UI, Configs.UITamingProgress.Name, true, Configs.UITamingProgress.Description, false);
 			BetterItemQualityIndicator = CreateConfig(ConfigSections.UI, Configs.UIItemQualityIndicator.Name, true, Configs.UIItemQualityIndicator.Description, false);
@@ -451,7 +452,7 @@ namespace MarsarahTweaks.Managers
 			DetailedHoverInfo = CreateConfig(ConfigSections.UI, Configs.UIDetailedHovers.Name, true, Configs.UIDetailedHovers.Description, false);
 			ColoredHoverInfo = CreateConfig(ConfigSections.UI, Configs.UIColoredHovers.Name, true, Configs.UIColoredHovers.Description, false);
 			ShowSingleItemChestHover = CreateConfig(ConfigSections.UI, Configs.UIChestSingleItem.Name, false, Configs.UIChestSingleItem.Description, false);
-			ContainerHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIcontainerHoverMode.Name, ContainerHoverMode.CurrentPerMax, Configs.UIcontainerHoverMode.Description, false);
+			ContainerHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIContainerHoverMode.Name, ContainerHoverMode.CurrentPerMax, Configs.UIContainerHoverMode.Description, false);
 			BeehiveHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIBeeHoverMode.Name, BeeHoverMode.RemainingTime, Configs.UIBeeHoverMode.Description, false);
 			PlantHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIPlantHoverMode.Name, PlantHoverMode.RemainingTime, Configs.UIPlantHoverMode.Description, false);
 			FermenterHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIFermenterHoverMode.Name, FermenterHoverMode.RemainingTime, Configs.UIFermenterHoverMode.Description, false);
