@@ -39,8 +39,6 @@
 
  ******* TODO *******
 
- - Revamp UI configs
- - For Cooking Stations, change the name that shows to current item, not target item (or maybe both?)
  - Add Cooking Oven hover info
  - Add Smelter (all types) and Kiln hover info
  - Add Windmill and Spinning Wheel hover info
@@ -52,10 +50,11 @@
    - Reposition weather symbol (not next to time of day anymore)
    - Add weather forecast (need to see how this works with my Clearer Weather section)
  - Add indicator when a player is in PVP mode. Also change the HP fill color
- - Implement skill progress message (update compatibilityManager disable function to work with custom configs)
+ - Implement skill progress message
  - Implement player login screen stats
  - See if I can add text to item durability bars (maybe make them thicker) and see how it looks like
  - Add a synced with server master toggle for UI elements if individual UI elements should be synced or not
+ - Update CompatibilityManager disable function to work with custom configs
  - Add compatibility for My Little UI and Enhuddlement
  - Test tooltips with EpicLoot (see if there's any compatibility to do)
  - Implement Player Inspector - see other player stats that are currently logged into the world

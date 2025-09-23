@@ -484,6 +484,8 @@ namespace MarsarahTweaks.Patches.UI
 				string stationName = Localization.instance.Localize(station.m_name);
 				string slotInfo = "";
 				int activeSlots = 0;
+				bool hasReadyItem = false;
+				bool hasOvercookedItem = false;
 
 				for (int i = 0; i < station.m_slots.Length; i++)
 				{
@@ -493,8 +495,15 @@ namespace MarsarahTweaks.Patches.UI
 					string itemName = args[1] as string;
 					float cookedTime = (float)args[2];
 
-					if (string.IsNullOrEmpty(itemName) || itemName == station.m_overCookedItem?.name)
+					if (string.IsNullOrEmpty(itemName))
 						continue;
+
+					// overcooked items still count!
+					if (itemName == station.m_overCookedItem?.name)
+					{
+						hasOvercookedItem = true;
+						continue;
+					}
 
 					var itemConv = (CookingStation.ItemConversion)GetItemConversionMethod.Invoke(station, new object[] { itemName });
 					if (itemConv == null)
@@ -502,28 +511,39 @@ namespace MarsarahTweaks.Patches.UI
 
 					activeSlots++;
 
-					string displayText = BuildCookingSlotText(itemConv, cookedTime, station);
+					// check "ready to take" state
+					if (cookedTime >= itemConv.m_cookTime && cookedTime < itemConv.m_cookTime * 2f)
+						hasReadyItem = true;
+
+					string displayText = BuildCookingSlotText(itemConv, cookedTime, station, itemName);
 					slotInfo += "\n" + displayText;
 				}
 
-				if (activeSlots == 0)
+				if (activeSlots == 0 && !hasOvercookedItem)
 					return null; // vanilla handles empty
 
 				string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
 				string localizedCook = Localization.instance.Localize("$piece_cstand_cook");
+				string localizedTake = Localization.instance.Localize("$piece_itemstand_take");
+
+				if (hasReadyItem || hasOvercookedItem)
+					return $"{stationName}\n{useKeyColored} {localizedTake}{slotInfo}";
 
 				return (activeSlots >= station.m_slots.Length)
 					? $"{stationName}{slotInfo}"
 					: $"{stationName}\n{useKeyColored} {localizedCook} {slotInfo}";
 			}
 
-			private static string BuildCookingSlotText(CookingStation.ItemConversion conv, float cookedTime, CookingStation station)
+			private static string BuildCookingSlotText(CookingStation.ItemConversion conv, float cookedTime, CookingStation station, string currentItemName)
 			{
 				float cookTime = conv.m_cookTime;
 				float overCookTime = cookTime * 2f;
 
-				string targetName = Localization.instance.Localize(conv.m_to.GetHoverName());
-				string overCookedName = Localization.instance.Localize(station.m_overCookedItem.GetHoverName());
+				// localize the current item instead of future product
+				GameObject currentPrefab = ObjectDB.instance.GetItemPrefab(currentItemName);
+				string currentName = currentPrefab != null
+					? Localization.instance.Localize(currentPrefab.GetComponent<ItemDrop>().m_itemData.m_shared.m_name)
+					: currentItemName;
 
 				switch (ConfigManager.CookingStationHoverModeChoice.Value)
 				{
@@ -532,13 +552,13 @@ namespace MarsarahTweaks.Patches.UI
 						{
 							float percent = Mathf.Clamp01((cookedTime - cookTime) / cookTime);
 							string percentText = $"{percent:0%}";
-							return $"{overCookedName}: {PaintTextIfEnabled(percentText, GetPercentColorInverted(percent))}";
+							return $"{currentName}: {PaintTextIfEnabled(percentText, GetPercentColorInverted(percent))}";
 						}
 						else
 						{
 							float percent = Mathf.Clamp01(cookedTime / cookTime);
 							string percentText = $"{percent:0%}";
-							return $"{targetName}: {PaintTextIfEnabled(percentText, GetPercentColor(percent))}";
+							return $"{currentName}: {PaintTextIfEnabled(percentText, GetPercentColor(percent))}";
 						}
 
 					case CookingStationHoverMode.RemainingTime:
@@ -546,13 +566,13 @@ namespace MarsarahTweaks.Patches.UI
 						{
 							float remaining = Mathf.Max(0f, overCookTime - cookedTime);
 							string time = FormatTime(remaining);
-							return $"{overCookedName}: {PaintTextIfEnabled(time, Color.red)}";
+							return $"{currentName}: {PaintTextIfEnabled(time, Color.red)}";
 						}
 						else
 						{
 							float remaining = Mathf.Max(0f, cookTime - cookedTime);
 							string time = FormatTime(remaining);
-							return $"{targetName}: {PaintTextIfEnabled(time, Color.cyan)}";
+							return $"{currentName}: {PaintTextIfEnabled(time, Color.cyan)}";
 						}
 
 					case CookingStationHoverMode.PercentAndTime:
@@ -565,7 +585,7 @@ namespace MarsarahTweaks.Patches.UI
 							float remaining = Mathf.Max(0f, overCookTime - cookedTime);
 							string time = PaintTextIfEnabled(FormatTime(remaining), Color.red);
 
-							return $"{overCookedName}: {percentColored} - {time}";
+							return $"{currentName}: {percentColored} - {time}";
 						}
 						else
 						{
@@ -576,7 +596,7 @@ namespace MarsarahTweaks.Patches.UI
 							float remaining = Mathf.Max(0f, cookTime - cookedTime);
 							string time = PaintTextIfEnabled(FormatTime(remaining), Color.cyan);
 
-							return $"{targetName}: {percentColored} - {time}";
+							return $"{currentName}: {percentColored} - {time}";
 						}
 				}
 
