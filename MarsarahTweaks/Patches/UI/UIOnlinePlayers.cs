@@ -30,7 +30,7 @@ namespace MarsarahTweaks.Patches.UI
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
-				if (ConfigManager.ShowOnlinePlayers.Value && showUI)
+				if (ConfigManager.ShowOnlinePlayers.Value && ShowUI)
 				{
 					//if (___m_players.Count != 0)
 					playerInfoList = ___m_players;
@@ -143,11 +143,11 @@ namespace MarsarahTweaks.Patches.UI
 					{
 						if (!ConfigManager.OnlinePlayersUnderMinimap.Value)
 						{
-							bool shouldShowOnlineHeader = showUI && !Chat.instance.IsChatDialogWindowVisible();
-							bool shouldShowPlayerList = showUI && showPlayerList && !Chat.instance.IsChatDialogWindowVisible();
+							bool shouldShowOnlineHeader = ShowUI && !Chat.instance.IsChatDialogWindowVisible();
+							bool shouldShowPlayerList = ShowUI && ShowPlayerList && !Chat.instance.IsChatDialogWindowVisible();
 
 							UIPlayerTexts[0].enabled = shouldShowOnlineHeader;
-							if (showUI)
+							if (ShowUI)
 							{
 								UIPlayerTexts[0].color = Color.green;
 								UIPlayerTexts[0].text = $"Online: {numPlayersTotal}"; // 🧑‍🤝‍🧑
@@ -158,7 +158,7 @@ namespace MarsarahTweaks.Patches.UI
 								if (i <= numPlayersToFit)
 								{
 									UIPlayerTexts[i].enabled = shouldShowPlayerList;
-									if (showUI)
+									if (ShowUI)
 									{
 										UIPlayerTexts[i].color = Color.white;
 										UIPlayerTexts[i].text = playerInfoList[i - 1].m_name;
@@ -173,11 +173,11 @@ namespace MarsarahTweaks.Patches.UI
 						}
 						else
 						{
-							bool shouldShowOnlineHeader = showUI && Minimap.instance.m_mapSmall.activeInHierarchy;
-							bool shouldShowPlayerList = showUI && showPlayerList && Minimap.instance.m_mapSmall.activeInHierarchy;
+							bool shouldShowOnlineHeader = ShowUI && Minimap.instance.m_mapSmall.activeInHierarchy;
+							bool shouldShowPlayerList = ShowUI && ShowPlayerList && Minimap.instance.m_mapSmall.activeInHierarchy;
 
 							UIPlayerTexts[0].enabled = shouldShowOnlineHeader;
-							if (showUI)
+							if (ShowUI)
 							{
 								UIPlayerTexts[0].color = Color.green;
 								UIPlayerTexts[0].text = $"Online: {numPlayersTotal}";
@@ -188,7 +188,7 @@ namespace MarsarahTweaks.Patches.UI
 								if (i <= numPlayersToFit)
 								{
 									UIPlayerTexts[i].enabled = shouldShowPlayerList;
-									if (showUI)
+									if (ShowUI)
 									{
 										UIPlayerTexts[i].color = Color.white;
 										UIPlayerTexts[i].text = playerInfoList[i - 1].m_name;

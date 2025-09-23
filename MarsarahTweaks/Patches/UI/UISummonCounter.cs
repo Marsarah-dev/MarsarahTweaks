@@ -38,7 +38,7 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (___m_localPlayer == null) return;
 
-				if (ConfigManager.ShowSummonCounter.Value && showUI)
+				if (ConfigManager.ShowSummonCounter.Value && ShowUI)
 				{
 					List<Character> allCharacters = Character.GetAllCharacters();
 					int numSummonedSkeletons = 0;
@@ -107,7 +107,7 @@ namespace MarsarahTweaks.Patches.UI
 					CreateTextBasedUI(__instance);
 					CreateSymbolBasedUI(__instance);
 
-					bool showSummonsCounter = showUI && (numSummons != 0);
+					bool showSummonsCounter = ShowUI && (numSummons != 0);
 
 					if (!newUI)
 					{

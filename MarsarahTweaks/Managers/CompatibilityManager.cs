@@ -104,7 +104,7 @@ namespace MarsarahTweaks.Managers
 
 		public static void UpdateIncompatibilities()
 		{
-			DisableIfIncompatible(MinimalStatusEffects, ConfigManager.OnlinePlayersUnderMinimap);
+			/*DisableIfIncompatible(MinimalStatusEffects, ConfigManager.OnlinePlayersUnderMinimap);
 			DisableIfIncompatible(BetterUI, ConfigManager.BetterEnemyNameplates, "Letting BetterUI handle enemy nameplates.");
 			DisableIfIncompatible(BetterUI, ConfigManager.BetterItemQualityIndicator, "Letting BetterUI handle the quality indicator.");
 			DisableIfIncompatible(BetterUI, ConfigManager.ColoredItemDurabilityBar, "Letting BetterUI handle the durability indicator.");
@@ -125,7 +125,7 @@ namespace MarsarahTweaks.Managers
 			DisableIfIncompatible(Sailing, ConfigManager.LargerBoatExploreRadiusEnabled);
 			DisableIfIncompatible(Sailing, ConfigManager.CameraUpWhenSailingEnabled);
 			DisableIfIncompatible(Seasonality, ConfigManager.ClearerWeatherEnabled);
-			DisableIfIncompatible(Seasons, ConfigManager.ClearerWeatherEnabled);
+			DisableIfIncompatible(Seasons, ConfigManager.ClearerWeatherEnabled);*/
 		}
 
 		// Optional: log all loaded mods for debugging

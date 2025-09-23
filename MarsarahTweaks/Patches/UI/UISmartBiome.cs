@@ -148,7 +148,7 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (___m_localPlayer == null) return;
 
-				if (ConfigManager.ShowSmartBiome.Value && showUI)
+				if (ConfigManager.ShowSmartBiome.Value && ShowUI)
 				{
 					playerArmor = ___m_localPlayer.GetBodyArmor();
 					Inventory playerInventory = ___m_localPlayer.GetInventory();
@@ -204,7 +204,7 @@ namespace MarsarahTweaks.Patches.UI
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
-				if (ConfigManager.ShowSmartBiome.Value && showUI)
+				if (ConfigManager.ShowSmartBiome.Value && ShowUI)
 				{
 					___m_biomeNameSmall.enabled = false;
 
@@ -228,9 +228,9 @@ namespace MarsarahTweaks.Patches.UI
 				{
 					CreateUI(__instance); // Create UI if missing
 
-					UIBiomeText.enabled = showUI && Minimap.instance.m_mapSmall.activeInHierarchy;
+					UIBiomeText.enabled = ShowUI && Minimap.instance.m_mapSmall.activeInHierarchy;
 
-					if (showUI && Minimap.instance.m_mapSmall.activeInHierarchy)
+					if (ShowUI && Minimap.instance.m_mapSmall.activeInHierarchy)
 					{
 
 						if (currentBiome != null && biomeWeightsDict.ContainsKey(currentBiome))

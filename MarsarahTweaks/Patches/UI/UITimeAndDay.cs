@@ -218,7 +218,7 @@ namespace MarsarahTweaks.Patches.UI
 						UpdateTimePosition(newUI);
 					}
 
-					bool showTimeUI = Game.m_noMap ? showUI : showUI && Minimap.instance != null && Minimap.instance.m_mapSmall != null && Minimap.instance.m_mapSmall.activeInHierarchy;
+					bool showTimeUI = Game.m_noMap ? ShowUI : ShowUI && Minimap.instance != null && Minimap.instance.m_mapSmall != null && Minimap.instance.m_mapSmall.activeInHierarchy;
 
 					UITimeText.enabled = showTimeUI;
 					UIDayText.enabled = showTimeUI;

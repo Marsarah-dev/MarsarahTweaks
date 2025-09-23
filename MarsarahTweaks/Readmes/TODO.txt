@@ -9,6 +9,8 @@
    B. Updates
       - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed. Logs are printed to know exactly which mod overlaps with which config when this happens.
       - Converted the "Alternate UI Layout" config toggle into an Enum choice named "UI Layout Mode" to make it more obvious as to what that config was doing.
+        - Options: New, Old, Off. 
+        - UI can still be toggled with the Insert key (and Home key for online player list) like before, but the Off toggle from the config will override this.
       
    C. New Grind Reduction
 
@@ -35,18 +37,34 @@
 
  ******* TODO *******
 
-public enum SkillXPNotificationStyle
-{
-    FloatingBar,
-    CornerStack,
-    RadialFill, 
-    Top-Left message
-}
+Enemy Nameplates (16+17) → merge into one enum (EnemyNameplatesMode).
 
- - Implement skill progress message
+Item Quality (19–22) → merge 19+20 into one enum, keep 21+22 as sub-options.
+
+Hover Info (24–32) → remove master toggle, make each hover element independent with Off option. Merge 25 into individual hover configs.
+
+Chest Hover (26+27) → merge into single enum.
+
+ - Revamp UI configs
+ - Merge Show Online Players and Show Online Players under minimap
+ - For Cooking Stations, change the name that shows to current item, not target item (or maybe both?)
+ - Add Cooking Oven hover info
+ - Add Smelter (all types) and Kiln hover info
+ - Add Windmill and Spinning Wheel hover info
+ - Add Eitr Refinery hover info
+ - Add Eggs hover info
+ - Modify the ShowSingleItemChestHover into show container contents (and display everything inside it in a vertical list)
+ - Separate the weather and time emoji into its own config
+   - Modify emojis for weather (use in-game icons if possible)
+   - Reposition weather symbol (not next to time of day anymore)
+   - Add weather forecast (need to see how this works with my Clearer Weather section)
+ - Add indicator when a player is in PVP mode. Also change the HP fill color
+ - Implement skill progress message (update compatibilityManager disable function to work with custom configs)
  - Implement player login screen stats
+ - See if I can add text to item durability bars (maybe make them thicker) and see how it looks like
+ - Add compatibility for My Little UI and Enhuddlement
+ - Test tooltips with EpicLoot (see if there's any compatibility to do)
  - Implement Player Inspector - see other player stats that are currently logged into the world
- - Add SmartDropbox
  - Add new clause for Permissions in readme: "You are free to take inspiration or implement similar features, but please do so with your own code and assets."
    
    * Prep for update

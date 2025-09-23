@@ -18,8 +18,9 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly LogManager log = new LogManager("UI Controller", LogManager.LogLevel.Warning);
 
 		// UI data
-		internal static bool showUI = true;
-		internal static bool showPlayerList = true;
+		internal static bool ShowUI = true;
+		internal static bool ShowPlayerList = true;
+		private static UIMode LastLayout = UIMode.New;
 
 		// This is needed since Unity 6 update to set the default font for TMP fonts since LiberationSans is missing and was default
 		[HarmonyPatch(typeof(Hud), "Awake")]
@@ -62,14 +63,33 @@ namespace MarsarahTweaks.Patches.UI
 
 		public static void UpdateUIDisplay()
 		{
-			if (Input.GetKeyDown(KeyCode.Insert))
+			UIMode currentLayout = ConfigManager.UILayoutChoice.Value;
+
+			if (currentLayout == UIMode.Off)
 			{
-				showUI = !showUI;
+
+				ShowUI = false;
+				ShowPlayerList = false;
 			}
-			if (Input.GetKeyDown(KeyCode.Home))
+			else
 			{
-				showPlayerList = !showPlayerList;
+				if (LastLayout != currentLayout)
+				{
+					ShowUI = true;
+					ShowPlayerList = true;
+				}
+
+				if (Input.GetKeyDown(KeyCode.Insert))
+				{
+					ShowUI = !ShowUI;
+				}
+				if (Input.GetKeyDown(KeyCode.Home))
+				{
+					ShowPlayerList = !ShowPlayerList;
+				}
 			}
+
+			LastLayout = currentLayout;
 		}
 
 		public static Text CreateTextObject(string name, GameObject parent, Color textColor, string fontName, int fontSize, TextAnchor alignment, Vector2 position, Vector2 sizeDelta)

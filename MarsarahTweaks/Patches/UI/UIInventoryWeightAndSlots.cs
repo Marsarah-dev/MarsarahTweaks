@@ -91,19 +91,19 @@ namespace MarsarahTweaks.Patches.UI
 
 					if (!newUI)
 					{
-						UIInventoryArea?.SetActive(showUI);
+						UIInventoryArea?.SetActive(ShowUI);
 						UIWeightBarArea?.SetActive(false);
 						UIWeightBarEmojiArea?.SetActive(false);
 						UISlotsArea?.SetActive(false);
 
-						if (showUI)
+						if (ShowUI)
 						{
 							float currentWeightPrecent = currentWeight * 100 / maxWeight;
 							UIWeightText.color = GetColorFromPercent(currentWeightPrecent);
 							UIWeightText.text = currentWeight.ToString("0.0") + "/" + maxWeight.ToString("0");
 						}
 
-						if (showUI)
+						if (ShowUI)
 						{
 							UISlotText.color = GetColorFromPercent(freeSlotsPercent);
 							UISlotText.text = "(" + freeSlots.ToString() + ")";
@@ -112,11 +112,11 @@ namespace MarsarahTweaks.Patches.UI
 					else
 					{
 						UIInventoryArea?.SetActive(false);
-						UIWeightBarArea?.SetActive(showUI);
-						UIWeightBarEmojiArea?.SetActive(showUI);
-						UISlotsArea?.SetActive(showUI);
+						UIWeightBarArea?.SetActive(ShowUI);
+						UIWeightBarEmojiArea?.SetActive(ShowUI);
+						UISlotsArea?.SetActive(ShowUI);
 
-						if (showUI)
+						if (ShowUI)
 						{
 							// Weight section
 

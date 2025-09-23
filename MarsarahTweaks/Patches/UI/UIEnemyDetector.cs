@@ -95,11 +95,11 @@ namespace MarsarahTweaks.Patches.UI
 
 					if (!newUI)
 					{
-						UIEnemyArea?.SetActive(showUI);
+						UIEnemyArea?.SetActive(ShowUI);
 						UIEnemyArea2?.SetActive(false);
 						UIFriendlyArea?.SetActive(false);
 
-						if (showUI)
+						if (ShowUI)
 						{
 							UIEnemyText.color = GetColorFromNum(numEnemies);
 
@@ -112,10 +112,10 @@ namespace MarsarahTweaks.Patches.UI
 					else
 					{
 						UIEnemyArea?.SetActive(false);
-						UIEnemyArea2?.SetActive(showUI);
-						UIFriendlyArea?.SetActive(showUI && numEnemiesPassive != 0);
+						UIEnemyArea2?.SetActive(ShowUI);
+						UIFriendlyArea?.SetActive(ShowUI && numEnemiesPassive != 0);
 
-						if (showUI)
+						if (ShowUI)
 						{
 							Color enemyColor = GetColorFromNum(numEnemies);
 

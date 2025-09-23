@@ -33,7 +33,7 @@ namespace MarsarahTweaks.Patches.UI
 			static void Postfix(Character __instance, ref float ___m_lavaHeatLevel)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
-				if (!ConfigManager.ShowHeatLevelInAshlands.Value || !showUI) return;
+				if (!ConfigManager.ShowHeatLevelInAshlands.Value || !ShowUI) return;
 				if (!(__instance is Player)) return;
 
 				heatThreshold = __instance.m_heatLevelFirstDamageThreshold;
@@ -65,7 +65,7 @@ namespace MarsarahTweaks.Patches.UI
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 				if (__instance == null) return;
 
-				// TODO: use showUI
+				// TODO: use ShowUI
 
 				if (ConfigManager.ShowHeatLevelInAshlands.Value)
 				{
@@ -134,12 +134,12 @@ namespace MarsarahTweaks.Patches.UI
 						}
 						else
 						{
-							if (heatBarFill != null) heatBarFill.enabled = showUI;
-							if (heatBarBGImage != null) heatBarBGImage.enabled = showUI;
-							if (heatBarText != null) heatBarText.enabled = showUI;
+							if (heatBarFill != null) heatBarFill.enabled = ShowUI;
+							if (heatBarBGImage != null) heatBarBGImage.enabled = ShowUI;
+							if (heatBarText != null) heatBarText.enabled = ShowUI;
 							if (heatBarEmojiTMP != null)
 							{
-								heatBarEmojiTMP.enabled = showUI;
+								heatBarEmojiTMP.enabled = ShowUI;
 								heatBarEmojiTMP.text = "🔥";
 
 							}

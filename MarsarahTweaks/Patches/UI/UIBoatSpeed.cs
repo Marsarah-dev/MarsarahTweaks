@@ -89,10 +89,10 @@ namespace MarsarahTweaks.Patches.UI
 
 					if (!newUI)
 					{
-						UIBoatArea?.SetActive(showBoatSpeedUI && showUI);
+						UIBoatArea?.SetActive(showBoatSpeedUI && ShowUI);
 						UIBoatArea2?.SetActive(false);
 
-						if (showBoatSpeedUI && showUI)
+						if (showBoatSpeedUI && ShowUI)
 						{
 							UIBoatText.color = GetColorFromSpeed(boatSpeed);
 							UIBoatText.text = boatSpeed > 0 ? boatSpeed.ToString("0.00") : "R " + (Math.Abs(boatSpeed)).ToString("0.00");
@@ -102,9 +102,9 @@ namespace MarsarahTweaks.Patches.UI
 					else
 					{
 						UIBoatArea?.SetActive(false);
-						UIBoatArea2?.SetActive(showBoatSpeedUI && showUI);
+						UIBoatArea2?.SetActive(showBoatSpeedUI && ShowUI);
 
-						if (showBoatSpeedUI && showUI)
+						if (showBoatSpeedUI && ShowUI)
 						{
 							UIBoatText2.color = GetColorFromSpeed(boatSpeed);
 							UIBoatText2.text = boatSpeed > 0 ? boatSpeed.ToString("0.00") : "R " + (Math.Abs(boatSpeed)).ToString("0.00");
