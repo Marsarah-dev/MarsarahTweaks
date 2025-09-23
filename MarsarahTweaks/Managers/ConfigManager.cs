@@ -107,6 +107,13 @@ namespace MarsarahTweaks.Managers
 			Cyan
 		}
 
+		public enum HoverInfoMode
+		{
+			ColoredText,
+			WhiteText,
+			Off
+		}
+
 		public enum ContainerHoverMode
 		{
 			CurrentPerMax,
@@ -248,8 +255,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIItemQualitySymbol = new ConfigMetadata("21 - Symbol For Item Quality", "Choose the symbol used for the item quality indicator. Requires Better Item Quality Inicator");
 			public static readonly ConfigMetadata UIItemQualityColor = new ConfigMetadata("22 - Color For Item Quality", "Choose the color used for the item quality indicator. Requires Better Item Quality Inicator");
 			public static readonly ConfigMetadata UIItemDurabilityColor = new ConfigMetadata("23 - Better Item Durability Bar", "Colors the item durability bar according to curent durability and modifies the sprite texture");
-			public static readonly ConfigMetadata UIDetailedHovers = new ConfigMetadata("24 - Detailed Hover Information", "Shows extra information like number of available spaces in chests or remaining time for fermenters, beehives, smelters, cooking stations, and plants");
-			public static readonly ConfigMetadata UIColoredHovers = new ConfigMetadata("25 - Use Dynamic Colors For Hover Info", "Colors the hover text based on chest fill or progress. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIHoverInfoMode = new ConfigMetadata("25 - Detailed Hover Info Mode", "Adds more information when hovering over objects. Master toggle for the configs below (26-32)");
 			public static readonly ConfigMetadata UIChestSingleItem = new ConfigMetadata("26 - Chest Hover - Show Info For Single Item", "If a container has only one type of item, its name and quantity are also displayed in the hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIContainerHoverMode = new ConfigMetadata("27 - Container Hover Mode", "Choose the method of displaying Container hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIBeeHoverMode = new ConfigMetadata("28 - Beehive Hover Mode", "Choose the method of displaying Beehive hover info. Requires Detailed Hover Information");
@@ -257,7 +263,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIFermenterHoverMode = new ConfigMetadata("30 - Fermenter Hover Mode", "Choose the method of displaying Fermenter hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UICookingStationHoverMode = new ConfigMetadata("31 - CookingStation Hover Mode", "Choose the method of displaying Cooking Station hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UISmelterHoverMode = new ConfigMetadata("32 - Smelter Hover Mode", "Choose the method of displaying Smelter hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UISkillXPMode = new ConfigMetadata("33 - Skill XP Notification Mode", "Choose the method of displaying info when progressing in a skill");
+			//public static readonly ConfigMetadata UISkillXPMode = new ConfigMetadata("33 - Skill XP Notification Mode", "Choose the method of displaying info when progressing in a skill");
 		}
 
 		// Config entries
@@ -349,8 +355,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<ItemQualitySymbol> ItemQualitySymbolChoice;
 		public static ConfigEntry<ItemQualityColor> ItemQualityColorChoice;
 		public static ConfigEntry<bool> ColoredItemDurabilityBar;
-		public static ConfigEntry<bool> DetailedHoverInfo;
-		public static ConfigEntry<bool> ColoredHoverInfo;
+		public static ConfigEntry<HoverInfoMode> DetailedHoverInfoChoice;
 		public static ConfigEntry<bool> ShowSingleItemChestHover;
 		public static ConfigEntry<ContainerHoverMode> ContainerHoverModeChoice;
 		public static ConfigEntry<BeeHoverMode> BeehiveHoverModeChoice;
@@ -358,7 +363,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<FermenterHoverMode> FermenterHoverModeChoice;
 		public static ConfigEntry<CookingStationHoverMode> CookingStationHoverModeChoice;
 		public static ConfigEntry<SmelterHoverMode> SmelterHoverModeChoice;
-		public static ConfigEntry<SkillXPNotificationMode> SkillXPNotificationChoice;
+		//public static ConfigEntry<SkillXPNotificationMode> SkillXPNotificationChoice;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -453,8 +458,7 @@ namespace MarsarahTweaks.Managers
 			ItemQualitySymbolChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualitySymbol.Name, ItemQualitySymbol.Star, Configs.UIItemQualitySymbol.Description, false);
 			ItemQualityColorChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualityColor.Name, ItemQualityColor.Yellow, Configs.UIItemQualityColor.Description, false);
 			ColoredItemDurabilityBar = CreateConfig(ConfigSections.UI, Configs.UIItemDurabilityColor.Name, true, Configs.UIItemDurabilityColor.Description, false);
-			DetailedHoverInfo = CreateConfig(ConfigSections.UI, Configs.UIDetailedHovers.Name, true, Configs.UIDetailedHovers.Description, false);
-			ColoredHoverInfo = CreateConfig(ConfigSections.UI, Configs.UIColoredHovers.Name, true, Configs.UIColoredHovers.Description, false);
+			DetailedHoverInfoChoice = CreateConfig(ConfigSections.UI, Configs.UIHoverInfoMode.Name, HoverInfoMode.Colored, Configs.UIHoverInfoMode.Description, false);
 			ShowSingleItemChestHover = CreateConfig(ConfigSections.UI, Configs.UIChestSingleItem.Name, false, Configs.UIChestSingleItem.Description, false);
 			ContainerHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIContainerHoverMode.Name, ContainerHoverMode.CurrentPerMax, Configs.UIContainerHoverMode.Description, false);
 			BeehiveHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIBeeHoverMode.Name, BeeHoverMode.RemainingTime, Configs.UIBeeHoverMode.Description, false);
@@ -462,7 +466,7 @@ namespace MarsarahTweaks.Managers
 			FermenterHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIFermenterHoverMode.Name, FermenterHoverMode.RemainingTime, Configs.UIFermenterHoverMode.Description, false);
 			CookingStationHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UICookingStationHoverMode.Name, CookingStationHoverMode.RemainingTime, Configs.UICookingStationHoverMode.Description, false);
 			SmelterHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UISmelterHoverMode.Name, SmelterHoverMode.RemainingTime, Configs.UISmelterHoverMode.Description, false);
-			SkillXPNotificationChoice = CreateConfig(ConfigSections.UI, Configs.UISkillXPMode.Name, SkillXPNotificationMode.FloatingBar, Configs.UISkillXPMode.Description, false);
+			//SkillXPNotificationChoice = CreateConfig(ConfigSections.UI, Configs.UISkillXPMode.Name, SkillXPNotificationMode.FloatingBar, Configs.UISkillXPMode.Description, false);
 
 			//HandleToggleExclusivity();
 			SetupWatcher();

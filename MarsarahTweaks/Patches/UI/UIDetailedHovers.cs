@@ -42,7 +42,7 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static void Postfix(Container __instance, ref string __result)
 			{
-				if (!ConfigManager.DetailedHoverInfo.Value)	return;
+				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off) return;
 
 				Inventory inventory = InventoryField?.GetValue(__instance) as Inventory;
 				if (inventory == null)
@@ -143,7 +143,7 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static bool Prefix(Beehive __instance, ref string __result)
 			{
-				if (!ConfigManager.DetailedHoverInfo.Value)
+				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
 					return true; // fall back to vanilla
 
 				// Skip if player has no access and add custom message
@@ -251,7 +251,7 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static bool Prefix(Plant __instance, ref string __result)
 			{
-				if (!ConfigManager.DetailedHoverInfo.Value)
+				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
 					return true; // fall back to vanilla 
 
 				if (!PrivateArea.CheckAccess(__instance.transform.position, 0f, flash: false))
@@ -332,7 +332,7 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static bool Prefix(Fermenter __instance, ref string __result)
 			{
-				if (!ConfigManager.DetailedHoverInfo.Value)
+				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
 					return true; // fall back to vanilla
 
 				// Skip if player has no access
@@ -449,7 +449,7 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static bool Prefix(CookingStation __instance, ref string __result)
 			{
-				if (!ConfigManager.DetailedHoverInfo.Value)
+				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
 					return true; // vanilla
 
 				// Only owners see slot timers
@@ -627,7 +627,7 @@ namespace MarsarahTweaks.Patches.UI
 		// ---------- Generic painter if enabled ----------
 		private static string PaintTextIfEnabled(string text, Color col, bool bold = false)
 		{
-			if (!ConfigManager.ColoredHoverInfo.Value)
+			if (ConfigManager.DetailedHoverInfoChoice.Value != HoverInfoMode.Colored)
 				return bold ? $"<b>{text}</b>" : text;
 
 			string colored = PaintText(text, col);

@@ -38,11 +38,7 @@
 
  ******* TODO *******
 
-Item Quality (19–22) → merge 19+20 into one enum, keep 21+22 as sub-options.
-
-Hover Info (24–32) → remove master toggle, make each hover element independent with Off option. Merge 25 into individual hover configs.
-
-Chest Hover (26+27) → merge into single enum.
+Time and day + 24h format merge
 
  - Revamp UI configs
  - For Cooking Stations, change the name that shows to current item, not target item (or maybe both?)
@@ -60,6 +56,7 @@ Chest Hover (26+27) → merge into single enum.
  - Implement skill progress message (update compatibilityManager disable function to work with custom configs)
  - Implement player login screen stats
  - See if I can add text to item durability bars (maybe make them thicker) and see how it looks like
+ - Add a synced with server master toggle for UI elements if individual UI elements should be synced or not
  - Add compatibility for My Little UI and Enhuddlement
  - Test tooltips with EpicLoot (see if there's any compatibility to do)
  - Implement Player Inspector - see other player stats that are currently logged into the world
