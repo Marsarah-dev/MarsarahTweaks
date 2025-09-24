@@ -30,6 +30,9 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly MethodInfo GetFermentationTimeMethod = typeof(Fermenter).GetMethod("GetFermentationTime", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetSlotMethod = typeof(CookingStation).GetMethod("GetSlot", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetItemConversionMethod = typeof(CookingStation).GetMethod("GetItemConversion", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly MethodInfo GetHoverTextMethod = typeof(CookingStation).GetMethod("HoverText", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly MethodInfo GetCSFuelMethod = typeof(CookingStation).GetMethod("GetFuel", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly MethodInfo OnHoverFuelSwitchMethod = typeof(CookingStation).GetMethod("OnHoverFuelSwitch", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetProcessedQueueSizeMethod = typeof(Smelter).GetMethod("GetProcessedQueueSize", BindingFlags.Instance | BindingFlags.NonPublic);
 		private static readonly MethodInfo GetQueueSizeMethod = typeof(Smelter).GetMethod("GetQueueSize", BindingFlags.Instance | BindingFlags.NonPublic);
 		private static readonly MethodInfo GetFuelMethod = typeof(Smelter).GetMethod("GetFuel", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -446,6 +449,66 @@ namespace MarsarahTweaks.Patches.UI
 			}
 		}
 
+		[HarmonyPatch(typeof(CookingStation), "Awake")]
+		internal static class CookingStation_AddFoodSwitchHoverPatch
+		{
+			private static void Postfix(CookingStation __instance)
+			{
+				// Skip if no switch
+				if (__instance.m_addFoodSwitch == null)
+					return;
+
+				// Avoid overwriting existing delegates
+				if (__instance.m_addFoodSwitch.m_onHover != null)
+					return;
+
+				ZNetView nview = NViewFieldCookingStation.GetValue(__instance) as ZNetView;
+				if (nview == null)
+				{
+					log.Warn("CookingStation m_nview is null.");
+					return;
+				}
+
+				if (!nview.IsOwner())
+					return;
+
+				// Assign a hover delegate to the food interaction hover
+				__instance.m_addFoodSwitch.m_onHover = () =>
+				{
+					string vanillaText = Localization.instance.Localize(GetHoverTextMethod.Invoke(__instance, null) as string);
+
+					if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
+						return vanillaText;
+
+					string hover = GetCookingStationHover(__instance);
+					if (!string.IsNullOrEmpty(hover))
+						return hover;
+
+					return vanillaText;
+				};
+
+				// Assign a hover delegate to the wood interaction hover
+				__instance.m_addFuelSwitch.m_onHover = () =>
+				{
+					string vanillaText = Localization.instance.Localize(OnHoverFuelSwitchMethod.Invoke(__instance, null) as string);
+
+					if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
+						return vanillaText;
+
+					// Compute remaining fuel time
+					float fuel = (float)GetCSFuelMethod.Invoke(__instance, null);
+					float remainingSeconds = fuel * __instance.m_secPerFuel;
+					string hover = "";
+					if (remainingSeconds <= 0)
+						hover = vanillaText;
+					else
+						hover = $"{vanillaText}\nTime Left: {PaintTextIfEnabled(FormatTime(remainingSeconds), Color.cyan)}";
+
+					return hover;
+				};
+			}
+		}
+
 		[HarmonyPatch(typeof(CookingStation), "GetHoverText")]
 		internal static class CookingStationHoverPatch
 		{
@@ -458,11 +521,15 @@ namespace MarsarahTweaks.Patches.UI
 				ZNetView nview = NViewFieldCookingStation.GetValue(__instance) as ZNetView;
 				if (nview == null)
 				{
-					log.Warn("Beehive m_nview is null.");
+					log.Warn("CookingStation m_nview is null.");
 					return true;
 				}
 
 				if (!nview.IsOwner())
+					return true;
+
+				bool isOven = __instance.m_useFuel && !__instance.m_requireFire;
+				if (isOven)
 					return true;
 
 				string hover = GetCookingStationHover(__instance);
@@ -474,136 +541,136 @@ namespace MarsarahTweaks.Patches.UI
 
 				return true; // fallback to vanilla
 			}
+		}
 
-			private static string GetCookingStationHover(CookingStation station)
+		private static string GetCookingStationHover(CookingStation station)
+		{
+			if (GetSlotMethod == null || GetItemConversionMethod == null)
 			{
-				if (GetSlotMethod == null || GetItemConversionMethod == null)
-				{
-					log.Warn("CookingStation reflection not found.");
-					return null;
-				}
-
-				string stationName = Localization.instance.Localize(station.m_name);
-				string slotInfo = "";
-				int activeSlots = 0;
-				bool hasReadyItem = false;
-				bool hasOvercookedItem = false;
-
-				for (int i = 0; i < station.m_slots.Length; i++)
-				{
-					object[] args = { i, null, 0f, null };
-					GetSlotMethod.Invoke(station, args);
-
-					string itemName = args[1] as string;
-					float cookedTime = (float)args[2];
-
-					if (string.IsNullOrEmpty(itemName))
-						continue;
-
-					// overcooked items still count!
-					if (itemName == station.m_overCookedItem?.name)
-					{
-						hasOvercookedItem = true;
-						continue;
-					}
-
-					var itemConv = (CookingStation.ItemConversion)GetItemConversionMethod.Invoke(station, new object[] { itemName });
-					if (itemConv == null)
-						continue;
-
-					activeSlots++;
-
-					// check "ready to take" state
-					if (cookedTime >= itemConv.m_cookTime && cookedTime < itemConv.m_cookTime * 2f)
-						hasReadyItem = true;
-
-					string displayText = BuildCookingSlotText(itemConv, cookedTime, station, itemName);
-					slotInfo += "\n" + displayText;
-				}
-
-				if (activeSlots == 0 && !hasOvercookedItem)
-					return null; // vanilla handles empty
-
-				string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
-				string localizedCook = Localization.instance.Localize("$piece_cstand_cook");
-				string localizedTake = Localization.instance.Localize("$piece_itemstand_take");
-
-				if (hasReadyItem || hasOvercookedItem)
-					return $"{stationName}\n{useKeyColored} {localizedTake}{slotInfo}";
-
-				return (activeSlots >= station.m_slots.Length)
-					? $"{stationName}{slotInfo}"
-					: $"{stationName}\n{useKeyColored} {localizedCook} {slotInfo}";
-			}
-
-			private static string BuildCookingSlotText(CookingStation.ItemConversion conv, float cookedTime, CookingStation station, string currentItemName)
-			{
-				float cookTime = conv.m_cookTime;
-				float overCookTime = cookTime * 2f;
-
-				// localize the current item instead of future product
-				GameObject currentPrefab = ObjectDB.instance.GetItemPrefab(currentItemName);
-				string currentName = currentPrefab != null
-					? Localization.instance.Localize(currentPrefab.GetComponent<ItemDrop>().m_itemData.m_shared.m_name)
-					: currentItemName;
-
-				switch (ConfigManager.CookingStationHoverModeChoice.Value)
-				{
-					case CookingStationHoverMode.Percent:
-						if (cookedTime > cookTime)
-						{
-							float percent = Mathf.Clamp01((cookedTime - cookTime) / cookTime);
-							string percentText = $"{percent:0%}";
-							return $"{currentName}: {PaintTextIfEnabled(percentText, GetPercentColorInverted(percent))}";
-						}
-						else
-						{
-							float percent = Mathf.Clamp01(cookedTime / cookTime);
-							string percentText = $"{percent:0%}";
-							return $"{currentName}: {PaintTextIfEnabled(percentText, GetPercentColor(percent))}";
-						}
-
-					case CookingStationHoverMode.RemainingTime:
-						if (cookedTime > cookTime)
-						{
-							float remaining = Mathf.Max(0f, overCookTime - cookedTime);
-							string time = FormatTime(remaining);
-							return $"{currentName}: {PaintTextIfEnabled(time, Color.red)}";
-						}
-						else
-						{
-							float remaining = Mathf.Max(0f, cookTime - cookedTime);
-							string time = FormatTime(remaining);
-							return $"{currentName}: {PaintTextIfEnabled(time, Color.cyan)}";
-						}
-
-					case CookingStationHoverMode.PercentAndTime:
-						if (cookedTime > cookTime)
-						{
-							float percent = Mathf.Clamp01((cookedTime - cookTime) / cookTime);
-							string percentText = $"{percent:0%}";
-							string percentColored = PaintTextIfEnabled(percentText, GetPercentColorInverted(percent));
-
-							float remaining = Mathf.Max(0f, overCookTime - cookedTime);
-							string time = PaintTextIfEnabled(FormatTime(remaining), Color.red);
-
-							return $"{currentName}: {percentColored} - {time}";
-						}
-						else
-						{
-							float percent = Mathf.Clamp01(cookedTime / cookTime);
-							string percentText = $"{percent:0%}";
-							string percentColored = PaintTextIfEnabled(percentText, GetPercentColor(percent));
-
-							float remaining = Mathf.Max(0f, cookTime - cookedTime);
-							string time = PaintTextIfEnabled(FormatTime(remaining), Color.cyan);
-
-							return $"{currentName}: {percentColored} - {time}";
-						}
-				}
-
+				log.Warn("CookingStation reflection not found.");
 				return null;
 			}
+
+			string stationName = Localization.instance.Localize(station.m_name);
+			string slotInfo = "";
+			int activeSlots = 0;
+			bool hasReadyItem = false;
+			bool hasOvercookedItem = false;
+
+			for (int i = 0; i < station.m_slots.Length; i++)
+			{
+				object[] args = { i, null, 0f, null };
+				GetSlotMethod.Invoke(station, args);
+
+				string itemName = args[1] as string;
+				float cookedTime = (float)args[2];
+
+				if (string.IsNullOrEmpty(itemName))
+					continue;
+
+				// overcooked items still count!
+				if (itemName == station.m_overCookedItem?.name)
+				{
+					hasOvercookedItem = true;
+					continue;
+				}
+
+				var itemConv = (CookingStation.ItemConversion)GetItemConversionMethod.Invoke(station, new object[] { itemName });
+				if (itemConv == null)
+					continue;
+
+				activeSlots++;
+
+				// check "ready to take" state
+				if (cookedTime >= itemConv.m_cookTime && cookedTime < itemConv.m_cookTime * 2f)
+					hasReadyItem = true;
+
+				string displayText = BuildCookingSlotText(itemConv, cookedTime, station, itemName);
+				slotInfo += "\n" + displayText;
+			}
+
+			if (activeSlots == 0 && !hasOvercookedItem)
+				return null; // vanilla handles empty
+
+			string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
+			string localizedCook = Localization.instance.Localize("$piece_cstand_cook");
+			string localizedTake = Localization.instance.Localize("$piece_itemstand_take");
+
+			if (hasReadyItem || hasOvercookedItem)
+				return $"{stationName}\n{useKeyColored} {localizedTake}{slotInfo}";
+
+			return (activeSlots >= station.m_slots.Length)
+				? $"{stationName}{slotInfo}"
+				: $"{stationName}\n{useKeyColored} {localizedCook} {slotInfo}";
+		}
+
+		private static string BuildCookingSlotText(CookingStation.ItemConversion conv, float cookedTime, CookingStation station, string currentItemName)
+		{
+			float cookTime = conv.m_cookTime;
+			float overCookTime = cookTime * 2f;
+
+			// localize the current item instead of future product
+			GameObject currentPrefab = ObjectDB.instance.GetItemPrefab(currentItemName);
+			string currentName = currentPrefab != null
+				? Localization.instance.Localize(currentPrefab.GetComponent<ItemDrop>().m_itemData.m_shared.m_name)
+				: currentItemName;
+
+			switch (ConfigManager.CookingStationHoverModeChoice.Value)
+			{
+				case CookingStationHoverMode.Percent:
+					if (cookedTime > cookTime)
+					{
+						float percent = Mathf.Clamp01((cookedTime - cookTime) / cookTime);
+						string percentText = $"{percent:0%}";
+						return $"{currentName}: {PaintTextIfEnabled(percentText, GetPercentColorInverted(percent))}";
+					}
+					else
+					{
+						float percent = Mathf.Clamp01(cookedTime / cookTime);
+						string percentText = $"{percent:0%}";
+						return $"{currentName}: {PaintTextIfEnabled(percentText, GetPercentColor(percent))}";
+					}
+
+				case CookingStationHoverMode.RemainingTime:
+					if (cookedTime > cookTime)
+					{
+						float remaining = Mathf.Max(0f, overCookTime - cookedTime);
+						string time = FormatTime(remaining);
+						return $"{currentName}: {PaintTextIfEnabled(time, Color.red)}";
+					}
+					else
+					{
+						float remaining = Mathf.Max(0f, cookTime - cookedTime);
+						string time = FormatTime(remaining);
+						return $"{currentName}: {PaintTextIfEnabled(time, Color.cyan)}";
+					}
+
+				case CookingStationHoverMode.PercentAndTime:
+					if (cookedTime > cookTime)
+					{
+						float percent = Mathf.Clamp01((cookedTime - cookTime) / cookTime);
+						string percentText = $"{percent:0%}";
+						string percentColored = PaintTextIfEnabled(percentText, GetPercentColorInverted(percent));
+
+						float remaining = Mathf.Max(0f, overCookTime - cookedTime);
+						string time = PaintTextIfEnabled(FormatTime(remaining), Color.red);
+
+						return $"{currentName}: {percentColored} - {time}";
+					}
+					else
+					{
+						float percent = Mathf.Clamp01(cookedTime / cookTime);
+						string percentText = $"{percent:0%}";
+						string percentColored = PaintTextIfEnabled(percentText, GetPercentColor(percent));
+
+						float remaining = Mathf.Max(0f, cookTime - cookedTime);
+						string time = PaintTextIfEnabled(FormatTime(remaining), Color.cyan);
+
+						return $"{currentName}: {percentColored} - {time}";
+					}
+			}
+
+			return null;
 		}
 
 		[HarmonyPatch(typeof(Smelter), "OnHoverAddOre")]
