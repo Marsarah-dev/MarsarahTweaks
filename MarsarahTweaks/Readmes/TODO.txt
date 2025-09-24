@@ -34,17 +34,16 @@
         - Fermenters
         - Cooking Stations
         - Plants
+        - All smelter-type objects (Kiln, Smelter, Blast Furnace, Spinning Wheel, Windmill, Eitr Refinery)
       - The symbols next to the time of day now indicate current weather as well. If the weather is clear, then the symbol changes according to the time of day
 
 
  ******* TODO *******
 
  - Add Cooking Oven hover info
- - Add Smelter (all types) and Kiln hover info
- - Add Windmill and Spinning Wheel hover info
- - Add Eitr Refinery hover info
  - Add Eggs hover info
  - Modify the ShowSingleItemChestHover into show container contents (and display everything inside it in a vertical list)
+ - See if I can use the in-game icons for weight and inventory slots
  - Separate the weather and time emoji into its own config
    - Modify emojis for weather (use in-game icons if possible)
    - Reposition weather symbol (not next to time of day anymore)

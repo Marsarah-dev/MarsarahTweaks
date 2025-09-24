@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Jotunn.Configs;
 using MarsarahTweaks.Managers;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIDetailedHovers
 	{
-		private static readonly LogManager log = new LogManager("UI Detailed Hover Info", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("UI Detailed Hover Info", LogManager.LogLevel.Info);
 
 		// Cache the FieldInfo for performance
 		private static readonly FieldInfo InventoryField = typeof(Container).GetField("m_inventory", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -31,6 +32,7 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly MethodInfo GetItemConversionMethod = typeof(CookingStation).GetMethod("GetItemConversion", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetProcessedQueueSizeMethod = typeof(Smelter).GetMethod("GetProcessedQueueSize", BindingFlags.Instance | BindingFlags.NonPublic);
 		private static readonly MethodInfo GetQueueSizeMethod = typeof(Smelter).GetMethod("GetQueueSize", BindingFlags.Instance | BindingFlags.NonPublic);
+		private static readonly MethodInfo GetFuelMethod = typeof(Smelter).GetMethod("GetFuel", BindingFlags.Instance | BindingFlags.NonPublic);
 		private static readonly MethodInfo GetBakeTimerMethod = typeof(Smelter).GetMethod("GetBakeTimer", BindingFlags.Instance | BindingFlags.NonPublic);
 
 
@@ -602,6 +604,110 @@ namespace MarsarahTweaks.Patches.UI
 
 				return null;
 			}
+		}
+
+		[HarmonyPatch(typeof(Smelter), "OnHoverAddOre")]
+		internal static class SmelterHoverAddPatch
+		{
+			private static void Postfix(Smelter __instance, ref string __result)
+			{
+				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
+					return;
+
+				__result = GetSmelterHover(__instance, __result);
+			}
+		}
+
+		[HarmonyPatch(typeof(Smelter), "OnHoverAddFuel")]
+		internal static class SmelterHoverFuelPatch
+		{
+			private static void Postfix(Smelter __instance, ref string __result)
+			{
+				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
+					return;
+
+				__result = GetSmelterHover(__instance, __result);
+			}
+		}
+
+		[HarmonyPatch(typeof(Smelter), "OnHoverEmptyOre")]
+		internal static class SmelterHoverEmptyPatch
+		{
+			private static void Postfix(Smelter __instance, ref string __result)
+			{
+				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
+					return;
+
+				__result = GetSmelterHover(__instance, __result);
+			}
+		}
+
+		private static string GetSmelterHover(Smelter smelter, string result)
+		{
+			if (!smelter.IsActive())
+				return result;
+
+			float fuel = (float)GetFuelMethod.Invoke(smelter, null);
+			int queueSize = (int)GetQueueSizeMethod.Invoke(smelter, null);
+			float bakeTimer = (float)GetBakeTimerMethod.Invoke(smelter, null);
+
+			// Avoid division by zero
+			if (queueSize <= 0)
+				return result;
+
+			// Base processing duration (seconds)
+			float durationPerItem = smelter.m_secPerProduct;
+			int fuelPerProduct = smelter.m_fuelPerProduct;
+
+			// How many additional whole items we can process after the current one
+			int additionalItems;
+			if (fuelPerProduct > 0)
+			{
+				// number of full items that can be produced using remaining fuel
+				int fullItemsFromFuel = Mathf.FloorToInt(fuel / fuelPerProduct);
+				// we can only count items that actually exist after the current one
+				int maxAvailableAfterCurrent = Mathf.Max(0, queueSize - 1);
+				additionalItems = Mathf.Clamp(fullItemsFromFuel, 0, maxAvailableAfterCurrent);
+			}
+			else
+			{
+				// windmill - no-fuel case: everything in the queue is processable (after the current one is queueSize-1)
+				additionalItems = Mathf.Max(0, queueSize - 1);
+			}
+
+			// Remaining time for the current item (never negative; never more than a single item duration)
+			float remainingCurrent = Mathf.Clamp(durationPerItem - bakeTimer, 0f, durationPerItem);
+
+			// Total remaining seconds for current + additional fully-processable items
+			float remainingSeconds = remainingCurrent + additionalItems * durationPerItem;
+
+			// Apply windmill power modifier
+			float power = 1f;
+			if (smelter.m_windmill != null)
+			{
+				power = Mathf.Max(smelter.m_windmill.GetPowerOutput(), 0.0001f);
+				remainingSeconds /= power;
+			}
+
+			// Percent (this is for current item only, not all items in queue. Need to store initial state to calculate total percentage properly)
+			//float percent = Mathf.Clamp01(bakeTimer / Mathf.Max(durationPerItem, 0.0001f)) * 100f;
+
+			// Format additions
+			string hover = "";
+			if (SmelterHoverModeChoice.Value == SmelterHoverMode.RemainingTime)
+			{
+				// Wind power line 
+				if (smelter.m_windmill != null)
+				{
+					int percentPower = Mathf.RoundToInt(power * 100f);
+					hover += $"\nWind: {PaintTextIfEnabled($"{percentPower}%", GetPercentColor(power))}";
+				}
+
+				// Time line 
+				hover += $"\n{PaintTextIfEnabled(FormatTime(remainingSeconds), Color.cyan)}";
+			}
+
+			return Localization.instance.Localize($"{result} {hover}");
 		}
 
 		// ---------- Generic time formatter ----------

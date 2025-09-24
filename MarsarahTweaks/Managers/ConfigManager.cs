@@ -159,8 +159,7 @@ namespace MarsarahTweaks.Managers
 		public enum SmelterHoverMode
 		{
 			RemainingTime,
-			Percent,
-			PercentAndTime
+			Bars // Future implementation
 		}
 
 		public enum SkillXPNotificationMode
