@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using System.Text;
 using System.Xml.Linq;
 using TMPro;
 using UnityEngine;
@@ -79,11 +80,11 @@ namespace MarsarahTweaks.Patches.UI
 				string localizedName = Localization.instance.Localize(container.m_name);
 				string localizedOpen = Localization.instance.Localize("$piece_container_open");
 				string localizedStack = Localization.instance.Localize("$msg_stackall_hover");
-				string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
-				string oneItemsLine = GetOneItemInventory(inventory);
+				string useKeyColored = $"[{PaintText(Localization.instance.Localize("$KEY_Use"), Color.yellow)}]";
+				string containerItemsLine = GetContainerInventoryList(inventory);
 
-				string finalText = oneItemsLine != ""
-					? $"{localizedName} ({containerText})\n{oneItemsLine}\n{useKeyColored} {localizedOpen} {localizedStack}"
+				string finalText = containerItemsLine != ""
+					? $"{localizedName} ({containerText})\n{useKeyColored} {localizedOpen} {localizedStack}\n\n{containerItemsLine}"
 					: $"{localizedName} ({containerText})\n{useKeyColored} {localizedOpen} {localizedStack}";
 
 				LogHoverText(finalText);
@@ -91,26 +92,52 @@ namespace MarsarahTweaks.Patches.UI
 				return finalText;
 			}
 
-			private static string GetOneItemInventory(Inventory inventory)
+			private static string GetContainerInventoryList(Inventory inventory)
 			{
-				if (!ConfigManager.ShowSingleItemChestHover.Value) return "";
+				if (!ConfigManager.ShowContainerContents.Value)
+					return "";
 
 				var itemCounts = new Dictionary<string, int>();
+
 				foreach (var item in inventory.GetAllItems())
 				{
 					if (item?.m_shared == null) continue;
+
 					string itemName = Localization.instance.Localize(item.m_shared.m_name);
-					if (!itemCounts.ContainsKey(itemName)) itemCounts[itemName] = 0;
+					if (!itemCounts.ContainsKey(itemName))
+						itemCounts[itemName] = 0;
+
 					itemCounts[itemName] += item.m_stack;
 				}
 
-				if (itemCounts.Count == 1)
+				if (itemCounts.Count == 0)
+					return "";
+
+				var sb = new StringBuilder();
+				int shown = 0;
+				int total = itemCounts.Count;
+
+				foreach (var kv in itemCounts)
 				{
-					foreach (var kv in itemCounts)
-						return $"{kv.Key} x{kv.Value}";
+					if (shown >= 10) break;
+
+					string countColored = PaintTextIfEnabled(kv.Value.ToString(), Color.yellow);
+					string nameColored = PaintTextIfEnabled(kv.Key, Color.gray); // new Color(0.9f, 0.85f, 0.7f) - light tan; new Color(0.6f, 0.8f, 1f) - soft blue; new Color(0.8f, 0.8f, 0.8f) - light silver  
+
+					sb.AppendLine($"{countColored} {nameColored}");
+					shown++;
 				}
 
-				return "";
+				if (total > 10)
+				{
+					string plus = PaintTextIfEnabled("+", Color.yellow);
+					string number = PaintTextIfEnabled((total - 10).ToString(), Color.yellow);
+					string others = PaintTextIfEnabled(" Others", Color.gray);
+
+					sb.AppendLine($"{plus}{number}{others}");
+				}
+
+				return sb.ToString().TrimEnd();
 			}
 
 			private static Color GetInventoryRatioColor(int used, int max)
@@ -199,7 +226,7 @@ namespace MarsarahTweaks.Patches.UI
 				string productName = Localization.instance.Localize(beehive.m_honeyItem.m_itemData.m_shared.m_name);
 				string productColored = PaintTextIfEnabled(productName, GetHoneyColor(honeyLevel, beehive.m_maxHoney));
 				string honeyCountColored = PaintTextIfEnabled("x" + honeyLevel, GetHoneyColor(honeyLevel, beehive.m_maxHoney));
-				string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
+				string useKeyColored = $"[{PaintText(Localization.instance.Localize("$KEY_Use"), Color.yellow)}]";
 
 				string hoverText;
 				if (honeyLevel == beehive.m_maxHoney)
@@ -296,7 +323,7 @@ namespace MarsarahTweaks.Patches.UI
 						break;
 				}
 
-				string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
+				string useKeyColored = $"[{PaintText(Localization.instance.Localize("$KEY_Use"), Color.yellow)}]";
 
 				string hoverText;
 				if (age >= growTime) // Plant is grown
@@ -413,7 +440,7 @@ namespace MarsarahTweaks.Patches.UI
 					{
 						LogHoverText($"Switch case - {statusName}");
 						string contentName = (string)GetFermenterContentNameMethod.Invoke(fermenter, null);
-						string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
+						string useKeyColored = $"[{PaintText(Localization.instance.Localize("$KEY_Use"), Color.yellow)}]";
 						string localizedReady = PaintTextIfEnabled(Localization.instance.Localize("$piece_fermenter_ready"), Color.green);
 						string localizedTap = Localization.instance.Localize("$piece_fermenter_tap");
 
@@ -557,7 +584,7 @@ namespace MarsarahTweaks.Patches.UI
 			if (activeSlots == 0 && !hasOvercookedItem)
 				return null; // vanilla handles empty
 
-			string useKeyColored = $"[{PaintTextIfEnabled(Localization.instance.Localize("$KEY_Use"), Color.yellow, bold: true)}]";
+			string useKeyColored = $"[{PaintText(Localization.instance.Localize("$KEY_Use"), Color.yellow)}]";
 			string localizedCook = Localization.instance.Localize("$piece_cstand_cook");
 			string localizedTake = Localization.instance.Localize("$piece_itemstand_take");
 

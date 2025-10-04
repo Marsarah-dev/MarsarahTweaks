@@ -41,7 +41,6 @@
 
  ******* TODO *******
 
- - Modify the ShowSingleItemChestHover into show container contents (and display everything inside it in a vertical list)
  - See if I can use the in-game icons for weight and inventory slots
  - Separate the weather and time emoji into its own config
    - Modify emojis for weather (use in-game icons if possible)

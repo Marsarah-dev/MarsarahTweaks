@@ -268,7 +268,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIItemQualityColor = new ConfigMetadata("18 - Color For Item Quality", "Choose the color used for the item quality indicator. Requires Item Quality Indicator Mode to be enabled");
 			public static readonly ConfigMetadata UIItemDurabilityColor = new ConfigMetadata("19 - Better Item Durability Bar", "Colors the item durability bar according to curent durability and modifies the sprite texture");
 			public static readonly ConfigMetadata UIHoverInfoMode = new ConfigMetadata("20 - Detailed Hover Information", "Adds more information when hovering over objects. Master toggle for the configs below (26-32)");
-			public static readonly ConfigMetadata UIChestSingleItem = new ConfigMetadata("21 - Chest Hover - Show Info For Single Item", "If a container has only one type of item, its name and quantity are also displayed in the hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIContainerContents = new ConfigMetadata("21 - Show Container Contents", "Show the contents of a chest or container when hovering. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIContainerHoverMode = new ConfigMetadata("22 - Container Hover Mode", "Choose the method of displaying Container hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIBeeHoverMode = new ConfigMetadata("23 - Beehive Hover Mode", "Choose the method of displaying Beehive hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIPlantHoverMode = new ConfigMetadata("24 - Plant Hover Mode", "Choose the method of displaying Plant hover info. Requires Detailed Hover Information");
@@ -368,7 +368,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<ItemQualityColor> ItemQualityColorChoice;
 		public static ConfigEntry<bool> ColoredItemDurabilityBar;
 		public static ConfigEntry<HoverInfoMode> DetailedHoverInfoChoice;
-		public static ConfigEntry<bool> ShowSingleItemChestHover;
+		public static ConfigEntry<bool> ShowContainerContents;
 		public static ConfigEntry<ContainerHoverMode> ContainerHoverModeChoice;
 		public static ConfigEntry<BeeHoverMode> BeehiveHoverModeChoice;
 		public static ConfigEntry<PlantHoverMode> PlantHoverModeChoice;
@@ -471,7 +471,7 @@ namespace MarsarahTweaks.Managers
 			ItemQualityColorChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualityColor.Name, ItemQualityColor.Yellow, Configs.UIItemQualityColor.Description, false);
 			ColoredItemDurabilityBar = CreateConfig(ConfigSections.UI, Configs.UIItemDurabilityColor.Name, true, Configs.UIItemDurabilityColor.Description, false);
 			DetailedHoverInfoChoice = CreateConfig(ConfigSections.UI, Configs.UIHoverInfoMode.Name, HoverInfoMode.ColoredText, Configs.UIHoverInfoMode.Description, false);
-			ShowSingleItemChestHover = CreateConfig(ConfigSections.UI, Configs.UIChestSingleItem.Name, false, Configs.UIChestSingleItem.Description, false);
+			ShowContainerContents = CreateConfig(ConfigSections.UI, Configs.UIContainerContents.Name, false, Configs.UIContainerContents.Description, false);
 			ContainerHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIContainerHoverMode.Name, ContainerHoverMode.CurrentPerMax, Configs.UIContainerHoverMode.Description, false);
 			BeehiveHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIBeeHoverMode.Name, BeeHoverMode.RemainingTime, Configs.UIBeeHoverMode.Description, false);
 			PlantHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIPlantHoverMode.Name, PlantHoverMode.RemainingTime, Configs.UIPlantHoverMode.Description, false);
