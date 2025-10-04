@@ -17,11 +17,6 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly LogManager log = new LogManager("UI Detailed Hover Info", LogManager.LogLevel.Info);
 
 		// Cache the FieldInfo for performance
-		private static readonly FieldInfo InventoryField = typeof(Container).GetField("m_inventory", BindingFlags.NonPublic | BindingFlags.Instance);
-		private static readonly FieldInfo NViewFieldBeehive = typeof(Beehive).GetField("m_nview", BindingFlags.NonPublic | BindingFlags.Instance);
-		private static readonly FieldInfo NViewFieldCookingStation = typeof(CookingStation).GetField("m_nview", BindingFlags.NonPublic | BindingFlags.Instance);
-		private static readonly FieldInfo FermenterExposedField = typeof(Fermenter).GetField("m_exposed", BindingFlags.NonPublic | BindingFlags.Instance);
-		private static readonly FieldInfo HaveRoofField = typeof(Smelter).GetField("m_haveRoof", BindingFlags.Instance | BindingFlags.NonPublic);
 		private static readonly MethodInfo GetHoneyLevelMethod = typeof(Beehive).GetMethod("GetHoneyLevel", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetTimeSincePlantedMethod = typeof(Plant).GetMethod("TimeSincePlanted", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetGrowTimeMethod = typeof(Plant).GetMethod("GetGrowTime", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -33,7 +28,6 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly MethodInfo GetHoverTextMethod = typeof(CookingStation).GetMethod("HoverText", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo GetCSFuelMethod = typeof(CookingStation).GetMethod("GetFuel", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly MethodInfo OnHoverFuelSwitchMethod = typeof(CookingStation).GetMethod("OnHoverFuelSwitch", BindingFlags.NonPublic | BindingFlags.Instance);
-		private static readonly MethodInfo GetProcessedQueueSizeMethod = typeof(Smelter).GetMethod("GetProcessedQueueSize", BindingFlags.Instance | BindingFlags.NonPublic);
 		private static readonly MethodInfo GetQueueSizeMethod = typeof(Smelter).GetMethod("GetQueueSize", BindingFlags.Instance | BindingFlags.NonPublic);
 		private static readonly MethodInfo GetFuelMethod = typeof(Smelter).GetMethod("GetFuel", BindingFlags.Instance | BindingFlags.NonPublic);
 		private static readonly MethodInfo GetBakeTimerMethod = typeof(Smelter).GetMethod("GetBakeTimer", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -45,21 +39,14 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Container), nameof(Container.GetHoverText))]
 		internal static class DetailedHoverContainer_Patch
 		{
-			private static void Postfix(Container __instance, ref string __result)
+			private static void Postfix(Container __instance, Inventory ___m_inventory, ref string __result)
 			{
 				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off) return;
 
-				Inventory inventory = InventoryField?.GetValue(__instance) as Inventory;
-				if (inventory == null)
-				{
-					log.Warn("Could not access container inventory via reflection.");
-					return;
-				}
-
 				// Skip empty containers to keep it clean
-				if (inventory.NrOfItems() == 0)	return;
+				if (___m_inventory.NrOfItems() == 0)	return;
 
-				__result = GetContainerHover(__instance, inventory);
+				__result = GetContainerHover(__instance, ___m_inventory);
 			}
 
 			public static string GetContainerHover(Container container, Inventory inventory)
@@ -146,7 +133,7 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Beehive), nameof(Beehive.GetHoverText))]
 		internal static class DetailedHoverBeehive_Patch
 		{
-			private static bool Prefix(Beehive __instance, ref string __result)
+			private static bool Prefix(Beehive __instance, ZNetView ___m_nview, ref string __result)
 			{
 				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
 					return true; // fall back to vanilla
@@ -158,29 +145,22 @@ namespace MarsarahTweaks.Patches.UI
 					return false;
 				}
 
-				__result = GetBeehiveHover(__instance);
+				__result = GetBeehiveHover(__instance, ___m_nview);
 				return false;
 			}
 
-			private static string GetBeehiveHover(Beehive beehive)
+			private static string GetBeehiveHover(Beehive beehive, ZNetView m_nview)
 			{
 				string name = Localization.instance.Localize(beehive.m_name);
 
-				if (GetHoneyLevelMethod == null || NViewFieldBeehive == null)
+				if (GetHoneyLevelMethod == null)
 				{
 					log.Warn("Beehive reflection fields not found.");
 					return name;
 				}
 
 				int honeyLevel = (int)GetHoneyLevelMethod.Invoke(beehive, null);
-				ZNetView nview = NViewFieldBeehive.GetValue(beehive) as ZNetView;
-				if (nview == null)
-				{
-					log.Warn("Beehive m_nview is null.");
-					return name;
-				}
-
-				float produced = nview.GetZDO().GetFloat("product");
+				float produced = m_nview.GetZDO().GetFloat("product");
 				float remaining = beehive.m_secPerUnit - produced;
 
 				BeeHoverMode beeMode = ConfigManager.BeehiveHoverModeChoice.Value;
@@ -335,7 +315,7 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(Fermenter), nameof(Fermenter.GetHoverText))]
 		internal static class DetailedHoverFermenter_Patch
 		{
-			private static bool Prefix(Fermenter __instance, ref string __result)
+			private static bool Prefix(Fermenter __instance, bool ___m_exposed, ref string __result)
 			{
 				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
 					return true; // fall back to vanilla
@@ -347,7 +327,7 @@ namespace MarsarahTweaks.Patches.UI
 					return false;
 				}
 
-				string customFermenterString = GetFermenterHover(__instance);
+				string customFermenterString = GetFermenterHover(__instance, ___m_exposed);
 				if (customFermenterString == null)
 					return true; // fall back to vanilla
 
@@ -356,11 +336,11 @@ namespace MarsarahTweaks.Patches.UI
 			}
 
 			// ---------- Hover builder ----------
-			private static string GetFermenterHover(Fermenter fermenter)
+			private static string GetFermenterHover(Fermenter fermenter, bool exposed)
 			{
 				string name = Localization.instance.Localize(fermenter.m_name);
 
-				if (FermenterExposedField == null || GetFermenterStatusMethod == null || GetFermenterContentNameMethod == null || GetFermentationTimeMethod == null)
+				if (GetFermenterStatusMethod == null || GetFermenterContentNameMethod == null || GetFermentationTimeMethod == null)
 				{
 					log.Warn("Fermenter reflection fields not found.");
 					return null;
@@ -396,8 +376,7 @@ namespace MarsarahTweaks.Patches.UI
 						string timeColored;
 
 						// If exposed → special message
-						bool fermenterExposed = (bool)FermenterExposedField.GetValue(fermenter);
-						if (fermenterExposed)
+						if (exposed)
 						{
 							return $"{name} ( {contentName} )\n{localizedExposed}";
 						}
@@ -452,7 +431,7 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(CookingStation), "Awake")]
 		internal static class CookingStation_AddFoodSwitchHoverPatch
 		{
-			private static void Postfix(CookingStation __instance)
+			private static void Postfix(CookingStation __instance, ZNetView ___m_nview)
 			{
 				// Skip if no switch
 				if (__instance.m_addFoodSwitch == null)
@@ -462,14 +441,7 @@ namespace MarsarahTweaks.Patches.UI
 				if (__instance.m_addFoodSwitch.m_onHover != null)
 					return;
 
-				ZNetView nview = NViewFieldCookingStation.GetValue(__instance) as ZNetView;
-				if (nview == null)
-				{
-					log.Warn("CookingStation m_nview is null.");
-					return;
-				}
-
-				if (!nview.IsOwner())
+				if (!___m_nview.IsOwner())
 					return;
 
 				// Assign a hover delegate to the food interaction hover
@@ -512,20 +484,13 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(CookingStation), "GetHoverText")]
 		internal static class CookingStationHoverPatch
 		{
-			private static bool Prefix(CookingStation __instance, ref string __result)
+			private static bool Prefix(CookingStation __instance, ZNetView ___m_nview, ref string __result)
 			{
 				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
 					return true; // vanilla
 
 				// Only owners see slot timers
-				ZNetView nview = NViewFieldCookingStation.GetValue(__instance) as ZNetView;
-				if (nview == null)
-				{
-					log.Warn("CookingStation m_nview is null.");
-					return true;
-				}
-
-				if (!nview.IsOwner())
+				if (!___m_nview.IsOwner())
 					return true;
 
 				bool isOven = __instance.m_useFuel && !__instance.m_requireFire;
@@ -775,6 +740,63 @@ namespace MarsarahTweaks.Patches.UI
 			}
 
 			return Localization.instance.Localize($"{result} {hover}");
+		}
+
+		[HarmonyPatch(typeof(EggGrow), nameof(EggGrow.GetHoverText))]
+		internal static class EggGrowHoverPatch
+		{
+			private static void Postfix(EggGrow __instance, ZNetView ___m_nview, ref string __result)
+			{
+				if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
+					return;
+
+				__result = GetEggHover(__instance, ___m_nview, __result);
+			}
+
+			private static string GetEggHover(EggGrow egg, ZNetView m_nview, string originalHover)
+			{
+				if (m_nview == null || !m_nview.IsValid())
+					return originalHover;
+
+				ZDO zdo = m_nview.GetZDO();
+				if (zdo == null)
+					return originalHover;
+
+				float growStart = zdo.GetFloat(ZDOVars.s_growStart);
+				if (growStart <= 0f)
+					return originalHover; // not started
+
+				double elapsed = ZNet.instance.GetTimeSeconds() - growStart;
+				float growTime = egg.m_growTime;
+
+				string creatureName = egg.m_grownPrefab?.GetComponent<Character>()?.m_name ?? egg.m_grownPrefab?.name ?? "Unknown";
+				creatureName = Localization.instance.Localize(creatureName);
+
+				if (elapsed >= growTime)
+					return $"{originalHover}\n{creatureName}: {PaintTextIfEnabled("Hatching soon", Color.green)}"; 
+
+				float percent = Mathf.Clamp01((float)(elapsed / growTime));
+				float remaining = Mathf.Max(0f, growTime - (float)elapsed);
+
+				string hover = "";
+
+				switch (ConfigManager.EggHoverModeChoice.Value)
+				{
+					case EggHoverMode.RemainingTime:
+						hover = $"{creatureName}: {PaintTextIfEnabled(FormatTime(remaining), Color.cyan)}";
+						break;
+					case EggHoverMode.Percent:
+						hover = $"{creatureName}: {PaintTextIfEnabled($"{percent:0%}", GetPercentColor(percent))}";
+						break;
+					case EggHoverMode.PercentAndTime:
+						string percentColored = PaintTextIfEnabled($"{percent:0%}", GetPercentColor(percent));
+						string timeColored = PaintTextIfEnabled(FormatTime(remaining), Color.cyan);
+						hover = $"{creatureName}: {percentColored} - {timeColored}";
+						break;
+				}
+
+				return $"{originalHover}\n{hover}";
+			}
 		}
 
 		// ---------- Generic time formatter ----------

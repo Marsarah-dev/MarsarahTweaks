@@ -162,6 +162,13 @@ namespace MarsarahTweaks.Managers
 			Bars // Future implementation
 		}
 
+		public enum EggHoverMode
+		{
+			RemainingTime,
+			Percent,
+			PercentAndTime
+		}
+
 		public enum SkillXPNotificationMode
 		{
 			FloatingBar,
@@ -268,6 +275,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIFermenterHoverMode = new ConfigMetadata("25 - Fermenter Hover Mode", "Choose the method of displaying Fermenter hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UICookingStationHoverMode = new ConfigMetadata("26 - CookingStation Hover Mode", "Choose the method of displaying Cooking Station hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UISmelterHoverMode = new ConfigMetadata("27 - Smelter Hover Mode", "Choose the method of displaying Smelter hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIEggHoverMode = new ConfigMetadata("28 - Egg Hover Mode", "Choose the method of displaying Egg hatching hover info. Requires Detailed Hover Information");
 			//public static readonly ConfigMetadata UISkillXPMode = new ConfigMetadata("33 - Skill XP Notification Mode", "Choose the method of displaying info when progressing in a skill");
 		}
 
@@ -367,6 +375,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<FermenterHoverMode> FermenterHoverModeChoice;
 		public static ConfigEntry<CookingStationHoverMode> CookingStationHoverModeChoice;
 		public static ConfigEntry<SmelterHoverMode> SmelterHoverModeChoice;
+		public static ConfigEntry<EggHoverMode> EggHoverModeChoice;
 		//public static ConfigEntry<SkillXPNotificationMode> SkillXPNotificationChoice;
 
 		public static void Init(ConfigFile configFile)
@@ -469,6 +478,7 @@ namespace MarsarahTweaks.Managers
 			FermenterHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIFermenterHoverMode.Name, FermenterHoverMode.RemainingTime, Configs.UIFermenterHoverMode.Description, false);
 			CookingStationHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UICookingStationHoverMode.Name, CookingStationHoverMode.RemainingTime, Configs.UICookingStationHoverMode.Description, false);
 			SmelterHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UISmelterHoverMode.Name, SmelterHoverMode.RemainingTime, Configs.UISmelterHoverMode.Description, false);
+			EggHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIEggHoverMode.Name, EggHoverMode.RemainingTime, Configs.UIEggHoverMode.Description, false);
 			//SkillXPNotificationChoice = CreateConfig(ConfigSections.UI, Configs.UISkillXPMode.Name, SkillXPNotificationMode.FloatingBar, Configs.UISkillXPMode.Description, false);
 
 			//HandleToggleExclusivity();
