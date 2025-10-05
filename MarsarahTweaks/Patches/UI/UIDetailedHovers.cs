@@ -15,7 +15,7 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIDetailedHovers
 	{
-		private static readonly LogManager log = new LogManager("UI Detailed Hover Info", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("UI Detailed Hover Info", LogManager.LogLevel.Warning);
 
 		// Cache the FieldInfo for performance
 		private static readonly MethodInfo GetHoneyLevelMethod = typeof(Beehive).GetMethod("GetHoneyLevel", BindingFlags.NonPublic | BindingFlags.Instance);

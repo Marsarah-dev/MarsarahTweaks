@@ -36,16 +36,14 @@
         - Plants
         - All smelter-type objects (Kiln, Smelter, Blast Furnace, Spinning Wheel, Windmill, Eitr Refinery)
         - Eggs
-      - The symbols next to the time of day now indicate current weather as well. If the weather is clear, then the symbol changes according to the time of day
+      - Added Show Weather Indicator
+        - Separated the symbols next to the time of day and moved them to the top-right of the minimap. This indicator now shows the current weather as well. If the weather is clear, then the symbol changes according to the time of day.
 
 
  ******* TODO *******
 
- - See if I can use the in-game icons for weight and inventory slots
- - Separate the weather and time emoji into its own config
-   - Modify emojis for weather (use in-game icons if possible)
-   - Reposition weather symbol (not next to time of day anymore)
-   - Add weather forecast (need to see how this works with my Clearer Weather section)
+ - Add weather forecast (need to see how this works with my Clearer Weather section)
+ - Separate Day and Time into their own configs
  - Add indicator when a player is in PVP mode. Also change the HP fill color
  - Implement skill progress message
  - Implement player login screen stats
@@ -56,6 +54,10 @@
  - Test tooltips with EpicLoot (see if there's any compatibility to do)
  - Implement Player Inspector - see other player stats that are currently logged into the world
  - Add new clause for Permissions in readme: "You are free to take inspiration or implement similar features, but please do so with your own code and assets."
+
+=== For next release ===
+- See if I can use the in-game icons for weight and inventory slots 
+- Modify emojis for weather (use in-game icons if possible)
    
    * Prep for update
      - New gear costs (done)
