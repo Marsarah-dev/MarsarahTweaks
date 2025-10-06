@@ -20,15 +20,15 @@ namespace MarsarahTweaks.Patches.UI
 
 		// UI data
 		public static string TimeString;
-		//public static string TimeEmoji;
+		//public static string UIWeatherEmoji;
 		public static int CurrentDay;
 
 		// UI elements
 		private static Text UITimeText;
 		private static Text UIDayText;
 
-		//private static TMPro.TextMeshProUGUI UITimeEmojiTMP = null;
-		//private static Color UITimeEmojiColor;
+		//private static TMPro.TextMeshProUGUI UIWeatherEmojiTMP = null;
+		//private static Color UIWeatherEmojiColor;
 
 		/*private static readonly Dictionary<(Heightmap.Biome, string), string> WeatherEmojis = new Dictionary<(Heightmap.Biome, string), string>()
 		{
@@ -107,8 +107,8 @@ namespace MarsarahTweaks.Patches.UI
 						string minutesString = minutes < 10 ? "0" + minutes.ToString() : minutes.ToString();
 						TimeString = "Time " + hoursString + ":" + minutesString;
 					}
-					//TimeEmoji = GetEmojiForCurrentWeather(___m_smoothDayFraction);
-					//UITimeEmojiColor = GetColorFromFraction(___m_smoothDayFraction);
+					//UIWeatherEmoji = GetEmojiForCurrentWeather(___m_smoothDayFraction);
+					//UIWeatherEmojiColor = GetColorFromFraction(___m_smoothDayFraction);
 				}
 			}
 
@@ -221,17 +221,17 @@ namespace MarsarahTweaks.Patches.UI
 
 					UITimeText.enabled = showTimeUI;
 					UIDayText.enabled = showTimeUI;
-					//UITimeEmojiTMP.enabled = newUI ? showTimeUI : false;
+					//UIWeatherEmojiTMP.enabled = newUI ? showTimeUI : false;
 
 					if (showTimeUI)
 					{
 						UITimeText.color = GetColorFromString(TimeString);
 						UIDayText.color = Color.white;
-						//UITimeEmojiTMP.color = UITimeEmojiColor;
+						//UIWeatherEmojiTMP.color = UIWeatherEmojiColor;
 
 						UITimeText.text = TimeString;
 						UIDayText.text = "Day " + CurrentDay.ToString();
-						//UITimeEmojiTMP.text = TimeEmoji;
+						//UIWeatherEmojiTMP.text = UIWeatherEmoji;
 					}
 				}
 				else
@@ -240,8 +240,8 @@ namespace MarsarahTweaks.Patches.UI
 						UITimeText.enabled = false;
 					if (UIDayText != null)
 						UIDayText.enabled = false;
-					//if (UITimeEmojiTMP != null)
-						//UITimeEmojiTMP.enabled = false;
+					//if (UIWeatherEmojiTMP != null)
+						//UIWeatherEmojiTMP.enabled = false;
 				}
 			}
 
@@ -266,7 +266,7 @@ namespace MarsarahTweaks.Patches.UI
 
 		private static void CreateUI(Hud hud)
 		{
-			if (UITimeText != null && UIDayText != null /*&& UITimeEmojiTMP != null*/)
+			if (UITimeText != null && UIDayText != null /*&& UIWeatherEmojiTMP != null*/)
 				return;  // UI already exists, no need to create again
 
 			//bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
@@ -300,7 +300,7 @@ namespace MarsarahTweaks.Patches.UI
 			UIDayText = CreateTextObject("DayText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(-40f, 0f), UITimeAreaSize);
 
 			// Time emoji
-			//UITimeEmojiTMP = CreateTMPTextObject("TimeEmojiTMP", UITimeArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineRight, new Vector2(80f, 0f), UITimeAreaEmojiSize, log);
+			//UIWeatherEmojiTMP = CreateTMPTextObject("TimeEmojiTMP", UITimeArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineRight, new Vector2(80f, 0f), UITimeAreaEmojiSize, log);
 		}
 	}
 }

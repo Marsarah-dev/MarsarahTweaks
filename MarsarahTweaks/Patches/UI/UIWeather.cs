@@ -19,11 +19,23 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly LogManager log = new LogManager("UI Weather", LogManager.LogLevel.Info);
 
 		// UI data
-		private static string TimeEmoji;
+		private static string UIWeatherEmoji;
+		private static Color UIWeatherEmojiColor;
+
+		private static string UIForecastEmoji;
+		private static string UIForecastTimer;
+		private static Color UIForecastEmojiColor = Color.cyan;
 
 		// UI elements
-		private static TMPro.TextMeshProUGUI UITimeEmojiTMP = null;
-		private static Color UITimeEmojiColor;
+		private static TMPro.TextMeshProUGUI UIWeatherEmojiTMP = null;
+		private static TMPro.TextMeshProUGUI UIForecastEmojiTMP = null;
+		private static Text UINextWeatherTimerText = null;
+
+		// Cache
+		private static EnvSetup _lastForecastEnv = null;
+		private static string _lastForecastEmoji = "❓";
+		private static long _lastForecastPeriod = -1;
+		private static string _lastAvailableWeathersLog = string.Empty;
 
 		private static readonly Dictionary<(Heightmap.Biome, string), string> WeatherEmojis = new Dictionary<(Heightmap.Biome, string), string>()
 		{
@@ -80,7 +92,7 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(EnvMan), "Update")]
 		class Weather_EnvManPatch
 		{
-			private static void Prefix(EnvMan __instance, ref float ___m_smoothDayFraction, ref Heightmap.Biome ___m_currentBiome, ref EnvSetup ___m_currentEnv)
+			private static void Prefix(EnvMan __instance, ref float ___m_smoothDayFraction, ref Heightmap.Biome ___m_currentBiome, ref EnvSetup ___m_currentEnv, ref long ___m_environmentPeriod, ref double ___m_totalSeconds)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
@@ -88,61 +100,13 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (ConfigManager.ShowWeatherIndicator.Value == true)
 				{
-					TimeEmoji = GetEmojiForCurrentWeather(___m_smoothDayFraction, ___m_currentBiome, ___m_currentEnv);
-					UITimeEmojiColor = GetColorFromFraction(___m_smoothDayFraction);
+					// Current weather
+					UIWeatherEmoji = GetEmojiForCurrentWeather(___m_smoothDayFraction, ___m_currentBiome, ___m_currentEnv);
+					UIWeatherEmojiColor = GetColorFromFraction(___m_smoothDayFraction);
+
+					// Forecast
+					UpdateForecastData(__instance, ___m_currentEnv, ___m_currentBiome, ___m_environmentPeriod, ___m_totalSeconds);
 				}
-			}
-
-			private static string GetEmojiForCurrentWeather(float dayFraction, Heightmap.Biome currentBiome, EnvSetup currentEnv)
-			{
-				var envMan = EnvMan.instance;
-				if (envMan == null)
-					return "❓";
-
-				/*var currentEnvField = typeof(EnvMan).GetField("m_currentEnv", BindingFlags.NonPublic | BindingFlags.Instance);
-				if (currentEnvField == null)
-					return "❓";
-
-				var currentEnv = currentEnvField.GetValue(envMan) as EnvSetup;*/
-				if (currentEnv == null)
-					return "❓";
-
-				// Use the biome directly from EnvMan
-				/*var currentBiomeField = typeof(EnvMan).GetField("m_currentBiome", BindingFlags.NonPublic | BindingFlags.Instance);
-				Heightmap.Biome biome = Heightmap.Biome.Meadows; // fallback
-				if (currentBiomeField != null)
-					biome = (Heightmap.Biome)currentBiomeField.GetValue(envMan);*/
-
-				string emoji = WeatherEmojis.TryGetValue((currentBiome, currentEnv.m_name), out var e) ? e : "❓";
-
-				if (emoji == "☀️") // only override for clear-weather types
-					emoji = GetEmojiFromFraction(dayFraction);
-
-				return emoji ?? "❓";
-			}
-
-			private static string GetEmojiFromFraction(float dayFraction)
-			{
-				if (dayFraction < 0.20f) return "🌙";
-				if (dayFraction < 0.25f) return "🌅";
-				if (dayFraction < 0.33f) return "🌅";
-				if (dayFraction < 0.50f) return "☀️";
-				if (dayFraction < 0.66f) return "☀️";
-				if (dayFraction < 0.75f) return "🌄"; // 🌤
-				if (dayFraction < 0.80f) return "🌄";
-				return "🌙";
-			}
-
-			private static Color GetColorFromFraction(float dayFraction)
-			{
-				if (dayFraction < 0.20f) return Color.white;
-				if (dayFraction < 0.25f) return new Color(1f, 0.549019f, 0f);
-				if (dayFraction < 0.33f) return Color.yellow;
-				if (dayFraction < 0.50f) return Color.green;
-				if (dayFraction < 0.66f) return Color.green;
-				if (dayFraction < 0.75f) return Color.yellow;
-				if (dayFraction < 0.80f) return new Color(1f, 0.549019f, 0f);
-				return Color.white;
 			}
 		}
 
@@ -176,58 +140,285 @@ namespace MarsarahTweaks.Patches.UI
 					CreateUI(__instance);
 
 					bool showWeatherUI = Game.m_noMap ? ShowUI : ShowUI && Minimap.instance != null && Minimap.instance.m_mapSmall != null && Minimap.instance.m_mapSmall.activeInHierarchy;
-					UITimeEmojiTMP.enabled = showWeatherUI;
+					UIWeatherEmojiTMP.enabled = showWeatherUI;
+					UIForecastEmojiTMP.enabled = showWeatherUI;
 
 					if (showWeatherUI)
 					{
-						UITimeEmojiTMP.color = UITimeEmojiColor;
-						UITimeEmojiTMP.text = TimeEmoji;
+						UIWeatherEmojiTMP.text = UIWeatherEmoji;
+						UIWeatherEmojiTMP.color = UIWeatherEmojiColor;
+
+						UIForecastEmojiTMP.text = UIForecastEmoji;
+						UIForecastEmojiTMP.color = UIForecastEmojiColor;
+
+						UINextWeatherTimerText.text = UIForecastTimer;
+						UINextWeatherTimerText.color = Color.white;
 					}
 				}
 				else
 				{
-					if (UITimeEmojiTMP != null)
-						UITimeEmojiTMP.enabled = false;
+					if (UIWeatherEmojiTMP != null)
+						UIWeatherEmojiTMP.enabled = false;
+
+					if (UIForecastEmojiTMP != null)
+						UIForecastEmojiTMP.enabled = false;
+
+					if (UINextWeatherTimerText != null)
+						UINextWeatherTimerText.enabled = false;
 				}
 			}
 		}
 
 		private static void CreateUI(Hud hud)
 		{
-			if (UITimeEmojiTMP != null)
-				return;  // UI already exists, no need to create again
+			if (UIWeatherEmojiTMP != null && UIForecastEmojiTMP != null && UINextWeatherTimerText != null)
+				return;  // UI already exists
 
 			int UITextFontSize = 16;
-			//string UITextFontName = "AveriaSansLibre-Bold";
-			string UIEmojiFontName = "NotoEmoji-Regular SDF"; // NotoEmoji-Regular
-			//Vector2 UITimeAreaSize = new Vector2(200f, 30f); // width, height
-			Vector2 UIWeatherAreaEmojiSize = new Vector2(30f, 30f); // width, height
-			Vector2 UIWeatherAreaEmojiPosition = new Vector2(0f, 0f);
+			string UIEmojiFontName = "NotoEmoji-Regular SDF";
+			string UITextFontName = "AveriaSansLibre-Bold";
+			Vector2 UIWeatherAreaSize = new Vector2(200f, 40f); // wider, since it holds all
+			Vector2 UIWeatherAreaPos = new Vector2(-125f, -220f); // bottom-right corner
 
-			// Weather area object
-			GameObject UIWeatherArea = new GameObject("WeatherArea");
-			UIWeatherArea.layer = 5;
-			UIWeatherArea.transform.SetParent(hud.m_rootObject.transform);
-			RectTransform timeAreaTransform = UIWeatherArea.AddComponent<RectTransform>();
-			timeAreaTransform.anchorMin = new Vector2(1f, 1f);
-			timeAreaTransform.anchorMax = new Vector2(1f, 1f);
-			timeAreaTransform.anchoredPosition = new Vector2(-225f, -60f); // -140f, -25f
-			timeAreaTransform.sizeDelta = UIWeatherAreaEmojiSize;
-			UIWeatherArea.transform.localScale = Vector3.one;  // Ensure correct scale
+			// Parent container for the widget
+			GameObject UIWeatherWidgetArea = new GameObject("WeatherWidgetArea");
+			UIWeatherWidgetArea.layer = 5;
+			UIWeatherWidgetArea.transform.SetParent(hud.m_rootObject.transform);
+			RectTransform widgetTransform = UIWeatherWidgetArea.AddComponent<RectTransform>();
+			widgetTransform.anchorMin = new Vector2(1f, 1f);
+			widgetTransform.anchorMax = new Vector2(1f, 1f);
+			widgetTransform.anchoredPosition = UIWeatherAreaPos;
+			widgetTransform.sizeDelta = UIWeatherAreaSize;
+			UIWeatherWidgetArea.transform.localScale = Vector3.one;
 
-			// Special modification for text sizeDelta
-			//UITimeAreaSize.x = UITimeAreaSize.x / 2;
-			//float timeTextXPos = newUI ? 20f : 40f;
-			//float timeTextXPos = 40f;
+			// --- Current weather emoji ---
+			UIWeatherEmojiTMP = CreateTMPTextObject("CurrentWeatherTMP", UIWeatherWidgetArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineLeft, new Vector2(0f, 0f), new Vector2(30f, 30f), log);
 
-			// Time text
-			//UITimeText = CreateTextObject("TimeText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(timeTextXPos, 0f), UITimeAreaSize);
+			// --- Forecast emoji ---
+			UIForecastEmojiTMP = CreateTMPTextObject("ForecastWeatherTMP", UIWeatherWidgetArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineLeft, new Vector2(25f, 0f), new Vector2(30f, 30f), log);
 
-			// Day text
-			//UIDayText = CreateTextObject("DayText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(-40f, 0f), UITimeAreaSize);
+			// --- Timer text ---
+			UINextWeatherTimerText = CreateTextObject("WeatherTimerTMP", UIWeatherWidgetArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(75f, 0f), new Vector2(80f, 30f));
+		}
 
-			// Time emoji
-			UITimeEmojiTMP = CreateTMPTextObject("TimeEmojiTMP", UIWeatherArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineRight, UIWeatherAreaEmojiPosition, UIWeatherAreaEmojiSize, log);
+		private static void UpdateForecastData(EnvMan envMan, EnvSetup currentEnv, Heightmap.Biome biome, long currentEnvironmentPeriod, double totalSeconds)
+		{
+			if (envMan == null || currentEnv == null)
+			{
+				UIForecastEmoji = "❓";
+				UIForecastTimer = "--:--";
+				return;
+			}
+
+			// Player position → biome context
+			Vector3 position = Vector3.zero;
+			if (Player.m_localPlayer != null)
+				position = Player.m_localPlayer.transform.position;
+
+			bool isAshlands = WorldGenerator.IsAshlands(position.x, position.z);
+			bool isDeepNorth = WorldGenerator.IsDeepnorth(position.x, position.z);
+
+			EnvSetup forecastEnv = null;
+			long forecastPeriod = -1;
+
+			// Look ahead up to 50 periods
+			for (int i = 1; i <= 50; i++)
+			{
+				long periodToCheck = currentEnvironmentPeriod + i;
+				EnvSetup nextEnv = GetEnvironment(periodToCheck, biome, isAshlands, isDeepNorth);
+
+				if (nextEnv != null && nextEnv.m_name != currentEnv.m_name)
+				{
+					forecastEnv = nextEnv;
+					forecastPeriod = periodToCheck;
+					break;
+				}
+			}
+
+			if (forecastEnv == null)
+			{
+				UIForecastEmoji = "❓";
+				UIForecastTimer = "--:--";
+				return;
+			}
+
+			// pick emoji
+			string emoji = WeatherEmojis.TryGetValue((biome, forecastEnv.m_name), out var e) ? e : "❓";
+			string timerStr = GetNextWeatherTimer(forecastPeriod, totalSeconds);
+
+			// assign globals
+			UIForecastEmoji = emoji;
+			UIForecastTimer = timerStr;
+
+			// log only when forecast changes
+			if (forecastEnv != _lastForecastEnv || forecastPeriod != _lastForecastPeriod)
+			{
+				// Collect all lookahead environments for debug
+				StringBuilder sequenceLog = new StringBuilder();
+				sequenceLog.AppendLine("Next 50 forecast environments:");
+
+				for (int i = 1; i <= 50; i++)
+				{
+					long periodToCheck = currentEnvironmentPeriod + i;
+					EnvSetup nextEnv = GetEnvironment(periodToCheck, biome, isAshlands, isDeepNorth);
+
+					string nextName = nextEnv != null ? nextEnv.m_name : "null";
+					sequenceLog.AppendLine($"  +{i,2} → {nextName}");
+				}
+
+				log.Info(sequenceLog.ToString());
+
+				log.Info($"Next forecast: {forecastEnv.m_name} ({emoji}), ETA {timerStr}");
+				_lastForecastEnv = forecastEnv;
+				_lastForecastEmoji = emoji;
+				_lastForecastPeriod = forecastPeriod;
+			}
+		}
+
+		private static EnvSetup GetEnvironment(long period, Heightmap.Biome biome, bool isAshlands, bool isDeepNorth)
+		{
+			// Save RNG state
+			UnityEngine.Random.State state = UnityEngine.Random.state;
+
+			// Deterministic seed
+			UnityEngine.Random.InitState((int)period);
+
+			EnvSetup result = null;
+
+			try
+			{
+				var envMan = EnvMan.instance;
+				if (envMan != null)
+				{
+					// Get all the available weathers for given biome
+					var availableEnvironments = Traverse.Create(envMan).Method("GetAvailableEnvironments", new object[] { biome }).GetValue<List<EnvEntry>>();
+
+					if (availableEnvironments != null && availableEnvironments.Count > 0)
+					{
+						// Calculate total weight
+						float totalWeight = availableEnvironments
+							.Where(e => e != null && e.m_env != null)
+							.Sum(e => e.m_weight);
+
+						// Build debug log for available weathers
+						StringBuilder envListLog = new StringBuilder();
+						envListLog.AppendLine($"Available weathers for biome {biome}:");
+
+						foreach (var entry in availableEnvironments)
+						{
+							if (entry == null || entry.m_env == null)
+								continue;
+
+							string name = entry.m_env.m_name;
+							float weight = entry.m_weight;
+							float probability = totalWeight > 0 ? (weight / totalWeight) * 100f : 0f;
+							bool ashlands = entry.m_ashlandsOverride;
+							bool deepnorth = entry.m_deepnorthOverride;
+
+							envListLog.AppendLine($"  - {name} (weight={weight}, probability={probability:F1}%)");
+						}
+
+						string logStr = envListLog.ToString();
+
+						// Only log once per forecast change (avoid spam)
+						if (logStr != _lastAvailableWeathersLog)
+						{
+							log.Info(logStr);
+							_lastAvailableWeathersLog = logStr;
+						}
+					}
+
+					if (availableEnvironments != null && availableEnvironments.Count > 0)
+					{
+						// From the list of available weathers, select one based on weights
+						result = Traverse.Create(envMan).Method("SelectWeightedEnvironment", new object[] { availableEnvironments }).GetValue<EnvSetup>();
+
+						// Apply Ashlands / DeepNorth overrides
+						foreach (var entry in availableEnvironments)
+						{
+							if (entry == null) continue;
+
+							if (entry.m_ashlandsOverride && isAshlands)
+							{
+								result = entry.m_env;
+							}
+							if (entry.m_deepnorthOverride && isDeepNorth)
+							{
+								result = entry.m_env;
+							}
+						}
+					}
+				}
+			}
+			finally
+			{
+				// Restore RNG state
+				UnityEngine.Random.state = state;
+			}
+
+			return result;
+		}
+
+		// Returns a timer string until the given forecast period occurs.
+		private static string GetNextWeatherTimer(long forecastPeriod, double totalSecondsToNow)
+		{
+			var envMan = EnvMan.instance;
+			if (envMan == null) return "";
+
+			// Period length in seconds (derived from EnvMan constant)
+			float periodLength = envMan.m_environmentDuration;
+			double forecastTime = forecastPeriod * periodLength;
+
+			if (forecastTime <= totalSecondsToNow)
+				return "0:00";
+
+			double secondsLeft = forecastTime - totalSecondsToNow;
+			TimeSpan ts = TimeSpan.FromSeconds(secondsLeft);
+
+			if (ts.TotalHours >= 1.0)
+				return $"{(int)ts.TotalHours}:{ts.Minutes:D2}h";
+			return $"{ts.Minutes:D2}:{ts.Seconds:D2}";
+		}
+
+		private static string GetEmojiForCurrentWeather(float dayFraction, Heightmap.Biome currentBiome, EnvSetup currentEnv)
+		{
+			var envMan = EnvMan.instance;
+			if (envMan == null)
+				return "❓";
+
+			if (currentEnv == null)
+				return "❓";
+
+			string emoji = WeatherEmojis.TryGetValue((currentBiome, currentEnv.m_name), out var e) ? e : "❓";
+
+			if (emoji == "☀️") // only override for clear-weather types
+				emoji = GetEmojiFromFraction(dayFraction);
+
+			return emoji ?? "❓";
+		}
+
+		private static string GetEmojiFromFraction(float dayFraction)
+		{
+			if (dayFraction < 0.20f) return "🌙";
+			if (dayFraction < 0.25f) return "🌅";
+			if (dayFraction < 0.33f) return "🌅";
+			if (dayFraction < 0.50f) return "☀️";
+			if (dayFraction < 0.66f) return "☀️";
+			if (dayFraction < 0.75f) return "🌄"; // 🌤
+			if (dayFraction < 0.80f) return "🌄";
+			return "🌙";
+		}
+
+		private static Color GetColorFromFraction(float dayFraction)
+		{
+			if (dayFraction < 0.20f) return Color.white;
+			if (dayFraction < 0.25f) return new Color(1f, 0.549019f, 0f);
+			if (dayFraction < 0.33f) return Color.yellow;
+			if (dayFraction < 0.50f) return Color.green;
+			if (dayFraction < 0.66f) return Color.green;
+			if (dayFraction < 0.75f) return Color.yellow;
+			if (dayFraction < 0.80f) return new Color(1f, 0.549019f, 0f);
+			return Color.white;
 		}
 	}
 }

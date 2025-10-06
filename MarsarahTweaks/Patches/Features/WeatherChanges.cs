@@ -13,25 +13,31 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		private static readonly LogManager log = new LogManager("Weather Changes", LogManager.LogLevel.Warning);
 
-		private static bool applied = false;
-
 		// New weather values
 		public static readonly Dictionary<(Heightmap.Biome, string), float> weatherWeightChanges = new Dictionary<(Heightmap.Biome, string), float>()
 		{
-			{ (Heightmap.Biome.Meadows, "Misty"), 0.1f },        // 0.2
-			{ (Heightmap.Biome.Meadows, "Rain"), 0.1f },         // 0.2
-			{ (Heightmap.Biome.Meadows, "ThunderStorm"), 0.1f }, // 0.2
+			{ (Heightmap.Biome.Meadows, "Clear"), 4.5f },           // 5
+			{ (Heightmap.Biome.Meadows, "Misty"), 0.1f },           // 0.2
+			{ (Heightmap.Biome.Meadows, "Rain"), 0.15f },           // 0.2
+			{ (Heightmap.Biome.Meadows, "ThunderStorm"), 0.15f },   // 0.2
+			{ (Heightmap.Biome.Meadows, "LightRain"), 0.175f },     // 0.2
 
-			{ (Heightmap.Biome.Mountain, "SnowStorm"), 0.5f },   // 1
+			{ (Heightmap.Biome.BlackForest, "DeepForest Mist"), 3f }, // 2
 
-			{ (Heightmap.Biome.Plains, "Heath clear"), 3f },     // 2
-			{ (Heightmap.Biome.Plains, "Misty"), 0.1f },         // 0.4
-			{ (Heightmap.Biome.Plains, "LightRain"), 0.1f },     // 0.4
+			{ (Heightmap.Biome.Mountain, "SnowStorm"), 0.3f },      // 1
 
-			{ (Heightmap.Biome.Ocean, "Misty"), 0.05f },         // 0.1
+			{ (Heightmap.Biome.Plains, "Heath clear"), 3f },        // 2
+			{ (Heightmap.Biome.Plains, "Misty"), 0.1f },            // 0.4
+			{ (Heightmap.Biome.Plains, "LightRain"), 0.1f },        // 0.4
+
+			{ (Heightmap.Biome.Ocean, "Misty"), 0.025f },           // 0.1
+
+			{ (Heightmap.Biome.Mistlands, "Mistlands_clear"), 2f }, // 1.5
+
+			{ (Heightmap.Biome.AshLands, "Ashlands_ashrain"), 2f }, // 1.5
 		};
 
-		// Backup dictionary
+		// Backup dictionary and apply tracker
 		private static readonly Dictionary<EnvEntry, float> originalWeights = new Dictionary<EnvEntry, float>();
 
 		[HarmonyPatch(typeof(EnvMan), "SelectWeightedEnvironment")]
@@ -41,45 +47,55 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (environments == null || environments.Count == 0) return;
 
+				var biome = GetBiomeForEnvironments(environments, __instance);
+
 				if (ConfigManager.ClearerWeatherEnabled.Value)
 				{
-					if (!applied)
+					if (!biome.HasValue)
+						return;
+
+					foreach (var e in environments)
 					{
-						var biome = GetBiomeForEnvironments(environments, __instance);
+						// Store original value only once
+						if (!originalWeights.ContainsKey(e))
+							originalWeights[e] = e.m_weight;
 
-						foreach (var e in environments)
+						if (weatherWeightChanges.TryGetValue((biome.Value, e.m_env.m_name), out float newWeight))
 						{
-							// Backup original if not already
-							if (!originalWeights.ContainsKey(e))
-								originalWeights[e] = e.m_weight;
-
-							if (biome.HasValue && weatherWeightChanges.TryGetValue((biome.Value, e.m_env.m_name), out float newWeight))
+							if (Math.Abs(e.m_weight - newWeight) > 0.001f)
 							{
 								log.Info($"Changing weight for {e.m_env.m_name} in {biome.Value}: {e.m_weight} -> {newWeight}");
 								e.m_weight = newWeight;
 							}
 						}
 					}
-
-					applied = true;
 				}
-				else if (applied)
+				else
 				{
-					// Restore original weights if config disabled
+					bool restoredAny = false;
+
 					foreach (var e in environments)
 					{
 						if (originalWeights.TryGetValue(e, out float originalWeight))
 						{
-							e.m_weight = originalWeight;
-							log.Info($"Restored original weight for {e.m_env.m_name}: {originalWeight}");
+							if (Math.Abs(e.m_weight - originalWeight) > 0.001f)
+							{
+								e.m_weight = originalWeight;
+								log.Info($"Restored original weight for {e.m_env.m_name}: {originalWeight}");
+								restoredAny = true;
+							}
+
+							// Clean up restored entry
+							originalWeights.Remove(e);
 						}
 					}
 
-					applied = false;
+					if (restoredAny)
+						log.Info($"Restored weights for biome: {biome?.ToString() ?? "Unknown"}");
 				}
 			}
 
-			static void Postfix(EnvSetup __result, List<EnvEntry> environments, EnvMan __instance)
+			/*static void Postfix(EnvSetup __result, List<EnvEntry> environments, EnvMan __instance)
 			{
 				if (!ConfigManager.ClearerWeatherEnabled.Value) return;
 
@@ -93,7 +109,7 @@ namespace MarsarahTweaks.Patches.Features
 						//MessageHud.instance.ShowMessage(MessageHud.MessageType.TopLeft,	$"Selected environment: {__result.m_name} in {biome.Value}");
 					}
 				}
-			}
+			}*/
 		}
 
 		private static Heightmap.Biome? GetBiomeForEnvironments(List<EnvEntry> envs, EnvMan envMan)
