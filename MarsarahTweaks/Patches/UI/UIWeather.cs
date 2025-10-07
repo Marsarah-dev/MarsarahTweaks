@@ -237,8 +237,21 @@ namespace MarsarahTweaks.Patches.UI
 
 			if (forecastEnv == null)
 			{
-				UIForecastEmoji = "❓";
-				UIForecastTimer = "--:--";
+				// Handle static-weather biomes gracefully
+				var availableEnvironments = Traverse.Create(envMan).Method("GetAvailableEnvironments", new object[] { biome }).GetValue<List<EnvEntry>>();
+
+				if (EnvMan.instance != null && availableEnvironments != null && availableEnvironments.Count <= 1)
+				{
+					// Only one weather -> show current one again with 00:00
+					UIForecastEmoji = WeatherEmojis.TryGetValue((biome, currentEnv.m_name), out var env) ? env : "❓";
+					UIForecastTimer = "00:00";
+					UIForecastEmojiColor = new Color(0.6f, 0.8f, 0.6f);
+				}
+				else
+				{
+					UIForecastEmoji = "❓";
+					UIForecastTimer = "--:--";
+				}
 				return;
 			}
 
@@ -249,6 +262,7 @@ namespace MarsarahTweaks.Patches.UI
 			// assign globals
 			UIForecastEmoji = emoji;
 			UIForecastTimer = timerStr;
+			UIForecastEmojiColor = Color.cyan;
 
 			// log only when forecast changes
 			if (forecastEnv != _lastForecastEnv || forecastPeriod != _lastForecastPeriod)
