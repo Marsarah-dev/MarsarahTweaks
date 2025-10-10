@@ -65,29 +65,29 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			UIMode currentLayout = ConfigManager.UILayoutChoice.Value;
 
-			if (currentLayout == UIMode.Off)
+			/*if (currentLayout == UIMode.Off)
 			{
 
 				ShowUI = false;
 				ShowPlayerList = false;
 			}
 			else
+			{*/
+			if (LastLayout != currentLayout)
 			{
-				if (LastLayout != currentLayout)
-				{
-					ShowUI = true;
-					ShowPlayerList = true;
-				}
-
-				if (Input.GetKeyDown(KeyCode.Insert))
-				{
-					ShowUI = !ShowUI;
-				}
-				if (Input.GetKeyDown(KeyCode.Home))
-				{
-					ShowPlayerList = !ShowPlayerList;
-				}
+				ShowUI = true;
+				ShowPlayerList = true;
 			}
+
+			if (Input.GetKeyDown(KeyCode.Insert))
+			{
+				ShowUI = !ShowUI;
+			}
+			if (Input.GetKeyDown(KeyCode.Home))
+			{
+				ShowPlayerList = !ShowPlayerList;
+			}
+			//}
 
 			LastLayout = currentLayout;
 		}

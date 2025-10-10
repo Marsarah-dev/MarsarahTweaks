@@ -19,18 +19,11 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly LogManager log = new LogManager("UI Weather", LogManager.LogLevel.Info);
 
 		// UI data
-		//private static string UIWeatherEmoji;
-		//private static Color UIWeatherEmojiColor;
-
-		//private static string UIForecastEmoji;
 		private static string UIForecastTimer;
-		//private static Color UIForecastEmojiColor = Color.cyan;
 
 		// UI elements
-		//private static TMPro.TextMeshProUGUI UIWeatherEmojiTMP = null;
-		//private static TMPro.TextMeshProUGUI UIForecastEmojiTMP = null;
 		private static Text UINextWeatherTimerText = null;
-		private static Image UIWeatherIcon = null;
+		//private static Image UIWeatherIcon = null;
 		private static Image UIForecastIcon = null;
 
 		// Cache
@@ -153,12 +146,10 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (__instance == null) return;
 
-				if (ConfigManager.ShowWeatherIndicator.Value == true)
+				if (ConfigManager.ShowWeatherForecast.Value == true)
 				{
 					// Current weather
-					//UIWeatherEmoji = GetEmojiForCurrentWeather(___m_smoothDayFraction, ___m_currentBiome, ___m_currentEnv);
-					//UIWeatherEmojiColor = GetColorFromFraction(___m_smoothDayFraction);
-					UpdateCurrentWeather(__instance, ___m_currentEnv, ___m_currentBiome);
+					//UpdateCurrentWeather(__instance, ___m_currentEnv, ___m_currentBiome);
 
 					// Forecast
 					UpdateForecastData(__instance, ___m_currentEnv, ___m_currentBiome, ___m_environmentPeriod, ___m_totalSeconds);
@@ -175,7 +166,7 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (__instance == null) return;
 
-				if (ConfigManager.ShowWeatherIndicator.Value)
+				if (ConfigManager.ShowWeatherForecast.Value)
 				{
 					CreateUI(__instance);
 				}
@@ -191,45 +182,31 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (__instance == null) return;
 
-				if (ConfigManager.ShowWeatherIndicator.Value)
+				if (ConfigManager.ShowWeatherForecast.Value)
 				{
 					CreateUI(__instance);
 
 					bool showWeatherUI = Game.m_noMap ? ShowUI : ShowUI && Minimap.instance != null && Minimap.instance.m_mapSmall != null && Minimap.instance.m_mapSmall.activeInHierarchy;
-					//UIWeatherEmojiTMP.enabled = showWeatherUI;
-					//UIForecastEmojiTMP.enabled = showWeatherUI;
-					UIWeatherIcon.enabled = showWeatherUI;
+					//UIWeatherIcon.enabled = showWeatherUI;
 					UIForecastIcon.enabled = showWeatherUI;
 					UINextWeatherTimerText.enabled = showWeatherUI;
 
 					if (showWeatherUI)
 					{
-						//UIWeatherEmojiTMP.text = UIWeatherEmoji;
-						//UIWeatherEmojiTMP.color = UIWeatherEmojiColor;
-
-						//UIForecastEmojiTMP.text = UIForecastEmoji;
-						//UIForecastEmojiTMP.color = UIForecastEmojiColor;
-
 						UINextWeatherTimerText.text = UIForecastTimer;
 						UINextWeatherTimerText.color = Color.white;
 					}
 				}
 				else
 				{
-					//if (UIWeatherEmojiTMP != null)
-						//UIWeatherEmojiTMP.enabled = false;
-
-					//if (UIForecastEmojiTMP != null)
-						//UIForecastEmojiTMP.enabled = false;
-
 					if (UINextWeatherTimerText != null)
 						UINextWeatherTimerText.enabled = false;
 
-					if (UIWeatherIcon != null)
+					/*if (UIWeatherIcon != null)
 					{
 						UIWeatherIcon.sprite = null;
 						UIWeatherIcon.enabled = false;
-					}
+					}*/
 
 					if (UIForecastIcon != null)
 					{
@@ -242,11 +219,10 @@ namespace MarsarahTweaks.Patches.UI
 
 		private static void CreateUI(Hud hud)
 		{
-			if (UIWeatherIcon != null && UIForecastIcon != null && UINextWeatherTimerText != null)
+			if (/*UIWeatherIcon != null && */UIForecastIcon != null && UINextWeatherTimerText != null)
 				return;  // UI already exists
 
 			int UITextFontSize = 16;
-			//string UIEmojiFontName = "NotoEmoji-Regular SDF";
 			string UITextFontName = "AveriaSansLibre-Bold";
 			Vector2 UIWeatherAreaSize = new Vector2(200f, 40f); // wider, since it holds all
 			Vector2 UIWeatherAreaPos = new Vector2(-130f, -220f); // bottom-right corner
@@ -263,22 +239,16 @@ namespace MarsarahTweaks.Patches.UI
 			UIWeatherWidgetArea.transform.localScale = Vector3.one;
 
 			// --- Weather icon ---
-			UIWeatherIcon = CreateUIImageObject("WeatherIcon", UIWeatherWidgetArea, new Vector2(0f, 0f), new Vector2(30f, 30f));
-
-			// --- Current weather emoji ---
-			//UIWeatherEmojiTMP = CreateTMPTextObject("CurrentWeatherTMP", UIWeatherWidgetArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineLeft, new Vector2(0f, 0f), new Vector2(30f, 30f), log);
+			//UIWeatherIcon = CreateUIImageObject("WeatherIcon", UIWeatherWidgetArea, new Vector2(0f, 0f), new Vector2(30f, 30f));
 
 			// --- Forecast icon ---
 			UIForecastIcon = CreateUIImageObject("ForecastWeatherIcon", UIWeatherWidgetArea, new Vector2(25f, 0f), new Vector2(30f, 30f));
-
-			// --- Forecast emoji ---
-			//UIForecastEmojiTMP = CreateTMPTextObject("ForecastWeatherTMP", UIWeatherWidgetArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineLeft, new Vector2(25f, 0f), new Vector2(30f, 30f), log);
 
 			// --- Timer text ---
 			UINextWeatherTimerText = CreateTextObject("WeatherTimerTMP", UIWeatherWidgetArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(80f, 0f), new Vector2(80f, 30f));
 		}
 
-		private static void UpdateCurrentWeather(EnvMan envMan, EnvSetup currentEnv, Heightmap.Biome biome)
+		/*private static void UpdateCurrentWeather(EnvMan envMan, EnvSetup currentEnv, Heightmap.Biome biome)
 		{
 			if (envMan == null || currentEnv == null) return;
 
@@ -296,13 +266,12 @@ namespace MarsarahTweaks.Patches.UI
 				UIWeatherIcon.sprite = iconSprite;
 				UIWeatherIcon.enabled = iconSprite != null;
 			}
-		}
+		}*/
 
 		private static void UpdateForecastData(EnvMan envMan, EnvSetup currentEnv, Heightmap.Biome biome, long currentEnvironmentPeriod, double totalSeconds)
 		{
 			if (envMan == null || currentEnv == null)
 			{
-				//UIForecastEmoji = "❓";
 				UIForecastTimer = "--:--";
 				return;
 			}
@@ -334,43 +303,25 @@ namespace MarsarahTweaks.Patches.UI
 
 			if (forecastEnv == null)
 			{
-				// Handle static-weather biomes gracefully
-				var availableEnvironments = Traverse.Create(envMan).Method("GetAvailableEnvironments", new object[] { biome }).GetValue<List<EnvEntry>>();
+				// No upcoming weather change within 50 periods
+				// → show the current environment icon and a neutral timer ("--:--")
 
-				if (EnvMan.instance != null && availableEnvironments != null && availableEnvironments.Count <= 1)
+				Sprite iconSpriteCurrent = null;
+				if (WeatherIcons.TryGetValue((biome, currentEnv.m_name), out var iconKeyCurrent))
 				{
-					// Only one weather -> show current one again with 00:00
-					//UIForecastEmoji = WeatherEmojis.TryGetValue((biome, currentEnv.m_name), out var env) ? env : "❓";
-					Sprite iconSpriteConstant = null;
-					if (WeatherIcons.TryGetValue((biome, currentEnv.m_name), out var iconKeyConstant))
-					{
-						string resourcePath = $"MarsarahTweaks.Assets.Icons.Weather.{iconKeyConstant}.png";
-						iconSpriteConstant = IconManager.LoadEmbeddedIcon(resourcePath);
-					}
-					if (UIForecastIcon != null)
-					{
-						UIForecastIcon.sprite = iconSpriteConstant;
-						UIForecastIcon.enabled = iconSpriteConstant != null;
-					}
-					UIForecastTimer = "00:00";
-					//UIForecastEmojiColor = new Color(0.6f, 0.8f, 0.6f);
+					string resourcePath = $"MarsarahTweaks.Assets.Icons.Weather.{iconKeyCurrent}.png";
+					iconSpriteCurrent = IconManager.LoadEmbeddedIcon(resourcePath);
 				}
-				else
+
+				if (UIForecastIcon != null)
 				{
-					//UIForecastEmoji = "❓";
-					UIForecastTimer = "--:--";
+					UIForecastIcon.sprite = iconSpriteCurrent;
+					UIForecastIcon.enabled = iconSpriteCurrent != null;
 				}
+
+				UIForecastTimer = "--:--";
 				return;
 			}
-
-			// pick emoji
-			/*string emoji = WeatherEmojis.TryGetValue((biome, forecastEnv.m_name), out var e) ? e : "❓";
-			string timerStr = GetNextWeatherTimer(forecastPeriod, totalSeconds);
-
-			// assign globals
-			UIForecastEmoji = emoji;
-			UIForecastTimer = timerStr;
-			UIForecastEmojiColor = Color.cyan;*/
 
 			// pick emoji
 			string emoji = WeatherEmojis.TryGetValue((biome, forecastEnv.m_name), out var e) ? e : "❓";
@@ -385,9 +336,7 @@ namespace MarsarahTweaks.Patches.UI
 			}
 
 			// assign globals
-			//UIForecastEmoji = emoji;
 			UIForecastTimer = timerStr;
-			//UIForecastEmojiColor = Color.cyan;
 
 			// Update UI element
 			if (UIForecastIcon != null)
@@ -395,11 +344,6 @@ namespace MarsarahTweaks.Patches.UI
 				UIForecastIcon.sprite = iconSprite;
 				UIForecastIcon.enabled = iconSprite != null;
 			}
-			/*if (UIForecastEmojiTMP != null)
-			{
-				UIForecastEmojiTMP.text = emoji; // optional fallback
-				UIForecastEmojiTMP.enabled = iconSprite == null;
-			}*/
 
 			// log only when forecast changes
 			if (forecastEnv != _lastForecastEnv || forecastPeriod != _lastForecastPeriod)
@@ -560,7 +504,7 @@ namespace MarsarahTweaks.Patches.UI
 			return "🌙";
 		}
 
-		private static Color GetColorFromFraction(float dayFraction)
+		/*private static Color GetColorFromFraction(float dayFraction)
 		{
 			if (dayFraction < 0.20f) return Color.white;
 			if (dayFraction < 0.25f) return new Color(1f, 0.549019f, 0f);
@@ -570,6 +514,6 @@ namespace MarsarahTweaks.Patches.UI
 			if (dayFraction < 0.75f) return Color.yellow;
 			if (dayFraction < 0.80f) return new Color(1f, 0.549019f, 0f);
 			return Color.white;
-		}
+		}*/
 	}
 }
