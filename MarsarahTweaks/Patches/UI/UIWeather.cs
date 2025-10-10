@@ -19,17 +19,19 @@ namespace MarsarahTweaks.Patches.UI
 		private static readonly LogManager log = new LogManager("UI Weather", LogManager.LogLevel.Info);
 
 		// UI data
-		private static string UIWeatherEmoji;
-		private static Color UIWeatherEmojiColor;
+		//private static string UIWeatherEmoji;
+		//private static Color UIWeatherEmojiColor;
 
-		private static string UIForecastEmoji;
+		//private static string UIForecastEmoji;
 		private static string UIForecastTimer;
-		private static Color UIForecastEmojiColor = Color.cyan;
+		//private static Color UIForecastEmojiColor = Color.cyan;
 
 		// UI elements
-		private static TMPro.TextMeshProUGUI UIWeatherEmojiTMP = null;
-		private static TMPro.TextMeshProUGUI UIForecastEmojiTMP = null;
+		//private static TMPro.TextMeshProUGUI UIWeatherEmojiTMP = null;
+		//private static TMPro.TextMeshProUGUI UIForecastEmojiTMP = null;
 		private static Text UINextWeatherTimerText = null;
+		private static Image UIWeatherIcon = null;
+		private static Image UIForecastIcon = null;
 
 		// Cache
 		private static EnvSetup _lastForecastEnv = null;
@@ -59,23 +61,10 @@ namespace MarsarahTweaks.Patches.UI
 			{ (Heightmap.Biome.Mountain, "SnowStorm"), "🌨️" },
 			{ (Heightmap.Biome.Mountain, "Snow"), "❄️" },
 
-			// DeepNorth
-			{ (Heightmap.Biome.DeepNorth, "Twilight_SnowStorm"), "🌨️" },
-			{ (Heightmap.Biome.DeepNorth, "Twilight_Snow"), "❄️" },
-			{ (Heightmap.Biome.DeepNorth, "Twilight_Clear"), "☀️" },
-
 			// Plains
 			{ (Heightmap.Biome.Plains, "Heath clear"), "☀️" },
 			{ (Heightmap.Biome.Plains, "Misty"), "🌫" },
 			{ (Heightmap.Biome.Plains, "LightRain"), "🌦" },
-
-			// Ocean
-			{ (Heightmap.Biome.Ocean, "Clear"), "☀️" },
-			{ (Heightmap.Biome.Ocean, "Rain"), "🌧" },
-			{ (Heightmap.Biome.Ocean, "LightRain"), "🌦" },
-			{ (Heightmap.Biome.Ocean, "Misty"), "🌫" },
-			{ (Heightmap.Biome.Ocean, "ThunderStorm"), "⛈" },
-			{ (Heightmap.Biome.Ocean, "Ashlands_SeaStorm"), "🌪" },
 
 			// Mistlands
 			{ (Heightmap.Biome.Mistlands, "Mistlands_clear"), "☀️" },
@@ -86,8 +75,74 @@ namespace MarsarahTweaks.Patches.UI
 			{ (Heightmap.Biome.AshLands, "Ashlands_ashrain"), "☀️" },  // 🔥 
 			{ (Heightmap.Biome.AshLands, "Ashlands_misty"), "🌫" },
 			{ (Heightmap.Biome.AshLands, "Ashlands_CinderRain"), "🌋" }, // cinder rain
-			{ (Heightmap.Biome.AshLands, "Ashlands_storm"), "🌪" }
+			{ (Heightmap.Biome.AshLands, "Ashlands_storm"), "🌪" },
+
+			// DeepNorth
+			{ (Heightmap.Biome.DeepNorth, "Twilight_SnowStorm"), "🌨️" },
+			{ (Heightmap.Biome.DeepNorth, "Twilight_Snow"), "❄️" },
+			{ (Heightmap.Biome.DeepNorth, "Twilight_Clear"), "☀️" },
+
+			// Ocean
+			{ (Heightmap.Biome.Ocean, "Clear"), "☀️" },
+			{ (Heightmap.Biome.Ocean, "Rain"), "🌧" },
+			{ (Heightmap.Biome.Ocean, "LightRain"), "🌦" },
+			{ (Heightmap.Biome.Ocean, "Misty"), "🌫" },
+			{ (Heightmap.Biome.Ocean, "ThunderStorm"), "⛈" },
+			{ (Heightmap.Biome.Ocean, "Ashlands_SeaStorm"), "🌪" }
 		};
+
+		private static readonly Dictionary<(Heightmap.Biome, string), string> WeatherIcons = new Dictionary<(Heightmap.Biome, string), string>()
+		{
+			// Meadows
+			{(Heightmap.Biome.Meadows, "Clear"), "Clear"},
+			{(Heightmap.Biome.Meadows, "Rain"), "Rain"},
+			{(Heightmap.Biome.Meadows, "Misty"), "Misty"},
+			{(Heightmap.Biome.Meadows, "ThunderStorm"), "Thunderstorm"},
+			{(Heightmap.Biome.Meadows, "LightRain"), "LightRain"},
+			
+			// BlackForest
+			{ (Heightmap.Biome.BlackForest, "DeepForest Mist"), "Clear" },
+			{ (Heightmap.Biome.BlackForest, "Rain"), "Rain" },
+			{ (Heightmap.Biome.BlackForest, "Misty"), "misty" },
+			{ (Heightmap.Biome.BlackForest, "ThunderStorm"), "Thunderstorm" },
+
+			// Swamp
+			{ (Heightmap.Biome.Swamp, "SwampRain"), "LightRain" },
+
+			// Mountain
+			{ (Heightmap.Biome.Mountain, "SnowStorm"), "Snowstorm" },
+			{ (Heightmap.Biome.Mountain, "Snow"), "Snow" },
+
+			// Plains
+			{ (Heightmap.Biome.Plains, "Heath clear"), "Clear" },
+			{ (Heightmap.Biome.Plains, "Misty"), "Misty" },
+			{ (Heightmap.Biome.Plains, "LightRain"), "LightRain" },
+
+			// Mistlands
+			{ (Heightmap.Biome.Mistlands, "Mistlands_clear"), "Clear" },
+			{ (Heightmap.Biome.Mistlands, "Mistlands_rain"), "Rain" },
+			{ (Heightmap.Biome.Mistlands, "Mistlands_thunder"), "Thunderstorm" },
+
+			// AshLands
+			{ (Heightmap.Biome.AshLands, "Ashlands_ashrain"), "AshRain" },
+			{ (Heightmap.Biome.AshLands, "Ashlands_misty"), "AshMist" },
+			{ (Heightmap.Biome.AshLands, "Ashlands_CinderRain"), "AshCinderRain" },
+			{ (Heightmap.Biome.AshLands, "Ashlands_storm"), "AshStorm" },
+
+			// DeepNorth
+			{ (Heightmap.Biome.DeepNorth, "Twilight_SnowStorm"), "Snowstorm" },
+			{ (Heightmap.Biome.DeepNorth, "Twilight_Snow"), "Snow" },
+			{ (Heightmap.Biome.DeepNorth, "Twilight_Clear"), "Clear" },
+
+			// Ocean
+			{ (Heightmap.Biome.Ocean, "Clear"), "Clear" },
+			{ (Heightmap.Biome.Ocean, "Rain"), "Rain" },
+			{ (Heightmap.Biome.Ocean, "LightRain"), "LightRain" },
+			{ (Heightmap.Biome.Ocean, "Misty"), "Misty" },
+			{ (Heightmap.Biome.Ocean, "ThunderStorm"), "Thunderstorm" },
+			{ (Heightmap.Biome.Ocean, "Ashlands_SeaStorm"), "AshStorm" }
+		};
+
 
 		[HarmonyPatch(typeof(EnvMan), "Update")]
 		class Weather_EnvManPatch
@@ -101,8 +156,9 @@ namespace MarsarahTweaks.Patches.UI
 				if (ConfigManager.ShowWeatherIndicator.Value == true)
 				{
 					// Current weather
-					UIWeatherEmoji = GetEmojiForCurrentWeather(___m_smoothDayFraction, ___m_currentBiome, ___m_currentEnv);
-					UIWeatherEmojiColor = GetColorFromFraction(___m_smoothDayFraction);
+					//UIWeatherEmoji = GetEmojiForCurrentWeather(___m_smoothDayFraction, ___m_currentBiome, ___m_currentEnv);
+					//UIWeatherEmojiColor = GetColorFromFraction(___m_smoothDayFraction);
+					UpdateCurrentWeather(__instance, ___m_currentEnv, ___m_currentBiome);
 
 					// Forecast
 					UpdateForecastData(__instance, ___m_currentEnv, ___m_currentBiome, ___m_environmentPeriod, ___m_totalSeconds);
@@ -140,16 +196,19 @@ namespace MarsarahTweaks.Patches.UI
 					CreateUI(__instance);
 
 					bool showWeatherUI = Game.m_noMap ? ShowUI : ShowUI && Minimap.instance != null && Minimap.instance.m_mapSmall != null && Minimap.instance.m_mapSmall.activeInHierarchy;
-					UIWeatherEmojiTMP.enabled = showWeatherUI;
-					UIForecastEmojiTMP.enabled = showWeatherUI;
+					//UIWeatherEmojiTMP.enabled = showWeatherUI;
+					//UIForecastEmojiTMP.enabled = showWeatherUI;
+					UIWeatherIcon.enabled = showWeatherUI;
+					UIForecastIcon.enabled = showWeatherUI;
+					UINextWeatherTimerText.enabled = showWeatherUI;
 
 					if (showWeatherUI)
 					{
-						UIWeatherEmojiTMP.text = UIWeatherEmoji;
-						UIWeatherEmojiTMP.color = UIWeatherEmojiColor;
+						//UIWeatherEmojiTMP.text = UIWeatherEmoji;
+						//UIWeatherEmojiTMP.color = UIWeatherEmojiColor;
 
-						UIForecastEmojiTMP.text = UIForecastEmoji;
-						UIForecastEmojiTMP.color = UIForecastEmojiColor;
+						//UIForecastEmojiTMP.text = UIForecastEmoji;
+						//UIForecastEmojiTMP.color = UIForecastEmojiColor;
 
 						UINextWeatherTimerText.text = UIForecastTimer;
 						UINextWeatherTimerText.color = Color.white;
@@ -157,28 +216,40 @@ namespace MarsarahTweaks.Patches.UI
 				}
 				else
 				{
-					if (UIWeatherEmojiTMP != null)
-						UIWeatherEmojiTMP.enabled = false;
+					//if (UIWeatherEmojiTMP != null)
+						//UIWeatherEmojiTMP.enabled = false;
 
-					if (UIForecastEmojiTMP != null)
-						UIForecastEmojiTMP.enabled = false;
+					//if (UIForecastEmojiTMP != null)
+						//UIForecastEmojiTMP.enabled = false;
 
 					if (UINextWeatherTimerText != null)
 						UINextWeatherTimerText.enabled = false;
+
+					if (UIWeatherIcon != null)
+					{
+						UIWeatherIcon.sprite = null;
+						UIWeatherIcon.enabled = false;
+					}
+
+					if (UIForecastIcon != null)
+					{
+						UIForecastIcon.sprite = null;
+						UIForecastIcon.enabled = false;
+					}
 				}
 			}
 		}
 
 		private static void CreateUI(Hud hud)
 		{
-			if (UIWeatherEmojiTMP != null && UIForecastEmojiTMP != null && UINextWeatherTimerText != null)
+			if (UIWeatherIcon != null && UIForecastIcon != null && UINextWeatherTimerText != null)
 				return;  // UI already exists
 
 			int UITextFontSize = 16;
-			string UIEmojiFontName = "NotoEmoji-Regular SDF";
+			//string UIEmojiFontName = "NotoEmoji-Regular SDF";
 			string UITextFontName = "AveriaSansLibre-Bold";
 			Vector2 UIWeatherAreaSize = new Vector2(200f, 40f); // wider, since it holds all
-			Vector2 UIWeatherAreaPos = new Vector2(-125f, -220f); // bottom-right corner
+			Vector2 UIWeatherAreaPos = new Vector2(-130f, -220f); // bottom-right corner
 
 			// Parent container for the widget
 			GameObject UIWeatherWidgetArea = new GameObject("WeatherWidgetArea");
@@ -186,26 +257,52 @@ namespace MarsarahTweaks.Patches.UI
 			UIWeatherWidgetArea.transform.SetParent(hud.m_rootObject.transform);
 			RectTransform widgetTransform = UIWeatherWidgetArea.AddComponent<RectTransform>();
 			widgetTransform.anchorMin = new Vector2(1f, 1f);
-			widgetTransform.anchorMax = new Vector2(1f, 1f);
+			widgetTransform.anchorMax = new Vector2(1f, 1f); 
 			widgetTransform.anchoredPosition = UIWeatherAreaPos;
 			widgetTransform.sizeDelta = UIWeatherAreaSize;
 			UIWeatherWidgetArea.transform.localScale = Vector3.one;
 
+			// --- Weather icon ---
+			UIWeatherIcon = CreateUIImageObject("WeatherIcon", UIWeatherWidgetArea, new Vector2(0f, 0f), new Vector2(30f, 30f));
+
 			// --- Current weather emoji ---
-			UIWeatherEmojiTMP = CreateTMPTextObject("CurrentWeatherTMP", UIWeatherWidgetArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineLeft, new Vector2(0f, 0f), new Vector2(30f, 30f), log);
+			//UIWeatherEmojiTMP = CreateTMPTextObject("CurrentWeatherTMP", UIWeatherWidgetArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineLeft, new Vector2(0f, 0f), new Vector2(30f, 30f), log);
+
+			// --- Forecast icon ---
+			UIForecastIcon = CreateUIImageObject("ForecastWeatherIcon", UIWeatherWidgetArea, new Vector2(25f, 0f), new Vector2(30f, 30f));
 
 			// --- Forecast emoji ---
-			UIForecastEmojiTMP = CreateTMPTextObject("ForecastWeatherTMP", UIWeatherWidgetArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineLeft, new Vector2(25f, 0f), new Vector2(30f, 30f), log);
+			//UIForecastEmojiTMP = CreateTMPTextObject("ForecastWeatherTMP", UIWeatherWidgetArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineLeft, new Vector2(25f, 0f), new Vector2(30f, 30f), log);
 
 			// --- Timer text ---
-			UINextWeatherTimerText = CreateTextObject("WeatherTimerTMP", UIWeatherWidgetArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(75f, 0f), new Vector2(80f, 30f));
+			UINextWeatherTimerText = CreateTextObject("WeatherTimerTMP", UIWeatherWidgetArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(80f, 0f), new Vector2(80f, 30f));
+		}
+
+		private static void UpdateCurrentWeather(EnvMan envMan, EnvSetup currentEnv, Heightmap.Biome biome)
+		{
+			if (envMan == null || currentEnv == null) return;
+
+			// Pick icon
+			Sprite iconSprite = null;
+			if (WeatherIcons.TryGetValue((biome, currentEnv.m_name), out var iconKey))
+			{
+				string resourcePath = $"MarsarahTweaks.Assets.Icons.Weather.{iconKey}.png";
+				iconSprite = IconManager.LoadEmbeddedIcon(resourcePath);
+			}
+
+			// Update UI element
+			if (UIWeatherIcon != null)
+			{
+				UIWeatherIcon.sprite = iconSprite;
+				UIWeatherIcon.enabled = iconSprite != null;
+			}
 		}
 
 		private static void UpdateForecastData(EnvMan envMan, EnvSetup currentEnv, Heightmap.Biome biome, long currentEnvironmentPeriod, double totalSeconds)
 		{
 			if (envMan == null || currentEnv == null)
 			{
-				UIForecastEmoji = "❓";
+				//UIForecastEmoji = "❓";
 				UIForecastTimer = "--:--";
 				return;
 			}
@@ -243,26 +340,66 @@ namespace MarsarahTweaks.Patches.UI
 				if (EnvMan.instance != null && availableEnvironments != null && availableEnvironments.Count <= 1)
 				{
 					// Only one weather -> show current one again with 00:00
-					UIForecastEmoji = WeatherEmojis.TryGetValue((biome, currentEnv.m_name), out var env) ? env : "❓";
+					//UIForecastEmoji = WeatherEmojis.TryGetValue((biome, currentEnv.m_name), out var env) ? env : "❓";
+					Sprite iconSpriteConstant = null;
+					if (WeatherIcons.TryGetValue((biome, currentEnv.m_name), out var iconKeyConstant))
+					{
+						string resourcePath = $"MarsarahTweaks.Assets.Icons.Weather.{iconKeyConstant}.png";
+						iconSpriteConstant = IconManager.LoadEmbeddedIcon(resourcePath);
+					}
+					if (UIForecastIcon != null)
+					{
+						UIForecastIcon.sprite = iconSpriteConstant;
+						UIForecastIcon.enabled = iconSpriteConstant != null;
+					}
 					UIForecastTimer = "00:00";
-					UIForecastEmojiColor = new Color(0.6f, 0.8f, 0.6f);
+					//UIForecastEmojiColor = new Color(0.6f, 0.8f, 0.6f);
 				}
 				else
 				{
-					UIForecastEmoji = "❓";
+					//UIForecastEmoji = "❓";
 					UIForecastTimer = "--:--";
 				}
 				return;
 			}
 
 			// pick emoji
-			string emoji = WeatherEmojis.TryGetValue((biome, forecastEnv.m_name), out var e) ? e : "❓";
+			/*string emoji = WeatherEmojis.TryGetValue((biome, forecastEnv.m_name), out var e) ? e : "❓";
 			string timerStr = GetNextWeatherTimer(forecastPeriod, totalSeconds);
 
 			// assign globals
 			UIForecastEmoji = emoji;
 			UIForecastTimer = timerStr;
-			UIForecastEmojiColor = Color.cyan;
+			UIForecastEmojiColor = Color.cyan;*/
+
+			// pick emoji
+			string emoji = WeatherEmojis.TryGetValue((biome, forecastEnv.m_name), out var e) ? e : "❓";
+			string timerStr = GetNextWeatherTimer(forecastPeriod, totalSeconds);
+
+			// pick icons
+			Sprite iconSprite = null;
+			if (WeatherIcons.TryGetValue((biome, forecastEnv.m_name), out var iconKey))
+			{
+				string resourcePath = $"MarsarahTweaks.Assets.Icons.Weather.{iconKey}.png";
+				iconSprite = IconManager.LoadEmbeddedIcon(resourcePath);
+			}
+
+			// assign globals
+			//UIForecastEmoji = emoji;
+			UIForecastTimer = timerStr;
+			//UIForecastEmojiColor = Color.cyan;
+
+			// Update UI element
+			if (UIForecastIcon != null)
+			{
+				UIForecastIcon.sprite = iconSprite;
+				UIForecastIcon.enabled = iconSprite != null;
+			}
+			/*if (UIForecastEmojiTMP != null)
+			{
+				UIForecastEmojiTMP.text = emoji; // optional fallback
+				UIForecastEmojiTMP.enabled = iconSprite == null;
+			}*/
 
 			// log only when forecast changes
 			if (forecastEnv != _lastForecastEnv || forecastPeriod != _lastForecastPeriod)

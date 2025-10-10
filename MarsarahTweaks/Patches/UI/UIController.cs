@@ -161,6 +161,23 @@ namespace MarsarahTweaks.Patches.UI
 			return tmpText;
 		}
 
+		public static Image CreateUIImageObject(string name, GameObject parent, Vector2 position, Vector2 sizeDelta)
+		{
+			GameObject iconObject = new GameObject(name);
+			iconObject.layer = 5;
+			iconObject.transform.SetParent(parent.transform, false);
+
+			RectTransform rectTransform = iconObject.AddComponent<RectTransform>();
+			rectTransform.anchoredPosition = position;
+			rectTransform.sizeDelta = sizeDelta;
+			rectTransform.localScale = Vector3.one;
+
+			Image image = iconObject.AddComponent<Image>();
+			image.color = Color.white;
+
+			return image;
+		}
+
 		public static void UpdateUIPositions()
 		{
 			bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
