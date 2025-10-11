@@ -3,7 +3,7 @@
 
    A. Fixes
       - Fixed Blue Silver Hanging Brazier flame and coal position to avoid shadow flickers under it
-      - Fixed Clearer Weather feature to apply defined weather weights properly every time the weather is calculated (initially they were applied only at logon)
+      - Fixed Clearer Weather feature to apply defined weather weights properly every time the weather is calculated (initially they were applied only at logon).
       - Fixed the text and symbol spacing for the Summons Counter that was broken during the Call to Arms update
 
    B. Updates
@@ -13,6 +13,7 @@
         - UI can still be toggled with the Insert key (and Home key for online player list) like before, but the Off toggle from the config will override this.
       - Merged configs: Show Online Players and Show Online Players Under Minimap. Can now choose the mode from a single multiple choice config.
       - Merged configs: Show Time And Day and Time - 24 Hour Format. Can now choose the time format from a single multiple choice config.
+      - Split config: Show Time And Day into Show Current Day and Show Current Time. They can now be toggled individually and the position for the respective texts is adjusted accordingly when only one is shown.
       
    C. New Grind Reduction
 
@@ -36,15 +37,13 @@
         - Plants
         - All smelter-type objects (Kiln, Smelter, Blast Furnace, Spinning Wheel, Windmill, Eitr Refinery)
         - Eggs
-      - Added Show Weather Indicator
-        - Separated the symbols next to the time of day and moved them to the top-right of the minimap. This indicator now shows the current weather as well. If the weather is clear, then the symbol changes according to the time of day.
+      - Added Show Weather Forecast Indicator
+        - Added a forecast icona nd timer to the bottom-right of the minimap. This indicator shows the upcoming weather based on the current biome and weather weights. If the biome has a single weather (Swamp and Ashlands Ocean), then the indicator shows the current weather and the timer is set to --:--. 
+        - With this occasion, the emojis next to the time of day (present on the New style UI) were removed to avoid confusion and UI bloat.
 
 
  ******* TODO *******
 
- - Add weather forecast (need to see how this works with my Clearer Weather section)
- - See if weather forecast and current weather are both needed. Adjust configs accordingly
- - Separate Day and Time into their own configs
  - Add indicator when a player is in PVP mode. Also change the HP fill color
  - Implement skill progress message
  - Implement player login screen stats

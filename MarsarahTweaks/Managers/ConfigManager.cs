@@ -66,7 +66,7 @@ namespace MarsarahTweaks.Managers
 			//Off
 		}
 
-		public enum TimeAndDayMode
+		public enum TimeMode
 		{
 			DigitalClock,
 			DayPhases,
@@ -253,31 +253,31 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("03 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
 			public static readonly ConfigMetadata UIEnemyDetector = new ConfigMetadata("04 - Show Enemy Detector", "Shows enemy detector on the bottom left of the screen");
 			public static readonly ConfigMetadata UIBoatSpeed = new ConfigMetadata("05 - Show Boat Speed", "Shows boat speed when using a boat next to the sail indicator (if UI layout is new) or on the bottom left of the screen (if UI layout is old)");
-			public static readonly ConfigMetadata UITimeAndDayMode = new ConfigMetadata("06 - Show Time And Day", "Shows the time and current day above the minimap. Can choose different time formats");
-			//public static readonly ConfigMetadata UIWeatherIndicator = new ConfigMetadata("07 - Show Weather Indicator", "Shows the current weather as an icon at the top-left of the minimap.");
-			public static readonly ConfigMetadata UIWeatherForecast = new ConfigMetadata("07 - Show Weather Forecast Indicator", "Shows the next scheduled weather as an icon at the bottom-right of the minimap and the remaining time to that weather.");
-			public static readonly ConfigMetadata UISmartBiome = new ConfigMetadata("08 - Smart Biome Indicator", "Shows smart biome text on the minimap (colored according to worn armor relative to current biome)");
-			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("09 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
-			public static readonly ConfigMetadata UIOnlinePlayersMode = new ConfigMetadata("10 - Show Online Players", "Displays a list of online players. The player names can be toggled with the Home key. (Not displayed if only one player is online)");
-			public static readonly ConfigMetadata UIShowOwnedResources = new ConfigMetadata("11 - Show Owned Resources In Build Menu", "Displays the total amount of resources in the player's inventory in addition to the required resource amount for the selected piece or recipe in the build or crafting menu");
-			public static readonly ConfigMetadata UIShowPowerExpiration = new ConfigMetadata("12 - Show Boss Power Expiration Message", "Displays a message in the center of the screen when any Forsaken Power expires");
-			public static readonly ConfigMetadata UIPlayerLogoutAnnounce = new ConfigMetadata("13 - Player Logout Announce", "Displays a message when a player logs out in the top-left corner of the screen and in the chat window");
-			public static readonly ConfigMetadata UIAshlandsHeatLevel = new ConfigMetadata("14 - Show Heat Meter in Ashlands", "Shows a heat meter at the top-center of the screen when in Ashlands water or lava");
-			public static readonly ConfigMetadata UIEnemyNameplateMode = new ConfigMetadata("15 - Enemy Nameplate Mode", "Changes the way enemy nameplates are displayed by changing bar style and colors and alerted/aggravated status. Has different ways of showing HP");
-			public static readonly ConfigMetadata UITamingProgress = new ConfigMetadata("16 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing under the HP bar. This is independent of Enemy Nameplate Mode");
-			public static readonly ConfigMetadata UIItemQualityIndicatorMode = new ConfigMetadata("17 - Item Quality Indicator Mode", "Changes the way item quality is displayed by converting the vanilla number to symbols.");
-			public static readonly ConfigMetadata UIItemQualitySymbol = new ConfigMetadata("18 - Symbol For Item Quality", "Choose the symbol used for the item quality indicator. Requires Item Quality Indicator Mode to be enabled");
-			public static readonly ConfigMetadata UIItemQualityColor = new ConfigMetadata("19 - Color For Item Quality", "Choose the color used for the item quality indicator. Requires Item Quality Indicator Mode to be enabled");
-			public static readonly ConfigMetadata UIItemDurabilityColor = new ConfigMetadata("20 - Better Item Durability Bar", "Colors the item durability bar according to curent durability and modifies the sprite texture");
-			public static readonly ConfigMetadata UIHoverInfoMode = new ConfigMetadata("21 - Detailed Hover Information", "Adds more information when hovering over objects. Master toggle for the configs below (26-32)");
-			public static readonly ConfigMetadata UIContainerContents = new ConfigMetadata("22 - Show Container Contents", "Show the contents of a chest or container when hovering. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIContainerHoverMode = new ConfigMetadata("23 - Container Hover Mode", "Choose the method of displaying Container hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIBeeHoverMode = new ConfigMetadata("24 - Beehive Hover Mode", "Choose the method of displaying Beehive hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIPlantHoverMode = new ConfigMetadata("25 - Plant Hover Mode", "Choose the method of displaying Plant hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIFermenterHoverMode = new ConfigMetadata("26 - Fermenter Hover Mode", "Choose the method of displaying Fermenter hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UICookingStationHoverMode = new ConfigMetadata("27 - CookingStation Hover Mode", "Choose the method of displaying Cooking Station hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UISmelterHoverMode = new ConfigMetadata("28 - Smelter Hover Mode", "Choose the method of displaying Smelter hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIEggHoverMode = new ConfigMetadata("29 - Egg Hover Mode", "Choose the method of displaying Egg hatching hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UICurrentDay = new ConfigMetadata("06 - Show Current Day", "Shows the current day above the minimap.");
+			public static readonly ConfigMetadata UITimeMode = new ConfigMetadata("07 - Show Current Time", "Shows the current time above the minimap. Can choose between digital clock and day sections");
+			public static readonly ConfigMetadata UIWeatherForecast = new ConfigMetadata("08 - Show Weather Forecast Indicator", "Shows the next scheduled weather as an icon at the bottom-right of the minimap and the remaining time to that weather.");
+			public static readonly ConfigMetadata UISmartBiome = new ConfigMetadata("09 - Smart Biome Indicator", "Shows smart biome text on the minimap (colored according to worn armor relative to current biome)");
+			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("10 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
+			public static readonly ConfigMetadata UIOnlinePlayersMode = new ConfigMetadata("11 - Show Online Players", "Displays a list of online players. The player names can be toggled with the Home key. (Not displayed if only one player is online)");
+			public static readonly ConfigMetadata UIShowOwnedResources = new ConfigMetadata("12 - Show Owned Resources In Build Menu", "Displays the total amount of resources in the player's inventory in addition to the required resource amount for the selected piece or recipe in the build or crafting menu");
+			public static readonly ConfigMetadata UIShowPowerExpiration = new ConfigMetadata("13 - Show Boss Power Expiration Message", "Displays a message in the center of the screen when any Forsaken Power expires");
+			public static readonly ConfigMetadata UIPlayerLogoutAnnounce = new ConfigMetadata("14 - Player Logout Announce", "Displays a message when a player logs out in the top-left corner of the screen and in the chat window");
+			public static readonly ConfigMetadata UIAshlandsHeatLevel = new ConfigMetadata("15 - Show Heat Meter in Ashlands", "Shows a heat meter at the top-center of the screen when in Ashlands water or lava");
+			public static readonly ConfigMetadata UIEnemyNameplateMode = new ConfigMetadata("16 - Enemy Nameplate Mode", "Changes the way enemy nameplates are displayed by changing bar style and colors and alerted/aggravated status. Has different ways of showing HP");
+			public static readonly ConfigMetadata UITamingProgress = new ConfigMetadata("17 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing under the HP bar. This is independent of Enemy Nameplate Mode");
+			public static readonly ConfigMetadata UIItemQualityIndicatorMode = new ConfigMetadata("18 - Item Quality Indicator Mode", "Changes the way item quality is displayed by converting the vanilla number to symbols.");
+			public static readonly ConfigMetadata UIItemQualitySymbol = new ConfigMetadata("19 - Symbol For Item Quality", "Choose the symbol used for the item quality indicator. Requires Item Quality Indicator Mode to be enabled");
+			public static readonly ConfigMetadata UIItemQualityColor = new ConfigMetadata("20 - Color For Item Quality", "Choose the color used for the item quality indicator. Requires Item Quality Indicator Mode to be enabled");
+			public static readonly ConfigMetadata UIItemDurabilityColor = new ConfigMetadata("21 - Better Item Durability Bar", "Colors the item durability bar according to curent durability and modifies the sprite texture");
+			public static readonly ConfigMetadata UIHoverInfoMode = new ConfigMetadata("22 - Detailed Hover Information", "Adds more information when hovering over objects. Master toggle for the configs below (26-32)");
+			public static readonly ConfigMetadata UIContainerContents = new ConfigMetadata("23 - Show Container Contents", "Show the contents of a chest or container when hovering. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIContainerHoverMode = new ConfigMetadata("24 - Container Hover Mode", "Choose the method of displaying Container hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIBeeHoverMode = new ConfigMetadata("25 - Beehive Hover Mode", "Choose the method of displaying Beehive hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIPlantHoverMode = new ConfigMetadata("26 - Plant Hover Mode", "Choose the method of displaying Plant hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIFermenterHoverMode = new ConfigMetadata("27 - Fermenter Hover Mode", "Choose the method of displaying Fermenter hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UICookingStationHoverMode = new ConfigMetadata("28 - CookingStation Hover Mode", "Choose the method of displaying Cooking Station hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UISmelterHoverMode = new ConfigMetadata("29 - Smelter Hover Mode", "Choose the method of displaying Smelter hover info. Requires Detailed Hover Information");
+			public static readonly ConfigMetadata UIEggHoverMode = new ConfigMetadata("30 - Egg Hover Mode", "Choose the method of displaying Egg hatching hover info. Requires Detailed Hover Information");
 			//public static readonly ConfigMetadata UISkillXPMode = new ConfigMetadata("33 - Skill XP Notification Mode", "Choose the method of displaying info when progressing in a skill");
 		}
 
@@ -355,8 +355,8 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShowInventoryWeightAndSlots;
 		public static ConfigEntry<bool> ShowEnemyDetector;
 		public static ConfigEntry<bool> ShowBoatSpeed;
-		public static ConfigEntry<TimeAndDayMode> TimeAndDayChoice;
-		//public static ConfigEntry<bool> ShowWeatherIndicator;
+		public static ConfigEntry<bool> ShowCurrentDay;
+		public static ConfigEntry<TimeMode> TimeChoice;
 		public static ConfigEntry<bool> ShowWeatherForecast;
 		public static ConfigEntry<bool> ShowSmartBiome;
 		public static ConfigEntry<bool> ShowSummonCounter;
@@ -460,8 +460,8 @@ namespace MarsarahTweaks.Managers
 			ShowInventoryWeightAndSlots = CreateConfig(ConfigSections.UI, Configs.UIInventoryWeightAndSlots.Name, true, Configs.UIInventoryWeightAndSlots.Description, false);
 			ShowEnemyDetector = CreateConfig(ConfigSections.UI, Configs.UIEnemyDetector.Name, true, Configs.UIEnemyDetector.Description, false);
 			ShowBoatSpeed = CreateConfig(ConfigSections.UI, Configs.UIBoatSpeed.Name, true, Configs.UIBoatSpeed.Description, false);
-			TimeAndDayChoice = CreateConfig(ConfigSections.UI, Configs.UITimeAndDayMode.Name, TimeAndDayMode.DigitalClock, Configs.UITimeAndDayMode.Description, false);
-			//ShowWeatherIndicator = CreateConfig(ConfigSections.UI, Configs.UIWeatherIndicator.Name, true, Configs.UIWeatherIndicator.Description, false);
+			ShowCurrentDay = CreateConfig(ConfigSections.UI, Configs.UICurrentDay.Name, true, Configs.UICurrentDay.Description, false);
+			TimeChoice = CreateConfig(ConfigSections.UI, Configs.UITimeMode.Name, TimeMode.DigitalClock, Configs.UITimeMode.Description, false);
 			ShowWeatherForecast = CreateConfig(ConfigSections.UI, Configs.UIWeatherForecast.Name, true, Configs.UIWeatherForecast.Description, false);
 			ShowSmartBiome = CreateConfig(ConfigSections.UI, Configs.UISmartBiome.Name, true, Configs.UISmartBiome.Description, false);
 			ShowSummonCounter = CreateConfig(ConfigSections.UI, Configs.UISummonCounter.Name, true, Configs.UISummonCounter.Description, false);
@@ -682,6 +682,14 @@ namespace MarsarahTweaks.Managers
 						//SilverTableTorch.ToggleSilverTorchVisibility();
 						ColoredDvergerLanterns.ToggleVisibility();
 						//BuildPieceHelper.UpdateCategory();
+						break;
+
+					case var name when name == Configs.UICurrentDay.Name:
+						UITimeAndDay.UpdatePositions();
+						break;
+
+					case var name when name == Configs.UITimeMode.Name:
+						UITimeAndDay.UpdatePositions();
 						break;
 
 					case var name when name == Configs.UIInventoryWeightAndSlots.Name:

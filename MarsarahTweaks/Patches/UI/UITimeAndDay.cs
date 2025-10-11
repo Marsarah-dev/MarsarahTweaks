@@ -20,67 +20,11 @@ namespace MarsarahTweaks.Patches.UI
 
 		// UI data
 		public static string TimeString;
-		//public static string UIWeatherEmoji;
 		public static int CurrentDay;
 
 		// UI elements
 		private static Text UITimeText;
 		private static Text UIDayText;
-
-		//private static TMPro.TextMeshProUGUI UIWeatherEmojiTMP = null;
-		//private static Color UIWeatherEmojiColor;
-
-		/*private static readonly Dictionary<(Heightmap.Biome, string), string> WeatherEmojis = new Dictionary<(Heightmap.Biome, string), string>()
-		{
-			// Meadows
-			{ (Heightmap.Biome.Meadows, "Clear"), "☀️" },
-			{ (Heightmap.Biome.Meadows, "Rain"), "🌧" },
-			{ (Heightmap.Biome.Meadows, "Misty"), "🌫" },
-			{ (Heightmap.Biome.Meadows, "ThunderStorm"), "⛈" },
-			{ (Heightmap.Biome.Meadows, "LightRain"), "🌦" },
-
-			// BlackForest
-			{ (Heightmap.Biome.BlackForest, "DeepForest Mist"), "🌫" },
-			{ (Heightmap.Biome.BlackForest, "Rain"), "🌧" },
-			{ (Heightmap.Biome.BlackForest, "Misty"), "🌫" },
-			{ (Heightmap.Biome.BlackForest, "ThunderStorm"), "⛈" },
-
-			// Swamp
-			{ (Heightmap.Biome.Swamp, "SwampRain"), "🌧" },
-
-			// Mountain
-			{ (Heightmap.Biome.Mountain, "SnowStorm"), "🌨️" },
-			{ (Heightmap.Biome.Mountain, "Snow"), "❄️" },
-
-			// DeepNorth
-			{ (Heightmap.Biome.DeepNorth, "Twilight_SnowStorm"), "🌨️" },
-			{ (Heightmap.Biome.DeepNorth, "Twilight_Snow"), "❄️" },
-			{ (Heightmap.Biome.DeepNorth, "Twilight_Clear"), "☀️" },
-
-			// Plains
-			{ (Heightmap.Biome.Plains, "Heath clear"), "☀️" },
-			{ (Heightmap.Biome.Plains, "Misty"), "🌫" },
-			{ (Heightmap.Biome.Plains, "LightRain"), "🌦" },
-
-			// Ocean
-			{ (Heightmap.Biome.Ocean, "Clear"), "☀️" },
-			{ (Heightmap.Biome.Ocean, "Rain"), "🌧" },
-			{ (Heightmap.Biome.Ocean, "LightRain"), "🌦" },
-			{ (Heightmap.Biome.Ocean, "Misty"), "🌫" },
-			{ (Heightmap.Biome.Ocean, "ThunderStorm"), "⛈" },
-			{ (Heightmap.Biome.Ocean, "Ashlands_SeaStorm"), "🌪" },
-
-			// Mistlands
-			{ (Heightmap.Biome.Mistlands, "Mistlands_clear"), "☀️" },
-			{ (Heightmap.Biome.Mistlands, "Mistlands_rain"), "🌧" },
-			{ (Heightmap.Biome.Mistlands, "Mistlands_thunder"), "⛈" },
-
-			// AshLands
-			{ (Heightmap.Biome.AshLands, "Ashlands_ashrain"), "☀️" },  // 🔥 
-			{ (Heightmap.Biome.AshLands, "Ashlands_misty"), "🌫" },
-			{ (Heightmap.Biome.AshLands, "Ashlands_CinderRain"), "🌋" }, // cinder rain
-			{ (Heightmap.Biome.AshLands, "Ashlands_storm"), "🌪" }
-		};*/
 
 		[HarmonyPatch(typeof(EnvMan), "Update")]
 		class TimeAndDay_EnvManPatch
@@ -91,11 +35,14 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (__instance == null) return;
 
-				if (ConfigManager.TimeAndDayChoice.Value != TimeAndDayMode.Off)
+				if (ConfigManager.ShowCurrentDay.Value)
 				{
 					CurrentDay = Traverse.Create((object)EnvMan.instance).Method("GetCurrentDay", Array.Empty<object>()).GetValue<int>();
+				}
 
-					if (ConfigManager.TimeAndDayChoice.Value == TimeAndDayMode.DayPhases)
+				if (ConfigManager.TimeChoice.Value != TimeMode.Off)
+				{
+					if (ConfigManager.TimeChoice.Value == TimeMode.DayPhases)
 					{
 						TimeString = GetStringFromFraction(___m_smoothDayFraction);
 					}
@@ -107,8 +54,6 @@ namespace MarsarahTweaks.Patches.UI
 						string minutesString = minutes < 10 ? "0" + minutes.ToString() : minutes.ToString();
 						TimeString = "Time " + hoursString + ":" + minutesString;
 					}
-					//UIWeatherEmoji = GetEmojiForCurrentWeather(___m_smoothDayFraction);
-					//UIWeatherEmojiColor = GetColorFromFraction(___m_smoothDayFraction);
 				}
 			}
 
@@ -123,58 +68,6 @@ namespace MarsarahTweaks.Patches.UI
 				if (dayFraction < 0.80f) return "Dusk";
 				return "Night";
 			}
-
-			/*private static string GetEmojiFromFraction(float dayFraction)
-			{
-				if (dayFraction < 0.20f) return "🌙";
-				if (dayFraction < 0.25f) return "🌅";
-				if (dayFraction < 0.33f) return "🌅";
-				if (dayFraction < 0.50f) return "☀️";
-				if (dayFraction < 0.66f) return "☀️";
-				if (dayFraction < 0.75f) return "🌄"; // 🌤
-				if (dayFraction < 0.80f) return "🌄";
-				return "🌙";
-			}*/
-
-			/*private static Color GetColorFromFraction(float dayFraction)
-			{
-				if (dayFraction < 0.20f) return Color.white;
-				if (dayFraction < 0.25f) return new Color(1f, 0.549019f, 0f);
-				if (dayFraction < 0.33f) return Color.yellow;
-				if (dayFraction < 0.50f) return Color.green;
-				if (dayFraction < 0.66f) return Color.green;
-				if (dayFraction < 0.75f) return Color.yellow;
-				if (dayFraction < 0.80f) return new Color(1f, 0.549019f, 0f);
-				return Color.white;
-			}*/
-
-			/*private static string GetEmojiForCurrentWeather(float dayFraction)
-			{
-				var envMan = EnvMan.instance;
-				if (envMan == null)
-					return "❓";
-
-				var currentEnvField = typeof(EnvMan).GetField("m_currentEnv", BindingFlags.NonPublic | BindingFlags.Instance);
-				if (currentEnvField == null)
-					return "❓";
-
-				var currentEnv = currentEnvField.GetValue(envMan) as EnvSetup;
-				if (currentEnv == null)
-					return "❓";
-
-				// Use the biome directly from EnvMan
-				var currentBiomeField = typeof(EnvMan).GetField("m_currentBiome", BindingFlags.NonPublic | BindingFlags.Instance);
-				Heightmap.Biome biome = Heightmap.Biome.Meadows; // fallback
-				if (currentBiomeField != null)
-					biome = (Heightmap.Biome)currentBiomeField.GetValue(envMan);
-
-				string emoji = WeatherEmojis.TryGetValue((biome, currentEnv.m_name), out var e) ? e : "❓";
-
-				if (emoji == "☀️") // only override for clear-weather types
-					emoji = GetEmojiFromFraction(dayFraction);
-
-				return emoji ?? "❓";
-			}*/
 		}
 
 		[HarmonyPatch(typeof(Hud), "Awake")]
@@ -186,7 +79,7 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (__instance == null) return;
 
-				if (ConfigManager.TimeAndDayChoice.Value != TimeAndDayMode.Off)
+				if (ConfigManager.TimeChoice.Value != TimeMode.Off || ConfigManager.ShowCurrentDay.Value != false)
 				{
 					CreateUI(__instance);
 				}
@@ -204,34 +97,24 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (__instance == null) return;
 
-				if (ConfigManager.TimeAndDayChoice.Value != TimeAndDayMode.Off)
+				if (ConfigManager.TimeChoice.Value != TimeMode.Off || ConfigManager.ShowCurrentDay.Value != false)
 				{
 					bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
 
 					CreateUI(__instance); // Create UI if missing
 
-					// Handle where to display the time text when toggling
-					/*if (ConfigManager.UILayoutChoice.Value != lastUImode)
-					{
-						lastUImode = ConfigManager.UILayoutChoice.Value;
-						UpdateTimePosition(newUI);
-					}*/
+					bool showTimeAndDayUI = Game.m_noMap ? ShowUI : ShowUI && Minimap.instance != null && Minimap.instance.m_mapSmall != null && Minimap.instance.m_mapSmall.activeInHierarchy;
 
-					bool showTimeUI = Game.m_noMap ? ShowUI : ShowUI && Minimap.instance != null && Minimap.instance.m_mapSmall != null && Minimap.instance.m_mapSmall.activeInHierarchy;
+					UITimeText.enabled = showTimeAndDayUI && ConfigManager.TimeChoice.Value != TimeMode.Off;
+					UIDayText.enabled = showTimeAndDayUI && ConfigManager.ShowCurrentDay.Value != false;
 
-					UITimeText.enabled = showTimeUI;
-					UIDayText.enabled = showTimeUI;
-					//UIWeatherEmojiTMP.enabled = newUI ? showTimeUI : false;
-
-					if (showTimeUI)
+					if (showTimeAndDayUI)
 					{
 						UITimeText.color = GetColorFromString(TimeString);
 						UIDayText.color = Color.white;
-						//UIWeatherEmojiTMP.color = UIWeatherEmojiColor;
 
 						UITimeText.text = TimeString;
 						UIDayText.text = "Day " + CurrentDay.ToString();
-						//UIWeatherEmojiTMP.text = UIWeatherEmoji;
 					}
 				}
 				else
@@ -240,16 +123,8 @@ namespace MarsarahTweaks.Patches.UI
 						UITimeText.enabled = false;
 					if (UIDayText != null)
 						UIDayText.enabled = false;
-					//if (UIWeatherEmojiTMP != null)
-						//UIWeatherEmojiTMP.enabled = false;
 				}
 			}
-
-			/*private static void UpdateTimePosition(bool newUI)
-			{
-				float xOffset = newUI ? 20f : 40f;
-				UITimeText.GetComponent<RectTransform>().anchoredPosition = new Vector2(xOffset, 0f);
-			}*/
 
 			private static Color GetColorFromString(string word)
 			{
@@ -266,14 +141,11 @@ namespace MarsarahTweaks.Patches.UI
 
 		private static void CreateUI(Hud hud)
 		{
-			if (UITimeText != null && UIDayText != null /*&& UIWeatherEmojiTMP != null*/)
+			if (UITimeText != null && UIDayText != null)
 				return;  // UI already exists, no need to create again
-
-			//bool newUI = ConfigManager.UILayoutChoice.Value == UIMode.New;
 
 			int UITextFontSize = 16;
 			string UITextFontName = "AveriaSansLibre-Bold";
-			//string UIEmojiFontName = "NotoEmoji-Regular SDF"; // NotoEmoji-Regular
 			Vector2 UITimeAreaSize = new Vector2(200f, 30f); // width, height
 			Vector2 UITimeAreaEmojiSize = new Vector2(30f, 30f); // width, height
 
@@ -290,17 +162,49 @@ namespace MarsarahTweaks.Patches.UI
 
 			// Special modification for text sizeDelta
 			UITimeAreaSize.x = UITimeAreaSize.x / 2;
-			//float timeTextXPos = newUI ? 20f : 40f;
 			float timeTextXPos = 40f;
+			float dayTextXPos = -40f;
 
 			// Time text
 			UITimeText = CreateTextObject("TimeText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleRight, new Vector2(timeTextXPos, 0f), UITimeAreaSize);
 
 			// Day text
-			UIDayText = CreateTextObject("DayText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(-40f, 0f), UITimeAreaSize);
+			UIDayText = CreateTextObject("DayText", UITimeArea, Color.white, UITextFontName, UITextFontSize, TextAnchor.MiddleLeft, new Vector2(dayTextXPos, 0f), UITimeAreaSize);
+		}
 
-			// Time emoji
-			//UIWeatherEmojiTMP = CreateTMPTextObject("TimeEmojiTMP", UITimeArea, Color.white, UIEmojiFontName, UITextFontSize + 2, TextAlignmentOptions.MidlineRight, new Vector2(80f, 0f), UITimeAreaEmojiSize, log);
+		public static void UpdatePositions()
+		{
+			if (UITimeText == null || UIDayText == null) return;
+
+			bool timeEnabled = ConfigManager.TimeChoice.Value != TimeMode.Off;
+			bool dayEnabled = ConfigManager.ShowCurrentDay.Value;
+
+			float timeTextXPos = 40f;
+			float dayTextXPos = -40f;
+
+			RectTransform timeTransform = UITimeText.rectTransform;
+			RectTransform dayTransform = UIDayText.rectTransform;
+
+			Vector2 tPos = timeTransform.anchoredPosition;
+			Vector2 dPos = dayTransform.anchoredPosition;
+
+			if (timeEnabled && dayEnabled)
+			{
+				tPos.x = timeTextXPos;
+				dPos.x = dayTextXPos;
+				UITimeText.alignment = TextAnchor.MiddleRight;
+				UIDayText.alignment = TextAnchor.MiddleLeft;
+			}
+			else
+			{
+				tPos.x = timeEnabled ? 0f : 0f;
+				dPos.x = dayEnabled ? 0f : 0f;
+				UITimeText.alignment = TextAnchor.MiddleCenter;
+				UIDayText.alignment = TextAnchor.MiddleCenter;
+			}
+
+			timeTransform.anchoredPosition = tPos;
+			dayTransform.anchoredPosition = dPos;
 		}
 	}
 }
