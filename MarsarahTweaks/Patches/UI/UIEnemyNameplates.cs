@@ -154,6 +154,7 @@ namespace MarsarahTweaks.Features.UI
 
 					UpdateHpText(character, hudData, enemyNaplatesEnabled);
 					UpdateAlertAndName(character, hudData, enemyNaplatesEnabled);
+					UpdateBarColor(character, hudData);
 				}
 			}
 		}
@@ -218,8 +219,16 @@ namespace MarsarahTweaks.Features.UI
 				}
 				else if (character.IsPlayer())
 				{
-					fastBar?.SetColor(playerFillColor);
-					fastFriendlyBar?.SetColor(playerFillColor);
+					if (character.IsPVPEnabled())
+					{
+						fastBar?.SetColor(bossFillColor);
+						fastFriendlyBar?.SetColor(bossFillColor);
+					}
+					else
+					{
+						fastBar?.SetColor(playerFillColor);
+						fastFriendlyBar?.SetColor(playerFillColor);
+					}						
 				}
 				else
 				{
@@ -414,6 +423,36 @@ namespace MarsarahTweaks.Features.UI
 				else
 				{
 					nameText.color = Color.white;
+				}
+			}
+		}
+
+		private static void UpdateBarColor(Character character, object hudData)
+		{
+			if (character == null || hudData == null) return;
+
+			// Get the bar references from hudData
+			var fastBar = hud_m_healthFast_Field?.GetValue(hudData) as GuiBar;
+			var slowBar = hud_m_healthSlow_Field?.GetValue(hudData) as GuiBar;
+			var fastFriendlyBar = hud_m_healthFastFriendly_Field?.GetValue(hudData) as GuiBar;
+
+			if (fastBar == null) return;
+
+			// Define colors
+			Color playerPVPFillColor = Color.magenta;
+			Color playerFillColor = Color.green;
+
+			if (character.IsPlayer())
+			{
+				if (character.IsPVPEnabled())
+				{
+					fastBar?.SetColor(playerPVPFillColor);
+					fastFriendlyBar?.SetColor(playerPVPFillColor);
+				}
+				else
+				{
+					fastBar?.SetColor(playerFillColor);
+					fastFriendlyBar?.SetColor(playerFillColor);
 				}
 			}
 		}

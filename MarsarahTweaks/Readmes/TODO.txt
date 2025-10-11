@@ -38,13 +38,12 @@
         - All smelter-type objects (Kiln, Smelter, Blast Furnace, Spinning Wheel, Windmill, Eitr Refinery)
         - Eggs
       - Added Show Weather Forecast Indicator
-        - Added a forecast icona nd timer to the bottom-right of the minimap. This indicator shows the upcoming weather based on the current biome and weather weights. If the biome has a single weather (Swamp and Ashlands Ocean), then the indicator shows the current weather and the timer is set to --:--. 
+        - Added a forecast icon and timer to the bottom-right of the minimap. This indicator shows the upcoming weather based on the current biome and weather weights. If the biome has a single weather (Swamp and Ashlands Ocean), then the indicator shows the current weather and the timer is set to --:--. 
         - With this occasion, the emojis next to the time of day (present on the New style UI) were removed to avoid confusion and UI bloat.
 
 
  ******* TODO *******
 
- - Add indicator when a player is in PVP mode. Also change the HP fill color
  - Implement skill progress message
  - Implement player login screen stats
  - See if I can add text to item durability bars (maybe make them thicker) and see how it looks like
