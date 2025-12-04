@@ -43,7 +43,7 @@ namespace MarsarahTweaks
 		{
 			CompatibilityManager.Initialize();
 			CompatibilityManager.UpdateIncompatibilities();
-			CompatibilityManager.DumpAllLoadedMods();
+			//CompatibilityManager.DumpAllLoadedMods();
 		}
 
 		void Update()

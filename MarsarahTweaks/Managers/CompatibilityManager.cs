@@ -8,7 +8,7 @@ namespace MarsarahTweaks.Managers
 {
 	internal static class CompatibilityManager
 	{
-		private static readonly LogManager log = new LogManager("Compatibility Manager", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Compatibility Manager", LogManager.LogLevel.Warning);
 
 		// All loaded mods (GUID -> Name)
 		private static readonly Dictionary<string, string> LoadedMods = new Dictionary<string, string>();

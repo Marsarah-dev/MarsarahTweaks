@@ -16,7 +16,7 @@ namespace MarsarahTweaks.Patches.UI
 {
 	internal class UIWeather : UIController
 	{
-		private static readonly LogManager log = new LogManager("UI Weather", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("UI Weather", LogManager.LogLevel.Warning);
 
 		// UI data
 		private static string UIForecastTimer;
@@ -40,29 +40,53 @@ namespace MarsarahTweaks.Patches.UI
 			{ (Heightmap.Biome.Meadows, "Misty"), "🌫" },
 			{ (Heightmap.Biome.Meadows, "ThunderStorm"), "⛈" },
 			{ (Heightmap.Biome.Meadows, "LightRain"), "🌦" },
+			{ (Heightmap.Biome.Meadows, "Heath clear"), "☀️" }, // Seasons
+			{ (Heightmap.Biome.Meadows, "SwampRain"), "🌧" },  // Seasons
+			{ (Heightmap.Biome.Meadows, "Snow"), "❄️" },        // Seasons
+			{ (Heightmap.Biome.Meadows, "SnowStorm"), "🌨️" },  // Seasons
 
 			// BlackForest
 			{ (Heightmap.Biome.BlackForest, "DeepForest Mist"), "🌫" },
 			{ (Heightmap.Biome.BlackForest, "Rain"), "🌧" },
 			{ (Heightmap.Biome.BlackForest, "Misty"), "🌫" },
 			{ (Heightmap.Biome.BlackForest, "ThunderStorm"), "⛈" },
+			{ (Heightmap.Biome.BlackForest, "Clear"), "☀️" },      // Seasons
+			{ (Heightmap.Biome.BlackForest, "LightRain"), "🌦" }, // Seasons
+			{ (Heightmap.Biome.BlackForest, "SwampRain"), "🌧" }, // Seasons
+			{ (Heightmap.Biome.BlackForest, "Snow"), "❄️" },       // Seasons
+			{ (Heightmap.Biome.BlackForest, "SnowStorm"), "🌨️" }, // Seasons
+
 
 			// Swamp
 			{ (Heightmap.Biome.Swamp, "SwampRain"), "🌧" },
+			{ (Heightmap.Biome.Swamp, "ThunderStorm"), "⛈" }, // Seasons
+			{ (Heightmap.Biome.Swamp, "Snow"), "❄️" },          // Seasons
+			{ (Heightmap.Biome.Swamp, "SnowStorm"), "🌨️" },    // Seasons
 
 			// Mountain
 			{ (Heightmap.Biome.Mountain, "SnowStorm"), "🌨️" },
 			{ (Heightmap.Biome.Mountain, "Snow"), "❄️" },
+			{ (Heightmap.Biome.Mountain, "Clear"), "☀️" }, // Seasons
 
 			// Plains
 			{ (Heightmap.Biome.Plains, "Heath clear"), "☀️" },
 			{ (Heightmap.Biome.Plains, "Misty"), "🌫" },
 			{ (Heightmap.Biome.Plains, "LightRain"), "🌦" },
+			{ (Heightmap.Biome.Plains, "Rain"), "🌧" },         // Seasons
+			{ (Heightmap.Biome.Plains, "ThunderStorm"), "⛈" }, // Seasons
+			{ (Heightmap.Biome.Plains, "SwampRain"), "🌧" },    // Seasons
+			{ (Heightmap.Biome.Plains, "Snow"), "❄️" },          // Seasons
+			{ (Heightmap.Biome.Plains, "SnowStorm"), "🌨️" },    // Seasons
 
 			// Mistlands
 			{ (Heightmap.Biome.Mistlands, "Mistlands_clear"), "☀️" },
 			{ (Heightmap.Biome.Mistlands, "Mistlands_rain"), "🌧" },
 			{ (Heightmap.Biome.Mistlands, "Mistlands_thunder"), "⛈" },
+			{ (Heightmap.Biome.Mistlands, "Heath clear"), "☀️" },      // Seasons
+			{ (Heightmap.Biome.Mistlands, "DeepForest Mist"), "🌫" }, // or ☀️ for "clear-ish" // Seasons
+			{ (Heightmap.Biome.Mistlands, "SwampRain"), "🌧" },       // Seasons
+			{ (Heightmap.Biome.Mistlands, "Snow"), "❄️" },             // Seasons
+			{ (Heightmap.Biome.Mistlands, "SnowStorm"), "🌨️" },       // Seasons
 
 			// AshLands
 			{ (Heightmap.Biome.AshLands, "Ashlands_ashrain"), "☀️" },  // 🔥 
@@ -81,40 +105,67 @@ namespace MarsarahTweaks.Patches.UI
 			{ (Heightmap.Biome.Ocean, "LightRain"), "🌦" },
 			{ (Heightmap.Biome.Ocean, "Misty"), "🌫" },
 			{ (Heightmap.Biome.Ocean, "ThunderStorm"), "⛈" },
-			{ (Heightmap.Biome.Ocean, "Ashlands_SeaStorm"), "🌪" }
+			{ (Heightmap.Biome.Ocean, "Ashlands_SeaStorm"), "🌪" },
+			{ (Heightmap.Biome.Ocean, "Snow"), "❄️" },      // Seasons
+			{ (Heightmap.Biome.Ocean, "SnowStorm"), "🌨️" } // Seasons
 		};
 
 		private static readonly Dictionary<(Heightmap.Biome, string), string> WeatherIcons = new Dictionary<(Heightmap.Biome, string), string>()
 		{
 			// Meadows
-			{(Heightmap.Biome.Meadows, "Clear"), "Clear"},
-			{(Heightmap.Biome.Meadows, "Rain"), "Rain"},
-			{(Heightmap.Biome.Meadows, "Misty"), "Misty"},
-			{(Heightmap.Biome.Meadows, "ThunderStorm"), "Thunderstorm"},
-			{(Heightmap.Biome.Meadows, "LightRain"), "LightRain"},
+			{ (Heightmap.Biome.Meadows, "Clear"), "Clear"},
+			{ (Heightmap.Biome.Meadows, "Rain"), "Rain"},
+			{ (Heightmap.Biome.Meadows, "Misty"), "Misty"},
+			{ (Heightmap.Biome.Meadows, "ThunderStorm"), "Thunderstorm"},
+			{ (Heightmap.Biome.Meadows, "LightRain"), "LightRain"},
+			{ (Heightmap.Biome.Meadows, "Heath clear"), "Clear" },   // Seasons
+			{ (Heightmap.Biome.Meadows, "SwampRain"), "LightRain" }, // Seasons
+			{ (Heightmap.Biome.Meadows, "Snow"), "Snow" },           // Seasons
+			{ (Heightmap.Biome.Meadows, "SnowStorm"), "Snowstorm" }, // Seasons
+
 			
 			// BlackForest
 			{ (Heightmap.Biome.BlackForest, "DeepForest Mist"), "Clear" },
 			{ (Heightmap.Biome.BlackForest, "Rain"), "Rain" },
-			{ (Heightmap.Biome.BlackForest, "Misty"), "misty" },
+			{ (Heightmap.Biome.BlackForest, "Misty"), "Misty" },
 			{ (Heightmap.Biome.BlackForest, "ThunderStorm"), "Thunderstorm" },
+			{ (Heightmap.Biome.BlackForest, "Clear"), "Clear" },         // Seasons
+			{ (Heightmap.Biome.BlackForest, "LightRain"), "LightRain" }, // Seasons
+			{ (Heightmap.Biome.BlackForest, "SwampRain"), "LightRain" }, // Seasons
+			{ (Heightmap.Biome.BlackForest, "Snow"), "Snow" },           // Seasons
+			{ (Heightmap.Biome.BlackForest, "SnowStorm"), "Snowstorm" }, // Seasons
+
 
 			// Swamp
 			{ (Heightmap.Biome.Swamp, "SwampRain"), "LightRain" },
+			{ (Heightmap.Biome.Swamp, "ThunderStorm"), "Thunderstorm" }, // Seasons
+			{ (Heightmap.Biome.Swamp, "Snow"), "Snow" },                 // Seasons
+			{ (Heightmap.Biome.Swamp, "SnowStorm"), "Snowstorm" },       // Seasons
 
 			// Mountain
 			{ (Heightmap.Biome.Mountain, "SnowStorm"), "Snowstorm" },
 			{ (Heightmap.Biome.Mountain, "Snow"), "Snow" },
+			{ (Heightmap.Biome.Mountain, "Clear"), "Clear" }, // Seasons
 
 			// Plains
 			{ (Heightmap.Biome.Plains, "Heath clear"), "Clear" },
 			{ (Heightmap.Biome.Plains, "Misty"), "Misty" },
 			{ (Heightmap.Biome.Plains, "LightRain"), "LightRain" },
+			{ (Heightmap.Biome.Plains, "Rain"), "Rain" },                 // Seasons
+			{ (Heightmap.Biome.Plains, "ThunderStorm"), "Thunderstorm" }, // Seasons
+			{ (Heightmap.Biome.Plains, "SwampRain"), "LightRain" },       // Seasons
+			{ (Heightmap.Biome.Plains, "Snow"), "Snow" },                 // Seasons
+			{ (Heightmap.Biome.Plains, "SnowStorm"), "Snowstorm" },       // Seasons
 
 			// Mistlands
 			{ (Heightmap.Biome.Mistlands, "Mistlands_clear"), "Clear" },
 			{ (Heightmap.Biome.Mistlands, "Mistlands_rain"), "Rain" },
 			{ (Heightmap.Biome.Mistlands, "Mistlands_thunder"), "Thunderstorm" },
+			{ (Heightmap.Biome.Mistlands, "Heath clear"), "Clear" },     // Seasons
+			{ (Heightmap.Biome.Mistlands, "DeepForest Mist"), "Clear" }, // Seasons
+			{ (Heightmap.Biome.Mistlands, "SwampRain"), "LightRain" },   // Seasons
+			{ (Heightmap.Biome.Mistlands, "Snow"), "Snow" },             // Seasons
+			{ (Heightmap.Biome.Mistlands, "SnowStorm"), "Snowstorm" },   // Seasons
 
 			// AshLands
 			{ (Heightmap.Biome.AshLands, "Ashlands_ashrain"), "AshRain" },
@@ -133,7 +184,9 @@ namespace MarsarahTweaks.Patches.UI
 			{ (Heightmap.Biome.Ocean, "LightRain"), "LightRain" },
 			{ (Heightmap.Biome.Ocean, "Misty"), "Misty" },
 			{ (Heightmap.Biome.Ocean, "ThunderStorm"), "Thunderstorm" },
-			{ (Heightmap.Biome.Ocean, "Ashlands_SeaStorm"), "AshStorm" }
+			{ (Heightmap.Biome.Ocean, "Ashlands_SeaStorm"), "AshStorm" },
+			{ (Heightmap.Biome.Ocean, "Snow"), "Snow" },           // Seasons
+			{ (Heightmap.Biome.Ocean, "SnowStorm"), "Snowstorm" }  // Seasons
 		};
 
 
@@ -307,7 +360,8 @@ namespace MarsarahTweaks.Patches.UI
 				// → show the current environment icon and a neutral timer ("--:--")
 
 				Sprite iconSpriteCurrent = null;
-				if (WeatherIcons.TryGetValue((biome, currentEnv.m_name), out var iconKeyCurrent))
+				string currentNameNormalized = NormalizeWeatherName(biome, currentEnv.m_name);
+				if (WeatherIcons.TryGetValue((biome, currentNameNormalized), out var iconKeyCurrent))
 				{
 					string resourcePath = $"MarsarahTweaks.Assets.Icons.Weather.{iconKeyCurrent}.png";
 					iconSpriteCurrent = IconManager.LoadEmbeddedIcon(resourcePath);
@@ -323,13 +377,15 @@ namespace MarsarahTweaks.Patches.UI
 				return;
 			}
 
+			string normalizedForecastName = NormalizeWeatherName(biome, forecastEnv.m_name);
+
 			// pick emoji
-			string emoji = WeatherEmojis.TryGetValue((biome, forecastEnv.m_name), out var e) ? e : "❓";
+			string emoji = WeatherEmojis.TryGetValue((biome, normalizedForecastName), out var e) ? e : "❓";
 			string timerStr = GetNextWeatherTimer(forecastPeriod, totalSeconds);
 
 			// pick icons
 			Sprite iconSprite = null;
-			if (WeatherIcons.TryGetValue((biome, forecastEnv.m_name), out var iconKey))
+			if (WeatherIcons.TryGetValue((biome, normalizedForecastName), out var iconKey))
 			{
 				string resourcePath = $"MarsarahTweaks.Assets.Icons.Weather.{iconKey}.png";
 				iconSprite = IconManager.LoadEmbeddedIcon(resourcePath);
@@ -348,6 +404,10 @@ namespace MarsarahTweaks.Patches.UI
 			// log only when forecast changes
 			if (forecastEnv != _lastForecastEnv || forecastPeriod != _lastForecastPeriod)
 			{
+				// Current weather emoji (for summary log)
+				string normalizedCurrentName = NormalizeWeatherName(biome, currentEnv.m_name);
+				string currentEmoji = WeatherEmojis.TryGetValue((biome, normalizedCurrentName), out var curE) ? curE : "❓";
+
 				// Collect all lookahead environments for debug
 				StringBuilder sequenceLog = new StringBuilder();
 				sequenceLog.AppendLine("Next 50 forecast environments:");
@@ -357,13 +417,26 @@ namespace MarsarahTweaks.Patches.UI
 					long periodToCheck = currentEnvironmentPeriod + i;
 					EnvSetup nextEnv = GetEnvironment(periodToCheck, biome, isAshlands, isDeepNorth);
 
-					string nextName = nextEnv != null ? nextEnv.m_name : "null";
-					sequenceLog.AppendLine($"  +{i,2} → {nextName}");
+					if (nextEnv == null)
+					{
+						sequenceLog.AppendLine($"  +{i,2} → null (normalized: -, emoji=❓)");
+						continue;
+					}
+
+					string rawName = nextEnv.m_name;
+					string normalizedNextName = NormalizeWeatherName(biome, rawName);
+					string emojiNext = WeatherEmojis.TryGetValue((biome, normalizedNextName), out var em) ? em : "❓";
+
+					sequenceLog.AppendLine(
+						$"  +{i,2} → {rawName} (normalized: {normalizedNextName}, emoji={emojiNext})"
+					);
 				}
 
 				log.Info(sequenceLog.ToString());
 
-				log.Info($"Next forecast: {forecastEnv.m_name} ({emoji}), ETA {timerStr}");
+				log.Info($"Current weather: {currentEnv.m_name} (normalized: {normalizedCurrentName}), biome={biome}, emoji={currentEmoji}");
+				log.Info($"Next forecast: {forecastEnv.m_name} (normalized: {normalizedForecastName}, emoji={emoji}), ETA {timerStr}");
+
 				_lastForecastEnv = forecastEnv;
 				_lastForecastEmoji = emoji;
 				_lastForecastPeriod = forecastPeriod;
@@ -484,7 +557,8 @@ namespace MarsarahTweaks.Patches.UI
 			if (currentEnv == null)
 				return "❓";
 
-			string emoji = WeatherEmojis.TryGetValue((currentBiome, currentEnv.m_name), out var e) ? e : "❓";
+			string normalizedName = NormalizeWeatherName(currentBiome, currentEnv.m_name);
+			string emoji = WeatherEmojis.TryGetValue((currentBiome, normalizedName), out var e) ? e : "❓";
 
 			if (emoji == "☀️") // only override for clear-weather types
 				emoji = GetEmojiFromFraction(dayFraction);
@@ -515,5 +589,72 @@ namespace MarsarahTweaks.Patches.UI
 			if (dayFraction < 0.80f) return new Color(1f, 0.549019f, 0f);
 			return Color.white;
 		}*/
+
+		private static string NormalizeSeasonSuffix(string env)
+		{
+			// Remove seasonal suffixes
+			env = env.Replace(" Summer", "")
+					 .Replace(" Fall", "")
+					 .Replace(" Winter", "");
+
+			return env;
+		}
+
+		private static string NormalizeWeatherName(Heightmap.Biome biome, string env)
+		{
+			// Seasonality "warm" snow variants
+			if (env == "WarmSnow")
+				return "Snow";
+
+			if (env == "WarmSnowStorm")
+				return "SnowStorm";
+
+			// Seasons: winter "rain" behaves like snow in most biomes
+			if (env.EndsWith(" Winter", StringComparison.Ordinal))
+			{
+				bool isSnowInsteadOfRain =
+					biome != Heightmap.Biome.Mountain &&
+					biome != Heightmap.Biome.AshLands &&
+					biome != Heightmap.Biome.DeepNorth;
+
+				if (isSnowInsteadOfRain)
+				{
+					if (env.StartsWith("LightRain", StringComparison.Ordinal) || env.StartsWith("Rain", StringComparison.Ordinal))
+					{
+						// LightRain Winter / Rain Winter → light snow
+						return "Snow";
+					}
+
+					if (env.StartsWith("ThunderStorm", StringComparison.Ordinal))
+					{
+						// ThunderStorm Winter → heavy snow
+						return "SnowStorm";
+					}
+				}
+			}
+
+			// Seasons: Swamp Summer special case
+			// Handle before stripping the suffix, because NormalizeSeasonSuffix would
+			// turn "Swamp Summer" into just "Swamp".
+			if (env == "Swamp Summer")
+				env = "SwampRain";
+
+			// Strip generic seasonal suffixes (" Summer", " Fall", " Winter")
+			env = NormalizeSeasonSuffix(env);
+
+			// Twilight variants
+			// DeepNorth uses Twilight_* as its canonical environment names in vanilla so we don’t normalize there.
+			if (biome != Heightmap.Biome.DeepNorth)
+			{
+				if (env == "Twilight_Snow")
+					env = "Snow";
+				else if (env == "Twilight_SnowStorm")
+					env = "SnowStorm";
+				else if (env == "Twilight_Clear")
+					env = "Clear";
+			}
+
+			return env;
+		}
 	}
 }

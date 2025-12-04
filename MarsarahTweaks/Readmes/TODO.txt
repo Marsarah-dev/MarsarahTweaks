@@ -39,13 +39,12 @@
         - Eggs
       - Added Show Weather Forecast Indicator
         - Added a forecast icon and timer to the bottom-right of the minimap. This indicator shows the upcoming weather based on the current biome and weather weights. If the biome has a single weather (Swamp and Ashlands Ocean), then the indicator shows the current weather and the timer is set to --:--. 
+        - Compatible with Seasons and Seasonality weathers
         - With this occasion, the emojis next to the time of day (present on the New style UI) were removed to avoid confusion and UI bloat.
 
 
  ******* TODO *******
- - Update CompatibilityManager disable function to work with custom configs
- - Add compatibility for My Little UI and Enhuddlement
- - Test weather forecast with Seasons and Seasonality
+ - Add compatibility for Enhuddlement
 
  - Implement skill progress message
  - Implement player login screen stats
