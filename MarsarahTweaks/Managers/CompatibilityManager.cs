@@ -32,6 +32,7 @@ namespace MarsarahTweaks.Managers
 		public static ConflictMod MinimalStatusEffects = new ConflictMod("randyknapp.mods.minimalstatuseffects");
 		public static ConflictMod BetterUI = new ConflictMod("MK_BetterUI");
 		public static ConflictMod MyLittleUI = new ConflictMod("shudnal.MyLittleUI");
+		public static ConflictMod Enhuddlement = new ConflictMod("redseiko.valheim.enhuddlement");
 		public static ConflictMod CraftFromContainers = new ConflictMod("aedenthorn.CraftFromContainers");
 		public static ConflictMod DeezMistyBalls = new ConflictMod("Azumatt.DeezMistyBalls");
 		public static ConflictMod MistBeGone = new ConflictMod("Azumatt.MistBeGone");
@@ -62,6 +63,7 @@ namespace MarsarahTweaks.Managers
 			UpdateConflictMod(ref MinimalStatusEffects);
 			UpdateConflictMod(ref BetterUI);
 			UpdateConflictMod(ref MyLittleUI);
+			UpdateConflictMod(ref Enhuddlement);
 			UpdateConflictMod(ref CraftFromContainers);
 			UpdateConflictMod(ref DeezMistyBalls);
 			UpdateConflictMod(ref MistBeGone);
@@ -138,7 +140,7 @@ namespace MarsarahTweaks.Managers
 				mod,
 				config,
 				offValue,
-				"Automatically switching to Off",
+				"Automatically disabling",
 				additionalReason
 			);
 		}
@@ -172,6 +174,7 @@ namespace MarsarahTweaks.Managers
 		{
 			ToggleEnumIfIncompatible(MinimalStatusEffects, ConfigManager.OnlinePlayersChoice, OnlinePlayersMode.BottomRight, OnlinePlayersMode.Off);
 			DisableEnumIfIncompatible(BetterUI, ConfigManager.EnemyNameplateChoice, EnemyNameplateMode.Off);
+			DisableEnumIfIncompatible(Enhuddlement, ConfigManager.EnemyNameplateChoice, EnemyNameplateMode.Off);
 			DisableEnumIfIncompatible(BetterUI, ConfigManager.ItemQualityIndicatorChoice, ItemQualityMode.Off);
 			DisableEnumIfIncompatible(MyLittleUI, ConfigManager.ItemQualityIndicatorChoice, ItemQualityMode.Off);
 			DisableEnumIfIncompatible(BetterUI, ConfigManager.DetailedHoverInfoChoice, HoverInfoMode.Off);

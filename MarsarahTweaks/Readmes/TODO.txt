@@ -44,8 +44,6 @@
 
 
  ******* TODO *******
- - Add compatibility for Enhuddlement
-
  - Implement skill progress message
  - Implement player login screen stats
  - See if I can add text to item durability bars (maybe make them thicker) and see how it looks like
