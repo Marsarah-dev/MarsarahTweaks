@@ -43,15 +43,15 @@
 
 
  ******* TODO *******
+ - Update CompatibilityManager disable function to work with custom configs
+ - Add compatibility for My Little UI and Enhuddlement
+ - Test weather forecast with Seasons and Seasonality
 
  - Implement skill progress message
  - Implement player login screen stats
  - See if I can add text to item durability bars (maybe make them thicker) and see how it looks like
- - Add a synced with server master toggle for UI elements if individual UI elements should be synced or not
- - Update CompatibilityManager disable function to work with custom configs
- - Add compatibility for My Little UI and Enhuddlement
+ - Add a synced with server master toggle for UI elements if individual UI elements should be synced or not 
  - Test tooltips with EpicLoot (see if there's any compatibility to do)
- - Test weather forecast with Seasons and Seasonality
  - Add new clause for Permissions in readme: "You are free to take inspiration or implement similar features, but please do so with your own code and assets."
 
 === For next release ===

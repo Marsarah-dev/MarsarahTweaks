@@ -1,12 +1,14 @@
 ﻿using BepInEx.Bootstrap;
 using BepInEx.Configuration;
+using System;
 using System.Collections.Generic;
+using static MarsarahTweaks.Managers.ConfigManager;
 
 namespace MarsarahTweaks.Managers
 {
 	internal static class CompatibilityManager
 	{
-		private static readonly LogManager log = new LogManager("Compatibility Manager", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Compatibility Manager", LogManager.LogLevel.Info);
 
 		// All loaded mods (GUID -> Name)
 		private static readonly Dictionary<string, string> LoadedMods = new Dictionary<string, string>();
@@ -29,6 +31,7 @@ namespace MarsarahTweaks.Managers
 		// Static readonly variables for each mod we track
 		public static ConflictMod MinimalStatusEffects = new ConflictMod("randyknapp.mods.minimalstatuseffects");
 		public static ConflictMod BetterUI = new ConflictMod("MK_BetterUI");
+		public static ConflictMod MyLittleUI = new ConflictMod("shudnal.MyLittleUI");
 		public static ConflictMod CraftFromContainers = new ConflictMod("aedenthorn.CraftFromContainers");
 		public static ConflictMod DeezMistyBalls = new ConflictMod("Azumatt.DeezMistyBalls");
 		public static ConflictMod MistBeGone = new ConflictMod("Azumatt.MistBeGone");
@@ -58,6 +61,7 @@ namespace MarsarahTweaks.Managers
 			// Update all ConflictMods
 			UpdateConflictMod(ref MinimalStatusEffects);
 			UpdateConflictMod(ref BetterUI);
+			UpdateConflictMod(ref MyLittleUI);
 			UpdateConflictMod(ref CraftFromContainers);
 			UpdateConflictMod(ref DeezMistyBalls);
 			UpdateConflictMod(ref MistBeGone);
@@ -92,23 +96,92 @@ namespace MarsarahTweaks.Managers
 			}
 		}
 
-		// Disable a config if a conflict mod is loaded
+		// Generic helper: if a given mod is loaded, force a config entry to a specific value.
+		// Works for bools, enums, ints, strings, etc.
+		public static void SetIfIncompatible<T>(ConflictMod mod, ConfigEntry<T> config, T forcedValue, string actionDescription, string additionalReason = "")
+		{
+			if (!mod.Loaded)
+				return;
+
+			// Avoid pointless logs if it's already at the forced value
+			if (EqualityComparer<T>.Default.Equals(config.Value, forcedValue))
+				return;
+
+			string before = config.Value?.ToString() ?? "null";
+			string after = forcedValue?.ToString() ?? "null";
+
+			log.Warn(
+				$"{actionDescription} '{config.Definition.Key}' because '{mod.Name}' mod is loaded. " +
+				$"(was: {before}, now: {after}) {additionalReason}"
+			);
+
+			config.Value = forcedValue;
+		}
+
+
+		// Convenience wrapper for bool configs
 		public static void DisableIfIncompatible(ConflictMod mod, ConfigEntry<bool> config, string additionalReason = "")
 		{
-			if (mod.Loaded && config.Value)
-			{
-				log.Warn($"Automatically disabling '{config.Definition.Key}' because '{mod.Name}' mod is loaded. {additionalReason}");
-				config.Value = false;
-			}
+			SetIfIncompatible(
+				mod,
+				config,
+				false,
+				"Automatically disabling",
+				additionalReason
+			);
+		}
+
+		// Convenience wrapper for enums that have an Off option
+		public static void DisableEnumIfIncompatible<TEnum>(ConflictMod mod, ConfigEntry<TEnum> config, TEnum offValue, string additionalReason = "") where TEnum : struct, Enum
+		{
+			SetIfIncompatible(
+				mod,
+				config,
+				offValue,
+				"Automatically switching to Off",
+				additionalReason
+			);
+		}
+
+		// Convenience wrapper for enums that need to be set to a specific setting
+		public static void ToggleEnumIfIncompatible<TEnum>(ConflictMod mod, ConfigEntry<TEnum> config, TEnum fallbackValue, TEnum offValue, string additionalReason = "") where TEnum : struct, Enum
+		{
+			if (!mod.Loaded)
+				return;
+
+			// Respect "Off" – do NOT override
+			if (EqualityComparer<TEnum>.Default.Equals(config.Value, offValue))
+				return;
+
+			// Avoid redundant assignment
+			if (EqualityComparer<TEnum>.Default.Equals(config.Value, fallbackValue))
+				return;
+
+			string before = config.Value.ToString();
+			string after = fallbackValue.ToString();
+
+			log.Warn(
+				$"Automatically toggling '{config.Definition.Key}' because '{mod.Name}' is loaded. " +
+				$"(was: {before}, now: {after}) {additionalReason}"
+			);
+
+			config.Value = fallbackValue;
 		}
 
 		public static void UpdateIncompatibilities()
 		{
-			/*DisableIfIncompatible(MinimalStatusEffects, ConfigManager.OnlinePlayersUnderMinimap);
-			DisableIfIncompatible(BetterUI, ConfigManager.BetterEnemyNameplates, "Letting BetterUI handle enemy nameplates.");
-			DisableIfIncompatible(BetterUI, ConfigManager.BetterItemQualityIndicator, "Letting BetterUI handle the quality indicator.");
-			DisableIfIncompatible(BetterUI, ConfigManager.ColoredItemDurabilityBar, "Letting BetterUI handle the durability indicator.");
-			DisableIfIncompatible(BetterUI, ConfigManager.DetailedHoverInfo, "Letting BetterUI handle hover information.");
+			ToggleEnumIfIncompatible(MinimalStatusEffects, ConfigManager.OnlinePlayersChoice, OnlinePlayersMode.BottomRight, OnlinePlayersMode.Off);
+			DisableEnumIfIncompatible(BetterUI, ConfigManager.EnemyNameplateChoice, EnemyNameplateMode.Off);
+			DisableEnumIfIncompatible(BetterUI, ConfigManager.ItemQualityIndicatorChoice, ItemQualityMode.Off);
+			DisableEnumIfIncompatible(MyLittleUI, ConfigManager.ItemQualityIndicatorChoice, ItemQualityMode.Off);
+			DisableEnumIfIncompatible(BetterUI, ConfigManager.DetailedHoverInfoChoice, HoverInfoMode.Off);
+			DisableEnumIfIncompatible(MyLittleUI, ConfigManager.DetailedHoverInfoChoice, HoverInfoMode.Off);
+			DisableEnumIfIncompatible(MyLittleUI, ConfigManager.TimeChoice, TimeMode.Off);
+			DisableIfIncompatible(BetterUI, ConfigManager.ColoredItemDurabilityBar);
+			DisableIfIncompatible(MyLittleUI, ConfigManager.ColoredItemDurabilityBar);
+			DisableIfIncompatible(MyLittleUI, ConfigManager.ShowCurrentDay);
+			DisableIfIncompatible(MyLittleUI, ConfigManager.ShowTamingProgress);
+			DisableIfIncompatible(MyLittleUI, ConfigManager.ShowContainerContents);
 			DisableIfIncompatible(CraftFromContainers, ConfigManager.ShowOwnedResources);
 			DisableIfIncompatible(DeezMistyBalls, ConfigManager.BiggerWispRadiusEnabled);
 			DisableIfIncompatible(MistBeGone, ConfigManager.ClearMistlandsEnabled);
@@ -125,7 +198,7 @@ namespace MarsarahTweaks.Managers
 			DisableIfIncompatible(Sailing, ConfigManager.LargerBoatExploreRadiusEnabled);
 			DisableIfIncompatible(Sailing, ConfigManager.CameraUpWhenSailingEnabled);
 			DisableIfIncompatible(Seasonality, ConfigManager.ClearerWeatherEnabled);
-			DisableIfIncompatible(Seasons, ConfigManager.ClearerWeatherEnabled);*/
+			DisableIfIncompatible(Seasons, ConfigManager.ClearerWeatherEnabled);
 		}
 
 		// Optional: log all loaded mods for debugging
