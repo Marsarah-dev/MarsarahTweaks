@@ -44,11 +44,13 @@ namespace MarsarahTweaks.Managers
 		public static ConflictMod TorchesEternal2 = new ConflictMod("Xenofell.TorchesEternal");
 		public static ConflictMod ForsakenPowerOverhaul = new ConflictMod("JuneGame.Valheim.ForsakenPowerOverhaul");
 		public static ConflictMod TripleBronze = new ConflictMod("LolmanXDXD.TripleBronze");
+		public static ConflictMod TripleBronzeJVL = new ConflictMod("digitalroot.mods.triplebronze.jvl");
 		public static ConflictMod BiggerPickupRadius = new ConflictMod("net.mtnewton.biggerpickupradius");
 		public static ConflictMod CreatureLevelLootControl = new ConflictMod("org.bepinex.plugins.creaturelevelcontrol");
 		public static ConflictMod Sailing = new ConflictMod("org.bepinex.plugins.sailing");
 		public static ConflictMod Seasonality = new ConflictMod("RustyMods.Seasonality");
 		public static ConflictMod Seasons = new ConflictMod("shudnal.Seasons");
+		public static ConflictMod ImFriendlyDammit = new ConflictMod("Azumatt.ImFRIENDLYDAMMIT");
 
 		// Initialize the manager
 		public static void Initialize()
@@ -75,11 +77,13 @@ namespace MarsarahTweaks.Managers
 			UpdateConflictMod(ref TorchesEternal2);
 			UpdateConflictMod(ref ForsakenPowerOverhaul);
 			UpdateConflictMod(ref TripleBronze);
+			UpdateConflictMod(ref TripleBronzeJVL);
 			UpdateConflictMod(ref BiggerPickupRadius);
 			UpdateConflictMod(ref CreatureLevelLootControl);
 			UpdateConflictMod(ref Sailing);
 			UpdateConflictMod(ref Seasonality);
 			UpdateConflictMod(ref Seasons);
+			UpdateConflictMod(ref ImFriendlyDammit);
 		}
 
 		// Helper to update the Name and Loaded flag of a ConflictMod
@@ -173,6 +177,7 @@ namespace MarsarahTweaks.Managers
 		public static void UpdateIncompatibilities()
 		{
 			ToggleEnumIfIncompatible(MinimalStatusEffects, ConfigManager.OnlinePlayersChoice, OnlinePlayersMode.BottomRight, OnlinePlayersMode.Off);
+			ToggleEnumIfIncompatible(MyLittleUI, ConfigManager.OnlinePlayersChoice, OnlinePlayersMode.BottomRight, OnlinePlayersMode.Off);
 			DisableEnumIfIncompatible(BetterUI, ConfigManager.EnemyNameplateChoice, EnemyNameplateMode.Off);
 			DisableEnumIfIncompatible(Enhuddlement, ConfigManager.EnemyNameplateChoice, EnemyNameplateMode.Off);
 			DisableEnumIfIncompatible(BetterUI, ConfigManager.ItemQualityIndicatorChoice, ItemQualityMode.Off);
@@ -196,12 +201,14 @@ namespace MarsarahTweaks.Managers
 			DisableIfIncompatible(TorchesEternal2, ConfigManager.PermanentLightsEnabled);
 			DisableIfIncompatible(ForsakenPowerOverhaul, ConfigManager.LongerForsakenPowersEnabled);
 			DisableIfIncompatible(TripleBronze, ConfigManager.DoubleBronzeEnabled);
+			DisableIfIncompatible(TripleBronzeJVL, ConfigManager.DoubleBronzeEnabled);
 			DisableIfIncompatible(BiggerPickupRadius, ConfigManager.LargerPickupAreaEnabled);
 			DisableIfIncompatible(CreatureLevelLootControl, ConfigManager.CreatureUnlevelerEnabled);
 			DisableIfIncompatible(Sailing, ConfigManager.LargerBoatExploreRadiusEnabled);
 			DisableIfIncompatible(Sailing, ConfigManager.CameraUpWhenSailingEnabled);
 			DisableIfIncompatible(Seasonality, ConfigManager.ClearerWeatherEnabled);
 			DisableIfIncompatible(Seasons, ConfigManager.ClearerWeatherEnabled);
+			DisableIfIncompatible(ImFriendlyDammit, ConfigManager.FriendlyBallistasEnabled);
 		}
 
 		// Optional: log all loaded mods for debugging

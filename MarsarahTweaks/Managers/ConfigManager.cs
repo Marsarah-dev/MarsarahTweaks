@@ -158,8 +158,8 @@ namespace MarsarahTweaks.Managers
 
 		public enum SmelterHoverMode
 		{
-			RemainingTime,
-			Bars // Future implementation
+			RemainingTime
+			//Bars // Future implementation
 		}
 
 		public enum EggHoverMode
@@ -269,7 +269,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata UIItemQualitySymbol = new ConfigMetadata("19 - Symbol For Item Quality", "Choose the symbol used for the item quality indicator. Requires Item Quality Indicator Mode to be enabled");
 			public static readonly ConfigMetadata UIItemQualityColor = new ConfigMetadata("20 - Color For Item Quality", "Choose the color used for the item quality indicator. Requires Item Quality Indicator Mode to be enabled");
 			public static readonly ConfigMetadata UIItemDurabilityColor = new ConfigMetadata("21 - Better Item Durability Bar", "Colors the item durability bar according to curent durability and modifies the sprite texture");
-			public static readonly ConfigMetadata UIHoverInfoMode = new ConfigMetadata("22 - Detailed Hover Information", "Adds more information when hovering over objects. Master toggle for the configs below (26-32)");
+			public static readonly ConfigMetadata UIHoverInfoMode = new ConfigMetadata("22 - Detailed Hover Information", "Adds more information when hovering over objects. Master toggle for the configs below (23-30)");
 			public static readonly ConfigMetadata UIContainerContents = new ConfigMetadata("23 - Show Container Contents", "Show the contents of a chest or container when hovering. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIContainerHoverMode = new ConfigMetadata("24 - Container Hover Mode", "Choose the method of displaying Container hover info. Requires Detailed Hover Information");
 			public static readonly ConfigMetadata UIBeeHoverMode = new ConfigMetadata("25 - Beehive Hover Mode", "Choose the method of displaying Beehive hover info. Requires Detailed Hover Information");

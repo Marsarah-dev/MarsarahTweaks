@@ -9,8 +9,8 @@
    B. Updates
       - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed. Logs are printed to know exactly which mod overlaps with which config when this happens.
       - Converted the "Alternate UI Layout" config toggle into a multiple choice config named "UI Layout Mode" to make it more obvious as to what that config was doing.
-        - Options: New, Old, Off. 
-        - UI can still be toggled with the Insert key (and Home key for online player list) like before, but the Off toggle from the config will override this.
+        - Options: New, Old. 
+        - UI can still be toggled with the Insert key (and Home key for online player list) like before.
       - Merged configs: Show Online Players and Show Online Players Under Minimap. Can now choose the mode from a single multiple choice config.
       - Merged configs: Show Time And Day and Time - 24 Hour Format. Can now choose the time format from a single multiple choice config.
       - Split config: Show Time And Day into Show Current Day and Show Current Time. They can now be toggled individually and the position for the respective texts is adjusted accordingly when only one is shown.
@@ -43,15 +43,17 @@
         - With this occasion, the emojis next to the time of day (present on the New style UI) were removed to avoid confusion and UI bloat.
 
 
- ******* TODO *******
- - Implement skill progress message
- - Implement player login screen stats
- - See if I can add text to item durability bars (maybe make them thicker) and see how it looks like
- - Add a synced with server master toggle for UI elements if individual UI elements should be synced or not 
- - Test tooltips with EpicLoot (see if there's any compatibility to do)
+ ******* TODO ******* 
  - Add new clause for Permissions in readme: "You are free to take inspiration or implement similar features, but please do so with your own code and assets."
 
 === For next release ===
+- Move the weather forecast somewhere else on a no-map setting
+- Implement bars hover mode for smelters
+- Implement skill progress message
+- Implement player login screen stats
+- See if I can add text to item durability bars (maybe make them thicker) and see how it looks like
+- Add a synced with server master toggle for UI elements if individual UI elements should be synced or not 
+- Test tooltips with EpicLoot (see if there's any compatibility to do)
 - Implement Player Inspector - see other player stats that are currently logged into the world
 - See if I can use the in-game icons for weight and inventory slots 
 - Modify emojis for weather (use in-game icons if possible)
@@ -145,3 +147,4 @@
         - Shorter Rested Delay          -> Rename to Rested Delay           - Set to indicated value (default 20s)
 
 
+✨⚙️🔧🔹

@@ -50,7 +50,7 @@ namespace MarsarahTweaks.Patches.UI
 
 				if (Game.m_noMap && onlinePlayersUnderMinimap)
 				{
-					log.Warn("Online Players Under Minimap cannot be selected when no map is enabled. Falling back to bottom-right.");
+					log.Warn("Online Players Under Minimap cannot be selected when 'no map' is enabled. Falling back to bottom-right.");
 					ConfigManager.OnlinePlayersChoice.Value = ConfigManager.OnlinePlayersMode.BottomRight;
 				}
 			}
