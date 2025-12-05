@@ -1,16 +1,20 @@
-Marsarah Tweaks v1.4.2
+Marsarah Tweaks v1.5.0
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
+This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
+Each feature is grouped into sections to make this process easier. In addition, the mod scans for already installed mods and automatically disables its own relevant configs if it finds mods that are incompatible or that may cause issues together.  
+If any issues or incompatibilities are found, please post them on the mod's Nexus page.
 
 PERMISSIONS
 ================================================================
 Reuploading this mod, whether in part or in full, is not permitted.
+Anyone is free to take inspiration or implement similar features, but must do so with their own code and assets.
 
 REQUIREMENTS
 ================================================================
 This mod requires BepInEx for Valheim which can be downloaded from Thunderstore:
 https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/
-From version 1.3.0 Jotunn is also required: 
+And also Jotunn available here: 
 https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/
 Note: This needs to be installed on the dedicated SERVER as well as all CLIENTS
 
@@ -26,14 +30,12 @@ NOTE: Configs may be renamed or reshuffled upon mod updates, so always check the
 
 CONFIGURATION
 ================================================================
-This mod is modular and customizable.
-
 Each feature is grouped into its own section in the config file, which is automatically created on first launch:
 Valheim/BepInEx/config/Marsarah.MarsarahTweaks.cfg
 
 Individual features can be enabled or disabled by editing this file or in-game with a config manager.
 
-If you’re using another mod that changes similar gameplay elements (e.g. creature scaling), disable the overlapping section in this mod’s config to avoid conflicts. Specific compatibility issues will be mentioned in each config description if known.
+If you’re using another mod that changes similar gameplay elements, disable the overlapping section in this mod’s config to avoid conflicts. Specific compatibility issues will be mentioned in each config description if known.
 
 This mod uses Server Sync. All clients need to have the same version as the server, otherwise they will be disconnected at login. All configs (except UI) are synced between server and clients.
 
@@ -59,6 +61,7 @@ MOD CONFIGS
 
 ► Conflicts:
   Incompatible with TripleBronze by KaceCottam or Triple Bronze JVL by Digitalroot.
+  This config is automatically disabled if the above are detected.
 
 ----------------- [Cheaper Gear Recipe Amounts] ----------------
 
@@ -1054,7 +1057,7 @@ MOD CONFIGS
 
 ► Conflicts:
   Incompatible with other mods that modify vanilla foods and meads.
-  Works with mods that add new recipes.
+  Does not modify new recipes addded by other mods.
 
 ▼ Changes (only modified foods are listed):
 
@@ -1726,6 +1729,7 @@ The following foods have the stack size increased to 20
 
 ► Conflicts:
   Incompatible with any mod that changes creature levels. (e.g. Creature Level And Loot Control)
+  This config is automatically disabled if the above is detected.
 
 ▼ Changes:
 
@@ -1913,19 +1917,22 @@ The following foods have the stack size increased to 20
   Enabling mid-game will apply changes immediately.
 
 ► Conflicts:
-  Incompatible with other mods that modify Mistlands mist.
+  Incompatible with other mods that modify Mistlands mist (e.g. MistBeGone by Azumatt).
+  This config is automatically disabled if the above mod is detected.
 
 
 ----------------------- [Clearer Weather] ----------------------
 
 ► Description:
-  Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively.
+  Reduces chance for mist, rain and snowstorms in Meadows, Plains, and Mountains respectively.
+  For the Ocean biome, only the mist chance is reduced.
 
 ► Mid-Game Toggling:
   Toggling mid-game requires CLIENT relog.
 
 ► Conflicts:
-  Incompatible with any weather or seasons mod.
+  Incompatible with any weather or seasons mod (Seasons by shundal or Seasonality by RustyMods).
+  This config is automatically disabled if the above mods are detected.
 
 
 ----------------------- [Craftable Chain] ----------------------
@@ -2001,7 +2008,8 @@ The following foods have the stack size increased to 20
   Toggling mid-game requires CLIENT relog or reloading area (moving/teleporting away and back).
 
 ► Conflicts:
-  Incompatible with any sailing mod that modifies ship HP.
+  Incompatible with any sailing mod that modifies ship HP (e.g. Sailing by Smoothbrain).
+  This config is automatically disabled if the above mod is detected.
 
 ▼ HP Changes:
 - Raft:     300  → 400
@@ -2072,7 +2080,7 @@ The following foods have the stack size increased to 20
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  No known conflicts.
+  This config will automatically be disabled if BiggerPickupRadius by mtnewton is detected.
 
 
 ---------------- [No Skill Levels Loss On Death] ---------------
@@ -2097,7 +2105,8 @@ The following foods have the stack size increased to 20
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  Incompatible with any mod that modifies explore radius (sailing mods).
+  Incompatible with any mod that modifies explore radius (e.g. Sailing by Smoothbrain).
+  This config is automatically disabled if the above mod is detected.
 
 
 -------------------- [Bigger Wisp Radius] ----------------------
@@ -2109,7 +2118,8 @@ The following foods have the stack size increased to 20
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  Incompatible with any mod that modifies the Wisplight (e.g. DeezMistyBalls).
+  Incompatible with any mod that modifies the Wisplight (e.g. DeezMistyBalls by Azumatt).
+  This config is automatically disabled if the above mod is detected.
 
 
 --------------------- [Friendly Ballistas] ---------------------
@@ -2121,7 +2131,8 @@ The following foods have the stack size increased to 20
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  Incompatible with any mod that changes Ballista behaviour (e.g. ImFriendly Dammit).
+  Incompatible with any mod that changes Ballista behaviour (e.g. ImFriendly Dammit by Azumatt).
+  This config is automatically disabled if the above mod is detected.
 
 
 --------------------- [Less Fall Damage] -----------------------
@@ -2147,7 +2158,8 @@ The following foods have the stack size increased to 20
   Can be enabled/disabled during gameplay, but changes will only be applied to newly spawned creatures or creatures in inactive areas.
 
 ► Conflicts:
-  Incompatible with anymod that changes creature resource drops timer (e.g Instant Monster Loot Drop).
+  Incompatible with anymod that changes creature resource drops timer (e.g Instant Monster Loot Drop by cjayride).
+  This config is automatically disabled if the above mod is detected.
 
 
 ----------------------- [Faster Equip] -------------------------
@@ -2160,7 +2172,8 @@ The following foods have the stack size increased to 20
   Toggling mid-game requires CLIENT relog.
 
 ► Conflicts:
-  Incompatible with any mod that changes equip timers (e.g. InstantEquip).
+  Incompatible with any mod that changes equip timers (e.g. InstantEquip by Smoothbrain).
+  This config is automatically disabled if the above mod is detected.
 
 
 --------------- [Move Camera Up While Sailing] -----------------
@@ -2173,6 +2186,7 @@ The following foods have the stack size increased to 20
 
 ► Conflicts:
   Incompatible with any mod that changes camera angles when sailing (e.g Sailing by Smoothbrain).
+  This config is automatically disabled if the above mod is detected.
 
 
 ------------------- [Shorter Rested Delay] ---------------------
@@ -2211,9 +2225,10 @@ The following foods have the stack size increased to 20
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  Incompatible with other mods that modify light source fuel.
+  Incompatible with other mods that modify light source fuel (Eternal Fire by Digitalroot, FuelEternal by Marf, TorchesEternal by Xenofell, TorchesEternal by wildbill22).
   Incompatible with other mods that modify build piece costs.
   Compatible with mods that add new light sources. This will make them permanent, but will not modify their build costs.
+  This config is automatically disabled if the above mods are detected.
 
 
 ======================= [Build Pieces] =========================
@@ -2231,7 +2246,7 @@ The following foods have the stack size increased to 20
 ► Mid-Game Toggling: Toggling mid-game requires reloading the build/crafting menu. 
   Even if this config is disabled, the prefabs are still created and existing portals or cores will not be removed from the world or inventory. Only the ability to craft them is affected by the toggle.
 
-► Conflicts: No known conflicts. Requires Jotunn.
+► Conflicts: No known conflicts.
 
 ▼ Portal Core Resource Requirements:
 - Surtling Core: 5
@@ -2291,6 +2306,21 @@ The following foods have the stack size increased to 20
   Incompatible with any mod that changes/adds loading screen tips.
 
 
+
+------------ [Layout for Inventory/Detector/Boat] --------------
+
+► Description:
+  Provides options to choose the layout of the inventory weight, enemy detector and boat speed. 
+  - **New** version uses symbols and filling bars, with the boat speed indicator next to the ship wind indicator. 
+  - **Old** version uses text and has the boat speed indicator next to the enemy detector.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+
+
 ----------- [Show Inventory Weight and Free Slots] -------------
 
 ► Description:
@@ -2311,8 +2341,12 @@ The following foods have the stack size increased to 20
   Displays an enemy detector next to the inventory weight widget at the bottom left of the screen.
   Counts the number of enemies in close proximity.
   Does not include other players, deer, hare, player summoned creatures, or tame animals in the enemy count.
-  Neutral Dverger are counted in parentheses. When attacked, the number goes into the normal enemy counter. If Alternate UI Layout is enabled, neutral Dverger are counted with a separate indicator.
-  Colors change according to the number of nearby enemies. If Alternate UI Layout is enabled, the icon will change according to how many enemies are nearby.
+  Colors change according to the number of nearby enemies.
+  - In the New UI layout
+    - Neutral Dverger are counted and shown in a separate indicator. When attacked, they are counted in the normal enemy indicator.
+    - The icon indicating enemies will change according to how many enemies are nearby.
+  - In the Old UI layout
+    - Neutral Dverger are counted in parentheses. When attacked, they are counted in the normal enemy counter. 
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
@@ -2324,12 +2358,13 @@ The following foods have the stack size increased to 20
 ----------------------- [Show Boat Speed] ----------------------
 
 ► Description:
-  Displays current ship speed next to the inventory weight widget at the bottom left of the screen.
-  If the Alternate UI Layout is used, this indicator is displayed above the main sailing widget. If Minimal Status Effects is installed, the speed indicator moves with the main widget.
+  Displays current ship speed when controlling a boat. Colors change according to speed.
+  - In the **New** UI layout
+    - The speed indicator is displayed above the main sailing widget. If Minimal Status Effects is installed, the speed indicator moves with the main widget.
+  - In the **Old** UI layout
+    - The speed indicator is displayed next to the inventory weight widget at the bottom left of the screen.
   When going forward, only the speed value is displayed.
   When going backwards, "R" is displayed before the speed value.
-  The speed counter only shows when controlling a boat.
-  Colors change according to speed.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
@@ -2338,30 +2373,44 @@ The following foods have the stack size increased to 20
   No known conflicts.
 
 
----------------------- [Show Time And Day] ---------------------
+----------------------- [Show Current Day] ---------------------
 
 ► Description:
-  Displays current time of day above the minimap using day sections (Dawn, Morning, Day, Afternoon, Evening, Dusk, Night).
-  Shows number of days spent in the world.
-  If the Alternate UI Layout is used, an additional symbol is displayed next to the time depending on the time of day.
+  Displays the number of days spent in the world above the minimap.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  No known conflicts.
+  This config will automatically be disabled if MyLittleUI is detected.
 
 
--------------------- [Time - 24 Hour Format] -------------------
+---------------------- [Show Current Time] ---------------------
 
 ► Description:
-  Sub-section for the previous config, enabling 24-hour format for displaying time.
+  Displays the current time above the minimap. Can choose between digital clock and day sections.
+  - Digital clock option shows the time in 24h format.
+  - Day sections option splits the day in the following format: Dawn, Morning, Day, Afternoon, Evening, Dusk, Night
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  This config will automatically be disabled if MyLittleUI is detected.
+
+
+-------------- [Show Weather Forecast Indicator] ---------------
+
+► Description:
+  Displays the next scheduled weather as an icon at the bottom-right of the minimap as well as a time until that weather will change.
+  This indicator shows the upcoming weather based on the current biome and weather weights. If the biome has a single weather (Swamp and Ashlands Ocean), then the indicator shows the current weather and the timer is set to --:--. 
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
   No known conflicts.
+  Compatible with weathers added by Seasons and Seasonality mods
 
 
 ------------------- [Smart Biome Indicator] --------------------
@@ -2397,7 +2446,8 @@ The following foods have the stack size increased to 20
 -------------------- [Show Online Players] ---------------------
 
 ► Description:
-  Shows a list of online players and the total number of players on the bottom right of the screen.
+  Shows a list of online players and the total number of players in the current world. 
+  Can choose to show it at the bottom-right of the screen or under the minimap.
   Not displayed if only one player is online.
   Displays maximum 20 players.
   The list can be toggled with the Home key, but the total number of online players will still be shown. 
@@ -2406,21 +2456,7 @@ The following foods have the stack size increased to 20
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  No known conflicts.
-
-
--------------- [Show Online Players Under Minimap] -------------
-
-► Description:
-  Sub-section for the previous config.
-  Shows online players under minimap instead of bottom right when Show Online Players is enabled.
-  This option is automatically disabled on a no-map world, or when Minimal Status Effects is installed, and cannot be toggled on.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
+  If either Minimal Status Effects by RandyKnapp or MyLittleUI by shundal is installed, this config will automatically be forced on the Bottom-right setting. The same is true for a "no-map" world.
 
 
 -------------- [Show Owned Resources In Build Menu] -------------
@@ -2434,8 +2470,7 @@ The following foods have the stack size increased to 20
 
 ► Conflicts:
   Valheim Plus, Craft From Containers
-  Note: If Craft From Containers is installed, this config will override the available resource lookup to the player inventory instead of nearby containers. Simply disable this config to see available resources from chests again.
-  Note: This will not disable Craft From Container's ability to craft from containers; it's just a visual incompatibility, same as Valheim Plus
+  This config is automatically disabled if Craft From Containers is detected.
 
 
 -------------- [Show Boss Power Expiration Message] -------------
@@ -2475,21 +2510,236 @@ The following foods have the stack size increased to 20
   No known conflicts.
 
 
----------------------- [Alternate UI Layout] --------------------
+--------------------- [Enemy Nameplate Mode] --------------------
 
 ► Description:
-  Alternates the layout of this mod's UI by using symbols instead of words for Inventory Weight and Slots, Enemy Counter, Summons Counter, Boat Speed, and Time of Day. 
-  Repositions the Boat Speed widget to the minimap area. If using the non-symbols version, the Boat Speed widget is located at the bottom-left of the screen next to the Enemy Detector.
+  Changes the way enemy nameplates are displayed by changing the  bar style and colors of the nameplate.
+  Alerted/aggravated status now changes the color of the creature name (yellow for alerted, red for aggravated).
+  Has options for choosing how to display the HP (value or percentage), and can choose between showing both, one of the two, or none.
+  Players with PVP status enabled are shown in a different color.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  Compatible with Minimal Status Effects. This mod automatically detects the existence of Minimal Status Effects and repositions the Boat Speed widget accordingly.
+  This config will automatically be disabled if either BetterUI or Enhuddlement is detected.
+
+
+--------------------- [Show Taming Progress] --------------------
+
+► Description:
+  Displays current taming percentage of animals that are acclamatizing under the HP bar. 
+  This is independent of Enemy Nameplate Mode.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  This config will automatically be disabled if MyLittleUI by shundal is detected.
+
+
+------------------ [Item Quality Indicator Mode] ----------------
+
+► Description:
+  Options to change the way item quality is displayed by converting the vanilla number to symbols.
+  Can arrange the symbols horizontally or vertically.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  This config will automatically be disabled if either BetterUI or MyLittleUI is detected.
+
+
+------------------- [Symbol For Item Quality] -------------------
+
+► Description:
+  Options to choose the symbol used for the item quality indicator.
+  Available symbols: Star ★, Circle ●, Diamond ◆, EmptyDiamond ◇
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+  Directly dependent on Item Quality Indicator Mode.
+
+
+-------------------- [Color For Item Quality] -------------------
+
+► Description:
+  Options to choose the color used for the item quality indicator.
+  Available colors: White, Yellow, Green, Red, Blue, Cyan
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+  Directly dependent on Item Quality Indicator Mode.
+
+
+------------------ [Better Item Durability Bar] -----------------
+
+► Description:
+  Colors the item durability bar gradually, according to curent durability and modifies the sprite to a non-flat texture.
+  100% durability: Green, 50% durability: Yellow, 0% durability: Red
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  This config will automatically be disabled if either BetterUI or MyLittleUI is detected.
+
+
+------------------ [Detailed Hover Information] -----------------
+
+► Description:
+  Adds more information when hovering over objects. Master toggle for the following 8 configs.
+  Has options for displaying text colored according to fill/progress percentage, or simply white.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  This config will automatically be disabled if either BetterUI or MyLittleUI is detected.
+
+
+------------------- [Show Container Contents] -------------------
+
+► Description:
+  Displays the contents of a chest or container when hovering over it.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  This config will automatically be disabled if MyLittleUI is detected.
+
+
+--------------------- [Container Hover Mode] --------------------
+
+► Description:
+  Choice for the method of displaying Container hover info.
+  Available options: remaining time, percent, percent and remaining time
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+  Directly dependent on Detailed Hover Information.
+
+---------------------- [Beehive Hover Mode] --------------------
+
+► Description:
+  Choice for the method of displaying Beehive hover info.
+  Available options: remaining time, percent, percent and remaining time
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+  Directly dependent on Detailed Hover Information.
+
+
+----------------------- [Plant Hover Mode] ---------------------
+
+► Description:
+  Choice for the method of displaying Plant hover info.
+  Available options: remaining time, percent, percent and remaining time
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+  Directly dependent on Detailed Hover Information.
+
+
+--------------------- [Fermenter Hover Mode] -------------------
+
+► Description:
+  Choice for the method of displaying Fermenter hover info.
+  Available options: remaining time, percent, percent and remaining time
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+  Directly dependent on Detailed Hover Information.
+
+
+------------------ [CookingStation Hover Mode] -----------------
+
+► Description:
+  Choice for the method of displaying CookingStation hover info.
+  Available options: remaining time, percent, percent and remaining time
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+  Directly dependent on Detailed Hover Information.
+
+
+---------------------- [Smelter Hover Mode] --------------------
+
+► Description:
+  Choice for the method of displaying Smelter hover info.
+  Available options: remaining time. (Future plans to implement bars)
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+  Directly dependent on Detailed Hover Information.
+
+
+------------------------ [Egg Hover Mode] ----------------------
+
+► Description:
+  Choice for the method of displaying Egg hover info.
+  Available options: remaining time, percent, percent and remaining time
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  No known conflicts.
+  Directly dependent on Detailed Hover Information.
+
 
 
 VERSION HISTORY
 ================================================================
+
+v1.5.0
+- Fixes:
+  - Fixed Blue Silver Hanging Brazier flame and coal position to avoid shadow flickers under it.
+  - Fixed Clearer Weather feature to apply defined weather weights properly every time the weather is calculated (initially they were applied only at logon).
+  - Fixed the text and symbol spacing for the Summons Counter that was broken during the Call to Arms update.
+
+- Updates:
+  - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed. Logs are printed to know exactly which mod overlaps with which config when this happens. This will be updated as more incompatible or conflicting mods are found.
+  - Converted the "Alternate UI Layout" config toggle into a multiple choice config named "UI Layout Mode" to make it more obvious as to what that config was doing.
+    - Options: New, Old. 
+    - The UI can still be toggled with the **Insert** key (and **Home** key for online player list) like before.
+  - Merged configs: "Show Online Players" and "Show Online Players Under Minimap". Can now choose the mode from a single multiple choice config.
+  - The configs: "Show Time And Day" and "Time - 24 Hour Format" were restructured. "Show Time And Day" is now split into "Show Current Day" and "Show Current Time". They can now be toggled individually and the position for the respective texts is adjusted accordingly when only one is shown. "Show Current Time" now includes options for digital clock or day sections.
+
+- New UI features
+  - Added "Better Enemy Nameplates"
+  - Added "Better Item Quality Indicator" (and other relevant configs to stylize it)
+  - Added "Better Item Durability Bar"
+  - Added "Detailed Hover Information" for the following entities:
+    - Chest, Beehive, Fermenter, Cooking Station, Cooking Oven, Plants, Kiln, Smelter, Blast Furnace, Spinning Wheel, Windmill, Eitr Refinery and Eggs.
+  - Added "Show Weather Forecast Indicator"
+    - With this occasion, the emojis next to the time of day (present on the New style UI) were removed to avoid confusion and UI bloat.
 
 v1.4.2
 - Fixes:

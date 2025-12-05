@@ -206,6 +206,7 @@ namespace MarsarahTweaks.Managers
 			DisableIfIncompatible(CreatureLevelLootControl, ConfigManager.CreatureUnlevelerEnabled);
 			DisableIfIncompatible(Sailing, ConfigManager.LargerBoatExploreRadiusEnabled);
 			DisableIfIncompatible(Sailing, ConfigManager.CameraUpWhenSailingEnabled);
+			DisableIfIncompatible(Sailing, ConfigManager.TougherShipsEnabled);
 			DisableIfIncompatible(Seasonality, ConfigManager.ClearerWeatherEnabled);
 			DisableIfIncompatible(Seasons, ConfigManager.ClearerWeatherEnabled);
 			DisableIfIncompatible(ImFriendlyDammit, ConfigManager.FriendlyBallistasEnabled);

@@ -1,9 +1,32 @@
 ## <strong> 📜 Version History </strong>
 
+v1.5.0
+- **Fixes:**
+  - Fixed Blue Silver Hanging Brazier flame and coal position to avoid shadow flickers under it.
+  - Fixed Clearer Weather feature to apply defined weather weights properly every time the weather is calculated (initially they were applied only at logon).
+  - Fixed the text and symbol spacing for the Summons Counter that was broken during the Call to Arms update.
+
+- **Updates:**
+  - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed. Logs are printed to know exactly which mod overlaps with which config when this happens. This will be updated as more incompatible or conflicting mods are found.
+  - Converted the **Alternate UI Layout** config toggle into a multiple choice config named **UI Layout Mode** to make it more obvious as to what that config was doing.
+    - Options: **New**, **Old**. 
+    - The UI can still be toggled with the **Insert** key (and **Home** key for online player list) like before.
+  - Merged configs: **Show Online Players** and **Show Online Players Under Minimap**. Can now choose the mode from a single multiple choice config.
+  - The configs: **Show Time And Day** and **Time - 24 Hour Format** were restructured. **Show Time And Day** is now split into **Show Current Day** and **Show Current Time**. They can now be toggled individually and the position for the respective texts is adjusted accordingly when only one is shown. **Show Current Time** now includes options for digital clock or day sections.
+
+- **New UI features**
+  - Added **Better Enemy Nameplates**
+  - Added **Better Item Quality Indicator** (and other relevant configs to stylize it)
+  - Added **Better Item Durability Bar**
+  - Added **Detailed Hover Information** for the following entities:
+    - Chest, Beehive, Fermenter, Cooking Station, Cooking Oven, Plants, Kiln, Smelter, Blast Furnace, Spinning Wheel, Windmill, Eitr Refinery and Eggs.
+  - Added **Show Weather Forecast Indicator**
+    - With this occasion, the emojis next to the time of day (present on the New style UI) were removed to avoid confusion and UI bloat.
+
 v1.4.2
 - **Fixes:**
-  - More Usable Fuel error message fixed when building or being nearby any Shield Generators
-  - Fixed UI emoji font issue after Valheim Unity Engine update
+  - More Usable Fuel error message fixed when building or being nearby any Shield Generators.
+  - Fixed UI emoji font issue after Valheim Unity Engine update.
 
 - **Updates:**
   - Cheaper Gear Recipe Amounts: 
@@ -104,6 +127,7 @@ v1.4.2
     - Added blue and green versions of the Dverger Lantern (both wall and standing)
     - Build costs are the same as the normal Dverger Lantern build pieces
 
+
 v1.3.2
 - **Fixes:**
   - Progression Halt: 
@@ -129,9 +153,11 @@ v1.3.2
      - Mead base: Vananidir: Dandelion 10 > 7
      - Mead base: Animal Whispers: Carrot 10 > 5
 
+
 v1.3.1
 - All UI configs are no longer synced with server. Players can individually configure this mod's UI elements individually.
 - Show Online Players Under Minimap cannot be toggled on with Minimal Status Effects installed.
+
 
 v1.3.0
 - **Mod now requires Jotunn**  
@@ -145,6 +171,7 @@ v1.3.0
 - **Feature addition:** Alternate Gear Recipes - Changed Dundr to use Iolite instead of Bloodstone for crafting and upgrading.
 - **New Feature:** Pocket Portal
 - **New Feature:** Max Portals Per Player
+
 
 v1.2.0
 - Fixed an issue with Progression Halt where players could get the contents of halted chests by simply destroying them.
@@ -161,23 +188,28 @@ v1.2.0
 - **New UI feature:** Show Heat Meter in Ashlands
 - **New UI feature:** Alternate UI Layout
 
+
 v1.1.2
 - Modified the way Progressionn Halt reads prefab names. This change is specifically targeting a previous incompatibility with Ventrure Location Reset mod where it was changing parts of prefab names after resetting dungeons. This patch makes these two mods compatible.
 - **New Feature:** Halt Ocean Behind Elder. This provides an extra option for players and sever admins if they prefer Ocean resources to be available earlier. Ocean-tier items and food are equal to Mountain-tier items and food, which is why this option is disabled by default, but still available if wanted.
 - Rearranged config entries in the config file, which means that old configs will have extra unused config entries (those can be safely deleted)
 
+
 v1.1.1
 - Added Draugr Archers to Progression Halt (previous oversight)
 - Removed Pickable Bone Piles found in Meadows from Progression Halt
+
 
 v1.1.0
 - **New QOL feature:** Move Camera Up While Sailing
 - Added forgotten items from old mod port to Cheaper Build Piece Amounts (all banners Leather Scraps: 6 → 5)
 - Added Shipwreck to Progression Halt (halted by Eikthyr)
 
+
 v1.0.1
 - Fixed a bug where features that were dependent on checking global keys (Progression Halt, Creature Unleveler) were dependent on having Clear Mistlands section enabled. Now these sections work as intended even if that option is off.
 - Made UI sections server synced like the rest of the configs.
+
 
 v1.0.0
 - Initial Upload

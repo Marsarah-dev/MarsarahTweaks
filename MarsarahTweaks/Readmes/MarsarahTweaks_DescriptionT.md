@@ -18,7 +18,7 @@ If any issues or incompatibilities are found, please post them on the mod's Nexu
 ## <strong> 🔒 Permissions </strong>
 
 Reuploading this mod, whether in part or in full, is **not permitted**.  
-However, in the spirit of modding integrity, anyone is free to take inspiration or implement similar features, but must do so with their own code and assets.
+Anyone is free to take inspiration or implement similar features, but must do so with their own code and assets.
 
 ---
 
@@ -41,8 +41,6 @@ And also **Jotunn** available here:  https://thunderstore.io/c/valheim/p/Valheim
 ---
 
 ## <strong> ⚙️ Configuration </strong>
-
-This mod is **modular and customizable**.
 
 - A config file is generated on first launch:  
   `Valheim/BepInEx/config/Marsarah.MarsarahTweaks.cfg`
@@ -183,12 +181,12 @@ They can be toggled mid-game, unless otherwise specified.
 ### <strong>🔧 Food and Mead Modifications</strong>
 
 - Adjusts food and mead recipes.
-- Changes recipe amounts, outputs, and ingredients  
+- Changes recipe amounts, outputs, and ingredients.  
 - All food stack sizes increased to **20**
 - Specific details can be found in the **Docs** tab of the **Nexusmods** page.
 - Toggling mid-game requires **client** relog. 
 - **Conflicts:** Mods that modify vanilla food or mead recipes.  
-  - Compatible with mods that add new recipes.
+  - Does not modify new recipes addded by other mods.
 
 ---
 
@@ -240,8 +238,8 @@ They can be toggled mid-game, unless otherwise specified.
   - **Light Armor:** Adds Stamina  
   - **Mage Armor:** Adds Eitr (not regen)
 - Toggling mid-game requires **client relog** for tooltip refresh.
-- **Conflicts:** Mods that add HP/Stamina/Eitr to armor  
-  - Compatible with custom armor mods — only vanilla gear is affected
+- **Conflicts:** Mods that add HP/Stamina/Eitr to armor.  
+  - Compatible with custom armor mods — only vanilla gear is affected.
 
 **🔹 Stat Bonuses by Armor Set:**
 
@@ -310,7 +308,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 ### <strong>🔧 Faster Character Speed</strong>
 
-- Boosts overall character movement speeds for smoother gameplay.
+- Boosts overall character movement speeds.
 - Terrain is not taken in consideration when modifying movement speed.
 - **Conflicts:** Mods that modify player movement speed
 
@@ -325,7 +323,7 @@ They can be toggled mid-game, unless otherwise specified.
 ### <strong>🔧 Shorter Wet & Potion Cooldowns</strong>
 
 - Reduces cooldowns for **potion usage** and the **wet status effect**.
-- **Conflicts:** Mods that modify status effects for wetness or potions
+- **Conflicts:** Mods that modify status effects for wetness or potions.
 
 **🔹 Cooldown Changes:**
 
@@ -344,8 +342,8 @@ They can be toggled mid-game, unless otherwise specified.
 ### <strong>🔧 Less Stamina Usage</strong>
 
 - Reduces all stamina costs across actions (combat, running, building, etc.) by **15%**.
-- **Conflicts:** Mods that globally modify player stamina  
-  - Compatible with mods that modify stamina on a per-item basis
+- **Conflicts:** Mods that globally modify player stamina.  
+  - Compatible with mods that modify stamina on a per-item basis.
 
 ---
 
@@ -378,7 +376,7 @@ They can be toggled mid-game, unless otherwise specified.
 ### <strong>🔧 Reduced Crossbows Reload Time</strong>
 
 - Crossbows Reload Time Reduced by 1s (3.5s → 2.5s).
-- Toggling mid-game requires **client** relog
+- Toggling mid-game requires **client** relog.
 - **Conflicts:** Mods that modify Crossbows reload time.
 
 ---
@@ -457,7 +455,7 @@ They can be toggled mid-game, unless otherwise specified.
 ### <strong>🔧 Halt Ocean Behind Elder</strong>
 
 - Halts Ocean biome resources (Leviathans and Serpents) behind The Elder instead of Bonemass. Requires Automatic Progression Halt to be enabled.   
-- NOTE: Ocean biome resources provide Mountain-tier gear and food (so it makes more sense to halt them behind Bonemass), but this option is here if players still want ocean resources earlier.
+- **Note:** Ocean biome resources provide Mountain-tier gear and food (so it makes more sense to halt them behind Bonemass), but this option is here if players still want ocean resources earlier.
 - Toggling mid-game requires **client** relog or reloading area. 
 - **Conflicts:** Same as above.
 
@@ -470,7 +468,7 @@ They can be toggled mid-game, unless otherwise specified.
 - Changes are automatically applied when a boss is defeated, including when reverting the boss global key with console commands.  
 - If defeating bosses in an unordered way, the changes still apply in their natural order.  
 - Some creatures that did not have stars will now gain stars (e.g. Abomination, Lox, Deathsquito), but no creature will pass two stars.
-- Specific details can be found in the **Docs** tab of the **Nexusmods** page
+- Specific details can be found in the **Docs** tab of the **Nexusmods** page.
 - Tooggling mid-game will only be affect new areas and newly spawned creatures.  
   - For example, if the mod was enabled and a 2-star Troll was spawned, the Troll will retain its level even if the config is toggled OFF afterwards. Same applies when toggling ON, when defeating bosses or reverting with console commands.
 - **Conflicts:**  Mods that change creature levels. (e.g. Creature Level And Loot Control)
@@ -524,7 +522,8 @@ They can be toggled mid-game, unless otherwise specified.
 
 ### <strong>🔧 Clearer Weather</strong>
 
-- Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively.
+- Reduces chance for mist, rain and snowstorms in Meadows, Plains, and Mountains respectively.
+- For the Ocean biome, only the mist chance is reduced.
 - Toggling mid-game requires **client** relog.
 - **Conflicts:**  Weather or seasons mods (Seasons by shundal or Seasonality by RustyMods).
   - Automatically disabled if the above are detected.
@@ -579,7 +578,8 @@ They can be toggled mid-game, unless otherwise specified.
 
 - Increases Ships HP by a flat amount.
 - Toggling mid-game requires **client** relog or reloading area (moving/teleporting away and back).
-- **Conflicts:** Mods that modify ship HP (sailing mods probably).
+- **Conflicts:** Mods that modify ship HP (e.g. Sailing by Smoothbrain).
+  - Automatically disabled if the above is detected.
 
 **🔹 HP Changes:**
 | Ship      | Old HP | New HP |
@@ -733,7 +733,7 @@ They can be toggled mid-game, unless otherwise specified.
 - Campfire and Fireplace Wood is refundable when destroyed.
 - **Conflicts:** Mods that modify light source fuel or build piece costs (Eternal Fire by Digitalroot, FuelEternal by Marf, TorchesEternal by Xenofell, TorchesEternal by wildbill22).  
   - Compatible with mods that add new light sources. This will make them permanent, but will not modify their build costs.
-  - Automatically disabled if the above are detected.
+  - Automatically disabled if the above mods are detected.
 
 ---
 
@@ -870,8 +870,8 @@ All configs can be toggled mid-game.
 
 ### <strong>🔧 Show Weather Forecast Indicator</strong>
 
-- Displays the next scheduled weather as an icon at the bottom-right of the minimap.
-- Also displays the remaining time to that weather.
+- Displays the next scheduled weather as an icon at the bottom-right of the minimap as well as a time until that weather will change.
+- This indicator shows the upcoming weather based on the current biome and weather weights. If the biome has a single weather (Swamp and Ashlands Ocean), then the indicator shows the current weather and the timer is set to --:--. 
 - **Conflicts:** No known conflicts.
   - Compatible with weathers added by Seasons and Seasonality mods
 
