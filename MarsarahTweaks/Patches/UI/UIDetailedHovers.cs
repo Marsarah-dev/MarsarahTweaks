@@ -460,51 +460,52 @@ namespace MarsarahTweaks.Patches.UI
 		{
 			private static void Postfix(CookingStation __instance, ZNetView ___m_nview)
 			{
-				// Skip if no switch
-				if (__instance.m_addFoodSwitch == null)
+				if (__instance == null || ___m_nview == null)
 					return;
 
-				// Avoid overwriting existing delegates
-				if (__instance.m_addFoodSwitch.m_onHover != null)
-					return;
-
-				if (!___m_nview.IsOwner())
-					return;
+				/*if (!___m_nview.IsOwner())
+					return;*/
 
 				// Assign a hover delegate to the food interaction hover
-				__instance.m_addFoodSwitch.m_onHover = () =>
+				if (__instance.m_addFoodSwitch != null && __instance.m_addFoodSwitch.m_onHover == null)
 				{
-					string vanillaText = Localization.instance.Localize(GetHoverTextMethod.Invoke(__instance, null) as string);
+					__instance.m_addFoodSwitch.m_onHover = () =>
+					{
+						string vanillaText = Localization.instance.Localize(GetHoverTextMethod.Invoke(__instance, null) as string);
 
-					if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
+						if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
+							return vanillaText;
+
+						string hover = GetCookingStationHover(__instance);
+						if (!string.IsNullOrEmpty(hover))
+							return hover;
+
 						return vanillaText;
-
-					string hover = GetCookingStationHover(__instance);
-					if (!string.IsNullOrEmpty(hover))
-						return hover;
-
-					return vanillaText;
-				};
+					};
+				}
 
 				// Assign a hover delegate to the wood interaction hover
-				__instance.m_addFuelSwitch.m_onHover = () =>
+				if (__instance.m_addFuelSwitch != null && __instance.m_addFuelSwitch.m_onHover == null)
 				{
-					string vanillaText = Localization.instance.Localize(OnHoverFuelSwitchMethod.Invoke(__instance, null) as string);
+					__instance.m_addFuelSwitch.m_onHover = () =>
+					{
+						string vanillaText = Localization.instance.Localize(OnHoverFuelSwitchMethod.Invoke(__instance, null) as string);
 
-					if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
-						return vanillaText;
+						if (ConfigManager.DetailedHoverInfoChoice.Value == HoverInfoMode.Off)
+							return vanillaText;
 
-					// Compute remaining fuel time
-					float fuel = (float)GetCSFuelMethod.Invoke(__instance, null);
-					float remainingSeconds = fuel * __instance.m_secPerFuel;
-					string hover = "";
-					if (remainingSeconds <= 0)
-						hover = vanillaText;
-					else
-						hover = $"{vanillaText}\nTime Left: {PaintTextIfEnabled(FormatTime(remainingSeconds), Color.cyan)}";
+						// Compute remaining fuel time
+						float fuel = (float)GetCSFuelMethod.Invoke(__instance, null);
+						float remainingSeconds = fuel * __instance.m_secPerFuel;
+						string hover = "";
+						if (remainingSeconds <= 0)
+							hover = vanillaText;
+						else
+							hover = $"{vanillaText}\nTime Left: {PaintTextIfEnabled(FormatTime(remainingSeconds), Color.cyan)}";
 
-					return hover;
-				};
+						return hover;
+					};
+				}
 			}
 		}
 

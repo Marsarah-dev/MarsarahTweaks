@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.5.0
+Marsarah Tweaks v1.5.1
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
@@ -2717,6 +2717,11 @@ The following foods have the stack size increased to 20
 
 VERSION HISTORY
 ================================================================
+
+v1.5.1
+- Fixes:
+  - Attempt to fix Null reference error with Detailed Hover Information for Cooking Stations in combination with other mods.
+  - Attempt to fix index out of bounds error in Item Durability Bar patch in combination with Azu Extended Player Inventory.
 
 v1.5.0
 - Fixes:

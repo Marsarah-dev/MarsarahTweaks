@@ -2,18 +2,8 @@
  ******* DONE, NOT RELEASED *******
 
    A. Fixes
-      - Fixed Blue Silver Hanging Brazier flame and coal position to avoid shadow flickers under it
-      - Fixed Clearer Weather feature to apply defined weather weights properly every time the weather is calculated (initially they were applied only at logon).
-      - Fixed the text and symbol spacing for the Summons Counter that was broken during the Call to Arms update
 
    B. Updates
-      - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed. Logs are printed to know exactly which mod overlaps with which config when this happens.
-      - Converted the "Alternate UI Layout" config toggle into a multiple choice config named "UI Layout Mode" to make it more obvious as to what that config was doing.
-        - Options: New, Old. 
-        - UI can still be toggled with the Insert key (and Home key for online player list) like before.
-      - Merged configs: Show Online Players and Show Online Players Under Minimap. Can now choose the mode from a single multiple choice config.
-      - Merged configs: Show Time And Day and Time - 24 Hour Format. Can now choose the time format from a single multiple choice config.
-      - Split config: Show Time And Day into Show Current Day and Show Current Time. They can now be toggled individually and the position for the respective texts is adjusted accordingly when only one is shown.
       
    C. New Grind Reduction
 
@@ -26,21 +16,6 @@
    G. New Build Pieces
 
    H. New UI
-      - Added Better Enemy Nameplates
-      - Added Better Item Quality Indicator
-      - Added Better Item Durability Bar
-      - Added Detailed Hover Information 
-        - Chests
-        - Beehives
-        - Fermenters
-        - Cooking Stations, Cooking Ovens
-        - Plants
-        - All smelter-type objects (Kiln, Smelter, Blast Furnace, Spinning Wheel, Windmill, Eitr Refinery)
-        - Eggs
-      - Added Show Weather Forecast Indicator
-        - Added a forecast icon and timer to the bottom-right of the minimap. This indicator shows the upcoming weather based on the current biome and weather weights. If the biome has a single weather (Swamp and Ashlands Ocean), then the indicator shows the current weather and the timer is set to --:--. 
-        - Compatible with Seasons and Seasonality weathers
-        - With this occasion, the emojis next to the time of day (present on the New style UI) were removed to avoid confusion and UI bloat.
 
 
  ******* TODO ******* 

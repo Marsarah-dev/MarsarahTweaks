@@ -80,14 +80,18 @@ namespace MarsarahTweaks.Patches.UI
 
 				var items = (List<ItemDrop.ItemData>)hotkeyItemsField.GetValue(__instance);
 				var elements = (IList)hotkeyElementsField.GetValue(__instance);
+				if (items == null || elements == null) return;
 
-				for (int i = 0; i < items.Count && i < elements.Count; i++)
+				int count = Math.Min(items.Count, elements.Count);
+				for (int i = 0; i < count; i++)
 				{
 					var item = items[i];
 					if (item == null || !item.m_shared.m_useDurability)
 						continue;
 
-					var elementData = elements[item.m_gridPos.x];
+					var elementData = elements[i];
+					if (elementData == null) continue;
+
 					var durabilityBar = (GuiBar)hotkeyDurabilityField.GetValue(elementData);
 					if (durabilityBar == null) continue;
 

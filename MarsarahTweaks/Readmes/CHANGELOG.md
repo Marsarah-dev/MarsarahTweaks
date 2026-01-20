@@ -1,5 +1,10 @@
 ## <strong> 📜 Version History </strong>
 
+v1.5.1
+- **Fixes:**
+  - Attempt to fix Null reference error with Detailed Hover Information for Cooking Stations in combination with other mods.
+  - Attempt to fix index out of bounds error in Item Durability Bar patch in combination with Azu Extended Player Inventory.
+
 v1.5.0
 - **Fixes:**
   - Fixed Blue Silver Hanging Brazier flame and coal position to avoid shadow flickers under it.
