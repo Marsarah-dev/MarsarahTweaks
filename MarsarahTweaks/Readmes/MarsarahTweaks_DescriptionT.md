@@ -469,7 +469,7 @@ They can be toggled mid-game, unless otherwise specified.
 - If defeating bosses in an unordered way, the changes still apply in their natural order.  
 - Some creatures that did not have stars will now gain stars (e.g. Abomination, Lox, Deathsquito), but no creature will pass two stars.
 - Specific details can be found in the **Docs** tab of the **Nexusmods** page.
-- Tooggling mid-game will only be affect new areas and newly spawned creatures.  
+- Toggling mid-game will only affect new areas and newly spawned creatures.  
   - For example, if the mod was enabled and a 2-star Troll was spawned, the Troll will retain its level even if the config is toggled OFF afterwards. Same applies when toggling ON, when defeating bosses or reverting with console commands.
 - **Conflicts:**  Mods that change creature levels. (e.g. Creature Level And Loot Control)
   - Automatically disabled if the above is detected.
