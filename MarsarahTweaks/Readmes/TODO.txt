@@ -21,10 +21,13 @@
  ******* TODO ******* 
 
 === For next release ===
+- Look into the bug reports (Pocket Portal max build number; UI issues with the other mod)
+- Add a visual line for time of day option with an indicator that moves across the line as the time changes
 - Move the weather forecast somewhere else on a no-map setting
 - Implement bars hover mode for smelters
 - Implement skill progress message
 - Implement player login screen stats
+- Implement icons for chest containers option
 - See if I can add text to item durability bars (maybe make them thicker) and see how it looks like
 - Add a synced with server master toggle for UI elements if individual UI elements should be synced or not 
 - Test tooltips with EpicLoot (see if there's any compatibility to do)
@@ -33,15 +36,15 @@
 - Modify emojis for weather (use in-game icons if possible)
    
    * Prep for update
-     - New gear costs (done)
-     - New gear speed (done)
-     - New gear stats (hp/stamina/eitr) (done)
-     - New gear hook into smart biome (done)
-     - New gear upgrade min station level (also move vile set to workbench) (done)
-     - New build pieces costs (Bear Rug) (no change needed)
-     - Forsaken powers CD's (done)
-     - Ghost, Bear and Vile trophy drop rate (done)
-     - Progression Halt for Ghost, Bear and Vile (done)
+     - New gear costs 
+     - New gear speed 
+     - New gear stats (hp/stamina/eitr) 
+     - New gear hook into smart biome 
+     - New gear upgrade min station level 
+     - New build pieces costs 
+     - Forsaken powers CD's 
+     - Ghost, Bear and Vile trophy drop rate
+     - Progression Halt for Ghost, Bear and Vile 
 
      - Look into Creature Unleveler (Ghost, Bear and Vile)
      - Check new Trinkets build costs

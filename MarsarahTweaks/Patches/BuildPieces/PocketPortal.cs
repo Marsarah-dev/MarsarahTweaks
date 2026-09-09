@@ -19,7 +19,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 {
 	public static class PocketPortal
 	{
-		private static readonly LogManager log = new LogManager("Pocket Portal", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Pocket Portal", LogManager.LogLevel.Info);
 
 		private static bool initialized = false;
 		private static GameObject PocketPortalPrefab;
@@ -509,60 +509,67 @@ namespace MarsarahTweaks.Patches.BuildPieces
 		{
 			static bool Prefix(Player __instance, Piece piece, ref bool __result)
 			{
-				if (piece.name == PocketPortalPrefab.name && PlayerHasPocketPortal())
+				if (piece == null || PocketPortalPrefab == null || piece.name != PocketPortalPrefab.name) return true;
+
+				if (PlayerHasPocketPortal(__instance))
 				{
-					log.Info($"Player {__instance.name} has a Pocket Portal built");
+					log.Info($"Blocking Pocket Portal placement for {__instance.GetPlayerName()} ({__instance.GetPlayerID()})");
 					__instance.Message(MessageHud.MessageType.Center, "You can only place one Pocket Portal.");
 					__result = false; // Prevent further execution
 					return false;     // Skip original method
 				}
-				else
-				{
-					log.Info($"Player {__instance.name} does not have a Pocket Portal built");
-				}
 
+				log.Info($"Allowing Pocket Portal placement for {__instance.GetPlayerName()} ({__instance.GetPlayerID()})");
 				return true; // Let placement continue normally
 			}
 		}
 
-		private static bool PlayerHasPocketPortal()
+		private static bool PlayerHasPocketPortal(Player player)
 		{
-			if (ZNet.instance == null || ZDOMan.instance == null || Player.m_localPlayer == null)
+			if (ZNet.instance == null || ZDOMan.instance == null || player == null)
 			{
-				log.Info($"Things are null");
+				log.Info($"PlayerHasPocketPortal: required instance is null");
 				return false;
 			}
 
-			string localPlayerName = Player.m_localPlayer.GetPlayerName();
+			// string localPlayerName = Player.m_localPlayer.GetPlayerName();
+			long playerId = player.GetPlayerID();
 			int pocketPortalHash = PocketPortalPrefab.name.GetStableHashCode();
 
 			var zdoDictField = typeof(ZDOMan).GetField("m_objectsByID", BindingFlags.NonPublic | BindingFlags.Instance);
 			if (zdoDictField == null)
 			{
-				log.Info($"Reflection field is null");
+				log.Info($"PlayerHasPocketPortal: m_objectsByID reflection field is null");
 				return false;
 			}
 
 			Dictionary<ZDOID, ZDO> zdoDict = zdoDictField.GetValue(ZDOMan.instance) as Dictionary<ZDOID, ZDO>;
 			if (zdoDict == null)
 			{
-				log.Info($"ZDO Dict is null");
+				log.Info($"PlayerHasPocketPortal: ZDO dictionary is null");
 				return false;
 			}
+
+			log.Info($"Checking Pocket Portal for {player.GetPlayerName()} | Player ID: {playerId} | ZDO count: {zdoDict.Count} | Server: {ZNet.instance.IsServer()} | Dedicated: {ZNet.instance.IsDedicated()}");
 
 			foreach (var zdo in zdoDict.Values)
 			{
 				if (zdo == null) continue;
 				if (zdo.GetPrefab() != pocketPortalHash) continue;
-				log.Info($"Checking prefab {zdo.GetPrefab()} - creator: {zdo.GetString(ZDOVars.s_creatorName)}");
-				if (zdo.GetString(ZDOVars.s_creatorName) == localPlayerName)
+
+				long creatorId = zdo.GetLong(ZDOVars.s_creator, 0L);
+
+				log.Info($"Found Pocket Portal ZDO | Creator ID: {creatorId} | Player ID: {playerId} | Creator name: {zdo.GetString(ZDOVars.s_creatorName)}");
+				//log.Info($"Checking prefab {zdo.GetPrefab()} - creator: {zdo.GetString(ZDOVars.s_creatorName)}");
+
+				if (creatorId == playerId)
 				{
-					log.Info($"We have a pocket portal");
+					log.Info($"Player {player.GetPlayerName()} already owns a Pocket Portal");
 					return true;
 				}
 			}
 
-			log.Info($"We did not find a pocket portal built by {localPlayerName}");
+			log.Info($"No Pocket Portal found for {player.GetPlayerName()} ({playerId})");
 
 			return false;
 		}
