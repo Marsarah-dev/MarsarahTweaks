@@ -552,7 +552,7 @@ namespace MarsarahTweaks.Patches.UI
 
 			for (int i = 0; i < station.m_slots.Length; i++)
 			{
-				object[] args = { i, null, 0f, null };
+				object[] args = { i, null, 0f, null, false };
 				GetSlotMethod.Invoke(station, args);
 
 				string itemName = args[1] as string;
