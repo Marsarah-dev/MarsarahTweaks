@@ -48,16 +48,16 @@ namespace MarsarahTweaks.Patches.UI
 
 			if (fonts.Length == 0)
 			{
-				Debug.LogWarning("[TMPDebug] No TMP_FontAssets found in memory!");
+				log.Warn("[TMPDebug] No TMP_FontAssets found in memory!");
 				return;
 			}
 
-			Debug.Log($"[TMPDebug] {fonts.Length} TMP_FontAssets found in memory:");
+			log.Info($"[TMPDebug] {fonts.Length} TMP_FontAssets found in memory:");
 			foreach (var font in fonts.OrderBy(f => f.name))
 			{
 				// TMP_FontAsset is a ScriptableObject, so no gameObject exists
 				string info = font != null ? $"name: '{font.name}', hideFlags: {font.hideFlags}" : "null font";
-				Debug.Log($"[TMPDebug] {info}");
+				log.Info($"[TMPDebug] {info}");
 			}
 		}
 

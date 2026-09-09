@@ -1,11 +1,7 @@
 ﻿using HarmonyLib;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.Grind
@@ -374,7 +370,7 @@ namespace MarsarahTweaks.Patches.Grind
 		private static Dictionary<string, int> originalFoodStacks = new Dictionary<string, int>();
 
 		// Update Food And Mead ====================================================================
-		public static void UpdateFoodAndMead (ObjectDB objDB, bool wasModified)
+		public static void UpdateFoodAndMead(ObjectDB objDB, bool wasModified)
 		{
 			/*foreach (Recipe recipe in objDB.m_recipes)
 			{

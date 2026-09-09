@@ -30,7 +30,7 @@ namespace MarsarahTweaks.Patches.Balance
 
 		// Modify Skeleton Summons
 		[HarmonyPatch(typeof(Humanoid), nameof(Humanoid.StartAttack))]
-		static class DeatRaiserAttack_Patch
+		static class DeathRaiserAttack_Patch
 		{
 			private static float lastAttackTime = 0f;
 			private static Attack originalSecondaryAttack = null; // Store default attack

@@ -937,7 +937,7 @@ namespace MarsarahTweaks.Patches.Features
 
 			// =======================================================================
 			// Progression Halt patch handler
-			private static void HandleProgressionHalt (ZNetScene instance)
+			private static void HandleProgressionHalt(ZNetScene instance)
 			{
 				if (!GlobalKeyChecker.EikthyrDefeated)
 				{
@@ -1033,7 +1033,7 @@ namespace MarsarahTweaks.Patches.Features
 			}
 
 			// Main Halt Drops for Boss
-			private static void HaltDropsForBoss (ZNetScene instance, string bossName)
+			private static void HaltDropsForBoss(ZNetScene instance, string bossName)
 			{
 				if (bossPrefabHolds.TryGetValue(bossName, out List<string> prefabStrings))
 				{

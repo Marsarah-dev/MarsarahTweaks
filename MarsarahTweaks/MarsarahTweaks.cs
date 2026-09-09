@@ -29,7 +29,7 @@ namespace MarsarahTweaks
 
 		private readonly Harmony harmony = new Harmony(ModGUID);
 
-		void Awake()
+		private void Awake()
 		{
 			LogManager.SetGlobalLogLevel(LogManager.LogLevel.Info); // None, Error, Warning, Info
 			ConfigManager.Init(Config);
@@ -46,7 +46,7 @@ namespace MarsarahTweaks
 			CompatibilityManager.DumpAllLoadedMods();
 		}
 
-		void Update()
+		private void Update()
 		{
 			// Hide/display UI
 			UIController.UpdateUIDisplay();

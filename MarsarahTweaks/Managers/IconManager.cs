@@ -11,7 +11,7 @@ namespace MarsarahTweaks.Managers
 {
 	internal static class IconManager
 	{
-		private static readonly LogManager log = new LogManager("Asset Manager", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Icon Manager", LogManager.LogLevel.Warning);
 
 		private static readonly Dictionary<string, Sprite> _icons = new Dictionary<string, Sprite>();
 

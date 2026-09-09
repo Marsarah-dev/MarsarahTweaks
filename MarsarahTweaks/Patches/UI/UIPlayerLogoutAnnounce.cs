@@ -10,9 +10,9 @@ using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.UI
 {
-	internal static class PlayerLogoutAnnounce
+	internal static class UIPlayerLogoutAnnounce
 	{
-		private static readonly LogManager log = new LogManager("UIPlayer Logout", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("UI Player Logout", LogManager.LogLevel.Warning);
 
 		private static HashSet<string> _previousPeers = new HashSet<string>();
 		private const string LogoutRPC = "MarsarahTweaks_LogoutAnnounce";

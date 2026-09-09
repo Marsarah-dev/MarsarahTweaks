@@ -81,7 +81,7 @@ namespace MarsarahTweaks.Features.UI
 		}
 
 		[HarmonyPatch(typeof(EnemyHud), "Awake")]
-		public static class EmenyHud_Awake_Patch
+		public static class EnemyHud_Awake_Patch
 		{
 			private static void Postfix(ref EnemyHud __instance)
 			{
@@ -125,10 +125,10 @@ namespace MarsarahTweaks.Features.UI
 				GuiBar slowBar = hud_m_healthSlow_Field?.GetValue(hudData) as GuiBar;
 				GuiBar fastFriendlyBar = hud_m_healthFastFriendly_Field?.GetValue(hudData) as GuiBar;
 
-				bool enemyNaplatesEnabled = ConfigManager.EnemyNameplateChoice.Value != EnemyNameplateMode.Off;
+				bool enemyNameplatesEnabled = ConfigManager.EnemyNameplateChoice.Value != EnemyNameplateMode.Off;
 
-				ApplyBarSettings(c, healthTransform, fastBar, slowBar, fastFriendlyBar, enemyNaplatesEnabled);
-				AddHpText(c, hudData, healthTransform, enemyNaplatesEnabled);
+				ApplyBarSettings(c, healthTransform, fastBar, slowBar, fastFriendlyBar, enemyNameplatesEnabled);
+				AddHpText(c, hudData, healthTransform, enemyNameplatesEnabled);
 			}
 		}
 
@@ -142,7 +142,7 @@ namespace MarsarahTweaks.Features.UI
 				IDictionary huds = m_hudsField.GetValue(__instance) as IDictionary;
 				if (huds == null) return;
 
-				bool enemyNaplatesEnabled = ConfigManager.EnemyNameplateChoice.Value != EnemyNameplateMode.Off;
+				bool enemyNameplatesEnabled = ConfigManager.EnemyNameplateChoice.Value != EnemyNameplateMode.Off;
 
 				foreach (DictionaryEntry entry in huds)
 				{
@@ -152,8 +152,8 @@ namespace MarsarahTweaks.Features.UI
 					var character = hud_m_character_Field?.GetValue(hudData) as Character;
 					if (character == null || character.IsDead()) continue;
 
-					UpdateHpText(character, hudData, enemyNaplatesEnabled);
-					UpdateAlertAndName(character, hudData, enemyNaplatesEnabled);
+					UpdateHpText(character, hudData, enemyNameplatesEnabled);
+					UpdateAlertAndName(character, hudData, enemyNameplatesEnabled);
 					UpdateBarColor(character, hudData);
 				}
 			}

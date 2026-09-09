@@ -41,7 +41,7 @@ namespace MarsarahTweaks.Patches.Balance
 			}
 		}
 
-		[HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetTooltip), new Type[] { typeof(ItemDrop.ItemData), typeof(int), typeof(bool), typeof(float), typeof(int) })]
+		[HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetTooltip), new Type[] { typeof(ItemDrop.ItemData), typeof(int), typeof(bool), typeof(float), typeof(int), typeof(bool) })]
 		class ArmorTooltip_Patch
 		{
 			private static void Postfix(ref string __result, ItemDrop.ItemData item)

@@ -13,7 +13,7 @@ namespace MarsarahTweaks.Patches.QOL
 		private static readonly LogManager log = new LogManager("No Skill Loss", LogManager.LogLevel.Warning);
 
 		[HarmonyPatch(typeof(Skills), "Awake")]
-		class NoSkilllLowerOnDeath_Patch
+		class NoSkillLowerOnDeath_Patch
 		{
 			private static void Prefix(ref float ___m_DeathLowerFactor)
 			{
