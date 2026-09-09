@@ -15,7 +15,6 @@ namespace MarsarahTweaks.Patches.BuildPieces
 	internal class BuildPieceController
 	{
 		private static readonly LogManager log = new LogManager("Build Piece Controller", LogManager.LogLevel.Warning);
-		private const bool LegacyPrefabsOnly = true;
 
 		[HarmonyPatch(typeof(Player), "OnSpawned")] // Awake
 		internal static class Player_Awake_Patch
@@ -55,13 +54,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				return;
 			}
 
-			if (LegacyPrefabsOnly)
-			{
-				log.Info($"Keeping prefab '{prefab.name}' registered without adding it to the build menu.");
-				return;
-			}
-
-			/*var pieceConfig = new PieceConfig
+			var pieceConfig = new PieceConfig
 			{
 				PieceTable = "Hammer",
 				Category = category,
@@ -69,7 +62,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 			};
 
 			MPrefabManager.AddToBuildMenu(prefab, pieceConfig);
-			log.Info($"Registered prefab '{prefab.name}' in build menu under '{category}'.");*/
+			log.Info($"Registered prefab '{prefab.name}' in build menu under '{category}'.");
 		}
 
 		public static RequirementConfig MakeRequirement(string item, int amount, bool givenRecover = true)
@@ -107,12 +100,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 
 		public static bool TogglePiece(Piece piece, bool enabled, LogManager specificLog)
 		{
-			if (LegacyPrefabsOnly)
-			{
-				return true;
-			}
-
-			/*if (piece == null)
+			if (piece == null)
 			{
 				//specificLog.Warn("Piece is null.");
 				return false;
@@ -143,7 +131,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				}
 			}
 
-			return true;*/
+			return true;
 		}
 	}
 }
