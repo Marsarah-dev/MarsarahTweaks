@@ -3,7 +3,6 @@ using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
 using MarsarahTweaks.Patches;
-using MarsarahTweaks.Patches.BuildPieces;
 using MarsarahTweaks.Patches.Balance;
 using MarsarahTweaks.Patches.Features;
 using MarsarahTweaks.Patches.Grind;
@@ -41,8 +40,8 @@ namespace MarsarahTweaks.Managers
 			public const string Balance = "3 - Balance (Synced with Server)";
 			public const string Features = "4 - Features (Synced with Server)";
 			public const string QOL = "5 - QOL (Synced with Server)";
-			public const string BuildPieces = "6 - Build Pieces (Synced with Server)";
-			public const string UI = "7 - UI (NOT Synced with Server)";
+			//public const string BuildPieces = "6 - Build Pieces (Synced with Server)";
+			public const string UI = "6 - UI (NOT Synced with Server)";
 		}
 
 		// Struct for Config Metadata
@@ -242,10 +241,10 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("13 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
 
 			// Build Pieces
-			public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("01 - Pocket Portal", "Adds a new portal that is built from a Portal Core that only takes one inventory slot which can be crafted at a Workbench starting with the Mountain area. Can only build one Pocket Portal per player. (Toggling mid-game requires reloading the build/crafting menu)");
+			//public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("01 - Pocket Portal", "Adds a new portal that is built from a Portal Core that only takes one inventory slot which can be crafted at a Workbench starting with the Mountain area. Can only build one Pocket Portal per player. (Toggling mid-game requires reloading the build/crafting menu)");
 			//public static readonly ConfigMetadata GlacialStonePortal = new ConfigMetadata("02 - Glacial Stone Portal", "Enables the unused stone portal and adds it to the build menu. Works like any normal portal - not to be confused with the Stone Portal from Ashlands. Unlocked at the Mountain biome. (Toggling mid-game requires reloading the build/crafting menu)");
 			//public static readonly ConfigMetadata MysticalLightWard = new ConfigMetadata("02 - Mystical Light Ward", "[Exclusive toggle with Permanent Lights] Adds a new ward starting with the Mountain area. When built, all light sources in its area will be automatically refueled when reaching 0 fuel. (Toggling mid-game requires reloading the build/crafting menu)");
-			public static readonly ConfigMetadata BuildPiecesLighting = new ConfigMetadata("02 - Extra Lights", "Adds new light sources (Silver Sconce, Green Standing Brazier, Silver Hanging Brazier, Colored Dverger Lanterns) unlocked at the Mountain/Mistlands biomes respectively. (Toggling mid-game requires reloading the build/crafting menu)");
+			//public static readonly ConfigMetadata BuildPiecesLighting = new ConfigMetadata("02 - Extra Lights", "Adds new light sources (Silver Sconce, Green Standing Brazier, Silver Hanging Brazier, Colored Dverger Lanterns) unlocked at the Mountain/Mistlands biomes respectively. (Toggling mid-game requires reloading the build/crafting menu)");
 
 			// UI
 			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
@@ -344,10 +343,10 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> PermanentLightsEnabled;
 
 		// Build Pieces
-		public static ConfigEntry<bool> PocketPortalEnabled;
+		//public static ConfigEntry<bool> PocketPortalEnabled;
 		//public static ConfigEntry<bool> GlacialStonePortalEnabled;
 		//public static ConfigEntry<bool> MysticalLightWardEnabled;
-		public static ConfigEntry<bool> BuildPiecesLightingEnabled;
+		//public static ConfigEntry<bool> BuildPiecesLightingEnabled;
 
 		// UI
 		public static ConfigEntry<bool> MoreLoadingTipsEnabled;
@@ -449,10 +448,10 @@ namespace MarsarahTweaks.Managers
 			PermanentLightsEnabled = CreateConfig(ConfigSections.QOL, Configs.PermanentLightsModifications.Name, false, Configs.PermanentLightsModifications.Description);
 
 			// ===== Build Pieces
-			PocketPortalEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.PocketPortal.Name, true, Configs.PocketPortal.Description);
+			//PocketPortalEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.PocketPortal.Name, true, Configs.PocketPortal.Description);
 			//GlacialStonePortalEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.GlacialStonePortal.Name, true, Configs.GlacialStonePortal.Description);
 			//MysticalLightWardEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.MysticalLightWard.Name, true, Configs.MysticalLightWard.Description);
-			BuildPiecesLightingEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.BuildPiecesLighting.Name, true, Configs.BuildPiecesLighting.Description);
+			//BuildPiecesLightingEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.BuildPiecesLighting.Name, true, Configs.BuildPiecesLighting.Description);
 
 			// ===== UI
 			MoreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description, false);
@@ -566,11 +565,11 @@ namespace MarsarahTweaks.Managers
 
 					case var name when name == Configs.BuildPieceAmountsModifications.Name:
 						BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, true, false);
-						SilverSconce.RefreshSilverSconceRequirements();
+						//SilverSconce.RefreshSilverSconceRequirements();
 						//SilverTableTorch.RefreshSilverTorchRequirements();
-						GreenStandingBrazier.RefreshGreenBrazierRequirements();
-						SilverHangingBrazier.RefreshSilverHangingBrazierRequirements();
-						ColoredDvergerLanterns.RefreshColoredDvergrLanternsRequirements();
+						//GreenStandingBrazier.RefreshGreenBrazierRequirements();
+						//SilverHangingBrazier.RefreshSilverHangingBrazierRequirements();
+						//ColoredDvergerLanterns.RefreshColoredDvergrLanternsRequirements();
 						break;
 
 					case var name when name == Configs.BuildPieceMaterialsModifications.Name:
@@ -622,10 +621,10 @@ namespace MarsarahTweaks.Managers
 							MysticalLightWardEnabled.Value = false;
 						}*/
 						PermanentLightsChanges.UpdateLightBuildPiecesAmounts(ZNetScene.instance, true);
-						SilverSconce.RefreshSilverSconceRequirements();
+						//SilverSconce.RefreshSilverSconceRequirements();
 						//SilverTableTorch.RefreshSilverTorchRequirements();
-						GreenStandingBrazier.RefreshGreenBrazierRequirements();
-						SilverHangingBrazier.RefreshSilverHangingBrazierRequirements();
+						//GreenStandingBrazier.RefreshGreenBrazierRequirements();
+						//SilverHangingBrazier.RefreshSilverHangingBrazierRequirements();
 						break;
 
 					case var name when name == Configs.CraftableChain.Name:
@@ -634,7 +633,7 @@ namespace MarsarahTweaks.Managers
 
 					case var name when name == Configs.BrighterLanterns.Name:
 						BrighterLanterns.UpdateLanterns(ZNetScene.instance);
-						ColoredDvergerLanterns.UpdateColoredDvergrLanternsIntensity();
+						//ColoredDvergerLanterns.UpdateColoredDvergrLanternsIntensity();
 						break;
 
 					case var name when name == Configs.TougherShips.Name:
@@ -656,10 +655,10 @@ namespace MarsarahTweaks.Managers
 						}
 						break;
 
-					case var name when name == Configs.PocketPortal.Name:
+					/*case var name when name == Configs.PocketPortal.Name:
 						PocketPortal.TogglePocketPortalVisibility();
 						PocketPortal.TogglePortalCoreVisibility();
-						break;
+						break;*/
 
 					/*case var name when name == Configs.GlacialStonePortal.Name:
 						GlacialStonePortal.TogglePortalVisibility();
@@ -675,14 +674,14 @@ namespace MarsarahTweaks.Managers
 						MysticalLightWard.ToggleMysticalWardVisibility();
 						break;*/
 
-					case var name when name == Configs.BuildPiecesLighting.Name:
+					/*case var name when name == Configs.BuildPiecesLighting.Name:
 						SilverSconce.ToggleVisibility();
 						GreenStandingBrazier.ToggleVisibility();
 						SilverHangingBrazier.ToggleVisibility();
 						//SilverTableTorch.ToggleSilverTorchVisibility();
 						ColoredDvergerLanterns.ToggleVisibility();
 						//BuildPieceHelper.UpdateCategory();
-						break;
+						break;*/
 
 					case var name when name == Configs.UICurrentDay.Name:
 						UITimeAndDay.UpdatePositions();

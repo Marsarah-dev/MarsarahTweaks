@@ -2,7 +2,7 @@
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
-using Jotunn.Managers;
+//using Jotunn.Managers;
 using MarsarahTweaks.Managers;
 using MarsarahTweaks.Patches;
 using MarsarahTweaks.Patches.Balance;

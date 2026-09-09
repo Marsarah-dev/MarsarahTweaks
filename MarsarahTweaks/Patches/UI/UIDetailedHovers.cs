@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using Jotunn.Configs;
+//using Jotunn.Configs;
 using MarsarahTweaks.Managers;
 using System;
 using System.Collections.Generic;

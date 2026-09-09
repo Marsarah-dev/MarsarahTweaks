@@ -51,10 +51,6 @@
     <Reference Include="BepInEx">
       <HintPath>Libs\BepInEx.dll</HintPath>
     </Reference>
-    <Reference Include="Jotunn, Version=2.20.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libs\Jotunn.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="ServerSync">
       <HintPath>Libs\ServerSync.dll</HintPath>
@@ -110,16 +106,7 @@
     <Compile Include="Managers\ConfigManager.cs" />
     <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\CompatibilityManager.cs" />
-    <Compile Include="Managers\MPrefabManager.cs" />
     <Compile Include="MarsarahTweaks.cs" />
-    <Compile Include="Patches\BuildPieces\BuildPieceController.cs" />
-    <Compile Include="Patches\BuildPieces\ColoredDvergerLanterns.cs" />
-    <Compile Include="Patches\BuildPieces\GreenStandingBrazier.cs" />
-    <Compile Include="Patches\BuildPieces\MysticalLightWard.cs" />
-    <Compile Include="Patches\BuildPieces\SilverHangingBrazier.cs" />
-    <Compile Include="Patches\BuildPieces\SilverSconce.cs" />
-    <Compile Include="Patches\BuildPieces\SilverTableTorch.cs" />
-    <Compile Include="Patches\BuildPieces\GlacialStonePortal.cs" />
     <Compile Include="Patches\Features\AIFleeChanges.cs" />
     <Compile Include="Patches\Balance\ArmorStatsChanges.cs" />
     <Compile Include="Patches\Features\AshlandsEnemiesChanges.cs" />
@@ -127,7 +114,6 @@
     <Compile Include="Patches\Features\HealStaff.cs" />
     <Compile Include="Patches\Features\MoreUsableFuel.cs" />
     <Compile Include="Patches\Features\NighttimeSpawnChanges.cs" />
-    <Compile Include="Patches\BuildPieces\PocketPortal.cs" />
     <Compile Include="Patches\Features\PortalsPerPlayer.cs" />
     <Compile Include="Patches\Features\RaidChanges.cs" />
     <Compile Include="Patches\QOL\BoatRadiusChanges.cs" />

@@ -14,8 +14,10 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		private static readonly LogManager log = new LogManager("Portals Per Player", LogManager.LogLevel.Warning);
 
-		private static GameObject PortalPrefab = MPrefabManager.GetPrefab("portal_wood");
-		private static GameObject PortalStonePrefab = MPrefabManager.GetPrefab("portal_stone");
+		//private static GameObject PortalPrefab = MPrefabManager.GetPrefab("portal_wood");
+		//private static GameObject PortalStonePrefab = MPrefabManager.GetPrefab("portal_stone");
+		private const string PortalPrefabName = "portal_wood";
+		private const string PortalStonePrefabName = "portal_stone";
 		//private static GameObject PortalGlacialPrefab = MPrefabManager.GetPrefab("portal_glacial");
 
 		// Limit Portals per player
@@ -24,7 +26,7 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			static bool Prefix(Player __instance, Piece piece, ref bool __result)
 			{
-				if (piece.name == PortalPrefab.name && PlayerReachedPortalLimit(__instance, PortalPrefab) || piece.name == PortalStonePrefab.name && PlayerReachedPortalLimit(__instance, PortalStonePrefab) /*|| piece.name == PortalGlacialPrefab.name && PlayerReachedPortalLimit(PortalGlacialPrefab)*/)
+				if (piece.name == PortalPrefabName && PlayerReachedPortalLimit(__instance, PortalPrefabName) || piece.name == PortalStonePrefabName && PlayerReachedPortalLimit(__instance, PortalStonePrefabName))
 				{
 					log.Info($"Blocking portal placement for {__instance.GetPlayerName()} ({__instance.GetPlayerID()}): portal limit reached");
 					__instance.Message(MessageHud.MessageType.Center, "You reached the maximum number of allowed portals.");
@@ -36,15 +38,9 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		}
 
-		private static bool PlayerReachedPortalLimit(Player player, GameObject portalPrefab)
+		private static bool PlayerReachedPortalLimit(Player player, string portalPrefabName)
 		{
 			if (ZNet.instance == null || ZDOMan.instance == null || Player.m_localPlayer == null) return false;
-
-			if (portalPrefab == null)
-			{
-				log.Warn("Portal prefab is null");
-				return false;
-			}
 
 			if (ConfigManager.MaxPortalsPerPlayer.Value < 0)
 			{
@@ -53,7 +49,7 @@ namespace MarsarahTweaks.Patches.Features
 			}
 
 			long playerId = player.GetPlayerID();
-			int portalHash = portalPrefab.name.GetStableHashCode();
+			int portalHash = portalPrefabName.GetStableHashCode();
 
 			var zdoDictField = typeof(ZDOMan).GetField("m_objectsByID", BindingFlags.NonPublic | BindingFlags.Instance);
 			if (zdoDictField == null)
@@ -79,7 +75,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (creatorId == playerId) count++;
 			}
 
-			log.Info($"Player {player.GetPlayerName()} ({playerId}) has {count}/{ConfigManager.MaxPortalsPerPlayer.Value} {portalPrefab.name} portals");
+			log.Info($"Player {player.GetPlayerName()} ({playerId}) has {count}/{ConfigManager.MaxPortalsPerPlayer.Value} {portalPrefabName} portals");
 
 			if (count >= ConfigManager.MaxPortalsPerPlayer.Value)
 			{
