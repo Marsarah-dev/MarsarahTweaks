@@ -101,7 +101,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomEntities\CustomPiece.cs" />
     <Compile Include="Managers\IconManager.cs" />
     <Compile Include="Managers\ConfigManager.cs" />
     <Compile Include="Managers\LogManager.cs" />

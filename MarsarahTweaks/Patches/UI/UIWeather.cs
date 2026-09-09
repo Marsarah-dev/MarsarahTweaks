@@ -1,12 +1,10 @@
 ﻿using HarmonyLib;
 using MarsarahTweaks.Managers;
-using Splatform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -193,11 +191,11 @@ namespace MarsarahTweaks.Patches.UI
 		[HarmonyPatch(typeof(EnvMan), "Update")]
 		class Weather_EnvManPatch
 		{
-			private static void Prefix(EnvMan __instance, ref float ___m_smoothDayFraction, ref Heightmap.Biome ___m_currentBiome, ref EnvSetup ___m_currentEnv, ref long ___m_environmentPeriod, ref double ___m_totalSeconds)
+			private static void Prefix(EnvMan __instance, ref float ___m_smoothDayFraction, ref EnvSetup ___m_currentEnv, ref long ___m_environmentPeriod, ref double ___m_totalSeconds)
 			{
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
-
 				if (__instance == null) return;
+				if (!ShouldShowWeatherUI()) return;
 
 				if (ConfigManager.ShowWeatherForecast.Value == true)
 				{
@@ -205,7 +203,7 @@ namespace MarsarahTweaks.Patches.UI
 					//UpdateCurrentWeather(__instance, ___m_currentEnv, ___m_currentBiome);
 
 					// Forecast
-					UpdateForecastData(__instance, ___m_currentEnv, ___m_currentBiome, ___m_environmentPeriod, ___m_totalSeconds);
+					UpdateForecastData(__instance, ___m_currentEnv, ___m_environmentPeriod, ___m_totalSeconds);
 				}
 			}
 		}
@@ -239,9 +237,9 @@ namespace MarsarahTweaks.Patches.UI
 				{
 					CreateUI(__instance);
 
-					bool showWeatherUI = Game.m_noMap ? ShowUI : ShowUI && Minimap.instance != null && Minimap.instance.m_mapSmall != null && Minimap.instance.m_mapSmall.activeInHierarchy;
+					bool showWeatherUI = ShouldShowWeatherUI();
 					//UIWeatherIcon.enabled = showWeatherUI;
-					UIForecastIcon.enabled = showWeatherUI;
+					UIForecastIcon.enabled = showWeatherUI && UIForecastIcon.sprite != null;
 					UINextWeatherTimerText.enabled = showWeatherUI;
 
 					if (showWeatherUI)
@@ -321,7 +319,7 @@ namespace MarsarahTweaks.Patches.UI
 			}
 		}*/
 
-		private static void UpdateForecastData(EnvMan envMan, EnvSetup currentEnv, Heightmap.Biome biome, long currentEnvironmentPeriod, double totalSeconds)
+		private static void UpdateForecastData(EnvMan envMan, EnvSetup currentEnv, long currentEnvironmentPeriod, double totalSeconds)
 		{
 			if (envMan == null || currentEnv == null)
 			{
@@ -334,6 +332,21 @@ namespace MarsarahTweaks.Patches.UI
 			if (Player.m_localPlayer != null)
 				position = Player.m_localPlayer.transform.position;
 
+			Heightmap.Biome currentBiome = Heightmap.Biome.None;
+			if (Player.m_localPlayer != null)
+			{
+				currentBiome = Player.m_localPlayer.GetCurrentBiome();
+			}
+
+			BiomeSector biomeSector = WorldGenerator.instance != null ? WorldGenerator.instance.GetBiomeSector(position, false) : null;
+
+			if (biomeSector == null)
+			{
+				log.Warn("Could not determine biome sector for weather forecast.");
+				UIForecastTimer = "--:--";
+				return;
+			}
+
 			bool isAshlands = WorldGenerator.IsAshlands(position.x, position.z);
 			bool isDeepNorth = WorldGenerator.IsDeepnorth(position.x, position.z);
 
@@ -344,7 +357,7 @@ namespace MarsarahTweaks.Patches.UI
 			for (int i = 1; i <= 50; i++)
 			{
 				long periodToCheck = currentEnvironmentPeriod + i;
-				EnvSetup nextEnv = GetEnvironment(periodToCheck, biome, isAshlands, isDeepNorth);
+				EnvSetup nextEnv = GetEnvironment(periodToCheck, biomeSector, isAshlands, isDeepNorth);
 
 				if (nextEnv != null && nextEnv.m_name != currentEnv.m_name)
 				{
@@ -360,8 +373,8 @@ namespace MarsarahTweaks.Patches.UI
 				// → show the current environment icon and a neutral timer ("--:--")
 
 				Sprite iconSpriteCurrent = null;
-				string currentNameNormalized = NormalizeWeatherName(biome, currentEnv.m_name);
-				if (WeatherIcons.TryGetValue((biome, currentNameNormalized), out var iconKeyCurrent))
+				string currentNameNormalized = NormalizeWeatherName(currentBiome, currentEnv.m_name);
+				if (WeatherIcons.TryGetValue((currentBiome, currentNameNormalized), out var iconKeyCurrent))
 				{
 					string resourcePath = $"MarsarahTweaks.Assets.Icons.Weather.{iconKeyCurrent}.png";
 					iconSpriteCurrent = IconManager.LoadEmbeddedIcon(resourcePath);
@@ -377,18 +390,27 @@ namespace MarsarahTweaks.Patches.UI
 				return;
 			}
 
-			string normalizedForecastName = NormalizeWeatherName(biome, forecastEnv.m_name);
+			string normalizedForecastName = NormalizeWeatherName(currentBiome, forecastEnv.m_name);
 
 			// pick emoji
-			string emoji = WeatherEmojis.TryGetValue((biome, normalizedForecastName), out var e) ? e : "❓";
+			string emoji = WeatherEmojis.TryGetValue((currentBiome, normalizedForecastName), out var e) ? e : "❓";
 			string timerStr = GetNextWeatherTimer(forecastPeriod, totalSeconds);
 
 			// pick icons
 			Sprite iconSprite = null;
-			if (WeatherIcons.TryGetValue((biome, normalizedForecastName), out var iconKey))
+			if (WeatherIcons.TryGetValue((currentBiome, normalizedForecastName), out var iconKey))
 			{
 				string resourcePath = $"MarsarahTweaks.Assets.Icons.Weather.{iconKey}.png";
 				iconSprite = IconManager.LoadEmbeddedIcon(resourcePath);
+
+				if (iconSprite == null)
+				{
+					log.Warn($"Failed to load weather icon '{resourcePath}'.");
+				}
+			}
+			else
+			{
+				log.Info($"No weather icon mapping for biome '{currentBiome}' and environment '{normalizedForecastName}'.");
 			}
 
 			// assign globals
@@ -405,8 +427,8 @@ namespace MarsarahTweaks.Patches.UI
 			if (forecastEnv != _lastForecastEnv || forecastPeriod != _lastForecastPeriod)
 			{
 				// Current weather emoji (for summary log)
-				string normalizedCurrentName = NormalizeWeatherName(biome, currentEnv.m_name);
-				string currentEmoji = WeatherEmojis.TryGetValue((biome, normalizedCurrentName), out var curE) ? curE : "❓";
+				string normalizedCurrentName = NormalizeWeatherName(currentBiome, currentEnv.m_name);
+				string currentEmoji = WeatherEmojis.TryGetValue((currentBiome, normalizedCurrentName), out var curE) ? curE : "❓";
 
 				// Collect all lookahead environments for debug
 				StringBuilder sequenceLog = new StringBuilder();
@@ -415,7 +437,7 @@ namespace MarsarahTweaks.Patches.UI
 				for (int i = 1; i <= 50; i++)
 				{
 					long periodToCheck = currentEnvironmentPeriod + i;
-					EnvSetup nextEnv = GetEnvironment(periodToCheck, biome, isAshlands, isDeepNorth);
+					EnvSetup nextEnv = GetEnvironment(periodToCheck, biomeSector, isAshlands, isDeepNorth);
 
 					if (nextEnv == null)
 					{
@@ -424,8 +446,8 @@ namespace MarsarahTweaks.Patches.UI
 					}
 
 					string rawName = nextEnv.m_name;
-					string normalizedNextName = NormalizeWeatherName(biome, rawName);
-					string emojiNext = WeatherEmojis.TryGetValue((biome, normalizedNextName), out var em) ? em : "❓";
+					string normalizedNextName = NormalizeWeatherName(currentBiome, rawName);
+					string emojiNext = WeatherEmojis.TryGetValue((currentBiome, normalizedNextName), out var em) ? em : "❓";
 
 					sequenceLog.AppendLine(
 						$"  +{i,2} → {rawName} (normalized: {normalizedNextName}, emoji={emojiNext})"
@@ -434,7 +456,7 @@ namespace MarsarahTweaks.Patches.UI
 
 				log.Info(sequenceLog.ToString());
 
-				log.Info($"Current weather: {currentEnv.m_name} (normalized: {normalizedCurrentName}), biome={biome}, emoji={currentEmoji}");
+				log.Info($"Current weather: {currentEnv.m_name} (normalized: {normalizedCurrentName}), biome={currentBiome}, emoji={currentEmoji}");
 				log.Info($"Next forecast: {forecastEnv.m_name} (normalized: {normalizedForecastName}, emoji={emoji}), ETA {timerStr}");
 
 				_lastForecastEnv = forecastEnv;
@@ -443,7 +465,7 @@ namespace MarsarahTweaks.Patches.UI
 			}
 		}
 
-		private static EnvSetup GetEnvironment(long period, Heightmap.Biome biome, bool isAshlands, bool isDeepNorth)
+		private static EnvSetup GetEnvironment(long period, BiomeSector biomeSector, bool isAshlands, bool isDeepNorth)
 		{
 			// Save RNG state
 			UnityEngine.Random.State state = UnityEngine.Random.state;
@@ -459,7 +481,7 @@ namespace MarsarahTweaks.Patches.UI
 				if (envMan != null)
 				{
 					// Get all the available weathers for given biome
-					var availableEnvironments = Traverse.Create(envMan).Method("GetAvailableEnvironments", new object[] { biome }).GetValue<List<EnvEntry>>();
+					List<EnvEntry> availableEnvironments = envMan.GetAvailableEnvironments(biomeSector);
 
 					if (availableEnvironments != null && availableEnvironments.Count > 0)
 					{
@@ -470,7 +492,7 @@ namespace MarsarahTweaks.Patches.UI
 
 						// Build debug log for available weathers
 						StringBuilder envListLog = new StringBuilder();
-						envListLog.AppendLine($"Available weathers for biome {biome}:");
+						envListLog.AppendLine($"Available weathers for biome sector {biomeSector}:");
 
 						foreach (var entry in availableEnvironments)
 						{
@@ -655,6 +677,16 @@ namespace MarsarahTweaks.Patches.UI
 			}
 
 			return env;
+		}
+
+		private static bool ShouldShowWeatherUI()
+		{
+			if (!ShowUI) return false;
+			if (Game.m_noMap) return true;
+
+			return Minimap.instance != null &&
+				   Minimap.instance.m_mapSmall != null &&
+				   Minimap.instance.m_mapSmall.activeInHierarchy;
 		}
 	}
 }
