@@ -19,7 +19,7 @@ namespace MarsarahTweaks.Patches.BuildPieces
 {
 	public static class PocketPortal
 	{
-		private static readonly LogManager log = new LogManager("Pocket Portal", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Pocket Portal", LogManager.LogLevel.Warning);
 
 		private static bool initialized = false;
 		private static GameObject PocketPortalPrefab;
@@ -532,7 +532,6 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				return false;
 			}
 
-			// string localPlayerName = Player.m_localPlayer.GetPlayerName();
 			long playerId = player.GetPlayerID();
 			int pocketPortalHash = PocketPortalPrefab.name.GetStableHashCode();
 
@@ -560,7 +559,6 @@ namespace MarsarahTweaks.Patches.BuildPieces
 				long creatorId = zdo.GetLong(ZDOVars.s_creator, 0L);
 
 				log.Info($"Found Pocket Portal ZDO | Creator ID: {creatorId} | Player ID: {playerId} | Creator name: {zdo.GetString(ZDOVars.s_creatorName)}");
-				//log.Info($"Checking prefab {zdo.GetPrefab()} - creator: {zdo.GetString(ZDOVars.s_creatorName)}");
 
 				if (creatorId == playerId)
 				{

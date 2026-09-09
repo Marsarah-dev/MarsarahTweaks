@@ -24,8 +24,9 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			static bool Prefix(Player __instance, Piece piece, ref bool __result)
 			{
-				if (piece.name == PortalPrefab.name && PlayerReachedPortalLimit(PortalPrefab) || piece.name == PortalStonePrefab.name && PlayerReachedPortalLimit(PortalStonePrefab) /*|| piece.name == PortalGlacialPrefab.name && PlayerReachedPortalLimit(PortalGlacialPrefab)*/)
+				if (piece.name == PortalPrefab.name && PlayerReachedPortalLimit(__instance, PortalPrefab) || piece.name == PortalStonePrefab.name && PlayerReachedPortalLimit(__instance, PortalStonePrefab) /*|| piece.name == PortalGlacialPrefab.name && PlayerReachedPortalLimit(PortalGlacialPrefab)*/)
 				{
+					log.Info($"Blocking portal placement for {__instance.GetPlayerName()} ({__instance.GetPlayerID()}): portal limit reached");
 					__instance.Message(MessageHud.MessageType.Center, "You reached the maximum number of allowed portals.");
 					__result = false;
 					return false;
@@ -35,16 +36,23 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		}
 
-		private static bool PlayerReachedPortalLimit(GameObject portalPrefab)
+		private static bool PlayerReachedPortalLimit(Player player, GameObject portalPrefab)
 		{
 			if (ZNet.instance == null || ZDOMan.instance == null || Player.m_localPlayer == null) return false;
+
 			if (portalPrefab == null)
 			{
 				log.Warn("Portal prefab is null");
 				return false;
 			}
 
-			string localPlayerName = Player.m_localPlayer.GetPlayerName();
+			if (ConfigManager.MaxPortalsPerPlayer.Value < 0)
+			{
+				log.Info("No portal limit set");
+				return false;
+			}
+
+			long playerId = player.GetPlayerID();
 			int portalHash = portalPrefab.name.GetStableHashCode();
 
 			var zdoDictField = typeof(ZDOMan).GetField("m_objectsByID", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -66,19 +74,19 @@ namespace MarsarahTweaks.Patches.Features
 			{
 				if (zdo == null) continue;
 				if (zdo.GetPrefab() != portalHash) continue;
-				if (zdo.GetString(ZDOVars.s_creatorName) == localPlayerName) count++;
+
+				long creatorId = zdo.GetLong(ZDOVars.s_creator, 0L);
+				if (creatorId == playerId) count++;
 			}
 
-			if (ConfigManager.MaxPortalsPerPlayer.Value < 0)
-			{
-				log.Info("No portal limit set");
-				return false;
-			}
+			log.Info($"Player {player.GetPlayerName()} ({playerId}) has {count}/{ConfigManager.MaxPortalsPerPlayer.Value} {portalPrefab.name} portals");
+
 			if (count >= ConfigManager.MaxPortalsPerPlayer.Value)
 			{
-				log.Info("Player reached portal limit");
+				log.Info($"Player {player.GetPlayerName()} reached portal limit");
 				return true;
 			}
+
 			return false;
 		}
 	}
