@@ -7,7 +7,6 @@ using MarsarahTweaks.Patches.Balance;
 using MarsarahTweaks.Patches.Features;
 using MarsarahTweaks.Patches.Grind;
 using MarsarahTweaks.Patches.QOL;
-using MarsarahTweaks.Patches.UI;
 using ServerSync;
 using System.Collections.Generic;
 using System.IO;
@@ -40,8 +39,6 @@ namespace MarsarahTweaks.Managers
 			public const string Balance = "3 - Balance (Synced with Server)";
 			public const string Features = "4 - Features (Synced with Server)";
 			public const string QOL = "5 - QOL (Synced with Server)";
-			//public const string BuildPieces = "6 - Build Pieces (Synced with Server)";
-			public const string UI = "6 - UI (NOT Synced with Server)";
 		}
 
 		// Struct for Config Metadata
@@ -56,126 +53,7 @@ namespace MarsarahTweaks.Managers
 				Description = description;
 			}
 		}
-
-		// Config Enums
-		public enum UIMode
-		{
-			New,
-			Old
-			//Off
-		}
-
-		public enum TimeMode
-		{
-			DigitalClock,
-			DayPhases,
-			Off
-		}
-
-		public enum OnlinePlayersMode
-		{
-			BottomRight,
-			UnderMinimap,
-			Off
-		}
-
-		public enum EnemyNameplateMode
-		{
-			BarsOnly,        // health bar only, no numbers
-			BarsWithHealth,  // bar + HP value (100/100)
-			BarsWithPercent, // bar + percent (75%)
-			BarsWithBoth,    // bar + HP + percent
-			Off              // vanilla
-		}
-
-		public enum ItemQualityMode
-		{
-			Horizontal,
-			Vertical,
-			Off
-		}
-
-		public enum ItemQualitySymbol
-		{
-			Star,        // ★
-			Circle,      // ●
-			Diamond,     // ◆
-			EmptyDiamond // ◇
-		}
-
-		public enum ItemQualityColor
-		{
-			White,
-			Yellow,
-			Green,
-			Red,
-			Blue,
-			Cyan
-		}
-
-		public enum HoverInfoMode
-		{
-			ColoredText,
-			WhiteText,
-			Off
-		}
-
-		public enum ContainerHoverMode
-		{
-			CurrentPerMax,
-			AmountOfFreeSlots,
-			Percent
-		}
-
-		public enum BeeHoverMode
-		{
-			RemainingTime,
-			Percent,
-			PercentAndTime
-		}
-
-		public enum PlantHoverMode
-		{
-			RemainingTime,
-			Percent,
-			PercentAndTime
-		}
-
-		public enum FermenterHoverMode
-		{
-			RemainingTime,
-			Percent,
-			PercentAndTime
-		}
-
-		public enum CookingStationHoverMode
-		{
-			RemainingTime,
-			Percent,
-			PercentAndTime
-		}
-
-		public enum SmelterHoverMode
-		{
-			RemainingTime
-			//Bars // Future implementation
-		}
-
-		public enum EggHoverMode
-		{
-			RemainingTime,
-			Percent,
-			PercentAndTime
-		}
-
-		public enum SkillXPNotificationMode
-		{
-			FloatingBar,
-			CornerStack,
-			RadialFill,
-			TopLeftMessage,
-			Off
-		}
+		
 
 		// Grouped Config Metadata (for easy expansion)
 		public static class Configs
@@ -239,45 +117,6 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata ShorterRestedDelay = new ConfigMetadata("11 - Shorter Rested Delay", "Reduces the amount of time needed to get the rested buff from 20 to 10 seconds (Toggling mid-game requires re-entering the resting area)");
 			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("12 - More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators");
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("13 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
-
-			// Build Pieces
-			//public static readonly ConfigMetadata PocketPortal = new ConfigMetadata("01 - Pocket Portal", "Adds a new portal that is built from a Portal Core that only takes one inventory slot which can be crafted at a Workbench starting with the Mountain area. Can only build one Pocket Portal per player. (Toggling mid-game requires reloading the build/crafting menu)");
-			//public static readonly ConfigMetadata GlacialStonePortal = new ConfigMetadata("02 - Glacial Stone Portal", "Enables the unused stone portal and adds it to the build menu. Works like any normal portal - not to be confused with the Stone Portal from Ashlands. Unlocked at the Mountain biome. (Toggling mid-game requires reloading the build/crafting menu)");
-			//public static readonly ConfigMetadata MysticalLightWard = new ConfigMetadata("02 - Mystical Light Ward", "[Exclusive toggle with Permanent Lights] Adds a new ward starting with the Mountain area. When built, all light sources in its area will be automatically refueled when reaching 0 fuel. (Toggling mid-game requires reloading the build/crafting menu)");
-			//public static readonly ConfigMetadata BuildPiecesLighting = new ConfigMetadata("02 - Extra Lights", "Adds new light sources (Silver Sconce, Green Standing Brazier, Silver Hanging Brazier, Colored Dverger Lanterns) unlocked at the Mountain/Mistlands biomes respectively. (Toggling mid-game requires reloading the build/crafting menu)");
-
-			// UI
-			public static readonly ConfigMetadata UIMoreLoadingTips = new ConfigMetadata("01 - More Loading Tips", "More loading screen tips");
-			public static readonly ConfigMetadata UILayoutMode = new ConfigMetadata("02 - Layout for Inventory/Detector/Boat", "Choose the layout of the following 3 UI elements added by this mod. New version uses symbols and filling bars. Old version uses more text and has the boat speed indicator next to the enemy detector.");
-			public static readonly ConfigMetadata UIInventoryWeightAndSlots = new ConfigMetadata("03 - Show Inventory Weight and Free Slots", "Shows inventory weight and free slots on the bottom left of the screen");
-			public static readonly ConfigMetadata UIEnemyDetector = new ConfigMetadata("04 - Show Enemy Detector", "Shows enemy detector on the bottom left of the screen");
-			public static readonly ConfigMetadata UIBoatSpeed = new ConfigMetadata("05 - Show Boat Speed", "Shows boat speed when using a boat next to the sail indicator (if UI layout is new) or on the bottom left of the screen (if UI layout is old)");
-			public static readonly ConfigMetadata UICurrentDay = new ConfigMetadata("06 - Show Current Day", "Shows the current day above the minimap.");
-			public static readonly ConfigMetadata UITimeMode = new ConfigMetadata("07 - Show Current Time", "Shows the current time above the minimap. Can choose between digital clock and day sections");
-			public static readonly ConfigMetadata UIWeatherForecast = new ConfigMetadata("08 - Show Weather Forecast Indicator", "Shows the next scheduled weather as an icon at the bottom-right of the minimap and the remaining time to that weather.");
-			public static readonly ConfigMetadata UISmartBiome = new ConfigMetadata("09 - Smart Biome Indicator", "Shows smart biome text on the minimap (colored according to worn armor relative to current biome)");
-			public static readonly ConfigMetadata UISummonCounter = new ConfigMetadata("10 - Show Summon Counter", "Shows number of summoned skeletons from the Dead Raiser");
-			public static readonly ConfigMetadata UIOnlinePlayersMode = new ConfigMetadata("11 - Show Online Players", "Displays a list of online players. The player names can be toggled with the Home key. (Not displayed if only one player is online)");
-			public static readonly ConfigMetadata UIShowOwnedResources = new ConfigMetadata("12 - Show Owned Resources In Build Menu", "Displays the total amount of resources in the player's inventory in addition to the required resource amount for the selected piece or recipe in the build or crafting menu");
-			public static readonly ConfigMetadata UIShowPowerExpiration = new ConfigMetadata("13 - Show Boss Power Expiration Message", "Displays a message in the center of the screen when any Forsaken Power expires");
-			public static readonly ConfigMetadata UIPlayerLogoutAnnounce = new ConfigMetadata("14 - Player Logout Announce", "Displays a message when a player logs out in the top-left corner of the screen and in the chat window");
-			public static readonly ConfigMetadata UIAshlandsHeatLevel = new ConfigMetadata("15 - Show Heat Meter in Ashlands", "Shows a heat meter at the top-center of the screen when in Ashlands water or lava");
-			public static readonly ConfigMetadata UIEnemyNameplateMode = new ConfigMetadata("16 - Enemy Nameplate Mode", "Changes the way enemy nameplates are displayed by changing bar style and colors and alerted/aggravated status. Has different ways of showing HP");
-			public static readonly ConfigMetadata UITamingProgress = new ConfigMetadata("17 - Show Taming Progress", "Displays current taming percentage of animals that are acclamatizing under the HP bar. This is independent of Enemy Nameplate Mode");
-			public static readonly ConfigMetadata UIItemQualityIndicatorMode = new ConfigMetadata("18 - Item Quality Indicator Mode", "Changes the way item quality is displayed by converting the vanilla number to symbols.");
-			public static readonly ConfigMetadata UIItemQualitySymbol = new ConfigMetadata("19 - Symbol For Item Quality", "Choose the symbol used for the item quality indicator. Requires Item Quality Indicator Mode to be enabled");
-			public static readonly ConfigMetadata UIItemQualityColor = new ConfigMetadata("20 - Color For Item Quality", "Choose the color used for the item quality indicator. Requires Item Quality Indicator Mode to be enabled");
-			public static readonly ConfigMetadata UIItemDurabilityColor = new ConfigMetadata("21 - Better Item Durability Bar", "Colors the item durability bar according to curent durability and modifies the sprite texture");
-			public static readonly ConfigMetadata UIHoverInfoMode = new ConfigMetadata("22 - Detailed Hover Information", "Adds more information when hovering over objects. Master toggle for the configs below (23-30)");
-			public static readonly ConfigMetadata UIContainerContents = new ConfigMetadata("23 - Show Container Contents", "Show the contents of a chest or container when hovering. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIContainerHoverMode = new ConfigMetadata("24 - Container Hover Mode", "Choose the method of displaying Container hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIBeeHoverMode = new ConfigMetadata("25 - Beehive Hover Mode", "Choose the method of displaying Beehive hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIPlantHoverMode = new ConfigMetadata("26 - Plant Hover Mode", "Choose the method of displaying Plant hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIFermenterHoverMode = new ConfigMetadata("27 - Fermenter Hover Mode", "Choose the method of displaying Fermenter hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UICookingStationHoverMode = new ConfigMetadata("28 - CookingStation Hover Mode", "Choose the method of displaying Cooking Station hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UISmelterHoverMode = new ConfigMetadata("29 - Smelter Hover Mode", "Choose the method of displaying Smelter hover info. Requires Detailed Hover Information");
-			public static readonly ConfigMetadata UIEggHoverMode = new ConfigMetadata("30 - Egg Hover Mode", "Choose the method of displaying Egg hatching hover info. Requires Detailed Hover Information");
-			//public static readonly ConfigMetadata UISkillXPMode = new ConfigMetadata("33 - Skill XP Notification Mode", "Choose the method of displaying info when progressing in a skill");
 		}
 
 		// Config entries
@@ -341,45 +180,6 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShorterRestedDelayEnabled;
 		public static ConfigEntry<bool> MoreUsableFuelEnabled;
 		public static ConfigEntry<bool> PermanentLightsEnabled;
-
-		// Build Pieces
-		//public static ConfigEntry<bool> PocketPortalEnabled;
-		//public static ConfigEntry<bool> GlacialStonePortalEnabled;
-		//public static ConfigEntry<bool> MysticalLightWardEnabled;
-		//public static ConfigEntry<bool> BuildPiecesLightingEnabled;
-
-		// UI
-		public static ConfigEntry<bool> MoreLoadingTipsEnabled;
-		public static ConfigEntry<UIMode> UILayoutChoice;
-		public static ConfigEntry<bool> ShowInventoryWeightAndSlots;
-		public static ConfigEntry<bool> ShowEnemyDetector;
-		public static ConfigEntry<bool> ShowBoatSpeed;
-		public static ConfigEntry<bool> ShowCurrentDay;
-		public static ConfigEntry<TimeMode> TimeChoice;
-		public static ConfigEntry<bool> ShowWeatherForecast;
-		public static ConfigEntry<bool> ShowSmartBiome;
-		public static ConfigEntry<bool> ShowSummonCounter;
-		public static ConfigEntry<OnlinePlayersMode> OnlinePlayersChoice;
-		public static ConfigEntry<bool> ShowOwnedResources;
-		public static ConfigEntry<bool> ShowBossExpirationMessage;
-		public static ConfigEntry<bool> AnnouncePlayerLogout;
-		public static ConfigEntry<bool> ShowHeatLevelInAshlands;
-		public static ConfigEntry<EnemyNameplateMode> EnemyNameplateChoice;
-		public static ConfigEntry<bool> ShowTamingProgress;
-		public static ConfigEntry<ItemQualityMode> ItemQualityIndicatorChoice;
-		public static ConfigEntry<ItemQualitySymbol> ItemQualitySymbolChoice;
-		public static ConfigEntry<ItemQualityColor> ItemQualityColorChoice;
-		public static ConfigEntry<bool> ColoredItemDurabilityBar;
-		public static ConfigEntry<HoverInfoMode> DetailedHoverInfoChoice;
-		public static ConfigEntry<bool> ShowContainerContents;
-		public static ConfigEntry<ContainerHoverMode> ContainerHoverModeChoice;
-		public static ConfigEntry<BeeHoverMode> BeehiveHoverModeChoice;
-		public static ConfigEntry<PlantHoverMode> PlantHoverModeChoice;
-		public static ConfigEntry<FermenterHoverMode> FermenterHoverModeChoice;
-		public static ConfigEntry<CookingStationHoverMode> CookingStationHoverModeChoice;
-		public static ConfigEntry<SmelterHoverMode> SmelterHoverModeChoice;
-		public static ConfigEntry<EggHoverMode> EggHoverModeChoice;
-		//public static ConfigEntry<SkillXPNotificationMode> SkillXPNotificationChoice;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -447,46 +247,6 @@ namespace MarsarahTweaks.Managers
 			MoreUsableFuelEnabled = CreateConfig(ConfigSections.QOL, Configs.MoreUsableFuel.Name, true, Configs.MoreUsableFuel.Description);
 			PermanentLightsEnabled = CreateConfig(ConfigSections.QOL, Configs.PermanentLightsModifications.Name, false, Configs.PermanentLightsModifications.Description);
 
-			// ===== Build Pieces
-			//PocketPortalEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.PocketPortal.Name, true, Configs.PocketPortal.Description);
-			//GlacialStonePortalEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.GlacialStonePortal.Name, true, Configs.GlacialStonePortal.Description);
-			//MysticalLightWardEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.MysticalLightWard.Name, true, Configs.MysticalLightWard.Description);
-			//BuildPiecesLightingEnabled = CreateConfig(ConfigSections.BuildPieces, Configs.BuildPiecesLighting.Name, true, Configs.BuildPiecesLighting.Description);
-
-			// ===== UI
-			MoreLoadingTipsEnabled = CreateConfig(ConfigSections.UI, Configs.UIMoreLoadingTips.Name, true, Configs.UIMoreLoadingTips.Description, false);
-			UILayoutChoice = CreateConfig(ConfigSections.UI, Configs.UILayoutMode.Name, UIMode.New, Configs.UILayoutMode.Description, false);
-			ShowInventoryWeightAndSlots = CreateConfig(ConfigSections.UI, Configs.UIInventoryWeightAndSlots.Name, true, Configs.UIInventoryWeightAndSlots.Description, false);
-			ShowEnemyDetector = CreateConfig(ConfigSections.UI, Configs.UIEnemyDetector.Name, true, Configs.UIEnemyDetector.Description, false);
-			ShowBoatSpeed = CreateConfig(ConfigSections.UI, Configs.UIBoatSpeed.Name, true, Configs.UIBoatSpeed.Description, false);
-			ShowCurrentDay = CreateConfig(ConfigSections.UI, Configs.UICurrentDay.Name, true, Configs.UICurrentDay.Description, false);
-			TimeChoice = CreateConfig(ConfigSections.UI, Configs.UITimeMode.Name, TimeMode.DigitalClock, Configs.UITimeMode.Description, false);
-			ShowWeatherForecast = CreateConfig(ConfigSections.UI, Configs.UIWeatherForecast.Name, true, Configs.UIWeatherForecast.Description, false);
-			ShowSmartBiome = CreateConfig(ConfigSections.UI, Configs.UISmartBiome.Name, true, Configs.UISmartBiome.Description, false);
-			ShowSummonCounter = CreateConfig(ConfigSections.UI, Configs.UISummonCounter.Name, true, Configs.UISummonCounter.Description, false);
-			OnlinePlayersChoice = CreateConfig(ConfigSections.UI, Configs.UIOnlinePlayersMode.Name, OnlinePlayersMode.BottomRight, Configs.UIOnlinePlayersMode.Description, false);
-			ShowOwnedResources = CreateConfig(ConfigSections.UI, Configs.UIShowOwnedResources.Name, true, Configs.UIShowOwnedResources.Description, false);
-			ShowBossExpirationMessage = CreateConfig(ConfigSections.UI, Configs.UIShowPowerExpiration.Name, true, Configs.UIShowPowerExpiration.Description, false);
-			AnnouncePlayerLogout = CreateConfig(ConfigSections.UI, Configs.UIPlayerLogoutAnnounce.Name, true, Configs.UIPlayerLogoutAnnounce.Description, false);
-			ShowHeatLevelInAshlands = CreateConfig(ConfigSections.UI, Configs.UIAshlandsHeatLevel.Name, true, Configs.UIAshlandsHeatLevel.Description, false);
-			EnemyNameplateChoice = CreateConfig(ConfigSections.UI, Configs.UIEnemyNameplateMode.Name, EnemyNameplateMode.BarsWithHealth, Configs.UIEnemyNameplateMode.Description, false);
-			ShowTamingProgress = CreateConfig(ConfigSections.UI, Configs.UITamingProgress.Name, true, Configs.UITamingProgress.Description, false);
-			ItemQualityIndicatorChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualityIndicatorMode.Name, ItemQualityMode.Horizontal, Configs.UIItemQualityIndicatorMode.Description, false);
-			ItemQualitySymbolChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualitySymbol.Name, ItemQualitySymbol.Star, Configs.UIItemQualitySymbol.Description, false);
-			ItemQualityColorChoice = CreateConfig(ConfigSections.UI, Configs.UIItemQualityColor.Name, ItemQualityColor.Yellow, Configs.UIItemQualityColor.Description, false);
-			ColoredItemDurabilityBar = CreateConfig(ConfigSections.UI, Configs.UIItemDurabilityColor.Name, true, Configs.UIItemDurabilityColor.Description, false);
-			DetailedHoverInfoChoice = CreateConfig(ConfigSections.UI, Configs.UIHoverInfoMode.Name, HoverInfoMode.ColoredText, Configs.UIHoverInfoMode.Description, false);
-			ShowContainerContents = CreateConfig(ConfigSections.UI, Configs.UIContainerContents.Name, false, Configs.UIContainerContents.Description, false);
-			ContainerHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIContainerHoverMode.Name, ContainerHoverMode.CurrentPerMax, Configs.UIContainerHoverMode.Description, false);
-			BeehiveHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIBeeHoverMode.Name, BeeHoverMode.RemainingTime, Configs.UIBeeHoverMode.Description, false);
-			PlantHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIPlantHoverMode.Name, PlantHoverMode.RemainingTime, Configs.UIPlantHoverMode.Description, false);
-			FermenterHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIFermenterHoverMode.Name, FermenterHoverMode.RemainingTime, Configs.UIFermenterHoverMode.Description, false);
-			CookingStationHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UICookingStationHoverMode.Name, CookingStationHoverMode.RemainingTime, Configs.UICookingStationHoverMode.Description, false);
-			SmelterHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UISmelterHoverMode.Name, SmelterHoverMode.RemainingTime, Configs.UISmelterHoverMode.Description, false);
-			EggHoverModeChoice = CreateConfig(ConfigSections.UI, Configs.UIEggHoverMode.Name, EggHoverMode.RemainingTime, Configs.UIEggHoverMode.Description, false);
-			//SkillXPNotificationChoice = CreateConfig(ConfigSections.UI, Configs.UISkillXPMode.Name, SkillXPNotificationMode.FloatingBar, Configs.UISkillXPMode.Description, false);
-
-			//HandleToggleExclusivity();
 			SetupWatcher();
 		}
 
@@ -607,24 +367,10 @@ namespace MarsarahTweaks.Managers
 					case var name when name == Configs.GearUpgradeModifications.Name:
 						GearUpgradeChanges.UpdateGearRecipeUnlock(ObjectDB.instance, true);
 						GearUpgradeChanges.UpdateGearRecipeStations(ObjectDB.instance, true);
-						if (ShowSmartBiome.Value)
-						{
-							UISmartBiome.UpdateBiomeWeights();
-						}
 						break;
 
 					case var name when name == Configs.PermanentLightsModifications.Name:
-						/*log.Info($"Permanent Lights toggled: {PermanentLightsEnabled.Value}");
-						if (PermanentLightsEnabled.Value)
-						{
-							log.Warn("Permanent Lights toggled on. Turning off Mystical Light Ward, as these configs are mutually exclusive.");
-							MysticalLightWardEnabled.Value = false;
-						}*/
 						PermanentLightsChanges.UpdateLightBuildPiecesAmounts(ZNetScene.instance, true);
-						//SilverSconce.RefreshSilverSconceRequirements();
-						//SilverTableTorch.RefreshSilverTorchRequirements();
-						//GreenStandingBrazier.RefreshGreenBrazierRequirements();
-						//SilverHangingBrazier.RefreshSilverHangingBrazierRequirements();
 						break;
 
 					case var name when name == Configs.CraftableChain.Name:
@@ -633,7 +379,6 @@ namespace MarsarahTweaks.Managers
 
 					case var name when name == Configs.BrighterLanterns.Name:
 						BrighterLanterns.UpdateLanterns(ZNetScene.instance);
-						//ColoredDvergerLanterns.UpdateColoredDvergrLanternsIntensity();
 						break;
 
 					case var name when name == Configs.TougherShips.Name:
@@ -653,62 +398,6 @@ namespace MarsarahTweaks.Managers
 						{
 							LargerPickupAreaChanges.UpdatePickupArea(Player.m_localPlayer, true);
 						}
-						break;
-
-					/*case var name when name == Configs.PocketPortal.Name:
-						PocketPortal.TogglePocketPortalVisibility();
-						PocketPortal.TogglePortalCoreVisibility();
-						break;*/
-
-					/*case var name when name == Configs.GlacialStonePortal.Name:
-						GlacialStonePortal.TogglePortalVisibility();
-						break;*/
-
-					/*case var name when name == Configs.MysticalLightWard.Name:
-						log.Info($"Mystical Light Ward toggled: {PermanentLightsEnabled.Value}");
-						if (MysticalLightWardEnabled.Value)
-						{
-							log.Warn("Mystical Light Ward toggled on. Turning off Permanent Lights, as these configs are mutually exclusive.");
-							PermanentLightsEnabled.Value = false;
-						}
-						MysticalLightWard.ToggleMysticalWardVisibility();
-						break;*/
-
-					/*case var name when name == Configs.BuildPiecesLighting.Name:
-						SilverSconce.ToggleVisibility();
-						GreenStandingBrazier.ToggleVisibility();
-						SilverHangingBrazier.ToggleVisibility();
-						//SilverTableTorch.ToggleSilverTorchVisibility();
-						ColoredDvergerLanterns.ToggleVisibility();
-						//BuildPieceHelper.UpdateCategory();
-						break;*/
-
-					case var name when name == Configs.UICurrentDay.Name:
-						UITimeAndDay.UpdatePositions();
-						break;
-
-					case var name when name == Configs.UITimeMode.Name:
-						UITimeAndDay.UpdatePositions();
-						break;
-
-					case var name when name == Configs.UIInventoryWeightAndSlots.Name:
-						UIController.UpdateUIPositions();
-						break;
-
-					case var name when name == Configs.UIEnemyDetector.Name:
-						UIController.UpdateUIPositions();
-						break;
-
-					case var name when name == Configs.UIBoatSpeed.Name:
-						UIController.UpdateUIPositions();
-						break;
-
-					case var name when name == Configs.UISmartBiome.Name:
-						UISmartBiome.UpdateBiomeWeights();
-						break;
-
-					case var name when name == Configs.UIItemQualityIndicatorMode.Name:
-						UIItemQuality.UpdateSymbols();
 						break;
 				}
 			}
@@ -754,23 +443,5 @@ namespace MarsarahTweaks.Managers
 					break;
 			}
 		}
-
-		/*[HarmonyPatch(typeof(ZNetScene), "Awake")]
-		public static class ZNetScene_Awake_Patch
-		{
-			private static void Postfix()
-			{
-				HandleToggleExclusivity();
-			}
-		}
-
-		private static void HandleToggleExclusivity()
-		{
-			if (PermanentLightsEnabled.Value && MysticalLightWardEnabled.Value)
-			{
-				log.Warn("Permanent Lights and Mystical Light Ward cannot be enabled at the same time. Falling back to Mystical Light Ward.");
-				PermanentLightsEnabled.Value = false;
-			}
-		}*/
 	}
 }

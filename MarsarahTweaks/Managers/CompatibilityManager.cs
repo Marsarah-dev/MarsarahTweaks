@@ -29,11 +29,6 @@ namespace MarsarahTweaks.Managers
 		}
 
 		// Static readonly variables for each mod we track
-		public static ConflictMod MinimalStatusEffects = new ConflictMod("randyknapp.mods.minimalstatuseffects");
-		public static ConflictMod BetterUI = new ConflictMod("MK_BetterUI");
-		public static ConflictMod MyLittleUI = new ConflictMod("shudnal.MyLittleUI");
-		public static ConflictMod Enhuddlement = new ConflictMod("redseiko.valheim.enhuddlement");
-		public static ConflictMod CraftFromContainers = new ConflictMod("aedenthorn.CraftFromContainers");
 		public static ConflictMod DeezMistyBalls = new ConflictMod("Azumatt.DeezMistyBalls");
 		public static ConflictMod MistBeGone = new ConflictMod("Azumatt.MistBeGone");
 		public static ConflictMod InstantMonsterDrop = new ConflictMod("cjayride.InstantMonsterDrop");
@@ -62,11 +57,6 @@ namespace MarsarahTweaks.Managers
 				LoadedMods[plugin.Metadata.GUID] = plugin.Metadata.Name;
 
 			// Update all ConflictMods
-			UpdateConflictMod(ref MinimalStatusEffects);
-			UpdateConflictMod(ref BetterUI);
-			UpdateConflictMod(ref MyLittleUI);
-			UpdateConflictMod(ref Enhuddlement);
-			UpdateConflictMod(ref CraftFromContainers);
 			UpdateConflictMod(ref DeezMistyBalls);
 			UpdateConflictMod(ref MistBeGone);
 			UpdateConflictMod(ref InstantMonsterDrop);
@@ -137,60 +127,8 @@ namespace MarsarahTweaks.Managers
 			);
 		}
 
-		// Convenience wrapper for enums that have an Off option
-		public static void DisableEnumIfIncompatible<TEnum>(ConflictMod mod, ConfigEntry<TEnum> config, TEnum offValue, string additionalReason = "") where TEnum : struct, Enum
-		{
-			SetIfIncompatible(
-				mod,
-				config,
-				offValue,
-				"Automatically disabling",
-				additionalReason
-			);
-		}
-
-		// Convenience wrapper for enums that need to be set to a specific setting
-		public static void ToggleEnumIfIncompatible<TEnum>(ConflictMod mod, ConfigEntry<TEnum> config, TEnum fallbackValue, TEnum offValue, string additionalReason = "") where TEnum : struct, Enum
-		{
-			if (!mod.Loaded)
-				return;
-
-			// Respect "Off" – do NOT override
-			if (EqualityComparer<TEnum>.Default.Equals(config.Value, offValue))
-				return;
-
-			// Avoid redundant assignment
-			if (EqualityComparer<TEnum>.Default.Equals(config.Value, fallbackValue))
-				return;
-
-			string before = config.Value.ToString();
-			string after = fallbackValue.ToString();
-
-			log.Warn(
-				$"Automatically toggling '{config.Definition.Key}' because '{mod.Name}' is loaded. " +
-				$"(was: {before}, now: {after}) {additionalReason}"
-			);
-
-			config.Value = fallbackValue;
-		}
-
 		public static void UpdateIncompatibilities()
 		{
-			ToggleEnumIfIncompatible(MinimalStatusEffects, ConfigManager.OnlinePlayersChoice, OnlinePlayersMode.BottomRight, OnlinePlayersMode.Off);
-			ToggleEnumIfIncompatible(MyLittleUI, ConfigManager.OnlinePlayersChoice, OnlinePlayersMode.BottomRight, OnlinePlayersMode.Off);
-			DisableEnumIfIncompatible(BetterUI, ConfigManager.EnemyNameplateChoice, EnemyNameplateMode.Off);
-			DisableEnumIfIncompatible(Enhuddlement, ConfigManager.EnemyNameplateChoice, EnemyNameplateMode.Off);
-			DisableEnumIfIncompatible(BetterUI, ConfigManager.ItemQualityIndicatorChoice, ItemQualityMode.Off);
-			DisableEnumIfIncompatible(MyLittleUI, ConfigManager.ItemQualityIndicatorChoice, ItemQualityMode.Off);
-			DisableEnumIfIncompatible(BetterUI, ConfigManager.DetailedHoverInfoChoice, HoverInfoMode.Off);
-			DisableEnumIfIncompatible(MyLittleUI, ConfigManager.DetailedHoverInfoChoice, HoverInfoMode.Off);
-			DisableEnumIfIncompatible(MyLittleUI, ConfigManager.TimeChoice, TimeMode.Off);
-			DisableIfIncompatible(BetterUI, ConfigManager.ColoredItemDurabilityBar);
-			DisableIfIncompatible(MyLittleUI, ConfigManager.ColoredItemDurabilityBar);
-			DisableIfIncompatible(MyLittleUI, ConfigManager.ShowCurrentDay);
-			DisableIfIncompatible(MyLittleUI, ConfigManager.ShowTamingProgress);
-			DisableIfIncompatible(MyLittleUI, ConfigManager.ShowContainerContents);
-			DisableIfIncompatible(CraftFromContainers, ConfigManager.ShowOwnedResources);
 			DisableIfIncompatible(DeezMistyBalls, ConfigManager.BiggerWispRadiusEnabled);
 			DisableIfIncompatible(MistBeGone, ConfigManager.ClearMistlandsEnabled);
 			DisableIfIncompatible(InstantMonsterDrop, ConfigManager.FasterResourceDropsEnabled);

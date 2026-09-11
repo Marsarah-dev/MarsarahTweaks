@@ -101,7 +101,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Managers\IconManager.cs" />
     <Compile Include="Managers\ConfigManager.cs" />
     <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\CompatibilityManager.cs" />
@@ -155,25 +154,6 @@
     <Compile Include="Patches\TestJump.cs" />
     <Compile Include="Patches\Features\TougherShipsChanges.cs" />
     <Compile Include="Patches\Balance\TrophyDropsChanges.cs" />
-    <Compile Include="Patches\UI\UIAshlandsHeatLevel.cs" />
-    <Compile Include="Patches\UI\UIBoatSpeed.cs" />
-    <Compile Include="Patches\UI\UIBossPowerExpiration.cs" />
-    <Compile Include="Patches\UI\UIController.cs" />
-    <Compile Include="Patches\UI\UIDetailedHovers.cs" />
-    <Compile Include="Patches\UI\UIEnemyDetector.cs" />
-    <Compile Include="Patches\UI\UIEnemyNameplates.cs" />
-    <Compile Include="Patches\UI\UIInventoryWeightAndSlots.cs" />
-    <Compile Include="Patches\UI\UIItemDurability.cs" />
-    <Compile Include="Patches\UI\UIItemQuality.cs" />
-    <Compile Include="Patches\UI\UILoadscreenTips.cs" />
-    <Compile Include="Patches\UI\UIPlayerLogoutAnnounce.cs" />
-    <Compile Include="Patches\UI\UIOnlinePlayers.cs" />
-    <Compile Include="Patches\UI\UIShowOwnedResources.cs" />
-    <Compile Include="Patches\UI\UISmartBiome.cs" />
-    <Compile Include="Patches\UI\UISummonCounter.cs" />
-    <Compile Include="Patches\UI\UITamingProgress.cs" />
-    <Compile Include="Patches\UI\UITimeAndDay.cs" />
-    <Compile Include="Patches\UI\UIWeather.cs" />
     <Compile Include="Patches\WeaponStaminaChanges.cs" />
     <Compile Include="Patches\Features\WeatherChanges.cs" />
     <Compile Include="Patches\QOL\WispRadiusChanges.cs" />
@@ -190,20 +170,6 @@
     <Content Include="Readmes\MarsarahTweaks_DescriptionN.txt" />
     <Content Include="Readmes\MarsarahTweaks_Readme.txt" />
     <Content Include="Readmes\TODO.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\Icons\Weather\Clear.png" />
-    <EmbeddedResource Include="Assets\Icons\Weather\ClearNight.png" />
-    <EmbeddedResource Include="Assets\Icons\Weather\Misty.png" />
-    <EmbeddedResource Include="Assets\Icons\Weather\Rain.png" />
-    <EmbeddedResource Include="Assets\Icons\Weather\LightRain.png" />
-    <EmbeddedResource Include="Assets\Icons\Weather\Thunderstorm.png" />
-    <EmbeddedResource Include="Assets\Icons\Weather\Snow.png" />
-    <EmbeddedResource Include="Assets\Icons\Weather\Snowstorm.png" />
-    <EmbeddedResource Include="Assets\Icons\Weather\AshRain.png" />
-    <EmbeddedResource Include="Assets\Icons\Weather\AshCinderRain.png" />
-    <EmbeddedResource Include="Assets\Icons\Weather\AshMist.png" />
-    <EmbeddedResource Include="Assets\Icons\Weather\AshStorm.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.40\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.40\build\ILRepack.Lib.MSBuild.Task.targets')" />

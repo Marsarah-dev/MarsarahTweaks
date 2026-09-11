@@ -2,13 +2,11 @@
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
-//using Jotunn.Managers;
 using MarsarahTweaks.Managers;
 using MarsarahTweaks.Patches;
 using MarsarahTweaks.Patches.Balance;
 using MarsarahTweaks.Patches.Features;
 using MarsarahTweaks.Patches.QOL;
-using MarsarahTweaks.Patches.UI;
 using ServerSync;
 using System;
 using System.Collections;
@@ -34,7 +32,6 @@ namespace MarsarahTweaks
 			LogManager.SetGlobalLogLevel(LogManager.LogLevel.Info); // None, Error, Warning, Info
 			ConfigManager.Init(Config);
 			//CustomConsoleCommandHandler.Init(); // Register new console commands
-			UISmartBiome.UpdateBiomeWeights(); // Set the correct biome weight dictionary at startup
 
 			harmony.PatchAll();
 		}
@@ -44,15 +41,6 @@ namespace MarsarahTweaks
 			CompatibilityManager.Initialize();
 			CompatibilityManager.UpdateIncompatibilities();
 			CompatibilityManager.DumpAllLoadedMods();
-		}
-
-		private void Update()
-		{
-			// Hide/display UI
-			UIController.UpdateUIDisplay();
-
-			// Handle toggle exclusivity between Permanent Lights and Mystical Light Ward
-			//ConfigManager.HandleToggleExclusivity();
 		}
 
 		private void OnDestroy()

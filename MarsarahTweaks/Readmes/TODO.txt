@@ -4,7 +4,7 @@
    A. Fixes
 
    B. Updates
-      - Portals per player also includes Glacial Stone Portal if it exists from the MArsarahBuildPieces mod.
+      - Portals per player also includes Glacial Stone Portal if it exists from the MarsarahBuildPieces mod.
       
    C. New Grind Reduction
 
@@ -17,6 +17,7 @@
    G. New Build Pieces
 
    H. New UI
+      - Completely removed all UI elements from the mod, in preparation for a standalone UI mod.
 
 
  ******* TODO ******* 
@@ -26,7 +27,7 @@
 - Add a visual line for time of day option with an indicator that moves across the line as the time changes
 - Move the weather forecast somewhere else on a no-map setting
 - Implement bars hover mode for smelters
-- Implement skill progress message
+- Implement skill progress message/bar
 - Implement player login screen stats
 - Implement icons for chest containers option
 - See if I can add text to item durability bars (maybe make them thicker) and see how it looks like
