@@ -117,6 +117,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata ShorterRestedDelay = new ConfigMetadata("11 - Shorter Rested Delay", "Reduces the amount of time needed to get the rested buff from 20 to 10 seconds (Toggling mid-game requires re-entering the resting area)");
 			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("12 - More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators");
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("13 - Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type");
+			public static readonly ConfigMetadata PlayerLogoutAnnounce = new ConfigMetadata("14 - Player Logout Announce", "Displays a message in the top-left corner and chat when a player logs out.");
 		}
 
 		// Config entries
@@ -180,6 +181,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ShorterRestedDelayEnabled;
 		public static ConfigEntry<bool> MoreUsableFuelEnabled;
 		public static ConfigEntry<bool> PermanentLightsEnabled;
+		public static ConfigEntry<bool> AnnouncePlayerLogout;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -246,6 +248,7 @@ namespace MarsarahTweaks.Managers
 			ShorterRestedDelayEnabled = CreateConfig(ConfigSections.QOL, Configs.ShorterRestedDelay.Name, true, Configs.ShorterRestedDelay.Description);
 			MoreUsableFuelEnabled = CreateConfig(ConfigSections.QOL, Configs.MoreUsableFuel.Name, true, Configs.MoreUsableFuel.Description);
 			PermanentLightsEnabled = CreateConfig(ConfigSections.QOL, Configs.PermanentLightsModifications.Name, false, Configs.PermanentLightsModifications.Description);
+			AnnouncePlayerLogout = CreateConfig(ConfigSections.QOL, Configs.PlayerLogoutAnnounce.Name, true, Configs.PlayerLogoutAnnounce.Description);
 
 			SetupWatcher();
 		}
