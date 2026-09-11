@@ -1,0 +1,152 @@
+MARSARAH TWEAKS TODO
+====================
+
+============================================================
+IMPLEMENTED - NOT RELEASED
+============================================================
+
+A. Project Restructuring
+------------------------
+* Removed all UI features from MarsarahTweaks and moved them to the standalone MarsarahUI mod.
+* Removed the custom build-piece module from MarsarahTweaks and moved it to MarsarahBuildPieces.
+
+B. Updates
+----------
+* Max Portals Per Player now also recognizes the Glacial Stone Portal when MarsarahBuildPieces is installed.
+* Player Logout Announce moved to QOL from the previous UI section.
+
+C. Multiplayer / Compatibility
+------------------------------
+* Max Portals Per Player / Glacial Stone Portal integration still needs dedicated-server testing.
+* Player Logout Announce should receive a final multiplayer/dedicated-server test.
+
+
+============================================================
+TO IMPLEMENT
+============================================================
+
+A. Next Release / High Priority
+-------------------------------
+* Complete the Valheim 1.0 compatibility pass against the current game assemblies.
+
+* Permanent Lights cleanup:
+  - Keep the global Permanent Lights feature. Decide if I want to do the below:
+    - Remove the increased/max-fuel build-cost behavior.
+    - Campfires, fireplaces and other lights should use their normal vanilla build costs.
+    - Coordinate with MarsarahBuildPieces so its custom lights no longer increase their fuel/build requirements when Permanent Lights is enabled.
+
+* Final project consistency pass after the 1.0 fixes:
+  - Logging
+  - Naming
+  - Arrangement/style
+  - Dead code/usings/comments
+  - Current assembly references
+
+B. Deep North / 1.0 Content
+---------------------------
+[DEFERRED] Do this after playing the Deep North to avoid spoilers.
+
+Grind / Recipes:
+* Review new gear crafting and upgrade costs.
+* Review new build-piece costs.
+
+Balance:
+* Review new gear speed values.
+* Review new gear HP / Stamina / Eitr stats.
+* Review new gear upgrade minimum station levels.
+* Review Forsaken Power cooldowns.
+
+Progression / Drops:
+* Review Ghost, Bear and Vile and Deep North creatures trophy drop rates.
+* Add/verify Progression Halt handling for Ghost, Bear and Vile, plus Deep North.
+* Review Creature Unleveler handling for Ghost, Bear and Vile, plus Deep North.
+
+Trinkets:
+* Review new Trinket build costs:
+ - Recipe_TrinketFlametalEitr: remove GemstoneRed or replace with SulfurStone.
+ - Recipe_TrinketIronStamina: consider replacing TrophySurtling.
+ - Recipe_TrinketSilverDamage: consider replacing TrophyFenring with Wolf trophy.
+ - Recipe_TrinketSilverResist: consider replacing TrophySGolem with Drake trophy.
+
+* Review adrenaline costs for:
+  - Heart of the Forest
+  - Bronze Pendant
+  - Iron Brooch
+  - Nimble Anklet
+  - Crystal Heart
+  - Wolf Sight
+  - Fins of Destiny
+  - Evasion Mantle
+  - Bracelets of the Brave
+  - Pulsating Earrings
+  - Resounding Shackle
+  - Jörmundling
+  - Brimstone
+
+C. Grind Reduction
+------------------
+* Increase Scrap Iron drop amount from Muddy Scrap Piles.
+
+D. Balance
+----------
+* Staff of Fracturing: increase splinter blast radius.
+* Add improved gear set bonuses.
+
+E. Features
+-----------
+* Staff of Protection: add a secondary healing attack similar to the Dvergr Mage heal.
+* Better Roads: increase player movement speed on roads.
+* Vote to Sleep:
+  - A player can trigger a sleep vote.
+  - Skip time if the majority votes yes.
+  - Cancel the vote entirely if one or more players are in combat / have enemies nearby.
+* Allow ships to be destroyed with the hammer.
+* Allow Boars to eat Yellow Mushrooms.
+
+F. QOL
+------
+* Less Fireplace Smoke with a configurable percentage.
+* Recreate Better Sorting.
+* Make candles refillable with Resin.
+* Increase Maypole range.
+* Remove/reduce character slowdown during selected actions such as equipping and eating.
+* Configurable faster processing for smelters and kilns.
+
+G. Config Improvements
+----------------------
+* Replace selected bool-based tweaks with configurable values where appropriate:
+
+  - Less Stamina Usage            -> Rename to Stamina Usage          -> Value controls stamina-use percentage.
+  - Reduced Crossbows Reload Time -> Rename to Crossbows Reload Time  -> Set the desired reload value directly instead of adding/subtracting.
+  - Hildir Weight Rewards         ->                                  -> Configure extra carry weight per chest delivered
+  - Lighter Metal Weight          -> Rename to Metal Weight           -> Configure the common metal weight directly.
+  - Larger Pickup Area            -> Rename to Pickup Area            -> Configure the desired pickup radius directly.
+  - Larger Boat Explore Radius    -> Rename to Boat Explore Radius    -> Configure a multiplier or direct value.
+  - Bigger Wisp Radius            -> Rename to Wisp Radius            -> Configure the radius directly.
+  - Less Fall Damage              -> Rename to Fall Damage Multiplier -> Example: 0.6 = 40% less fall damage.
+  - Shorter Rested Delay          -> Rename to Rested Delay           -> Configure the delay directly.
+  - Max Portals Per Player        -> Make the config take a range so the config manager reads it with a slider. From -1 to 50-ish, where -1 is still off/default. Or add a bool to enable/disable it and then a separate slider from 1 to 50-ish.
+
+H. Add configurable files
+-------------------------
+* Move hardcoded values from the categories below into yaml files or equivalent, to have users choose them:
+  - Cheaper Gear Recipe Amounts
+  - Alternate Gear Recipe Materials
+  - Cheaper Build Pieces Amounts
+  - Alternate Build Pieces Materials
+  - Food And Mead Modifications
+  - Automatic Progression Halt (add prefabs under each boss. This is to help with mods that add custom prefabs. Need to decide if I wanna add the vanilla prefabs in this file or just make a file for the custom ones)
+
+* Decide if the categories below need a file or just more explicit configs:
+  - Gear Speed Modifications
+  - Extra Armor Stats
+  - Forsaken Powers Cooldowns
+
+============================================================
+MOVED / NO LONGER NEEDED HERE
+============================================================
+
+- Pocket Portal max-build/ownership work belongs to MarsarahBuildPieces.
+- All UI feature ideas belong to MarsarahUI.
+- Mystical Light Ward belongs to MarsarahBuildPieces and is already implemented.
+- Do NOT remove Permanent Lights entirely. The plan changed: keep it in Tweaks, but remove the artificial max-fuel build costs.

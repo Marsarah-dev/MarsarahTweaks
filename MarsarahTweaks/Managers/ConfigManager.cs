@@ -255,7 +255,6 @@ namespace MarsarahTweaks.Managers
 
 		private static ConfigEntry<T> CreateConfig<T>(string group, string name, T defaultValue, string description, bool synchronizedSetting = true)
 		{
-			//var configEntry = Config.Bind(group, name, defaultValue, new ConfigDescription(description + (synchronizedSetting ? " [Synced with Server]" : " [Not Synced with Server]")));
 			var configEntry = Config.Bind(group, name, defaultValue, new ConfigDescription(description));
 
 			SyncedConfigEntry<T> syncedConfigEntry = configSync.AddConfigEntry(configEntry);
