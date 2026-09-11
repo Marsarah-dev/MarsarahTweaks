@@ -102,6 +102,9 @@ E. Features
   - Cancel the vote entirely if one or more players are in combat / have enemies nearby.
 * Allow ships to be destroyed with the hammer.
 * Allow Boars to eat Yellow Mushrooms.
+* Max Portals Per Player        
+  - Make the config take a range so the config manager reads it with a slider. From -1 to 50-ish, where -1 is still off/default. Or add a bool to enable/disable it and then a separate slider from 1 to 50-ish.
+  - Add admin exception for portal limit. 
 
 F. QOL
 ------
@@ -125,7 +128,6 @@ G. Config Improvements
   - Bigger Wisp Radius            -> Rename to Wisp Radius            -> Configure the radius directly.
   - Less Fall Damage              -> Rename to Fall Damage Multiplier -> Example: 0.6 = 40% less fall damage.
   - Shorter Rested Delay          -> Rename to Rested Delay           -> Configure the delay directly.
-  - Max Portals Per Player        -> Make the config take a range so the config manager reads it with a slider. From -1 to 50-ish, where -1 is still off/default. Or add a bool to enable/disable it and then a separate slider from 1 to 50-ish.
 
 H. Add configurable files
 -------------------------
