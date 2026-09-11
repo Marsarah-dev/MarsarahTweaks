@@ -1,5 +1,20 @@
 ## <strong> 📜 Version History </strong>
 
+v1.6.0
+- **Valheim 1.0 Compatibility:**
+  - Updated the mod for the Valheim 1.0 release.
+  - Updated ServerSync to the Valheim 1.0 compatible version.
+  - Fixed Extra Armor Stats tooltips after changes to the game's tooltip methods.
+  - Fixed Detailed Hover Information for Cooking Stations and Cooking Ovens after changes to CookingStation slot data.
+  - Fixed the Weather Forecast Indicator after changes to Valheim's biome and environment systems.
+  - Fixed weather icon loading after dependency changes.
+
+- **Build Pieces:**
+  - Removed the custom Build Pieces section from Marsarah Tweaks.
+  - Removed Pocket Portal and Extra Lights from this mod. These features are planned to move into a separate build-pieces mod.
+  - Removed the Jotunn dependency. Marsarah Tweaks now only requires BepInEx.
+  - Max Portals Per Player now explicitly applies only to the vanilla Wood Portal and Stone Portal.
+
 v1.5.1
 - **Fixes:**
   - Attempt to fix Null reference error with Detailed Hover Information for Cooking Stations in combination with other mods.

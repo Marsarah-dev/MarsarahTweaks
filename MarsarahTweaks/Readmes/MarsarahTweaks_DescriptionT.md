@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.5.1  
+**Version:** 1.6.0  
 **Author:** Marsarah
 
 ---
@@ -12,6 +12,22 @@ It features numerous code improvements, cleaned-up logic, and **ServerSync** int
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
 Each feature is grouped into sections to make this process easier. In addition, the mod scans for already installed mods and automatically disables its own relevant configs if it finds mods that are incompatible or that may cause issues together.  
 If any issues or incompatibilities are found, please post them on the mod's Nexus page.
+
+> ⚠️ **v1.6.0 Upgrade Note:** The custom Build Pieces section, including Pocket Portal and Extra Lights, has been removed from Marsarah Tweaks and is planned to move into a separate mod. 
+If an existing world uses these custom pieces, make a world backup before updating. Marsarah Tweaks no longer provides these custom prefabs.
+
+---
+
+## **Development Notes**
+
+**Deep North / Spoiler Note:** Deep North content is intentionally not included in Marsarah Tweaks yet. 
+I want to experience the new biome, progression, gear, build pieces, and other content myself before digging through the game files, so I can play through it without spoiling the experience for myself. 
+Once I have played through the Deep North, I plan to update the mod to properly include its content across the relevant features, including things such as gear and recipe changes, 
+build-piece costs and materials, progression and balance adjustments, and any other existing tweaks that should apply to the new content.
+
+**AI Usage Disclosure:** Marsarah Tweaks grew out of my original MarsarahMod project, whose code I initially wrote myself. 
+AI tools were later used to assist with porting that code into Marsarah Tweaks and are now used as part of my development workflow for tasks such as debugging, refactoring, compatibility updates, researching game API changes, and documentation. 
+Development remains human-directed: I decide what features are added, how they should behave, and I write code, review and test the changes included in releases. The mod's logo was also created using generative AI.
 
 ---
 
@@ -25,8 +41,7 @@ Anyone is free to take inspiration or implement similar features, but must do so
 ## <strong> 🧱 Requirements </strong>
 
 This mod requires **BepInEx for Valheim**, available here:  https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/  
-And also **Jotunn** available here:  https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/  
-⚠️ **Note:** These need to be installed on the **dedicated server** as well as **all clients**.  
+⚠️ **Note:** BepInEx needs to be installed on the **dedicated server** as well as **all clients**.
 
 ---
 
@@ -593,9 +608,9 @@ They can be toggled mid-game, unless otherwise specified.
 
 ### <strong>🔧 Max Portals Per Player</strong>
 
-- Sets the number of portals that can be built by each player. This applies separately for each world.
-- This number applies individually for the normal and the stone portal. E.g. If the number is set to 5, then a player can build 5 normal portals and 5 stone portals.
-- This does not affect the number of Pocket Portals a player can build (added by this mod).
+- Sets the number of vanilla portals that can be built by each player. This applies separately for each world.
+- The limit is tracked individually for the normal Wood Portal and the Stone Portal. E.g. if the number is set to 5, then a player can build 5 Wood Portals and 5 Stone Portals.
+- Modded/custom portal types are not affected.
 - Set to -1 for unlimited portals (default).
 - Changes will take effect immediately if the number is changed mid-game.
 - **Conflicts:** Incompatible with Rare Magic Portal Plus (or any other mod that sets a limit to portals), unless the value is set to -1.
@@ -734,60 +749,6 @@ They can be toggled mid-game, unless otherwise specified.
 - **Conflicts:** Mods that modify light source fuel or build piece costs (Eternal Fire by Digitalroot, FuelEternal by Marf, TorchesEternal by Xenofell, TorchesEternal by wildbill22).  
   - Compatible with mods that add new light sources. This will make them permanent, but will not modify their build costs.
   - Automatically disabled if the above mods are detected.
-
----
-
-## <strong>⚙️ Build Pieces</strong>
-
-All features below are synced with the server.  
-They can be toggled mid-game, unless otherwise specified.
-
----
-
-### <strong>🔧 Pocket Portal</strong>
-
-- Adds a new portal that is functionally equal to the normal portal but is built from a special material, the Portal Core.
-- The Portal Core takes takes only one inventory slot and can be crafted at a lvl 4 Workbench with resources gathered from the Mountain and Black Forest biomes.  
-- The portal's shape is exactly the same as a normal portal, but has blue effects.
-- It does **not** allow the carying of metal or other prohibited items through it. It functions like a normal portal and can connect to any other portal.
-- Can craft and carry any number of Portal Cores, but can only build **one** Pocket Portal per player. 
-- Toggling mid-game requires reloading the build/crafting menu. 
-- **Note:** Even if this config is disabled, the prefabs are still created and existing portals or cores will not be removed from the world or inventory. Only the ability to craft/build/destroy them is affected by the toggle.
-- **Conflicts:** No known conflicts.
-
-**🔹 Portal Core Resource Requirements:**
-- **Surtling Core:** 5
-- **Fine Wood:** 20
-- **Freeze Gland:** 5
-- **Obsidian:** 20
-
----
-
-### <strong>🔧 Extra Lights</strong>
-
-- Adds new light sources in the 'Extra Lights' category in the build menu.  
-  - The build costs depend on whether Cheaper Build Piece Amounts or Permanent Lights are enabled or not.
-- Toggling mid-game requires reloading the build/crafting menu. 
-- **Note:** Even if this config is disabled, the prefabs are still created and existing lights will not be removed from the world. Only the ability to build/destroy them is affected by the toggle.
-- **Conflicts:** No known conflicts.
-
-**🔹 Specific Additions:**
-- **Green Standing Brazier**
-  - Added a green version of the Standing Brazier that uses Guck as fuel.
-
-- **Silver Sconce**
-  - Added 3 types of Silver Sconces (red, blue and green flame) available in the Mountain biome
-  - Fuel lasts longer than the normal sconce
-  - Build Cost: Silver, Ancient Bark and the respective fuel: Resin, Greydwarf Eye or Guck
-
-- **Silver Hanging Brazier**
-  - Added 3 types of Silver Hanging Braziers (red, blue and green flame) available in the Mountain biome
-  - Fuel lasts longer than the normal hanging brazier
-  - Build Cost: Silver, Chain and the respective fuel: Coal, Greydwarf Eye or Guck
-
-- **Blue and Green Dverger Lanterns**
-  - Added blue and green versions of the Dverger Lantern (both wall and pole)
-  - Build costs are the same as the normal Dverger Lantern build pieces
 
 ---
 

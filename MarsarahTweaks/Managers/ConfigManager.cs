@@ -222,7 +222,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata MinibossWeight = new ConfigMetadata("12 - Hildir Weight Rewards", "Increases base carry weight by 25 when turning in Hildir chests (for each chest). (Toggling mid-game requires CLIENT relog)");
 			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("13 - Stop Running Away", "Boars and Necks won't flee when alerted. (Toggling mid-game only affects new creatures)");
 			public static readonly ConfigMetadata TougherShips = new ConfigMetadata("14 - Tougher Ships", "Increases Ships HP. Raft: 300 -> 400, Karve: 500 -> 650, Longship: 1000 -> 1250, Drakkar: 3000 -> 4000 (Toggling mid-game requires CLIENT relog or reloading area)");
-			public static readonly ConfigMetadata PortalsPerPlayer = new ConfigMetadata("15 - Max Portals Per Player", "Set the number of portals a player can build per world for each player. This number applies individually for the normal and the stone portal. Set to -1 for unlimited portals.");
+			public static readonly ConfigMetadata PortalsPerPlayer = new ConfigMetadata("15 - Max Portals Per Player", "Set the number of portals a player can build per world for each player. This number applies individually for the vanilla normal and stone portal, and Glacial Stone Portal when available from MarsarahBuildPieces. Set to -1 for unlimited portals.");
 			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("16 - Other Section", "Tankard costs reduced and Iron Nails crafting output doubled");
 
 			// QOL

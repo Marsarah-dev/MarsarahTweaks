@@ -4,6 +4,7 @@
    A. Fixes
 
    B. Updates
+      - Portals per player also includes Glacial Stone Portal if it exists from the MArsarahBuildPieces mod.
       
    C. New Grind Reduction
 

@@ -1,9 +1,13 @@
-Marsarah Tweaks v1.5.1
+Marsarah Tweaks v1.6.0
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
 Each feature is grouped into sections to make this process easier. In addition, the mod scans for already installed mods and automatically disables its own relevant configs if it finds mods that are incompatible or that may cause issues together.  
 If any issues or incompatibilities are found, please post them on the mod's Nexus page.
+
+IMPORTANT v1.6.0 UPGRADE NOTE:
+The custom Build Pieces section, including Pocket Portal and Extra Lights, has been removed from Marsarah Tweaks and is planned to move into a separate mod.
+If an existing world uses these custom pieces, make a world backup before updating. Marsarah Tweaks no longer provides these custom prefabs.
 
 PERMISSIONS
 ================================================================
@@ -14,9 +18,7 @@ REQUIREMENTS
 ================================================================
 This mod requires BepInEx for Valheim which can be downloaded from Thunderstore:
 https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/
-And also Jotunn available here: 
-https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/
-Note: This needs to be installed on the dedicated SERVER as well as all CLIENTS
+Note: BepInEx needs to be installed on the dedicated SERVER as well as all CLIENTS.
 
 INSTALLATION
 ================================================================
@@ -2021,9 +2023,9 @@ The following foods have the stack size increased to 20
 ------------------ [Max Portals Per Player] --------------------
 
 ► Description:
-  Sets the number of portals that can be built by each player. This applies separately for each world.
-  This number applies individually for the normal and the stone portal. E.g. If the number is set to 5, then a player can build 5 normal portals and 5 stone portals.
-  This does not affect the number of Pocket Portals a player can build.
+  Sets the number of vanilla portals that can be built by each player. This applies separately for each world.
+  The limit is tracked individually for the normal Wood Portal and the Stone Portal. E.g. if the number is set to 5, then a player can build 5 Wood Portals and 5 Stone Portals.
+  Modded/custom portal types are not affected.
   Set to -1 for unlimited portals (default).
 
 ► Mid-Game Toggling: Changes will take effect immediately if the number is changed mid-game.
@@ -2229,64 +2231,6 @@ The following foods have the stack size increased to 20
   Incompatible with other mods that modify build piece costs.
   Compatible with mods that add new light sources. This will make them permanent, but will not modify their build costs.
   This config is automatically disabled if the above mods are detected.
-
-
-======================= [Build Pieces] =========================
-► All configs in this section are synced with server.
-
------------------------ [Pocket Portal] ------------------------
-
-► Description:
-  Adds a new portal that is functionally equal to the normal portal but is built from a special material, the Portal Core.
-  The Portal Core takes takes only one inventory slot and can be crafted at a lvl 4 Workbench with resources gathered from the Mountain and Black Forest biomes.  
-  The portal's shape is exactly the same as a normal portal, but has blue effects.
-  It does not allow the carying of metal or other prohibited items through it. It functions like a normal portal and can connect to any other portal.
-  Can craft and carry any number of Portal Cores, but can only build one Pocket Portal per player. 
-
-► Mid-Game Toggling: Toggling mid-game requires reloading the build/crafting menu. 
-  Even if this config is disabled, the prefabs are still created and existing portals or cores will not be removed from the world or inventory. Only the ability to craft them is affected by the toggle.
-
-► Conflicts: No known conflicts.
-
-▼ Portal Core Resource Requirements:
-- Surtling Core: 5
-- Fine Wood:     20
-- Freeze Gland:  5
-- Obsidian:      20
-
-
------------------------- [Extra Lights] ------------------------
-
-► Description:
-  Adds new light sources in the 'Extra Lights' category in the build menu.
-
-  NOTE: The build costs depend on whether Cheapper Build Piece Amounts or Permanent Lights are enabled or not.
-
-► Mid-Game Toggling:
-  Toggling mid-game requires reloading the build/crafting menu. 
-  Even if this config is disabled, the prefabs are still created and existing lights will not be removed from the world. Only the ability to build them is affected by the toggle.
-
-► Conflicts:
-  No known conflicts.
-
-▼ Specific Additions:
-
-- Green Standing Brazier 
-  - Added a green version of the Standing Brazier
-
-- Silver Sconce
-  - Added 3 types of Silver Sconces (red, blue and green flame) available in the Mountain biome
-  - Fuel lasts longer than the normal sconce
-  - Build Cost: Silver, Ancient Bark and the respective fuel: Resin, Greydwarf Eye or Guck
-
-- Silver Hanging Brazier
-  - Added 3 types of Silver Hanging Braziers (red, blue and green flame) available in the Mountain biome
-  - Fuel lasts longer than the normal hanging brazier
-  - Build Cost: Silver, Chain and the respective fuel: Coal, Greydwarf Eye or Guck
-
-- Blue and Green Dverger Lanterns
-  - Added blue and green versions of the Dverger Lantern (both wall and pole)
-  - Build costs are the same as the normal Dverger Lantern build pieces
 
 
 ============================ [UI] ==============================
@@ -2717,6 +2661,21 @@ The following foods have the stack size increased to 20
 
 VERSION HISTORY
 ================================================================
+
+v1.6.0
+- Valheim 1.0 Compatibility:
+  - Updated the mod for the Valheim 1.0 release.
+  - Updated ServerSync to the Valheim 1.0 compatible version.
+  - Fixed Extra Armor Stats tooltips after changes to the game's tooltip methods.
+  - Fixed Detailed Hover Information for Cooking Stations and Cooking Ovens after changes to CookingStation slot data.
+  - Fixed the Weather Forecast Indicator after changes to Valheim's biome and environment systems.
+  - Fixed weather icon loading after dependency changes.
+
+- Build Pieces:
+  - Removed the custom Build Pieces section from Marsarah Tweaks.
+  - Removed Pocket Portal and Extra Lights from this mod. These features are planned to move into a separate build-pieces mod.
+  - Removed the Jotunn dependency. Marsarah Tweaks now only requires BepInEx.
+  - Max Portals Per Player now explicitly applies only to the vanilla Wood Portal and Stone Portal.
 
 v1.5.1
 - Fixes:

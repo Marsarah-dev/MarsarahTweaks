@@ -18,6 +18,7 @@ namespace MarsarahTweaks.Patches.Features
 		//private static GameObject PortalStonePrefab = MPrefabManager.GetPrefab("portal_stone");
 		private const string PortalPrefabName = "portal_wood";
 		private const string PortalStonePrefabName = "portal_stone";
+		private const string PortalGlacialPrefabName = "portal_glacial";
 		//private static GameObject PortalGlacialPrefab = MPrefabManager.GetPrefab("portal_glacial");
 
 		// Limit Portals per player
@@ -26,7 +27,9 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			static bool Prefix(Player __instance, Piece piece, ref bool __result)
 			{
-				if (piece.name == PortalPrefabName && PlayerReachedPortalLimit(__instance, PortalPrefabName) || piece.name == PortalStonePrefabName && PlayerReachedPortalLimit(__instance, PortalStonePrefabName))
+				if ((piece.name == PortalPrefabName && PlayerReachedPortalLimit(__instance, PortalPrefabName)) ||
+					(piece.name == PortalStonePrefabName && PlayerReachedPortalLimit(__instance, PortalStonePrefabName)) ||
+					(piece.name == PortalGlacialPrefabName && PlayerReachedPortalLimit(__instance, PortalGlacialPrefabName)))
 				{
 					log.Info($"Blocking portal placement for {__instance.GetPlayerName()} ({__instance.GetPlayerID()}): portal limit reached");
 					__instance.Message(MessageHud.MessageType.Center, "You reached the maximum number of allowed portals.");
