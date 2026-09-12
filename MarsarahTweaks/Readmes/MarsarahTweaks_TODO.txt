@@ -14,6 +14,9 @@ B. Updates
 * Player Logout Announce moved to QOL from the previous UI section.
 * Permanent Lights
   - Reduced Wood cost for Campfire and Hearth to 5 and 10 respectively, and reduced the max fuel to that number.
+* Cheaper Gear Recipe Amounts
+  - Shield of Roots: reduced amount of Fine Wood for upgrade from 5/10/15 -> 4/8/12
+  - Lox Fur Jacket: reduced amount of Lox Pelt for upgrade from 6/12/18 -> 4/8/12
 
 C. Others
 ------------------------

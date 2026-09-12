@@ -164,6 +164,14 @@ namespace MarsarahTweaks.Patches.Grind
 				}
 			},
 
+			// Root
+			{
+				"Recipe_ShieldRoots", new Dictionary<string, (int?, int?)>
+				{
+					{ "FineWood", (null, 4) }, // 10, 5
+				}
+			},
+
 			// Iron
 			{ "Recipe_MaceIron", new Dictionary<string, (int?, int?)>
 				{
@@ -850,6 +858,14 @@ namespace MarsarahTweaks.Patches.Grind
 				"Recipe_ArmorBerserkerUndeadLegs", new Dictionary<string, (int?, int?)>
 				{
 					{ "BjornHide", (null, 2) } // 10, 5
+				}
+			},
+
+			// Lox Fur
+			{
+				"Recipe_ArmorLoxChest", new Dictionary<string, (int?, int?)>
+				{
+					{ "LoxPelt", (null, 4) } // 5, 6
 				}
 			},
 
