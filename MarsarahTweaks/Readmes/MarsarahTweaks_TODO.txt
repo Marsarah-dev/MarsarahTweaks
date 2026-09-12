@@ -13,7 +13,7 @@ B. Updates
 * Max Portals Per Player now also recognizes the Glacial Stone Portal when MarsarahBuildPieces is installed.
 * Player Logout Announce moved to QOL from the previous UI section.
 * Permanent Lights
-  - Reduced Wood cost for Campfire and Hearth to 5 and 10 respectively, and reduce the max fuel to that number.
+  - Reduced Wood cost for Campfire and Hearth to 5 and 10 respectively, and reduced the max fuel to that number.
 
 C. Others
 ------------------------
@@ -30,6 +30,8 @@ TO IMPLEMENT
 A. Grind Reduction
 -------------------------------
 * Review new gear crafting and upgrade costs.
+  - Lox Fur set
+  - Shield of Roots
 * Review new build-piece costs.
 
 B. Balance
@@ -40,12 +42,13 @@ B. Balance
 * Review Forsaken Power cooldowns.
 * Staff of Fracturing: increase splinter blast radius.
 * Add improved gear set bonuses.
+* Specifically check recipes that use Writhian Roots
 
 C. Features
 -------------------------------
-* Review Ghost, Bear and Vile and Deep North creatures trophy drop rates.
-* Add/verify Progression Halt handling for Ghost, Bear and Vile, plus Deep North.
-* Review Creature Unleveler handling for Ghost, Bear and Vile, plus Deep North.
+* Review Ghost, Bear and Vile, Writhian and Deep North creatures trophy drop rates.
+* Add/verify Progression Halt handling for Ghost, Bear, Vile, Writhian plus Deep North.
+* Review Creature Unleveler handling for Ghost, Bear, Vile, Writhian plus Deep North.
 * Increase Scrap Iron drop amount from Muddy Scrap Piles.
 * Staff of Protection: add a secondary healing attack similar to the Dvergr Mage heal.
 * Better Roads: increase player movement speed on roads.
