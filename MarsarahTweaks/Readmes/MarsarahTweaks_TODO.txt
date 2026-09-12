@@ -43,6 +43,9 @@ B. Updates
       - Cooked Bear Meat: 1 > 2
     - Amount crafted: 1 > 2
     - Max stacks: 10 > 20
+* Gear Speed Modifications:
+  - Added Lox Fur Jacket and Lox Fur Trousers to light armor speed bonuses (+2% each).
+  - Removed movement speed modifications for Wood, Bone, Iron, Black Metal, and Flametal Tower Shields. Valheim 1.0 reduced their vanilla movement penalty from -15% to -10%, matching MarsarahTweaks' existing modified value and making those overrides redundant.
 
 C. Others
 ------------------------

@@ -23,7 +23,7 @@ namespace MarsarahTweaks.Patches.Balance
 
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-				//LogGearSpeeds(__instance);
+				LogGearSpeeds(__instance);
 
 				UpdateGearSpeed(__instance, false);
 			}
@@ -39,6 +39,7 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "ArmorMageChest", 0f }, { "ArmorMageChest_Ashlands", 0f },
 			{ "ArmorTrollLeatherChest", 0.02f }, { "ArmorAshlandsMediumChest", 0.02f },
 			{ "ArmorRootChest", 0.01f }, { "ArmorBerserkerChest", 0.02f }, { "ArmorBerserkerUndeadChest", 0.02f },
+			{ "ArmorLoxChest", 0.02f },
 
 			// Legs
 			{ "ArmorBronzeLegs", 0f }, { "ArmorIronLegs", 0f }, { "ArmorWolfLegs", 0f },
@@ -46,14 +47,15 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "ArmorMageLegs", 0f }, { "ArmorMageLegs_Ashlands", 0f },
 			{ "ArmorTrollLeatherLegs", 0.02f }, { "ArmorAshlandsMediumlegs", 0.02f },
 			{ "ArmorRootLegs", 0.01f }, { "ArmorBerserkerLegs", 0.02f }, { "ArmorBerserkerUndeadLegs", 0.02f },
+			{ "ArmorLoxLegs", 0.02f },
 
 			// Two-handed weapons
 			{ "Battleaxe", -0.10f }, { "BattleaxeCrystal", -0.10f }, { "BattleaxeBlackmetal", -0.10f }, { "BattleaxeSkullSplittur", -0.10f }, 
 			{ "SledgeStagbreaker", -0.10f }, { "SledgeIron", -0.10f }, { "SledgeDemolisher", -0.10f },
 
 			// Shields
-			{ "ShieldFlametalTower", -0.10f }, { "ShieldBlackmetalTower", -0.10f },
-			{ "ShieldBoneTower", -0.10f }, { "ShieldIronTower", -0.10f }, { "ShieldWoodTower", -0.10f },
+			/*{ "ShieldFlametalTower", -0.10f }, { "ShieldBlackmetalTower", -0.10f },
+			{ "ShieldBoneTower", -0.10f }, { "ShieldIronTower", -0.10f }, { "ShieldWoodTower", -0.10f },*/
 			{ "ShieldSerpentscale", -0.05f }
 		};
 
@@ -110,20 +112,38 @@ namespace MarsarahTweaks.Patches.Balance
 				return;
 			}
 
-			log.Info("=== Listing Gear Movement Modifiers ===");
+			log.Info("=== Gear Movement Modifiers ===");
 
 			foreach (GameObject prefab in objDB.m_items)
 			{
 				ItemDrop item = prefab.GetComponent<ItemDrop>();
 				if (item == null) continue;
 
+				ItemDrop.ItemData itemData = item.m_itemData;
+				ItemDrop.ItemData.ItemType itemType = itemData.m_shared.m_itemType;
+
+				bool isRelevant =
+					itemData.IsWeapon() ||
+					itemType == ItemDrop.ItemData.ItemType.Helmet ||
+					itemType == ItemDrop.ItemData.ItemType.Chest ||
+					itemType == ItemDrop.ItemData.ItemType.Legs ||
+					itemType == ItemDrop.ItemData.ItemType.Shield ||
+					itemType == ItemDrop.ItemData.ItemType.Tool;
+
+				if (!isRelevant) continue;
+
 				string itemName = item.name;
-				float movementModifier = item.m_itemData.m_shared.m_movementModifier;
+				string displayName = itemData.m_shared.m_name;
+				float vanillaModifier = itemData.m_shared.m_movementModifier;
 
-				// Log anything that affects movement, plus anything MarsarahTweaks modifies.
-				if (movementModifier == 0f && !movementModifiers.ContainsKey(itemName)) continue;
-
-				log.Info($"{itemName}: {movementModifier} ({movementModifier * 100f:+0.##;-0.##;0}%)");
+				if (movementModifiers.TryGetValue(itemName, out float modifiedModifier))
+				{
+					log.Info($"{itemName} | {displayName} | Vanilla: {vanillaModifier} | Modified: {modifiedModifier}");
+				}
+				else
+				{
+					log.Info($"{itemName} | {displayName} | Vanilla: {vanillaModifier}");
+				}
 			}
 
 			log.Info("=== End Gear Movement Modifiers ===");

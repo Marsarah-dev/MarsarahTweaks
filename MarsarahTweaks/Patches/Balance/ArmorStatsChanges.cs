@@ -105,6 +105,9 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "$item_helmet_berserker_undead", (0, 5, 0) },
 			{ "$item_chest_berserker_undead", (0, 8, 0) },
 			{ "$item_legs_berserker_undead", (0, 7, 0) },
+			{ "$item_helmet_lox", (0, 5, 0) },
+			{ "$item_chest_lox", (0, 8, 0) },
+			{ "$item_legs_lox", (0, 7, 0) },
 
 			// Mage Gear (Eitr Bonus)
 			{ "$item_helmet_mage", (0, 0, 10) },
