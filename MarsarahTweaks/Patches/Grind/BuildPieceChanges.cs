@@ -28,6 +28,7 @@ namespace MarsarahTweaks.Patches.Grind
 
 				//LogPrefabs(__instance);
 				//LogBuildPieces(__instance);
+				//LogBuildPiecesExtra(__instance);
 				UpdateBuildPieces(__instance, false, false);
 			}
 		}
@@ -38,6 +39,30 @@ namespace MarsarahTweaks.Patches.Grind
 
 		private static Dictionary<string, Dictionary<string, int>> newPieceAmounts = new Dictionary<string, Dictionary<string, int>>()
 		{
+			{
+				"$piece_rock_01", new Dictionary<string, int> // Ornamental Boulder
+				{
+					{ "Stone", 8 } // 25
+				}
+			},
+			{
+				"$piece_rock_02", new Dictionary<string, int> // Decorative Boulder
+				{
+					{ "Stone", 5 } // 10
+				}
+			},
+			{
+				"$piece_woodfencegate", new Dictionary<string, int> // Roundpole Gate
+				{
+					{ "Wood", 2 } // 4
+				}
+			},
+			{
+				"$piece_stonefence", new Dictionary<string, int> // Stone Fence
+				{
+					{ "Stone", 3 } // 4
+				}
+			},
 			{ "$piece_preptable", new Dictionary<string, int>
 				{
 					{ "FineWood", 10 }, // 20
@@ -290,6 +315,24 @@ namespace MarsarahTweaks.Patches.Grind
 					{ "Stone", 3 } // 8
 				}
 			},
+			{
+				"$piece_darkwoodraven", new Dictionary<string, int> // Darkwood Raven
+				{
+					{ "FineWood", 6 } // 10
+				}
+			},
+			{
+				"$piece_darkwoodwolf", new Dictionary<string, int> // Darkwood Wolf
+				{
+					{ "FineWood", 6 } // 10
+				}
+			},
+			{
+				"$piece_blackmarble_throne", new Dictionary<string, int> // Black Marble Throne
+				{
+					{ "Copper", 4 } // 5
+				}
+			},
 			{ "$piece_blackmarble2x1x1", new Dictionary<string, int>
 				{
 					{ "BlackMarble", 3 } // 4
@@ -426,7 +469,7 @@ namespace MarsarahTweaks.Patches.Grind
 			{ "$piece_blackmarble_table", new Dictionary<string, int>
 				{
 					{ "BlackMarble", 5 }, // 6
-					{ "Copper", 2 } // 6
+					{ "Copper", 2 } // 3
 				}
 			},
 			{ "$piece_brazierfloor01", new Dictionary<string, int>
@@ -485,42 +528,60 @@ namespace MarsarahTweaks.Patches.Grind
 					{ "Blackwood", 1 } // 2
 				}
 			},
-			{ "$piece_ashwood_floor_2x2", new Dictionary<string, int>
+			/*{ "$piece_ashwood_floor_2x2", new Dictionary<string, int>
 				{
-					{ "Blackwood", 2 } // 4
+					{ "Blackwood", 2 } // 4 -> now 2 in vanilla
 				}
 			},
 			{ "$piece_ashwood_floor_1x1", new Dictionary<string, int>
 				{
-					{ "Blackwood", 1 } // 2
+					{ "Blackwood", 1 } // 2 -> now 1 in vanilla
 				}
-			},
+			},*/
 			{ "$piece_ashwood_floor_deco", new Dictionary<string, int>
 				{
 					{ "Blackwood", 2 } // 4
 				}
 			},
-			{ "$piece_ashwood_beam_1m", new Dictionary<string, int>
+			/*{ "$piece_ashwood_beam_1m", new Dictionary<string, int>
 				{
-					{ "Blackwood", 1 } // 2
+					{ "Blackwood", 1 } // 2 -> now 1 in vanilla
 				}
 			},
 			{ "$piece_ashwood_beam_2m", new Dictionary<string, int>
 				{
-					{ "Blackwood", 2 } // 4
+					{ "Blackwood", 2 } // 4 -> now 2 in vanilla
 				}
 			},
 			{ "$piece_ashwood_pole_1m", new Dictionary<string, int>
 				{
-					{ "Blackwood", 1 } // 2
+					{ "Blackwood", 1 } // 2 -> now 1 in vanilla
 				}
 			},
 			{ "$piece_ashwood_pole_2m", new Dictionary<string, int>
 				{
+					{ "Blackwood", 2 } // 4 -> now 2 in vanilla
+				}
+			},*/
+			{ "$piece_ashwoodstair", new Dictionary<string, int>
+				{
+					{ "Blackwood", 1 } // 2
+				}
+			},
+			{
+				"$piece_ashwood_decowall", new Dictionary<string, int> // Ashwood Decowall 2x2
+				{
 					{ "Blackwood", 2 } // 4
 				}
 			},
-			{ "$piece_ashwoodstair", new Dictionary<string, int>
+			{
+				"$piece_ashwood_decowall_divider", new Dictionary<string, int> // Ashwood Decowall Divider
+				{
+					{ "Blackwood", 1 } // 2
+				}
+			},
+			{
+				"$piece_ashwood_decowall_tree", new Dictionary<string, int> // Ashwood Decowall Tree
 				{
 					{ "Blackwood", 1 } // 2
 				}
@@ -835,6 +896,45 @@ namespace MarsarahTweaks.Patches.Grind
 			}
 
 			log.Info("=== Finished Logging Build Pieces ===");
+		}
+
+		public static void LogBuildPiecesExtra(ZNetScene znScene)
+		{
+			if (znScene == null)
+			{
+				log.Warn("ZNetScene is null. Cannot log build pieces.");
+				return;
+			}
+
+			log.Info("=== Build Piece Costs ===");
+
+			foreach (GameObject prefab in znScene.m_prefabs)
+			{
+				Piece piece = prefab.GetComponent<Piece>();
+				if (piece == null || piece.m_resources == null || piece.m_resources.Length == 0) continue;
+
+				bool hasAmountChanges = newPieceAmounts.TryGetValue(piece.m_name, out Dictionary<string, int> pieceChanges);
+
+				log.Info($"[Piece] {piece.m_name} | Prefab: {prefab.name}");
+
+				foreach (Piece.Requirement req in piece.m_resources)
+				{
+					if (req?.m_resItem == null) continue;
+
+					int vanillaAmount = req.m_amount;
+
+					if (hasAmountChanges && pieceChanges.TryGetValue(req.m_resItem.name, out int modifiedAmount) && modifiedAmount != vanillaAmount)
+					{
+						log.Info($"   - {req.m_resItem.name}: Vanilla {vanillaAmount} -> Modified {modifiedAmount}");
+					}
+					else
+					{
+						log.Info($"   - {req.m_resItem.name}: Vanilla {vanillaAmount}");
+					}
+				}
+			}
+
+			log.Info("=== End Build Piece Costs ===");
 		}
 
 		// Log Prefabs

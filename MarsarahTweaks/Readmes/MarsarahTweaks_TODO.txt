@@ -17,6 +17,25 @@ B. Updates
 * Cheaper Gear Recipe Amounts
   - Shield of Roots: reduced amount of Fine Wood for upgrade from 5/10/15 -> 4/8/12
   - Lox Fur Jacket: reduced amount of Lox Pelt for upgrade from 6/12/18 -> 4/8/12
+* Cheaper Build Pieces Amounts
+  - Decorative Boulder: Stone 10 -> 5
+  - Ornamental Boulder: Stone 25 -> 8
+  - Roundpole Gate: Wood 4 -> 2
+  - Stone Fence: Stone 4 -> 3
+  - Darkwood Raven: Fine Wood 10 -> 6
+  - Darkwood Wolf: Fine Wood 10 -> 6
+  - Black Marble Throne: Copper 5 -> 4
+  - Ashwood Decowall 2x2: Ashwood 4 -> 2
+  - Ashwood Decowall Divider: Ashwood 2 -> 1
+  - Ashwood Decowall Tree: Ashwood 2 -> 1
+  - Removed the following from being modified, since the vanilla values are now as the mod was changing them:
+    - Ashwood Floor 2x2
+    - Ashwood Floor 1x1
+    - Ashwood Beam 1m
+    - Ashwood Beam 2m
+    - Ashwood Pole 1m
+    - Ashwood Pole 2m
+  - NOTE: For Blackmarble Table change the readme to update the vanilla value of copper from 6 to 3 (mod makes it 2)
 
 C. Others
 ------------------------
