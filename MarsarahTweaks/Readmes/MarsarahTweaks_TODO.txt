@@ -36,6 +36,13 @@ B. Updates
     - Ashwood Pole 1m
     - Ashwood Pole 2m
   - NOTE: For Blackmarble Table change the readme to update the vanilla value of copper from 6 to 3 (mod makes it 2)
+* Food And Mead Modifications
+  - Added Pulled Bear to the changed recipes
+    - Amounts to craft: 
+      - Carrot: 1 > 2
+      - Cooked Bear Meat: 1 > 2
+    - Amount crafted: 1 > 2
+    - Max stacks: 10 > 20
 
 C. Others
 ------------------------

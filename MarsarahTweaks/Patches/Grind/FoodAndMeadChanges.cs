@@ -19,6 +19,7 @@ namespace MarsarahTweaks.Patches.Grind
 
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
+				//LogFoodAndMead(__instance);
 				UpdateFoodAndMead(__instance, false);
 			}
 		}
@@ -75,6 +76,12 @@ namespace MarsarahTweaks.Patches.Grind
 			},
 			{ "Recipe_Eyescream", new RecipeModification
 				{
+					RecipeAmount = 2
+				}
+			},
+			{ "Recipe_PulledBear", new RecipeModification
+				{
+					ResourceChanges = { { "CookedBjornMeat", 2 }, { "Blueberries", 2 } },
 					RecipeAmount = 2
 				}
 			},
@@ -311,6 +318,7 @@ namespace MarsarahTweaks.Patches.Grind
 			{ "CarrotSoup", 20 },
 			{ "DeerStew", 20 },
 			{ "TurnipStew", 20 },
+			{ "PulledBear", 20 },
 			{ "BlackSoup", 20 },
 			{ "Eyescream", 20 },
 			{ "ShocklateSmoothie", 20 }, // Muckshake
@@ -372,15 +380,6 @@ namespace MarsarahTweaks.Patches.Grind
 		// Update Food And Mead ====================================================================
 		public static void UpdateFoodAndMead(ObjectDB objDB, bool wasModified)
 		{
-			/*foreach (Recipe recipe in objDB.m_recipes)
-			{
-				// show item recipe info
-				foreach (Piece.Requirement req in recipe.m_resources)
-				{
-					Debug.Log($"[Marsarah Mod] :: {recipe.name} - Requirement: {req.m_resItem.name} - Amount: {req.m_amount} - Upgrade: {req.m_amountPerLevel} ");
-				}
-			}*/
-
 			// Get Dictionary for all recipe modifications
 			var recipeModifications = GetRecipeModifications();
 
@@ -536,6 +535,155 @@ namespace MarsarahTweaks.Patches.Grind
 				originalRecipeValues.Clear();
 				originalFoodStacks.Clear();
 			}
+		}
+
+		private static void LogFoodAndMead(ObjectDB objDB)
+		{
+			if (objDB == null)
+			{
+				log.Warn("ObjectDB is null. Cannot log food and mead.");
+				return;
+			}
+
+			Dictionary<string, RecipeModification> modifications = GetRecipeModifications();
+			HashSet<string> loggedOutputItems = new HashSet<string>();
+
+			log.Info("=== Food And Mead Recipes ===");
+
+			foreach (Recipe recipe in objDB.m_recipes)
+			{
+				if (!IsFoodOrMeadRecipe(recipe, modifications)) continue;
+
+				ItemDrop outputItem = recipe.m_item;
+				string outputPrefab = outputItem.name;
+				string outputName = outputItem.m_itemData.m_shared.m_name;
+				string stationName = recipe.m_craftingStation != null ? recipe.m_craftingStation.name : "None";
+
+				loggedOutputItems.Add(outputPrefab);
+
+				modifications.TryGetValue(recipe.name, out RecipeModification modification);
+
+				log.Info($"[Recipe] {recipe.name} | Output: {outputPrefab} | Name: {outputName} | Station: {stationName}");
+
+				int vanillaRecipeAmount = recipe.m_amount;
+
+				if (modification?.RecipeAmount != null && modification.RecipeAmount.Value != vanillaRecipeAmount)
+				{
+					log.Info($"   Crafted Amount: Vanilla {vanillaRecipeAmount} -> Modified {modification.RecipeAmount.Value}");
+				}
+				else
+				{
+					log.Info($"   Crafted Amount: Vanilla {vanillaRecipeAmount}");
+				}
+
+				int vanillaStack = outputItem.m_itemData.m_shared.m_maxStackSize;
+
+				if (foodStacksModifications.TryGetValue(outputPrefab, out int modifiedStack) && modifiedStack != vanillaStack)
+				{
+					log.Info($"   Stack: Vanilla {vanillaStack} -> Modified {modifiedStack}");
+				}
+				else
+				{
+					log.Info($"   Stack: Vanilla {vanillaStack}");
+				}
+
+				foreach (Piece.Requirement req in recipe.m_resources)
+				{
+					if (req?.m_resItem == null) continue;
+
+					string resourceName = req.m_resItem.name;
+					int vanillaAmount = req.m_amount;
+					int modifiedAmount = vanillaAmount;
+					string modifiedResource = resourceName;
+
+					int newAmount = vanillaAmount;
+
+					bool amountChanged = modification != null &&
+						modification.ResourceChanges.TryGetValue(resourceName, out newAmount) &&
+						newAmount != vanillaAmount;
+
+					if (amountChanged)
+					{
+						modifiedAmount = newAmount;
+					}
+
+					string newResource = resourceName;
+
+					bool resourceChanged = modification != null &&
+						modification.ResourceReplacements.TryGetValue(resourceName, out newResource) &&
+						newResource != resourceName;
+
+					if (resourceChanged)
+					{
+						modifiedResource = newResource;
+					}
+
+					if (amountChanged && resourceChanged)
+					{
+						log.Info($"   - Resource: {resourceName} | Vanilla Amount: {vanillaAmount} | Modified Resource: {modifiedResource} | Modified Amount: {modifiedAmount}");
+					}
+					else if (amountChanged)
+					{
+						log.Info($"   - Resource: {resourceName} | Vanilla Amount: {vanillaAmount} | Modified Amount: {modifiedAmount}");
+					}
+					else if (resourceChanged)
+					{
+						log.Info($"   - Resource: {resourceName} | Vanilla Amount: {vanillaAmount} | Modified Resource: {modifiedResource}");
+					}
+					else
+					{
+						log.Info($"   - Resource: {resourceName} | Vanilla Amount: {vanillaAmount}");
+					}
+				}
+			}
+
+			log.Info("=== Additional Food Item Stacks ===");
+
+			foreach (GameObject item in objDB.m_items)
+			{
+				if (item == null || loggedOutputItems.Contains(item.name)) continue;
+
+				ItemDrop itemDrop = item.GetComponent<ItemDrop>();
+				if (itemDrop == null) continue;
+
+				ItemDrop.ItemData.SharedData sharedData = itemDrop.m_itemData.m_shared;
+
+				bool isFood = sharedData.m_food > 0f;
+				bool hasStackModification = foodStacksModifications.TryGetValue(item.name, out int modifiedStack);
+
+				if (!isFood && !hasStackModification) continue;
+
+				int vanillaStack = sharedData.m_maxStackSize;
+
+				if (hasStackModification && modifiedStack != vanillaStack)
+				{
+					log.Info($"[Item] {item.name} | Name: {sharedData.m_name} | Stack: Vanilla {vanillaStack} -> Modified {modifiedStack}");
+				}
+				else
+				{
+					log.Info($"[Item] {item.name} | Name: {sharedData.m_name} | Stack: Vanilla {vanillaStack}");
+				}
+			}
+
+			log.Info("=== End Food And Mead Audit ===");
+		}
+
+		private static bool IsFoodOrMeadRecipe(Recipe recipe, Dictionary<string, RecipeModification> modifications)
+		{
+			if (recipe?.m_item == null) return false;
+
+			if (modifications.ContainsKey(recipe.name)) return true;
+
+			if (recipe.m_item.m_itemData.m_shared.m_food > 0f) return true;
+
+			if (recipe.m_craftingStation != null)
+			{
+				string stationName = recipe.m_craftingStation.name.ToLowerInvariant();
+
+				if (stationName.Contains("cauldron") || stationName.Contains("preptable")) return true;
+			}
+
+			return false;
 		}
 	}
 }
