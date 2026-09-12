@@ -13,6 +13,8 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		private static readonly LogManager log = new LogManager("Weather Changes", LogManager.LogLevel.Warning);
 
+		//private static bool originalWeatherLogged = false;
+
 		// New weather values
 		public static readonly Dictionary<(Heightmap.Biome, string), float> weatherWeightChanges = new Dictionary<(Heightmap.Biome, string), float>()
 		{
@@ -46,6 +48,12 @@ namespace MarsarahTweaks.Patches.Features
 			static void Prefix(List<EnvEntry> environments, EnvMan __instance)
 			{
 				if (environments == null || environments.Count == 0) return;
+
+				/*if (!originalWeatherLogged)
+				{
+					LogWeatherWeights(__instance);
+					originalWeatherLogged = true;
+				}*/
 
 				var biome = GetBiomeForEnvironments(environments, __instance);
 
@@ -150,5 +158,73 @@ namespace MarsarahTweaks.Patches.Features
 				}				
 			}
 		}*/
+
+		private static void LogWeatherWeights(EnvMan envMan)
+		{
+			if (envMan == null || envMan.m_biomes == null)
+			{
+				log.Warn("Cannot log weather weights because EnvMan or its biome list is null.");
+				return;
+			}
+
+			log.Info("=== Vanilla Weather Weights by Biome ===");
+
+			Dictionary<Heightmap.Biome, int> biomeCounts = new Dictionary<Heightmap.Biome, int>();
+			Dictionary<Heightmap.Biome, int> biomeIndexes = new Dictionary<Heightmap.Biome, int>();
+
+			foreach (var biomeSetup in envMan.m_biomes)
+			{
+				Heightmap.Biome biome = biomeSetup.m_biome;
+
+				if (!biomeCounts.ContainsKey(biome))
+					biomeCounts[biome] = 0;
+
+				biomeCounts[biome]++;
+			}
+
+			foreach (var biomeSetup in envMan.m_biomes)
+			{
+				Heightmap.Biome biome = biomeSetup.m_biome;
+				List<EnvEntry> environments = biomeSetup.m_environments;
+
+				if (!biomeIndexes.ContainsKey(biome))
+					biomeIndexes[biome] = 0;
+
+				biomeIndexes[biome]++;
+
+				int variantIndex = biomeIndexes[biome];
+				int variantCount = biomeCounts[biome];
+
+				string variantText = variantCount > 1 ? $" [Variant {variantIndex}/{variantCount}]" : "";
+
+				if (environments == null || environments.Count == 0)
+				{
+					log.Info($"Biome: {biome}{variantText} | No environments");
+					continue;
+				}
+
+				float totalWeight = 0f;
+
+				foreach (EnvEntry entry in environments)
+				{
+					if (entry?.m_env == null) continue;
+
+					totalWeight += entry.m_weight;
+				}
+
+				log.Info($"Biome: {biome}{variantText} | Environments: {environments.Count} | Total Weight: {totalWeight:0.###}");
+
+				foreach (EnvEntry entry in environments)
+				{
+					if (entry?.m_env == null) continue;
+
+					float probability = totalWeight > 0f ? entry.m_weight / totalWeight * 100f : 0f;
+
+					log.Info($"   - {entry.m_env.m_name}: Weight {entry.m_weight:0.###} | Probability {probability:0.00}%");
+				}
+			}
+
+			log.Info("=== End Vanilla Weather Weights ===");
+		}
 	}
 }

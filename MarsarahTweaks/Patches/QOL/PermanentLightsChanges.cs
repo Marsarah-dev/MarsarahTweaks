@@ -14,11 +14,21 @@ namespace MarsarahTweaks.Patches.QOL
 	{
 		private static readonly LogManager log = new LogManager("Permanent Lights", LogManager.LogLevel.Warning);
 
+		private const int CampfirePermanentFuel = 5;
+		private const int HearthPermanentFuel = 10;
+
 		[HarmonyPatch(typeof(Fireplace), "UpdateFireplace")]
 		class PermanentLights_Patch
 		{
 			private static void Postfix(Fireplace __instance, ref ZNetView ___m_nview)
 			{
+				string prefabName = Utils.GetPrefabName(__instance.gameObject);
+
+				if (prefabName == "fire_pit")
+					__instance.m_maxFuel = ConfigManager.PermanentLightsEnabled.Value ? CampfirePermanentFuel : 10f;
+				else if (prefabName == "hearth")
+					__instance.m_maxFuel = ConfigManager.PermanentLightsEnabled.Value ? HearthPermanentFuel : 20f;
+
 				// Ensure this only runs on the server (or the owner of the fireplace)
 				if (___m_nview.IsOwner())
 				{
@@ -53,8 +63,8 @@ namespace MarsarahTweaks.Patches.QOL
 		private static readonly Dictionary<string, Dictionary<string, int>> originalLightPieceCosts = new Dictionary<string, Dictionary<string, int>>();
 		public static readonly Dictionary<string, Dictionary<string, int>> lightPieceCostChanges = new Dictionary<string, Dictionary<string, int>>()
 		{
-			{ "$piece_firepit",             new Dictionary<string, int>() { { "Wood", 10 } } },
-			{ "$piece_hearth",              new Dictionary<string, int>() { { "Wood", 20 } } },
+			{ "$piece_firepit",             new Dictionary<string, int>() { { "Wood", CampfirePermanentFuel } } },
+			{ "$piece_hearth",              new Dictionary<string, int>() { { "Wood", HearthPermanentFuel } } },
 			{ "$piece_sconce",              new Dictionary<string, int>() { { "Resin", 6 } } },
 			{ "$piece_groundtorch",         new Dictionary<string, int>() { { "Resin", 6 } } },
 			{ "$piece_groundtorchwood",     new Dictionary<string, int>() { { "Resin", 4 } } },
@@ -125,7 +135,7 @@ namespace MarsarahTweaks.Patches.QOL
 					{
 						Piece.Requirement woodReq = new Piece.Requirement()
 						{
-							m_amount = 20,
+							m_amount = HearthPermanentFuel,
 							m_amountPerLevel = 0,
 							m_resItem = znScene.GetPrefab("Wood").GetComponent<ItemDrop>(),
 							m_recover = true
@@ -194,7 +204,7 @@ namespace MarsarahTweaks.Patches.QOL
 					if (pieceName == "$piece_hearth")
 					{
 						component.m_resources = component.m_resources
-							.Where(req => !(req.m_resItem.name == "Wood" && req.m_amount == 20))
+							.Where(req => !(req.m_resItem.name == "Wood" && req.m_amount == HearthPermanentFuel))
 							.ToArray();
 						log.Info($"Removed Wood requirement for {pieceName}");
 					}

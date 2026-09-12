@@ -5,18 +5,20 @@ MARSARAH TWEAKS TODO
 IMPLEMENTED - NOT RELEASED
 ============================================================
 
-A. Project Restructuring
+A. New Features
+------------------------------
+
+B. Updates
+------------------------------
+* Max Portals Per Player now also recognizes the Glacial Stone Portal when MarsarahBuildPieces is installed.
+* Player Logout Announce moved to QOL from the previous UI section.
+* Permanent Lights
+  - Reduced Wood cost for Campfire and Hearth to 5 and 10 respectively, and reduce the max fuel to that number.
+
+C. Others
 ------------------------
 * Removed all UI features from MarsarahTweaks and moved them to the standalone MarsarahUI mod.
 * Removed the custom build-piece module from MarsarahTweaks and moved it to MarsarahBuildPieces.
-
-B. Updates
-----------
-* Max Portals Per Player now also recognizes the Glacial Stone Portal when MarsarahBuildPieces is installed.
-* Player Logout Announce moved to QOL from the previous UI section.
-
-C. Multiplayer / Compatibility
-------------------------------
 * Max Portals Per Player / Glacial Stone Portal integration still needs dedicated-server testing.
 * Player Logout Announce should receive a final multiplayer/dedicated-server test.
 
@@ -25,41 +27,39 @@ C. Multiplayer / Compatibility
 TO IMPLEMENT
 ============================================================
 
-A. Next Release / High Priority
+A. Grind Reduction
 -------------------------------
-* Complete the Valheim 1.0 compatibility pass against the current game assemblies.
-
-* Permanent Lights cleanup:
-  - Keep the global Permanent Lights feature. Decide if I want to do the below:
-    - Remove the increased/max-fuel build-cost behavior.
-    - Campfires, fireplaces and other lights should use their normal vanilla build costs.
-    - Coordinate with MarsarahBuildPieces so its custom lights no longer increase their fuel/build requirements when Permanent Lights is enabled.
-
-* Final project consistency pass after the 1.0 fixes:
-  - Logging
-  - Naming
-  - Arrangement/style
-  - Dead code/usings/comments
-  - Current assembly references
-
-B. Deep North / 1.0 Content
----------------------------
-[DEFERRED] Do this after playing the Deep North to avoid spoilers.
-
-Grind / Recipes:
 * Review new gear crafting and upgrade costs.
 * Review new build-piece costs.
 
-Balance:
+B. Balance
+-------------------------------
 * Review new gear speed values.
 * Review new gear HP / Stamina / Eitr stats.
 * Review new gear upgrade minimum station levels.
 * Review Forsaken Power cooldowns.
+* Staff of Fracturing: increase splinter blast radius.
+* Add improved gear set bonuses.
 
-Progression / Drops:
+C. Features
+-------------------------------
 * Review Ghost, Bear and Vile and Deep North creatures trophy drop rates.
 * Add/verify Progression Halt handling for Ghost, Bear and Vile, plus Deep North.
 * Review Creature Unleveler handling for Ghost, Bear and Vile, plus Deep North.
+* Increase Scrap Iron drop amount from Muddy Scrap Piles.
+* Staff of Protection: add a secondary healing attack similar to the Dvergr Mage heal.
+* Better Roads: increase player movement speed on roads.
+* Vote to Sleep:
+  - A player can trigger a sleep vote.
+  - Skip time if the majority votes yes.
+  - Cancel the vote entirely if one or more players are in combat / have enemies nearby.
+* Allow ships to be destroyed with the hammer.
+* Allow Boars to eat Yellow Mushrooms.
+* Max Portals Per Player        
+  - Make the config take a range so the config manager reads it with a slider. From -1 to 50-ish, where -1 is still off/default. Or add a bool to enable/disable it and then a separate slider from 1 to 50-ish.
+  - Add admin exception for portal limit. 
+* Player Inspector for players currently logged into the world.
+* Skip intro video
 
 Trinkets:
 * Review new Trinket build costs:
@@ -83,31 +83,9 @@ Trinkets:
   - Jörmundling
   - Brimstone
 
-C. Grind Reduction
-------------------
-* Increase Scrap Iron drop amount from Muddy Scrap Piles.
 
-D. Balance
-----------
-* Staff of Fracturing: increase splinter blast radius.
-* Add improved gear set bonuses.
-
-E. Features
------------
-* Staff of Protection: add a secondary healing attack similar to the Dvergr Mage heal.
-* Better Roads: increase player movement speed on roads.
-* Vote to Sleep:
-  - A player can trigger a sleep vote.
-  - Skip time if the majority votes yes.
-  - Cancel the vote entirely if one or more players are in combat / have enemies nearby.
-* Allow ships to be destroyed with the hammer.
-* Allow Boars to eat Yellow Mushrooms.
-* Max Portals Per Player        
-  - Make the config take a range so the config manager reads it with a slider. From -1 to 50-ish, where -1 is still off/default. Or add a bool to enable/disable it and then a separate slider from 1 to 50-ish.
-  - Add admin exception for portal limit. 
-
-F. QOL
-------
+D. QOL
+-------------------------------
 * Less Fireplace Smoke with a configurable percentage.
 * Recreate Better Sorting.
 * Make candles refillable with Resin.
@@ -115,10 +93,15 @@ F. QOL
 * Remove/reduce character slowdown during selected actions such as equipping and eating.
 * Configurable faster processing for smelters and kilns.
 
-G. Config Improvements
-----------------------
-* Replace selected bool-based tweaks with configurable values where appropriate:
+E. Others
+-------------------------------
+* Final project consistency pass after the 1.0 fixes:
+  - Logging
+  - Naming
+  - Arrangement/style
+  - Dead code/usings/comments
 
+* Replace selected bool-based tweaks with configurable values where appropriate:
   - Less Stamina Usage            -> Rename to Stamina Usage          -> Value controls stamina-use percentage.
   - Reduced Crossbows Reload Time -> Rename to Crossbows Reload Time  -> Set the desired reload value directly instead of adding/subtracting.
   - Hildir Weight Rewards         ->                                  -> Configure extra carry weight per chest delivered
@@ -129,8 +112,6 @@ G. Config Improvements
   - Less Fall Damage              -> Rename to Fall Damage Multiplier -> Example: 0.6 = 40% less fall damage.
   - Shorter Rested Delay          -> Rename to Rested Delay           -> Configure the delay directly.
 
-H. Add configurable files
--------------------------
 * Move hardcoded values from the categories below into yaml files or equivalent, to have users choose them:
   - Cheaper Gear Recipe Amounts
   - Alternate Gear Recipe Materials
@@ -144,11 +125,7 @@ H. Add configurable files
   - Extra Armor Stats
   - Forsaken Powers Cooldowns
 
-============================================================
-MOVED / NO LONGER NEEDED HERE
-============================================================
+F. Deep North / 1.0 Content
+---------------------------
+[DEFERRED] Do this after playing the Deep North to avoid spoilers.
 
-- Pocket Portal max-build/ownership work belongs to MarsarahBuildPieces.
-- All UI feature ideas belong to MarsarahUI.
-- Mystical Light Ward belongs to MarsarahBuildPieces and is already implemented.
-- Do NOT remove Permanent Lights entirely. The plan changed: keep it in Tweaks, but remove the artificial max-fuel build costs.

@@ -23,6 +23,8 @@ namespace MarsarahTweaks.Patches.Balance
 
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
+				//LogGearSpeeds(__instance);
+
 				UpdateGearSpeed(__instance, false);
 			}
 		}
@@ -98,6 +100,33 @@ namespace MarsarahTweaks.Patches.Balance
 					}
 				}
 			}
+		}
+
+		private static void LogGearSpeeds(ObjectDB objDB)
+		{
+			if (objDB == null || objDB.m_items == null)
+			{
+				log.Warn("Cannot log gear speeds because ObjectDB or its item list is null.");
+				return;
+			}
+
+			log.Info("=== Listing Gear Movement Modifiers ===");
+
+			foreach (GameObject prefab in objDB.m_items)
+			{
+				ItemDrop item = prefab.GetComponent<ItemDrop>();
+				if (item == null) continue;
+
+				string itemName = item.name;
+				float movementModifier = item.m_itemData.m_shared.m_movementModifier;
+
+				// Log anything that affects movement, plus anything MarsarahTweaks modifies.
+				if (movementModifier == 0f && !movementModifiers.ContainsKey(itemName)) continue;
+
+				log.Info($"{itemName}: {movementModifier} ({movementModifier * 100f:+0.##;-0.##;0}%)");
+			}
+
+			log.Info("=== End Gear Movement Modifiers ===");
 		}
 	}
 }
