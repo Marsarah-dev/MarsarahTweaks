@@ -15,7 +15,7 @@ namespace MarsarahTweaks.Patches.Balance
 		private static readonly LogManager log = new LogManager("Crossbow Changes", LogManager.LogLevel.Warning);
 
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
-		class GearSpeedChanges_Patch
+		class CrossbowsChanges_Patch
 		{
 			static void Postfix(ref ObjectDB __instance)
 			{

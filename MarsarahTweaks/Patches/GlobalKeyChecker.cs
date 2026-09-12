@@ -23,6 +23,8 @@ namespace MarsarahTweaks.Patches
 		public static bool GeirrhafaDefeated = false;
 		public static bool ThungrNZilDefeated = false;
 
+		private static string lastGlobalKeysSnapshot = null;
+
 		// Dictionary to store global key states
 		private static readonly Dictionary<string, bool> globalKeyStates = new Dictionary<string, bool>()
 		{
@@ -74,7 +76,7 @@ namespace MarsarahTweaks.Patches
 			}
 		}
 
-		private static void UpdateDefeatedStates(ZoneSystem zoneSystem)
+		/*private static void UpdateDefeatedStates(ZoneSystem zoneSystem)
 		{
 			List<string> globalKeys = zoneSystem.GetGlobalKeys();
 			foreach (var key in globalKeyStates.Keys.ToList())
@@ -84,6 +86,45 @@ namespace MarsarahTweaks.Patches
 				{
 					globalKeyStates[key] = keyIsPresent;
 				}
+			}
+		}*/
+
+		private static void UpdateDefeatedStates(ZoneSystem zoneSystem)
+		{
+			List<string> globalKeys = zoneSystem.GetGlobalKeys();
+
+			string snapshot = string.Join(", ", globalKeys.OrderBy(key => key));
+			bool snapshotChanged = snapshot != lastGlobalKeysSnapshot;
+
+			if (snapshotChanged)
+			{
+				log.Info($"=== Global Keys ({globalKeys.Count}) ===");
+				log.Info(globalKeys.Count > 0 ? snapshot : "(none)");
+			}
+
+			foreach (string key in globalKeyStates.Keys.ToList())
+			{
+				bool keyIsPresent = globalKeys.Contains(key);
+
+				if (globalKeyStates[key] != keyIsPresent)
+				{
+					log.Info($"Key state changed: {key} | {globalKeyStates[key]} -> {keyIsPresent}");
+					globalKeyStates[key] = keyIsPresent;
+				}
+			}
+
+			if (snapshotChanged)
+			{
+				log.Info("=== Expected Key States ===");
+
+				foreach (var key in globalKeyStates)
+				{
+					log.Info($"{key.Key}: {key.Value}");
+				}
+
+				log.Info("=== End Global Keys ===");
+
+				lastGlobalKeysSnapshot = snapshot;
 			}
 		}
 

@@ -17,7 +17,7 @@ namespace MarsarahTweaks.Patches.Features
 		internal static bool lastExtensionSetting = ConfigManager.ExtensionsChangesEnabled.Value;
 
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
-		class BuildPiecesModifications_Patch
+		class ExtensionChangesSpace_Patch
 		{
 			static void Postfix(ref ZNetScene __instance)
 			{
@@ -90,24 +90,24 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static void UpdateExtensionsRange(StationExtension extension)
 		{
-			string extensioName = extension.name;
+			string extensionName = extension.name;
 
 			if (ConfigManager.ExtensionsChangesEnabled.Value)
 			{
-				if (!originalStationDistance.ContainsKey(extensioName))
+				if (!originalStationDistance.ContainsKey(extensionName))
 				{
-					log.Info($"Backing up build distance for {extensioName}");
-					originalStationDistance[extensioName] = extension.m_maxStationDistance;
+					log.Info($"Backing up build distance for {extensionName}");
+					originalStationDistance[extensionName] = extension.m_maxStationDistance;
 				}
 
 				extension.m_maxStationDistance = 7f;
 			}
-			else if (originalStationDistance.TryGetValue(extensioName, out float original))
+			else if (originalStationDistance.TryGetValue(extensionName, out float original))
 			{
-				log.Info($"Restoring build distance for {extensioName}");
+				log.Info($"Restoring build distance for {extensionName}");
 				extension.m_maxStationDistance = original;
 
-				originalStationDistance.Remove(extensioName);
+				originalStationDistance.Remove(extensionName);
 			}
 		}
 

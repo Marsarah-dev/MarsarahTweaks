@@ -20,6 +20,28 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		private static readonly LogManager log = new LogManager("Progression Halt", LogManager.LogLevel.Warning);
 
+		private static readonly HashSet<string> haltedMobPrefabs = new HashSet<string>();
+
+		[HarmonyPatch(typeof(CharacterDrop), nameof(CharacterDrop.GenerateDropList))]
+		class ProgressionHaltCharacterDrop_Patch
+		{
+			static bool Prefix(CharacterDrop __instance, ref List<KeyValuePair<GameObject, int>> __result)
+			{
+				if (!ConfigManager.AutomaticProgressionHaltEnabled.Value) return true;
+				if (__instance == null) return true;
+
+				string prefabName = __instance.gameObject.name.Replace("(Clone)", "").Trim();
+
+				if (!haltedMobPrefabs.Contains(prefabName)) return true;
+
+				__result = new List<KeyValuePair<GameObject, int>>();
+
+				log.Info($"Prevented creature drops for {prefabName} because it is progression halted.");
+
+				return false;
+			}
+		}
+
 		[HarmonyPatch(typeof(Piece), "DropResources")]
 		class ProgressionHaltPiece_Patch
 		{
@@ -446,7 +468,6 @@ namespace MarsarahTweaks.Patches.Features
 			private static bool betterDropsSet = false;
 
 			// Backup dictionaries
-			private static readonly Dictionary<string, Dictionary<string, float>> mobDropChanceBackup = new Dictionary<string, Dictionary<string, float>>();
 			private static readonly Dictionary<string, float> mineDropBackup = new Dictionary<string, float>();
 			private static readonly Dictionary<string, float> mine5DropBackup = new Dictionary<string, float>();
 			private static readonly Dictionary<string, float> destroyedDropBackup = new Dictionary<string, float>();
@@ -501,6 +522,7 @@ namespace MarsarahTweaks.Patches.Features
 						"Blob",
 						"BlobElite",
 						"Wraith",
+						"Writhan",
 						"Abomination",
 						"sapling_turnip",
 						"sapling_seedturnip",
@@ -736,7 +758,10 @@ namespace MarsarahTweaks.Patches.Features
 						"cliff_ashlands6_frac",
 						"cliff_ashlands7_HalfArch_frac",
 						"cliff_ashlandsflowrock_frac",
-						// These are not halted but dun't know if they are the ones that drop things
+						"asksvin_carrion",
+						"asksvin_carrion2",
+						"morgenhole_pile",
+						// These are not halted but don't know if they are the ones that drop things
 						//"Ashlands_Arch1",
 						//"Ashlands_Arch2",
 						//"Ashlands_Pillar4_tip",
@@ -1118,31 +1143,15 @@ namespace MarsarahTweaks.Patches.Features
 			private static bool HaltDropsMob(GameObject prefab)
 			{
 				CharacterDrop characterDrop = prefab.GetComponent<CharacterDrop>();
-				if (characterDrop != null)
-				{
-					string prefabName = prefab.name;
+				if (characterDrop == null) return false;
 
-					if (!mobDropChanceBackup.ContainsKey(prefabName))
-					{
-						// Store only drop chances (ensuring deep copy)
-						Dictionary<string, float> dropChances = new Dictionary<string, float>();
-						foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
-						{
-							log.Info($"Backing up {prefabName}");
-							dropChances[drop.m_prefab?.name ?? "UNKNOWN_PREFAB"] = drop.m_chance;
-						}
-						mobDropChanceBackup[prefabName] = dropChances;
-					}
+				string prefabName = prefab.name;
 
-					// Halt drops by setting all chances to 0
-					foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
-					{
-						drop.m_chance = 0f;
-					}
+				haltedMobPrefabs.Add(prefabName);
 
-					return true;
-				}
-				return false;
+				log.Info($"Halting creature drops for {prefabName}");
+
+				return true;
 			}
 
 			private static bool HaltDropsMine(GameObject prefab)
@@ -1317,25 +1326,16 @@ namespace MarsarahTweaks.Patches.Features
 			private static bool RestoreDropsMob(GameObject prefab)
 			{
 				CharacterDrop characterDrop = prefab.GetComponent<CharacterDrop>();
-				if (characterDrop != null)
-				{
-					string prefabName = prefab.name;
-					if (mobDropChanceBackup.TryGetValue(prefabName, out var originalChances))
-					{
-						foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
-						{
-							string dropPrefabName = drop.m_prefab?.name ?? "UNKNOWN_PREFAB";
-							if (originalChances.TryGetValue(dropPrefabName, out float originalChance))
-							{
-								log.Info($"Restoring backup for {prefabName}");
-								drop.m_chance = originalChance; // Restore original chance
-							}
-						}
-						mobDropChanceBackup.Remove(prefabName);
+				if (characterDrop == null) return false;
 
-						return true;
-					}
+				string prefabName = prefab.name;
+
+				if (haltedMobPrefabs.Remove(prefabName))
+				{
+					log.Info($"Restoring creature drops for {prefabName}");
+					return true;
 				}
+
 				return false;
 			}
 
