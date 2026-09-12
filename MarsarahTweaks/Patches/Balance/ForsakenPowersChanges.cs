@@ -58,7 +58,7 @@ namespace MarsarahTweaks.Patches.Balance
 		{
 			{ "GP_Eikthyr", (600f, 900f) }, // 10 mins, 15 mins
 			{ "GP_TheElder", (600f, 900f) }, // 10 mins, 15 mins
-            { "GP_Bonemass", (450f, 900f) }, // 7.5 mins, 15 mins - 7.5 mins, 17.5 mins (450f, 1050f)
+			{ "GP_Bonemass", (450f, 900f) }, // 7.5 mins, 15 mins - 7.5 mins, 17.5 mins (450f, 1050f)
 			{ "GP_Moder", (600f, 900f) }, // 10 mins, 15 mins
 			{ "GP_Yagluth", (450f, 900f) }, // 7.5 mins, 15 mins - 7.5 mins, 17.5 mins (450f, 1050f)
 			{ "GP_Queen", (450f, 900f) }, // 7.5 mins, 15 mins

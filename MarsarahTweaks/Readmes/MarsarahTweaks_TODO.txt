@@ -74,13 +74,13 @@ B. Balance
 * Review Forsaken Power cooldowns.
 * Staff of Fracturing: increase splinter blast radius.
 * Add improved gear set bonuses.
-* Specifically check recipes that use Writhian Roots
+* Specifically check recipes that use Writhan Roots
 
 C. Features
 -------------------------------
-* Review Ghost, Bear and Vile, Writhian and Deep North creatures trophy drop rates.
-* Add/verify Progression Halt handling for Ghost, Bear, Vile, Writhian plus Deep North.
-* Review Creature Unleveler handling for Ghost, Bear, Vile, Writhian plus Deep North.
+* Review Ghost, Bear and Vile, Writhan and Deep North creatures trophy drop rates.
+* Add/verify Progression Halt handling for Ghost, Bear, Vile, Writhan plus Deep North.
+* Review Creature Unleveler handling for Ghost, Bear, Vile, Writhan plus Deep North.
 * Increase Scrap Iron drop amount from Muddy Scrap Piles.
 * Staff of Protection: add a secondary healing attack similar to the Dvergr Mage heal.
 * Better Roads: increase player movement speed on roads.
