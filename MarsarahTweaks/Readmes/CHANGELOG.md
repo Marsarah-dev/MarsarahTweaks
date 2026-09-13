@@ -1,5 +1,8 @@
 ## <strong> 📜 Version History </strong>
 
+v1.7.1
+- Fixed the internal mod version incorrectly reporting as 1.6.0 in the 1.7.0 release.
+
 v1.7.0
 - **Standalone Mod Split:**
   - Removed all UI features from Marsarah Tweaks and moved them to the standalone **MarsarahUI** mod.

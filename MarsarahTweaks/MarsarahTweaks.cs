@@ -9,7 +9,7 @@ namespace MarsarahTweaks
 	public class MarsarahTweaks : BaseUnityPlugin
 	{
 		internal const string ModName = "MarsarahTweaks";
-		internal const string ModVersion = "1.7.0";
+		internal const string ModVersion = "1.7.2";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 
