@@ -47,6 +47,35 @@ B. Updates
   - Added Lox Fur Jacket and Lox Fur Trousers to light armor speed bonuses (+2% each).
   - Removed movement speed modifications for Wood, Bone, Iron, Black Metal, and Flametal Tower Shields. Valheim 1.0 reduced their vanilla movement penalty from -15% to -10%, matching MarsarahTweaks' existing modified value and making those overrides redundant.
 * Progression Halt now correctly halts creatures again. Added 3 more Ashlands prefabs to the list of halted objects.
+* Creature Unleveler
+  - Added Bjorn DAY and Bjorn NIGHT to Creature Unleveler progression.
+    - After Elder: 20% level-up chance.
+    - After Bonemass: 30% level-up chance.
+    - Preserved vanilla day/night maximum level differences.
+  - Added Writhan to Creature Unleveler progression.
+    - After Bonemass: 20% level-up chance.
+    - After Moder: 30% level-up chance.
+    - Preserved vanilla max level.
+  - Added Unbjorn (Vile Bear) to Creature Unleveler progression.
+    - After Queen: max level 2 with 20% level-up chance.
+  - Fixed Creature Unleveler spawn backup identity.
+    - Backups are now keyed by the individual SpawnSystem.SpawnData object instead of spawner name.
+    - Fixes incorrect backup/restoration when multiple SpawnData entries share the same name but have different vanilla values, such as Wolf and Seeker.
+    - Spawn modification matching continues to use spawner name.
+  - Creature spawn backups are now cleared when loading a new world.
+  - Verified Valheim 1.0 alternate-biome level-up behavior.
+    - Vanilla default level-up chance is 10% when SpawnData override is -1.
+    - Alternate biome regions multiply the final base level-up chance rather than replacing it.
+    - Creature Unleveler's 20%/30% overrides are therefore still multiplied by the active alt-biome multiplier rather than replacing it.
+    - Confirmed increased regions:
+      Dark Meadows x2
+      Rock Black Forest x2
+      Pinetree Black Forest x2
+      Wolf Mountain x2
+      Drake Mountain x2
+      Fortress Mountain x3
+      Goblin Plains x2
+      Death Plains x2
 
 C. Others
 ------------------------

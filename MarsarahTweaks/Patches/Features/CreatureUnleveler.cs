@@ -13,8 +13,8 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		private static readonly LogManager log = new LogManager("Creature Unleveler", LogManager.LogLevel.Warning);
 
-		private static readonly Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)> creatureSpawnBackups	= new Dictionary<string, (int?, float?, float?)>();
-		private static readonly Dictionary <string, Dictionary <string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>> creatureSpawnChanges = new Dictionary<string, Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>>()
+		private static readonly Dictionary<SpawnSystem.SpawnData, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)> creatureSpawnBackups = new Dictionary<SpawnSystem.SpawnData, (int?, float?, float?)>();
+		private static readonly Dictionary<string, Dictionary <string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>> creatureSpawnChanges = new Dictionary<string, Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>>()
 		{
 			{ "Eikthyr", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
 				{
@@ -38,7 +38,9 @@ namespace MarsarahTweaks.Patches.Features
 					{ "greydwarf DAY", (null, 20f, null) },
 					{ "greydwarf Night", (null, 20f, null) },					
 					{ "greydwarf ELITE", (null, 20f, 0f) },
-					{ "Troll", (null, 20f, 0f) },					
+					{ "Troll", (null, 20f, 0f) },
+					{ "Bjorn DAY", (null, 20f, null) },
+					{ "Bjorn NIGHT", (null, 20f, null) },
 					{ "greydwarf After boss", (3, 20f, null) },
 					{ "Greydwarf Elite", (3, 20f, null) },
 					{ "Greydwarf Shaman", (3, 20f, null) },
@@ -61,6 +63,8 @@ namespace MarsarahTweaks.Patches.Features
 					{ "Greydwarf Elite", (null, 30f, null) },
 					{ "Greydwarf Shaman", (null, 30f, null) },
 					{ "Greydwarf", (null, 30f, null) },
+					{ "Bjorn DAY", (null, 30f, null) },
+					{ "Bjorn NIGHT", (null, 30f, null) },
 
 					// Swamp
 					{ "Marsh draugr", (null, 20f, null) },
@@ -69,7 +73,8 @@ namespace MarsarahTweaks.Patches.Features
 					{ "Draugr", (3, 20f, null) },
 					{ "Draugr Elite", (3, 20f, null) },
 					{ "Marsh surtling", (3, 20f, null) },
-					{ "Surtling", (3, 20f, null) }
+					{ "Surtling", (3, 20f, null) },
+					{ "Writhan", (null, 20f, null) }
 				}
 			},
 			{ "Moder", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
@@ -84,6 +89,7 @@ namespace MarsarahTweaks.Patches.Features
 					{ "Draugr Elite", (null, 30f, null) },
 					{ "Marsh surtling", (null, 30f, null) },
 					{ "Surtling", (null, 30f, null) },
+					{ "Writhan", (null, 30f, null) },
 
 					// Mountain
 					{ "Fenring", (2, 10f, null) },
@@ -114,6 +120,7 @@ namespace MarsarahTweaks.Patches.Features
 				{
 					// Plains
 					{ "Lox", (2, 20f, null) },
+					{ "Unbjorn", (2, 20f, null) },
 					{ "Deathsquito", (2, 20f, null) },
 					{ "Goblin", (null, 30f, null) },
 					{ "GoblinBrute", (null, 30f, null) },
@@ -160,7 +167,7 @@ namespace MarsarahTweaks.Patches.Features
 		public static void ResetCreatureUnlevelerState()
 		{
 			hasAppliedSpawnChangesOnce = false;
-			//creatureSpawnBackups.Clear();
+			creatureSpawnBackups.Clear();
 
 			// Reset boss state tracking
 			lastEikthyrDefeated = GlobalKeyChecker.IsBossDefeated("Eikthyr");
@@ -189,6 +196,7 @@ namespace MarsarahTweaks.Patches.Features
 				{
 					log.Info("Initial creature spawn changes applied.");
 					ApplyCreatureLevelChanges(__instance);
+					//LogAltBiomeLevelChances();
 					hasAppliedSpawnChangesOnce = true;
 				}
 
@@ -217,6 +225,17 @@ namespace MarsarahTweaks.Patches.Features
 				foreach (SpawnSystem.SpawnData spawner in spawnList.m_spawners)
 				{
 					string spawnerName = spawner.m_name;
+					/*string prefabName = spawner.m_prefab != null ? spawner.m_prefab.name : "NULL";
+
+					log.Info(
+						$"Spawner: {spawner.m_name} | " +
+						$"Prefab: {prefabName} | " +
+						$"Biome: {spawner.m_biome} | " +
+						$"Max Level: {spawner.m_maxLevel} | " +
+						$"Level Chance: {spawner.m_overrideLevelupChance}% | " +
+						$"Min Distance: {spawner.m_levelUpMinCenterDistance} | " +
+						$"Required Key: {spawner.m_requiredGlobalKey}"
+					);*/
 
 					// Find all bosses that define changes for this creature
 					List<string> affectingBosses = creatureSpawnChanges
@@ -239,9 +258,9 @@ namespace MarsarahTweaks.Patches.Features
 							log.Info($"Applying changes to: {spawnerName} - defeated boss: {highestDefeatedBoss}");
 							var changes = creatureSpawnChanges[highestDefeatedBoss][spawnerName];
 
-							if (!creatureSpawnBackups.ContainsKey(spawnerName))
+							if (!creatureSpawnBackups.ContainsKey(spawner))
 							{
-								creatureSpawnBackups[spawnerName] = (
+								creatureSpawnBackups[spawner] = (
 									spawner.m_maxLevel,
 									spawner.m_overrideLevelupChance,
 									spawner.m_levelUpMinCenterDistance
@@ -259,27 +278,27 @@ namespace MarsarahTweaks.Patches.Features
 						}
 						else
 						{
-							if (creatureSpawnBackups.TryGetValue(spawnerName, out var backup))
+							if (creatureSpawnBackups.TryGetValue(spawner, out var backup))
 							{
 								log.Info($"(Enabled) Restoring changes for: {spawnerName} - defeated boss: {highestDefeatedBoss}");
 								spawner.m_maxLevel = backup.maxLevel ?? spawner.m_maxLevel;
 								spawner.m_overrideLevelupChance = backup.levelUpChance ?? spawner.m_overrideLevelupChance;
 								spawner.m_levelUpMinCenterDistance = backup.levelUpMinCenterDistance ?? spawner.m_levelUpMinCenterDistance;
 
-								creatureSpawnBackups.Remove(spawnerName);
+								creatureSpawnBackups.Remove(spawner);
 							}
 						}
 					}
 					else
 					{
-						if (creatureSpawnBackups.TryGetValue(spawnerName, out var backup))
+						if (creatureSpawnBackups.TryGetValue(spawner, out var backup))
 						{
 							log.Info($"(Disabled) Restoring changes for: {spawnerName} - defeated boss: {highestDefeatedBoss}");
 							spawner.m_maxLevel = backup.maxLevel ?? spawner.m_maxLevel;
 							spawner.m_overrideLevelupChance = backup.levelUpChance ?? spawner.m_overrideLevelupChance;
 							spawner.m_levelUpMinCenterDistance = backup.levelUpMinCenterDistance ?? spawner.m_levelUpMinCenterDistance;
 
-							creatureSpawnBackups.Remove(spawnerName);
+							creatureSpawnBackups.Remove(spawner);
 						}
 					}
 				}
@@ -329,5 +348,22 @@ namespace MarsarahTweaks.Patches.Features
 
 			return changed;
 		}
+
+		/*private static void LogAltBiomeLevelChances()
+		{
+			log.Info("=== Alternate Biome Level-Up Chances ===");
+
+			foreach (AltBiome altBiome in AltBiomeList.m_altBiomes)
+			{
+				log.Info(
+					$"Alt Biome: {altBiome.m_name} | " +
+					$"Biome: {altBiome.m_biome} | " +
+					$"Level Chance Multiplier: {altBiome.m_levelUpChanceMultiplier}x | " +
+					$"10% Base Result: {10f * altBiome.m_levelUpChanceMultiplier}%"
+				);
+			}
+
+			log.Info("=== End Alternate Biome Level-Up Chances ===");
+		}*/
 	}
 }
