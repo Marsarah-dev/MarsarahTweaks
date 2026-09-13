@@ -55,6 +55,7 @@ B. Updates
   - Now correctly halts creatures again. 
   - Added Writhan to the Swamp progression halt.
   - Added 3 more Ashlands prefabs to the list of halted objects.
+  - Added a shared chest restriction check for MarsarahUI compatibility, allowing other Marsarah mods to detect when a container is currently progression-sealed.
 * Creature Unleveler
   - Added Bjorn DAY and Bjorn NIGHT to Creature Unleveler progression.
     - After Elder: 20% level-up chance.
