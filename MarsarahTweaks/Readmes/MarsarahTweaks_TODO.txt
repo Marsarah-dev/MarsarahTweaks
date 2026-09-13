@@ -70,7 +70,6 @@ B. Updates
   - Fixed Creature Unleveler spawn backup identity.
     - Backups are now keyed by the individual SpawnSystem.SpawnData object instead of spawner name.
     - Fixes incorrect backup/restoration when multiple SpawnData entries share the same name but have different vanilla values, such as Wolf and Seeker.
-    - Spawn modification matching continues to use spawner name.
   - Creature spawn backups are now cleared when loading a new world.
   - Verified Valheim 1.0 alternate-biome level-up behavior.
     - Vanilla default level-up chance is 10% when SpawnData override is -1.
@@ -100,7 +99,7 @@ B. Updates
 C. Others
 ------------------------
 * Removed all UI features from MarsarahTweaks and moved them to the standalone MarsarahUI mod.
-* Removed the custom build-piece module from MarsarahTweaks and moved it to MarsarahBuildPieces.
+* Removed the custom build-piece module from MarsarahTweaks and moved it to MarsarahBuildPieces mod.
 * Max Portals Per Player / Glacial Stone Portal integration still needs dedicated-server testing.
 * Player Logout Announce should receive a final multiplayer/dedicated-server test.
 

@@ -1,13 +1,45 @@
-Marsarah Tweaks v1.6.0
+Marsarah Tweaks v1.7.0
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
 Each feature is grouped into sections to make this process easier. In addition, the mod scans for already installed mods and automatically disables its own relevant configs if it finds mods that are incompatible or that may cause issues together.  
 If any issues or incompatibilities are found, please post them on the mod's Nexus page.
 
-IMPORTANT v1.6.0 UPGRADE NOTE:
-The custom Build Pieces section, including Pocket Portal and Extra Lights, has been removed from Marsarah Tweaks and is planned to move into a separate mod.
-If an existing world uses these custom pieces, make a world backup before updating. Marsarah Tweaks no longer provides these custom prefabs.
+IMPORTANT UPGRADE NOTE
+================================================================
+The custom build pieces and UI features previously included in Marsarah Tweaks have been moved into their own standalone mods.
+
+MarsarahBuildPieces contains the Pocket Portal, Extra Lights, Glacial Stone Portal, Mystical Light Ward, and other custom build-piece functionality.
+
+MarsarahUI contains the UI features previously included in Marsarah Tweaks.
+
+Both mods are optional and Marsarah Tweaks can still be used on its own.
+
+If updating from an older version of Marsarah Tweaks that still contained the custom build pieces, make a world backup before updating and install MarsarahBuildPieces if you want to continue using those pieces.
+
+
+DEVELOPMENT NOTES
+================================================================
+DEEP NORTH / SPOILER NOTE:
+Deep North content is intentionally not included in Marsarah Tweaks yet. I want to experience the new biome and progression myself before digging through the game files so I can play through it without spoiling the experience for myself.
+
+After completing the Deep North, I plan to review the mod's existing systems for the new content, including gear and recipe changes, build-piece costs and materials, progression systems, creature balance, trophy drops, and other relevant tweaks.
+
+AI USAGE DISCLOSURE:
+Marsarah Tweaks grew out of my original MarsarahMod project, whose code I initially wrote myself. AI tools were later used to assist with porting that code into Marsarah Tweaks and are now used as part of my development workflow for tasks such as debugging, refactoring, compatibility updates, researching game API changes, and documentation.
+
+Development remains human-directed: I decide what features are added, how they should behave, and I write code, review and test the changes included in releases. The mod's logo was also created using generative AI.
+
+
+RELATED MARSARAH MODS
+================================================================
+MarsarahUI
+  Standalone UI mod containing the UI features previously included in Marsarah Tweaks.
+
+MarsarahBuildPieces
+  Standalone build-piece mod containing the custom build pieces previously included in Marsarah Tweaks, along with new functional pieces.
+
+Neither mod is required to use Marsarah Tweaks. When installed together, the mods automatically use relevant compatibility integrations where available.
 
 PERMISSIONS
 ================================================================
@@ -39,7 +71,7 @@ Individual features can be enabled or disabled by editing this file or in-game w
 
 If you’re using another mod that changes similar gameplay elements, disable the overlapping section in this mod’s config to avoid conflicts. Specific compatibility issues will be mentioned in each config description if known.
 
-This mod uses Server Sync. All clients need to have the same version as the server, otherwise they will be disconnected at login. All configs (except UI) are synced between server and clients.
+This mod uses Server Sync. All clients need to have the same version as the server, otherwise they will be disconnected at login. All configs are synced between server and clients.
 
 MOD CONFIGS
 ================================================================
@@ -208,6 +240,9 @@ MOD CONFIGS
 
 - Ironhead Arrow
   • Craft (Wood):                8        → 5
+
+- Shield of Roots
+  • Upgrade (Fine Wood):         5/10/15  → 4/8/12
 
 >> Mountains <<
 - Silver Knife
@@ -582,6 +617,9 @@ MOD CONFIGS
 - Vilebone Drapes
   • Upgrade (Bear Hide):         5/10/15  > 2/4/6
 
+- Lox Fur Jacket
+  • Upgrade (Lox Pelt):          6/12/18  → 4/8/12
+
 - Padded Helmet
   • Craft (Iron):                10       → 5
   • Upgrade (Iron):              5/10/15  → 3/6/9
@@ -753,6 +791,18 @@ MOD CONFIGS
 
 ▼ Changes (only modified build pieces are listed):
 
+- Decorative Boulder
+  • Stone:        10 → 5
+
+- Ornamental Boulder
+  • Stone:        25 → 8
+
+- Roundpole Gate
+  • Wood:         4  → 2
+
+- Stone Fence
+  • Stone:        4  → 3
+
 - Iron cooking Station 
   • Iron:         3  → 2
   • Chain:        3  → 2
@@ -783,6 +833,12 @@ MOD CONFIGS
 
 - Darkwood Gate
   • Iron:         4  → 3
+
+- Darkwood Raven
+  • Fine Wood:    10 → 6
+
+- Darkwood Wolf
+  • Fine Wood:    10 → 6
 
 - Iron Gate
   • Iron:         4  → 3
@@ -837,6 +893,9 @@ MOD CONFIGS
 
 - Stone Stair
   • Stone:        8  → 3
+
+- Black Marble Throne
+  • Copper:       5  → 4
 
 - Black Marble 2x1x1
   • Black Marble: 4  → 3
@@ -977,6 +1036,15 @@ MOD CONFIGS
 - Ashwood Arched Wall 
   • Ashwood:        2  → 1
 
+- Ashwood Decowall 2x2
+  • Ashwood:        4  → 2
+
+- Ashwood Decowall Divider
+  • Ashwood:        2  → 1
+
+- Ashwood Decowall Tree
+  • Ashwood:        2  → 1
+
 - Grausten Steep Stairs 
   • Grausten:       5  → 3
 
@@ -1072,6 +1140,12 @@ MOD CONFIGS
 
 - Turnip Stew 
   • Amount crafted:        1  → 2
+
+- Pulled Bear
+  • Resource amounts:
+    - Cooked Bear Meat:    1 → 2
+    - Blueberries:         1 → 2
+  • Amount crafted:        1 → 2
 
 - Black Soup
   • Resource amounts:
@@ -1364,12 +1438,12 @@ The following foods have the stack size increased to 20
   Incompatible with other mods that modify vanilla gear speed modifiers.
 
 ▼ Changes:
-- All metal chest and leg pieces speed penalty:  -5%  → 0%
-- All mage chest and leg pieces speed penalty:   -2%  → 0%
-- Troll, Bear, Vile & Ask chest and leg pieces speed bonus:  0%   → 2% 
-- Root armor chest and leg pieces speed bonus:   0%   → 1%
-- Battleaxes and Sledgehammers speed penalty:    -15% → -10% 
-- Tower Shields speed penalty:                   -15% → -10%
+- All metal chest and leg pieces speed penalty:               -5%  → 0%
+- All mage chest and leg pieces speed penalty:                -2%  → 0%
+- Troll, Bear, Vilebone, Lox Fur & Ask chest/legs speed bonus: 0%  → 2%
+- Root armor chest and leg pieces speed bonus:                 0%  → 1%
+- Battleaxes and Sledgehammers speed penalty:                 -15% → -10%
+- Serpent Scale Shield speed modifier:                        -10% → -5%
 
 
 ---------------------- [Extra Armor Stats] ---------------------
@@ -1401,6 +1475,7 @@ The following foods have the stack size increased to 20
   • Root set:     10    (3,    4,     3)
   • Fenris set:   15    (4,    6,     5)
   • Vilebone set: 20    (5,    8,     7)
+  • Lox Fur set:  20    (5,    8,     7)
   • Ask set:      30    (8,    12,    10)
 - Eitr values:    total (head, chest, legs):
   • Eitr-Weave:   50    (10,   20,    20)
@@ -1762,12 +1837,21 @@ The following foods have the stack size increased to 20
   • Greydwarf, Greydwarf Brute, Greydwarf Shaman
     - Level up chance: 10% → 20%
 
+  • Bjorn DAY & Bjorn NIGHT
+    - Level up chance: 20%
+
 - Bonemass Defeated
   • Draugr, Leech, Skeleton, Draugr Elite, Surtling
     - Level up chance: 10% → 20%
 
   • Boar, Neck, All Greydwarves
     - Level up chance: 20% → 30%
+
+  • Bjorn DAY & Bjorn NIGHT
+    - Level up chance: 30%
+
+  • Writhan
+    - Level up chance: 20%
 
 - Moder Defeated
   • Fenring
@@ -1779,6 +1863,9 @@ The following foods have the stack size increased to 20
 
   • Troll, Skeleton, Draugr, Surtling
     - Level up chance: 20% → 30%
+
+  • Writhan
+    - Level up chance: 30%
 
 - Yagluth Defeated
   • Berserker, Fuling
@@ -1795,6 +1882,10 @@ The following foods have the stack size increased to 20
   • Wolf
     - Level up chance: 20% → 30%
 
+  • Unbjorn (Vile Bear)
+    - Level up chance: 20%
+    - Max stars:       1
+
 - Queen Defeated
   • Dverger, Seeker Soldier, Tick
     - Level up chance: 10% → 20%
@@ -1807,7 +1898,7 @@ The following foods have the stack size increased to 20
     - Level up chance: 10% → 20%
 
   • Lox, Deathsquito
-    - Level up chance: 0% → 10%
+    - Level up chance: 0% → 20%
     - Max stars:       0  → 1
 
   • Fuling, Berserker
@@ -1867,45 +1958,35 @@ The following foods have the stack size increased to 20
 
 ▼ Changes (only modified creatures are listed):
 
-- Fallen Valkyrie
-  • Spawn chance:   20% → 15%
-
 - Asksvin (day)
-  • Max spawned:    2   → 1
-  • Min group size: 2   → 1
-  • Max group size: 3   → 2
-  • Spawn chance:   30% → 20%
+  • Max spawned:    2 → 1
+  • Max group size: 3 → 2
 
 - Asksvin (night)
-  • Max spawned:    3   → 2
-  • Spawn chance:   45% → 35%
+  • Max spawned:    3 → 2
 
 - Volture
-  • Max spawned:    3   → 2
+  • Max spawned:    3 → 2
 
 - Charred Twitcher (day)
-  • Max spawned:    3   → 2
-  • Min group size: 2   → 1
-  • Max group size: 4   → 2
-  • Spawn chance:   40% → 35%
+  • Max spawned:    3 → 2
+  • Min group size: 2 → 1
+  • Max group size: 4 → 2
 
 - Charred Twitcher (night)
-  • Max spawned:    4   → 3
-  • Min group size: 3   → 2
-  • Max group size: 6   → 3
+  • Max spawned:    4 → 3
+  • Min group size: 3 → 2
+  • Max group size: 6 → 3
 
 - Charred Marksman
-  • Max spawned:    4   → 2
-  • Spawn chance:   35% → 30%
+  • Max spawned:    4 → 2
 
 - Charred Warrior
-  • Max spawned:    4   → 2
-  • Spawn chance:   35% → 30%
+  • Max spawned:    4 → 2
 
 - Lava Blob
-  • Max spawned:    2   → 1
-  • Max group size: 2   → 1
-  • Spawn chance:   25% → 20%
+  • Max spawned:    2 → 1
+  • Max group size: 2 → 1
 
 
 ----------------- [Clear Mistlands After Queen] ----------------
@@ -2023,14 +2104,18 @@ The following foods have the stack size increased to 20
 ------------------ [Max Portals Per Player] --------------------
 
 ► Description:
-  Sets the number of vanilla portals that can be built by each player. This applies separately for each world.
-  The limit is tracked individually for the normal Wood Portal and the Stone Portal. E.g. if the number is set to 5, then a player can build 5 Wood Portals and 5 Stone Portals.
-  Modded/custom portal types are not affected.
+  Sets the number of portals that can be built by each player. This applies separately for each world.
+  The limit is tracked individually for each supported portal type.
+  Supports the vanilla Wood Portal and Stone Portal.
+  If MarsarahBuildPieces is installed, the Glacial Stone Portal is also included in the limit.
+  Other modded/custom portal types are not affected.
   Set to -1 for unlimited portals (default).
 
-► Mid-Game Toggling: Changes will take effect immediately if the number is changed mid-game.
+► Mid-Game Toggling:
+  Changes take effect immediately if the number is changed mid-game.
 
-► Conflicts: Incompatible with Rare Magic Portal Plus (or any other mod that sets a limit to portals), unless the value is set to -1.
+► Conflicts:
+  Incompatible with Rare Magic Portal Plus or other mods that impose portal limits, unless the value is set to -1.
 
 
 ----------------------- [Other Section] ------------------------
@@ -2218,215 +2303,25 @@ The following foods have the stack size increased to 20
 ---------------------- [Permanent Lights] ----------------------
 
 ► Description:
-  Makes all light sources permanent.
-  Modifies the build costs of light source pieces to use maximum amount of their respective fuel type (wood, resin, coal etc).
-  NOTE: Fireplace now has an additional 20 Wood cost.
-  NOTE: Campfire and Fireplace Wood is refundable when destroyed.
+  Makes fueled light sources permanent by keeping them fully fueled.
+  Modifies the build costs of supported light-source pieces to include their respective maximum fuel amount (wood, resin, coal, etc.).
+
+  Campfire:
+  • Max fuel:        10 → 5
+  • Wood build cost: 2  → 5
+
+  Hearth:
+  • Max fuel:        20 → 10
+  • Wood build cost: 0  → 10
+
+  Campfire and Hearth Wood is refundable when destroyed.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  Incompatible with other mods that modify light source fuel (Eternal Fire by Digitalroot, FuelEternal by Marf, TorchesEternal by Xenofell, TorchesEternal by wildbill22).
-  Incompatible with other mods that modify build piece costs.
-  Compatible with mods that add new light sources. This will make them permanent, but will not modify their build costs.
-  This config is automatically disabled if the above mods are detected.
-
-
-============================ [UI] ==============================
-► Configs in this section are NOT synced with server.
-
---------------------- [More Loading Tips]-----------------------
-
-► Description:
-  Modifies some original loadscreen tips.
-  Adds new tips in addition to the original ones.
-  NOTE: Only applies for the English localization.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  Incompatible with any mod that changes/adds loading screen tips.
-
-
-
------------- [Layout for Inventory/Detector/Boat] --------------
-
-► Description:
-  Provides options to choose the layout of the inventory weight, enemy detector and boat speed. 
-  - **New** version uses symbols and filling bars, with the boat speed indicator next to the ship wind indicator. 
-  - **Old** version uses text and has the boat speed indicator next to the enemy detector.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-
-
------------ [Show Inventory Weight and Free Slots] -------------
-
-► Description:
-  Displays current carry weight and max weight values at the bottom left of the screen under the health bar.
-  Displays current number of inventory slots next to the carry weight indicator at the bottom left of the screen.
-  Text color changes according to weight / free slots percentage.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-
-
--------------------- [Show Enemy Detector] ---------------------
-
-► Description:
-  Displays an enemy detector next to the inventory weight widget at the bottom left of the screen.
-  Counts the number of enemies in close proximity.
-  Does not include other players, deer, hare, player summoned creatures, or tame animals in the enemy count.
-  Colors change according to the number of nearby enemies.
-  - In the New UI layout
-    - Neutral Dverger are counted and shown in a separate indicator. When attacked, they are counted in the normal enemy indicator.
-    - The icon indicating enemies will change according to how many enemies are nearby.
-  - In the Old UI layout
-    - Neutral Dverger are counted in parentheses. When attacked, they are counted in the normal enemy counter. 
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-
-
------------------------ [Show Boat Speed] ----------------------
-
-► Description:
-  Displays current ship speed when controlling a boat. Colors change according to speed.
-  - In the **New** UI layout
-    - The speed indicator is displayed above the main sailing widget. If Minimal Status Effects is installed, the speed indicator moves with the main widget.
-  - In the **Old** UI layout
-    - The speed indicator is displayed next to the inventory weight widget at the bottom left of the screen.
-  When going forward, only the speed value is displayed.
-  When going backwards, "R" is displayed before the speed value.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-
-
------------------------ [Show Current Day] ---------------------
-
-► Description:
-  Displays the number of days spent in the world above the minimap.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  This config will automatically be disabled if MyLittleUI is detected.
-
-
----------------------- [Show Current Time] ---------------------
-
-► Description:
-  Displays the current time above the minimap. Can choose between digital clock and day sections.
-  - Digital clock option shows the time in 24h format.
-  - Day sections option splits the day in the following format: Dawn, Morning, Day, Afternoon, Evening, Dusk, Night
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  This config will automatically be disabled if MyLittleUI is detected.
-
-
--------------- [Show Weather Forecast Indicator] ---------------
-
-► Description:
-  Displays the next scheduled weather as an icon at the bottom-right of the minimap as well as a time until that weather will change.
-  This indicator shows the upcoming weather based on the current biome and weather weights. If the biome has a single weather (Swamp and Ashlands Ocean), then the indicator shows the current weather and the timer is set to --:--. 
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-  Compatible with weathers added by Seasons and Seasonality mods
-
-
-------------------- [Smart Biome Indicator] --------------------
-
-► Description:
-  Displays the current biome the player is in, replacing the vanila text from the minimap.
-  Text color changes according to currently equipped gear (not including weapons) relative to the current biome.
-  Colors range: purple (not ready for biome), red (hard), orange (ok), yellow (normal), green (easy). 
-  Colors only change for the first 7 land biomes. The rest are displayed in white.
-
-  NOTE: This only accounts for vanilla gear. Any custom armors will not be counted in the Smart Biome Indicator.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-
-
---------------------- [Show Summon Counter] --------------------
-
-► Description:
-  Displays a counter for summoned skeletons from the Dead Raiser. This does not count summoned trolls.
-  Colors change according to number of active summons.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-
-
--------------------- [Show Online Players] ---------------------
-
-► Description:
-  Shows a list of online players and the total number of players in the current world. 
-  Can choose to show it at the bottom-right of the screen or under the minimap.
-  Not displayed if only one player is online.
-  Displays maximum 20 players.
-  The list can be toggled with the Home key, but the total number of online players will still be shown. 
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  If either Minimal Status Effects by RandyKnapp or MyLittleUI by shundal is installed, this config will automatically be forced on the Bottom-right setting. The same is true for a "no-map" world.
-
-
--------------- [Show Owned Resources In Build Menu] -------------
-
-► Description:
-  Displays the total amount of resources in the player's inventory in addition to the required resource amount for the selected piece in the build menu.
-  If a player has 20 Wood in their inventory and the build piece requires 2, then "2/20" will be displayed in the resource cost.
-
-► Mid-Game Toggling:
-  Toggling mid-game requires reopening the build menu.
-
-► Conflicts:
-  Valheim Plus, Craft From Containers
-  This config is automatically disabled if Craft From Containers is detected.
-
-
--------------- [Show Boss Power Expiration Message] -------------
-
-► Description:
-  Displays a message in the center of the screen when any Forsaken Power expires.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
+  Incompatible with other mods that modify light-source fuel or build-piece costs.
+  Compatible with mods that add new light sources. They will be kept fueled, but their build costs will not automatically be modified.
 
 
 -------------------- [Player Logout Announce] -------------------
@@ -2442,225 +2337,76 @@ The following foods have the stack size increased to 20
   No known conflicts.
 
 
------------------- [Show Heat Meter in Ashlands] ----------------
-
-► Description:
-  Shows a heat meter at the top-center of the screen when in Ashlands water or lava.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-
-
---------------------- [Enemy Nameplate Mode] --------------------
-
-► Description:
-  Changes the way enemy nameplates are displayed by changing the  bar style and colors of the nameplate.
-  Alerted/aggravated status now changes the color of the creature name (yellow for alerted, red for aggravated).
-  Has options for choosing how to display the HP (value or percentage), and can choose between showing both, one of the two, or none.
-  Players with PVP status enabled are shown in a different color.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  This config will automatically be disabled if either BetterUI or Enhuddlement is detected.
-
-
---------------------- [Show Taming Progress] --------------------
-
-► Description:
-  Displays current taming percentage of animals that are acclamatizing under the HP bar. 
-  This is independent of Enemy Nameplate Mode.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  This config will automatically be disabled if MyLittleUI by shundal is detected.
-
-
------------------- [Item Quality Indicator Mode] ----------------
-
-► Description:
-  Options to change the way item quality is displayed by converting the vanilla number to symbols.
-  Can arrange the symbols horizontally or vertically.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  This config will automatically be disabled if either BetterUI or MyLittleUI is detected.
-
-
-------------------- [Symbol For Item Quality] -------------------
-
-► Description:
-  Options to choose the symbol used for the item quality indicator.
-  Available symbols: Star ★, Circle ●, Diamond ◆, EmptyDiamond ◇
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-  Directly dependent on Item Quality Indicator Mode.
-
-
--------------------- [Color For Item Quality] -------------------
-
-► Description:
-  Options to choose the color used for the item quality indicator.
-  Available colors: White, Yellow, Green, Red, Blue, Cyan
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-  Directly dependent on Item Quality Indicator Mode.
-
-
------------------- [Better Item Durability Bar] -----------------
-
-► Description:
-  Colors the item durability bar gradually, according to curent durability and modifies the sprite to a non-flat texture.
-  100% durability: Green, 50% durability: Yellow, 0% durability: Red
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  This config will automatically be disabled if either BetterUI or MyLittleUI is detected.
-
-
------------------- [Detailed Hover Information] -----------------
-
-► Description:
-  Adds more information when hovering over objects. Master toggle for the following 8 configs.
-  Has options for displaying text colored according to fill/progress percentage, or simply white.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  This config will automatically be disabled if either BetterUI or MyLittleUI is detected.
-
-
-------------------- [Show Container Contents] -------------------
-
-► Description:
-  Displays the contents of a chest or container when hovering over it.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  This config will automatically be disabled if MyLittleUI is detected.
-
-
---------------------- [Container Hover Mode] --------------------
-
-► Description:
-  Choice for the method of displaying Container hover info.
-  Available options: remaining time, percent, percent and remaining time
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-  Directly dependent on Detailed Hover Information.
-
----------------------- [Beehive Hover Mode] --------------------
-
-► Description:
-  Choice for the method of displaying Beehive hover info.
-  Available options: remaining time, percent, percent and remaining time
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-  Directly dependent on Detailed Hover Information.
-
-
------------------------ [Plant Hover Mode] ---------------------
-
-► Description:
-  Choice for the method of displaying Plant hover info.
-  Available options: remaining time, percent, percent and remaining time
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-  Directly dependent on Detailed Hover Information.
-
-
---------------------- [Fermenter Hover Mode] -------------------
-
-► Description:
-  Choice for the method of displaying Fermenter hover info.
-  Available options: remaining time, percent, percent and remaining time
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-  Directly dependent on Detailed Hover Information.
-
-
------------------- [CookingStation Hover Mode] -----------------
-
-► Description:
-  Choice for the method of displaying CookingStation hover info.
-  Available options: remaining time, percent, percent and remaining time
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-  Directly dependent on Detailed Hover Information.
-
-
----------------------- [Smelter Hover Mode] --------------------
-
-► Description:
-  Choice for the method of displaying Smelter hover info.
-  Available options: remaining time. (Future plans to implement bars)
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-  Directly dependent on Detailed Hover Information.
-
-
------------------------- [Egg Hover Mode] ----------------------
-
-► Description:
-  Choice for the method of displaying Egg hover info.
-  Available options: remaining time, percent, percent and remaining time
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-
-► Conflicts:
-  No known conflicts.
-  Directly dependent on Detailed Hover Information.
-
-
 
 VERSION HISTORY
 ================================================================
+
+v1.7.0
+- Standalone Mod Split:
+  - Removed all UI features from Marsarah Tweaks and moved them to the standalone MarsarahUI mod.
+  - Player Logout Announce** remains in Marsarah Tweaks and has moved to the QOL section.
+  - The custom build pieces previously removed from Tweaks are now available in the standalone **MarsarahBuildPieces** mod.
+  - Max Portals Per Player now recognizes the **Glacial Stone Portal** when MarsarahBuildPieces is installed.
+
+- Permanent Lights:
+  - Campfire max fuel reduced from 10 to 5 while Permanent Lights is enabled.
+  - Campfire Wood build cost is now 5.
+  - Hearth max fuel reduced from 20 to 10 while Permanent Lights is enabled.
+  - Hearth Wood build cost is now 10.
+  - Campfire and Hearth Wood remains refundable when the pieces are destroyed.
+
+- Cheaper Gear Recipe Amounts:
+  - Shield of Roots Fine Wood upgrade cost: 5/10/15 → 4/8/12.
+  - Lox Fur Jacket Lox Pelt upgrade cost: 6/12/18 → 4/8/12.
+
+- Cheaper Build Pieces Amounts:
+  - Decorative Boulder: Stone 10 → 5.
+  - Ornamental Boulder: Stone 25 → 8.
+  - Roundpole Gate: Wood 4 → 2.
+  - Stone Fence: Stone 4 → 3.
+  - Darkwood Raven: Fine Wood 10 → 6.
+  - Darkwood Wolf: Fine Wood 10 → 6.
+  - Black Marble Throne: Copper 5 → 4.
+  - Ashwood Decowall 2x2: Ashwood 4 → 2.
+  - Ashwood Decowall Divider: Ashwood 2 → 1.
+  - Ashwood Decowall Tree: Ashwood 2 → 1.
+  - Removed obsolete overrides for several Ashwood floors, beams and poles where Valheim 1.0 now matches the mod's previous values.
+
+- Food and Mead Modifications:
+  - Added Pulled Bear.
+  - Cooked Bear Meat: 1 → 2.
+  - Blueberries: 1 → 2.
+  - Amount crafted: 1 → 2.
+  - Stack size follows the mod's standard food stack size of 20.
+
+- Gear Speed Modifications:
+  - Added Lox Fur Jacket and Lox Fur Trousers to the +2% light-armor movement bonuses.
+  - Removed obsolete movement-speed overrides for vanilla Tower Shields whose Valheim 1.0 values now match the mod's previous target.
+
+- Extra Armor Stats:
+  - Added the Lox Fur set to the light-armor Stamina bonuses.
+  - Lox Fur Hood: +5 Stamina.
+  - Lox Fur Jacket: +8 Stamina.
+  - Lox Fur Trousers: +7 Stamina.
+
+- Progression Halt:
+  - Fixed creature halting for Valheim 1.0.
+  - Added Writhan to Swamp progression.
+  - Added additional Ashlands prefabs to progression handling.
+  - Added compatibility support allowing MarsarahUI to detect progression-sealed containers and hide their contents.
+
+- Creature Unleveler:
+  - Added Bjorn day/night progression.
+  - Added Writhan progression.
+  - Added Unbjorn (Vile Bear) progression.
+  - Fixed spawn backup/restoration when multiple spawn entries share the same name but use different vanilla values.
+  - Creature spawn backups are now reset correctly when loading another world in the same game session.
+  - Verified that Valheim 1.0 alternate-biome level-up multipliers continue to apply correctly to the mod's level-up chances.
+
+- Less Ashlands Enemies:
+  - Updated the feature against Valheim 1.0's new Ashlands spawn baselines.
+  - Removed spawn-chance overrides where the new vanilla values already match the mod's intended values.
+  - Retained the mod's reduced maximum spawn and group-size changes where still applicable.
 
 v1.6.0
 - Valheim 1.0 Compatibility:

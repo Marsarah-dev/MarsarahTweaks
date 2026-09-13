@@ -1,5 +1,72 @@
 ## <strong> 📜 Version History </strong>
 
+v1.7.0
+- **Standalone Mod Split:**
+  - Removed all UI features from Marsarah Tweaks and moved them to the standalone **MarsarahUI** mod.
+  - **Player Logout Announce** remains in Marsarah Tweaks and has moved to the QOL section.
+  - The custom build pieces previously removed from Tweaks are now available in the standalone **MarsarahBuildPieces** mod.
+  - Max Portals Per Player now recognizes the **Glacial Stone Portal** when MarsarahBuildPieces is installed.
+
+- **Permanent Lights:**
+  - Campfire max fuel reduced from 10 to 5 while Permanent Lights is enabled.
+  - Campfire Wood build cost is now 5.
+  - Hearth max fuel reduced from 20 to 10 while Permanent Lights is enabled.
+  - Hearth Wood build cost is now 10.
+  - Campfire and Hearth Wood remains refundable when the pieces are destroyed.
+
+- **Cheaper Gear Recipe Amounts:**
+  - Shield of Roots Fine Wood upgrade cost: 5/10/15 → 4/8/12.
+  - Lox Fur Jacket Lox Pelt upgrade cost: 6/12/18 → 4/8/12.
+
+- **Cheaper Build Pieces Amounts:**
+  - Decorative Boulder: Stone 10 → 5.
+  - Ornamental Boulder: Stone 25 → 8.
+  - Roundpole Gate: Wood 4 → 2.
+  - Stone Fence: Stone 4 → 3.
+  - Darkwood Raven: Fine Wood 10 → 6.
+  - Darkwood Wolf: Fine Wood 10 → 6.
+  - Black Marble Throne: Copper 5 → 4.
+  - Ashwood Decowall 2x2: Ashwood 4 → 2.
+  - Ashwood Decowall Divider: Ashwood 2 → 1.
+  - Ashwood Decowall Tree: Ashwood 2 → 1.
+  - Removed obsolete overrides for several Ashwood floors, beams and poles where Valheim 1.0 now matches the mod's previous values.
+
+- **Food and Mead Modifications:**
+  - Added Pulled Bear.
+  - Cooked Bear Meat: 1 → 2.
+  - Blueberries: 1 → 2.
+  - Amount crafted: 1 → 2.
+  - Stack size follows the mod's standard food stack size of 20.
+
+- **Gear Speed Modifications:**
+  - Added Lox Fur Jacket and Lox Fur Trousers to the +2% light-armor movement bonuses.
+  - Removed obsolete movement-speed overrides for vanilla Tower Shields whose Valheim 1.0 values now match the mod's previous target.
+
+- **Extra Armor Stats:**
+  - Added the Lox Fur set to the light-armor Stamina bonuses.
+  - Lox Fur Hood: +5 Stamina.
+  - Lox Fur Jacket: +8 Stamina.
+  - Lox Fur Trousers: +7 Stamina.
+
+- **Progression Halt:**
+  - Fixed creature halting for Valheim 1.0.
+  - Added Writhan to Swamp progression.
+  - Added additional Ashlands prefabs to progression handling.
+  - Added compatibility support allowing MarsarahUI to detect progression-sealed containers and hide their contents.
+
+- **Creature Unleveler:**
+  - Added Bjorn day/night progression.
+  - Added Writhan progression.
+  - Added Unbjorn (Vile Bear) progression.
+  - Fixed spawn backup/restoration when multiple spawn entries share the same name but use different vanilla values.
+  - Creature spawn backups are now reset correctly when loading another world in the same game session.
+  - Verified that Valheim 1.0 alternate-biome level-up multipliers continue to apply correctly to the mod's level-up chances.
+
+- **Less Ashlands Enemies:**
+  - Updated the feature against Valheim 1.0's new Ashlands spawn baselines.
+  - Removed spawn-chance overrides where the new vanilla values already match the mod's intended values.
+  - Retained the mod's reduced maximum spawn and group-size changes where still applicable.
+
 v1.6.0
 - **Valheim 1.0 Compatibility:**
   - Updated the mod for the Valheim 1.0 release.

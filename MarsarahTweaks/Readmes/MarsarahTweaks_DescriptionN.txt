@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.6.0
+[b]Version:[/b] 1.7.0
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -13,8 +13,12 @@ This mod changes many aspects of the game so it's advised to look through and re
 Each feature is grouped into sections to make this process easier. In addition, the mod scans for already installed mods and automatically disables its own relevant configs if it finds mods that are incompatible or that may cause issues together.  
 If any issues or incompatibilities are found, please post them on the mod's Nexus page.
 
-⚠️ [b]v1.6.0 Upgrade Note:[/b] The custom Build Pieces section, including Pocket Portal and Extra Lights, has been removed from Marsarah Tweaks and is planned to move into a separate mod. 
-If an existing world uses these custom pieces, make a world backup before updating. Marsarah Tweaks no longer provides these custom prefabs.
+⚠️ [b]Upgrade Note:[/b] The custom build pieces and UI features previously included in Marsarah Tweaks have been moved into their own standalone mods.
+[b]MarsarahBuildPieces[/b] now contains the Pocket Portal, Extra Lights, Glacial Stone Portal, Mystical Light Ward, and other custom build-piece functionality.
+[b]MarsarahUI[/b] now contains the UI features previously included in Marsarah Tweaks.
+Both mods are optional and Marsarah Tweaks can still be used on its own.
+
+If updating from an older version of Marsarah Tweaks that still contained the custom build pieces, make a world backup before updating and install MarsarahBuildPieces if you want to continue using those pieces.
 
 [line]
 
@@ -28,6 +32,14 @@ build-piece costs and materials, progression and balance adjustments, and any ot
 [b]AI Usage Disclosure:[/b] Marsarah Tweaks grew out of my original MarsarahMod project, whose code I initially wrote myself. 
 AI tools were later used to assist with porting that code into Marsarah Tweaks and are now used as part of my development workflow for tasks such as debugging, refactoring, compatibility updates, researching game API changes, and documentation. 
 Development remains human-directed: I decide what features are added, how they should behave, and I write code, review and test the changes included in releases. The mod's logo was also created using generative AI.
+
+[line]
+
+[size=4][b]Related Marsarah Mods[/b][/size]
+
+- [b]MarsarahUI[/b] — Standalone UI mod containing the UI features previously included in Marsarah Tweaks.
+- [b]MarsarahBuildPieces[/b] — Standalone build-piece mod containing the custom build pieces previously included in Marsarah Tweaks, along with new functional pieces.
+- Neither mod is required to use Marsarah Tweaks. When installed together, the mods automatically use relevant compatibility integrations where available.
 
 [line]
 
@@ -66,7 +78,7 @@ Or use a mod manager.
 - Most features support [b]mid-game toggling[/b], but some require crafting menus to be reopened, reloading areas or [b]client[/b] relogs (this is specified in each section below).
 - Some configs below will have more detailed changes written in the [Docs] tab of this page. 
 
-⚠️ [b]Note:[/b] All features (except UI) are synced using ServerSync.  
+⚠️ [b]Note:[/b] All features are synced using ServerSync. 
 ⚠️ [b]Note:[/b] Players will be disconnected if their mod version differs from the server.
 
 [line]
@@ -230,15 +242,15 @@ They can be toggled mid-game, unless otherwise specified.
 
 [b]🔹 Changes:[/b]
 
-- [b]Heavy Gear:[/b] -5% → 0%  
-- [b]Mage Gear:[/b] -2% → 0%  
-- [b]Light Gear Bonuses:[/b]  
-&nbsp;&nbsp;&nbsp;• Troll, Bear, Vilebone and Ask: +2%  
-&nbsp;&nbsp;&nbsp;• Root: +1%  
-- [b]Weapon Penalties:[/b]  
-&nbsp;&nbsp;&nbsp;• Battleaxes & Sledgehammers: -15% → -10%  
-- [b]Shield Penalties:[/b]  
-&nbsp;&nbsp;&nbsp;• Tower Shields: -15% → -10%
+- [b]Heavy Gear:[/b] -5% → 0%
+- [b]Mage Gear:[/b] -2% → 0%
+- [b]Light Gear Bonuses:[/b]
+&nbsp;&nbsp;&nbsp;• Troll, Bear, Vilebone, Lox Fur and Ask: +2%
+&nbsp;&nbsp;&nbsp;• Root: +1%
+- [b]Weapon Penalties:[/b]
+&nbsp;&nbsp;&nbsp;• Battleaxes & Sledgehammers: -15% → -10%
+- [b]Shield Penalties:[/b]
+&nbsp;&nbsp;&nbsp;• Serpent Scale Shield: -5%
 
 
 [size=4][b]🔧 Extra Armor Stats[/b][/size]
@@ -272,6 +284,7 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Root:[/b] 10 - 3 / 4 / 3
 - [b]Fenris:[/b] 15 - 4 / 6 / 5
 - [b]Vilebone:[/b] 20 - 5 / 8 / 7
+- [b]Lox Fur:[/b] 20 - 5 / 8 / 7
 - [b]Ask:[/b] 30 - 8 / 12 / 10
 
 [b]Eitr (Mage Armor):[/b]
@@ -573,12 +586,14 @@ They can be toggled mid-game, unless otherwise specified.
 
 [size=4][b]🔧 Max Portals Per Player[/b][/size]
 
-- Sets the number of vanilla portals that can be built by each player. This applies separately for each world.
-- The limit is tracked individually for the normal Wood Portal and the Stone Portal. E.g. if the number is set to 5, then a player can build 5 Wood Portals and 5 Stone Portals.
-- Modded/custom portal types are not affected.
+- Sets the number of portals that can be built by each player. This applies separately for each world.
+- The limit is tracked individually for each supported portal type. E.g. if the number is set to 5, then a player can build 5 Wood Portals and 5 Stone Portals.
+- Supports the vanilla Wood Portal and Stone Portal.
+- If [b]MarsarahBuildPieces[/b] is installed, the [b]Glacial Stone Portal[/b] is also included in the limit.
+- Other modded/custom portal types are not affected.
 - Set to -1 for unlimited portals (default).
-- Changes will take effect immediately if the number is changed mid-game.
-- [b]Conflicts:[/b] Incompatible with Rare Magic Portal Plus (or any other mod that sets a limit to portals), unless the value is set to -1.
+- Changes take effect immediately if the number is changed mid-game.
+- [b]Conflicts:[/b] Incompatible with Rare Magic Portal Plus or other mods that impose portal limits, unless the value is set to -1.
 
 
 [size=4][b]🔧 Other Section[/b][/size]
@@ -698,130 +713,13 @@ They can be toggled mid-game, unless otherwise specified.
 
 [size=4][b]🔧 Permanent Lights[/b][/size]
 
-- Makes all light sources permanent and modifies the build costs of light source pieces to use maximum amount of their respective fuel type (wood, resin, coal etc).  
-- Fireplace now has an additional 20 Wood cost.  
-- Campfire and Fireplace Wood is refundable when destroyed.
-- [b]Conflicts:[/b] Mods that modify light source fuel or build piece costs (Eternal Fire by Digitalroot, FuelEternal by Marf, TorchesEternal by Xenofell, TorchesEternal by wildbill22).  
-&nbsp;&nbsp;&nbsp;- Compatible with mods that add new light sources. This will make them permanent, but will not modify their build costs.
-&nbsp;&nbsp;&nbsp;- Automatically disabled if the above mods are detected.
-
-
-[line]
-
-[size=4][b]⚙️ UI[/b][/size]
-
-Configs in this section are [b]not[/b] synced with the server.
-All configs can be toggled mid-game.
-
-[line]
-
-[size=4][b]🔧 More Loading Tips[/b][/size]
-
-- Modifies some original loadscreen tips.   
-- Adds new tips in addition to the original ones.
-- Only applies for the English localization.
-- [b]Conflicts:[/b] Incompatible with any mod that changes/adds loading screen tips.
-
-
-[size=4][b]🔧 Layout for Inventory/Detector/Boat[/b][/size]
-
-- Options to choose the layout of the inventory weight, enemy detector and boat speed. 
-&nbsp;&nbsp;&nbsp;- **New** version uses symbols and filling bars, with the boat speed indicator next to the ship wind indicator. 
-&nbsp;&nbsp;&nbsp;- **Old** version uses text and has the boat speed indicator next to the enemy detector.
-- [b]Conflicts:[/b] No known conflicts.
-
-
-[size=4][b]🔧 Show Inventory Weight and Free Slots[/b][/size]
-
-- Displays current carry weight and max weight values at the bottom left of the screen under the health bar.   
-- Displays current number of inventory slots next to the carry weight indicator at the bottom left of the screen.
-- Text color changes according to weight/free slots percentage.
-- [b]Conflicts:[/b] No known conflicts.
-
-
-[size=4][b]🔧 Show Enemy Detector[/b][/size]
-
-- Displays an enemy detector next to the inventory weight widget at the bottom left of the screen that counts the number of enemies in close proximity.
-- Does not include other players, deer, hare, player-summoned creatures, or tame animals in the enemy count.
-- Colors change according to the number of nearby enemies.
-- In the [b]New[/b] UI layout
-&nbsp;&nbsp;&nbsp;- Neutral Dverger are counted and shown in a separate indicator. When attacked, they are counted in the normal enemy indicator.
-&nbsp;&nbsp;&nbsp;- The icon indicating enemies will change according to how many enemies are nearby.
-- In the [b]Old[/b] UI layout
-&nbsp;&nbsp;&nbsp;- Neutral Dverger are counted in parentheses. When attacked, they are counted in the normal enemy counter. 
-- [b]Conflicts:[/b] No known conflicts.
-
-
-[size=4][b]🔧 Show Boat Speed[/b][/size]
-
-- Displays current ship speed when controlling a boat. Colors change according to speed.
-- In the **New** UI layout
-&nbsp;&nbsp;&nbsp;- The speed indicator is displayed above the main sailing widget. If Minimal Status Effects is installed, the speed indicator moves with the main widget.
-- In the **Old** UI layout
-&nbsp;&nbsp;&nbsp;- The speed indicator is displayed next to the inventory weight widget at the bottom left of the screen.
-- When going forward, only the speed value is displayed.
-- When going backwards, "R" is displayed before the speed value.
-- [b]Conflicts:[/b] No known conflicts.
-
-
-[size=4][b]🔧 Show Current Day[/b][/size]
-
-- Displays the number of days spent in the world above the minimap.
-- [b]Conflicts:[/b] This config will automatically be disabled if [b]MyLittleUI[/b] is detected.
-
-
-[size=4][b]🔧 Show Current Time[/b][/size]
-
-- Displays the current time above the minimap. Can choose between digital clock and day sections.
-- [b]Digital clock[/b] option shows the time in 24h format.
-- [b]Day sections[/b] option splits the day in the following format: Dawn, Morning, Day, Afternoon, Evening, Dusk, Night
-- [b]Conflicts:[/b] This config will automatically be disabled if [b]MyLittleUI[/b] is detected.
-
-
-[size=4][b]🔧 Show Weather Forecast Indicator[/b][/size]
-
-- Displays the next scheduled weather as an icon at the bottom-right of the minimap as a time until that weather will change.
-- This indicator shows the upcoming weather based on the current biome and weather weights. If the biome has a single weather (Swamp and Ashlands Ocean), then the indicator shows the current weather and the timer is set to --:--. 
-- [b]Conflicts:[/b] No known conflicts.
-&nbsp;&nbsp;&nbsp;- Compatible with weathers added by Seasons and Seasonality mods
-
-
-[size=4][b]🔧 Smart Biome Indicator[/b][/size]
-
-- Displays the current biome name on the minimap in a specific color according to equipped armor relative to the biome.
-- Colors range: purple (not ready for biome), red (hard), orange (ok), yellow (normal), green (easy).
-- Colors only change for the first 7 land biomes. The rest are displayed in white.
-- [b]Note:[/b] This only accounts for vanilla gear. Any custom armors will not be counted in the Smart Biome Indicator.
-- [b]Conflicts:[/b] No known conflicts.
-
-
-[size=4][b]🔧 Show Summon Counter[/b][/size]
-
-- Displays a counter for summoned skeletons from the Dead Raiser. This does not count summoned trolls.
-- Colors change according to the number of active summons.
-- [b]Conflicts:[/b] No known conflicts.
-
-
-[size=4][b]🔧 Show Online Players[/b][/size]
-- Shows a list of online players and the total number of players logged in the current world. Can choose to show it at the bottom-right of the screen or under the minimap.
-- Displays maximum 20 players and is hidden if only one player is online.
-- The list can be toggled with the [b]Home[/b] key, but the total number of online players will still be shown. 
-- [b]Conflicts:[/b] If either [b]Minimal Status Effects[/b] by RandyKnapp or [b]MyLittleUI[/b] by shundal is installed, this config will automatically be forced on the Bottom-right setting. The same is true for a "no-map" world.
-
-
-[size=4][b]🔧 Show Owned Resources In Build Menu[/b][/size]
-
-- Displays the total amount of resources in the player's inventory in addition to the required resource amount for the selected piece in the build menu.
-- If a player has 20 Wood in their inventory and the build piece requires 2, then "2/20" will be displayed in the resource cost.
-- Toggling mid-game requires reopening the build menu.
-- [b]Conflicts:[/b] Valheim Plus, Craft From Containers
-&nbsp;&nbsp;&nbsp;- Automatically disabled if [b]Craft From Containers[/b] is detected.
-
-[size=4][b]🔧 Show Boss Power Expiration Message[/b][/size]
-
-- Displays a message in the center of the screen when any Forsaken Power expires.
-- [b]Conflicts:[/b] No known conflicts.
-
+- Makes fueled light sources permanent by keeping them fully fueled.
+- Modifies the build costs of supported light-source pieces to include their respective maximum fuel amount (wood, resin, coal, etc.).
+- The [b]Campfire[/b] max fuel and Wood build cost are set to [b]5[/b].
+- The [b]Hearth[/b] max fuel and Wood build cost are set to [b]10[/b].
+- Campfire and Hearth Wood is refundable when destroyed.
+- [b]Conflicts:[/b] Mods that modify light-source fuel or build-piece costs.
+&nbsp;&nbsp;&nbsp;- Compatible with mods that add new light sources. They will be kept fueled, but their build costs will not automatically be modified.
 
 [size=4][b]🔧 Player Logout Announce[/b][/size]
 
@@ -829,135 +727,17 @@ All configs can be toggled mid-game.
 - [b]Conflicts:[/b] No known conflicts.
 
 
-[size=4][b]🔧 Show Heat Meter in Ashlands[/b][/size]
-
-- Shows a heat meter at the top-center of the screen when in Ashlands water or lava.
-- [b]Conflicts:[/b] No known conflicts.
-
-
-[size=4][b]🔧 Enemy Nameplate Mode[/b][/size]
-
-- Changes the way enemy nameplates are displayed by changing the  bar style and colors of the nameplate.
-- Alerted/aggravated status now changes the color of the creature name (yellow for alerted, red for aggravated).
-- Has options for choosing how to display the HP (value or percentage), and can choose between showing both, one of the two, or none.
-- Players with PVP status enabled are shown in a different color.
-- [b]Conflicts:[/b] This config will automatically be disabled if either [b]BetterUI[/b] or [b]Enhuddlement[/b] is detected.
-
-
-[size=4][b]🔧 Show Taming Progress[/b][/size]
-
-- Displays current taming percentage of animals that are acclamatizing under the HP bar. 
-- This is independent of Enemy Nameplate Mode.
-- [b]Conflicts:[/b] This config will automatically be disabled if [b]MyLittleUI[/b] by shundal is detected.
-
-
-[size=4][b]🔧 Item Quality Indicator Mode[/b][/size]
-
-- Options to change the way item quality is displayed by converting the vanilla number to symbols.
-- Can arrange the symbols horizontally or vertically.
-- [b]Conflicts:[/b] This config will automatically be disabled if either [b]BetterUI[/b] or [b]MyLittleUI[/b] is detected.
-
-
-[size=4][b]🔧 Symbol For Item Quality[/b][/size]
-
-- Options to choose the symbol used for the item quality indicator.
-- Available symbols: Star ★, Circle ●, Diamond ◆, EmptyDiamond ◇
-- [b]Note:[/b] Directly dependent on Item Quality Indicator Mode.
-
-
-[size=4][b]🔧 Color For Item Quality[/b][/size]
-
-- Options to choose the color used for the item quality indicator.
-- Available colors: White, Yellow, Green, Red, Blue, Cyan
-- [b]Note:[/b] Directly dependent on Item Quality Indicator Mode.
-
-
-[size=4][b]🔧 Better Item Durability Bar[/b][/size]
-
-- Colors the item durability bar gradually, according to curent durability and modifies the sprite to a non-flat texture.
-- 100% durability: Green, 50% durability: Yellow, 0% durability: Red
-- [b]Conflicts:[/b] This config will automatically be disabled if either [b]BetterUI[/b] or [b]MyLittleUI[/b] is detected.
-
-
-[size=4][b]🔧 Detailed Hover Information[/b][/size]
-
-- Adds more information when hovering over objects. Master toggle for the following 8 configs.
-- Has options for displaying text colored according to fill/progress percentage, or simply white.
-- [b]Conflicts:[/b] This config will automatically be disabled if either [b]BetterUI[/b] or [b]MyLittleUI[/b] is detected.
-
-
-[size=4][b]🔧 Show Container Contents[/b][/size]
-
-- Displays the contents of a chest or container when hovering over it.
-- [b]Conflicts:[/b] This config will automatically be disabled if [b]MyLittleUI[/b] is detected.
-
-
-[size=4][b]🔧 Container Hover Mode[/b][/size]
-
-- Choice for the method of displaying Container hover info.
-- Available options: current filled / max available, amount of free slots, or percent filled
-- [b]Note:[/b] Directly dependent on Detailed Hover Information.
-
-
-[size=4][b]🔧 Beehive Hover Mode[/b][/size]
-
-- Choice for the method of displaying Beehive hover info.
-- Available options: remaining time, percent, percent and remaining time
-- [b]Note:[/b] Directly dependent on Detailed Hover Information.
-
-
-[size=4][b]🔧 Plant Hover Mode[/b][/size]
-
-- Choice for the method of displaying Plant hover info.
-- Available options: remaining time, percent, percent and remaining time
-- [b]Note:[/b] Directly dependent on Detailed Hover Information.
-
-
-[size=4][b]🔧 Fermenter Hover Mode[/b][/size]
-
-- Choice for the method of displaying Fermenter hover info.
-- Available options: remaining time, percent, percent and remaining time
-- [b]Note:[/b] Directly dependent on Detailed Hover Information.
-
-
-[size=4][b]🔧 CookingStation Hover Mode[/b][/size]
-
-- Choice for the method of displaying CookingStation hover info.
-- Available options: remaining time, percent, percent and remaining time
-- [b]Note:[/b] Directly dependent on Detailed Hover Information.
-
-
-[size=4][b]🔧 Smelter Hover Mode[/b][/size]
-
-- Choice for the method of displaying Smelter hover info.
-- Available options: remaining time. (Future plans to implement bars)
-- [b]Note:[/b] Directly dependent on Detailed Hover Information.
-
-
-[size=4][b]🔧 Egg Hover Mode[/b][/size]
-
-- Choice for the method of displaying Egg hover info.
-- Available options: remaining time, percent, percent and remaining time
-- [b]Note:[/b] Directly dependent on Detailed Hover Information.
-
-
 [line]
 
 [size=5][b]🔮 Future Plans[/b][/size]
 
-- Add the Bear and Vile to the Creature Unleveler feature, but will need to play it out first before I see how it feels.
-- Look into the new trinket system and see if there is a need to balance build costs or adrenaline costs.
-- Add an alternate way to Permanent Lights that makes things more immersive than the current option. Will probably keep both options available when I implement the alternative.
-- Look into adding a secondary attack tot he Staff of Protection that heals, or add the Dverger Heal Staff as a playable item.
-- Look into the sorting options for crafting recipes. My previous mod had a section that would reorder the crafting recipes by biome, but it broke with the Bog witch update. I'm looking into how to re-implement that.
-- Remove the player charatcter speed slow when eating.
-- Create a Smart Dropbox
-- Add a skill xp notification
-- Add player stats at character menu
-- Bar hover mode for progress indicators when hovering over smelters
+Marsarah Tweaks will continue to receive new gameplay, balance, grind-reduction and quality-of-life options over time.
 
-The above are just ideas I gathered and are not guaranteed to be implemented. 
-More features will be added over time. Config descriptions will be updated with known compatibility issues.
+Deep North content is intentionally deferred until I have completed my own playthrough. After that, existing features such as recipe changes, gear balance, Progression Halt, Creature Unleveler, trophy drops and other relevant systems will be reviewed for the new content.
+
+UI development will continue separately in [b]MarsarahUI[/b], while new custom build pieces and functional placeable objects will be developed in [b]MarsarahBuildPieces[/b].
+
+The above plans may change as the game and the mods continue to evolve.
 
 
 [line]
@@ -976,7 +756,76 @@ Blaxxun-bloop - for ServerSync
 
 [size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
 
-v1.6.0
+[size=4][b]v1.7.0[/b][/size]
+
+[b]Standalone Mod Split:[/b]
+- Removed all UI features from Marsarah Tweaks and moved them to the standalone [b]MarsarahUI[/b] mod.
+- [b]Player Logout Announce[/b] remains in Marsarah Tweaks and has moved to the QOL section.
+- The custom build pieces previously removed from Tweaks are now available in the standalone [b]MarsarahBuildPieces[/b] mod.
+- Max Portals Per Player now recognizes the [b]Glacial Stone Portal[/b] when MarsarahBuildPieces is installed.
+
+[b]Permanent Lights:[/b]
+- Campfire max fuel reduced from 10 to 5 while Permanent Lights is enabled.
+- Campfire Wood build cost is now 5.
+- Hearth max fuel reduced from 20 to 10 while Permanent Lights is enabled.
+- Hearth Wood build cost is now 10.
+- Campfire and Hearth Wood remains refundable when the pieces are destroyed.
+
+[b]Cheaper Gear Recipe Amounts:[/b]
+- Shield of Roots Fine Wood upgrade cost: 5/10/15 → 4/8/12.
+- Lox Fur Jacket Lox Pelt upgrade cost: 6/12/18 → 4/8/12.
+
+[b]Cheaper Build Pieces Amounts:[/b]
+- Decorative Boulder: Stone 10 → 5.
+- Ornamental Boulder: Stone 25 → 8.
+- Roundpole Gate: Wood 4 → 2.
+- Stone Fence: Stone 4 → 3.
+- Darkwood Raven: Fine Wood 10 → 6.
+- Darkwood Wolf: Fine Wood 10 → 6.
+- Black Marble Throne: Copper 5 → 4.
+- Ashwood Decowall 2x2: Ashwood 4 → 2.
+- Ashwood Decowall Divider: Ashwood 2 → 1.
+- Ashwood Decowall Tree: Ashwood 2 → 1.
+- Removed obsolete overrides for several Ashwood floors, beams and poles where Valheim 1.0 now matches the mod's previous values.
+
+[b]Food and Mead Modifications:[/b]
+- Added Pulled Bear.
+&nbsp;&nbsp;&nbsp;- Cooked Bear Meat: 1 → 2.
+&nbsp;&nbsp;&nbsp;- Blueberries: 1 → 2.
+&nbsp;&nbsp;&nbsp;- Amount crafted: 1 → 2.
+&nbsp;&nbsp;&nbsp;- Stack size follows the mod's standard food stack size of 20.
+
+[b]Gear Speed Modifications:[/b]
+- Added Lox Fur Jacket and Lox Fur Trousers to the +2% light-armor movement bonuses.
+- Removed obsolete movement-speed overrides for vanilla Tower Shields whose Valheim 1.0 values now match the mod's previous target.
+
+[b]Extra Armor Stats:[/b]
+- Added the Lox Fur set to the light-armor Stamina bonuses.
+&nbsp;&nbsp;&nbsp;- Lox Fur Hood: +5 Stamina.
+&nbsp;&nbsp;&nbsp;- Lox Fur Jacket: +8 Stamina.
+&nbsp;&nbsp;&nbsp;- Lox Fur Trousers: +7 Stamina.
+
+[b]Progression Halt:[/b]
+- Fixed creature halting for Valheim 1.0.
+- Added Writhan to Swamp progression.
+- Added additional Ashlands prefabs to progression handling.
+- Added compatibility support allowing MarsarahUI to detect progression-sealed containers and hide their contents.
+
+[b]Creature Unleveler:[/b]
+- Added Bjorn day/night progression.
+- Added Writhan progression.
+- Added Unbjorn (Vile Bear) progression.
+- Fixed spawn backup/restoration when multiple spawn entries share the same name but use different vanilla values.
+- Creature spawn backups are now reset correctly when loading another world in the same game session.
+- Verified that Valheim 1.0 alternate-biome level-up multipliers continue to apply correctly to the mod's level-up chances.
+
+[b]Less Ashlands Enemies:[/b]
+- Updated the feature against Valheim 1.0's new Ashlands spawn baselines.
+- Removed spawn-chance overrides where the new vanilla values already match the mod's intended values.
+- Retained the mod's reduced maximum spawn and group-size changes where still applicable.
+
+[size=4][b]v1.6.0[/b][/size]
+
 - [b]Valheim 1.0 Compatibility:[/b]
   - Updated the mod for the Valheim 1.0 release.
   - Updated ServerSync to the Valheim 1.0 compatible version.
@@ -991,12 +840,14 @@ v1.6.0
   - Removed the Jotunn dependency. Marsarah Tweaks now only requires BepInEx.
   - Max Portals Per Player now explicitly applies only to the vanilla Wood Portal and Stone Portal.
 
-v1.5.1
+[size=4][b]v1.5.1[/b][/size]
+
 - [b]Fixes:[/b]
   - Attempt to fix Null reference error with Detailed Hover Information for Cooking Stations in combination with other mods.
   - Attempt to fix index out of bounds error in Item Durability Bar patch in combination with Azu Extended Player Inventory.
 
-v1.5.0
+[size=4][b]v1.5.0[/b][/size]
+
 - [b]Fixes:[/b]
   - Fixed Blue Silver Hanging Brazier flame and coal position to avoid shadow flickers under it.
   - Fixed Clearer Weather feature to apply defined weather weights properly every time the weather is calculated (initially they were applied only at logon).
@@ -1019,7 +870,8 @@ v1.5.0
   - Added [b]Show Weather Forecast Indicator[/b]
     - With this occasion, the emojis next to the time of day (present on the New style UI) were removed to avoid confusion and UI bloat.
 
-v1.4.2
+[size=4][b]v1.4.2[/b][/size]
+
 - [b]Fixes:[/b]
   - More Usable Fuel error message fixed when building or being nearby any Shield Generators
   - Fixed UI emoji font issue after Valheim Unity Engine update
@@ -1123,7 +975,8 @@ v1.4.2
     - Added blue and green versions of the Dverger Lantern (both wall and standing)
     - Build costs are the same as the normal Dverger Lantern build pieces
 
-v1.3.2
+[size=4][b]v1.3.2[/b][/size]
+
 - [b]Progression Halt Fixes[/b]: 
    - Fixed broken gravestones dropping Grausten
    - Fixed Ashlands trees dropping Ashwood and Charcoal Resin when initially cut down (either by player or environmental damage)
@@ -1147,11 +1000,13 @@ v1.3.2
    - Mead base: Vananidir: Dandelion 10 > 7
    - Mead base: Animal Whispers: Carrot 10 > 5
 
-v1.3.1
+[size=4][b]v1.3.1[/b][/size]
+
 - All UI configs are no longer synced with server. Players can individually configure this mod's UI elements individually.
 - Show Online Players Under Minimap cannot be toggled on with Minimal Status Effects installed.
 
-v1.3.0
+[size=4][b]v1.3.0[/b][/size]
+
 - [b]Mod now requires Jotunn[/b]  
 
 - Fixed an issue with Player Logout Announce not working in certain situations.  
@@ -1166,7 +1021,8 @@ v1.3.0
 - [b]New Feature:[/b] Pocket Portal  
 - [b]New Feature:[/b] Max Portals Per Player  
 
-v1.2.0
+[size=4][b]v1.2.0[/b][/size]
+
 - Fixed an issue with Progression Halt where players could get the contents of halted chests by simply destroying them.
 - Fixed an issue with the Move Camera Up While Sailing section, where if a player would log out while controlling a ship, then the camera would be stuck in a high position when logging back in.
 - Fixed an issue with UI widgets (Time and day; online players) not showing on worlds with no map enabled. Now they display properly with the No Map global setting on.
@@ -1183,23 +1039,28 @@ v1.2.0
 - [b]New UI feature:[/b] Show Heat Meter in Ashlands
 - [b]New UI feature:[/b] Alternate UI Layout
 
-v1.1.2
+[size=4][b]v1.1.2[/b][/size]
+
 - Modified the way Progressionn Halt reads prefab names. This change is specifically targeting a previous incompatibility with Ventrure Location Reset mod where it was changing parts of prefab names after resetting dungeons. This patch makes these two mods compatible.
 - [b]New Feature:[/b] Halt Ocean Behind Elder. This provides an extra option for players and sever admins if they prefer Ocean resources to be available earlier. Ocean-tier items and food are equal to Mountain-tier items and food, which is why this option is disabled by default, but still available if wanted.
 - Rearranged config entries in the config file, which means that old configs will have extra unused config entries (those can be safely deleted)
 
-v1.1.1
+[size=4][b]v1.1.1[/b][/size]
+
 - Added Draugr Archers to Progression Halt (previous oversight)
 - Removed Pickable Bone Piles found in Meadows from Progression Halt
 
-v1.1.0
+[size=4][b]v1.1.0[/b][/size]
+
 - [b]New QOL feature:[/b] Move Camera Up While Sailing
 - Added forgotten items from old mod port to Cheaper Build Piece Amounts (all banners Leather Scraps: 6 → 5)
 - Added Shipwreck to Progression Halt (halted by Eikthyr)
 
-v1.0.1
+[size=4][b]v1.0.1[/b][/size]
+
 - Fixed a bug where features that were dependent on checking global keys (Progression Halt, Creature Unleveler) were dependent on having Clear Mistlands section enabled. Now these sections work as intended even if that option is off.
 - Made UI sections server synced like the rest of the configs.
 
-v1.0.0
+[size=4][b]v1.0.0[/b][/size]
+
 - Initial Upload
