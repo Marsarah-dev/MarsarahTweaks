@@ -13,12 +13,12 @@ This mod changes many aspects of the game so it's advised to look through and re
 Each feature is grouped into sections to make this process easier. In addition, the mod scans for already installed mods and automatically disables its own relevant configs if it finds mods that are incompatible or that may cause issues together.  
 If any issues or incompatibilities are found, please post them on the mod's Nexus page.
 
-> ⚠️ **Upgrade Note:** The custom build pieces and UI features previously included in Marsarah Tweaks have been moved into their own standalone mods.  
-**MarsarahBuildPieces** now contains the Pocket Portal, Extra Lights, Glacial Stone Portal, Mystical Light Ward, and other custom build-piece functionality.  
-**MarsarahUI** now contains the UI features previously included in Marsarah Tweaks.  
+⚠️ **Upgrade Note:** The custom build pieces and UI features previously included in Marsarah Tweaks have been moved into their own standalone mods.  
+[**MarsarahBuildPieces**](https://old.thunderstore.io/c/valheim/p/Marsarah/MarsarahBuildPieces/) now contains the Pocket Portal, Extra Lights, Glacial Stone Portal, Mystical Light Ward, and other custom build-piece functionality.  
+[**MarsarahUI**](https://old.thunderstore.io/c/valheim/p/Marsarah/MarsarahUI/) now contains the UI features previously included in Marsarah Tweaks.  
 Both mods are optional and Marsarah Tweaks can still be used on its own.
 
-> If updating from an older version of Marsarah Tweaks that still contained the custom build pieces, make a world backup before updating and install MarsarahBuildPieces if you want to continue using those pieces.
+If updating from an older version of Marsarah Tweaks that still contained the custom build pieces, make a world backup before updating and install [**MarsarahBuildPieces**](https://old.thunderstore.io/c/valheim/p/Marsarah/MarsarahBuildPieces/) if you want to continue using those pieces.
 
 ---
 
@@ -37,8 +37,8 @@ Development remains human-directed: I decide what features are added, how they s
 
 ### **Related Marsarah Mods**
 
-- **MarsarahUI** — Standalone UI mod containing the UI features previously included in Marsarah Tweaks.
-- **MarsarahBuildPieces** — Standalone build-piece mod containing the custom build pieces previously included in Marsarah Tweaks, along with new functional pieces.
+- [**MarsarahUI**](https://old.thunderstore.io/c/valheim/p/Marsarah/MarsarahUI/) - Standalone UI mod containing the UI features previously included in Marsarah Tweaks.
+- [**MarsarahBuildPieces**](https://old.thunderstore.io/c/valheim/p/Marsarah/MarsarahBuildPieces/) - Standalone build-piece mod containing the custom build pieces previously included in Marsarah Tweaks, along with new functional pieces.
 - Neither mod is required to use Marsarah Tweaks. When installed together, the mods automatically use relevant compatibility integrations where available.
 
 ---

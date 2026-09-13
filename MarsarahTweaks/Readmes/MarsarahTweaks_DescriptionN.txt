@@ -37,8 +37,8 @@ Development remains human-directed: I decide what features are added, how they s
 
 [size=4][b]Related Marsarah Mods[/b][/size]
 
-- [b]MarsarahUI[/b] — Standalone UI mod containing the UI features previously included in Marsarah Tweaks.
-- [b]MarsarahBuildPieces[/b] — Standalone build-piece mod containing the custom build pieces previously included in Marsarah Tweaks, along with new functional pieces.
+- [url=https://www.nexusmods.com/valheim/mods/3710][b]MarsarahUI[/b][/url] — Standalone UI mod containing the UI features previously included in Marsarah Tweaks.
+- [url=https://www.nexusmods.com/valheim/mods/3713][b]MarsarahBuildPieces[/b][/url] — Standalone build-piece mod containing the custom build pieces previously included in Marsarah Tweaks, along with new functional pieces (Pocket Portal, Extra Lights, Glacial Stone Portal, Mystical Light Ward).
 - Neither mod is required to use Marsarah Tweaks. When installed together, the mods automatically use relevant compatibility integrations where available.
 
 [line]
