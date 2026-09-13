@@ -76,6 +76,17 @@ B. Updates
       Fortress Mountain x3
       Goblin Plains x2
       Death Plains x2
+* Less Ashlands Enemies:
+  - Updated vanilla spawn baselines for Valheim 1.0.
+    - Fallen Valkyrie: vanilla chance changed 20% -> 15%. Removed mod change because vanilla now matches target.
+    - Asksvin DAY: vanilla chance changed 30% -> 20%. Removed 20% override. Kept Max Spawned 2 -> 1 and Group Max 3 -> 2.
+    - Asksvin NIGHT: vanilla chance changed 45% -> 30%. Removed old 35% override. Kept Max Spawned 3 -> 2.
+    - Volture: vanilla chance changed 20% -> 15%. Kept Max Spawned 3 -> 2.
+    - Charred Twitcher DAY: vanilla chance changed 40% -> 20%. Removed old 35% override. Kept Max Spawned 3 -> 2, Group Min 2 -> 1, Group Max 4 -> 2.
+    - Charred Twitcher NIGHT: vanilla chance changed 45% -> 40%. Kept Max Spawned 4 -> 3, Group Min 3 -> 2, Group Max 6 -> 3.
+    - Charred Archer: vanilla chance changed 35% -> 15%. Removed old 30% override. Kept Max Spawned 4 -> 2.
+    - Charred Melee: vanilla chance changed 35% -> 15%. Removed old 30% override. Kept Max Spawned 4 -> 2.
+    - Lava Blob: vanilla chance changed 25% -> 15%. Removed old 20% override. Kept Max Spawned 2 -> 1 and Group Max 2 -> 1.
 
 C. Others
 ------------------------
