@@ -21,6 +21,34 @@ namespace MarsarahTweaks.Patches.Features
 		private static readonly LogManager log = new LogManager("Progression Halt", LogManager.LogLevel.Warning);
 
 		private static readonly HashSet<string> haltedMobPrefabs = new HashSet<string>();
+		private static readonly Dictionary<string, List<string>> chestResourceRestrictions = new Dictionary<string, List<string>>()
+		{
+			{ "Eikthyr", new List<string> { "TreasureChest_blackforest", "TreasureChest_forestcrypt", "TreasureChest_trollcave" } },
+			{ "The Elder", new List<string> { "TreasureChest_swamp", "TreasureChest_sunkencrypt" } },
+			{ "Bonemass", new List<string> { "TreasureChest_mountains", "TreasureChest_mountaincave" } },
+			{ "Moder", new List<string> { "TreasureChest_heath", "TreasureChest_plains_stone" } },
+			{ "Yagluth", new List<string> { "TreasureChest_dvergrtower", "TreasureChest_dvergrtown" } },
+			{ "The Queen", new List<string> { "TreasureChest_charredfortress", "TreasureChest_ashland_stone" } }
+		};
+
+		// This method is used by Marsarah UI to check chest hovers
+		internal static bool IsContainerSealed(Container container)
+		{
+			if (!ConfigManager.AutomaticProgressionHaltEnabled.Value || container == null) return false;
+
+			string chestName = container.name;
+
+			foreach (var restriction in chestResourceRestrictions)
+			{
+				if (!GlobalKeyChecker.IsBossDefeated(restriction.Key) &&
+					restriction.Value.Any(rc => chestName.StartsWith(rc)))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
 
 		[HarmonyPatch(typeof(CharacterDrop), nameof(CharacterDrop.GenerateDropList))]
 		class ProgressionHaltCharacterDrop_Patch
@@ -147,16 +175,6 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(Container), "Interact")]
 		static class ContainerInteract_Patch
 		{
-			private static readonly Dictionary<string, List<string>> chestResourceRestrictions = new Dictionary<string, List<string>>()
-			{
-				{ "Eikthyr", new List<string> { "TreasureChest_blackforest", "TreasureChest_forestcrypt", "TreasureChest_trollcave" } },
-				{ "The Elder", new List<string> { "TreasureChest_swamp", "TreasureChest_sunkencrypt" } },
-				{ "Bonemass", new List<string> { "TreasureChest_mountains", "TreasureChest_mountaincave" } },
-				{ "Moder", new List<string> { "TreasureChest_heath", "TreasureChest_plains_stone" } },
-				{ "Yagluth", new List<string> { "TreasureChest_dvergrtower", "TreasureChest_dvergrtown" } },
-				{ "The Queen", new List<string> { "TreasureChest_charredfortress", "TreasureChest_ashland_stone" } }
-			};
-
 			static bool Prefix(Container __instance, Humanoid character, bool hold, bool alt, ref bool __result)
 			{
 				if (hold) return true; // Allow normal behavior for hold interactions ??
@@ -187,16 +205,6 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(Container), "DropAllItems", new Type[] { })] // Patch the version without parameters (there are two overloads)
 		static class ContainerDropItems_Patch
 		{
-			private static readonly Dictionary<string, List<string>> chestResourceRestrictions = new Dictionary<string, List<string>>()
-			{
-				{ "Eikthyr", new List<string> { "TreasureChest_blackforest", "TreasureChest_forestcrypt", "TreasureChest_trollcave" } },
-				{ "The Elder", new List<string> { "TreasureChest_swamp", "TreasureChest_sunkencrypt" } },
-				{ "Bonemass", new List<string> { "TreasureChest_mountains", "TreasureChest_mountaincave" } },
-				{ "Moder", new List<string> { "TreasureChest_heath", "TreasureChest_plains_stone" } },
-				{ "Yagluth", new List<string> { "TreasureChest_dvergrtower", "TreasureChest_dvergrtown" } },
-				{ "The Queen", new List<string> { "TreasureChest_charredfortress", "TreasureChest_ashland_stone" } }
-			};
-
 			static bool Prefix(Container __instance)
 			{
 				if (!ConfigManager.AutomaticProgressionHaltEnabled.Value) return true; // Skip if disabled
