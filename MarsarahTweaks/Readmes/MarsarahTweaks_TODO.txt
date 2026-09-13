@@ -39,14 +39,22 @@ B. Updates
 * Food And Mead Modifications
   - Added Pulled Bear to the changed recipes
     - Amounts to craft: 
-      - Carrot: 1 > 2
       - Cooked Bear Meat: 1 > 2
+      - Blueerries: 1 > 2
     - Amount crafted: 1 > 2
     - Max stacks: 10 > 20
 * Gear Speed Modifications:
   - Added Lox Fur Jacket and Lox Fur Trousers to light armor speed bonuses (+2% each).
   - Removed movement speed modifications for Wood, Bone, Iron, Black Metal, and Flametal Tower Shields. Valheim 1.0 reduced their vanilla movement penalty from -15% to -10%, matching MarsarahTweaks' existing modified value and making those overrides redundant.
-* Progression Halt now correctly halts creatures again. Added 3 more Ashlands prefabs to the list of halted objects.
+* Extra Armor Stats
+  - Added Lox Fur set to the light armor stamina bonuses.
+    - Lox Fur Hood: +5 Stamina
+    - Lox Fur Jacket: +8 Stamina
+    - Lox Fur Trousers: +7 Stamina
+* Progression Halt:
+  - Now correctly halts creatures again. 
+  - Added Writhan to the Swamp progression halt.
+  - Added 3 more Ashlands prefabs to the list of halted objects.
 * Creature Unleveler
   - Added Bjorn DAY and Bjorn NIGHT to Creature Unleveler progression.
     - After Elder: 20% level-up chance.
@@ -103,8 +111,6 @@ TO IMPLEMENT
 A. Grind Reduction
 -------------------------------
 * Review new gear crafting and upgrade costs.
-  - Lox Fur set
-  - Shield of Roots
 * Review new build-piece costs.
 
 B. Balance
@@ -112,17 +118,15 @@ B. Balance
 * Review new gear speed values.
 * Review new gear HP / Stamina / Eitr stats.
 * Review new gear upgrade minimum station levels.
-* Review Forsaken Power cooldowns.
 * Staff of Fracturing: increase splinter blast radius.
 * Add improved gear set bonuses.
-* Specifically check recipes that use Writhan Roots
 
 C. Features
 -------------------------------
-* Review Ghost, Bear and Vile, Writhan and Deep North creatures trophy drop rates.
-* Add/verify Progression Halt handling for Ghost, Bear, Vile, Writhan plus Deep North.
-* Review Creature Unleveler handling for Ghost, Bear, Vile, Writhan plus Deep North.
-* Increase Scrap Iron drop amount from Muddy Scrap Piles.
+* Review Deep North creatures trophy drop rates.
+* Add/verify Progression Halt handling Deep North.
+* Review Creature Unleveler handling Deep North.
+* Increase Scrap Iron drop amount from Muddy Scrap Piles (maybe).
 * Staff of Protection: add a secondary healing attack similar to the Dvergr Mage heal.
 * Better Roads: increase player movement speed on roads.
 * Vote to Sleep:
@@ -135,7 +139,7 @@ C. Features
   - Make the config take a range so the config manager reads it with a slider. From -1 to 50-ish, where -1 is still off/default. Or add a bool to enable/disable it and then a separate slider from 1 to 50-ish.
   - Add admin exception for portal limit. 
 * Player Inspector for players currently logged into the world.
-* Skip intro video
+* Skip intro video (devs said they will add this as a setting so skip for now)
 
 Trinkets:
 * Review new Trinket build costs:
@@ -171,12 +175,6 @@ D. QOL
 
 E. Others
 -------------------------------
-* Final project consistency pass after the 1.0 fixes:
-  - Logging
-  - Naming
-  - Arrangement/style
-  - Dead code/usings/comments
-
 * Replace selected bool-based tweaks with configurable values where appropriate:
   - Less Stamina Usage            -> Rename to Stamina Usage          -> Value controls stamina-use percentage.
   - Reduced Crossbows Reload Time -> Rename to Crossbows Reload Time  -> Set the desired reload value directly instead of adding/subtracting.

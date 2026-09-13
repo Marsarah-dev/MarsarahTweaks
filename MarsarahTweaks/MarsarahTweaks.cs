@@ -1,19 +1,7 @@
 ﻿
 using BepInEx;
-using BepInEx.Configuration;
 using HarmonyLib;
 using MarsarahTweaks.Managers;
-using MarsarahTweaks.Patches;
-using MarsarahTweaks.Patches.Balance;
-using MarsarahTweaks.Patches.Features;
-using MarsarahTweaks.Patches.QOL;
-using ServerSync;
-using System;
-using System.Collections;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using UnityEngine;
 
 namespace MarsarahTweaks
 {
@@ -40,7 +28,7 @@ namespace MarsarahTweaks
 		{
 			CompatibilityManager.Initialize();
 			CompatibilityManager.UpdateIncompatibilities();
-			CompatibilityManager.DumpAllLoadedMods();
+			//CompatibilityManager.DumpAllLoadedMods();
 		}
 
 		private void OnDestroy()

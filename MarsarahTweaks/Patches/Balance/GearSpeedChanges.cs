@@ -23,7 +23,7 @@ namespace MarsarahTweaks.Patches.Balance
 
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
-				LogGearSpeeds(__instance);
+				//LogGearSpeeds(__instance);
 
 				UpdateGearSpeed(__instance, false);
 			}

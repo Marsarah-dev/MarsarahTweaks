@@ -65,7 +65,6 @@ namespace MarsarahTweaks.Patches.Features
 
 					if (spawnAdjustments.TryGetValue(spawner.m_name, out var newValues))
 					{
-						string prefabName = spawner.m_prefab != null ? spawner.m_prefab.name : "NULL";
 						//log.Info($"| {spawner.m_name,-25} | {spawner.m_maxSpawned,-3} | {spawner.m_groupSizeMin,-9} | {spawner.m_groupSizeMax,-9} | {spawner.m_spawnChance,-6}% |");
 						
 						if (ConfigManager.LessAshlandsEnemiesEnabled.Value)
