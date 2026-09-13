@@ -1,7 +1,7 @@
 ## <strong> 📜 Version History </strong>
 
-v1.7.1
-- Fixed the internal mod version incorrectly reporting as 1.6.0 in the 1.7.0 release.
+v1.7.1 & 1.7.2
+- Fixed the internal mod version incorrectly reporting as 1.6.0.
 
 v1.7.0
 - **Standalone Mod Split:**

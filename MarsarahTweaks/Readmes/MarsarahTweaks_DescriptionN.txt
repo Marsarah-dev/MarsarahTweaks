@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.7.1
+[b]Version:[/b] 1.7.2
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -756,9 +756,9 @@ Blaxxun-bloop - for ServerSync
 
 [size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
 
-[size=4][b]v1.7.1[/b][/size]
+[size=4][b]v1.7.1 & 1.7.2[/b][/size]
 
-- Fixed the internal mod version incorrectly reporting as 1.6.0 in the 1.7.0 release.
+- Fixed the internal mod version incorrectly reporting as 1.6.0.
 
 [size=4][b]v1.7.0[/b][/size]
 
