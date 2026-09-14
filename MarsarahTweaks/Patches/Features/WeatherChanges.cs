@@ -2,18 +2,12 @@
 using MarsarahTweaks.Managers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
 namespace MarsarahTweaks.Patches.Features
 {
 	internal class WeatherChanges
 	{
 		private static readonly LogManager log = new LogManager("Weather Changes", LogManager.LogLevel.Warning);
-
-		//private static bool originalWeatherLogged = false;
 
 		// New weather values
 		public static readonly Dictionary<(Heightmap.Biome, string), float> weatherWeightChanges = new Dictionary<(Heightmap.Biome, string), float>()
@@ -39,192 +33,155 @@ namespace MarsarahTweaks.Patches.Features
 			{ (Heightmap.Biome.AshLands, "Ashlands_ashrain"), 2f }, // 1.5
 		};
 
-		// Backup dictionary and apply tracker
+		// Original weather weights used for restoring config changes and Alt Biome weather
 		private static readonly Dictionary<EnvEntry, float> originalWeights = new Dictionary<EnvEntry, float>();
+		private static EnvMan appliedEnvMan = null;
+		private static bool weightsApplied = false;
 
-		[HarmonyPatch(typeof(EnvMan), "SelectWeightedEnvironment")]
-		class Patch_SelectWeightedEnvironment
+		private static readonly System.Reflection.MethodInfo memberwiseClone = AccessTools.Method(typeof(object), "MemberwiseClone");
+
+		[HarmonyPatch(typeof(EnvMan), "GetAvailableEnvironments", new Type[] { typeof(BiomeSector) })]
+		class Patch_GetAvailableEnvironments
 		{
-			static void Prefix(List<EnvEntry> environments, EnvMan __instance)
+			static void Prefix(EnvMan __instance)
 			{
-				if (environments == null || environments.Count == 0) return;
-
-				/*if (!originalWeatherLogged)
-				{
-					LogWeatherWeights(__instance);
-					originalWeatherLogged = true;
-				}*/
-
-				var biome = GetBiomeForEnvironments(environments, __instance);
-
-				if (ConfigManager.ClearerWeatherEnabled.Value)
-				{
-					if (!biome.HasValue)
-						return;
-
-					foreach (var e in environments)
-					{
-						// Store original value only once
-						if (!originalWeights.ContainsKey(e))
-							originalWeights[e] = e.m_weight;
-
-						if (weatherWeightChanges.TryGetValue((biome.Value, e.m_env.m_name), out float newWeight))
-						{
-							if (Math.Abs(e.m_weight - newWeight) > 0.001f)
-							{
-								log.Info($"Changing weight for {e.m_env.m_name} in {biome.Value}: {e.m_weight} -> {newWeight}");
-								e.m_weight = newWeight;
-							}
-						}
-					}
-				}
-				else
-				{
-					bool restoredAny = false;
-
-					foreach (var e in environments)
-					{
-						if (originalWeights.TryGetValue(e, out float originalWeight))
-						{
-							if (Math.Abs(e.m_weight - originalWeight) > 0.001f)
-							{
-								e.m_weight = originalWeight;
-								log.Info($"Restored original weight for {e.m_env.m_name}: {originalWeight}");
-								restoredAny = true;
-							}
-
-							// Clean up restored entry
-							originalWeights.Remove(e);
-						}
-					}
-
-					if (restoredAny)
-						log.Info($"Restored weights for biome: {biome?.ToString() ?? "Unknown"}");
-				}
+				UpdateWeatherWeights(__instance);
 			}
 
-			/*static void Postfix(EnvSetup __result, List<EnvEntry> environments, EnvMan __instance)
+			static void Postfix(BiomeSector __0, List<EnvEntry> __result)
 			{
 				if (!ConfigManager.ClearerWeatherEnabled.Value) return;
+				if (__0 == null || __result == null) return;
+				if (!HasAlternateWeatherChanges(__0)) return;
 
-				if (__result != null && environments != null)
+				for (int i = 0; i < __result.Count; i++)
 				{
-					var biome = GetBiomeForEnvironments(environments, __instance);
+					EnvEntry entry = __result[i];
 
-					if (biome.HasValue)
-					{
-						log.Info($"Selected environment: {__result.m_name} in biome {biome.Value}");
-						//MessageHud.instance.ShowMessage(MessageHud.MessageType.TopLeft,	$"Selected environment: {__result.m_name} in {biome.Value}");
-					}
+					if (entry == null)
+						continue;
+
+					if (!originalWeights.TryGetValue(entry, out float originalWeight))
+						continue;
+
+					EnvEntry vanillaEntry = CloneEnvEntry(entry);
+					vanillaEntry.m_weight = originalWeight;
+					__result[i] = vanillaEntry;
 				}
-			}*/
-		}
-
-		private static Heightmap.Biome? GetBiomeForEnvironments(List<EnvEntry> envs, EnvMan envMan)
-		{
-			foreach (var biomeSetup in envMan.m_biomes)
-			{
-				if (biomeSetup.m_environments == envs)
-					return biomeSetup.m_biome;
 			}
-			return null;
 		}
 
-		// Helper to print available weathers
-		/*private static bool printed = false;
-		 
-		[HarmonyPatch(typeof(EnvMan), "Update")]
-		class Patch_EnvMan_Awake
+		public static void UpdateWeatherWeights(EnvMan envMan)
 		{
-			static void Postfix(EnvMan __instance)
+			if (envMan == null || envMan.m_biomes == null)
+				return;
+
+			if (appliedEnvMan != envMan)
 			{
-				if (!printed)
+				originalWeights.Clear();
+				weightsApplied = false;
+				appliedEnvMan = envMan;
+			}
+
+			if (ConfigManager.ClearerWeatherEnabled.Value)
+			{
+				if (!weightsApplied)
+					ApplyWeatherWeights(envMan);
+			}
+			else
+			{
+				if (weightsApplied)
+					RestoreWeatherWeights();
+			}
+		}
+
+		private static void ApplyWeatherWeights(EnvMan envMan)
+		{
+			foreach (BiomeEnvSetup biomeSetup in envMan.m_biomes)
+			{
+				foreach (EnvEntry entry in biomeSetup.m_environments)
 				{
-					log.Info("---- Biome → Environment list ----", header: true);
+					if (entry?.m_env == null)
+						continue;
 
-					foreach (var biomeSetup in __instance.m_biomes)
-					{
-						string biomeName = biomeSetup.m_biome.ToString();
+					if (!weatherWeightChanges.TryGetValue((biomeSetup.m_biome, entry.m_env.m_name), out float newWeight))
+						continue;
 
-						foreach (var entry in biomeSetup.m_environments)
-						{
-							log.Info($"Biome: {biomeName}, Env: {entry.m_env.m_name}, Default weight: {entry.m_weight}");
-						}
-					}
+					if (originalWeights.ContainsKey(entry))
+						continue;
 
-					log.Info("---- End list ----", footer: true);
+					originalWeights[entry] = entry.m_weight;
 
-					printed = true;
-				}				
+					log.Info($"Changing weight for {entry.m_env.m_name} in {biomeSetup.m_biome}: {entry.m_weight} -> {newWeight}");
+					entry.m_weight = newWeight;
+				}
 			}
-		}*/
 
+			weightsApplied = true;
+		}
+
+		private static void RestoreWeatherWeights()
+		{
+			foreach (var pair in originalWeights)
+			{
+				log.Info($"Restoring weight for {pair.Key.m_env.m_name}: {pair.Key.m_weight} -> {pair.Value}");
+				pair.Key.m_weight = pair.Value;
+			}
+
+			originalWeights.Clear();
+			weightsApplied = false;
+		}
+
+		private static bool HasAlternateWeatherChanges(BiomeSector biomeSector)
+		{
+			if (biomeSector.AltBiomes == null)
+				return false;
+
+			foreach (AltBiome altBiome in biomeSector.AltBiomes)
+			{
+				if (altBiome == null)
+					continue;
+
+				if (!string.IsNullOrEmpty(altBiome.m_forceEnvironment))
+					return true;
+
+				if (altBiome.m_addEnvironments != null && altBiome.m_addEnvironments.Count > 0)
+					return true;
+
+				if (altBiome.m_blockEnvironments != null && altBiome.m_blockEnvironments.Count > 0)
+					return true;
+			}
+
+			return false;
+		}
+
+		private static EnvEntry CloneEnvEntry(EnvEntry entry)
+		{
+			return (EnvEntry)memberwiseClone.Invoke(entry, null);
+		}
+
+		/*
+		// Debug helper: prints base biome weather weights.
 		private static void LogWeatherWeights(EnvMan envMan)
 		{
 			if (envMan == null || envMan.m_biomes == null)
-			{
-				log.Warn("Cannot log weather weights because EnvMan or its biome list is null.");
 				return;
-			}
 
-			log.Info("=== Vanilla Weather Weights by Biome ===");
+			log.Info("=== Weather Weights by Biome ===");
 
-			Dictionary<Heightmap.Biome, int> biomeCounts = new Dictionary<Heightmap.Biome, int>();
-			Dictionary<Heightmap.Biome, int> biomeIndexes = new Dictionary<Heightmap.Biome, int>();
-
-			foreach (var biomeSetup in envMan.m_biomes)
+			foreach (BiomeEnvSetup biomeSetup in envMan.m_biomes)
 			{
-				Heightmap.Biome biome = biomeSetup.m_biome;
-
-				if (!biomeCounts.ContainsKey(biome))
-					biomeCounts[biome] = 0;
-
-				biomeCounts[biome]++;
-			}
-
-			foreach (var biomeSetup in envMan.m_biomes)
-			{
-				Heightmap.Biome biome = biomeSetup.m_biome;
-				List<EnvEntry> environments = biomeSetup.m_environments;
-
-				if (!biomeIndexes.ContainsKey(biome))
-					biomeIndexes[biome] = 0;
-
-				biomeIndexes[biome]++;
-
-				int variantIndex = biomeIndexes[biome];
-				int variantCount = biomeCounts[biome];
-
-				string variantText = variantCount > 1 ? $" [Variant {variantIndex}/{variantCount}]" : "";
-
-				if (environments == null || environments.Count == 0)
+				foreach (EnvEntry entry in biomeSetup.m_environments)
 				{
-					log.Info($"Biome: {biome}{variantText} | No environments");
-					continue;
-				}
+					if (entry?.m_env == null)
+						continue;
 
-				float totalWeight = 0f;
-
-				foreach (EnvEntry entry in environments)
-				{
-					if (entry?.m_env == null) continue;
-
-					totalWeight += entry.m_weight;
-				}
-
-				log.Info($"Biome: {biome}{variantText} | Environments: {environments.Count} | Total Weight: {totalWeight:0.###}");
-
-				foreach (EnvEntry entry in environments)
-				{
-					if (entry?.m_env == null) continue;
-
-					float probability = totalWeight > 0f ? entry.m_weight / totalWeight * 100f : 0f;
-
-					log.Info($"   - {entry.m_env.m_name}: Weight {entry.m_weight:0.###} | Probability {probability:0.00}%");
+					log.Info($"{biomeSetup.m_biome} - {entry.m_env.m_name}: {entry.m_weight}");
 				}
 			}
 
-			log.Info("=== End Vanilla Weather Weights ===");
+			log.Info("=== End Weather Weights ===");
 		}
+		*/
 	}
 }

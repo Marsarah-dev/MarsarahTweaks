@@ -302,6 +302,11 @@ namespace MarsarahTweaks.Managers
 
 			CompatibilityManager.UpdateIncompatibilities();
 
+			if (configName == Configs.WeatherModifications.Name)
+			{
+				WeatherChanges.UpdateWeatherWeights(EnvMan.instance);
+			}
+
 			if (ObjectDB.instance == null || ZNetScene.instance == null) return;
 			if (ZNet.instance == null) return;
 			var spawnSystem = Object.FindFirstObjectByType<SpawnSystem>();

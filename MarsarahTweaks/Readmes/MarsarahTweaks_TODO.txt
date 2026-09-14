@@ -8,101 +8,14 @@ IMPLEMENTED - NOT RELEASED
 A. New Features
 ------------------------------
 
-B. Updates
+B. Updates / Fixes
 ------------------------------
-* Max Portals Per Player now also recognizes the Glacial Stone Portal when MarsarahBuildPieces is installed.
-* Player Logout Announce moved to QOL from the previous UI section.
-* Permanent Lights
-  - Reduced Wood cost for Campfire and Hearth to 5 and 10 respectively, and reduced the max fuel to that number.
-* Cheaper Gear Recipe Amounts
-  - Shield of Roots: reduced amount of Fine Wood for upgrade from 5/10/15 -> 4/8/12
-  - Lox Fur Jacket: reduced amount of Lox Pelt for upgrade from 6/12/18 -> 4/8/12
-* Cheaper Build Pieces Amounts
-  - Decorative Boulder: Stone 10 -> 5
-  - Ornamental Boulder: Stone 25 -> 8
-  - Roundpole Gate: Wood 4 -> 2
-  - Stone Fence: Stone 4 -> 3
-  - Darkwood Raven: Fine Wood 10 -> 6
-  - Darkwood Wolf: Fine Wood 10 -> 6
-  - Black Marble Throne: Copper 5 -> 4
-  - Ashwood Decowall 2x2: Ashwood 4 -> 2
-  - Ashwood Decowall Divider: Ashwood 2 -> 1
-  - Ashwood Decowall Tree: Ashwood 2 -> 1
-  - Removed the following from being modified, since the vanilla values are now as the mod was changing them:
-    - Ashwood Floor 2x2
-    - Ashwood Floor 1x1
-    - Ashwood Beam 1m
-    - Ashwood Beam 2m
-    - Ashwood Pole 1m
-    - Ashwood Pole 2m
-  - NOTE: For Blackmarble Table change the readme to update the vanilla value of copper from 6 to 3 (mod makes it 2)
-* Food And Mead Modifications
-  - Added Pulled Bear to the changed recipes
-    - Amounts to craft: 
-      - Cooked Bear Meat: 1 > 2
-      - Blueerries: 1 > 2
-    - Amount crafted: 1 > 2
-    - Max stacks: 10 > 20
-* Gear Speed Modifications:
-  - Added Lox Fur Jacket and Lox Fur Trousers to light armor speed bonuses (+2% each).
-  - Removed movement speed modifications for Wood, Bone, Iron, Black Metal, and Flametal Tower Shields. Valheim 1.0 reduced their vanilla movement penalty from -15% to -10%, matching MarsarahTweaks' existing modified value and making those overrides redundant.
-* Extra Armor Stats
-  - Added Lox Fur set to the light armor stamina bonuses.
-    - Lox Fur Hood: +5 Stamina
-    - Lox Fur Jacket: +8 Stamina
-    - Lox Fur Trousers: +7 Stamina
-* Progression Halt:
-  - Now correctly halts creatures again. 
-  - Added Writhan to the Swamp progression halt.
-  - Added 3 more Ashlands prefabs to the list of halted objects.
-  - Added a shared chest restriction check for MarsarahUI compatibility, allowing other Marsarah mods to detect when a container is currently progression-sealed.
-* Creature Unleveler
-  - Added Bjorn DAY and Bjorn NIGHT to Creature Unleveler progression.
-    - After Elder: 20% level-up chance.
-    - After Bonemass: 30% level-up chance.
-    - Preserved vanilla day/night maximum level differences.
-  - Added Writhan to Creature Unleveler progression.
-    - After Bonemass: 20% level-up chance.
-    - After Moder: 30% level-up chance.
-    - Preserved vanilla max level.
-  - Added Unbjorn (Vile Bear) to Creature Unleveler progression.
-    - After Queen: max level 2 with 20% level-up chance.
-  - Fixed Creature Unleveler spawn backup identity.
-    - Backups are now keyed by the individual SpawnSystem.SpawnData object instead of spawner name.
-    - Fixes incorrect backup/restoration when multiple SpawnData entries share the same name but have different vanilla values, such as Wolf and Seeker.
-  - Creature spawn backups are now cleared when loading a new world.
-  - Verified Valheim 1.0 alternate-biome level-up behavior.
-    - Vanilla default level-up chance is 10% when SpawnData override is -1.
-    - Alternate biome regions multiply the final base level-up chance rather than replacing it.
-    - Creature Unleveler's 20%/30% overrides are therefore still multiplied by the active alt-biome multiplier rather than replacing it.
-    - Confirmed increased regions:
-      Dark Meadows x2
-      Rock Black Forest x2
-      Pinetree Black Forest x2
-      Wolf Mountain x2
-      Drake Mountain x2
-      Fortress Mountain x3
-      Goblin Plains x2
-      Death Plains x2
-* Less Ashlands Enemies:
-  - Updated vanilla spawn baselines for Valheim 1.0.
-    - Fallen Valkyrie: vanilla chance changed 20% -> 15%. Removed mod change because vanilla now matches target.
-    - Asksvin DAY: vanilla chance changed 30% -> 20%. Removed 20% override. Kept Max Spawned 2 -> 1 and Group Max 3 -> 2.
-    - Asksvin NIGHT: vanilla chance changed 45% -> 30%. Removed old 35% override. Kept Max Spawned 3 -> 2.
-    - Volture: vanilla chance changed 20% -> 15%. Kept Max Spawned 3 -> 2.
-    - Charred Twitcher DAY: vanilla chance changed 40% -> 20%. Removed old 35% override. Kept Max Spawned 3 -> 2, Group Min 2 -> 1, Group Max 4 -> 2.
-    - Charred Twitcher NIGHT: vanilla chance changed 45% -> 40%. Kept Max Spawned 4 -> 3, Group Min 3 -> 2, Group Max 6 -> 3.
-    - Charred Archer: vanilla chance changed 35% -> 15%. Removed old 30% override. Kept Max Spawned 4 -> 2.
-    - Charred Melee: vanilla chance changed 35% -> 15%. Removed old 30% override. Kept Max Spawned 4 -> 2.
-    - Lava Blob: vanilla chance changed 25% -> 15%. Removed old 20% override. Kept Max Spawned 2 -> 1 and Group Max 2 -> 1.
+* Clearer Weather:
+  - Fixed Clearer Weather for Valheim 1.0's new Alternative Biome weather system.
+  - Clearer Weather now preserves custom AltBiome weather behavior, such as Dark Meadows, while still modifying normal biome weather.
 
 C. Others
 ------------------------
-* Removed all UI features from MarsarahTweaks and moved them to the standalone MarsarahUI mod.
-* Removed the custom build-piece module from MarsarahTweaks and moved it to MarsarahBuildPieces mod.
-* Max Portals Per Player / Glacial Stone Portal integration still needs dedicated-server testing.
-* Player Logout Announce should receive a final multiplayer/dedicated-server test.
-
 
 ============================================================
 TO IMPLEMENT
