@@ -13,6 +13,8 @@ B. Updates / Fixes
 * Clearer Weather:
   - Fixed Clearer Weather for Valheim 1.0's new Alternative Biome weather system.
   - Clearer Weather now preserves custom AltBiome weather behavior, such as Dark Meadows, while still modifying normal biome weather.
+* Better Death Raiser
+  - Fixed a bug where summoned skeletons had no gear or weapons if summoned with a Death Raiser higher than lvl 4, and would not be able to attack at all.
 
 C. Others
 ------------------------

@@ -26,7 +26,7 @@ namespace MarsarahTweaks.Patches.Balance
 
 	internal class DeathRaiserChanges
 	{
-		private static readonly LogManager log = new LogManager("Death Raiser", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Death Raiser", LogManager.LogLevel.Info);
 
 		// Modify Skeleton Summons
 		[HarmonyPatch(typeof(Humanoid), nameof(Humanoid.StartAttack))]
@@ -138,7 +138,7 @@ namespace MarsarahTweaks.Patches.Balance
 					// Check if it has a custom attack type assigned or a weapon level
 					var skeletonSharedComponent = __instance.GetComponent<SkeletonSharedData>();
 					bool isSecondaryAttack = skeletonSharedComponent != null && skeletonSharedComponent.IsSecondaryAttack;
-					int usedWeaponLevel = skeletonSharedComponent.WeaponLevel;
+					int usedWeaponLevel = Mathf.Min(skeletonSharedComponent.WeaponLevel, 4);
 					log.Info($"Used Weapon Level: {usedWeaponLevel}");
 
 					if (ConfigManager.BetterDeathRaiserSummonsEnabled.Value)
