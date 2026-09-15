@@ -17,7 +17,7 @@ namespace MarsarahTweaks
 
 		private void Awake()
 		{
-			LogManager.SetGlobalLogLevel(LogManager.LogLevel.Info); // None, Error, Warning, Info
+			LogManager.SetGlobalLogLevel(LogManager.LogLevel.Warning); // None, Error, Warning, Info
 			ConfigManager.Init(Config);
 			//CustomConsoleCommandHandler.Init(); // Register new console commands
 

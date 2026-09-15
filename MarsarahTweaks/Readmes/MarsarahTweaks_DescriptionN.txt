@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.7.2
+[b]Version:[/b] 1.7.3
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -525,6 +525,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 - Reduces chance for mist, rain and snowstorms in Meadows, Plains, and Mountains respectively.
 - For the Ocean biome, only the mist chance is reduced.
+- Preserves custom Alternative Biome weather behavior, such as Dark Meadows.
 - Toggling mid-game requires [b]client[/b] relog.
 - [b]Conflicts:[/b]  Weather or seasons mods (Seasons by shundal or Seasonality by RustyMods).
 &nbsp;&nbsp;&nbsp;- Automatically disabled if the above are detected.
@@ -755,6 +756,15 @@ Blaxxun-bloop - for ServerSync
 
 
 [size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
+
+[size=4][b]v1.7.3[/b][/size]
+
+- [b]Clearer Weather:[/b]
+  - Fixed Clearer Weather for Valheim 1.0's new Alternative Biome weather system.
+  - Clearer Weather now preserves custom Alternative Biome weather behavior, such as Dark Meadows, while still modifying normal biome weather.
+
+- [b]Better Death Raiser:[/b]
+  - Fixed summoned skeletons having no gear or weapons when summoned with a level 5+ Death Raiser, preventing them from attacking.
 
 [size=4][b]v1.7.1 & 1.7.2[/b][/size]
 

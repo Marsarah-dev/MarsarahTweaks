@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.7.2  
+**Version:** 1.7.3  
 **Author:** Marsarah
 
 ---
@@ -552,6 +552,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 - Reduces chance for mist, rain and snowstorms in Meadows, Plains, and Mountains respectively.
 - For the Ocean biome, only the mist chance is reduced.
+- Preserves custom Alternative Biome weather behavior, such as Dark Meadows.
 - Toggling mid-game requires **client** relog.
 - **Conflicts:**  Weather or seasons mods (Seasons by shundal or Seasonality by RustyMods).
   - Automatically disabled if the above are detected.

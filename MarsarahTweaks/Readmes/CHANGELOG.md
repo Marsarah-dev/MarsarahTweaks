@@ -1,5 +1,13 @@
 ## <strong> 📜 Version History </strong>
 
+v1.7.3
+- **Clearer Weather:**
+  - Fixed Clearer Weather for Valheim 1.0's new Alternative Biome weather system.
+  - Clearer Weather now preserves custom Alternative Biome weather behavior, such as Dark Meadows, while still modifying normal biome weather.
+
+- **Better Death Raiser:**
+  - Fixed summoned skeletons having no gear or weapons when summoned with a level 5+ Death Raiser, preventing them from attacking.
+
 v1.7.1 & 1.7.2
 - Fixed the internal mod version incorrectly reporting as 1.6.0.
 

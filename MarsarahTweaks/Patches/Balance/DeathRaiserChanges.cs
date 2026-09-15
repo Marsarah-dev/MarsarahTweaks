@@ -26,7 +26,7 @@ namespace MarsarahTweaks.Patches.Balance
 
 	internal class DeathRaiserChanges
 	{
-		private static readonly LogManager log = new LogManager("Death Raiser", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Death Raiser", LogManager.LogLevel.Warning);
 
 		// Modify Skeleton Summons
 		[HarmonyPatch(typeof(Humanoid), nameof(Humanoid.StartAttack))]

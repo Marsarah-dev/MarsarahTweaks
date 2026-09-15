@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.7.2
+Marsarah Tweaks v1.7.3
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
@@ -2009,6 +2009,7 @@ The following foods have the stack size increased to 20
 ► Description:
   Reduces chance for mist, rain and snowstorms in Meadows, Plains, and Mountains respectively.
   For the Ocean biome, only the mist chance is reduced.
+  Preserves custom Alternative Biome weather behavior, such as Dark Meadows.
 
 ► Mid-Game Toggling:
   Toggling mid-game requires CLIENT relog.
@@ -2340,6 +2341,14 @@ The following foods have the stack size increased to 20
 
 VERSION HISTORY
 ================================================================
+
+v1.7.3
+- Clearer Weather:
+  - Fixed Clearer Weather for Valheim 1.0's new Alternative Biome weather system.
+  - Clearer Weather now preserves custom Alternative Biome weather behavior, such as Dark Meadows, while still modifying normal biome weather.
+
+- Better Death Raiser:
+  - Fixed summoned skeletons having no gear or weapons when summoned with a level 5+ Death Raiser, preventing them from attacking.
 
 v1.7.1 & 1.7.2
 - Fixed the internal mod version incorrectly reporting as 1.6.0.
