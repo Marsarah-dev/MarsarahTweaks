@@ -12,8 +12,6 @@ The project is designed to be:
 - Gameplay and progression balance tweaks
 - Crafting, gear, and resource adjustments
 - New build pieces and visual variants
-- UI widgets and indicators
-- Portal and world-interaction enhancements
 - Extensive mod compatibility handling
 
 ### Technical highlights

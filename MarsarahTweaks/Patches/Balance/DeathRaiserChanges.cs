@@ -28,6 +28,41 @@ namespace MarsarahTweaks.Patches.Balance
 	{
 		private static readonly LogManager log = new LogManager("Death Raiser", LogManager.LogLevel.Warning);
 
+		private const string SkeletonSecondaryAttackZdoKey = "MarsarahTweaks_SkeletonSecondaryAttack";
+		private const string SkeletonWeaponLevelZdoKey = "MarsarahTweaks_SkeletonWeaponLevel";
+
+		private static bool TryGetPersistedSkeletonData(GameObject skeleton, out bool isSecondaryAttack, out int weaponLevel)
+		{
+			isSecondaryAttack = false;
+			weaponLevel = 0;
+
+			ZNetView nview = skeleton.GetComponent<ZNetView>();
+			if (nview == null || !nview.IsValid()) return false;
+
+			ZDO zdo = nview.GetZDO();
+			if (zdo == null) return false;
+
+			weaponLevel = zdo.GetInt(SkeletonWeaponLevelZdoKey, 0);
+			if (weaponLevel <= 0) return false;
+
+			isSecondaryAttack = zdo.GetBool(SkeletonSecondaryAttackZdoKey, false);
+			return true;
+		}
+
+		private static void SaveSkeletonData(GameObject skeleton, bool isSecondaryAttack, int weaponLevel)
+		{
+			if (weaponLevel <= 0) return;
+
+			ZNetView nview = skeleton.GetComponent<ZNetView>();
+			if (nview == null || !nview.IsValid()) return;
+
+			ZDO zdo = nview.GetZDO();
+			if (zdo == null) return;
+
+			zdo.Set(SkeletonSecondaryAttackZdoKey, isSecondaryAttack);
+			zdo.Set(SkeletonWeaponLevelZdoKey, weaponLevel);
+		}
+
 		// Modify Skeleton Summons
 		[HarmonyPatch(typeof(Humanoid), nameof(Humanoid.StartAttack))]
 		static class DeathRaiserAttack_Patch
@@ -90,20 +125,42 @@ namespace MarsarahTweaks.Patches.Balance
 
 				if (ZNet.instance == null || ZNet.instance.IsDedicated()) return;
 
-				// Do nothing if the feature is disabled
 				if (!ConfigManager.BetterDeathRaiserEnabled.Value) return;
 
 				if (__result is GameObject gameObject && gameObject.name.Contains("Skeleton_Friendly"))
 				{
 					ModState.LastSpawnedSkeleton = gameObject;
-					log.Info($"Captured instantiated skeleton: {gameObject.name}");
 
-					// Set attack type and weapon level
-					SkeletonSharedData skeletonShared = gameObject.AddComponent<SkeletonSharedData>();
+					SkeletonSharedData skeletonShared = gameObject.GetComponent<SkeletonSharedData>();
+					if (skeletonShared == null)
+					{
+						skeletonShared = gameObject.AddComponent<SkeletonSharedData>();
+					}
+
+					// Existing skeleton loaded from the world: restore its original summon data.
+					if (TryGetPersistedSkeletonData(gameObject, out bool savedSecondaryAttack, out int savedWeaponLevel))
+					{
+						skeletonShared.IsSecondaryAttack = savedSecondaryAttack;
+						skeletonShared.WeaponLevel = savedWeaponLevel;
+
+						log.Info($"Restored skeleton data: Secondary Attack = {savedSecondaryAttack}, Weapon Level = {savedWeaponLevel}");
+						return;
+					}
+
+					// Newly summoned skeleton: use the Death Raiser attack that just created it.
 					skeletonShared.IsSecondaryAttack = ModState.LastAttackWasSecondary;
 					skeletonShared.WeaponLevel = ModState.LastWeaponLevel;
-					log.Info($"Set IsSecondaryAttack = {skeletonShared.IsSecondaryAttack} for {gameObject.name}");
-					log.Info($"Set WeaponLevel = {skeletonShared.WeaponLevel} for {gameObject.name}");
+
+					if (skeletonShared.WeaponLevel > 0)
+					{
+						SaveSkeletonData(gameObject, skeletonShared.IsSecondaryAttack, skeletonShared.WeaponLevel);
+
+						log.Info($"Saved skeleton data: Secondary Attack = {skeletonShared.IsSecondaryAttack}, Weapon Level = {skeletonShared.WeaponLevel}");
+					}
+					else
+					{
+						log.Info($"No valid summon data available for {gameObject.name}");
+					}
 				}
 			}
 		}
@@ -137,70 +194,102 @@ namespace MarsarahTweaks.Patches.Balance
 				{
 					// Check if it has a custom attack type assigned or a weapon level
 					var skeletonSharedComponent = __instance.GetComponent<SkeletonSharedData>();
-					bool isSecondaryAttack = skeletonSharedComponent != null && skeletonSharedComponent.IsSecondaryAttack;
-					int usedWeaponLevel = Mathf.Min(skeletonSharedComponent.WeaponLevel, 4);
+
+					bool isSecondaryAttack;
+					int weaponLevel;
+
+					if (TryGetPersistedSkeletonData(__instance.gameObject, out bool savedSecondaryAttack, out int savedWeaponLevel))
+					{
+						isSecondaryAttack = savedSecondaryAttack;
+						weaponLevel = savedWeaponLevel;
+
+						if (skeletonSharedComponent != null)
+						{
+							skeletonSharedComponent.IsSecondaryAttack = isSecondaryAttack;
+							skeletonSharedComponent.WeaponLevel = weaponLevel;
+						}
+					}
+					else if (skeletonSharedComponent != null && skeletonSharedComponent.WeaponLevel > 0)
+					{
+						isSecondaryAttack = skeletonSharedComponent.IsSecondaryAttack;
+						weaponLevel = skeletonSharedComponent.WeaponLevel;
+
+						SaveSkeletonData(__instance.gameObject, isSecondaryAttack, weaponLevel);
+					}
+					else
+					{
+						log.Info($"No valid summon data found for {__instance.name}. Falling back to vanilla equipment.");
+						__runOriginal = true;
+						return;
+					}
+
+					int usedWeaponLevel = Mathf.Min(weaponLevel, 4);
 					log.Info($"Used Weapon Level: {usedWeaponLevel}");
 
 					if (ConfigManager.BetterDeathRaiserSummonsEnabled.Value)
 					{
-						if (SummonedSkeletonChanges.newSkeletonGear.TryGetValue(usedWeaponLevel, out var gearForLevel))
+						if (!SummonedSkeletonChanges.newSkeletonGear.TryGetValue(usedWeaponLevel, out var gearForLevel))
 						{
-							// Get original skeleton weapon data
-							ItemDrop originalSkeletonWeaponData = null;
+							log.Warn($"No summoned skeleton gear configured for weapon level {usedWeaponLevel}. Falling back to vanilla equipment.");
+							__runOriginal = true;
+							return;
+						}
 
-							string originalWeaponPrefabName = isSecondaryAttack ? "skeleton_bow2" : "skeleton_sword2";
-							var originalWeaponPrefab = ObjectDB.instance.GetItemPrefab(originalWeaponPrefabName);
-							if (originalWeaponPrefab != null)
+						// Get original skeleton weapon data
+						ItemDrop originalSkeletonWeaponData = null;
+
+						string originalWeaponPrefabName = isSecondaryAttack ? "skeleton_bow2" : "skeleton_sword2";
+						var originalWeaponPrefab = ObjectDB.instance.GetItemPrefab(originalWeaponPrefabName);
+						if (originalWeaponPrefab != null)
+						{
+							originalSkeletonWeaponData = originalWeaponPrefab.GetComponent<ItemDrop>();
+						}
+
+						// Apply new fancy gear
+						string skeletonType = isSecondaryAttack ? "Ranged" : "Melee";
+						if (gearForLevel.TryGetValue(skeletonType, out var gear))
+						{
+							string weaponPrefabName = !string.IsNullOrEmpty(gear.weapon2) && UnityEngine.Random.value > 0.5f ? gear.weapon2 : gear.weapon1;
+							string shieldPrefabName = !string.IsNullOrEmpty(gear.shield2) && UnityEngine.Random.value > 0.5f ? gear.shield2 : gear.shield1;
+
+							log.Info($"Selected Weapon: {weaponPrefabName}");
+							log.Info($"Selected Shield: {shieldPrefabName}");
+
+							var weaponPrefab = ObjectDB.instance.GetItemPrefab(weaponPrefabName);
+							GameObject shieldPrefab = null;
+							if (shieldPrefabName != null)
 							{
-								originalSkeletonWeaponData = originalWeaponPrefab.GetComponent<ItemDrop>();
+								shieldPrefab = ObjectDB.instance.GetItemPrefab(shieldPrefabName);
 							}
+							var chestPrefab = ObjectDB.instance.GetItemPrefab(gear.chest);
+							var legsPrefab = ObjectDB.instance.GetItemPrefab(gear.legs);
+							var capePrefab = ObjectDB.instance.GetItemPrefab(gear.cape);
 
-							// Apply new fancy gear
-							string skeletonType = isSecondaryAttack ? "Ranged" : "Melee";
-							if (gearForLevel.TryGetValue(skeletonType, out var gear))
+							if (weaponPrefab != null)
 							{
-								string weaponPrefabName = !string.IsNullOrEmpty(gear.weapon2) && UnityEngine.Random.value > 0.5f ? gear.weapon2 : gear.weapon1;
-								string shieldPrefabName = !string.IsNullOrEmpty(gear.shield2) && UnityEngine.Random.value > 0.5f ? gear.shield2 : gear.shield1;
-
-								log.Info($"Selected Weapon: {weaponPrefabName}");
-								log.Info($"Selected Shield: {shieldPrefabName}");
-
-								var weaponPrefab = ObjectDB.instance.GetItemPrefab(weaponPrefabName);
-								GameObject shieldPrefab = null;
-								if (shieldPrefabName != null)
-								{
-									shieldPrefab = ObjectDB.instance.GetItemPrefab(shieldPrefabName);
-								}
-								var chestPrefab = ObjectDB.instance.GetItemPrefab(gear.chest);
-								var legsPrefab = ObjectDB.instance.GetItemPrefab(gear.legs);
-								var capePrefab = ObjectDB.instance.GetItemPrefab(gear.cape);
-
-								if (weaponPrefab != null)
-								{
-									log.Info($"Weapon Prefab: {weaponPrefab}");
-									giveItem(__instance, weaponPrefab, originalSkeletonWeaponData);
-								}
-								if (shieldPrefab != null && skeletonType == "Melee")
-								{
-									log.Info($"Shield Prefab: {shieldPrefab}");
-									giveItem(__instance, shieldPrefab);
-								}
-								if (chestPrefab != null)
-								{
-									log.Info($"Chest Prefab: {chestPrefab}");
-									giveItem(__instance, chestPrefab);
-								}
-								if (legsPrefab != null)
-								{
-									log.Info($"Legs Prefab: {legsPrefab}");
-									giveItem(__instance, legsPrefab);
-								}
-								if (capePrefab != null)
-								{
-									log.Info($"Cape Prefab: {capePrefab}");
-									giveItem(__instance, capePrefab);
-								}								
+								log.Info($"Weapon Prefab: {weaponPrefab}");
+								giveItem(__instance, weaponPrefab, originalSkeletonWeaponData);
 							}
+							if (shieldPrefab != null && skeletonType == "Melee")
+							{
+								log.Info($"Shield Prefab: {shieldPrefab}");
+								giveItem(__instance, shieldPrefab);
+							}
+							if (chestPrefab != null)
+							{
+								log.Info($"Chest Prefab: {chestPrefab}");
+								giveItem(__instance, chestPrefab);
+							}
+							if (legsPrefab != null)
+							{
+								log.Info($"Legs Prefab: {legsPrefab}");
+								giveItem(__instance, legsPrefab);
+							}
+							if (capePrefab != null)
+							{
+								log.Info($"Cape Prefab: {capePrefab}");
+								giveItem(__instance, capePrefab);
+							}								
 						}
 					}
 					else
