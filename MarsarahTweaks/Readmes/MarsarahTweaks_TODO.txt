@@ -8,12 +8,14 @@ IMPLEMENTED - NOT RELEASED
 A. Fixes
 ------------------------------
 * Better Summoned Skeletons
-  - Fixed an issue where already summoned skeletons would not attack after a complete game reload. 
+  - Fixed an issue where already summoned skeletons would not attack after a complete game reload.
 
 B. Updates
 ------------------------------
 * Max Portals Per Player
-  - Admins are excempt from the limit.
+  - Server admins and local hosts are exempt from the limit.
+    - Admin status is first checked through Server Devcommands (if installed), allowing per-character admin permissions to be respected. Otherwise, the check falls back to ServerSync admin data.
+  - Config is now a range, allowing it to be displayed as a slider by configuration managers.
 
 C. New Features
 ------------------------------

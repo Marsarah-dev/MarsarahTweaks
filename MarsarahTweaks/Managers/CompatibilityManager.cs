@@ -2,6 +2,7 @@
 using BepInEx.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using static MarsarahTweaks.Managers.ConfigManager;
 
 namespace MarsarahTweaks.Managers
@@ -29,6 +30,7 @@ namespace MarsarahTweaks.Managers
 		}
 
 		// Static readonly variables for each mod we track
+		public static ConflictMod ServerDevcommands = new ConflictMod("server_devcommands");
 		public static ConflictMod DeezMistyBalls = new ConflictMod("Azumatt.DeezMistyBalls");
 		public static ConflictMod MistBeGone = new ConflictMod("Azumatt.MistBeGone");
 		public static ConflictMod InstantMonsterDrop = new ConflictMod("cjayride.InstantMonsterDrop");
@@ -57,6 +59,7 @@ namespace MarsarahTweaks.Managers
 				LoadedMods[plugin.Metadata.GUID] = plugin.Metadata.Name;
 
 			// Update all ConflictMods
+			UpdateConflictMod(ref ServerDevcommands);
 			UpdateConflictMod(ref DeezMistyBalls);
 			UpdateConflictMod(ref MistBeGone);
 			UpdateConflictMod(ref InstantMonsterDrop);
@@ -158,6 +161,38 @@ namespace MarsarahTweaks.Managers
 				var meta = plugin.Metadata;
 				log.Info($"Plugin: {meta.Name} v{meta.Version} (GUID: {meta.GUID})");
 			}
+		}
+
+		public static bool TryGetServerDevcommandsAdmin(out bool isAdmin)
+		{
+			isAdmin = false;
+
+			if (!ServerDevcommands.Loaded)
+				return false;
+
+			if (!Chainloader.PluginInfos.TryGetValue(ServerDevcommands.Guid, out var plugin))
+				return false;
+
+			Type permissionManagerType = plugin.Instance.GetType().Assembly.GetType("ServerDevcommands.PermissionManager");
+			if (permissionManagerType == null)
+			{
+				log.Warn("Server Devcommands detected, but PermissionManager could not be found. Falling back to ServerSync admin status.");
+				return false;
+			}
+
+			PropertyInfo instanceProperty = permissionManagerType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
+			object permissionManager = instanceProperty?.GetValue(null);
+
+			PropertyInfo isAdminProperty = permissionManagerType.GetProperty("IsAdmin", BindingFlags.Public | BindingFlags.Instance);
+
+			if (!(permissionManager != null && isAdminProperty?.GetValue(permissionManager) is bool resolvedAdmin))
+			{
+				log.Warn("Server Devcommands detected, but admin status could not be read. Falling back to ServerSync admin status.");
+				return false;
+			}
+
+			isAdmin = resolvedAdmin;
+			return true;
 		}
 	}
 }

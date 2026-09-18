@@ -27,6 +27,8 @@ namespace MarsarahTweaks.Managers
 			MinimumRequiredVersion = MarsarahTweaks.ModVersion
 		};
 
+		public static bool IsAdminOrHost => configSync.IsAdmin;
+
 		// Config file stuff
 		private static string ConfigFileName => MarsarahTweaks.ModGUID + ".cfg";
 		private static string ConfigFileFullPath => Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;

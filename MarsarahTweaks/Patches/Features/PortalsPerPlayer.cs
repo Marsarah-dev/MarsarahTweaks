@@ -14,12 +14,23 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		private static readonly LogManager log = new LogManager("Portals Per Player", LogManager.LogLevel.Warning);
 
-		//private static GameObject PortalPrefab = MPrefabManager.GetPrefab("portal_wood");
-		//private static GameObject PortalStonePrefab = MPrefabManager.GetPrefab("portal_stone");
+		// Prefab names
 		private const string PortalPrefabName = "portal_wood";
 		private const string PortalStonePrefabName = "portal_stone";
 		private const string PortalGlacialPrefabName = "portal_glacial";
-		//private static GameObject PortalGlacialPrefab = MPrefabManager.GetPrefab("portal_glacial");
+
+		private static bool IsAdminOrHost()
+		{
+			//log.Info($"ServerSync admin status: {ConfigManager.IsAdminOrHost}");
+
+			if (CompatibilityManager.TryGetServerDevcommandsAdmin(out bool serverDevcommandsAdmin))
+			{
+				//log.Info($"ServerDevcommands admin status: {serverDevcommandsAdmin}");
+				return serverDevcommandsAdmin;
+			}
+
+			return ConfigManager.IsAdminOrHost;
+		}
 
 		// Limit Portals per player
 		[HarmonyPatch(typeof(Player), nameof(Player.TryPlacePiece))]
@@ -45,16 +56,9 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			if (ZNet.instance == null || ZDOMan.instance == null || Player.m_localPlayer == null) return false;
 
-			/*if (player == Player.m_localPlayer && ZNet.instance.LocalPlayerIsAdminOrHost())
+			if (player == Player.m_localPlayer && IsAdminOrHost())
 			{
 				log.Info($"Ignoring portal limit for admin/host {player.GetPlayerName()} ({player.GetPlayerID()})");
-				return false;
-			}*/
-
-			UserInfo localUser = UserInfo.GetLocalUser();
-			if (localUser != null && ZNet.instance.PlayerIsAdmin(localUser.UserId))
-			{
-				log.Info($"Ignoring portal limit for admin {player.GetPlayerName()} ({player.GetPlayerID()})");
 				return false;
 			}
 
