@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.7.3
+Marsarah Tweaks v1.7.4
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
