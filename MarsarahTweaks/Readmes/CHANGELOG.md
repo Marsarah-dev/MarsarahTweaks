@@ -10,6 +10,7 @@ v1.7.4
     - Server admins and local hosts are exempt from the limit.
       - Admin status is first checked through Server Devcommands (if installed), allowing per-character admin permissions to be respected. Otherwise, the check falls back to ServerSync admin data.
     - Config is now a range, allowing it to be displayed as a slider by configuration managers.
+  - Reorganized configuration entries to remove numbered setting names and use Configuration Manager ordering instead.
 
 v1.7.3
 - **Clearer Weather:**

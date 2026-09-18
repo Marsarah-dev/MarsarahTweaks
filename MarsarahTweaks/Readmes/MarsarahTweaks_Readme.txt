@@ -2344,6 +2344,18 @@ The following foods have the stack size increased to 20
 VERSION HISTORY
 ================================================================
 
+v1.7.4
+- Fixes:
+  - Better Summoned Skeletons
+    - Fixed an issue where already summoned skeletons would not attack after a complete game reload.
+
+- Updates:
+  - Max Portals Per Player
+    - Server admins and local hosts are exempt from the limit.
+      - Admin status is first checked through Server Devcommands (if installed), allowing per-character admin permissions to be respected. Otherwise, the check falls back to ServerSync admin data.
+    - Config is now a range, allowing it to be displayed as a slider by configuration managers.
+  - Reorganized configuration entries to remove numbered setting names and use Configuration Manager ordering instead.
+
 v1.7.3
 - Clearer Weather:
   - Fixed Clearer Weather for Valheim 1.0's new Alternative Biome weather system.
