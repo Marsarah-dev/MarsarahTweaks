@@ -45,6 +45,19 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			if (ZNet.instance == null || ZDOMan.instance == null || Player.m_localPlayer == null) return false;
 
+			/*if (player == Player.m_localPlayer && ZNet.instance.LocalPlayerIsAdminOrHost())
+			{
+				log.Info($"Ignoring portal limit for admin/host {player.GetPlayerName()} ({player.GetPlayerID()})");
+				return false;
+			}*/
+
+			UserInfo localUser = UserInfo.GetLocalUser();
+			if (localUser != null && ZNet.instance.PlayerIsAdmin(localUser.UserId))
+			{
+				log.Info($"Ignoring portal limit for admin {player.GetPlayerName()} ({player.GetPlayerID()})");
+				return false;
+			}
+
 			if (ConfigManager.MaxPortalsPerPlayer.Value < 0)
 			{
 				log.Info("No portal limit set");

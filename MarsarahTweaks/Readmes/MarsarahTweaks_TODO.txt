@@ -5,16 +5,21 @@ MARSARAH TWEAKS TODO
 IMPLEMENTED - NOT RELEASED
 ============================================================
 
-A. New Features
-------------------------------
-
-B. Updates / Fixes
+A. Fixes
 ------------------------------
 * Better Summoned Skeletons
   - Fixed an issue where already summoned skeletons would not attack after a complete game reload. 
 
-C. Others
-------------------------
+B. Updates
+------------------------------
+* Max Portals Per Player
+  - Admins are excempt from the limit.
+
+C. New Features
+------------------------------
+
+D. Others
+------------------------------
 
 ============================================================
 TO IMPLEMENT
@@ -36,15 +41,11 @@ B. Balance
 C. Features
 -------------------------------
 * Review Deep North creatures trophy drop rates.
-* Add/verify Progression Halt handling Deep North.
+* Add/verify Progression Halt for Deep North.
 * Review Creature Unleveler handling Deep North.
 * Increase Scrap Iron drop amount from Muddy Scrap Piles (maybe).
 * Staff of Protection: add a secondary healing attack similar to the Dvergr Mage heal.
 * Better Roads: increase player movement speed on roads.
-* Vote to Sleep:
-  - A player can trigger a sleep vote.
-  - Skip time if the majority votes yes.
-  - Cancel the vote entirely if one or more players are in combat / have enemies nearby.
 * Allow ships to be destroyed with the hammer.
 * Allow Boars to eat Yellow Mushrooms.
 * Max Portals Per Player        
