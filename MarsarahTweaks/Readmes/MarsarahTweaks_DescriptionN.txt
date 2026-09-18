@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.7.3
+[b]Version:[/b] 1.7.4
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -593,6 +593,8 @@ They can be toggled mid-game, unless otherwise specified.
 - If [b]MarsarahBuildPieces[/b] is installed, the [b]Glacial Stone Portal[/b] is also included in the limit.
 - Other modded/custom portal types are not affected.
 - Set to -1 for unlimited portals (default).
+- Server admins and local hosts are exempt from the limit.
+- Admin status is first checked through Server Devcommands (if installed), allowing per-character admin permissions to be respected. Otherwise, the check falls back to ServerSync admin data.
 - Changes take effect immediately if the number is changed mid-game.
 - [b]Conflicts:[/b] Incompatible with Rare Magic Portal Plus or other mods that impose portal limits, unless the value is set to -1.
 
@@ -756,6 +758,17 @@ Blaxxun-bloop - for ServerSync
 
 
 [size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
+
+[size=4][b]v1.7.4[/b][/size]
+- [b]Fixes:[/b]
+  - Better Summoned Skeletons: 
+    - Fixed an issue where already summoned skeletons would not attack after a complete game reload.
+
+- [b]Updates:[/b]
+  - Max Portals Per Player
+    - Server admins and local hosts are exempt from the limit.
+      - Admin status is first checked through Server Devcommands (if installed), allowing per-character admin permissions to be respected. Otherwise, the check falls back to ServerSync admin data.
+    - Config is now a range, allowing it to be displayed as a slider by configuration managers.
 
 [size=4][b]v1.7.3[/b][/size]
 

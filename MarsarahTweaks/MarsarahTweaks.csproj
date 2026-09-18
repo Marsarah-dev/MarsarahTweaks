@@ -144,6 +144,7 @@
   <ItemGroup>
     <None Include="ILRepack.targets" />
     <None Include="Readmes\CHANGELOG.md" />
+    <None Include="Readmes\manifest.json" />
     <None Include="Readmes\MarsarahTweaks_DescriptionT.md" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -628,6 +628,8 @@ They can be toggled mid-game, unless otherwise specified.
 - If **MarsarahBuildPieces** is installed, the **Glacial Stone Portal** is also included in the limit.
 - Other modded/custom portal types are not affected.
 - Set to -1 for unlimited portals (default).
+- Server admins and local hosts are exempt from the limit.
+- Admin status is first checked through Server Devcommands (if installed), allowing per-character admin permissions to be respected. Otherwise, the check falls back to ServerSync admin data.
 - Changes will take effect immediately if the number is changed mid-game.
 - **Conflicts:** Incompatible with Rare Magic Portal Plus (or any other mod that sets a limit to portals), unless the value is set to -1.
 
