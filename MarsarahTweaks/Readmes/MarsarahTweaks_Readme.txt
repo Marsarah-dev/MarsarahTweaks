@@ -2111,6 +2111,7 @@ The following foods have the stack size increased to 20
   If MarsarahBuildPieces is installed, the Glacial Stone Portal is also included in the limit.
   Other modded/custom portal types are not affected.
   Set to -1 for unlimited portals (default).
+  Set to 0 to prevent non-admin players from placing supported portals.
   Server admins and local hosts are exempt from the limit.
   Admin status is first checked through Server Devcommands (if installed), allowing per-character admin permissions to be respected. Otherwise, the check falls back to ServerSync admin data.
 
@@ -2370,9 +2371,9 @@ v1.7.1 & 1.7.2
 v1.7.0
 - Standalone Mod Split:
   - Removed all UI features from Marsarah Tweaks and moved them to the standalone MarsarahUI mod.
-  - Player Logout Announce** remains in Marsarah Tweaks and has moved to the QOL section.
-  - The custom build pieces previously removed from Tweaks are now available in the standalone **MarsarahBuildPieces** mod.
-  - Max Portals Per Player now recognizes the **Glacial Stone Portal** when MarsarahBuildPieces is installed.
+  - Player Logout Announce remains in Marsarah Tweaks and has moved to the QOL section.
+  - The custom build pieces previously removed from Tweaks are now available in the standalone MarsarahBuildPieces mod.
+  - Max Portals Per Player now recognizes the Glacial Stone Portal when MarsarahBuildPieces is installed.
 
 - Permanent Lights:
   - Campfire max fuel reduced from 10 to 5 while Permanent Lights is enabled.
@@ -2464,7 +2465,7 @@ v1.5.0
   - Mod now automatically detects known conflicting mods and disables related configs, preventing incompatibilities. Those configs cannot be toggled back on as long as the conflicting mod is installed. Logs are printed to know exactly which mod overlaps with which config when this happens. This will be updated as more incompatible or conflicting mods are found.
   - Converted the "Alternate UI Layout" config toggle into a multiple choice config named "UI Layout Mode" to make it more obvious as to what that config was doing.
     - Options: New, Old. 
-    - The UI can still be toggled with the **Insert** key (and **Home** key for online player list) like before.
+    - The UI can still be toggled with the Insert key (and Home key for online player list) like before.
   - Merged configs: "Show Online Players" and "Show Online Players Under Minimap". Can now choose the mode from a single multiple choice config.
   - The configs: "Show Time And Day" and "Time - 24 Hour Format" were restructured. "Show Time And Day" is now split into "Show Current Day" and "Show Current Time". They can now be toggled individually and the position for the respective texts is adjusted accordingly when only one is shown. "Show Current Time" now includes options for digital clock or day sections.
 

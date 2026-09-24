@@ -592,7 +592,8 @@ They can be toggled mid-game, unless otherwise specified.
 - Supports the vanilla Wood Portal and Stone Portal.
 - If [b]MarsarahBuildPieces[/b] is installed, the [b]Glacial Stone Portal[/b] is also included in the limit.
 - Other modded/custom portal types are not affected.
-- Set to -1 for unlimited portals (default).
+- Set to [b]-1[/b] for unlimited portals (default).
+- Set to [b]0[/b] to prevent non-admin players from placing supported portals.
 - Server admins and local hosts are exempt from the limit.
 - Admin status is first checked through Server Devcommands (if installed), allowing per-character admin permissions to be respected. Otherwise, the check falls back to ServerSync admin data.
 - Changes take effect immediately if the number is changed mid-game.
