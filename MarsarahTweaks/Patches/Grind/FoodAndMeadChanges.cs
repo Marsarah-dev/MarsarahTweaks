@@ -8,7 +8,7 @@ namespace MarsarahTweaks.Patches.Grind
 {
 	internal class FoodAndMeadChanges
 	{
-		private static readonly LogManager log = new LogManager("Food And Mead", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Food And Mead", LogManager.LogLevel.Info);
 
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class FoodAndMeadChanges_Patch
@@ -17,7 +17,7 @@ namespace MarsarahTweaks.Patches.Grind
 			{
 				if (__instance == null) return;
 
-				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
+				//if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
 				//LogFoodAndMead(__instance);
 				UpdateFoodAndMead(__instance, false);

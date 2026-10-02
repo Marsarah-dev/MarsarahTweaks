@@ -9,7 +9,7 @@ namespace MarsarahTweaks
 	public class MarsarahTweaks : BaseUnityPlugin
 	{
 		internal const string ModName = "MarsarahTweaks";
-		internal const string ModVersion = "1.7.4";
+		internal const string ModVersion = "1.7.5";
 		internal const string Author = "Marsarah";
 		public const string ModGUID = Author + "." + ModName;
 
@@ -17,7 +17,7 @@ namespace MarsarahTweaks
 
 		private void Awake()
 		{
-			LogManager.SetGlobalLogLevel(LogManager.LogLevel.Warning); // None, Error, Warning, Info
+			LogManager.SetGlobalLogLevel(LogManager.LogLevel.Info); // None, Error, Warning, Info
 			ConfigManager.Init(Config);
 			//CustomConsoleCommandHandler.Init(); // Register new console commands
 

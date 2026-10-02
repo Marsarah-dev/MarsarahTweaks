@@ -358,10 +358,6 @@ namespace MarsarahTweaks.Managers
 						BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, false, true);
 						break;
 
-					case var name when name == Configs.FoodAndMeadModifications.Name:
-						FoodAndMeadChanges.UpdateFoodAndMead(ObjectDB.instance, true);
-						break;
-
 					case var name when name == Configs.LinenCapeModifications.Name:
 						GearRecipeChanges.UpdateLinenCapeRecipe(ObjectDB.instance, true);
 						EarlyLinenCape.UpdateLinenCapeStats(true);
@@ -462,6 +458,10 @@ namespace MarsarahTweaks.Managers
 
 				case var name when name == Configs.MoreUsableFuel.Name:
 					MoreUsableFuel.UpdateMoreUsableFuel();
+					break;
+
+				case var name when name == Configs.FoodAndMeadModifications.Name:
+					FoodAndMeadChanges.UpdateFoodAndMead(ObjectDB.instance, true);
 					break;
 			}
 		}

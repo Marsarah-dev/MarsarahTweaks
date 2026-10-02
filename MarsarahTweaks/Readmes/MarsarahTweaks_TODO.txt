@@ -7,17 +7,11 @@ IMPLEMENTED - NOT RELEASED
 
 A. Fixes
 ------------------------------
-* Better Summoned Skeletons
-  - Fixed an issue where already summoned skeletons would not attack after a complete game reload.
+* Food and Mead Changes: 
+  - Removed the check to not run on dedicated servers to prevent mismatches of stacks between clients and the server.
 
 B. Updates
 ------------------------------
-* Max Portals Per Player
-  - Server admins and local hosts are exempt from the limit.
-    - Admin status is first checked through Server Devcommands (if installed), allowing per-character admin permissions to be respected. Otherwise, the check falls back to ServerSync admin data.
-  - Config is now a range, allowing it to be displayed as a slider by configuration managers.
-
-* Reorganized configuration entries to remove numbered setting names and use Configuration Manager ordering instead.
 
 C. New Features
 ------------------------------
