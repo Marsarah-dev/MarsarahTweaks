@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.7.4
+[b]Version:[/b] 1.7.5
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -759,6 +759,12 @@ Blaxxun-bloop - for ServerSync
 
 
 [size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
+
+[size=4][b]v1.7.5[/b][/size]
+- [b]Fixes:[/b]
+  - [b]Food and Mead Modifications[/b]
+    - Fixed Food and Mead Modifications not being applied on dedicated servers, which could cause modified food stacks to fall back to vanilla stack sizes during server-side inventory operations.
+
 
 [size=4][b]v1.7.4[/b][/size]
 - [b]Fixes:[/b]

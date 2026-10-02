@@ -7,7 +7,7 @@ IMPLEMENTED - NOT RELEASED
 
 A. Fixes
 ------------------------------
-* Food and Mead Changes: 
+* Food and Mead Modifications: 
   - Removed the check to not run on dedicated servers to prevent mismatches of stacks between clients and the server.
 
 B. Updates

@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.7.4
+Marsarah Tweaks v1.7.5
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
@@ -1123,7 +1123,7 @@ MOD CONFIGS
   Changes the stack size of all foods to 20.
 
 ► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay, but requires the food crafting menu to be reopened to take effect.
+  Toggling requires a CLIENT relog for food stack changes to fully take effect.
 
 ► Conflicts:
   Incompatible with other mods that modify vanilla foods and meads.
@@ -2344,6 +2344,11 @@ The following foods have the stack size increased to 20
 
 VERSION HISTORY
 ================================================================
+
+v1.7.5
+- Fixes:
+  - Food and Mead Modifications
+    - Fixed Food and Mead Modifications not being applied on dedicated servers, which could cause modified food stacks to fall back to vanilla stack sizes during server-side inventory operations.
 
 v1.7.4
 - Fixes:

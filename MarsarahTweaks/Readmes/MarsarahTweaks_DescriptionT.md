@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.7.4  
+**Version:** 1.7.5  
 **Author:** Marsarah
 
 ---
@@ -213,7 +213,7 @@ They can be toggled mid-game, unless otherwise specified.
 - Specific details can be found in the **Docs** tab of the **Nexusmods** page.
 - Toggling mid-game requires **client** relog. 
 - **Conflicts:** Mods that modify vanilla food or mead recipes.  
-  - Does not modify new recipes addded by other mods.
+  - Does not modify new recipes added by other mods.
 
 ---
 

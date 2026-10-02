@@ -1,4 +1,8 @@
 ## <strong> 📜 Version History </strong>
+v1.7.5
+- **Fixes:**
+  - **Food and Mead Modifications**
+    - Fixed Food and Mead Modifications not being applied on dedicated servers, which could cause modified food stacks to fall back to vanilla stack sizes during server-side inventory operations.
 
 v1.7.4
 - **Fixes:**
