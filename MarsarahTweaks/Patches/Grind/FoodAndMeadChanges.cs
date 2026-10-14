@@ -17,7 +17,7 @@ namespace MarsarahTweaks.Patches.Grind
 			{
 				if (__instance == null) return;
 
-				// If we prevent this to run on dedicated servers, then tehre is a mismatch with Smart Dropbox regarding max stack size, so we now run it on both dedicated and client
+				// If we prevent this to run on dedicated servers, then there is a mismatch with Smart Dropbox regarding max stack size, so we now run it on both dedicated and client
 				//if (ZNet.instance != null && ZNet.instance.IsDedicated()) return; // Do not run on dedicated servers
 
 				//LogFoodAndMead(__instance);

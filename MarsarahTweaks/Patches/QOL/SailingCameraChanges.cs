@@ -25,7 +25,7 @@ namespace MarsarahTweaks.Patches.QOL
 		//private static float defaultMaxDistance = -1f; // Seems to be 8
 		//private const float sailingMaxDistance = 20f;
 
-		[HarmonyPatch(typeof(Ship), "GetSpeed")]
+		/*[HarmonyPatch(typeof(Ship), "GetSpeed")]
 		private class ShipCamera_Patch
 		{
 			private static void Prefix(Ship __instance)
@@ -34,9 +34,23 @@ namespace MarsarahTweaks.Patches.QOL
 
 				UpdateShipControlledState(__instance);
 			}
-		}
+		}*/
 
 		[HarmonyPatch(typeof(GameCamera), "GetCameraPosition")]
+		private class GameCamera_Patch
+		{
+			private static void Postfix(GameCamera __instance, ref float dt, ref Vector3 pos, ref Quaternion rot)
+			{
+				if (!Player.m_localPlayer) return;
+
+				UpdateShipControlledState();
+
+				float offsetY = UpdateCameraOffset(dt);
+				pos += Vector3.up * offsetY;
+			}
+		}
+
+		/*[HarmonyPatch(typeof(GameCamera), "GetCameraPosition")]
 		private class GameCamera_Patch
 		{
 			private static void Postfix(GameCamera __instance, ref float dt, ref Vector3 pos, ref Quaternion rot)
@@ -47,44 +61,42 @@ namespace MarsarahTweaks.Patches.QOL
 				float offsetY = UpdateCameraOffset(dt);
 				pos += Vector3.up * offsetY;
 			}
-		}
+		}*/
 
-		private static void UpdateShipControlledState(Ship __instance)
+		private static void UpdateShipControlledState()
 		{
 			if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
-			if (ConfigManager.CameraUpWhenSailingEnabled.Value)
-			{
-				//bool isControlling = Traverse.Create(__instance).Method("HaveControllingPlayer").GetValue<bool>();
-				Ship currentControlledShip = Player.m_localPlayer.GetControlledShip();
-				bool isControlling = currentControlledShip != null;
-
-				if (isControlling != moveCameraUp)
-				{
-					moveCameraUp = isControlling;
-
-					if (moveCameraUp)
-					{
-						string prefabName = __instance.gameObject.name.Replace("(Clone)", "").Trim();
-
-						if (!shipOffsets.TryGetValue(prefabName, out targetOffset))
-						{
-							targetOffset = 0f; // Default if unknown ship
-						}
-
-						log.Info($"Controlling {prefabName}, offset set to {targetOffset:F1}");
-					}
-					else
-					{
-						targetOffset = 0f;
-					}
-				}
-			}
-			else
+			if (!ConfigManager.CameraUpWhenSailingEnabled.Value)
 			{
 				moveCameraUp = false;
 				targetOffset = 0f;
+				return;
 			}
+
+			Ship currentControlledShip = Player.m_localPlayer.GetControlledShip();
+
+			if (!currentControlledShip)
+			{
+				moveCameraUp = false;
+				targetOffset = 0f;
+				return;
+			}
+
+			string prefabName = currentControlledShip.gameObject.name.Replace("(Clone)", "").Trim();
+
+			if (!shipOffsets.TryGetValue(prefabName, out float newTargetOffset))
+			{
+				newTargetOffset = 0f;
+			}
+
+			if (!moveCameraUp || !Mathf.Approximately(targetOffset, newTargetOffset))
+			{
+				log.Info($"Controlling {prefabName}, offset set to {newTargetOffset:F1}");
+			}
+
+			moveCameraUp = true;
+			targetOffset = newTargetOffset;
 		}
 
 		private static float UpdateCameraOffset(float dt)
