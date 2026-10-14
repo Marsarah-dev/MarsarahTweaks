@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.7.5  
+**Version:** 1.7.6  
 **Author:** Marsarah
 
 ---

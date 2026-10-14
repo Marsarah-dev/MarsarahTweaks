@@ -1,4 +1,10 @@
 ## <strong> 📜 Version History </strong>
+v1.7.6
+- **Fixes:**
+  - **Move Camera Up While Sailing**
+    - Fixed the camera remaining elevated when a ship was destroyed while the player was controlling it.
+    - Improved camera state handling so the camera smoothly returns to its normal position when ship control is lost.
+
 v1.7.5
 - **Fixes:**
   - **Food and Mead Modifications**

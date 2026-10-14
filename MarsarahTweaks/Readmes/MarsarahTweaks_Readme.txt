@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.7.5
+Marsarah Tweaks v1.7.6
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
@@ -2344,6 +2344,12 @@ The following foods have the stack size increased to 20
 
 VERSION HISTORY
 ================================================================
+
+v1.7.6
+- Fixes:
+  - Move Camera Up While Sailing
+    - Fixed the camera remaining elevated when a ship was destroyed while the player was controlling it.
+    - Improved camera state handling so the camera smoothly returns to its normal position when ship control is lost.
 
 v1.7.5
 - Fixes:

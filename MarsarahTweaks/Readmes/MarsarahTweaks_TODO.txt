@@ -7,6 +7,9 @@ IMPLEMENTED - NOT RELEASED
 
 A. Fixes
 ------------------------------
+* Move Camera Up While Sailing:
+  - Fixed the camera remaining elevated when a ship was destroyed while the player was controlling it.
+  - Improved camera state handling so the camera smoothly returns to its normal position when ship control is lost.
 
 B. Updates
 ------------------------------

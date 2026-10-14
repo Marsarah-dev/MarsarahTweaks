@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.7.5
+[b]Version:[/b] 1.7.6
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -759,6 +759,14 @@ Blaxxun-bloop - for ServerSync
 
 
 [size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
+
+
+[size=4][b]v1.7.6[/b][/size]
+- [b]Fixes:[/b]
+  - [b]Move Camera Up While Sailing[/b]
+    - Fixed the camera remaining elevated when a ship was destroyed while the player was controlling it.
+    - Improved camera state handling so the camera smoothly returns to its normal position when ship control is lost.
+
 
 [size=4][b]v1.7.5[/b][/size]
 - [b]Fixes:[/b]
