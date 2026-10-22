@@ -25,6 +25,8 @@ namespace MarsarahTweaks.Patches.QOL
 
 		private static Transform previewTransform;
 		private static Vector3 originalPreviewScale;
+		private static Transform pathenParticleTransform;
+		private static Vector3 originalPathenParticleScale;
 		private static bool interceptPlacementScroll;
 		private static bool suppressCameraZoom;
 
@@ -132,18 +134,6 @@ namespace MarsarahTweaks.Patches.QOL
 			{
 				suppressCameraZoom = false;
 				return __exception;
-			}
-		}
-
-		[HarmonyPatch(typeof(TerrainComp), "DoOperation")]
-		private static class TerrainComp_DoOperation_Patch
-		{
-			private static void Prefix(TerrainOp.Settings __2)
-			{
-				if (!ConfigManager.AdjustableHoeRadiusEnabled.Value || activeOperation == null || activeOperation.name != "path_v2" || __2 == null)
-					return;
-
-				log.Info($"Pathen operation: SelectedRadius={currentRadius}, PrefabPaintRadius={activeOperation.m_settings.m_paintRadius}, AppliedPaintRadius={__2.m_paintRadius}, PaintEnabled={__2.m_paintCleared}, PaintType={__2.m_paintType}");
 			}
 		}
 
@@ -260,28 +250,44 @@ namespace MarsarahTweaks.Patches.QOL
 				previewTransform = indicator;
 
 				if (previewTransform != null)
+				{
 					originalPreviewScale = previewTransform.localScale;
+
+					// Pathen's nested particle uses Local scaling and ignores its parent's scale.
+					if (activeOperation.name == "path_v2")
+					{
+						ParticleSystem particle = previewTransform.GetComponentInChildren<ParticleSystem>(true);
+
+						if (particle != null && particle.transform != previewTransform && particle.main.scalingMode == ParticleSystemScalingMode.Local)
+						{
+							pathenParticleTransform = particle.transform;
+							originalPathenParticleScale = pathenParticleTransform.localScale;
+
+							log.Info("Detected Pathen's local-scaled ghost particle.");
+						}
+						else
+						{
+							log.Warn("Could not find Pathen's expected local-scaled ghost particle.");
+						}
+					}
+				}
 			}
 
 			if (previewTransform != null)
 				previewTransform.localScale = originalPreviewScale * scale;
 
-
-			if (activeOperation.name == "path_v2" && previewTransform != null)
-			{
-				ParticleSystem particle = previewTransform.GetComponentInChildren<ParticleSystem>(true);
-
-				if (particle != null)
-				{
-					ParticleSystem.MainModule main = particle.main;
-
-					log.Info($"Pathen preview: Scale={scale:0.##}, Indicator={previewTransform.name}, Particle={particle.name}, ParticleScalingMode={main.scalingMode}");
-				}
-			}
+			// Scale Pathen's nested particle directly because it ignores the parent scale.
+			if (pathenParticleTransform != null)
+				pathenParticleTransform.localScale = originalPathenParticleScale * scale;
 		}
 
 		private static void RestorePreviewScale()
 		{
+			if (pathenParticleTransform != null)
+				pathenParticleTransform.localScale = originalPathenParticleScale;
+
+			pathenParticleTransform = null;
+
 			if (previewTransform != null)
 				previewTransform.localScale = originalPreviewScale;
 
