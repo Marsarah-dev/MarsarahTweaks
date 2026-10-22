@@ -7,7 +7,7 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class PavingChanges
 	{
-		private static readonly LogManager log = new LogManager("Paving", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Paving", LogManager.LogLevel.Info);
 
 		private const string SourcePrefabName = "paved_road_v2";
 		private const string PavingPrefabName = "MarsarahTweaks_Paving";
@@ -35,6 +35,30 @@ namespace MarsarahTweaks.Patches.QOL
 			private static void Postfix(ObjectDB __instance)
 			{
 				RegisterPavingTerrainOp(__instance);
+			}
+		}
+
+		[HarmonyPatch(typeof(ZNetScene), "OnDestroy")]
+		private static class PavingCleanup_Patch
+		{
+			private static void Prefix(ZNetScene __instance)
+			{
+				if (ReferenceEquals(pavingPrefab, null))
+					return;
+
+				GameObject hoePrefab = __instance.GetPrefab(HoePrefabName);
+				PieceTable hoeTable = hoePrefab?.GetComponent<ItemDrop>()?.m_itemData?.m_shared?.m_buildPieces;
+				if (hoeTable != null)
+				{
+					int removed = hoeTable.m_pieces.RemoveAll(prefab => ReferenceEquals(prefab, pavingPrefab));
+					if (removed > 0)
+						log.Info($"Removed {removed} Paving prefab reference(s) from the Hoe PieceTable during world shutdown.");
+				}
+				else
+				{
+					log.Warn("Could not access the Hoe PieceTable during Paving cleanup.");
+				}
+				pavingPrefab = null;
 			}
 		}
 

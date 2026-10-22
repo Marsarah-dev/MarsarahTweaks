@@ -41,6 +41,8 @@ C. New Features
       5. Pathside Assistance
       6. Shack Better Paths
 
+* Reworked Permanent Lights with four configurable modes (Off, Lights Only, Lights & Fires, All Supported Pieces), including Hot Tub and Stone Oven support.
+
 D. Others
 ------------------------------
 
