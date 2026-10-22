@@ -110,7 +110,7 @@ namespace MarsarahTweaks.Patches.QOL
 				return;
 			}
 
-			piece.m_name = "Paving";
+			piece.m_name = "Paving Without Leveling";
 			piece.m_description = "Pave the ground without leveling it.";
 
 			terrainOp.m_settings.m_level = false;
