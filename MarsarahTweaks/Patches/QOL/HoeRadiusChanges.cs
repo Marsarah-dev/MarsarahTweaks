@@ -9,12 +9,24 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal static class HoeRadiusChanges
 	{
-		private static readonly LogManager log = new LogManager("Hoe Radius", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Hoe Radius", LogManager.LogLevel.Info);
 
 		private const float RadiusStep = 1f;
 		private const float MinRadius = 1f;
 		private const float PathenMinRadius = 2f;
 		private const float MaxRadius = 7f;
+
+		private const int RadiusWireMagic = 0x4D545248;
+		private const int RadiusWireVersion = 1;
+		private static readonly HashSet<int> SupportedTerrainHashes = new HashSet<int>
+		{
+			"mud_road_v2".GetStableHashCode(),
+			"path_v2".GetStableHashCode(),
+			"paved_road_v2".GetStableHashCode(),
+			"MarsarahTweaks_Paving".GetStableHashCode(),
+			"cultivate_v2".GetStableHashCode(),
+			"replant_v2".GetStableHashCode()
+		};
 
 		private static TerrainOp activeOperation;
 		private static float originalLevel;
@@ -135,6 +147,90 @@ namespace MarsarahTweaks.Patches.QOL
 			{
 				suppressCameraZoom = false;
 				return __exception;
+			}
+		}
+
+		[HarmonyPatch(typeof(TerrainOp.Settings), "Serialize")]
+		private static class TerrainSettings_Serialize_Patch
+		{
+			private static void Postfix(ZPackage __0, GameObject __1)
+			{
+				if (!ConfigManager.AdjustableHoeRadiusEnabled.Value || activeOperation == null || __0 == null || __1 == null || Player.m_localPlayer == null)
+					return;
+				string prefabName = __1.name;
+				if (prefabName.EndsWith("(Clone)", StringComparison.Ordinal))
+					prefabName = prefabName.Substring(0, prefabName.Length - "(Clone)".Length);
+				if (prefabName != activeOperation.name)
+					return;
+				int prefabHash = prefabName.GetStableHashCode();
+				if (!SupportedTerrainHashes.Contains(prefabHash))
+					return;
+				__0.Write(RadiusWireMagic);
+				__0.Write(RadiusWireVersion);
+				__0.Write(prefabHash);
+				__0.Write(currentRadius);
+				log.Info($"Sent terrain radius: Piece={prefabName}, Radius={currentRadius:0.##}m, Hash={prefabHash}.");
+			}
+		}
+
+		[HarmonyPatch(typeof(TerrainOp.Settings), "Deserialize")]
+		private static class TerrainSettings_Deserialize_Patch
+		{
+			private static void Postfix(ZPackage __0, ref TerrainOp.Settings __result)
+			{
+				if (!ConfigManager.AdjustableHoeRadiusEnabled.Value || __0 == null || __result == null)
+					return;
+				int start = __0.GetPos();
+				if (start < sizeof(int) || __0.Size() - start < sizeof(int))
+					return;
+				if (__0.ReadInt() != RadiusWireMagic)
+				{
+					__0.SetPos(start);
+					return;
+				}
+				if (__0.Size() - __0.GetPos() < 12)
+				{
+					log.Warn("Received incomplete terrain radius data. Using vanilla settings.");
+					__0.SetPos(start);
+					return;
+				}
+				int version = __0.ReadInt();
+				int prefabHash = __0.ReadInt();
+				float radius = __0.ReadSingle();
+				int end = __0.GetPos();
+				__0.SetPos(start - sizeof(int));
+				int serializedHash = __0.ReadInt();
+				__0.SetPos(end);
+				float minimum = prefabHash == "path_v2".GetStableHashCode() ? PathenMinRadius : MinRadius;
+				if (version != RadiusWireVersion || serializedHash != prefabHash || !SupportedTerrainHashes.Contains(prefabHash) || float.IsNaN(radius) || float.IsInfinity(radius) || radius < minimum || radius > MaxRadius)
+				{
+					log.Warn("Rejected invalid terrain radius data. Using vanilla settings.");
+					__0.SetPos(start);
+					return;
+				}
+				if (__result.m_raise || (!__result.m_level && !__result.m_smooth && !__result.m_paintCleared))
+				{
+					log.Warn("Received radius data for an unexpected terrain operation. Using vanilla settings.");
+					return;
+				}
+				float originalRadius = GetEffectiveRadius(__result);
+				if (originalRadius <= 0f)
+				{
+					log.Warn("Received terrain operation has no valid radius. Using vanilla settings.");
+					return;
+				}
+				TerrainOp.Settings settings = CloneSettings(__result);
+				float scale = radius / originalRadius;
+				if (settings.m_level)
+					settings.m_levelRadius *= scale;
+				if (settings.m_raise)
+					settings.m_raiseRadius *= scale;
+				if (settings.m_smooth)
+					settings.m_smoothRadius *= scale;
+				if (settings.m_paintCleared)
+					settings.m_paintRadius *= scale;
+				__result = settings;
+				log.Info($"Applied network terrain radius: Hash={prefabHash}, Radius={radius:0.##}m, Level={settings.m_levelRadius:0.##}, Smooth={settings.m_smoothRadius:0.##}, Paint={settings.m_paintRadius:0.##}.");
 			}
 		}
 
@@ -313,9 +409,54 @@ namespace MarsarahTweaks.Patches.QOL
 			defaultRadius = 0f;
 			currentRadius = 0f;
 		}
+
 		private static float GetMinimumRadius(TerrainOp operation)
 		{
 			return operation != null && operation.name == "path_v2" ? PathenMinRadius : MinRadius;
+		}
+
+		private static float GetEffectiveRadius(TerrainOp.Settings settings)
+		{
+			float radius = 0f;
+			if (settings.m_level)
+				radius = Mathf.Max(radius, settings.m_levelRadius);
+			if (settings.m_raise)
+				radius = Mathf.Max(radius, settings.m_raiseRadius);
+			if (settings.m_smooth)
+				radius = Mathf.Max(radius, settings.m_smoothRadius);
+			if (settings.m_paintCleared)
+				radius = Mathf.Max(radius, settings.m_paintRadius);
+			return radius;
+		}
+		private static TerrainOp.Settings CloneSettings(TerrainOp.Settings source)
+		{
+			return new TerrainOp.Settings
+			{
+				m_levelOffset = source.m_levelOffset,
+				m_level = source.m_level,
+				m_levelRadius = source.m_levelRadius,
+				m_square = source.m_square,
+				m_raise = source.m_raise,
+				m_raiseRadius = source.m_raiseRadius,
+				m_raisePower = source.m_raisePower,
+				m_raiseDelta = source.m_raiseDelta,
+				m_smooth = source.m_smooth,
+				m_smoothRadius = source.m_smoothRadius,
+				m_smoothPower = source.m_smoothPower,
+				m_paintCleared = source.m_paintCleared,
+				m_paintHeightCheck = source.m_paintHeightCheck,
+				m_paintType = source.m_paintType,
+				m_paintRadius = source.m_paintRadius,
+				m_paintStrength = source.m_paintStrength,
+				m_paintExp = source.m_paintExp,
+				m_paintCurve = source.m_paintCurve,
+				m_rotation = source.m_rotation,
+				m_sides = source.m_sides,
+				m_addMedianMax = source.m_addMedianMax,
+				m_centerMultiplicationFactor = source.m_centerMultiplicationFactor,
+				m_pointMultiplicationFactor = source.m_pointMultiplicationFactor,
+				m_halfOffset = source.m_halfOffset
+			};
 		}
 	}
 }
