@@ -7,9 +7,6 @@ IMPLEMENTED - NOT RELEASED
 
 A. Fixes
 ------------------------------
-* Move Camera Up While Sailing:
-  - Fixed the camera remaining elevated when a ship was destroyed while the player was controlling it.
-  - Improved camera state handling so the camera smoothly returns to its normal position when ship control is lost.
 
 B. Updates
 ------------------------------
@@ -23,6 +20,19 @@ D. Others
 ============================================================
 TO IMPLEMENT
 ============================================================
+* Change values of Pulled Bear HP and Stamina
+* Equalize food duration by biome
+* Add drops to root tendrils in the alternate black forest biome
+* Add Hoe Stone Pathen
+* Increase Serpent spawn rate
+* Change Bird's Nest Acorn cost to 2 or 1
+* Change Berserkir Mead Base Mushroom and Yellow Mushroom cost from 10 to 5
+* Reduce Crown of Roots Coin cost from 3k to 2k
+* Check Leech unleveler. If too low, make earlier and higher.
+* Include Hot Tub and Stove in permanent lights. Also add toggle for these and for normal fires.
+
+0. Requests
+* Add a 4'th food slot for feasts only. 
 
 A. Grind Reduction
 -------------------------------
