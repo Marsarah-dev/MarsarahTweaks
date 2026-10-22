@@ -54,7 +54,7 @@ namespace MarsarahTweaks.Patches.QOL
 		private static class Fireplace_UpdateFireplace_Patch
 		{
 			// This makes fuel burn faster. Meant for testing.
-			private static bool burnSpeedLogged;
+			/*private static bool burnSpeedLogged;
 
 			private static void Prefix(Fireplace __instance)
 			{
@@ -65,7 +65,7 @@ namespace MarsarahTweaks.Patches.QOL
 					log.Info("Temporary testing: Fireplace fuel burn time set to 3 seconds per fuel.");
 					burnSpeedLogged = true;
 				}
-			}
+			}*/
 
 			private static void Postfix(Fireplace __instance, ZNetView ___m_nview)
 			{
@@ -90,7 +90,7 @@ namespace MarsarahTweaks.Patches.QOL
 		private static class CookingStation_UpdateCooking_Patch
 		{
 			// This makes Stone Oven fuel burn faster. Meant for testing.
-			private static bool ovenBurnSpeedLogged;
+			/*private static bool ovenBurnSpeedLogged;
 
 			private static void Prefix(CookingStation __instance)
 			{
@@ -104,7 +104,7 @@ namespace MarsarahTweaks.Patches.QOL
 					log.Info("Temporary testing: Stone Oven fuel burn time set to 3 seconds.");
 					ovenBurnSpeedLogged = true;
 				}
-			}
+			}*/
 
 			private static void Postfix(CookingStation __instance, ZNetView ___m_nview)
 			{
@@ -120,7 +120,7 @@ namespace MarsarahTweaks.Patches.QOL
 		private static class Smelter_UpdateSmelter_Patch
 		{
 			// This makes Hot Tub fuel burn faster. Meant for testing.
-			private static bool hotTubBurnSpeedLogged;
+			/*private static bool hotTubBurnSpeedLogged;
 
 			private static void Prefix(Smelter __instance)
 			{
@@ -134,7 +134,7 @@ namespace MarsarahTweaks.Patches.QOL
 					log.Info("Temporary testing: Hot Tub fuel burn time set to 3 seconds.");
 					hotTubBurnSpeedLogged = true;
 				}
-			}
+			}*/
 
 			private static void Postfix(Smelter __instance, ZNetView ___m_nview)
 			{
