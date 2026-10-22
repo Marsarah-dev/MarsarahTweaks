@@ -495,6 +495,7 @@ namespace MarsarahTweaks.Patches.Features
 						"Troll",
 						"Bjorn",
 						"Ghost",
+						"TentaRoot_wild",
 						//"Skeleton",
 						"Skeleton_Poison",
 						"Pickable_Carrot",

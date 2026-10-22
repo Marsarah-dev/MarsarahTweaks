@@ -103,8 +103,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("Reduced Crossbows Reload Time", "Crossbows Reload Time Reduced by 1s. (Toggling mid-game requires CLIENT relog)", ConfigSections.Balance, 30);
 			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Ghost, Bear, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Vile, Tick, Dverger, Seeker Soldier, Charred Warlock", ConfigSections.Balance, 20);
 			public static readonly ConfigMetadata DropsModifications = new ConfigMetadata("Better Creature Drops", "Modifies the drops for the following creatures: Fenring (adds Fenris Hair and Fenris Claw, removes Wolf Fang), Bat (adds 50% Bloodbag drop), Dvergr (increases chance of Soft Tissue to 100% from 25%)", ConfigSections.Balance, 10);
-			public static readonly ConfigMetadata RootForestDrops = new ConfigMetadata("Root Forest Drops", "Adds independent drop chances to wild roots in the Root Black Forest: 50% for 1 Wood, 50% for 1 Core Wood, and 20% for 1 Resin. Roots summoned by the Elder are unaffected.", ConfigSections.Balance, 5);
-
+			public static readonly ConfigMetadata RootForestDrops = new ConfigMetadata("Black Forest Root Drops", "Adds independent drop chances to Roots in the Root Black Forest alternate biome: 50% for 1 Wood, 50% for 1 Core Wood, and 20% for 1 Resin. Roots summoned by the Elder are unaffected.", ConfigSections.Balance, 5);
 
 			// Features
 			public static readonly ConfigMetadata ProgressionHalt = new ConfigMetadata("Automatic Progression Halt", "Creatures and objects do not drop any items unless the previous biome boss has been defeated. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.Features, 160);
