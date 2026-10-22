@@ -46,14 +46,32 @@ namespace MarsarahTweaks.Patches.QOL
 				return;
 			}
 
-			GameObject sourcePrefab = znScene.GetPrefab(SourcePrefabName);
-			if (sourcePrefab == null)
+			GameObject hoePrefab = znScene.GetPrefab(HoePrefabName);
+			ItemDrop hoeItem = hoePrefab != null ? hoePrefab.GetComponent<ItemDrop>() : null;
+			PieceTable hoeTable = hoeItem?.m_itemData?.m_shared?.m_buildPieces;
+
+			if (hoeTable == null)
 			{
-				log.Error($"Could not find source prefab '{SourcePrefabName}'.");
+				log.Error("Could not find the Hoe PieceTable.");
 				return;
 			}
 
-			log.Info($"Found source prefab '{SourcePrefabName}'.");
+			GameObject sourcePrefab = hoeTable.m_pieces.Find(prefab => prefab != null && prefab.name == SourcePrefabName);
+
+			if (sourcePrefab == null)
+			{
+				log.Error($"Could not find '{SourcePrefabName}' in the Hoe PieceTable.");
+
+				foreach (GameObject prefab in hoeTable.m_pieces)
+				{
+					if (prefab != null && prefab.name.Contains("paved"))
+						log.Info($"Available paved-road candidate: '{prefab.name}', TerrainOp={prefab.GetComponent<TerrainOp>() != null}.");
+				}
+
+				return;
+			}
+
+			log.Info($"Found active Hoe prefab '{sourcePrefab.name}'.");
 
 			GameObject inactiveParent = new GameObject("MarsarahTweaks_Paving_CloneContainer");
 			inactiveParent.SetActive(false);
@@ -77,6 +95,13 @@ namespace MarsarahTweaks.Patches.QOL
 				return;
 			}
 
+			if (terrainOp.m_settings.m_paintRadius <= 0f)
+			{
+				log.Error($"Could not create '{PavingPrefabName}': source prefab has no valid paint radius.");
+				UnityEngine.Object.Destroy(clone);
+				return;
+			}
+
 			piece.m_name = "Paving";
 			piece.m_description = "Pave the ground without leveling it.";
 
@@ -87,7 +112,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 			log.Info($"Paving terrain operation: Level={terrainOp.m_settings.m_level}, Raise={terrainOp.m_settings.m_raise}, Smooth={terrainOp.m_settings.m_smooth}, Paint={terrainOp.m_settings.m_paintCleared}, PaintType={terrainOp.m_settings.m_paintType}, PaintRadius={terrainOp.m_settings.m_paintRadius}.");
 
-			if (znScene.m_prefabs.Contains(sourcePrefab))
+			if (clone.GetComponent<ZNetView>() != null)
 			{
 				znScene.m_prefabs.Add(clone);
 			}
