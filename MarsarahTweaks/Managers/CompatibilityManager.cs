@@ -160,10 +160,10 @@ namespace MarsarahTweaks.Managers
 			DisableIfIncompatible(MistBeGone, ConfigManager.ClearMistlandsEnabled);
 			DisableIfIncompatible(InstantMonsterDrop, ConfigManager.FasterResourceDropsEnabled);
 			DisableIfIncompatible(InstantEquip, ConfigManager.FasterEquipEnabled);
-			DisableIfIncompatible(EternalFire, ConfigManager.PermanentLightsEnabled);
-			DisableIfIncompatible(FuelEternal, ConfigManager.PermanentLightsEnabled);
-			DisableIfIncompatible(TorchesEternal, ConfigManager.PermanentLightsEnabled);
-			DisableIfIncompatible(TorchesEternal2, ConfigManager.PermanentLightsEnabled);
+			SetIfIncompatible(EternalFire, ConfigManager.PermanentLightsMode, ConfigManager.PermanentLightsOptions.Off, "Automatically disabling");
+			SetIfIncompatible(FuelEternal, ConfigManager.PermanentLightsMode, ConfigManager.PermanentLightsOptions.Off, "Automatically disabling");
+			SetIfIncompatible(TorchesEternal, ConfigManager.PermanentLightsMode, ConfigManager.PermanentLightsOptions.Off, "Automatically disabling");
+			SetIfIncompatible(TorchesEternal2, ConfigManager.PermanentLightsMode, ConfigManager.PermanentLightsOptions.Off, "Automatically disabling");
 			DisableIfIncompatible(ForsakenPowerOverhaul, ConfigManager.LongerForsakenPowersEnabled);
 			DisableIfIncompatible(TripleBronze, ConfigManager.DoubleBronzeEnabled);
 			DisableIfIncompatible(TripleBronzeJVL, ConfigManager.DoubleBronzeEnabled);

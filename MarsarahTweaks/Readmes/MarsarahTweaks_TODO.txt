@@ -10,6 +10,7 @@ A. Fixes
 
 B. Updates
 ------------------------------
+* Include Hot Tub and Stove in Permanent Lights. Also add toggle for these and for normal fires.
 
 C. New Features
 ------------------------------
@@ -52,9 +53,9 @@ TO IMPLEMENT
 * Change Berserkir Mead Base Mushroom and Yellow Mushroom cost from 10 to 5
 * Reduce Crown of Roots Coin cost from 3k to 2k
 * Check Leech unleveler. If too low, make earlier and higher.
-* Include Hot Tub and Stove in permanent lights. Also add toggle for these and for normal fires.
 
 0. Requests
+-------------------------------
 * Add a 4'th food slot for feasts only. 
 
 A. Grind Reduction
