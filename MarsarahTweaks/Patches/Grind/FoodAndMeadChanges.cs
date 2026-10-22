@@ -34,6 +34,15 @@ namespace MarsarahTweaks.Patches.Grind
 			public int? RecipeAmount { get; set; }
 		}
 
+		// Food Stats Class
+		private class FoodStatModification
+		{
+			public float? Health { get; set; }
+			public float? Stamina { get; set; }
+			public float? Eitr { get; set; }
+			public float? Regen { get; set; }
+		}
+
 		// Dictionaries
 		private static Dictionary<string, RecipeModification> foodRecipeModifications = new Dictionary<string, RecipeModification>
 		{
@@ -362,6 +371,16 @@ namespace MarsarahTweaks.Patches.Grind
 			{ "RoastedCrustPieUncooked", 20 },
 			{ "PiquantPieUncooked", 20 }
 		};
+
+		private static readonly Dictionary<string, FoodStatModification> foodStatModifications = new Dictionary<string, FoodStatModification>()
+		{
+			{ "PulledBear", new FoodStatModification
+				{
+					Health = 45f
+				}
+			}
+		};
+
 		private static Dictionary<string, RecipeModification> recipeModifications;
 
 		private static Dictionary<string, RecipeModification> GetRecipeModifications()
@@ -382,7 +401,7 @@ namespace MarsarahTweaks.Patches.Grind
 		// Dictionary for original values
 		private static Dictionary<string, RecipeModification> originalRecipeValues = new Dictionary<string, RecipeModification>();
 		private static Dictionary<string, int> originalFoodStacks = new Dictionary<string, int>();
-		private static float? originalPulledBearHealth;
+		private static readonly Dictionary<string, FoodStatModification> originalFoodStats = new Dictionary<string, FoodStatModification>();
 
 		// Update Food And Mead ====================================================================
 		public static void UpdateFoodAndMead(ObjectDB objDB, bool wasModified)
@@ -479,8 +498,70 @@ namespace MarsarahTweaks.Patches.Grind
 					}
 				}
 
-				// Apply stats changes ==============================================================
-				UpdatePulledBearHealth(objDB, wasModified);
+				// Apply food stat changes ========================================================
+				foreach (KeyValuePair<string, FoodStatModification> entry in foodStatModifications)
+				{
+					string itemName = entry.Key;
+					FoodStatModification modifications = entry.Value;
+
+					GameObject item = objDB.m_items.FirstOrDefault(r => r.name == itemName);
+					if (item == null) continue;
+
+					ItemDrop itemDrop = item.GetComponent<ItemDrop>();
+					if (itemDrop == null) continue;
+
+					ItemDrop.ItemData.SharedData shared = itemDrop.m_itemData.m_shared;
+
+					if (!originalFoodStats.TryGetValue(itemName, out FoodStatModification originals))
+					{
+						originals = new FoodStatModification();
+						originalFoodStats[itemName] = originals;
+					}
+
+					if (modifications.Health.HasValue)
+					{
+						if (!originals.Health.HasValue) originals.Health = shared.m_food;
+
+						if (shared.m_food != modifications.Health.Value)
+						{
+							log.Info($"Apply new health for {itemName}: {shared.m_food} -> {modifications.Health.Value}");
+							shared.m_food = modifications.Health.Value;
+						}
+					}
+
+					if (modifications.Stamina.HasValue)
+					{
+						if (!originals.Stamina.HasValue) originals.Stamina = shared.m_foodStamina;
+
+						if (shared.m_foodStamina != modifications.Stamina.Value)
+						{
+							log.Info($"Apply new stamina for {itemName}: {shared.m_foodStamina} -> {modifications.Stamina.Value}");
+							shared.m_foodStamina = modifications.Stamina.Value;
+						}
+					}
+
+					if (modifications.Eitr.HasValue)
+					{
+						if (!originals.Eitr.HasValue) originals.Eitr = shared.m_foodEitr;
+
+						if (shared.m_foodEitr != modifications.Eitr.Value)
+						{
+							log.Info($"Apply new eitr for {itemName}: {shared.m_foodEitr} -> {modifications.Eitr.Value}");
+							shared.m_foodEitr = modifications.Eitr.Value;
+						}
+					}
+
+					if (modifications.Regen.HasValue)
+					{
+						if (!originals.Regen.HasValue) originals.Regen = shared.m_foodRegen;
+
+						if (shared.m_foodRegen != modifications.Regen.Value)
+						{
+							log.Info($"Apply new regeneration for {itemName}: {shared.m_foodRegen} -> {modifications.Regen.Value}");
+							shared.m_foodRegen = modifications.Regen.Value;
+						}
+					}
+				}
 			}
 			else if (wasModified)
 			{
@@ -541,46 +622,49 @@ namespace MarsarahTweaks.Patches.Grind
 					}
 				}
 
+				// Revert food stat changes =======================================================
+				foreach (KeyValuePair<string, FoodStatModification> entry in originalFoodStats)
+				{
+					string itemName = entry.Key;
+					FoodStatModification originals = entry.Value;
+
+					GameObject item = objDB.m_items.FirstOrDefault(r => r.name == itemName);
+					if (item == null) continue;
+
+					ItemDrop itemDrop = item.GetComponent<ItemDrop>();
+					if (itemDrop == null) continue;
+
+					ItemDrop.ItemData.SharedData shared = itemDrop.m_itemData.m_shared;
+
+					if (originals.Health.HasValue)
+					{
+						log.Info($"Restoring health for {itemName}: {shared.m_food} -> {originals.Health.Value}");
+						shared.m_food = originals.Health.Value;
+					}
+
+					if (originals.Stamina.HasValue)
+					{
+						log.Info($"Restoring stamina for {itemName}: {shared.m_foodStamina} -> {originals.Stamina.Value}");
+						shared.m_foodStamina = originals.Stamina.Value;
+					}
+
+					if (originals.Eitr.HasValue)
+					{
+						log.Info($"Restoring eitr for {itemName}: {shared.m_foodEitr} -> {originals.Eitr.Value}");
+						shared.m_foodEitr = originals.Eitr.Value;
+					}
+
+					if (originals.Regen.HasValue)
+					{
+						log.Info($"Restoring regeneration for {itemName}: {shared.m_foodRegen} -> {originals.Regen.Value}");
+						shared.m_foodRegen = originals.Regen.Value;
+					}
+				}
+
 				log.Info($"(Cleanup) Removing backups");
 				originalRecipeValues.Clear();
 				originalFoodStacks.Clear();
-			}
-		}
-
-		private static void UpdatePulledBearHealth(ObjectDB objDB, bool wasModified)
-		{
-			if (objDB == null || objDB.m_items == null) return;
-
-			bool enabled = ConfigManager.FoodAndMeadModificationsEnabled.Value;
-			if (!enabled && (!wasModified || !originalPulledBearHealth.HasValue)) return;
-
-			GameObject prefab = objDB.m_items.FirstOrDefault(item => item != null && item.name == "PulledBear");
-			if (prefab == null)
-			{
-				log.Warn("Pulled Bear prefab not found.");
-				return;
-			}
-
-			ItemDrop itemDrop = prefab.GetComponent<ItemDrop>();
-			if (itemDrop == null) return;
-
-			ItemDrop.ItemData.SharedData shared = itemDrop.m_itemData.m_shared;
-
-			if (enabled)
-			{
-				if (!originalPulledBearHealth.HasValue) originalPulledBearHealth = shared.m_food;
-
-				if (shared.m_food != 45f)
-				{
-					log.Info($"Setting Pulled Bear health from {shared.m_food} to 45");
-					shared.m_food = 45f;
-				}
-			}
-			else if (wasModified && originalPulledBearHealth.HasValue)
-			{
-				log.Info($"Restoring Pulled Bear health to {originalPulledBearHealth.Value}");
-				shared.m_food = originalPulledBearHealth.Value;
-				originalPulledBearHealth = null;
+				originalFoodStats.Clear();
 			}
 		}
 
