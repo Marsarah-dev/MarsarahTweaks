@@ -13,10 +13,30 @@ B. Updates
 
 C. New Features
 ------------------------------
-* Stone Pathing without Leveling on Hoe
-* Working on:
-  - Adjustable Hoe Radius
-  
+* Added Paving Without Leveling to the Hoe, allowing stone paving without altering terrain height or smoothing.
+* Added Adjustable Hoe & Cultivator Radius for Level Ground, Pathen, Paved Road, Paving, Cultivate, and Grass.
+  - Mouse-wheel radius adjustment is in 1 m increments, with a 1–7 m range (Pathen minimum: 2 m).
+  - Disabled camera zoom while adjusting the radius of supported terrain operations.
+  - Added individual radius memory for all six operations, retained when switching tools or selections during a game session.
+  - Added automatic compatibility detection and config disabling for 12 overlapping mods.
+  - Incompatible Mods
+    - Adjustable Hoe Radius (9):
+      1. Hoe Radius (aedenthorn)
+      2. TerraHoe
+      3. Treadwell
+      4. Advanced Terrain Modifiers
+      5. ValheimTerraformPlus
+      6. SmarterHoe
+      7. ValAdvancedHoe
+      8. ValheimTerrainTools
+      9. MyDirtyHoe
+    - Paving Without Leveling (6):
+      1. Advanced Terrain Modifiers
+      2. ValheimTerrainTools
+      3. MyDirtyHoe
+      4. Paved Road No Level
+      5. Pathside Assistance
+      6. Shack Better Paths
 
 D. Others
 ------------------------------

@@ -129,7 +129,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type", ConfigSections.QOL, 20);
 			public static readonly ConfigMetadata PlayerLogoutAnnounce = new ConfigMetadata("Player Logout Announce", "Displays a message in the top-left corner and chat when a player logs out.", ConfigSections.QOL, 10);
 			public static readonly ConfigMetadata Paving = new ConfigMetadata("Paving Without Leveling", "Adds a Paving option to the Hoe that creates paved ground without leveling it. Costs 1 Stone and requires a Stonecutter.", ConfigSections.QOL, 5);
-			public static readonly ConfigMetadata AdjustableHoeRadius = new ConfigMetadata("Adjustable Hoe Radius", "Allows changing the radius of Hoe terrain operations (Level Ground, Pathen, Paved Road, and Paving) using the mouse scroll wheel without a modifier key.", ConfigSections.QOL, 4);
+			public static readonly ConfigMetadata AdjustableHoeRadius = new ConfigMetadata("Adjustable Hoe & Cultivator Radius", "Allows changing the radius of Hoe terrain operations (Level Ground, Pathen, Paved Road, and Paving) and Cultivator (Cultivate and Grass) using the mouse scroll wheel.", ConfigSections.QOL, 4);
 		}
 
 		// Config entries
