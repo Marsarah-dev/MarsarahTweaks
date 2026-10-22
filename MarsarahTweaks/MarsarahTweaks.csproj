@@ -126,6 +126,7 @@
     <Compile Include="Patches\Features\MinibossWeightChanges.cs" />
     <Compile Include="Patches\QOL\NoSkillLossChanges.cs" />
     <Compile Include="Patches\Features\OtherChanges.cs" />
+    <Compile Include="Patches\QOL\PavingChanges.cs" />
     <Compile Include="Patches\QOL\PermanentLightsChanges.cs" />
     <Compile Include="Patches\PrefabHitLogger.cs" />
     <Compile Include="Patches\Features\ProgressionHalt.cs" />
