@@ -3,6 +3,7 @@ using HarmonyLib;
 using MarsarahTweaks.Managers;
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace MarsarahTweaks.Patches.QOL
 {
@@ -10,9 +11,9 @@ namespace MarsarahTweaks.Patches.QOL
 	{
 		private static readonly LogManager log = new LogManager("Hoe Radius", LogManager.LogLevel.Info);
 
-		private const float RadiusStep = 0.5f;
-		private const float MinRadius = 0.5f;
-		private const float MaxRadius = 10f;
+		private const float RadiusStep = 1f;
+		private const float MinRadius = 1f;
+		private const float MaxRadius = 7f;
 
 		private static TerrainOp activeOperation;
 		private static float originalLevel;
@@ -28,7 +29,7 @@ namespace MarsarahTweaks.Patches.QOL
 		private static bool suppressCameraZoom;
 
 		private static readonly AccessTools.FieldRef<Player, PieceTable> buildPiecesRef = AccessTools.FieldRefAccess<Player, PieceTable>("m_buildPieces");
-
+		private static readonly Dictionary<string, float> savedRadii = new Dictionary<string, float>();
 
 		[HarmonyPatch(typeof(Player), "UpdatePlacement")]
 		private static class Player_UpdatePlacement_Patch
@@ -68,8 +69,10 @@ namespace MarsarahTweaks.Patches.QOL
 					return;
 
 				currentRadius = newRadius;
+				savedRadii[activeOperation.gameObject.name] = currentRadius;
 
 				ApplyRadius(activeOperation.m_settings, currentRadius / defaultRadius);
+
 				UpdatePreview(___m_placementGhost);
 
 				log.Info($"Adjusted '{activeOperation.name}' radius to {currentRadius:0.##}m.");
@@ -129,6 +132,18 @@ namespace MarsarahTweaks.Patches.QOL
 			{
 				suppressCameraZoom = false;
 				return __exception;
+			}
+		}
+
+		[HarmonyPatch(typeof(TerrainComp), "DoOperation")]
+		private static class TerrainComp_DoOperation_Patch
+		{
+			private static void Prefix(TerrainOp.Settings __2)
+			{
+				if (!ConfigManager.AdjustableHoeRadiusEnabled.Value || activeOperation == null || activeOperation.name != "path_v2" || __2 == null)
+					return;
+
+				log.Info($"Pathen operation: SelectedRadius={currentRadius}, PrefabPaintRadius={activeOperation.m_settings.m_paintRadius}, AppliedPaintRadius={__2.m_paintRadius}, PaintEnabled={__2.m_paintCleared}, PaintType={__2.m_paintType}");
 			}
 		}
 
@@ -198,8 +213,17 @@ namespace MarsarahTweaks.Patches.QOL
 				return;
 			}
 
-			currentRadius = defaultRadius;
-			log.Info($"Selected '{operation.name}' with default radius {defaultRadius:0.##}m.");
+			if (savedRadii.TryGetValue(operation.gameObject.name, out float savedRadius))
+			{
+				currentRadius = Mathf.Clamp(savedRadius, MinRadius, MaxRadius);
+				ApplyRadius(settings, currentRadius / defaultRadius);
+			}
+			else
+			{
+				currentRadius = defaultRadius;
+			}
+
+			log.Info($"Selected '{operation.name}' with radius {currentRadius:0.##}m.");
 		}
 
 		private static void ApplyRadius(TerrainOp.Settings settings, float scale)
@@ -241,6 +265,19 @@ namespace MarsarahTweaks.Patches.QOL
 
 			if (previewTransform != null)
 				previewTransform.localScale = originalPreviewScale * scale;
+
+
+			if (activeOperation.name == "path_v2" && previewTransform != null)
+			{
+				ParticleSystem particle = previewTransform.GetComponentInChildren<ParticleSystem>(true);
+
+				if (particle != null)
+				{
+					ParticleSystem.MainModule main = particle.main;
+
+					log.Info($"Pathen preview: Scale={scale:0.##}, Indicator={previewTransform.name}, Particle={particle.name}, ParticleScalingMode={main.scalingMode}");
+				}
+			}
 		}
 
 		private static void RestorePreviewScale()
