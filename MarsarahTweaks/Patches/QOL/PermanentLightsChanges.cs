@@ -9,7 +9,7 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class PermanentLightsChanges
 	{
-		private static readonly LogManager log = new LogManager("Permanent Lights", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Permanent Lights", LogManager.LogLevel.Warning);
 
 		private const int CampfirePermanentFuel = 5;
 		private const int HearthPermanentFuel = 10;

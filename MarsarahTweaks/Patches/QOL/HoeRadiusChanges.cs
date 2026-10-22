@@ -9,7 +9,7 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal static class HoeRadiusChanges
 	{
-		private static readonly LogManager log = new LogManager("Hoe Radius", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Hoe Radius", LogManager.LogLevel.Warning);
 
 		private const float RadiusStep = 1f;
 		private const float MinRadius = 1f;
