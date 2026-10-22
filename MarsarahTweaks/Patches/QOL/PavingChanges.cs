@@ -29,6 +29,15 @@ namespace MarsarahTweaks.Patches.QOL
 			}
 		}
 
+		[HarmonyPatch(typeof(ObjectDB), "UpdateRegisters")]
+		private static class PavingTerrainOpRegistry_Patch
+		{
+			private static void Postfix(ObjectDB __instance)
+			{
+				RegisterPavingTerrainOp(__instance);
+			}
+		}
+
 		private static void RegisterPavingPrefab(ZNetScene znScene)
 		{
 			Dictionary<int, GameObject> namedPrefabs = namedPrefabsRef(znScene);
@@ -39,6 +48,7 @@ namespace MarsarahTweaks.Patches.QOL
 				if (existingPrefab.name == PavingPrefabName)
 				{
 					pavingPrefab = existingPrefab;
+					RegisterPavingTerrainOp(ObjectDB.instance);
 					return;
 				}
 
@@ -125,6 +135,8 @@ namespace MarsarahTweaks.Patches.QOL
 
 			pavingPrefab = clone;
 
+			RegisterPavingTerrainOp(ObjectDB.instance);
+
 			log.Info($"Paving registered successfully. Active: {clone.activeSelf}, TerrainOp: {terrainOp != null}.");
 		}
 
@@ -166,6 +178,38 @@ namespace MarsarahTweaks.Patches.QOL
 				hoeTable.m_pieces.Remove(pavingPrefab);
 				log.Info("Removed Paving from the Hoe build menu.");
 			}
+		}
+
+		private static void RegisterPavingTerrainOp(ObjectDB objectDB)
+		{
+			if (objectDB == null || pavingPrefab == null) return;
+
+			TerrainOp terrainOp = pavingPrefab.GetComponent<TerrainOp>();
+
+			if (terrainOp == null)
+			{
+				log.Error("Cannot register Paving TerrainOp: component is missing.");
+				return;
+			}
+
+			int prefabHash = objectDB.GetPrefabHash(pavingPrefab);
+
+			if (objectDB.m_terrainOpsByHash.TryGetValue(prefabHash, out TerrainOp existingOp))
+			{
+				if (existingOp != terrainOp)
+				{
+					log.Error($"TerrainOp hash collision for '{PavingPrefabName}' ({prefabHash}).");
+					return;
+				}
+			}
+			else
+			{
+				objectDB.m_terrainOpsByHash.Add(prefabHash, terrainOp);
+				log.Info($"Registered Paving TerrainOp with hash {prefabHash}.");
+			}
+
+			if (!objectDB.m_terrainOps.Contains(terrainOp))
+				objectDB.m_terrainOps.Add(terrainOp);
 		}
 	}
 }
