@@ -128,7 +128,6 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators", ConfigSections.QOL, 30);
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("Permanent Lights", "Makes all light sources permanent, but the build costs of light source pieces use maximum amount of their respective fuel type", ConfigSections.QOL, 20);
 			public static readonly ConfigMetadata PlayerLogoutAnnounce = new ConfigMetadata("Player Logout Announce", "Displays a message in the top-left corner and chat when a player logs out.", ConfigSections.QOL, 10);
-			public static readonly ConfigMetadata Paving = new ConfigMetadata("Paving", "Adds a Paving option to the Hoe that creates paved ground without leveling it. Costs 1 Stone and requires a Stonecutter.", ConfigSections.QOL, 5);
 		}
 
 		// Config entries
@@ -193,7 +192,6 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> MoreUsableFuelEnabled;
 		public static ConfigEntry<bool> PermanentLightsEnabled;
 		public static ConfigEntry<bool> AnnouncePlayerLogout;
-		public static ConfigEntry<bool> PavingEnabled;
 
 		public static void Init(ConfigFile configFile)
 		{
@@ -261,7 +259,6 @@ namespace MarsarahTweaks.Managers
 			MoreUsableFuelEnabled = CreateConfig(Configs.MoreUsableFuel, true);
 			PermanentLightsEnabled = CreateConfig(Configs.PermanentLightsModifications, false);
 			AnnouncePlayerLogout = CreateConfig(Configs.PlayerLogoutAnnounce, true);
-			PavingEnabled = CreateConfig(Configs.Paving, true);
 
 			SetupWatcher();
 		}
@@ -465,10 +462,6 @@ namespace MarsarahTweaks.Managers
 
 				case var name when name == Configs.FoodAndMeadModifications.Name:
 					FoodAndMeadChanges.UpdateFoodAndMead(ObjectDB.instance, true);
-					break;
-
-				case var name when name == Configs.Paving.Name:
-					PavingChanges.UpdatePavingAvailability(ZNetScene.instance);
 					break;
 			}
 		}
