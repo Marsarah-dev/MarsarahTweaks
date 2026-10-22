@@ -211,12 +211,14 @@ namespace MarsarahTweaks.Patches.QOL
 				if (__result.m_raise || (!__result.m_level && !__result.m_smooth && !__result.m_paintCleared))
 				{
 					log.Warn("Received radius data for an unexpected terrain operation. Using vanilla settings.");
+					__0.SetPos(start);
 					return;
 				}
 				float originalRadius = GetEffectiveRadius(__result);
 				if (originalRadius <= 0f)
 				{
 					log.Warn("Received terrain operation has no valid radius. Using vanilla settings.");
+					__0.SetPos(start);
 					return;
 				}
 				TerrainOp.Settings settings = CloneSettings(__result);

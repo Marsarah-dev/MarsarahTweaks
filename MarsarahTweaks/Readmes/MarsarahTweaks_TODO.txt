@@ -42,20 +42,24 @@ C. New Features
 
 * Reworked Permanent Lights with four configurable modes (Off, Lights Only, Lights & Fires, All Supported Pieces), including Hot Tub and Stone Oven support.
 
+IP:
+* Change values of Pulled Bear HP and Stamina
+* Change Berserkir Mead Base Mushroom and Yellow Mushroom cost from 10 to 5
+* Equalize food duration 
+
 D. Others
 ------------------------------
 
 ============================================================
 TO IMPLEMENT
 ============================================================
-* Change values of Pulled Bear HP and Stamina
-* Equalize food duration by biome
 * Add drops to root tendrils in the alternate black forest biome
 * Increase Serpent spawn rate
 * Change Bird's Nest Acorn cost to 2 or 1
-* Change Berserkir Mead Base Mushroom and Yellow Mushroom cost from 10 to 5
-* Reduce Crown of Roots Coin cost from 3k to 2k
+* Reduce Crown of Roots Coin cost from 3k to 2k, and remove durability.
 * Check Leech unleveler. If too low, make earlier and higher.
+* Bats Bloodbag drop chance 100%?
+* Increase Cooking skill gains percentage. It's too slow. Maybe blocking too.
 
 0. Requests
 -------------------------------
@@ -107,6 +111,8 @@ Trinkets:
   - Resounding Shackle
   - Jörmundling
   - Brimstone
+
+* Maybe make them passive bonuses and nerf the stats.
 
 
 D. QOL

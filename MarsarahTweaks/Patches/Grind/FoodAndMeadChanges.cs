@@ -8,7 +8,7 @@ namespace MarsarahTweaks.Patches.Grind
 {
 	internal class FoodAndMeadChanges
 	{
-		private static readonly LogManager log = new LogManager("Food And Mead", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Food And Mead", LogManager.LogLevel.Info);
 
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class FoodAndMeadChanges_Patch
@@ -311,6 +311,11 @@ namespace MarsarahTweaks.Patches.Grind
 				{
 					ResourceChanges = { { "Carrot", 5 } }
 				}
+			},
+			{ "Recipe_MeadBaseBzerker", new RecipeModification
+				{
+					ResourceChanges = { { "Mushroom", 5 }, { "MushroomYellow", 5 } }
+				}
 			}
 		};
 		private static Dictionary<string, int> foodStacksModifications = new Dictionary<string, int>()
@@ -377,6 +382,7 @@ namespace MarsarahTweaks.Patches.Grind
 		// Dictionary for original values
 		private static Dictionary<string, RecipeModification> originalRecipeValues = new Dictionary<string, RecipeModification>();
 		private static Dictionary<string, int> originalFoodStacks = new Dictionary<string, int>();
+		private static float? originalPulledBearHealth;
 
 		// Update Food And Mead ====================================================================
 		public static void UpdateFoodAndMead(ObjectDB objDB, bool wasModified)
@@ -535,6 +541,43 @@ namespace MarsarahTweaks.Patches.Grind
 				log.Info($"(Cleanup) Removing backups");
 				originalRecipeValues.Clear();
 				originalFoodStacks.Clear();
+			}
+		}
+
+		private static void UpdatePulledBearHealth(ObjectDB objDB, bool wasModified)
+		{
+			if (objDB == null || objDB.m_items == null) return;
+
+			bool enabled = ConfigManager.FoodAndMeadModificationsEnabled.Value;
+			if (!enabled && (!wasModified || !originalPulledBearHealth.HasValue)) return;
+
+			GameObject prefab = objDB.m_items.FirstOrDefault(item => item != null && item.name == "PulledBear");
+			if (prefab == null)
+			{
+				log.Warn("Pulled Bear prefab not found.");
+				return;
+			}
+
+			ItemDrop itemDrop = prefab.GetComponent<ItemDrop>();
+			if (itemDrop == null) return;
+
+			ItemDrop.ItemData.SharedData shared = itemDrop.m_itemData.m_shared;
+
+			if (enabled)
+			{
+				if (!originalPulledBearHealth.HasValue) originalPulledBearHealth = shared.m_food;
+
+				if (shared.m_food != 45f)
+				{
+					log.Info($"Setting Pulled Bear health from {shared.m_food} to 45");
+					shared.m_food = 45f;
+				}
+			}
+			else if (wasModified && originalPulledBearHealth.HasValue)
+			{
+				log.Info($"Restoring Pulled Bear health to {originalPulledBearHealth.Value}");
+				shared.m_food = originalPulledBearHealth.Value;
+				originalPulledBearHealth = null;
 			}
 		}
 

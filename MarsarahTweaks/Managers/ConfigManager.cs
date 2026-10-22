@@ -136,8 +136,9 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators", ConfigSections.QOL, 30);
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("Permanent Lights", "Controls which supported lights, fires, and utility pieces consume fuel. Light and fire build costs are adjusted when included to use maximum amount of their respective fuel type.", ConfigSections.QOL, 20);
 			public static readonly ConfigMetadata PlayerLogoutAnnounce = new ConfigMetadata("Player Logout Announce", "Displays a message in the top-left corner and chat when a player logs out.", ConfigSections.QOL, 10);
-			public static readonly ConfigMetadata Paving = new ConfigMetadata("Paving Without Leveling", "Adds a Paving option to the Hoe that creates paved ground without leveling it. Costs 1 Stone and requires a Stonecutter.", ConfigSections.QOL, 5);
-			public static readonly ConfigMetadata AdjustableHoeRadius = new ConfigMetadata("Adjustable Hoe & Cultivator Radius", "Allows changing the radius of Hoe terrain operations (Level Ground, Pathen, Paved Road, and Paving) and Cultivator (Cultivate and Grass) using the mouse scroll wheel.", ConfigSections.QOL, 4);
+			public static readonly ConfigMetadata Paving = new ConfigMetadata("Paving Without Leveling", "Adds a Paving option to the Hoe that creates paved ground without leveling it. Costs 1 Stone and requires a Stonecutter.", ConfigSections.QOL, 9);
+			public static readonly ConfigMetadata AdjustableHoeRadius = new ConfigMetadata("Adjustable Hoe & Cultivator Radius", "Allows changing the radius of Hoe terrain operations (Level Ground, Pathen, Paved Road, and Paving) and Cultivator (Cultivate and Grass) using the mouse scroll wheel.", ConfigSections.QOL, 8);
+			public static readonly ConfigMetadata StandardizedFoodDurations = new ConfigMetadata("Standardized Food Durations", "Standardizes food durations by preparation type within each biome. Only increases durations. New durations take effect when food is eaten again.", ConfigSections.QOL, 5);
 		}
 
 		// Config entries
@@ -204,6 +205,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> AnnouncePlayerLogout;
 		public static ConfigEntry<bool> PavingEnabled;
 		public static ConfigEntry<bool> AdjustableHoeRadiusEnabled;
+		public static ConfigEntry<bool> StandardizedFoodDurationsEnabled;
 
 
 		public static void Init(ConfigFile configFile)
@@ -274,6 +276,7 @@ namespace MarsarahTweaks.Managers
 			AnnouncePlayerLogout = CreateConfig(Configs.PlayerLogoutAnnounce, true);
 			PavingEnabled = CreateConfig(Configs.Paving, true);
 			AdjustableHoeRadiusEnabled = CreateConfig(Configs.AdjustableHoeRadius, true);
+			StandardizedFoodDurationsEnabled = CreateConfig(Configs.StandardizedFoodDurations, true);
 
 			SetupWatcher();
 		}
@@ -481,6 +484,10 @@ namespace MarsarahTweaks.Managers
 
 				case var name when name == Configs.Paving.Name:
 					PavingChanges.UpdatePavingAvailability(ZNetScene.instance);
+					break;
+
+				case var name when name == Configs.StandardizedFoodDurations.Name:
+					FoodDurationChanges.UpdateFoodDurations(ObjectDB.instance, true);
 					break;
 			}
 		}
