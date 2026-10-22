@@ -15,6 +15,8 @@ B. Updates
 C. New Features
 ------------------------------
 * Added Paving Without Leveling to the Hoe, allowing stone paving without altering terrain height or smoothing.
+
+(This does not work on clients on dedicated server. The radius changes visually, but placements are default)
 * Added Adjustable Hoe & Cultivator Radius for Level Ground, Pathen, Paved Road, Paving, Cultivate, and Grass.
   - Mouse-wheel radius adjustment is in 1 m increments, with a 1–7 m range (Pathen minimum: 2 m).
   - Disabled camera zoom while adjusting the radius of supported terrain operations.

@@ -9,7 +9,7 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class PermanentLightsChanges
 	{
-		private static readonly LogManager log = new LogManager("Permanent Lights", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Permanent Lights", LogManager.LogLevel.Info);
 
 		private const int CampfirePermanentFuel = 5;
 		private const int HearthPermanentFuel = 10;
@@ -53,6 +53,20 @@ namespace MarsarahTweaks.Patches.QOL
 		[HarmonyPatch(typeof(Fireplace), "UpdateFireplace")]
 		private static class Fireplace_UpdateFireplace_Patch
 		{
+			// This makes fuel burn faster. Meant for testing.
+			private static bool burnSpeedLogged;
+
+			private static void Prefix(Fireplace __instance)
+			{
+				__instance.m_secPerFuel = 3f;
+
+				if (!burnSpeedLogged)
+				{
+					log.Info("Temporary testing: Fireplace fuel burn time set to 3 seconds per fuel.");
+					burnSpeedLogged = true;
+				}
+			}
+
 			private static void Postfix(Fireplace __instance, ZNetView ___m_nview)
 			{
 				string prefabName = Utils.GetPrefabName(__instance.gameObject);
@@ -75,6 +89,23 @@ namespace MarsarahTweaks.Patches.QOL
 		[HarmonyPatch(typeof(CookingStation), "UpdateCooking")]
 		private static class CookingStation_UpdateCooking_Patch
 		{
+			// This makes Stone Oven fuel burn faster. Meant for testing.
+			private static bool ovenBurnSpeedLogged;
+
+			private static void Prefix(CookingStation __instance)
+			{
+				if (Utils.GetPrefabName(__instance.gameObject) != "piece_oven")
+					return;
+
+				__instance.m_secPerFuel = 3;
+
+				if (!ovenBurnSpeedLogged)
+				{
+					log.Info("Temporary testing: Stone Oven fuel burn time set to 3 seconds.");
+					ovenBurnSpeedLogged = true;
+				}
+			}
+
 			private static void Postfix(CookingStation __instance, ZNetView ___m_nview)
 			{
 				if (!CoversUtilities || !__instance.m_useFuel || Utils.GetPrefabName(__instance.gameObject) != "piece_oven")
@@ -88,6 +119,23 @@ namespace MarsarahTweaks.Patches.QOL
 		[HarmonyPatch(typeof(Smelter), "UpdateSmelter")]
 		private static class Smelter_UpdateSmelter_Patch
 		{
+			// This makes Hot Tub fuel burn faster. Meant for testing.
+			private static bool hotTubBurnSpeedLogged;
+
+			private static void Prefix(Smelter __instance)
+			{
+				if (Utils.GetPrefabName(__instance.gameObject) != "piece_bathtub")
+					return;
+
+				__instance.m_secPerProduct = 3f;
+
+				if (!hotTubBurnSpeedLogged)
+				{
+					log.Info("Temporary testing: Hot Tub fuel burn time set to 3 seconds.");
+					hotTubBurnSpeedLogged = true;
+				}
+			}
+
 			private static void Postfix(Smelter __instance, ZNetView ___m_nview)
 			{
 				if (!CoversUtilities || Utils.GetPrefabName(__instance.gameObject) != "piece_bathtub")
