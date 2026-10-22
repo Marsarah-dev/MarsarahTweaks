@@ -478,6 +478,9 @@ namespace MarsarahTweaks.Patches.Grind
 						itemDrop.m_itemData.m_shared.m_maxStackSize = itemStack;
 					}
 				}
+
+				// Apply stats changes ==============================================================
+				UpdatePulledBearHealth(objDB, wasModified);
 			}
 			else if (wasModified)
 			{
