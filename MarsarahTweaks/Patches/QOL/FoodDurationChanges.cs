@@ -7,7 +7,7 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class FoodDurationChanges
 	{
-		private static readonly LogManager log = new LogManager("Food Durations", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Food Durations", LogManager.LogLevel.Info);
 
 		// Only foods whose duration differs from vanilla are listed here.
 		// Values are minutes. No Deep North foods or feasts are modified.
@@ -82,7 +82,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 				if (prefab == null)
 				{
-					log.Warn($"Food prefab not found: {prefabName}");
+					log.Info($"Food prefab not found: {prefabName}");
 					continue;
 				}
 

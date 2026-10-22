@@ -122,23 +122,23 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("Other Section", "Tankard costs reduced and Iron Nails crafting output doubled", ConfigSections.Features, 10);
 
 			// QOL
-			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("Lighter Metal Weight", "All metal ore and bars weight decreased to 8. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.QOL, 140);
-			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("Larger Pickup Area", "Item pickup area slightly increased", ConfigSections.QOL, 130);
-			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("No Skill Levels Loss On Death", "Skills won't go down the current level upon death (progress in that skill is still lost). (Toggling mid-game requires CLIENT relog)", ConfigSections.QOL, 120);
-			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("Larger Boat Explore Radius", "Double explore radius on a boat", ConfigSections.QOL, 110);
-			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("Bigger Wisp Radius", "Increases wisp radius", ConfigSections.QOL, 100);
-			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("Friendly Ballistas", "Ballistas won't target players and tame animals", ConfigSections.QOL, 90);
-			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("Less Fall Damage", "Fall damage reduced by 40%", ConfigSections.QOL, 80);
-			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("Faster Resource Drops", "Enemies drop resources faster when dying", ConfigSections.QOL, 70);
-			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s). (Toggling mid-game requires CLIENT relog)", ConfigSections.QOL, 60);
-			public static readonly ConfigMetadata CameraSailingPosition = new ConfigMetadata("Move Camera Up While Sailing", "Moves the camera a bit upwards when sailing to better see in front of the boat", ConfigSections.QOL, 50);
-			public static readonly ConfigMetadata ShorterRestedDelay = new ConfigMetadata("Shorter Rested Delay", "Reduces the amount of time needed to get the rested buff from 20 to 10 seconds (Toggling mid-game requires re-entering the resting area)", ConfigSections.QOL, 40);
-			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators", ConfigSections.QOL, 30);
-			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("Permanent Lights", "Controls which supported lights, fires, and utility pieces consume fuel. Light and fire build costs are adjusted when included to use maximum amount of their respective fuel type.", ConfigSections.QOL, 20);
-			public static readonly ConfigMetadata PlayerLogoutAnnounce = new ConfigMetadata("Player Logout Announce", "Displays a message in the top-left corner and chat when a player logs out.", ConfigSections.QOL, 10);
-			public static readonly ConfigMetadata Paving = new ConfigMetadata("Paving Without Leveling", "Adds a Paving option to the Hoe that creates paved ground without leveling it. Costs 1 Stone and requires a Stonecutter.", ConfigSections.QOL, 9);
-			public static readonly ConfigMetadata AdjustableHoeRadius = new ConfigMetadata("Adjustable Hoe & Cultivator Radius", "Allows changing the radius of Hoe terrain operations (Level Ground, Pathen, Paved Road, and Paving) and Cultivator (Cultivate and Grass) using the mouse scroll wheel.", ConfigSections.QOL, 8);
-			public static readonly ConfigMetadata StandardizedFoodDurations = new ConfigMetadata("Standardized Food Durations", "Standardizes food durations by preparation type within each biome. Only increases durations. New durations take effect when food is eaten again.", ConfigSections.QOL, 5);
+			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("Lighter Metal Weight", "All metal ore and bars weight decreased to 8. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.QOL, 160);
+			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("Larger Pickup Area", "Item pickup area slightly increased", ConfigSections.QOL, 150);
+			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("No Skill Levels Loss On Death", "Skills won't go down the current level upon death (progress in that skill is still lost). (Toggling mid-game requires CLIENT relog)", ConfigSections.QOL, 140);
+			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("Larger Boat Explore Radius", "Double explore radius on a boat", ConfigSections.QOL, 130);
+			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("Bigger Wisp Radius", "Increases wisp radius", ConfigSections.QOL, 120);
+			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("Friendly Ballistas", "Ballistas won't target players and tame animals", ConfigSections.QOL, 110);
+			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("Less Fall Damage", "Fall damage reduced by 40%", ConfigSections.QOL, 100);
+			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("Faster Resource Drops", "Enemies drop resources faster when dying", ConfigSections.QOL, 90);
+			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s). (Toggling mid-game requires CLIENT relog)", ConfigSections.QOL, 80);
+			public static readonly ConfigMetadata CameraSailingPosition = new ConfigMetadata("Move Camera Up While Sailing", "Moves the camera a bit upwards when sailing to better see in front of the boat", ConfigSections.QOL, 70);
+			public static readonly ConfigMetadata ShorterRestedDelay = new ConfigMetadata("Shorter Rested Delay", "Reduces the amount of time needed to get the rested buff from 20 to 10 seconds (Toggling mid-game requires re-entering the resting area)", ConfigSections.QOL, 60);
+			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators", ConfigSections.QOL, 50);
+			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("Permanent Lights", "Controls which supported lights, fires, and utility pieces consume fuel. Light and fire build costs are adjusted when included to use maximum amount of their respective fuel type.", ConfigSections.QOL, 40);
+			public static readonly ConfigMetadata PlayerLogoutAnnounce = new ConfigMetadata("Player Logout Announce", "Displays a message in the top-left corner and chat when a player logs out.", ConfigSections.QOL, 30);
+			public static readonly ConfigMetadata Paving = new ConfigMetadata("Paving Without Leveling", "Adds a Paving option to the Hoe that creates paved ground without leveling it. Costs 1 Stone and requires a Stonecutter.", ConfigSections.QOL, 20);
+			public static readonly ConfigMetadata AdjustableHoeRadius = new ConfigMetadata("Adjustable Hoe & Cultivator Radius", "Allows changing the radius of Hoe terrain operations (Level Ground, Pathen, Paved Road, and Paving) and Cultivator (Cultivate and Grass) using the mouse scroll wheel.", ConfigSections.QOL, 10);
+			public static readonly ConfigMetadata StandardizedFoodDurations = new ConfigMetadata("Standardized Food Durations", "Standardizes food durations based on preparation type. Only increases durations. (Toggling mid-game requires CLIENT relog for food already in inventory)", ConfigSections.QOL, 5);
 		}
 
 		// Config entries
