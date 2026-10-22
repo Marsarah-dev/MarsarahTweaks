@@ -14,7 +14,7 @@ B. Updates
 C. New Features
 ------------------------------
 * Working on:
-  - Hoe Stone Pathen
+  - Hoe Stone Pathing
 
 D. Others
 ------------------------------
@@ -59,7 +59,6 @@ C. Features
 * Allow ships to be destroyed with the hammer.
 * Allow Boars to eat Yellow Mushrooms.
 * Player Inspector for players currently logged into the world.
-* Skip intro video (devs said they will add this as a setting so skip for now)
 
 Trinkets:
 * Review new Trinket build costs:

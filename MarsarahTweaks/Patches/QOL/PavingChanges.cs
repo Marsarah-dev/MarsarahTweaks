@@ -9,7 +9,7 @@ namespace MarsarahTweaks.Patches.QOL
 	{
 		private static readonly LogManager log = new LogManager("Paving", LogManager.LogLevel.Info);
 
-		private const string SourcePrefabName = "paved_road";
+		private const string SourcePrefabName = "paved_road_v2";
 		private const string PavingPrefabName = "MarsarahTweaks_Paving";
 		private const string HoePrefabName = "Hoe";
 
@@ -68,11 +68,11 @@ namespace MarsarahTweaks.Patches.QOL
 			log.Info($"Created inactive Paving clone from '{SourcePrefabName}'.");
 
 			Piece piece = clone.GetComponent<Piece>();
-			TerrainModifier terrainModifier = clone.GetComponent<TerrainModifier>();
+			TerrainOp terrainOp = clone.GetComponent<TerrainOp>();
 
-			if (piece == null || terrainModifier == null)
+			if (piece == null || terrainOp == null)
 			{
-				log.Error($"Could not create '{PavingPrefabName}': source prefab is missing Piece or TerrainModifier.");
+				log.Error($"Could not create '{PavingPrefabName}': source prefab is missing Piece or TerrainOp.");
 				UnityEngine.Object.Destroy(clone);
 				return;
 			}
@@ -80,9 +80,12 @@ namespace MarsarahTweaks.Patches.QOL
 			piece.m_name = "Paving";
 			piece.m_description = "Pave the ground without leveling it.";
 
-			terrainModifier.m_level = false;
-			terrainModifier.m_smooth = false;
-			terrainModifier.m_paintCleared = true;
+			terrainOp.m_settings.m_level = false;
+			terrainOp.m_settings.m_raise = false;
+			terrainOp.m_settings.m_smooth = false;
+			terrainOp.m_settings.m_paintCleared = true;
+
+			log.Info($"Paving terrain operation: Level={terrainOp.m_settings.m_level}, Raise={terrainOp.m_settings.m_raise}, Smooth={terrainOp.m_settings.m_smooth}, Paint={terrainOp.m_settings.m_paintCleared}, PaintType={terrainOp.m_settings.m_paintType}, PaintRadius={terrainOp.m_settings.m_paintRadius}.");
 
 			if (znScene.m_prefabs.Contains(sourcePrefab))
 			{
@@ -97,7 +100,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 			pavingPrefab = clone;
 
-			log.Info($"Paving registered successfully. Active: {clone.activeSelf}, TerrainModifier: {terrainModifier != null}, Level: {terrainModifier.m_level}, Smooth: {terrainModifier.m_smooth}, Paint: {terrainModifier.m_paintCleared}.");
+			log.Info($"Paving registered successfully. Active: {clone.activeSelf}, TerrainOp: {terrainOp != null}.");
 		}
 
 		public static void UpdatePavingAvailability(ZNetScene znScene)
