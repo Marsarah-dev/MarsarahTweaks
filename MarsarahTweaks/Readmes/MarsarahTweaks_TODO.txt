@@ -11,6 +11,9 @@ A. Fixes
 B. Updates
 ------------------------------
 * Include Hot Tub and Stove in Permanent Lights. Also add toggle for these and for normal fires.
+* Food and Mead Modifications
+  - Reduced Berserkir Mead Base Mushroom and Yellow Mushroom costs from 10 to 5 each.
+  - Increased Pulled Bear health from 37 to 45.
 
 C. New Features
 ------------------------------
@@ -42,10 +45,14 @@ C. New Features
 
 * Reworked Permanent Lights with four configurable modes (Off, Lights Only, Lights & Fires, All Supported Pieces), including Hot Tub and Stone Oven support.
 
+* Added Standardized Food Durations
+  - Increases food durations based on preparation type and biome progression:
+    - Raw edible ingredients: 15 minutes.
+    - Simply cooked meats: 25 minutes.
+    - Prepared meals: 30 minutes.
+    - Only increases durations where needed, leaving other foods unchanged.
+
 IP:
-* Change values of Pulled Bear HP and Stamina
-* Change Berserkir Mead Base Mushroom and Yellow Mushroom cost from 10 to 5
-* Equalize food duration 
 
 D. Others
 ------------------------------

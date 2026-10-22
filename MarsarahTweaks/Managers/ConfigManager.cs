@@ -85,7 +85,8 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata GearRecipeMaterialsModifications = new ConfigMetadata("Alternate Gear Recipe Materials", "Modifies gear recipe materials for some items (more materials from current respective biomes)", ConfigSections.GrindReduction, 40);
 			public static readonly ConfigMetadata BuildPieceAmountsModifications = new ConfigMetadata("Cheaper Build Pieces Amounts", "Reduces costs for build pieces", ConfigSections.GrindReduction, 30);
 			public static readonly ConfigMetadata BuildPieceMaterialsModifications = new ConfigMetadata("Alternate Build Pieces Materials", "Modifies build pieces materials (This will move the Workbench Toolrack extension from Mountain to Swamp biome)", ConfigSections.GrindReduction, 20);
-			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("Food And Mead Modifications", "Modifies food and mead recipes costs, crafted amounts and stacks. (Toggling mid-game requires CLIENT relog for food stacks)", ConfigSections.GrindReduction, 10);
+			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("Food And Mead Modifications", "Modifies food and mead recipes costs, crafted amounts, stacks and stats. (Toggling mid-game requires CLIENT relog for food stacks and stats)", ConfigSections.GrindReduction, 10);
+			public static readonly ConfigMetadata StandardizedFoodDurations = new ConfigMetadata("Standardized Food Durations", "Standardizes food durations based on preparation type. Only increases durations. (Toggling mid-game requires CLIENT relog for food already in inventory)", ConfigSections.GrindReduction, 5);
 
 			// Balance
 			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it. (Toggling mid-game requires CLIENT relog if the item is equipped)", ConfigSections.Balance, 140);
@@ -138,7 +139,6 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata PlayerLogoutAnnounce = new ConfigMetadata("Player Logout Announce", "Displays a message in the top-left corner and chat when a player logs out.", ConfigSections.QOL, 30);
 			public static readonly ConfigMetadata Paving = new ConfigMetadata("Paving Without Leveling", "Adds a Paving option to the Hoe that creates paved ground without leveling it. Costs 1 Stone and requires a Stonecutter.", ConfigSections.QOL, 20);
 			public static readonly ConfigMetadata AdjustableHoeRadius = new ConfigMetadata("Adjustable Hoe & Cultivator Radius", "Allows changing the radius of Hoe terrain operations (Level Ground, Pathen, Paved Road, and Paving) and Cultivator (Cultivate and Grass) using the mouse scroll wheel.", ConfigSections.QOL, 10);
-			public static readonly ConfigMetadata StandardizedFoodDurations = new ConfigMetadata("Standardized Food Durations", "Standardizes food durations based on preparation type. Only increases durations. (Toggling mid-game requires CLIENT relog for food already in inventory)", ConfigSections.QOL, 5);
 		}
 
 		// Config entries
@@ -152,6 +152,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> BuildPieceAmountsEnabled;
 		public static ConfigEntry<bool> BuildPieceMaterialsEnabled;
 		public static ConfigEntry<bool> FoodAndMeadModificationsEnabled;
+		public static ConfigEntry<bool> StandardizedFoodDurationsEnabled;
 
 		// Balance
 		public static ConfigEntry<bool> EarlyLinenCapeEnabled;
@@ -205,7 +206,6 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> AnnouncePlayerLogout;
 		public static ConfigEntry<bool> PavingEnabled;
 		public static ConfigEntry<bool> AdjustableHoeRadiusEnabled;
-		public static ConfigEntry<bool> StandardizedFoodDurationsEnabled;
 
 
 		public static void Init(ConfigFile configFile)
@@ -223,6 +223,7 @@ namespace MarsarahTweaks.Managers
 			BuildPieceAmountsEnabled = CreateConfig(Configs.BuildPieceAmountsModifications, true);
 			BuildPieceMaterialsEnabled = CreateConfig(Configs.BuildPieceMaterialsModifications, true);
 			FoodAndMeadModificationsEnabled = CreateConfig(Configs.FoodAndMeadModifications, true);
+			StandardizedFoodDurationsEnabled = CreateConfig(Configs.StandardizedFoodDurations, true);
 
 			// ===== Balance
 			EarlyLinenCapeEnabled = CreateConfig(Configs.LinenCapeModifications, true);
@@ -276,7 +277,6 @@ namespace MarsarahTweaks.Managers
 			AnnouncePlayerLogout = CreateConfig(Configs.PlayerLogoutAnnounce, true);
 			PavingEnabled = CreateConfig(Configs.Paving, true);
 			AdjustableHoeRadiusEnabled = CreateConfig(Configs.AdjustableHoeRadius, true);
-			StandardizedFoodDurationsEnabled = CreateConfig(Configs.StandardizedFoodDurations, true);
 
 			SetupWatcher();
 		}
