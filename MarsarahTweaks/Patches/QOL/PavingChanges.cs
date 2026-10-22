@@ -53,9 +53,19 @@ namespace MarsarahTweaks.Patches.QOL
 				return;
 			}
 
-			GameObject clone = UnityEngine.Object.Instantiate(sourcePrefab);
+			log.Info($"Found source prefab '{SourcePrefabName}'.");
+
+			GameObject inactiveParent = new GameObject("MarsarahTweaks_Paving_CloneContainer");
+			inactiveParent.SetActive(false);
+
+			GameObject clone = UnityEngine.Object.Instantiate(sourcePrefab, inactiveParent.transform);
 			clone.name = PavingPrefabName;
 			clone.SetActive(false);
+			clone.transform.SetParent(null, false);
+
+			UnityEngine.Object.Destroy(inactiveParent);
+
+			log.Info($"Created inactive Paving clone from '{SourcePrefabName}'.");
 
 			Piece piece = clone.GetComponent<Piece>();
 			TerrainModifier terrainModifier = clone.GetComponent<TerrainModifier>();
@@ -86,6 +96,8 @@ namespace MarsarahTweaks.Patches.QOL
 			namedPrefabs.Add(prefabHash, clone);
 
 			pavingPrefab = clone;
+
+			log.Info($"Paving registered successfully. Active: {clone.activeSelf}, TerrainModifier: {terrainModifier != null}, Level: {terrainModifier.m_level}, Smooth: {terrainModifier.m_smooth}, Paint: {terrainModifier.m_paintCleared}.");
 		}
 
 		public static void UpdatePavingAvailability(ZNetScene znScene)
@@ -115,17 +127,16 @@ namespace MarsarahTweaks.Patches.QOL
 				int pavedRoadIndex = hoeTable.m_pieces.FindIndex(prefab => prefab != null && prefab.name == SourcePrefabName);
 
 				if (pavedRoadIndex >= 0)
-				{
 					hoeTable.m_pieces.Insert(pavedRoadIndex + 1, pavingPrefab);
-				}
 				else
-				{
 					hoeTable.m_pieces.Add(pavingPrefab);
-				}
+
+				log.Info("Added Paving to the Hoe build menu.");
 			}
 			else if (!ConfigManager.PavingEnabled.Value && containsPaving)
 			{
 				hoeTable.m_pieces.Remove(pavingPrefab);
+				log.Info("Removed Paving from the Hoe build menu.");
 			}
 		}
 	}

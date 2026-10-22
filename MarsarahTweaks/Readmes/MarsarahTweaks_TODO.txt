@@ -13,6 +13,8 @@ B. Updates
 
 C. New Features
 ------------------------------
+* Working on:
+  - Hoe Stone Pathen
 
 D. Others
 ------------------------------
@@ -23,7 +25,6 @@ TO IMPLEMENT
 * Change values of Pulled Bear HP and Stamina
 * Equalize food duration by biome
 * Add drops to root tendrils in the alternate black forest biome
-* Add Hoe Stone Pathen
 * Increase Serpent spawn rate
 * Change Bird's Nest Acorn cost to 2 or 1
 * Change Berserkir Mead Base Mushroom and Yellow Mushroom cost from 10 to 5
