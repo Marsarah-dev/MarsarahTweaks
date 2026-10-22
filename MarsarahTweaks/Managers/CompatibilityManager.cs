@@ -48,6 +48,18 @@ namespace MarsarahTweaks.Managers
 		public static ConflictMod Seasonality = new ConflictMod("RustyMods.Seasonality");
 		public static ConflictMod Seasons = new ConflictMod("shudnal.Seasons");
 		public static ConflictMod ImFriendlyDammit = new ConflictMod("Azumatt.ImFRIENDLYDAMMIT");
+		public static ConflictMod HoeRadius = new ConflictMod("aedenthorn.HoeRadius");
+		public static ConflictMod TerraHoe = new ConflictMod("terrahoe");
+		public static ConflictMod Treadwell = new ConflictMod("com.jstack424.treadwell");
+		public static ConflictMod AdvancedTerrainModifiers = new ConflictMod("Searica.Valheim.TerrainTools");
+		public static ConflictMod ValheimTerraformPlus = new ConflictMod("shamloebs.valheim.terraformplus");
+		public static ConflictMod SmarterHoe = new ConflictMod("com.jubaroo.smarterhoe");
+		public static ConflictMod ValAdvancedHoe = new ConflictMod("com.vnts.valadvancedhoe");
+		public static ConflictMod ValheimTerrainTools = new ConflictMod("icecub.ValheimTerrainTools");
+		public static ConflictMod MyDirtyHoe = new ConflictMod("MagicMike.MyDirtyHoe");
+		public static ConflictMod PavedRoadNoLevel = new ConflictMod("DeathWizsh.PavedRoadNoLevel");
+		public static ConflictMod PathsideAssistance = new ConflictMod("com.orianaventure.mod.PathsideAssistance");
+		public static ConflictMod ShackBetterPaths = new ConflictMod("theshack.betterpaths");
 
 		// Initialize the manager
 		public static void Initialize()
@@ -77,6 +89,18 @@ namespace MarsarahTweaks.Managers
 			UpdateConflictMod(ref Seasonality);
 			UpdateConflictMod(ref Seasons);
 			UpdateConflictMod(ref ImFriendlyDammit);
+			UpdateConflictMod(ref HoeRadius);
+			UpdateConflictMod(ref TerraHoe);
+			UpdateConflictMod(ref Treadwell);
+			UpdateConflictMod(ref AdvancedTerrainModifiers);
+			UpdateConflictMod(ref ValheimTerraformPlus);
+			UpdateConflictMod(ref SmarterHoe);
+			UpdateConflictMod(ref ValAdvancedHoe);
+			UpdateConflictMod(ref ValheimTerrainTools);
+			UpdateConflictMod(ref MyDirtyHoe);
+			UpdateConflictMod(ref PavedRoadNoLevel);
+			UpdateConflictMod(ref PathsideAssistance);
+			UpdateConflictMod(ref ShackBetterPaths);
 		}
 
 		// Helper to update the Name and Loaded flag of a ConflictMod
@@ -151,6 +175,23 @@ namespace MarsarahTweaks.Managers
 			DisableIfIncompatible(Seasonality, ConfigManager.ClearerWeatherEnabled);
 			DisableIfIncompatible(Seasons, ConfigManager.ClearerWeatherEnabled);
 			DisableIfIncompatible(ImFriendlyDammit, ConfigManager.FriendlyBallistasEnabled);
+			// Adjustable Hoe Radius
+			DisableIfIncompatible(HoeRadius, ConfigManager.AdjustableHoeRadiusEnabled);
+			DisableIfIncompatible(TerraHoe, ConfigManager.AdjustableHoeRadiusEnabled);
+			DisableIfIncompatible(Treadwell, ConfigManager.AdjustableHoeRadiusEnabled);
+			DisableIfIncompatible(AdvancedTerrainModifiers, ConfigManager.AdjustableHoeRadiusEnabled);
+			DisableIfIncompatible(ValheimTerraformPlus, ConfigManager.AdjustableHoeRadiusEnabled);
+			DisableIfIncompatible(SmarterHoe, ConfigManager.AdjustableHoeRadiusEnabled);
+			DisableIfIncompatible(ValAdvancedHoe, ConfigManager.AdjustableHoeRadiusEnabled);
+			DisableIfIncompatible(ValheimTerrainTools, ConfigManager.AdjustableHoeRadiusEnabled);
+			DisableIfIncompatible(MyDirtyHoe, ConfigManager.AdjustableHoeRadiusEnabled);
+			// Paving Without Leveling
+			DisableIfIncompatible(AdvancedTerrainModifiers, ConfigManager.PavingEnabled);
+			DisableIfIncompatible(ValheimTerrainTools, ConfigManager.PavingEnabled);
+			DisableIfIncompatible(MyDirtyHoe, ConfigManager.PavingEnabled);
+			DisableIfIncompatible(PavedRoadNoLevel, ConfigManager.PavingEnabled);
+			DisableIfIncompatible(PathsideAssistance, ConfigManager.PavingEnabled);
+			DisableIfIncompatible(ShackBetterPaths, ConfigManager.PavingEnabled);
 		}
 
 		// Optional: log all loaded mods for debugging

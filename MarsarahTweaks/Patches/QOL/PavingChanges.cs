@@ -7,7 +7,7 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class PavingChanges
 	{
-		private static readonly LogManager log = new LogManager("Paving", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Paving", LogManager.LogLevel.Warning);
 
 		private const string SourcePrefabName = "paved_road_v2";
 		private const string PavingPrefabName = "MarsarahTweaks_Paving";
