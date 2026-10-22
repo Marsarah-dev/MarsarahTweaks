@@ -13,6 +13,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 		private const float RadiusStep = 1f;
 		private const float MinRadius = 1f;
+		private const float PathenMinRadius = 2f;
 		private const float MaxRadius = 7f;
 
 		private static TerrainOp activeOperation;
@@ -65,7 +66,7 @@ namespace MarsarahTweaks.Patches.QOL
 				// Consume the scroll only for our six supported operations.
 				interceptPlacementScroll = true;
 
-				float newRadius = Mathf.Clamp(currentRadius + Mathf.Sign(scroll) * RadiusStep, MinRadius, MaxRadius);
+				float newRadius = Mathf.Clamp(currentRadius + Mathf.Sign(scroll) * RadiusStep, GetMinimumRadius(activeOperation), MaxRadius);
 
 				if (Mathf.Approximately(newRadius, currentRadius))
 					return;
@@ -205,7 +206,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 			if (savedRadii.TryGetValue(operation.gameObject.name, out float savedRadius))
 			{
-				currentRadius = Mathf.Clamp(savedRadius, MinRadius, MaxRadius);
+				currentRadius = Mathf.Clamp(savedRadius, GetMinimumRadius(operation), MaxRadius);
 				ApplyRadius(settings, currentRadius / defaultRadius);
 			}
 			else
@@ -311,6 +312,10 @@ namespace MarsarahTweaks.Patches.QOL
 			activeOperation = null;
 			defaultRadius = 0f;
 			currentRadius = 0f;
+		}
+		private static float GetMinimumRadius(TerrainOp operation)
+		{
+			return operation != null && operation.name == "path_v2" ? PathenMinRadius : MinRadius;
 		}
 	}
 }
