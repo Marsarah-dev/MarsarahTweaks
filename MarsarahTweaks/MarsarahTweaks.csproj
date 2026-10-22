@@ -86,12 +86,13 @@
     <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\CompatibilityManager.cs" />
     <Compile Include="MarsarahTweaks.cs" />
+    <Compile Include="Patches\Balance\RootForestDrops.cs" />
     <Compile Include="Patches\Features\AIFleeChanges.cs" />
     <Compile Include="Patches\Balance\ArmorStatsChanges.cs" />
     <Compile Include="Patches\Features\AshlandsEnemiesChanges.cs" />
     <Compile Include="Patches\Balance\BetterDropsChanges.cs" />
     <Compile Include="Patches\Features\HealStaff.cs" />
-    <Compile Include="Patches\QOL\FoodDurationChanges.cs" />
+    <Compile Include="Patches\Grind\FoodDurationChanges.cs" />
     <Compile Include="Patches\QOL\HoeRadiusChanges.cs" />
     <Compile Include="Patches\QOL\MoreUsableFuel.cs" />
     <Compile Include="Patches\Features\NighttimeSpawnChanges.cs" />

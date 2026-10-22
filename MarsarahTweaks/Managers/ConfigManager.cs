@@ -493,6 +493,10 @@ namespace MarsarahTweaks.Managers
 				case var name when name == Configs.StandardizedFoodDurations.Name:
 					FoodDurationChanges.UpdateFoodDurations(ObjectDB.instance, true);
 					break;
+
+				case var name when name == Configs.RootForestDrops.Name:
+					RootForestDrops.UpdateRootForestDrops(ZNetScene.instance, true);
+					break;
 			}
 		}
 	}

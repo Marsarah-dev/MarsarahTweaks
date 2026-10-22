@@ -53,6 +53,7 @@ C. New Features
     - Only increases durations where needed, leaving other foods unchanged.
 
 IP:
+* Add drops to root in the alternate black forest biome.
 
 D. Others
 ------------------------------
@@ -60,7 +61,6 @@ D. Others
 ============================================================
 TO IMPLEMENT
 ============================================================
-* Add drops to root tendrils in the alternate black forest biome
 * Increase Serpent spawn rate
 * Change Bird's Nest Acorn cost to 2 or 1
 * Reduce Crown of Roots Coin cost from 3k to 2k, and remove durability.

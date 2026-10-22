@@ -3,7 +3,7 @@ using MarsarahTweaks.Managers;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MarsarahTweaks.Patches.QOL
+namespace MarsarahTweaks.Patches.Grind
 {
 	internal class FoodDurationChanges
 	{
