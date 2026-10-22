@@ -84,16 +84,14 @@ namespace MarsarahTweaks.Patches.QOL
 			log.Info($"Found active Hoe prefab '{sourcePrefab.name}'.");
 
 			GameObject inactiveParent = new GameObject("MarsarahTweaks_Paving_CloneContainer");
+			inactiveParent.transform.SetParent(znScene.transform, false);
 			inactiveParent.SetActive(false);
 
 			GameObject clone = UnityEngine.Object.Instantiate(sourcePrefab, inactiveParent.transform);
 			clone.name = PavingPrefabName;
-			clone.SetActive(false);
-			clone.transform.SetParent(null, false);
+			clone.SetActive(true);
 
-			UnityEngine.Object.Destroy(inactiveParent);
-
-			log.Info($"Created inactive Paving clone from '{SourcePrefabName}'.");
+			log.Info($"Created Paving prefab from '{SourcePrefabName}'. ActiveSelf={clone.activeSelf}, ActiveInHierarchy={clone.activeInHierarchy}.");
 
 			Piece piece = clone.GetComponent<Piece>();
 			TerrainOp terrainOp = clone.GetComponent<TerrainOp>();
@@ -101,14 +99,14 @@ namespace MarsarahTweaks.Patches.QOL
 			if (piece == null || terrainOp == null)
 			{
 				log.Error($"Could not create '{PavingPrefabName}': source prefab is missing Piece or TerrainOp.");
-				UnityEngine.Object.Destroy(clone);
+				UnityEngine.Object.Destroy(inactiveParent);
 				return;
 			}
 
 			if (terrainOp.m_settings.m_paintRadius <= 0f)
 			{
 				log.Error($"Could not create '{PavingPrefabName}': source prefab has no valid paint radius.");
-				UnityEngine.Object.Destroy(clone);
+				UnityEngine.Object.Destroy(inactiveParent);
 				return;
 			}
 
@@ -137,7 +135,7 @@ namespace MarsarahTweaks.Patches.QOL
 
 			RegisterPavingTerrainOp(ObjectDB.instance);
 
-			log.Info($"Paving registered successfully. Active: {clone.activeSelf}, TerrainOp: {terrainOp != null}.");
+			log.Info($"Paving registered successfully. ActiveSelf={clone.activeSelf}, ActiveInHierarchy={clone.activeInHierarchy}, TerrainOp={terrainOp != null}.");
 		}
 
 		public static void UpdatePavingAvailability(ZNetScene znScene)
