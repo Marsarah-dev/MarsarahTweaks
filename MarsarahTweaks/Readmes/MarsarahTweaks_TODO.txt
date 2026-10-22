@@ -13,8 +13,10 @@ B. Updates
 
 C. New Features
 ------------------------------
+* Stone Pathing without Leveling on Hoe
 * Working on:
-  - Hoe Stone Pathing
+  - Adjustable Hoe Radius
+  
 
 D. Others
 ------------------------------
