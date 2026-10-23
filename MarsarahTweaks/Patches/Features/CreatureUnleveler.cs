@@ -29,6 +29,7 @@ namespace MarsarahTweaks.Patches.Features
 			{ "The Elder", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
 				{
 					// Meadows
+					{ "deer", (null, 20f, null) },
 					{ "Boar", (null, 20f, 0f) },
 					{ "Neck lakes", (null, 20f, 0f) },
 					{ "Neck IN RAIN", (null, 20f, 0f) },
@@ -85,6 +86,7 @@ namespace MarsarahTweaks.Patches.Features
 					// Swamp
 					{ "Skeleton", (null, 30f, null) },
 					{ "Marsh draugr", (null, 30f, null) },
+					{ "Leech", (null, 30f, null) },
 					{ "Draugr", (null, 30f, null) },
 					{ "Draugr Elite", (null, 30f, null) },
 					{ "Marsh surtling", (null, 30f, null) },

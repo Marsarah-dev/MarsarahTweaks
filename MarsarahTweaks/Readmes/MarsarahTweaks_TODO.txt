@@ -14,6 +14,11 @@ B. Updates
 * Food and Mead Modifications
   - Reduced Berserkir Mead Base Mushroom and Yellow Mushroom costs from 10 to 5 each.
   - Increased Pulled Bear health from 37 to 45.
+* Creature Unleveler
+  - Increased Leech levelup chance to 30% after Moder is defeated.
+  - Inceased Deer levelup chance to 20% after The Elder is defeated.
+* Cheaper Build Pieces Amounts
+  - Changed Bird's Nest Acorn cost to 1 from 3
 
 C. New Features
 ------------------------------
@@ -55,8 +60,11 @@ C. New Features
 * Black Forest Root Drops
   - Added Wood, Core Wood, and Resin drops to wild roots in the alternate Black Forest biome, respecting Progression Halt.
 
+* Crown of Roots Changes
+  - Reduced Crown of Roots Coin cost from 3k to 2k, and made it repairable at a lvl 3 Workbench.
+
 IP:
-* Reduce Crown of Roots Coin cost from 3k to 2k, and make it repairable at a lvl 3 Workbench.
+
 
 D. Others
 ------------------------------
@@ -65,9 +73,7 @@ D. Others
 TO IMPLEMENT
 ============================================================
 * Increase Serpent spawn rate
-* Change Bird's Nest Acorn cost to 2 or 1
-* Check Leech unleveler. If too low, make earlier and higher.
-* Bats Bloodbag drop chance 100%?
+
 * Increase Cooking skill gains percentage. It's too slow. Maybe blocking too.
 
 0. Requests

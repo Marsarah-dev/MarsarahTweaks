@@ -63,6 +63,11 @@ namespace MarsarahTweaks.Patches.Grind
 					{ "Stone", 3 } // 4
 				}
 			},
+			{ "$piece_birdnest", new Dictionary<string, int> // Bird's Nest
+				{
+					{ "Acorn", 1 } // 3
+				}
+			},
 			{ "$piece_preptable", new Dictionary<string, int>
 				{
 					{ "FineWood", 10 }, // 20
