@@ -2,6 +2,8 @@
 using BepInEx;
 using HarmonyLib;
 using MarsarahTweaks.Managers;
+using MarsarahTweaks.Debugging;
+
 
 namespace MarsarahTweaks
 {
@@ -20,6 +22,8 @@ namespace MarsarahTweaks
 			LogManager.SetGlobalLogLevel(LogManager.LogLevel.Info); // None, Error, Warning, Info
 			ConfigManager.Init(Config);
 			//CustomConsoleCommandHandler.Init(); // Register new console commands
+
+			gameObject.AddComponent<SeabedDepthDebug>();
 
 			harmony.PatchAll();
 		}

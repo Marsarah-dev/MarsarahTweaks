@@ -63,7 +63,8 @@ C. New Features
   - Reduced Crown of Roots Coin cost from 3k to 2k, and made it repairable at a lvl 3 Workbench.
 
 IP:
-* Increase Serpent spawn rate
+* Increase Serpent spawn rate according to boss
+* Add small serpents
 
 D. Others
 ------------------------------
