@@ -1,7 +1,8 @@
 ﻿using HarmonyLib;
 using MarsarahTweaks.Managers;
 using MarsarahTweaks.Patches;
-using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace MarsarahTweaks.Patches.Features
 {
@@ -9,10 +10,10 @@ namespace MarsarahTweaks.Patches.Features
 	{
 		private static readonly LogManager log = new LogManager("Serpent Spawns", LogManager.LogLevel.Info);
 
-		private static readonly float serpentChanceNightBonemass = 50f; //8f;
+		private static readonly float serpentChanceNightBonemass = 8f;
 		private static readonly float serpentIntervalNightBonemass = 800f;
-		private static readonly float serpentChanceRainModer = 50f; //8f;
-		private static readonly float serpentChanceNightModer = 75f; //12f;
+		private static readonly float serpentChanceRainModer = 8f;
+		private static readonly float serpentChanceNightModer = 12f;
 		private static readonly float serpentIntervalRainModer = 800f;
 		private static readonly float serpentIntervalNightModer = 700f;
 
@@ -23,36 +24,73 @@ namespace MarsarahTweaks.Patches.Features
 			Moder
 		}
 
-		// Use SpawnData references as keys: both vanilla entries are named "Serpent".
-		private static readonly Dictionary<SpawnSystem.SpawnData, (float chance, float interval)> originalSpawnValues = new Dictionary<SpawnSystem.SpawnData, (float chance, float interval)>();
-		private static SpawnSystem activeSpawnSystem;
-		private static ProgressionStage? lastAppliedStage;
-		private static bool? lastAppliedEnabled;
+		private sealed class OriginalSpawnValues
+		{
+			public readonly float Chance;
+			public readonly float Interval;
+
+			public OriginalSpawnValues(float chance, float interval)
+			{
+				Chance = chance;
+				Interval = interval;
+			}
+		}
+
+		// Weak keys retain each SpawnData's original values without keeping unloaded zones alive.
+		private static ConditionalWeakTable<SpawnSystem.SpawnData, OriginalSpawnValues> originalSpawnValues = new ConditionalWeakTable<SpawnSystem.SpawnData, OriginalSpawnValues>();
+
+		private static ProgressionStage? lastCheckedStage;
+		private static bool? lastCheckedEnabled;
+		private static ProgressionStage? lastLoggedStage;
+		private static bool? lastLoggedEnabled;
+
+		[HarmonyPatch(typeof(ZNetScene), "Awake")]
+		private static class WorldReset_Patch
+		{
+			private static void Prefix()
+			{
+				originalSpawnValues = new ConditionalWeakTable<SpawnSystem.SpawnData, OriginalSpawnValues>();
+				lastCheckedStage = null;
+				lastCheckedEnabled = null;
+				lastLoggedStage = null;
+				lastLoggedEnabled = null;
+			}
+		}
 
 		[HarmonyPatch(typeof(SpawnSystem), "Awake")]
 		private static class SpawnSystemAwake_Patch
 		{
 			private static void Postfix(SpawnSystem __instance)
 			{
+				// Each spawned system needs its own SpawnData updated, including new zones.
 				UpdateSerpentSpawns(__instance);
 			}
 		}
 
-		// GlobalKeyChecker also runs after ZoneSystem.Update. Run after it so boss states are current.
+		// GlobalKeyChecker also patches ZoneSystem.Update; use last priority to see updated keys.
 		[HarmonyPatch(typeof(ZoneSystem), "Update")]
 		[HarmonyPriority(Priority.Last)]
 		private static class BossProgressionWatcher_Patch
 		{
 			private static void Postfix()
 			{
-				if (activeSpawnSystem == null) return;
-
 				ProgressionStage stage = GetProgressionStage();
 				bool enabled = ConfigManager.MoreSerpentSpawnsEnabled.Value;
 
-				if (lastAppliedStage == stage && lastAppliedEnabled == enabled) return;
+				// ZoneSystem.Update runs frequently, but scanning SpawnSystems only occurs on a transition.
+				if (lastCheckedStage == stage && lastCheckedEnabled == enabled) return;
 
-				UpdateSerpentSpawns(activeSpawnSystem);
+				lastCheckedStage = stage;
+				lastCheckedEnabled = enabled;
+				UpdateAllSerpentSpawns();
+			}
+		}
+
+		public static void UpdateAllSerpentSpawns()
+		{
+			foreach (SpawnSystem spawnSystem in Object.FindObjectsByType<SpawnSystem>(FindObjectsSortMode.None))
+			{
+				UpdateSerpentSpawns(spawnSystem);
 			}
 		}
 
@@ -60,17 +98,9 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			if (spawnSystem == null || spawnSystem.m_spawnLists == null) return;
 
-			if (activeSpawnSystem != spawnSystem)
-			{
-				// World/SpawnSystem changed: discard backups for the previous instance.
-				activeSpawnSystem = spawnSystem;
-				originalSpawnValues.Clear();
-				lastAppliedStage = null;
-				lastAppliedEnabled = null;
-			}
-
 			ProgressionStage stage = GetProgressionStage();
 			bool enabled = ConfigManager.MoreSerpentSpawnsEnabled.Value;
+			bool reportStage = lastLoggedStage != stage || lastLoggedEnabled != enabled;
 			int matchedEntries = 0;
 
 			foreach (SpawnSystemList spawnList in spawnSystem.m_spawnLists)
@@ -88,14 +118,9 @@ namespace MarsarahTweaks.Patches.Features
 
 					matchedEntries++;
 
-					if (!originalSpawnValues.TryGetValue(spawner, out var original))
-					{
-						original = (spawner.m_spawnChance, spawner.m_spawnInterval);
-						originalSpawnValues.Add(spawner, original);
-					}
-
-					float chance = original.chance;
-					float interval = original.interval;
+					OriginalSpawnValues original = originalSpawnValues.GetValue(spawner, s => new OriginalSpawnValues(s.m_spawnChance, s.m_spawnInterval));
+					float chance = original.Chance;
+					float interval = original.Interval;
 
 					if (enabled)
 					{
@@ -113,23 +138,29 @@ namespace MarsarahTweaks.Patches.Features
 
 					if (spawner.m_spawnChance == chance && spawner.m_spawnInterval == interval) continue;
 
-					log.Info($"{(isNightSpawner ? "Night" : "Rain/Storm")} Serpent: {spawner.m_spawnChance}% / {spawner.m_spawnInterval}s -> {chance}% / {interval}s");
+					if (reportStage)
+					{
+						log.Info($"{(isNightSpawner ? "Night" : "Rain/Storm")} Serpent: {spawner.m_spawnChance}% / {spawner.m_spawnInterval}s -> {chance}% / {interval}s");
+					}
+
 					spawner.m_spawnChance = chance;
 					spawner.m_spawnInterval = interval;
 				}
 			}
 
-			// If the spawn list is not ready yet, retry on the next ZoneSystem update.
 			if (matchedEntries == 0) return;
 
-			if (matchedEntries != 2)
+			if (reportStage)
 			{
-				log.Warn($"Expected two vanilla Serpent spawn entries; found {matchedEntries}. Check the current game's spawn definitions.");
-			}
+				if (matchedEntries != 2)
+				{
+					log.Warn($"Expected two vanilla Serpent spawn entries; found {matchedEntries}. Check the current game's spawn definitions.");
+				}
 
-			log.Info($"More Serpent Spawns: {(enabled ? "enabled" : "disabled")} | Stage: {stage} | Entries: {matchedEntries}");
-			lastAppliedStage = stage;
-			lastAppliedEnabled = enabled;
+				log.Info($"More Serpent Spawns: {(enabled ? "enabled" : "disabled")} | Stage: {stage} | Entries: {matchedEntries}");
+				lastLoggedStage = stage;
+				lastLoggedEnabled = enabled;
+			}
 		}
 
 		private static ProgressionStage GetProgressionStage()
