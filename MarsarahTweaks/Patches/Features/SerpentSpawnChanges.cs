@@ -276,7 +276,12 @@ namespace MarsarahTweaks.Patches.Features
 
 			if (character == null || humanoid == null || humanoid.m_defaultItems == null || humanoid.m_defaultItems.Length == 0 || drops == null || originalMeat == null)
 			{
-				log.Error("Cannot register MSmallSerpent: required Humanoid default attacks, CharacterDrop, or SerpentMeat data is missing.");
+				if (!registrationErrorLogged)
+				{
+					log.Error("Cannot register MSmallSerpent: required Humanoid default attacks, CharacterDrop, or SerpentMeat data is missing.");
+					registrationErrorLogged = true;
+				}
+
 				UnityEngine.Object.Destroy(prefabContainer);
 				prefabContainer = null;
 				return false;

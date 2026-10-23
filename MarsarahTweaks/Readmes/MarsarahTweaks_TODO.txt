@@ -62,10 +62,26 @@ C. New Features
 * Crown of Roots Changes
   - Reduced Crown of Roots Coin cost from 3k to 2k, and made it repairable at a lvl 3 Workbench.
 
+* More Serpent Spawn
+  - Increased Serpent spawn rate according to defeated boss as follows:
+    - Bonemass defeated: Nighttime serpents spawn chance: 10% (from 5%), and spawn interval: 800s (from 1000s)
+    - Moder defeated: Rain and storm serpents spawn chance: 10% (from 5%), and spawn interval: 800s (from 1000s)
+                      Nighttime serpents spawn chance: 15%, and spawn interval: 700s
+
+* Small Serpent Spawns
+  - Adds smaller versions of the Serpent named Sea Wyrms with the following stats and spawn conditions:
+    - Size: 55% of vanilla Serpent
+    - HP: 200
+    - Damage: 50% of vanilla Serpent
+    - Drops: Serpent Meat only (no Scales or Trophies)
+    - Spawn areas/biomes: Ocean and coastal Meadows, Black Forest, Swamp, Mountain, Plains and Mistlands
+      - The non-ocean spawns do not occur too close to the shore, requiring a minimum of 20 sea floor depth.
+    - Spawn chance: 
+      - Before Bonemass: no spawns
+      - Bonemass defeated: 5% chance, 900s intervals
+      - Moder defeated: 10% chance, 700s intervals
+
 IP:
-* Increase Serpent spawn rate according to boss
-* Add small serpents
-* Increase Serpent Scale drops for normal serpent.
 
 D. Others
 ------------------------------
