@@ -101,6 +101,7 @@ C. Features
 * Allow ships to be destroyed with the hammer.
 * Allow Boars to eat Yellow Mushrooms.
 * Player Inspector for players currently logged into the world.
+* Crossbows remember loaded state after re-equipping.
 
 Trinkets:
 * Review new Trinket build costs:
@@ -130,7 +131,6 @@ Trinkets:
 D. QOL
 -------------------------------
 * Less Fireplace Smoke with a configurable percentage.
-* Recreate Better Sorting.
 * Make candles refillable with Resin.
 * Increase Maypole range.
 * Remove/reduce character slowdown during selected actions such as equipping and eating.
