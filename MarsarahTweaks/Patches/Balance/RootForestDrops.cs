@@ -8,7 +8,7 @@ namespace MarsarahTweaks.Patches.Balance
 {
 	internal class RootForestDrops
 	{
-		private static readonly LogManager log = new LogManager("Black Forest Root Drops", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Black Forest Root Drops", LogManager.LogLevel.Warning);
 
 		private const string RootPrefabName = "TentaRoot_wild";
 

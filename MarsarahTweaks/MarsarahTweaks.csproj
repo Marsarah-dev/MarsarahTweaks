@@ -86,6 +86,7 @@
     <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\CompatibilityManager.cs" />
     <Compile Include="MarsarahTweaks.cs" />
+    <Compile Include="Patches\Balance\CrownOfRootsChanges.cs" />
     <Compile Include="Patches\Balance\RootForestDrops.cs" />
     <Compile Include="Patches\Features\AIFleeChanges.cs" />
     <Compile Include="Patches\Balance\ArmorStatsChanges.cs" />

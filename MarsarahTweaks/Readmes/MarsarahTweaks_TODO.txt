@@ -52,8 +52,11 @@ C. New Features
     - Prepared meals: 30 minutes.
     - Only increases durations where needed, leaving other foods unchanged.
 
+* Black Forest Root Drops
+  - Added Wood, Core Wood, and Resin drops to wild roots in the alternate Black Forest biome, respecting Progression Halt.
+
 IP:
-* Add drops to root in the alternate black forest biome.
+* Reduce Crown of Roots Coin cost from 3k to 2k, and make it repairable at a lvl 3 Workbench.
 
 D. Others
 ------------------------------
@@ -63,7 +66,6 @@ TO IMPLEMENT
 ============================================================
 * Increase Serpent spawn rate
 * Change Bird's Nest Acorn cost to 2 or 1
-* Reduce Crown of Roots Coin cost from 3k to 2k, and remove durability.
 * Check Leech unleveler. If too low, make earlier and higher.
 * Bats Bloodbag drop chance 100%?
 * Increase Cooking skill gains percentage. It's too slow. Maybe blocking too.
