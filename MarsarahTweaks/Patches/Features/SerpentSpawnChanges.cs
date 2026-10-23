@@ -344,7 +344,7 @@ namespace MarsarahTweaks.Patches.Features
 					smallSpawner.m_biome = Heightmap.Biome.Ocean | Heightmap.Biome.Meadows | Heightmap.Biome.BlackForest | Heightmap.Biome.Swamp | Heightmap.Biome.Plains | Heightmap.Biome.Mistlands;
 					smallSpawner.m_biomeArea = Heightmap.BiomeArea.Everything;
 					smallSpawner.m_minAltitude = -1000f;
-					smallSpawner.m_maxAltitude = -10f;
+					smallSpawner.m_maxAltitude = -20f;
 					smallSpawner.m_spawnAtDay = true;
 					smallSpawner.m_spawnAtNight = true;
 					smallSpawner.m_requiredEnvironments = new List<string>();

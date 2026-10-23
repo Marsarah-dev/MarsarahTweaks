@@ -65,6 +65,7 @@ C. New Features
 IP:
 * Increase Serpent spawn rate according to boss
 * Add small serpents
+* Increase Serpent Scale drops for normal serpent.
 
 D. Others
 ------------------------------

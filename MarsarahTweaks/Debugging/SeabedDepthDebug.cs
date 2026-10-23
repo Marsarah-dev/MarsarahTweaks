@@ -52,11 +52,18 @@ namespace MarsarahTweaks.Debugging
 				return;
 			}
 
-			Vector3 position = player.transform.position;
-			float groundHeight = ZoneSystem.instance.GetGroundHeight(position);
-			seabedAltitude = groundHeight - ZoneSystem.instance.m_waterLevel;
-			currentBiome = Heightmap.FindBiome(position);
-			currentBiomeArea = WorldGenerator.instance != null ? WorldGenerator.instance.GetBiomeArea(position) : (Heightmap.BiomeArea?)null;
+			Vector3 groundPosition = player.transform.position;
+			ZoneSystem.instance.GetGroundData(ref groundPosition, out Vector3 groundNormal, out Heightmap.Biome biome, out Heightmap.BiomeArea biomeArea, out Heightmap heightmap);
+
+			if (heightmap == null)
+			{
+				hasReading = false;
+				return;
+			}
+
+			seabedAltitude = groundPosition.y - 30f;
+			currentBiome = biome;
+			currentBiomeArea = biomeArea;
 			isNight = EnvMan.IsNight();
 			EnvSetup environment = EnvMan.instance.GetCurrentEnvironment();
 			currentWeather = environment != null ? environment.m_name : "Unknown";
