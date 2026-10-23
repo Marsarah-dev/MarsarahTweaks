@@ -17,20 +17,20 @@ namespace MarsarahTweaks.Patches.Features
 		private const string SmallSerpentSpawnerName = "MSmallSerpent [Ocean]";
 		private const string BonemassGlobalKey = "defeated_bonemass";
 
-		private static readonly float serpentChanceNightBonemass = 8f;
+		private static readonly float serpentChanceNightBonemass = 10f; // 8f;
 		private static readonly float serpentIntervalNightBonemass = 800f;
-		private static readonly float serpentChanceRainModer = 8f;
-		private static readonly float serpentChanceNightModer = 12f;
+		private static readonly float serpentChanceRainModer = 10f; // 8f;
+		private static readonly float serpentChanceNightModer = 15f; // 12f;
 		private static readonly float serpentIntervalRainModer = 800f;
 		private static readonly float serpentIntervalNightModer = 700f;
 
 		private static readonly float smallSerpentScale = 0.55f;
 		private static readonly float smallSerpentHealth = 200f;
 		private static readonly float smallSerpentDamageMultiplier = 0.5f;
-		private static readonly float smallSerpentChanceBonemass = 2f;
-		private static readonly float smallSerpentIntervalBonemass = 1200f;
-		private static readonly float smallSerpentChanceModer = 3f;
-		private static readonly float smallSerpentIntervalModer = 1000f;
+		private static readonly float smallSerpentChanceBonemass = 5f; // 2f;
+		private static readonly float smallSerpentIntervalBonemass = 900f;
+		private static readonly float smallSerpentChanceModer = 10f; // 3f;
+		private static readonly float smallSerpentIntervalModer = 700f;
 
 		private static readonly MethodInfo memberwiseClone = typeof(object).GetMethod("MemberwiseClone", BindingFlags.Instance | BindingFlags.NonPublic);
 		private static readonly FieldInfo namedPrefabsField = AccessTools.Field(typeof(ZNetScene), "m_namedPrefabs");
@@ -283,7 +283,7 @@ namespace MarsarahTweaks.Patches.Features
 			}
 
 			character.m_health = smallSerpentHealth;
-			character.m_name = "Small Serpent";
+			character.m_name = "Sea Wyrm";
 
 			// 1.0's drop maximum is exclusive: 2 to 4 gives 2 or 3 meat.
 			CharacterDrop.Drop meat = CloneObject(originalMeat);
@@ -295,7 +295,7 @@ namespace MarsarahTweaks.Patches.Features
 
 			// Every peer must register this prefab even when Small Serpent Spawns is disabled.
 			scene.m_prefabs.Add(clone);
-namedPrefabs.Add(hash, clone);
+			namedPrefabs.Add(hash, clone);
 			smallSerpentPrefab = clone;
 			registrationErrorLogged = false;
 			log.Info($"Registered {SmallSerpentPrefabName}: scale {smallSerpentScale:P0}, health {smallSerpentHealth}, attack damage x{smallSerpentDamageMultiplier}, 2-3 SerpentMeat only.");
@@ -341,6 +341,10 @@ namedPrefabs.Add(hash, clone);
 					smallSpawner = CloneObject(nightSpawner);
 					smallSpawner.m_name = SmallSerpentSpawnerName;
 					smallSpawner.m_prefab = smallSerpentPrefab;
+					smallSpawner.m_biome = Heightmap.Biome.Ocean | Heightmap.Biome.Meadows | Heightmap.Biome.BlackForest | Heightmap.Biome.Swamp | Heightmap.Biome.Plains | Heightmap.Biome.Mistlands;
+					smallSpawner.m_biomeArea = Heightmap.BiomeArea.Everything;
+					smallSpawner.m_minAltitude = -1000f;
+					smallSpawner.m_maxAltitude = -10f;
 					smallSpawner.m_spawnAtDay = true;
 					smallSpawner.m_spawnAtNight = true;
 					smallSpawner.m_requiredEnvironments = new List<string>();
