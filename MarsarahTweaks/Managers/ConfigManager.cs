@@ -113,6 +113,8 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata RaidsModifications = new ConfigMetadata("No End-game Raids in Early Biomes", "Mistlands and Ashlands raids do not occur in the first four biomes", ConfigSections.Features, 130);
 			public static readonly ConfigMetadata StopNighttimeInvasion = new ConfigMetadata("Stop Nighttime Invasion", "Fulings, Seeker and Charred no longer spawn in early biomes at night. (Fulings spawn in Mountains and Seeker and Charred spawn in Plains)", ConfigSections.Features, 120);
 			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("Less Ashlands Enemies", "Numbers and spawn chance reduced for Ashlands enemies. (Toggling mid-game requires reloading area)", ConfigSections.Features, 110);
+			public static readonly ConfigMetadata MoreSerpentSpawns = new ConfigMetadata("More Serpent Spawns", "Increases Ocean Serpent spawn chances and reduces spawn intervals after defeating Bonemass and Moder.", ConfigSections.Features, 109);
+			public static readonly ConfigMetadata SmallSerpentSpawns = new ConfigMetadata("Small Serpent Spawns", "Adds smaller, weaker Serpents to the Ocean after Bonemass. They spawn during day and night in any weather, drop only Serpent Meat, and become more common after Moder.", ConfigSections.Features, 108);
 			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("Clear Mistlands after Queen", "Clear Mistlands mist after defeating the Queen. (Disabling mid-game requires CLIENT relog)", ConfigSections.Features, 100);
 			public static readonly ConfigMetadata WeatherModifications = new ConfigMetadata("Clearer Weather", "Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively. (Toggling mid-game requires CLIENT relog)", ConfigSections.Features, 90);
 			public static readonly ConfigMetadata CraftableChain = new ConfigMetadata("Craftable Chain", "Chain craftable at Black Forge", ConfigSections.Features, 80);
@@ -181,7 +183,9 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> CreatureUnlevelerEnabled;
 		public static ConfigEntry<bool> NoEndRaidsInEarlyBiomesEnabled;
 		public static ConfigEntry<bool> StopNighttimeInvasionEnabled;
-		public static ConfigEntry<bool> LessAshlandsEnemiesEnabled;		
+		public static ConfigEntry<bool> LessAshlandsEnemiesEnabled;
+		public static ConfigEntry<bool> MoreSerpentSpawnsEnabled;
+		public static ConfigEntry<bool> SmallSerpentSpawnsEnabled;
 		public static ConfigEntry<bool> ClearMistlandsEnabled;
 		public static ConfigEntry<bool> ClearerWeatherEnabled;
 		public static ConfigEntry<bool> CraftableChainEnabled;
@@ -255,6 +259,8 @@ namespace MarsarahTweaks.Managers
 			NoEndRaidsInEarlyBiomesEnabled = CreateConfig(Configs.RaidsModifications, true);
 			StopNighttimeInvasionEnabled = CreateConfig(Configs.StopNighttimeInvasion, true);
 			LessAshlandsEnemiesEnabled = CreateConfig(Configs.AshlandsEnemiesModifications, true);
+			MoreSerpentSpawnsEnabled = CreateConfig(Configs.MoreSerpentSpawns, true);
+			SmallSerpentSpawnsEnabled = CreateConfig(Configs.SmallSerpentSpawns, true);
 			ClearMistlandsEnabled = CreateConfig(Configs.ClearMistlands, true);
 			ClearerWeatherEnabled = CreateConfig(Configs.WeatherModifications, true);
 			CraftableChainEnabled = CreateConfig(Configs.CraftableChain, true);
