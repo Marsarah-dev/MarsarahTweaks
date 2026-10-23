@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.7.6
+[b]Version:[/b] 1.8.0
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -210,6 +210,18 @@ They can be toggled mid-game, unless otherwise specified.
 &nbsp;&nbsp;&nbsp;- Does not modify new recipes added by other mods.
 
 
+[size=4][b]🔧 Standardized Food Durations[/b][/size]
+
+- Increases the duration of selected foods based on preparation type and biome progression.
+- Raw edible ingredients last [b]15 minutes[/b].
+- Simply cooked meats last [b]20 minutes[/b].
+- Simply cooked Ashlands meats last [b]25 minutes[/b].
+- Prepared meals last [b]30 minutes[/b].
+- Only increases durations where needed. Food health, stamina, and Eitr stats remain unchanged.
+- Deep North foods and feasts are not modified.
+- Toggling mid-game requires a [b]client[/b] relog for food already in inventory.
+- [b]Conflicts:[/b] Mods that modify the duration of the same foods.
+
 [line]
 
 [size=4][b]⚙️ Balance[/b][/size]
@@ -303,6 +315,12 @@ They can be toggled mid-game, unless otherwise specified.
 - Toggling mid-game requires the relevant crafting menu to be reopened.
 - [b]Conflicts:[/b] Mods that modify the required station level for the named sets.
 
+
+[size=4][b]🔧 Crown of Roots Changes[/b][/size]
+
+- Reduces the [b]Crown of Roots[/b] purchase price from [b]3,000[/b] to [b]2,000 Coins[/b].
+- Allows the Crown of Roots to be repaired at a [b]level 3 Workbench[/b].
+- [b]Conflicts:[/b] Mods that modify the Crown of Roots purchase price or repair requirements.
 
 [size=4][b]🔧 Forsaken Powers Cooldowns[/b][/size]
 
@@ -432,6 +450,18 @@ They can be toggled mid-game, unless otherwise specified.
 &nbsp;&nbsp;&nbsp;- Increased Soft Tissue drop chance to 100% (from 25%)
 
 
+[size=4][b]🔧 Black Forest Root Drops[/b][/size]
+
+- Adds resource drops to wild roots found in the alternate [b]Black Forest[/b] biome.
+- Each resource has an independent chance to drop:
+&nbsp;&nbsp;&nbsp;- [b]Wood:[/b] 50% chance for 1.
+&nbsp;&nbsp;&nbsp;- [b]Core Wood:[/b] 50% chance for 1.
+&nbsp;&nbsp;&nbsp;- [b]Resin:[/b] 20% chance for 1.
+- Roots summoned by [b]The Elder[/b] are unaffected.
+- Respects Automatic Progression Halt when enabled.
+- Toggling mid-game requires reloading the area.
+- [b]Conflicts:[/b] Mods that modify drops from the same wild roots.
+
 [line]
 
 [size=4][b]⚙️ Features[/b][/size]
@@ -511,6 +541,45 @@ They can be toggled mid-game, unless otherwise specified.
 &nbsp;&nbsp;&nbsp;- Teleporting or simply walking away for a certain distance will make changes take effect if this config is toggled mid-game.
 - [b]Conflicts:[/b] Mods that modify Ashlands enemy spawn data.
 
+
+[size=4][b]🔧 More Serpent Spawns[/b][/size]
+
+- Increases the spawn frequency of regular [b]Ocean Serpents[/b] as boss progression advances.
+
+[b]🔹 After defeating Bonemass:[/b]
+- Nighttime Serpent spawn chance: [b]5% → 10%[/b].
+- Spawn interval: [b]1,000 → 800 seconds[/b].
+
+[b]🔹 After defeating Moder:[/b]
+- Nighttime Serpent spawn chance: [b]15%[/b].
+- Nighttime spawn interval: [b]700 seconds[/b].
+- Rain and storm Serpent spawn chance: [b]5% → 10%[/b].
+- Rain and storm spawn interval: [b]1,000 → 800 seconds[/b].
+
+- Changes apply automatically as bosses are defeated.
+- [b]Conflicts:[/b] Mods that modify Ocean Serpent spawning.
+
+
+[size=4][b]🔧 Small Serpent Spawns[/b][/size]
+
+- Adds [b]Sea Wyrms[/b], smaller and weaker versions of the regular Serpent.
+- Sea Wyrms can be encountered in the [b]Ocean[/b] and sufficiently deep coastal waters of the Meadows, Black Forest, Swamp, Plains, and Mistlands.
+- They can spawn during the day or night, regardless of weather.
+- Coastal spawns require a minimum seabed depth of [b]20 meters[/b].
+- Sea Wyrms become available after defeating [b]Bonemass[/b].
+
+[b]🔹 Sea Wyrm Stats:[/b]
+- [b]Size:[/b] 55% of a regular Serpent.
+- [b]Health:[/b] 200.
+- [b]Damage:[/b] 50% of regular Serpent damage.
+- [b]Drops:[/b] 2–3 Serpent Meat, without Serpent Scales or Trophies.
+
+[b]🔹 Spawn Progression:[/b]
+- [b]Before Bonemass:[/b] No Sea Wyrms.
+- [b]After Bonemass:[/b] 5% spawn chance, 900-second interval.
+- [b]After Moder:[/b] 10% spawn chance, 700-second interval.
+
+- [b]Conflicts:[/b] Mods that modify Serpent spawning or add similar creatures.
 
 [size=4][b]🔧 Clear Mistlands After Queen[/b][/size]
 
@@ -717,18 +786,52 @@ They can be toggled mid-game, unless otherwise specified.
 
 [size=4][b]🔧 Permanent Lights[/b][/size]
 
-- Makes fueled light sources permanent by keeping them fully fueled.
-- Modifies the build costs of supported light-source pieces to include their respective maximum fuel amount (wood, resin, coal, etc.).
-- The [b]Campfire[/b] max fuel and Wood build cost are set to [b]5[/b].
-- The [b]Hearth[/b] max fuel and Wood build cost are set to [b]10[/b].
+- Keeps fueled light sources permanently lit by automatically replenishing their fuel.
+- Offers four configurable modes to choose which pieces receive permanent fuel.
+
+[b]🔹 Available Modes:[/b]
+- [b]Off:[/b] Disables Permanent Lights.
+- [b]Lights Only:[/b] Keeps torches, sconces, braziers, and other decorative lights fueled.
+- [b]Lights & Fires:[/b] Includes decorative lights, Campfires, Hearths, Bonfires, and other fires. [b](Default)[/b]
+- [b]Lights, Fires, Stoves & Hot Tubs:[/b] Also includes the [b]Stone Oven[/b] and [b]Hot Tub[/b].
+
+- Light and fire build costs are adjusted according to the selected mode to account for their maximum fuel amounts. (wood, resin, coal, etc.).  
+- The [b]Campfire[/b] max fuel and Wood build cost are set to [b]5[/b] when fires are included.
+- The [b]Hearth[/b] max fuel and Wood build cost are set to [b]10[/b] when fires are included.
 - Campfire and Hearth Wood is refundable when destroyed.
-- [b]Conflicts:[/b] Mods that modify light-source fuel or build-piece costs.
-&nbsp;&nbsp;&nbsp;- Compatible with mods that add new light sources. They will be kept fueled, but their build costs will not automatically be modified.
+- Pieces excluded by the selected mode retain their normal fuel behavior and build costs.
+- [b]Conflicts:[/b] Mods that modify light-source fuel or build-piece costs (Eternal Fire, FuelEternal, and TorchesEternal).
+&nbsp;&nbsp;&nbsp;- Automatically disabled if the above conflicting mods are detected.
+&nbsp;&nbsp;&nbsp;- Compatible with mods that add new light sources, although their build costs are not automatically adjusted.
+
 
 [size=4][b]🔧 Player Logout Announce[/b][/size]
 
 - Displays a message when a player logs out in the top-left corner of the screen and in the chat window.
 - [b]Conflicts:[/b] No known conflicts.
+
+
+[size=4][b]🔧 Paving Without Leveling[/b][/size]
+
+- Adds a new [b]Paving Without Leveling[/b] option to the Hoe.
+- Creates paved ground without changing the terrain height or smoothing the surrounding area.
+- Costs [b]1 Stone[/b] and requires a nearby [b]Stonecutter[/b], just like normal paving.
+- Toggling mid-game adds or removes the option from the Hoe.
+- [b]Conflicts:[/b] Advanced Terrain Modifiers, ValheimTerrainTools, MyDirtyHoe, Paved Road No Level, Pathside Assistance, and Shack Better Paths.
+&nbsp;&nbsp;&nbsp;- Automatically disabled if any of the above are detected.
+
+
+[size=4][b]🔧 Adjustable Hoe & Cultivator Radius[/b][/size]
+
+- Allows terrain operation radius to be adjusted using the [b]mouse scroll wheel[/b].
+- Hoe operations: [b]Level Ground, Pathen, Paved Road, and Paving Without Leveling[/b].
+- Cultivator operations: [b]Cultivate and Grass[/b].
+- Radius can be adjusted in [b]1-meter increments[/b], from [b]1 to 7 meters[/b].
+&nbsp;&nbsp;&nbsp;- [b]Pathen[/b] has a minimum radius of [b]2 meters[/b].
+- Each operation remembers its own selected radius during the game session, including when switching tools or terrain operations.
+- Camera zoom is disabled while adjusting the radius of terrain operations.
+- [b]Conflicts:[/b] Hoe Radius (aedenthorn), TerraHoe, Treadwell, Advanced Terrain Modifiers, ValheimTerraformPlus, SmarterHoe, ValAdvancedHoe, ValheimTerrainTools, and MyDirtyHoe.
+&nbsp;&nbsp;&nbsp;- Automatically disabled if any of the above are detected.
 
 
 [line]
@@ -760,6 +863,44 @@ Blaxxun-bloop - for ServerSync
 
 [size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
 
+[size=4][b]v1.8.0[/b][/size]
+- [b]Updates:[/b]
+  - [b]Permanent Lights[/b]
+    - Reworked into four configurable modes: Off, Lights Only, Lights & Fires, and Lights, Fires, Stoves & Hot Tubs.
+    - Added permanent fuel support for the Stone Oven and Hot Tub in the highest mode.
+    - Light and fire build-cost adjustments now follow the selected mode.
+    - Default mode is Lights & Fires.
+  - [b]Food and Mead Modifications[/b]
+    - Berserkir Mead Base: Mushroom and Yellow Mushroom costs reduced from 10 to 5 each.
+    - Pulled Bear: Health increased from 37 to 45.
+  - [b]Creature Unleveler By Boss[/b]
+    - Deer level-up chance increased to 20% after defeating The Elder.
+    - Leech level-up chance increased to 30% after defeating Moder.
+  - [b]Cheaper Build Pieces Amounts[/b]
+    - Bird's Nest Acorn cost reduced from 3 to 1.
+
+- [b]New Features:[/b]
+  - [b]Standardized Food Durations[/b]
+    - Increases selected food durations based on preparation type and biome progression, without changing other food stats.
+    - Raw edible ingredients: at least 15 minutes.
+    - Selected simply cooked Ashlands meats: at least 25 minutes.
+    - Selected prepared meals: at least 30 minutes.
+  - [b]Black Forest Root Drops[/b]
+    - Wild roots in the alternate Black Forest can drop Wood (50%), Core Wood (50%), and Resin (20%) independently.
+    - The Elder's summoned roots remain unaffected.
+  - [b]Crown of Roots Changes[/b]
+    - Purchase price reduced from 3,000 to 2,000 Coins.
+    - Can now be repaired at a level 3 Workbench.
+  - [b]More Serpent Spawns[/b]
+    - Increased regular Ocean Serpent spawn frequency after Bonemass and Moder.
+  - [b]Small Serpent Spawns[/b]
+    - Added Sea Wyrms to deep Ocean and coastal waters after Bonemass.
+    - Smaller, weaker Serpents that drop 2–3 Serpent Meat.
+    - Spawn frequency increases after Moder.
+  - [b]Paving Without Leveling[/b]
+    - Added a new Hoe operation for paving without changing terrain height or smoothing.
+  - [b]Adjustable Hoe & Cultivator Radius[/b]
+    - Added mouse-wheel radius adjustment for six terrain operations, with separate radius memory and a 1–7 meter range.
 
 [size=4][b]v1.7.6[/b][/size]
 - [b]Fixes:[/b]

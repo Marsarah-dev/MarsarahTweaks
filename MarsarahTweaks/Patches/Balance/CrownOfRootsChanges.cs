@@ -11,7 +11,7 @@ namespace MarsarahTweaks.Patches.Balance
 {
 	internal class CrownOfRootsChanges
 	{
-		private static readonly LogManager log = new LogManager("Crown of Roots Changes", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Crown of Roots Changes", LogManager.LogLevel.Warning);
 
 		private const string CrownPrefabName = "HelmetRootCrown";
 		private const string WorkbenchPrefabName = "piece_workbench";

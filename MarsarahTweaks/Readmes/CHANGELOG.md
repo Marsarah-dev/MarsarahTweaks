@@ -1,4 +1,49 @@
 ## <strong> 📜 Version History </strong>
+v1.8.0
+- **Updates:**
+  - **Permanent Lights**
+    - Reworked into four configurable modes: Off, Lights Only, Lights & Fires, and Lights, Fires, Stoves & Hot Tubs.
+    - Added permanent fuel support for the Stone Oven and Hot Tub in the highest mode.
+    - Light and fire build-cost adjustments now follow the selected mode.
+    - Default mode is Lights & Fires.
+  - **Food and Mead Modifications**
+    - Berserkir Mead Base: Mushroom and Yellow Mushroom requirements reduced from 10 to 5 each.
+    - Pulled Bear: Health increased from 37 to 45.
+  - **Creature Unleveler By Boss**
+    - Deer level-up chance increased to 20% after defeating The Elder.
+    - Leech level-up chance increased to 30% after defeating Moder.
+  - **Cheaper Build Pieces Amounts**
+    - Bird's Nest: Acorn requirement reduced from 3 to 1.
+
+- **New Features:**
+  - **Standardized Food Durations**
+    - Increases the duration of selected foods based on preparation type and biome progression.
+    - Raw edible ingredients last 15 minutes, cooked Ashlands meats 25 minutes, and prepared meals at least 30 minutes. Other cooked meats remain on their vanilla 20 minutes duration.
+    - Only increases durations where needed, without changing food stats or Deep North foods.
+  - **Black Forest Root Drops**
+    - Wild roots in the alternate Black Forest biome can drop Wood (50%), Core Wood (50%), and Resin (20%), each with independent chances.
+    - Roots summoned by The Elder remain unaffected.
+  - **Crown of Roots Changes**
+    - Reduced the Crown of Roots purchase price from 3,000 to 2,000 Coins.
+    - The Crown of Roots can now be repaired at a level 3 Workbench.
+  - **More Serpent Spawns**
+    - After Bonemass, nighttime Serpents have a 10% spawn chance and an 800-second interval.
+    - After Moder, nighttime Serpents have a 15% spawn chance and a 700-second interval; rain and storm Serpents have a 10% chance and an 800-second interval.
+  - **Small Serpent Spawns**
+    - Added Sea Wyrms, smaller and weaker Serpents found in deep Ocean and coastal waters after Bonemass.
+    - Sea Wyrms have 200 Health, 55% of normal Serpent size, and 50% of normal Serpent damage.
+    - They drop 2–3 Serpent Meat, without Scales or Trophies.
+    - Spawn chance increases from 5% after Bonemass to 10% after Moder, with intervals decreasing from 900 to 700 seconds.
+  - **Paving Without Leveling**
+    - Added a new Hoe option for paving terrain without changing its height or smoothing it.
+    - Requires 1 Stone and a nearby Stonecutter.
+    - Automatically disabled when known incompatible terrain mods are installed.
+  - **Adjustable Hoe & Cultivator Radius**
+    - Added mouse-wheel radius adjustment for Level Ground, Pathen, Paved Road, Paving, Cultivate, and Grass.
+    - Supports radii from 1 to 7 meters in 1-meter increments, with a 2-meter minimum for Pathen.
+    - Remembers the radius of each operation separately during the game session and prevents camera zoom while adjusting terrain radius.
+    - Automatically disabled when known incompatible terrain mods are installed.
+
 v1.7.6
 - **Fixes:**
   - **Move Camera Up While Sailing**

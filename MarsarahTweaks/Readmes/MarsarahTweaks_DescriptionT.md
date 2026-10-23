@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.7.6  
+**Version:** 1.8.0  
 **Author:** Marsarah
 
 ---
@@ -179,7 +179,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 ---
 
-### <strong>🔧 Cheaper Build Piece Amounts</strong>
+### <strong>🔧 Cheaper Build Pieces Amounts</strong>
 
 - Reduces the **amount** of materials required to craft vanilla build pieces.
 - Specific details can be found in the **Docs** tab of the **Nexusmods** page.
@@ -214,6 +214,20 @@ They can be toggled mid-game, unless otherwise specified.
 - Toggling mid-game requires **client** relog. 
 - **Conflicts:** Mods that modify vanilla food or mead recipes.  
   - Does not modify new recipes added by other mods.
+
+---
+
+### <strong>🔧 Standardized Food Durations</strong>
+
+- Increases the duration of selected foods based on preparation type and biome progression.
+- Raw edible ingredients last **15 minutes**.
+- Simply cooked meats last **20 minutes**.
+- Simply cooked Ashlands meats last **25 minutes**.
+- Prepared meals last **30 minutes**.
+- Only increases durations where needed. Food health, stamina, and Eitr stats remain unchanged.
+- Deep North foods and feasts are not modified.
+- Toggling mid-game requires a **client** relog for food already in inventory.
+- **Conflicts:** Mods that modify the duration of the same foods.
 
 ---
 
@@ -311,6 +325,14 @@ They can be toggled mid-game, unless otherwise specified.
 - The Vilebone Set recipe is moved to the Workbench as a crafting station (from Forge).
 - Toggling mid-game requires the relevant crafting menu to be reopened.
 - **Conflicts:** Mods that modify the required station level for the named sets.
+
+---
+
+### <strong>🔧 Crown of Roots Changes</strong>
+
+- Reduces the **Crown of Roots** purchase price from **3,000** to **2,000 Coins**.
+- Allows the Crown of Roots to be repaired at a **level 3 Workbench**.
+- **Conflicts:** Mods that modify the Crown of Roots purchase price or repair requirements.
 
 ---
 
@@ -454,6 +476,20 @@ They can be toggled mid-game, unless otherwise specified.
 
 ---
 
+### <strong>🔧 Black Forest Root Drops</strong>
+
+- Adds resource drops to wild roots found in the alternate **Black Forest** biome.
+- Each resource has an independent chance to drop:
+  - **Wood:** 50% chance for 1.
+  - **Core Wood:** 50% chance for 1.
+  - **Resin:** 20% chance for 1.
+- Roots summoned by **The Elder** are unaffected.
+- Respects Automatic Progression Halt when enabled.
+- Toggling mid-game requires reloading the area.
+- **Conflicts:** Mods that modify drops from the same wild roots.
+
+---
+
 ## <strong>⚙️ Features</strong>
 
 All features below are synced with the server.  
@@ -535,6 +571,45 @@ They can be toggled mid-game, unless otherwise specified.
   - This means moving to a new unloaded area will apply the new/old spawn values depending on the toggle. Areas that are currently active (having a player present) will retain the old config spawn data.  
   - Teleporting or simply walking away for a certain distance will make changes take effect if this config is toggled mid-game.
 - **Conflicts:** Mods that modify Ashlands enemy spawn data.
+
+---
+
+### <strong>🔧 More Serpent Spawns</strong>
+
+- Increases the spawn frequency of regular **Serpents** as boss progression advances.
+- **After defeating Bonemass:**
+  - Nighttime Serpent spawn chance: **5% → 10%**.
+  - Spawn interval: **1,000 → 800 seconds**.
+- **After defeating Moder:**
+  - Nighttime Serpent spawn chance: **15%**.
+  - Nighttime spawn interval: **700 seconds**.
+  - Rain and storm Serpent spawn chance: **5% → 10%**.
+  - Rain and storm spawn interval: **1,000 → 800 seconds**.
+- Changes apply automatically as bosses are defeated.
+- **Conflicts:** Mods that modify Ocean Serpent spawning.
+
+---
+
+### <strong>🔧 Small Serpent Spawns</strong>
+
+- Adds **Sea Wyrms**, smaller and weaker versions of the regular Serpent.
+- Sea Wyrms can be encountered in the **Ocean** and in sufficiently deep coastal waters of the Meadows, Black Forest, Swamp, Plains, and Mistlands.
+- They can spawn during the day or night, regardless of weather.
+- Coastal spawns require a minimum seabed depth of **20 meters**.
+- Sea Wyrms become available after defeating **Bonemass**.
+
+**🔹 Sea Wyrm Stats:**
+- **Size:** 55% of a regular Serpent.
+- **Health:** 200.
+- **Damage:** 50% of regular Serpent damage.
+- **Drops:** 2–3 Serpent Meat, without Serpent Scales or Trophies.
+
+**🔹 Spawn Progression:**
+- **Before Bonemass:** No Sea Wyrms.
+- **After Bonemass:** 5% spawn chance, 900-second interval.
+- **After Moder:** 10% spawn chance, 700-second interval.
+
+- **Conflicts:** Mods that modify Serpent spawning or add similar creatures.
 
 ---
 
@@ -762,11 +837,20 @@ They can be toggled mid-game, unless otherwise specified.
 
 ### <strong>🔧 Permanent Lights</strong>
 
-- Makes fueled light sources permanent by keeping them fully fueled.
-- Modifies the build costs of supported light-source pieces to include their respective maximum fuel amount (wood, resin, coal, etc.).  
-- The **Campfire** max fuel and Wood build cost are set to **5**.
-- The **Hearth** max fuel and Wood build cost are set to **10**.
+- Keeps fueled light sources permanently lit by automatically replenishing their fuel.
+- Offers four configurable modes to choose which pieces receive permanent fuel.
+
+**🔹 Available Modes:**
+- **Off:** Disables Permanent Lights.
+- **Lights Only:** Keeps torches, sconces, braziers, and other decorative lights fueled.
+- **Lights & Fires:** Includes decorative lights, Campfires, Hearths, Bonfires, and other fires. **(Default)**
+- **Lights, Fires, Stoves & Hot Tubs:** Also includes the **Stone Oven** and **Hot Tub**.
+
+- Light and fire build costs are adjusted according to the selected mode to account for their maximum fuel amounts. (wood, resin, coal, etc.).  
+- The **Campfire** max fuel and Wood build cost are set to **5** when fires are included.
+- The **Hearth** max fuel and Wood build cost are set to **10** when fires are included.
 - Campfire and Hearth Wood is refundable when destroyed.
+- Pieces excluded by the selected mode retain their normal fuel behavior and build costs.
 - **Conflicts:** Mods that modify light source fuel or build piece costs (Eternal Fire by Digitalroot, FuelEternal by Marf, TorchesEternal by Xenofell, TorchesEternal by wildbill22).  
   - Compatible with mods that add new light sources. They will be kept fueled, but their build costs will not automatically be modified.
   - Automatically disabled if the above conflicting mods are detected.
@@ -777,6 +861,31 @@ They can be toggled mid-game, unless otherwise specified.
 
 - Displays a message when a player logs out in the top-left corner of the screen and in the chat window.
 - **Conflicts:** No known conflicts.
+
+---
+
+### <strong>🔧 Paving Without Leveling</strong>
+
+- Adds a new **Paving Without Leveling** option to the Hoe.
+- Creates paved ground without changing the terrain height or smoothing the surrounding area.
+- Costs **1 Stone** and requires a nearby **Stonecutter**, just like normal paving.
+- Toggling mid-game adds or removes the option from the Hoe.
+- **Conflicts:** Advanced Terrain Modifiers, ValheimTerrainTools, MyDirtyHoe, Paved Road No Level, Pathside Assistance, and Shack Better Paths.
+  - Automatically disabled if any of the above are detected.
+
+---
+
+### <strong>🔧 Adjustable Hoe & Cultivator Radius</strong>
+
+- Allows terrain operation radius to be adjusted using the **mouse scroll wheel**.
+- Hoe operations: **Level Ground, Pathen, Paved Road, and Paving Without Leveling**.
+- Cultivator operations: **Cultivate and Grass**.
+- Radius can be adjusted in **1-meter increments**, from **1 to 7 meters**.
+  - **Pathen** has a minimum radius of **2 meters**.
+- Each operation remembers its own selected radius during the game session, including when switching tools or terrain operations.
+- Camera zoom is disabled while adjusting the radius of terrain operations.
+- **Conflicts:** Hoe Radius (aedenthorn), TerraHoe, Treadwell, Advanced Terrain Modifiers, ValheimTerraformPlus, SmarterHoe, ValAdvancedHoe, ValheimTerrainTools, and MyDirtyHoe.
+  - Automatically disabled if any of the above are detected.
 
 ---
 ---

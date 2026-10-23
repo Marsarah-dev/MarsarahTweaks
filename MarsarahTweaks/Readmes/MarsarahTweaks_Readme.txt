@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.7.6
+Marsarah Tweaks v1.8.0
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
@@ -803,6 +803,9 @@ MOD CONFIGS
 - Stone Fence
   • Stone:        4  → 3
 
+- Bird's Nest
+  • Acorn:        3 → 1
+
 - Iron cooking Station 
   • Iron:         3  → 2
   • Chain:        3  → 2
@@ -1146,6 +1149,7 @@ MOD CONFIGS
     - Cooked Bear Meat:    1 → 2
     - Blueberries:         1 → 2
   • Amount crafted:        1 → 2
+  • Health:                37 → 45
 
 - Black Soup
   • Resource amounts:
@@ -1356,6 +1360,10 @@ MOD CONFIGS
   • Honey:                 10 → 5
   • Raspberries:           10 → 5
 
+- Berserkir Mead Base
+  • Mushroom:              10 → 5
+  • Yellow Mushroom:       10 → 5
+
 >> Food stacks <<
 The following foods have the stack size increased to 20
 
@@ -1399,6 +1407,72 @@ The following foods have the stack size increased to 20
 - Uncooked Misthare Supreme
 - Uncooked Roasted Crust Pie
 - Uncooked Piquant Pie  
+
+
+------------------- [Standardized Food Durations] ---------------
+
+► Description:
+  Increases the duration of foods based on preparation type and biome progression.
+  Only increases durations where necessary. Foods already meeting or exceeding the target duration remain unchanged.
+  Does not modify Health, Stamina, Eitr or Health Regeneration stats.
+  Deep North foods and feasts are not modified.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay, but requires a CLIENT relog for food already in inventory.
+
+► Conflicts:
+  Incompatible with other mods that modify the duration of the same foods.
+
+▼ Changes (only foods with modified durations are listed):
+
+>> Raw Edible Ingredients: 15 Minutes <<
+
+- Raspberries
+- Blueberries
+- Yellow Mushrooms
+
+>> Simply Cooked Meats: 25 Minutes <<
+
+- Cooked Asksvin Meat
+- Cooked Volture Meat
+
+>> Prepared Meals: 30 Minutes <<
+
+Black Forest:
+- Queen's Jam
+- Deer Stew
+- Mince Meat Sauce
+- Carrot Soup
+
+Swamp:
+- Black Soup
+- Muckshake
+- Sausages
+- Turnip Stew
+
+Mountains:
+- Onion Soup
+- Wolf Meat Skewer
+- Eyescream
+
+Plains:
+- Fish Wraps
+- Bread
+
+Mistlands:
+- Misthare Supreme
+- Mushroom Omelette
+- Salad
+- Yggdrasil Porridge
+- Magically Stuffed Mushroom
+
+Ashlands:
+- Fiery Svinstew
+- Mashed Meat
+- Spicy Marmalade
+- Scorching Medley
+- Sizzling Berry Broth
+- Sparkling Shroomshake
 
 
 ========================= [Balance] ============================
@@ -1496,6 +1570,25 @@ The following foods have the stack size increased to 20
 
 ► Conflicts:
   Incompatible with other mods that modify the required station level for the named sets.
+
+
+-------------------- [Crown of Roots Changes] -------------------
+
+► Description:
+  Reduces the Crown of Roots purchase price and allows repairing it at a Workbench.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+  Purchase prices are updated when interacting with the trader.
+
+► Conflicts:
+  Incompatible with other mods that modify the Crown of Roots purchase price or repair requirements.
+
+▼ Changes:
+
+- Crown of Roots
+  • Purchase Price: 3000 → 2000 Coins
+  • Repair Station: Level 3 Workbench
 
 
 ------------------ [Forsaken Powers Cooldowns] -----------------
@@ -1752,6 +1845,30 @@ The following foods have the stack size increased to 20
   - Increased Soft Tissue drop chance to 100% (from 25%)
 
 
+------------------- [Black Forest Root Drops] -------------------
+
+► Description:
+  Adds resource drops to wild roots found in the alternate Black Forest biome.
+  Each resource has an independent chance to drop, so multiple resources may drop from the same root.
+
+  Roots summoned by The Elder are unaffected.
+  Respects Automatic Progression Halt when enabled.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+  Requires reloading the area.
+
+► Conflicts:
+  Incompatible with other mods that modify wild root drops.
+
+▼ Changes:
+
+- Wild Roots
+  • Wood:       1 at 50% chance
+  • Core Wood:  1 at 50% chance
+  • Resin:      1 at 20% chance
+
+
 ========================= [Features] ===========================
 ► All configs in this section are synced with server.
 
@@ -1823,6 +1940,9 @@ The following foods have the stack size increased to 20
     - Max stars:       0   → 1
 
 - Elder Defeated
+  • Deer
+    - Level up chance: 15% → 20%
+
   • Greydwarf
     - Level up chance: 10% → 20%
 
@@ -1854,6 +1974,9 @@ The following foods have the stack size increased to 20
     - Level up chance: 20%
 
 - Moder Defeated
+  • Leech
+    - Level up chance: 20% → 30%
+
   • Fenring
     - Level up chance: 0% → 10%
     - Max stars:       0  → 1
@@ -1987,6 +2110,86 @@ The following foods have the stack size increased to 20
 - Lava Blob
   • Max spawned:    2 → 1
   • Max group size: 2 → 1
+
+
+-------------------- [More Serpent Spawns] ----------------------
+
+► Description:
+  Increases the spawn frequency of regular Ocean Serpents based on defeated bosses.
+  Serpents become more common as the world progresses.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+  Changes are automatically applied when the relevant boss is defeated.
+
+► Conflicts:
+  Incompatible with other mods that modify Ocean Serpent spawning.
+
+▼ Changes:
+
+- Bonemass Defeated
+  • Nighttime Serpents:
+    - Spawn chance:   5% → 10%
+    - Spawn interval: 1000s → 800s
+
+- Moder Defeated
+  • Nighttime Serpents:
+    - Spawn chance:   10% → 15%
+    - Spawn interval: 800s → 700s
+
+  • Rain and Storm Serpents:
+    - Spawn chance:   5% → 10%
+    - Spawn interval: 1000s → 800s
+
+
+-------------------- [Small Serpent Spawns] ---------------------
+
+► Description:
+  Adds Sea Wyrms, smaller and weaker versions of regular Serpents.
+  Sea Wyrms appear in deep Ocean and coastal waters after Bonemass is defeated.
+  They can spawn during the day or night, in any weather.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+  Spawn rates automatically increase after defeating Moder.
+  Existing Sea Wyrms are not removed when the feature is disabled.
+
+► Conflicts:
+  Incompatible with other mods that modify Serpent spawning or add similar creatures.
+
+▼ Sea Wyrm Stats:
+
+- Size:    55% of a regular Serpent
+- Health:  200
+- Damage:  50% of regular Serpent damage
+- Drops:   2–3 Serpent Meat
+           No Serpent Scales or Trophies
+
+▼ Spawn Areas:
+
+- Ocean
+- Coastal Meadows
+- Coastal Black Forest
+- Coastal Swamp
+- Coastal Plains
+- Coastal Mistlands
+
+  • Minimum seabed depth: 20 meters
+  • Time: Day and Night
+  • Weather: Any
+
+▼ Spawn Progression:
+
+- Before Bonemass
+  • Spawn chance: 0% (disabled)
+
+- Bonemass Defeated
+  • Spawn chance:   5%
+  • Spawn interval: 900s
+
+- Moder Defeated
+  • Spawn chance:   10%
+  • Spawn interval: 700s
 
 
 ----------------- [Clear Mistlands After Queen] ----------------
@@ -2307,25 +2510,53 @@ The following foods have the stack size increased to 20
 ---------------------- [Permanent Lights] ----------------------
 
 ► Description:
-  Makes fueled light sources permanent by keeping them fully fueled.
-  Modifies the build costs of supported light-source pieces to include their respective maximum fuel amount (wood, resin, coal, etc.).
+  Keeps fueled light sources permanently lit by automatically replenishing their fuel.
+  Modifies the build costs of light-source pieces to include their respective maximum fuel amount (wood, resin, coal, etc.).
 
-  Campfire:
+  Four modes are available to control which pieces receive permanent fuel.
+
+▼ Modes:
+
+- Off
+  • Disables Permanent Lights.
+  • Lights, fires and other pieces use fuel normally.
+
+- Lights Only
+  • Keeps torches, sconces, braziers and other decorative lights permanently fueled.
+  • Campfires, Hearths and other fires still consume fuel.
+
+- Lights & Fires (DEFAULT)
+  • Includes all decorative lights.
+  • Also keeps Campfires, Hearths, Bonfires and other fires permanently fueled.
+  • Stone Ovens and Hot Tubs still consume fuel normally.
+
+- Lights, Fires, Stoves & Hot Tubs
+  • Includes all decorative lights and fires.
+  • Also permanently fuels Stone Ovens and Hot Tubs.
+
+▼ Build Cost Changes:
+
+  Light and fire build costs are adjusted to include their maximum fuel amounts when covered by the selected mode.
+
+  Campfire (when fires are included):
   • Max fuel:        10 → 5
   • Wood build cost: 2  → 5
 
-  Hearth:
+  Hearth (when fires are included):
   • Max fuel:        20 → 10
   • Wood build cost: 0  → 10
 
-  Campfire and Hearth Wood is refundable when destroyed.
+  Campfire and Hearth Wood remains refundable when destroyed.
+  Pieces excluded by the selected mode retain their normal fuel behavior and build costs.
 
 ► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
+  Modes can be changed during gameplay.
+  Fuel behavior and applicable build costs update according to the selected mode.
 
 ► Conflicts:
   Incompatible with other mods that modify light-source fuel or build-piece costs.
-  Compatible with mods that add new light sources. They will be kept fueled, but their build costs will not automatically be modified.
+  Automatically disabled when Eternal Fire, FuelEternal or TorchesEternal are detected.
+  Compatible with mods that add new light sources. Their build costs are not automatically adjusted.
 
 
 -------------------- [Player Logout Announce] -------------------
@@ -2341,9 +2572,128 @@ The following foods have the stack size increased to 20
   No known conflicts.
 
 
+------------------- [Paving Without Leveling] -------------------
+
+► Description:
+  Adds an additional Paving option to the Hoe.
+  Creates paved ground without changing terrain height or smoothing the surrounding area.
+
+  • Cost: 1 Stone
+  • Required Station: Stonecutter
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  Automatically disabled if any of the following mods are installed:
+  - Advanced Terrain Modifiers
+  - ValheimTerrainTools
+  - MyDirtyHoe
+  - Paved Road No Level
+  - Pathside Assistance
+  - Shack Better Paths
+
+
+--------------- [Adjustable Hoe & Cultivator Radius] ------------
+
+► Description:
+  Allows adjusting the radius of supported Hoe and Cultivator terrain operations using the mouse scroll wheel.
+
+  Each terrain operation remembers its selected radius independently during the game session.
+  Radius settings are retained when switching between operations or tools.
+  Camera zoom is disabled while using the mouse wheel to adjust supported terrain operations.
+
+▼ Supported Operations:
+
+  Hoe:
+  - Level Ground
+  - Pathen
+  - Paved Road
+  - Paving Without Leveling
+
+  Cultivator:
+  - Cultivate
+  - Grass
+
+▼ Radius Settings:
+
+  • Minimum radius: 1 meter
+  • Maximum radius: 7 meters
+  • Adjustment step: 1 meter
+  • Pathen minimum radius: 2 meters
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  Automatically disabled if any of the following mods are installed:
+  - Hoe Radius (aedenthorn)
+  - TerraHoe
+  - Treadwell
+  - Advanced Terrain Modifiers
+  - ValheimTerraformPlus
+  - SmarterHoe
+  - ValAdvancedHoe
+  - ValheimTerrainTools
+  - MyDirtyHoe
+
 
 VERSION HISTORY
 ================================================================
+
+v1.8.0
+- Updates:
+  - Permanent Lights
+    - Reworked into four modes: Off, Lights Only, Lights & Fires, and Lights, Fires, Stoves & Hot Tubs.
+    - Added permanent fuel support for Stone Ovens and Hot Tubs.
+    - Build-cost adjustments now follow the selected mode.
+    - Default mode is Lights & Fires.
+
+  - Food and Mead Modifications
+    - Berserkir Mead Base: Mushroom and Yellow Mushroom costs reduced from 10 to 5 each.
+    - Pulled Bear: Health increased from 37 to 45.
+
+  - Creature Unleveler By Boss
+    - Deer level-up chance increased to 20% after The Elder.
+    - Leech level-up chance increased to 30% after Moder.
+
+  - Cheaper Build Pieces Amounts
+    - Bird's Nest Acorn cost reduced from 3 to 1.
+
+- New Features:
+  - Standardized Food Durations
+    - Increases selected raw ingredients to at least 15 minutes.
+    - Increases selected cooked Ashlands meats to at least 25 minutes.
+    - Increases selected prepared meals to at least 30 minutes.
+    - Does not change other food stats or Deep North foods.
+
+  - Black Forest Root Drops
+    - Wild roots in the alternate Black Forest can drop Wood (50%), Core Wood (50%), and Resin (20%) independently.
+    - Roots summoned by The Elder are unaffected.
+
+  - Crown of Roots Changes
+    - Purchase price reduced from 3000 to 2000 Coins.
+    - Can now be repaired at a level 3 Workbench.
+
+  - More Serpent Spawns
+    - Increased nighttime Serpent spawn chance and frequency after Bonemass.
+    - Further increased nighttime Serpent spawns and rain/storm Serpent spawns after Moder.
+
+  - Small Serpent Spawns
+    - Added Sea Wyrms to deep Ocean and coastal waters after Bonemass.
+    - Sea Wyrms have 55% of normal Serpent size, 200 Health and 50% damage.
+    - Drop 2–3 Serpent Meat without Scales or Trophies.
+    - Spawn frequency increases after Moder.
+
+  - Paving Without Leveling
+    - Added a Hoe option that paves terrain without changing height or smoothing it.
+    - Automatically disabled when known incompatible terrain mods are installed.
+
+  - Adjustable Hoe & Cultivator Radius
+    - Added mouse-wheel radius adjustment for six terrain operations.
+    - Supports a 1–7 meter range, with a 2-meter minimum for Pathen.
+    - Each operation remembers its radius separately during the game session.
+    - Automatically disabled when known incompatible terrain mods are installed.
 
 v1.7.6
 - Fixes:

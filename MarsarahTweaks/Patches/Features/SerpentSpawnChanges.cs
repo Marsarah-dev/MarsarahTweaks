@@ -11,7 +11,7 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class SerpentSpawnChanges
 	{
-		private static readonly LogManager log = new LogManager("Serpent Spawns", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Serpent Spawns", LogManager.LogLevel.Warning);
 
 		private const string SmallSerpentPrefabName = "MSmallSerpent";
 		private const string SmallSerpentSpawnerName = "MSmallSerpent [Ocean]";
