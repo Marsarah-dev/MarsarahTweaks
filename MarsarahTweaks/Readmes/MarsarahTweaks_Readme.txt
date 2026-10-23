@@ -1431,7 +1431,7 @@ The following foods have the stack size increased to 20
 - Blueberries
 - Yellow Mushrooms
 
->> Simply Cooked Meats: 25 Minutes <<
+>> Simply Cooked Ashlands Meats: 25 Minutes <<
 
 - Cooked Asksvin Meat
 - Cooked Volture Meat
@@ -2662,9 +2662,9 @@ v1.8.0
 
 - New Features:
   - Standardized Food Durations
-    - Increases selected raw ingredients to at least 15 minutes.
-    - Increases selected cooked Ashlands meats to at least 25 minutes.
-    - Increases selected prepared meals to at least 30 minutes.
+    - Increases raw ingredients to at least 15 minutes.
+    - Increases cooked Ashlands meats to at least 25 minutes.
+    - Increases prepared meals to at least 30 minutes.
     - Does not change other food stats or Deep North foods.
 
   - Black Forest Root Drops

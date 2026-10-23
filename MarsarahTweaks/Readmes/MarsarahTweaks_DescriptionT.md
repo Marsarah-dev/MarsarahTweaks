@@ -189,10 +189,10 @@ They can be toggled mid-game, unless otherwise specified.
 
 ---
 
-### <strong>🔧 Alternate Build Piece Materials</strong>
+### <strong>🔧 Alternate Build Pieces Materials</strong>
 
 - Alters some **material types** required for specific vanilla build pieces.  
-- Pairs well with the Cheaper Build Piece Amounts option
+- Pairs well with the Cheaper Build Pieces Amounts option
 - **Note:** This will move the Workbench Toolrack extension from the Mountain to Swamp biome
 - Toggling mid-game requires reopening the build menu.
 - **Conflicts:** Mods that modify vanilla build piece costs.  
@@ -221,7 +221,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 - Increases the duration of selected foods based on preparation type and biome progression.
 - Raw edible ingredients last **15 minutes**.
-- Simply cooked meats last **20 minutes**.
+- Other simply cooked meats retain their vanilla durations.
 - Simply cooked Ashlands meats last **25 minutes**.
 - Prepared meals last **30 minutes**.
 - Only increases durations where needed. Food health, stamina, and Eitr stats remain unchanged.
@@ -846,7 +846,7 @@ They can be toggled mid-game, unless otherwise specified.
 - **Lights & Fires:** Includes decorative lights, Campfires, Hearths, Bonfires, and other fires. **(Default)**
 - **Lights, Fires, Stoves & Hot Tubs:** Also includes the **Stone Oven** and **Hot Tub**.
 
-- Light and fire build costs are adjusted according to the selected mode to account for their maximum fuel amounts. (wood, resin, coal, etc.).  
+- Light and fire build costs are adjusted according to the selected mode to account for their maximum fuel amounts (wood, resin, coal, etc.).  
 - The **Campfire** max fuel and Wood build cost are set to **5** when fires are included.
 - The **Hearth** max fuel and Wood build cost are set to **10** when fires are included.
 - Campfire and Hearth Wood is refundable when destroyed.
@@ -857,7 +857,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 ---
 
-### <strong>🔧Player Logout Announce</strong>
+### <strong>🔧 Player Logout Announce</strong>
 
 - Displays a message when a player logs out in the top-left corner of the screen and in the chat window.
 - **Conflicts:** No known conflicts.

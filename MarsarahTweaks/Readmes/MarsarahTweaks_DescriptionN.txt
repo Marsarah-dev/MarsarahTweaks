@@ -214,7 +214,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 - Increases the duration of selected foods based on preparation type and biome progression.
 - Raw edible ingredients last [b]15 minutes[/b].
-- Simply cooked meats last [b]20 minutes[/b].
+- Other simply cooked meats retain their vanilla durations.
 - Simply cooked Ashlands meats last [b]25 minutes[/b].
 - Prepared meals last [b]30 minutes[/b].
 - Only increases durations where needed. Food health, stamina, and Eitr stats remain unchanged.
@@ -795,7 +795,7 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Lights & Fires:[/b] Includes decorative lights, Campfires, Hearths, Bonfires, and other fires. [b](Default)[/b]
 - [b]Lights, Fires, Stoves & Hot Tubs:[/b] Also includes the [b]Stone Oven[/b] and [b]Hot Tub[/b].
 
-- Light and fire build costs are adjusted according to the selected mode to account for their maximum fuel amounts. (wood, resin, coal, etc.).  
+- Light and fire build costs are adjusted according to the selected mode to account for their maximum fuel amounts (wood, resin, coal, etc.).  
 - The [b]Campfire[/b] max fuel and Wood build cost are set to [b]5[/b] when fires are included.
 - The [b]Hearth[/b] max fuel and Wood build cost are set to [b]10[/b] when fires are included.
 - Campfire and Hearth Wood is refundable when destroyed.
@@ -861,7 +861,7 @@ Thanks for checking out Marsarah Tweaks!
 Blaxxun-bloop - for ServerSync
 
 
-[size=5][b]🧑‍🤝‍🧑 Version History[/b][/size]
+[size=5][b]📜 Version History[/b][/size]
 
 [size=4][b]v1.8.0[/b][/size]
 - [b]Updates:[/b]
