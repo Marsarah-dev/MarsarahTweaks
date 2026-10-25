@@ -7,7 +7,7 @@ IMPLEMENTED - NOT RELEASED
 
 A. Fixes
 ------------------------------
-* Fixed a null refference error with regards to the small serpent spawns. 
+* Addressed intermittent null-reference errors related to Small Serpent Spawns by improving Sea Wyrm prefab registration, lifecycle management, and spawn-entry validation.
 
 B. Updates
 ------------------------------

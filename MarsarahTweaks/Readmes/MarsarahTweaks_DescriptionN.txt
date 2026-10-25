@@ -863,6 +863,13 @@ Blaxxun-bloop - for ServerSync
 
 [size=5][b]📜 Version History[/b][/size]
 
+
+[size=4][b]v1.8.1[/b][/size]
+- [b]Fixes:[/b]
+  - [b]Small Serpent Spawns[/b]
+    - Improved Sea Wyrm prefab registration and lifecycle handling to address intermittent null-reference errors during multiplayer spawning.
+    - Added safeguards to validate and restore spawn-entry prefab references, or temporarily disable the affected spawn entry when the prefab is unavailable.
+
 [size=4][b]v1.8.0[/b][/size]
 - [b]Updates:[/b]
   - [b]Permanent Lights[/b]

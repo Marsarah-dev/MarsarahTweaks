@@ -2641,6 +2641,12 @@ Ashlands:
 VERSION HISTORY
 ================================================================
 
+v1.8.1
+- Fixes:
+  - Small Serpent Spawns
+    - Improved Sea Wyrm prefab registration and lifecycle handling to address intermittent null-reference errors during multiplayer spawning.
+    - Added safeguards to validate and restore spawn-entry prefab references, or temporarily disable the affected spawn entry when the prefab is unavailable.
+
 v1.8.0
 - Updates:
   - Permanent Lights

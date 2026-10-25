@@ -17,19 +17,19 @@ namespace MarsarahTweaks.Patches.Features
 		private const string SmallSerpentSpawnerName = "MSmallSerpent [Ocean]";
 		private const string BonemassGlobalKey = "defeated_bonemass";
 
-		private static readonly float serpentChanceNightBonemass = 10f; // 8f;
+		private static readonly float serpentChanceNightBonemass = 10f;
 		private static readonly float serpentIntervalNightBonemass = 800f;
-		private static readonly float serpentChanceRainModer = 10f; // 8f;
-		private static readonly float serpentChanceNightModer = 15f; // 12f;
+		private static readonly float serpentChanceRainModer = 10f;
+		private static readonly float serpentChanceNightModer = 15f;
 		private static readonly float serpentIntervalRainModer = 800f;
 		private static readonly float serpentIntervalNightModer = 700f;
 
 		private static readonly float smallSerpentScale = 0.55f;
 		private static readonly float smallSerpentHealth = 200f;
 		private static readonly float smallSerpentDamageMultiplier = 0.5f;
-		private static readonly float smallSerpentChanceBonemass = 5f; // 2f;
+		private static readonly float smallSerpentChanceBonemass = 5f;
 		private static readonly float smallSerpentIntervalBonemass = 900f;
-		private static readonly float smallSerpentChanceModer = 10f; // 3f;
+		private static readonly float smallSerpentChanceModer = 10f;
 		private static readonly float smallSerpentIntervalModer = 700f;
 
 		private static readonly MethodInfo memberwiseClone = typeof(object).GetMethod("MemberwiseClone", BindingFlags.Instance | BindingFlags.NonPublic);
