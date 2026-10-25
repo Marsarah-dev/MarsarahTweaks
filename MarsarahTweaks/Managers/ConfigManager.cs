@@ -103,6 +103,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata FrostStaffModifications = new ConfigMetadata("Better Frost Staff Accuracy", "Improves Staff of Frost Accuracy", ConfigSections.Balance, 40);
 			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("Reduced Crossbows Reload Time", "Crossbows Reload Time Reduced by 1s. (Toggling mid-game requires CLIENT relog)", ConfigSections.Balance, 30);
 			public static readonly ConfigMetadata KeepCrossbowsLoaded = new ConfigMetadata("Keep Crossbows Loaded", "Fully loaded crossbows remain loaded when sheathed or switched. Partially completed reloads are not preserved.", ConfigSections.Balance, 25);
+			public static readonly ConfigMetadata CrossbowReloadWhileMoving = new ConfigMetadata("Crossbow Reload While Moving", "Crossbow reloads continue at 50% speed while sprinting or jumping instead of resetting.", ConfigSections.Balance, 24);
 			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("Better Trophy Drop Rates", "Increases trophy drop rate for the following creatures: Rancid Remains, Ghost, Bear, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Vile, Tick, Dverger, Seeker Soldier, Charred Warlock", ConfigSections.Balance, 20);
 			public static readonly ConfigMetadata DropsModifications = new ConfigMetadata("Better Creature Drops", "Modifies the drops for the following creatures: Fenring (adds Fenris Hair and Fenris Claw, removes Wolf Fang), Bat (adds 50% Bloodbag drop), Dvergr (increases chance of Soft Tissue to 100% from 25%)", ConfigSections.Balance, 10);
 			public static readonly ConfigMetadata RootForestDrops = new ConfigMetadata("Black Forest Root Drops", "Adds independent drop chances to Roots in the Root Black Forest alternate biome: 50% for 1 Wood, 50% for 1 Core Wood, and 20% for 1 Resin. Roots summoned by the Elder are unaffected.", ConfigSections.Balance, 5);
@@ -175,6 +176,7 @@ namespace MarsarahTweaks.Managers
 		//public static ConfigEntry<bool> HealStaffEnabled;
 		public static ConfigEntry<bool> ReducedCrossbowsReloadTimeEnabled;
 		public static ConfigEntry<bool> KeepCrossbowsLoadedEnabled;
+		public static ConfigEntry<bool> CrossbowReloadWhileMovingEnabled;
 		public static ConfigEntry<bool> BetterTrophyDropsEnabled;
 		public static ConfigEntry<bool> BetterDropsEnabled;
 		public static ConfigEntry<bool> RootForestDropsEnabled;
@@ -251,6 +253,7 @@ namespace MarsarahTweaks.Managers
 			//HealStaffEnabled = CreateConfig(ConfigSections.Balance, Configs.HealStaffModifications.Name, true, Configs.HealStaffModifications.Description);
 			ReducedCrossbowsReloadTimeEnabled = CreateConfig(Configs.CrossbowsReloadModifications, true);
 			KeepCrossbowsLoadedEnabled = CreateConfig(Configs.KeepCrossbowsLoaded, true);
+			CrossbowReloadWhileMovingEnabled = CreateConfig(Configs.CrossbowReloadWhileMoving, true);
 			BetterTrophyDropsEnabled = CreateConfig(Configs.TrophyDropsModifications, true);
 			BetterDropsEnabled = CreateConfig(Configs.DropsModifications, true);
 			RootForestDropsEnabled = CreateConfig(Configs.RootForestDrops, true);

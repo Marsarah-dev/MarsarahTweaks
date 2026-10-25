@@ -7,19 +7,24 @@ IMPLEMENTED - NOT RELEASED
 
 A. Fixes
 ------------------------------
-* Addressed intermittent null-reference errors related to Small Serpent Spawns by improving Sea Wyrm prefab registration, lifecycle management, and spawn-entry validation.
 
 B. Updates
 ------------------------------
 
 C. New Features
 ------------------------------
+* Store crossbow reload state
 
 D. Others
 ------------------------------
 
 E. Test
 ------------------------------
+
+F. In Progress
+------------------------------
+* Crossbow reload does not reset on player jump or sprint.
+
 
 ============================================================
 TO IMPLEMENT
