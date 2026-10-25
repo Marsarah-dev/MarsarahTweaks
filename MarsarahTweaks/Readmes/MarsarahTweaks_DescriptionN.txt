@@ -172,6 +172,8 @@ They can be toggled mid-game, unless otherwise specified.
 &nbsp;&nbsp;&nbsp;• Material: Flametal → Sulfur
 - [b]Dundr:[/b]
 &nbsp;&nbsp;&nbsp;• Material: Bloodstone → Iolite
+- [b]Grappling Hook:[/b]
+&nbsp;&nbsp;&nbsp;• Material: Mandible → Chain
 
 
 [size=4][b]🔧 Cheaper Build Pieces Amounts[/b][/size]
@@ -409,19 +411,19 @@ They can be toggled mid-game, unless otherwise specified.
 
 [size=4][b]🔧 Keep Crossbows Loaded[/b][/size]
 
-- Fully loaded crossbows remain loaded when sheathed or switched to another weapon.
-- Each crossbow remembers its own loaded state.
+- Fully loaded crossbows and the Grappling Hook remain loaded when sheathed or switched to another weapon.
+- Each weapon remembers its own loaded state.
 - Partial reloads are not preserved when switching weapons.
 - Can be enabled/disabled during gameplay.
-- [b]Conflicts:[/b] Mods that modify crossbow loading behavior.
+- [b]Conflicts:[/b] May conflict with mods that modify weapon loading behavior.
 
 
 [size=4][b]🔧 Crossbow Reload While Moving[/b][/size]
 
-- Crossbow reloading continues while sprinting or jumping instead of resetting.
-- Reloading is 50% slower while sprinting or airborne and returns to normal speed afterward.
+- Crossbows and the Grappling Hook can continue reloading while sprinting or jumping instead of resetting.
+- Reloading proceeds at 50% of normal speed while sprinting or airborne and returns to normal speed afterward.
 - Can be enabled/disabled during gameplay.
-- [b]Conflicts:[/b] Mods that modify reload interruptions or crossbow reload behavior.
+- [b]Conflicts:[/b] May conflict with mods that modify reload interruptions or weapon loading behavior.
 
 
 [size=4][b]🔧 Better Trophy Drop Rates[/b][/size]
@@ -879,6 +881,15 @@ Blaxxun-bloop - for ServerSync
 
 
 [size=5][b]📜 Version History[/b][/size]
+
+[size=4][b]v1.8.3[/b][/size]
+- [b]Updates:[/b]
+  - [b]Keep Crossbows Loaded[/b]
+    - Added support for the Grappling Hook, allowing it to retain its loaded state when sheathed or switched.
+  - [b]Crossbow Reload While Moving[/b]
+    - Added support for the Grappling Hook. Reloading continues at 50% speed while sprinting or jumping instead of resetting.
+  - [b]Alternate Gear Recipe Materials[/b]
+    - Grappling Hook: Replaced Mandible with Chain for crafting, retaining the original material amounts (4 to craft).
 
 [size=4][b]v1.8.2[/b][/size]
 - [b]New Features:[/b]

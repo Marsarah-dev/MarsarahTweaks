@@ -1,4 +1,14 @@
 ## <strong> 📜 Version History </strong>
+
+v1.8.3
+- **Updates:**
+  - **Keep Crossbows Loaded**
+    - Added support for the Grappling Hook, allowing it to retain its loaded state when sheathed or switched.
+  - **Crossbow Reload While Moving**
+    - Added support for the Grappling Hook. Reloading continues at 50% speed while sprinting or jumping instead of resetting.
+  - **Alternate Gear Recipe Materials**
+    - Grappling Hook: Replaced Mandible with Chain for crafting, retaining the original material amounts (4 to craft).
+
 v1.8.2
 - **New Features:**
   - **Keep Crossbows Loaded**

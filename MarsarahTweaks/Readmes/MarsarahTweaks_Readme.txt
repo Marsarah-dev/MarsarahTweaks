@@ -777,6 +777,10 @@ MOD CONFIGS
 - Dundr
   • Material:         Bloodstone     → Iolite
 
+- Grappling Hook
+  • Material:         Mandible       → Chain
+
+
 --------------- [Cheaper Build Pieces Amounts] -----------------
 
 ► Description:
@@ -1795,28 +1799,28 @@ Ashlands:
 -------------------- [Keep Crossbows Loaded] -------------------
 
 ► Description:
-  Fully loaded crossbows remain loaded when sheathed or switched to another weapon.
-  Each crossbow remembers its own loaded state.
+  Fully loaded crossbows and the Grappling Hook remain loaded when sheathed or switched to another weapon.
+  Each weapon remembers its own loaded state.
   Partial reloads are not preserved when switching weapons.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  May conflict with other mods that modify crossbow loading behavior.
+  May conflict with mods that modify weapon loading behavior.
 
 
 ---------------- [Crossbow Reload While Moving] ----------------
 
 ► Description:
-  Crossbow reloading continues while sprinting or jumping instead of resetting.
-  Reloading is 50% slower while sprinting or airborne and returns to normal speed afterward.
+  Crossbows and the Grappling Hook can continue reloading while sprinting or jumping instead of resetting.
+  Reloading proceeds at 50% of normal speed while sprinting or airborne and returns to normal speed afterward.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
 
 ► Conflicts:
-  May conflict with other mods that modify reload interruptions or crossbow reload behavior.
+  May conflict with mods that modify reload interruptions or weapon loading behavior.
 
 
 ------------------ [Better Trophy Drop Rates] ------------------
@@ -2667,6 +2671,15 @@ Ashlands:
 
 VERSION HISTORY
 ================================================================
+
+v1.8.3
+- Updates:
+  - Keep Crossbows Loaded
+    - Added support for the Grappling Hook, allowing it to retain its loaded state when sheathed or switched.
+  - Crossbow Reload While Moving
+    - Added support for the Grappling Hook. Reloading continues at 50% speed while sprinting or jumping instead of resetting.
+  - Alternate Gear Recipe Materials
+    - Grappling Hook: Replaced Mandible with Chain for crafting, retaining the original material amounts (4 to craft).
 
 v1.8.2
 - New Features:

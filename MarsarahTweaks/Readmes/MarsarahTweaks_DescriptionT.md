@@ -176,6 +176,8 @@ They can be toggled mid-game, unless otherwise specified.
   - Material:         Flametal       → Sulfur  
 - **Dundr:**  
   - Material:         Bloodstone     → Iolite  
+- **Grappling Hook:**
+  - Material:         Mandible       → Chain  
 
 ---
 
@@ -433,20 +435,20 @@ They can be toggled mid-game, unless otherwise specified.
 
 ### <strong>🔧 Keep Crossbows Loaded</strong>
 
-- Fully loaded crossbows remain loaded when sheathed or switched to another weapon.
-- Each crossbow remembers its own loaded state.
+- Fully loaded crossbows and the Grappling Hook remain loaded when sheathed or switched to another weapon.
+- Each weapon remembers its own loaded state.
 - Partial reloads are not preserved when switching weapons.
 - Can be enabled/disabled during gameplay.
-- **Conflicts:** Mods that modify crossbow loading behavior.
+- **Conflicts:** May conflict with mods that modify weapon loading behavior.
 
 ---
 
 ### <strong>🔧 Crossbow Reload While Moving</strong>
 
-- Crossbow reloading continues while sprinting or jumping instead of resetting.
-- Reloading is 50% slower while sprinting or airborne and returns to normal speed afterward.
+- Crossbows and the Grappling Hook can continue reloading while sprinting or jumping instead of resetting.
+- Reloading proceeds at 50% of normal speed while sprinting or airborne and returns to normal speed afterward.
 - Can be enabled/disabled during gameplay.
-- **Conflicts:** Mods that modify reload interruptions or crossbow reload behavior.
+- **Conflicts:** May conflict with mods that modify reload interruptions or weapon loading behavior.
 
 ---
 
