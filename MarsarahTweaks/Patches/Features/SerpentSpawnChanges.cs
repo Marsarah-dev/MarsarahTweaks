@@ -11,7 +11,7 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class SerpentSpawnChanges
 	{
-		private static readonly LogManager log = new LogManager("Serpent Spawns", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Serpent Spawns", LogManager.LogLevel.Warning);
 
 		private const string SmallSerpentPrefabName = "MSmallSerpent";
 		private const string SmallSerpentSpawnerName = "MSmallSerpent [Ocean]";
@@ -278,8 +278,7 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			if (scene == null || scene.m_prefabs == null) return false;
 			if (smallSerpentPrefab != null && scene.GetPrefab(SmallSerpentPrefabName) == smallSerpentPrefab) return true;
-			if (scene == null || scene.m_prefabs == null) return false;
-
+			
 			Dictionary<int, GameObject> namedPrefabs = namedPrefabsField?.GetValue(scene) as Dictionary<int, GameObject>;
 
 			if (namedPrefabs == null)

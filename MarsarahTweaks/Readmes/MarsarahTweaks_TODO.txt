@@ -7,87 +7,19 @@ IMPLEMENTED - NOT RELEASED
 
 A. Fixes
 ------------------------------
+* Fixed a null refference error with regards to the small serpent spawns. 
 
 B. Updates
 ------------------------------
-* Permanent Lights 
-  - Reworked with four configurable modes (Off; Lights Only; Lights & Fires; Lights, Fires, Stoves & Hot Tubs).
-* Food and Mead Modifications
-  - Reduced Berserkir Mead Base Mushroom and Yellow Mushroom costs from 10 to 5 each.
-  - Increased Pulled Bear health from 37 to 45.
-* Creature Unleveler
-  - Increased Leech levelup chance to 30% after Moder is defeated.
-  - Increased Deer levelup chance to 20% after The Elder is defeated.
-* Cheaper Build Pieces Amounts
-  - Changed Bird's Nest Acorn cost from 3 to 1.
 
 C. New Features
 ------------------------------
-* Paving Without Leveling 
-  - Adds an extra option to the Hoe allowing stone paving without altering terrain height or smoothing.
-  - Automatically disabled when the following mods are detected:
-    1. Advanced Terrain Modifiers
-    2. ValheimTerrainTools
-    3. MyDirtyHoe
-    4. Paved Road No Level
-    5. Pathside Assistance
-    6. Shack Better Paths
-
-* Adjustable Hoe & Cultivator Radius
-  - Added radius adjustment on mouse-wheel for Level Ground, Pathen, Paved Road, Paving, Cultivate, and Grass.
-  - Mouse-wheel radius adjustment is in 1 m increments, with a 1–7 m range (Pathen has a minimum of 2 m, since it does nothing at 1 m).
-  - Disabled camera zoom while adjusting the radius of the above terrain operations.
-  - Added individual radius memory for all six operations, retained when switching tools or selections during a game session.
-  - Automatically disabled when the following mods are detected:
-    1. Hoe Radius (aedenthorn)
-    2. TerraHoe
-    3. Treadwell
-    4. Advanced Terrain Modifiers
-    5. ValheimTerraformPlus
-    6. SmarterHoe
-    7. ValAdvancedHoe
-    8. ValheimTerrainTools
-    9. MyDirtyHoe      
-
-* Added Standardized Food Durations
-  - Increases food durations based on preparation type and biome progression:
-    - Raw edible ingredients: 15 minutes.
-    - Simply cooked meats: 25 minutes.
-    - Prepared meals: 30 minutes.
-    - Only increases durations where needed, leaving other foods unchanged.
-
-* Black Forest Root Drops
-  - Added Wood, Core Wood, and Resin drops to wild roots in the alternate Black Forest biome, respecting Progression Halt.
-
-* Crown of Roots Changes
-  - Reduced Crown of Roots Coin cost from 3k to 2k, and made it repairable at a lvl 3 Workbench.
-
-* More Serpent Spawns
-  - Increased Serpent spawn rate according to defeated boss as follows:
-    - Bonemass defeated: Nighttime serpents spawn chance: 10% (from 5%), and spawn interval: 800s (from 1000s)
-    - Moder defeated: Rain and storm serpents spawn chance: 10% (from 5%), and spawn interval: 800s (from 1000s)
-                      Nighttime serpents spawn chance: 15%, and spawn interval: 700s
-
-* Small Serpent Spawns
-  - Adds smaller versions of the Serpent named Sea Wyrms with the following stats and spawn conditions:
-    - Size: 55% of vanilla Serpent
-    - HP: 200
-    - Damage: 50% of vanilla Serpent
-    - Drops: 2-3 Serpent Meat (no Scales or Trophies)
-    - Spawn areas/biomes: Ocean and coastal Meadows, Black Forest, Swamp, Plains and Mistlands
-      - The non-ocean spawns do not occur too close to the shore, requiring a minimum of 20 sea floor depth.
-    - Spawn chance: 
-      - Before Bonemass: no spawns
-      - Bonemass defeated: 5% chance, 900s intervals
-      - Moder defeated: 10% chance, 700s intervals
 
 D. Others
 ------------------------------
 
 E. Test
 ------------------------------
-* Summoned roots by Elder
-* Serpents in multiplayer
 
 ============================================================
 TO IMPLEMENT

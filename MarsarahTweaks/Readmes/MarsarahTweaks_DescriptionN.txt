@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.8.0
+[b]Version:[/b] 1.8.1
 [b]Author:[/b] Marsarah  
 
 [line]
