@@ -57,7 +57,7 @@ namespace MarsarahTweaks.Patches.Balance
 			{
 				if (action == null) continue;
 				if (action.m_type != Player.MinorActionData.ActionType.Reload) continue;
-				if (!IsCrossbow(action.m_item)) continue;
+				if (!IsCrossbowOrHook(action.m_item)) continue;
 				if (!player.IsItemEquiped(action.m_item)) continue;
 
 				return action;
@@ -71,7 +71,7 @@ namespace MarsarahTweaks.Patches.Balance
 			if (action == null || queue == null) return;
 			if (!IsMovementReloadEnabled()) return;
 			if (player != Player.m_localPlayer) return;
-			if (!IsCrossbow(action.m_item)) return;
+			if (!IsCrossbowOrHook(action.m_item)) return;
 			if (!player.IsItemEquiped(action.m_item)) return;
 			if (queue.Count != 0) return;
 
@@ -120,14 +120,13 @@ namespace MarsarahTweaks.Patches.Balance
 				log.Info($"Applied new Crossbow reload time of {newCrossbowReloadTime}s to {crossbowName}");
 			}
 		}
-
-		private static bool IsCrossbow(ItemDrop.ItemData item)
+		private static bool IsCrossbowOrHook(ItemDrop.ItemData item)
 		{
-			return item != null
-				&& item.m_shared != null
-				&& item.m_shared.m_attack != null
-				&& item.m_shared.m_attack.m_requiresReload
-				&& item.m_shared.m_skillType == Skills.SkillType.Crossbows;
+			if (item == null || item.m_shared == null || item.m_shared.m_attack == null) return false;
+			if (!item.m_shared.m_attack.m_requiresReload) return false;
+
+			return item.m_shared.m_skillType == Skills.SkillType.Crossbows
+				|| (item.m_dropPrefab != null && item.m_dropPrefab.name == "GrapplingHook");
 		}
 
 		[HarmonyPatch(typeof(Humanoid), "UnequipItem")]
@@ -137,7 +136,7 @@ namespace MarsarahTweaks.Patches.Balance
 			{
 				if (!ConfigManager.KeepCrossbowsLoadedEnabled.Value) return;
 				if (!(__instance is Player player) || player != Player.m_localPlayer) return;
-				if (!IsCrossbow(item) || !__instance.IsItemEquiped(item)) return;
+				if (!IsCrossbowOrHook(item) || !__instance.IsItemEquiped(item)) return;
 				if (!ReferenceEquals(loadedWeaponField(player), item)) return;
 
 				item.m_customData[LoadedStateKey] = "1";
@@ -156,7 +155,7 @@ namespace MarsarahTweaks.Patches.Balance
 				if (!weapon.m_customData.Remove(LoadedStateKey)) return;
 
 				if (!ConfigManager.KeepCrossbowsLoadedEnabled.Value) return;
-				if (!IsCrossbow(weapon)) return;
+				if (!IsCrossbowOrHook(weapon)) return;
 
 				if (ReferenceEquals(loadedWeaponField(__instance), weapon)) return;
 

@@ -13,8 +13,7 @@ B. Updates
 
 C. New Features
 ------------------------------
-* Keep Crossbows Loaded
-* Crossbow Reload While Moving (50% reload speed while sprinting or jumping)
+* Added Grappling Hook to the Crossbow changes and modified its crafting cost from Mandible to Chain.
 
 D. Others
 ------------------------------

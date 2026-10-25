@@ -1104,6 +1104,12 @@ namespace MarsarahTweaks.Patches.Grind
 				}
 			},
 			{
+				"Recipe_GrapplingHook", new Dictionary<string, (string, int?, int?)>
+				{
+					{ "Mandible", ("Chain", null, null) } // 4, 1
+				}
+			},
+			{
 				"Recipe_HelmetMage", new Dictionary<string, (string, int?, int?)>
 				{
 					{ "Iron", ("ScaleHide", 3, null) }
