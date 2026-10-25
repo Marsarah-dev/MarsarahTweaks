@@ -8,7 +8,7 @@ namespace MarsarahTweaks.Patches.Balance
 {
 	internal class CrossbowsChanges
 	{
-		private static readonly LogManager log = new LogManager("Crossbow Changes", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Crossbow Changes", LogManager.LogLevel.Warning);
 
 		private const string LoadedStateKey = "MarsarahTweaks.CrossbowLoaded";
 		private static readonly AccessTools.FieldRef<Player, ItemDrop.ItemData> loadedWeaponField = AccessTools.FieldRefAccess<Player, ItemDrop.ItemData>("m_weaponLoaded");
