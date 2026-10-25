@@ -11,7 +11,7 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class SerpentSpawnChanges
 	{
-		private static readonly LogManager log = new LogManager("Serpent Spawns", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Serpent Spawns", LogManager.LogLevel.Info);
 
 		private const string SmallSerpentPrefabName = "MSmallSerpent";
 		private const string SmallSerpentSpawnerName = "MSmallSerpent [Ocean]";
@@ -53,6 +53,12 @@ namespace MarsarahTweaks.Patches.Features
 				Interval = interval;
 			}
 		}
+		private sealed class SmallSerpentSpawnGuardState
+		{
+			public bool DisabledDueToMissingPrefab;
+		}
+
+		private static ConditionalWeakTable<SpawnSystem.SpawnData, SmallSerpentSpawnGuardState> smallSerpentGuardStates = new ConditionalWeakTable<SpawnSystem.SpawnData, SmallSerpentSpawnGuardState>();
 
 		// Do not retain SpawnData from unloaded zones.
 		private static ConditionalWeakTable<SpawnSystem.SpawnData, OriginalSpawnValues> originalSpawnValues = new ConditionalWeakTable<SpawnSystem.SpawnData, OriginalSpawnValues>();
@@ -74,6 +80,7 @@ namespace MarsarahTweaks.Patches.Features
 			private static void Prefix()
 			{
 				originalSpawnValues = new ConditionalWeakTable<SpawnSystem.SpawnData, OriginalSpawnValues>();
+				smallSerpentGuardStates = new ConditionalWeakTable<SpawnSystem.SpawnData, SmallSerpentSpawnGuardState>();
 				lastCheckedStage = null;
 				lastCheckedEnabled = null;
 				lastCheckedSmallEnabled = null;
@@ -140,6 +147,52 @@ namespace MarsarahTweaks.Patches.Features
 				lastCheckedEnabled = enabled;
 				lastCheckedSmallEnabled = smallEnabled;
 				UpdateAllSerpentSpawns();
+			}
+		}
+
+		[HarmonyPatch(typeof(SpawnSystem), "UpdateSpawnList")]
+		private static class SmallSerpentSpawnGuard_Patch
+		{
+			private static void Prefix(List<SpawnSystem.SpawnData> spawners)
+			{
+				if (spawners == null) return;
+
+				foreach (SpawnSystem.SpawnData spawner in spawners)
+				{
+					if (spawner == null || spawner.m_name != SmallSerpentSpawnerName) continue;
+
+					SmallSerpentSpawnGuardState state = smallSerpentGuardStates.GetOrCreateValue(spawner);
+
+					GameObject registeredPrefab = ZNetScene.instance != null ? ZNetScene.instance.GetPrefab(SmallSerpentPrefabName) : null;
+
+					if (registeredPrefab == null)
+					{
+						if (!state.DisabledDueToMissingPrefab)
+						{
+							log.Warn("Sea Wyrm prefab is missing from ZNetScene. Disabling its spawn entry to prevent a NullReferenceException.");
+						}
+
+						state.DisabledDueToMissingPrefab = true;
+						spawner.m_enabled = false;
+						continue;
+					}
+
+					if (spawner.m_prefab != registeredPrefab)
+					{
+						bool referenceWasMissing = spawner.m_prefab == null;
+						spawner.m_prefab = registeredPrefab;
+
+						log.Warn(referenceWasMissing ? "Repaired invalid Sea Wyrm prefab reference." : "Rebound Sea Wyrm to the current ZNetScene prefab.");
+					}
+
+					if (state.DisabledDueToMissingPrefab)
+					{
+						spawner.m_enabled = ConfigManager.SmallSerpentSpawnsEnabled.Value && GlobalKeyChecker.BonemassDefeated;
+						state.DisabledDueToMissingPrefab = false;
+
+						log.Warn("Sea Wyrm prefab recovered. Restored spawn eligibility according to configuration and progression.");
+					}
+				}
 			}
 		}
 
@@ -223,7 +276,8 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static bool RegisterSmallSerpent(ZNetScene scene)
 		{
-			if (smallSerpentPrefab != null) return true;
+			if (scene == null || scene.m_prefabs == null) return false;
+			if (smallSerpentPrefab != null && scene.GetPrefab(SmallSerpentPrefabName) == smallSerpentPrefab) return true;
 			if (scene == null || scene.m_prefabs == null) return false;
 
 			Dictionary<int, GameObject> namedPrefabs = namedPrefabsField?.GetValue(scene) as Dictionary<int, GameObject>;
@@ -262,6 +316,7 @@ namespace MarsarahTweaks.Patches.Features
 
 			// An inactive parent keeps the cloned prefab from running creature logic before spawning.
 			prefabContainer = new GameObject("MarsarahTweaks_SerpentPrefabs");
+			prefabContainer.transform.SetParent(scene.transform, false);
 			prefabContainer.SetActive(false);
 			GameObject clone = UnityEngine.Object.Instantiate(original, prefabContainer.transform);
 			clone.name = SmallSerpentPrefabName;
@@ -361,6 +416,12 @@ namespace MarsarahTweaks.Patches.Features
 				}
 
 				if (smallSpawner == null) continue;
+
+				if (smallSpawner.m_prefab != smallSerpentPrefab)
+				{
+					smallSpawner.m_prefab = smallSerpentPrefab;
+					log.Warn("Rebound Sea Wyrm spawn entry to the registered prefab.");
+				}
 
 				matchedEntries++;
 				smallSpawner.m_enabled = shouldSpawn;
