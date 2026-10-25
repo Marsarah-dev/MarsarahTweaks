@@ -407,6 +407,23 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Conflicts:[/b] Mods that modify Crossbows reload time.
 
 
+[size=4][b]🔧 Keep Crossbows Loaded[/b][/size]
+
+- Fully loaded crossbows remain loaded when sheathed or switched to another weapon.
+- Each crossbow remembers its own loaded state.
+- Partial reloads are not preserved when switching weapons.
+- Can be enabled/disabled during gameplay.
+- [b]Conflicts:[/b] Mods that modify crossbow loading behavior.
+
+
+[size=4][b]🔧 Crossbow Reload While Moving[/b][/size]
+
+- Crossbow reloading continues while sprinting or jumping instead of resetting.
+- Reloading is 50% slower while sprinting or airborne and returns to normal speed afterward.
+- Can be enabled/disabled during gameplay.
+- [b]Conflicts:[/b] Mods that modify reload interruptions or crossbow reload behavior.
+
+
 [size=4][b]🔧 Better Trophy Drop Rates[/b][/size]
 
 - Increases trophy drop rate for some creatures.
@@ -863,6 +880,14 @@ Blaxxun-bloop - for ServerSync
 
 [size=5][b]📜 Version History[/b][/size]
 
+[size=4][b]v1.8.2[/b][/size]
+- [b]New Features:[/b]
+  - [b]Keep Crossbows Loaded[/b]
+    - Fully loaded crossbows retain their loaded state when sheathed or switched to another weapon.
+    - Each crossbow remembers its own loaded state, eliminating unnecessary reloading when re-equipped.
+  - [b]Crossbow Reload While Moving[/b]
+    - Crossbow reloading is no longer interrupted by sprinting or jumping.
+    - Reload progress continues at 50% speed while sprinting or airborne and returns to normal speed afterward.
 
 [size=4][b]v1.8.1[/b][/size]
 - [b]Fixes:[/b]

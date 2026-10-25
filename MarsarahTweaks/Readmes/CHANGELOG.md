@@ -1,4 +1,13 @@
 ## <strong> 📜 Version History </strong>
+v1.8.2
+- **New Features:**
+  - **Keep Crossbows Loaded**
+    - Fully loaded crossbows retain their loaded state when sheathed or switched to another weapon.
+    - Each crossbow remembers its own loaded state, eliminating unnecessary reloading when re-equipped.
+  - **Crossbow Reload While Moving**
+    - Crossbow reloading is no longer interrupted by sprinting or jumping.
+    - Reload progress continues at 50% speed while sprinting or airborne and returns to normal speed afterward.
+
 v1.8.1
 - **Fixes:**
   - **Small Serpent Spawns**

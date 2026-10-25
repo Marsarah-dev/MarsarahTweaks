@@ -13,7 +13,8 @@ B. Updates
 
 C. New Features
 ------------------------------
-* Store crossbow reload state
+* Keep Crossbows Loaded
+* Crossbow Reload While Moving (50% reload speed while sprinting or jumping)
 
 D. Others
 ------------------------------
@@ -23,8 +24,6 @@ E. Test
 
 F. In Progress
 ------------------------------
-* Crossbow reload does not reset on player jump or sprint.
-
 
 ============================================================
 TO IMPLEMENT
@@ -59,7 +58,6 @@ C. Features
 * Allow ships to be destroyed with the hammer.
 * Allow Boars to eat Yellow Mushrooms.
 * Player Inspector for players currently logged into the world.
-* Crossbows remember loaded state after re-equipping.
 
 Trinkets:
 * Review new Trinket build costs:

@@ -1792,6 +1792,33 @@ Ashlands:
   Incompatible with other mods that modify Crossbows reload time.
 
 
+-------------------- [Keep Crossbows Loaded] -------------------
+
+► Description:
+  Fully loaded crossbows remain loaded when sheathed or switched to another weapon.
+  Each crossbow remembers its own loaded state.
+  Partial reloads are not preserved when switching weapons.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  May conflict with other mods that modify crossbow loading behavior.
+
+
+---------------- [Crossbow Reload While Moving] ----------------
+
+► Description:
+  Crossbow reloading continues while sprinting or jumping instead of resetting.
+  Reloading is 50% slower while sprinting or airborne and returns to normal speed afterward.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+
+► Conflicts:
+  May conflict with other mods that modify reload interruptions or crossbow reload behavior.
+
+
 ------------------ [Better Trophy Drop Rates] ------------------
 
 ► Description:
@@ -2640,6 +2667,15 @@ Ashlands:
 
 VERSION HISTORY
 ================================================================
+
+v1.8.2
+- New Features:
+  - Keep Crossbows Loaded
+    - Fully loaded crossbows retain their loaded state when sheathed or switched to another weapon.
+    - Each crossbow remembers its own loaded state, eliminating unnecessary reloading when re-equipped.
+  - Crossbow Reload While Moving
+    - Crossbow reloading is no longer interrupted by sprinting or jumping.
+    - Reload progress continues at 50% speed while sprinting or airborne and returns to normal speed afterward.
 
 v1.8.1
 - Fixes:

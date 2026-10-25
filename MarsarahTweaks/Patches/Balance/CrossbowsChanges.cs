@@ -115,7 +115,7 @@ namespace MarsarahTweaks.Patches.Balance
 
 				if (crossbowItem == null) continue;
 
-				// Apply new relod time
+				// Apply new reload time
 				crossbowItem.m_itemData.m_shared.m_attack.m_reloadTime = newCrossbowReloadTime;
 				log.Info($"Applied new Crossbow reload time of {newCrossbowReloadTime}s to {crossbowName}");
 			}
