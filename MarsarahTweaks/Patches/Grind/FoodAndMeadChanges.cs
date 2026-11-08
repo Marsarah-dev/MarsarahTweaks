@@ -325,7 +325,12 @@ namespace MarsarahTweaks.Patches.Grind
 				{
 					ResourceChanges = { { "Mushroom", 5 }, { "MushroomYellow", 5 } }
 				}
-			}
+			},
+			{ "Recipe_MeadBaseBugRepellent", new RecipeModification
+				{
+					ResourceChanges = { { "Fish7", 2 } } // Anti-Sting Concoction: Grouper
+				}
+			},
 		};
 		private static Dictionary<string, int> foodStacksModifications = new Dictionary<string, int>()
 		{

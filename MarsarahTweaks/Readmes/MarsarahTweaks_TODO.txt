@@ -10,6 +10,9 @@ A. Fixes
 
 B. Updates
 ------------------------------
+* Included Dundr in the reload time reset change and load state (Keep Crossbows Loaded, Crossbow Reload While Moving)
+* Food And Mead Modifications: Mead Base: Anti-Sting: reduced Grouper fish requirement from 3 to 2
+* Alternate Build Pieces Materials: Grausten Chest build cost Warrior Trophy -> Charred Skull
 
 C. New Features
 ------------------------------
@@ -22,16 +25,11 @@ E. Test
 
 F. In Progress
 ------------------------------
-* Included Dundr in the reload time reset change and load state.
 
 ============================================================
 TO IMPLEMENT
 ============================================================
 * Increase Cooking skill gains percentage. It's too slow. Maybe blocking too.
-* Check Dundr to work like the crossbows.
-* Change Grausten chest to use Charred Skull instead of Warrior Trophy.
-* Anti-Sting Concoction: reduce Grouper fish requirement from 3 to 2
-* Convert my Glacial Stone Portal into a Glacial Pocket Portal. Works like the Pocket Portal, but can transport metal. Unlocked at Ashlands. Need to figure out the costs. Or maybe I add a reddish version of this and keep the Glacial Stone Portal as is. 
 
 0. Requests
 -------------------------------

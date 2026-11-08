@@ -676,6 +676,11 @@ namespace MarsarahTweaks.Patches.Grind
 					{ "AskHide", 3 } // 4
 				}
 			}
+			/*{ "$piece_chestgrausten", new Dictionary<string, int> // Grausten Chest
+				{
+					{ "TrophyCharredMelee", 2 } // 5
+				}
+			},*/
 		};
 
 		private static Dictionary<string, Dictionary<string, string>> newPieceMaterials = new Dictionary<string, Dictionary<string, string>>()
@@ -697,7 +702,12 @@ namespace MarsarahTweaks.Patches.Grind
 				{
 					{ "Iron", "BlackMetal" }
 				}
-			}
+			},
+			{ "$piece_chestgrausten", new Dictionary<string, string> // Grausten Chest
+				{
+					{ "TrophyCharredMelee", "Charredskull" }
+				}
+			},
 		};
 
 		// Modify Build Pieces =========================================================================
