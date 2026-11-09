@@ -121,6 +121,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata WeatherModifications = new ConfigMetadata("Clearer Weather", "Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively. (Toggling mid-game requires CLIENT relog)", ConfigSections.Features, 90);
 			public static readonly ConfigMetadata CraftableChain = new ConfigMetadata("Craftable Chain", "Chain craftable at Black Forge", ConfigSections.Features, 80);
 			public static readonly ConfigMetadata BrighterLanterns = new ConfigMetadata("Brighter Lanterns", "Dvergr lanterns are brighter. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.Features, 70);
+			public static readonly ConfigMetadata LessStandingBrazierSmoke = new ConfigMetadata("Less Standing Brazier Smoke", "Reduces smoke emission from standing braziers by 75% without affecting their light or fire effects.", ConfigSections.Features, 65);
 			public static readonly ConfigMetadata ExtensionsModifications = new ConfigMetadata("Station Extensions Changes", "Decreases space requirement for workstation extensions and increases build distance to workstations (This does not increase workstation radius)", ConfigSections.Features, 60);
 			public static readonly ConfigMetadata MinibossWeight = new ConfigMetadata("Hildir Weight Rewards", "Increases base carry weight by 25 when turning in Hildir chests (for each chest). (Toggling mid-game requires CLIENT relog)", ConfigSections.Features, 50);
 			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("Stop Running Away", "Boars and Necks won't flee when alerted. (Toggling mid-game only affects new creatures)", ConfigSections.Features, 40);
@@ -194,6 +195,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ClearerWeatherEnabled;
 		public static ConfigEntry<bool> CraftableChainEnabled;
 		public static ConfigEntry<bool> BrighterLanternsEnabled;
+		public static ConfigEntry<bool> LessStandingBrazierSmokeEnabled;
 		public static ConfigEntry<bool> ExtensionsChangesEnabled;
 		public static ConfigEntry<bool> MinibossWeightEnabled;
 		public static ConfigEntry<bool> NoFleeEnabled;		
@@ -271,6 +273,7 @@ namespace MarsarahTweaks.Managers
 			ClearerWeatherEnabled = CreateConfig(Configs.WeatherModifications, true);
 			CraftableChainEnabled = CreateConfig(Configs.CraftableChain, true);
 			BrighterLanternsEnabled = CreateConfig(Configs.BrighterLanterns, true);
+			LessStandingBrazierSmokeEnabled = CreateConfig(Configs.LessStandingBrazierSmoke, true);
 			ExtensionsChangesEnabled = CreateConfig(Configs.ExtensionsModifications, true);
 			MinibossWeightEnabled = CreateConfig(Configs.MinibossWeight, true);
 			NoFleeEnabled = CreateConfig(Configs.FleeAIModifications, true);
@@ -437,6 +440,10 @@ namespace MarsarahTweaks.Managers
 
 					case var name when name == Configs.BrighterLanterns.Name:
 						BrighterLanterns.UpdateLanterns(ZNetScene.instance);
+						break;
+
+					case var name when name == Configs.LessStandingBrazierSmoke.Name:
+						LessStandingBrazierSmoke.UpdateSmoke(ZNetScene.instance);
 						break;
 
 					case var name when name == Configs.TougherShips.Name:

@@ -98,6 +98,7 @@
     <Compile Include="Patches\Features\AshlandsEnemiesChanges.cs" />
     <Compile Include="Patches\Balance\BetterDropsChanges.cs" />
     <Compile Include="Patches\Features\HealStaff.cs" />
+    <Compile Include="Patches\Features\LessStandingBrazierSmoke.cs" />
     <Compile Include="Patches\Features\SerpentSpawnChanges.cs" />
     <Compile Include="Patches\Grind\FoodDurationChanges.cs" />
     <Compile Include="Patches\QOL\HoeRadiusChanges.cs" />

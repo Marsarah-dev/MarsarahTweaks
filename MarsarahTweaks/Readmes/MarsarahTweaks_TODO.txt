@@ -25,6 +25,7 @@ E. Test
 
 F. In Progress
 ------------------------------
+* Less Braziers and chandeliers smoke with a configurable percentage.
 
 ============================================================
 TO IMPLEMENT
@@ -87,7 +88,6 @@ Trinkets:
 
 D. QOL
 -------------------------------
-* Less Fireplace Smoke with a configurable percentage.
 * Make candles refillable with Resin.
 * Increase Maypole range.
 * Remove/reduce character slowdown during selected actions such as equipping and eating.
