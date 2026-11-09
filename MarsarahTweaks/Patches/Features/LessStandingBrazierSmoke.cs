@@ -15,7 +15,8 @@ namespace MarsarahTweaks.Patches.Features
 		private static readonly string[] brazierPrefabs =
 		{
 			"piece_brazierfloor01",
-			"piece_brazierfloor02"
+			"piece_brazierfloor02",
+			"piece_brazierceiling01"
 		};
 
 		private static readonly Dictionary<string, float> originalIntervals = new Dictionary<string, float>();
@@ -82,6 +83,8 @@ namespace MarsarahTweaks.Patches.Features
 					prefabName = "piece_brazierfloor01";
 				else if (piece.m_name == "$piece_brazierfloor02")
 					prefabName = "piece_brazierfloor02";
+				else if (piece.m_name == "$piece_brazierceiling01")
+					prefabName = "piece_brazierceiling01";
 
 				if (prefabName == null || !originalIntervals.ContainsKey(prefabName)) continue;
 
