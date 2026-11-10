@@ -9,7 +9,7 @@ namespace MarsarahTweaks.Patches.Grind
 {
 	internal class RareResourceChanges
 	{
-		private static readonly LogManager log = new LogManager("Rare Resource Changes", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Rare Resource Changes", LogManager.LogLevel.Warning);
 
 		private const string CharredFortressChest = "TreasureChest_charredfortress";
 		private const int GemMinAmount = 2;

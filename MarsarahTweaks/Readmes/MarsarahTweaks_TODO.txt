@@ -15,6 +15,11 @@ C. New Features
 ------------------------------
 * Shield Generator Capacity
   - Select the max capacity for Shield Generators (10, 20, 30, 50) with default 30. 
+* More Rare Resources
+  - Increases the amount and probability of Jade, Iolite and Bloodstone found in Ashlands Charred Fortress chests.
+  - Amount per gem min/max from 1/1 to 2/3.
+  - Weight per gem from 0.5to 0.75.
+  - Reduced the weights of the Coins, Charred Bone and Charred Skull so that the Flametal Ore, Molten core and the Idols probabilities remain the same. 
 
 D. Others
 ------------------------------
@@ -24,7 +29,6 @@ E. Test
 
 F. In Progress
 ------------------------------
-* Ashlands more gems
 
 ============================================================
 TO IMPLEMENT
