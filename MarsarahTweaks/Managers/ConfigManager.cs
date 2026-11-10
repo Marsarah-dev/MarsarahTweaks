@@ -142,7 +142,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata CameraSailingPosition = new ConfigMetadata("Move Camera Up While Sailing", "Moves the camera a bit upwards when sailing to better see in front of the boat", ConfigSections.QOL, 70);
 			public static readonly ConfigMetadata ShorterRestedDelay = new ConfigMetadata("Shorter Rested Delay", "Reduces the amount of time needed to get the rested buff from 20 to 10 seconds (Toggling mid-game requires re-entering the resting area)", ConfigSections.QOL, 60);
 			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("More Usable Fuel", "Ancient Bark can be used as fuel for Kilns and Withered Bones for Shield Generators", ConfigSections.QOL, 50);
-			public static readonly ConfigMetadata ShieldGeneratorCapacity = new ConfigMetadata("Shield Generator Capacity", "Sets the maximum fuel capacity of Shield Generators. 10 is the vanilla value.", ConfigSections.QOL, 45);
+			public static readonly ConfigMetadata ShieldGeneratorCapacityChange = new ConfigMetadata("Shield Generator Capacity", "Sets the maximum fuel capacity of Shield Generators. 10 is the vanilla value.", ConfigSections.QOL, 45);
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("Permanent Lights", "Controls which supported lights, fires, and utility pieces consume fuel. Light and fire build costs are adjusted when included to use maximum amount of their respective fuel type.", ConfigSections.QOL, 40);
 			public static readonly ConfigMetadata PlayerLogoutAnnounce = new ConfigMetadata("Player Logout Announce", "Displays a message in the top-left corner and chat when a player logs out.", ConfigSections.QOL, 30);
 			public static readonly ConfigMetadata Paving = new ConfigMetadata("Paving Without Leveling", "Adds a Paving option to the Hoe that creates paved ground without leveling it. Costs 1 Stone and requires a Stonecutter.", ConfigSections.QOL, 20);
@@ -217,7 +217,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> CameraUpWhenSailingEnabled;
 		public static ConfigEntry<bool> ShorterRestedDelayEnabled;
 		public static ConfigEntry<bool> MoreUsableFuelEnabled;
-		public static ConfigEntry<int> ShieldGeneratorCapacity;
+		public static ConfigEntry<int> ShieldGeneratorCapacityConfig;
 		public static ConfigEntry<string> PermanentLightsMode;
 		public static ConfigEntry<bool> AnnouncePlayerLogout;
 		public static ConfigEntry<bool> PavingEnabled;
@@ -296,7 +296,7 @@ namespace MarsarahTweaks.Managers
 			CameraUpWhenSailingEnabled = CreateConfig(Configs.CameraSailingPosition, true);
 			ShorterRestedDelayEnabled = CreateConfig(Configs.ShorterRestedDelay, true);
 			MoreUsableFuelEnabled = CreateConfig(Configs.MoreUsableFuel, true);
-			ShieldGeneratorCapacity = CreateConfig(Configs.ShieldGeneratorCapacity, 30, true, new AcceptableValueList<int>(10, 20, 30, 50));
+			ShieldGeneratorCapacityConfig = CreateConfig(Configs.ShieldGeneratorCapacityChange, 30, true, new AcceptableValueList<int>(10, 20, 30, 50));
 			PermanentLightsMode = CreateConfig(Configs.PermanentLightsModifications, PermanentLightsOptions.LightsAndFires, true, new AcceptableValueList<string>(PermanentLightsOptions.Off, PermanentLightsOptions.LightsOnly, PermanentLightsOptions.LightsAndFires, PermanentLightsOptions.AllSupportedPieces));
 			AnnouncePlayerLogout = CreateConfig(Configs.PlayerLogoutAnnounce, true);
 			PavingEnabled = CreateConfig(Configs.Paving, true);
@@ -503,6 +503,10 @@ namespace MarsarahTweaks.Managers
 
 				case var name when name == Configs.MoreUsableFuel.Name:
 					MoreUsableFuel.UpdateMoreUsableFuel();
+					break;
+
+				case var name when name == Configs.ShieldGeneratorCapacityChange.Name:
+					ShieldGeneratorCapacity.UpdateShieldGenerators();
 					break;
 
 				case var name when name == Configs.FoodAndMeadModifications.Name:
