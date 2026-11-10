@@ -20,9 +20,24 @@ namespace MarsarahTweaks.Patches.Features
 
 		private static readonly Dictionary<string, string> brazierPrefabs = new Dictionary<string, string>
 		{
+			// Vanilla
 			{ "$piece_brazierfloor01", "piece_brazierfloor01" },
 			{ "$piece_brazierfloor02", "piece_brazierfloor02" },
-			{ "$piece_brazierceiling01", "piece_brazierceiling01" }
+			{ "$piece_brazierceiling01", "piece_brazierceiling01" },
+
+			// MarsarahBuildPieces
+			{ "Green Standing Brazier", "piece_brazierfloor03" },
+			{ "Silver Hanging Brazier", "piece_brazierceiling02" },
+			{ "Blue-burning Silver Hanging Brazier", "piece_brazierceiling03" },
+			{ "Green-burning Silver Hanging Brazier", "piece_brazierceiling04" }
+		};
+
+		private static readonly Dictionary<string, string> customBrazierSources = new Dictionary<string, string>
+		{
+			{ "piece_brazierfloor03", "piece_brazierfloor01" },
+			{ "piece_brazierceiling02", "piece_brazierceiling01" },
+			{ "piece_brazierceiling03", "piece_brazierceiling01" },
+			{ "piece_brazierceiling04", "piece_brazierceiling01" }
 		};
 
 		private static readonly Dictionary<string, float> originalIntervals = new Dictionary<string, float>();
@@ -37,6 +52,7 @@ namespace MarsarahTweaks.Patches.Features
 		[HarmonyPatch(typeof(ZNetScene), "Awake")]
 		private static class LessBrazierSmoke_AwakePatch
 		{
+			[HarmonyPriority(Priority.Last)]
 			private static void Postfix(ZNetScene __instance)
 			{
 				if (__instance == null) return;
@@ -57,7 +73,7 @@ namespace MarsarahTweaks.Patches.Features
 				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 				Piece piece = __instance.GetComponentInParent<Piece>();
-				isBrazierSpawning = piece != null && brazierPrefabs.ContainsKey(piece.m_name);
+				isBrazierSpawning = piece != null && TryGetBrazierPrefab(piece.m_name, out _);
 			}
 
 			private static void Postfix(bool __state)
@@ -158,6 +174,28 @@ namespace MarsarahTweaks.Patches.Features
 			}
 		}
 
+		[HarmonyPatch(typeof(SmokeSpawner), "Awake")]
+		private static class SmokeSpawner_AwakePatch
+		{
+			private static void Postfix(SmokeSpawner __instance)
+			{
+				if (__instance == null) return;
+				if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
+
+				Piece piece = __instance.GetComponentInParent<Piece>();
+				if (piece == null) return;
+
+				if (!TryGetBrazierPrefab(piece.m_name, out string prefabName))
+					return;
+
+				if (!RememberOriginalInterval(__instance, prefabName))
+					return;
+
+				bool enabled = ConfigManager.LessStandingBrazierSmokeEnabled.Value;
+				ApplySmokeInterval(__instance, prefabName, enabled);
+			}
+		}
+
 		private static bool IsLoadLocal(OpCode opcode)
 		{
 			return opcode == OpCodes.Ldloc
@@ -180,24 +218,82 @@ namespace MarsarahTweaks.Patches.Features
 			return originalSize;
 		}
 
+		private static bool TryGetBrazierPrefab(string pieceName, out string prefabName)
+		{
+			if (!brazierPrefabs.TryGetValue(pieceName, out prefabName))
+				return false;
+
+			if (customBrazierSources.ContainsKey(prefabName) &&
+				!CompatibilityManager.MarsarahBuildPiecesInstalled)
+				return false;
+
+			return true;
+		}
+
+		private static bool RememberOriginalInterval(SmokeSpawner spawner, string prefabName)
+		{
+			if (originalIntervals.ContainsKey(prefabName))
+				return true;
+
+			float originalInterval;
+
+			if (customBrazierSources.TryGetValue(prefabName, out string sourcePrefabName))
+			{
+				if (!originalIntervals.TryGetValue(sourcePrefabName, out originalInterval))
+				{
+					GameObject sourcePrefab = ZNetScene.instance?.GetPrefab(sourcePrefabName);
+					SmokeSpawner sourceSpawner = sourcePrefab?.GetComponentInChildren<SmokeSpawner>(true);
+
+					if (sourceSpawner == null)
+						return false;
+
+					originalInterval = sourceSpawner.m_interval;
+					originalIntervals[sourcePrefabName] = originalInterval;
+				}
+			}
+			else
+			{
+				originalInterval = spawner.m_interval;
+			}
+
+			originalIntervals[prefabName] = originalInterval;
+
+			log.Info($"Backed up smoke interval for {prefabName}: {originalInterval:0.##}s");
+
+			return true;
+		}
+
 		public static void UpdateSmoke(ZNetScene znScene)
 		{
 			if (znScene == null) return;
 			if (ZNet.instance != null && ZNet.instance.IsDedicated()) return;
 
 			bool enabled = ConfigManager.LessStandingBrazierSmokeEnabled.Value;
+			bool buildPiecesInstalled = CompatibilityManager.MarsarahBuildPiecesInstalled;
 
 			log.Info($"Less Brazier Smoke enabled: {enabled}");
 
-			// Update prefab smoke intervals.
+			if (buildPiecesInstalled)
+				log.Info("MarsarahBuildPieces detected. Custom brazier smoke support enabled.");
+
+			// Update registered prefab intervals.
 			foreach (var entry in brazierPrefabs)
 			{
 				string prefabName = entry.Value;
+				bool isCustom = customBrazierSources.ContainsKey(prefabName);
+
+				if (isCustom && !buildPiecesInstalled)
+					continue;
+
 				GameObject prefab = znScene.GetPrefab(prefabName);
 
 				if (prefab == null)
 				{
-					log.Warn($"Could not find brazier prefab: {prefabName}");
+					if (isCustom)
+						log.Info($"Custom brazier prefab not registered yet: {prefabName}");
+					else
+						log.Warn($"Could not find brazier prefab: {prefabName}");
+
 					continue;
 				}
 
@@ -211,24 +307,24 @@ namespace MarsarahTweaks.Patches.Features
 
 				foreach (SmokeSpawner spawner in spawners)
 				{
-					if (!originalIntervals.ContainsKey(prefabName))
-					{
-						originalIntervals[prefabName] = spawner.m_interval;
-						log.Info($"Backed up smoke interval for {prefabName}: {spawner.m_interval:0.##}s");
-					}
+					if (!RememberOriginalInterval(spawner, prefabName))
+						continue;
 
 					ApplySmokeInterval(spawner, prefabName, enabled);
 				}
 			}
 
-			// Update existing braziers, including inactive ones.
+			// Update already-placed braziers.
 			foreach (SmokeSpawner spawner in UnityEngine.Object.FindObjectsByType<SmokeSpawner>(FindObjectsInactive.Include, FindObjectsSortMode.None))
 			{
 				Piece piece = spawner.GetComponentInParent<Piece>();
 				if (piece == null) continue;
 
-				if (!brazierPrefabs.TryGetValue(piece.m_name, out string prefabName)) continue;
-				if (!originalIntervals.ContainsKey(prefabName)) continue;
+				if (!TryGetBrazierPrefab(piece.m_name, out string prefabName))
+					continue;
+
+				if (!RememberOriginalInterval(spawner, prefabName))
+					continue;
 
 				ApplySmokeInterval(spawner, prefabName, enabled);
 			}

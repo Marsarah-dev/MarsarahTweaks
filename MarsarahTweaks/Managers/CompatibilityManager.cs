@@ -13,6 +13,7 @@ namespace MarsarahTweaks.Managers
 
 		// All loaded mods (GUID -> Name)
 		private static readonly Dictionary<string, string> LoadedMods = new Dictionary<string, string>();
+		public static bool MarsarahBuildPiecesInstalled => Chainloader.PluginInfos.ContainsKey("Marsarah.MarsarahBuildPieces");
 
 		// Struct representing a mod we care about for compatibility
 		public struct ConflictMod
