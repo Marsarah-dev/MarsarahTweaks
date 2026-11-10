@@ -10,14 +10,9 @@ A. Fixes
 
 B. Updates
 ------------------------------
-* Included Dundr in the reload time reset change and load state (Keep Crossbows Loaded, Crossbow Reload While Moving)
-* Food And Mead Modifications: Mead Base: Anti-Sting: reduced Grouper fish requirement from 3 to 2
-* Alternate Build Pieces Materials: Grausten Chest build cost Warrior Trophy -> Charred Skull
 
 C. New Features
 ------------------------------
-* Less Brazier Smoke
-  - Reduces smoke particle size for hanging and standing braziers by 50%, increases their spawn interval to 2s, and reduces the speed by 33%
 
 D. Others
 ------------------------------
