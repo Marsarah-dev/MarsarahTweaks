@@ -32,7 +32,6 @@ F. In Progress
 ============================================================
 TO IMPLEMENT
 ============================================================
-* Increase Cooking skill gains percentage. It's too slow. Maybe blocking too.
 
 0. Requests
 -------------------------------

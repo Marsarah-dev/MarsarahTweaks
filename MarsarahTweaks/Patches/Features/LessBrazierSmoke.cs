@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace MarsarahTweaks.Patches.Features
 {
-	internal class LessStandingBrazierSmoke
+	internal class LessBrazierSmoke
 	{
 		private static readonly LogManager log = new LogManager("Less Brazier Smoke", LogManager.LogLevel.Warning);
 
@@ -122,7 +122,7 @@ namespace MarsarahTweaks.Patches.Features
 
 				FieldInfo sizeField = AccessTools.Field(typeof(SmokeRenderer), "m_smokeBallSize");
 				MethodInfo particleMethod = AccessTools.Method(typeof(Smoke), "GetParticleValues");
-				MethodInfo scaleMethod = AccessTools.Method(typeof(LessStandingBrazierSmoke), nameof(AdjustVisualSize));
+				MethodInfo scaleMethod = AccessTools.Method(typeof(LessBrazierSmoke), nameof(AdjustVisualSize));
 
 				if (sizeField == null || particleMethod == null || scaleMethod == null)
 				{

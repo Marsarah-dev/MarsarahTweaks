@@ -386,11 +386,6 @@ namespace MarsarahTweaks.Managers
 
 					case var name when name == Configs.BuildPieceAmountsModifications.Name:
 						BuildPieceChanges.UpdateBuildPieces(ZNetScene.instance, true, false);
-						//SilverSconce.RefreshSilverSconceRequirements();
-						//SilverTableTorch.RefreshSilverTorchRequirements();
-						//GreenStandingBrazier.RefreshGreenBrazierRequirements();
-						//SilverHangingBrazier.RefreshSilverHangingBrazierRequirements();
-						//ColoredDvergerLanterns.RefreshColoredDvergrLanternsRequirements();
 						break;
 
 					case var name when name == Configs.BuildPieceMaterialsModifications.Name:
@@ -443,7 +438,7 @@ namespace MarsarahTweaks.Managers
 						break;
 
 					case var name when name == Configs.LessStandingBrazierSmoke.Name:
-						LessStandingBrazierSmoke.UpdateSmoke(ZNetScene.instance);
+						LessBrazierSmoke.UpdateSmoke(ZNetScene.instance);
 						break;
 
 					case var name when name == Configs.TougherShips.Name:
