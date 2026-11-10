@@ -85,6 +85,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata GearRecipeMaterialsModifications = new ConfigMetadata("Alternate Gear Recipe Materials", "Modifies gear recipe materials for some items (more materials from current respective biomes)", ConfigSections.GrindReduction, 40);
 			public static readonly ConfigMetadata BuildPieceAmountsModifications = new ConfigMetadata("Cheaper Build Pieces Amounts", "Reduces costs for build pieces", ConfigSections.GrindReduction, 30);
 			public static readonly ConfigMetadata BuildPieceMaterialsModifications = new ConfigMetadata("Alternate Build Pieces Materials", "Modifies build pieces materials (This will move the Workbench Toolrack extension from Mountain to Swamp biome)", ConfigSections.GrindReduction, 20);
+			public static readonly ConfigMetadata MoreRareResources = new ConfigMetadata("More Rare Resources", "Increases the amount of Jade, Iolite and Bloodstone found in Ashlands Charred Fortress chests.", ConfigSections.GrindReduction, 15);
 			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("Food And Mead Modifications", "Modifies food and mead recipes costs, crafted amounts, stacks and stats. (Toggling mid-game requires CLIENT relog for food stacks and stats)", ConfigSections.GrindReduction, 10);
 			public static readonly ConfigMetadata StandardizedFoodDurations = new ConfigMetadata("Standardized Food Durations", "Standardizes food durations based on preparation type. Only increases durations. (Toggling mid-game requires CLIENT relog for food already in inventory)", ConfigSections.GrindReduction, 5);
 
@@ -159,6 +160,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> GearRecipeMaterialsEnabled;
 		public static ConfigEntry<bool> BuildPieceAmountsEnabled;
 		public static ConfigEntry<bool> BuildPieceMaterialsEnabled;
+		public static ConfigEntry<bool> MoreRareResourcesEnabled;
 		public static ConfigEntry<bool> FoodAndMeadModificationsEnabled;
 		public static ConfigEntry<bool> StandardizedFoodDurationsEnabled;
 
@@ -238,6 +240,7 @@ namespace MarsarahTweaks.Managers
 			GearRecipeMaterialsEnabled = CreateConfig(Configs.GearRecipeMaterialsModifications, true);
 			BuildPieceAmountsEnabled = CreateConfig(Configs.BuildPieceAmountsModifications, true);
 			BuildPieceMaterialsEnabled = CreateConfig(Configs.BuildPieceMaterialsModifications, true);
+			MoreRareResourcesEnabled = CreateConfig(Configs.MoreRareResources, true);
 			FoodAndMeadModificationsEnabled = CreateConfig(Configs.FoodAndMeadModifications, true);
 			StandardizedFoodDurationsEnabled = CreateConfig(Configs.StandardizedFoodDurations, true);
 
