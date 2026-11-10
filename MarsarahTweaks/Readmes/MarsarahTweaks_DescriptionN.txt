@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.8.4
+[b]Version:[/b] 1.8.5
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -200,6 +200,15 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Darkwood Gate:[/b] Iron → Black Metal
 - [b]Bath Tub:[/b] Iron → Black Metal
 - [b]Grausten Chest:[/b] Charred Warrior Trophy → Charred Skull (5 required)
+
+
+[size=4][b]🔧 More Rare Resources[/b][/size]
+
+- Increases the amount and chance of finding [b]Jade, Iolite and Bloodstone[/b] in Ashlands Charred Fortress chests.
+- Gems now appear in quantities of [b]2–3[/b] instead of 1, with increased loot weights.
+- The chances of finding Molten Cores, Flametal Ore and Idols remain approximately unchanged.
+- Only affects newly generated chest loot. Existing contents are not modified.
+- [b]Conflicts:[/b] Mods that modify Charred Fortress chest loot.
 
 
 [size=4][b]🔧 Food and Mead Modifications[/b][/size]
@@ -813,6 +822,14 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Conflicts:[/b] No known conflicts.
 
 
+[size=4][b]🔧 Shield Generator Capacity[/b][/size]
+
+- Increases the maximum fuel capacity of Shield Generators.
+- Available values: [b]10 (Vanilla), 20, 30 (Default), 50[/b].
+- Can be changed during gameplay and affects existing Shield Generators.
+- [b]Conflicts:[/b] Mods that modify Shield Generator fuel capacity.
+
+
 [size=4][b]🔧 Permanent Lights[/b][/size]
 
 - Keeps fueled light sources permanently lit by automatically replenishing their fuel.
@@ -891,6 +908,14 @@ Blaxxun-bloop - for ServerSync
 
 
 [size=5][b]📜 Version History[/b][/size]
+
+[size=4][b]v1.8.5[/b][/size]
+- [b]New Features:[/b]
+  - [b]More Rare Resources[/b]
+    - Increased Jade, Iolite and Bloodstone quantities from 1 to 2–3 and increased their appearance chances in Ashlands Charred Fortress chests.
+    - Adjusted common resource weights to keep Molten Core, Flametal Ore and Idol drop probabilities approximately unchanged.
+  - [b]Shield Generator Capacity[/b]
+    - Added configurable maximum fuel capacity for Shield Generators: 10, 20, 30 or 50, with 30 as the default.
 
 [size=4][b]v1.8.4[/b][/size]
 - [b]Updates:[/b]

@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.8.4
+Marsarah Tweaks v1.8.5
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
@@ -1122,6 +1122,38 @@ MOD CONFIGS
 - Darkwood Gate:                   Iron     → Black Metal
 - Bath Tub:                        Iron     → Black Metal
 - Grausten Chest:                  Charred Warrior Trophy → Charred Skull (5 required)
+
+
+-------------------- [More Rare Resources] --------------------
+
+► Description:
+  Increases the amount and appearance chance of Jade, Iolite and Bloodstone in Ashlands Charred Fortress chests.
+
+▼ Changes:
+
+  Gem quantities:
+  - Jade:                   1–1 → 2–3
+  - Iolite:                 1–1 → 2–3
+  - Bloodstone:             1–1 → 2–3
+
+  Loot weights:
+  - Jade:                  0.50 → 0.75
+  - Iolite:                0.50 → 0.75
+  - Bloodstone:            0.50 → 0.75
+  - Coins:                 1.00 → 0.66
+  - Charred Bone:          1.00 → 0.66
+  - Charred Skull:         1.00 → 0.66
+
+  Other loot weights and quantities remain unchanged.
+  Molten Core, Flametal Ore and Idol appearance probabilities remain approximately the same as vanilla.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+  Changes apply when chest loot is first generated.
+  Previously generated chest contents are not modified or rerolled.
+
+► Conflicts:
+  May conflict with mods that modify Charred Fortress chest loot tables.
 
 
 ---------------- [Food And Mead Modifications] -----------------
@@ -2582,6 +2614,26 @@ Ashlands:
   No known conflicts.
 
 
+------------------ [Shield Generator Capacity] -----------------
+
+► Description:
+  Sets the maximum fuel capacity of Shield Generators.
+
+  Available values:
+  - 10 (Vanilla)
+  - 20
+  - 30 (DEFAULT)
+  - 50
+
+► Mid-Game Toggling:
+  Can be changed during gameplay.
+  Changes apply to existing and newly placed Shield Generators.
+  Does not directly modify stored fuel amounts.
+
+► Conflicts:
+  May conflict with mods that modify Shield Generator fuel capacity.
+
+
 ---------------------- [Permanent Lights] ----------------------
 
 ► Description:
@@ -2715,6 +2767,14 @@ Ashlands:
 
 VERSION HISTORY
 ================================================================
+
+v1.8.5
+- New Features:
+  - More Rare Resources
+    - Increased Jade, Iolite and Bloodstone quantities from 1 to 2–3 and increased their appearance chances in Ashlands Charred Fortress chests.
+    - Adjusted common resource weights to keep Molten Core, Flametal Ore and Idol drop probabilities approximately unchanged.
+  - Shield Generator Capacity
+    - Added configurable maximum fuel capacity for Shield Generators: 10, 20, 30 or 50, with 30 as the default.
 
 v1.8.4
 - Updates:

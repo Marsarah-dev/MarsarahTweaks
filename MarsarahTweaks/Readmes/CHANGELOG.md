@@ -1,5 +1,14 @@
 ## <strong> 📜 Version History </strong>
 
+v1.8.5
+- **New Features:**
+  - **More Rare Resources**
+    - Increased the amount and appearance chance of Jade, Iolite and Bloodstone in Ashlands Charred Fortress chests.
+    - Gem quantities increased from 1 to 2–3, with higher loot weights balanced by reducing the chances of common resources.
+    - Molten Core, Flametal Ore and Idol drop probabilities remain approximately unchanged.
+  - **Shield Generator Capacity**
+    - Added a configurable maximum fuel capacity for Shield Generators: 10, 20, 30 or 50, with 30 as the default.
+
 v1.8.4
 - **Updates:**
   - **Keep Crossbows Loaded**

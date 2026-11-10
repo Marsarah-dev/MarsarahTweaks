@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.8.4  
+**Version:** 1.8.5  
 **Author:** Marsarah
 
 ---
@@ -205,6 +205,16 @@ They can be toggled mid-game, unless otherwise specified.
 - **Darkwood Gate:**                   Iron     → Black Metal
 - **Bath Tub:**                        Iron     → Black Metal
 - **Grausten Chest:**                  Charred Warrior Trophy → Charred Skull (5 required)
+
+---
+
+### <strong>🔧 More Rare Resources</strong>
+
+- Increases the amount and chance of finding **Jade, Iolite and Bloodstone** in Ashlands Charred Fortress chests.
+- Gems now appear in quantities of **2–3** instead of 1, with increased loot weights.
+- The chances of finding Molten Cores, Flametal Ore and Idols remain approximately unchanged.
+- Only affects newly generated chest loot. Existing contents are not modified.
+- **Conflicts:** Mods that modify Charred Fortress chest loot.
 
 ---
 
@@ -864,6 +874,15 @@ They can be toggled mid-game, unless otherwise specified.
 
 - Ancient Bark can be used as fuel for Kilns. Withered Bones can be used in Shield Generators.
 - **Conflicts:** No known conflicts.
+
+---
+
+### <strong>🔧 Shield Generator Capacity</strong>
+
+- Increases the maximum fuel capacity of Shield Generators.
+- Available values: **10 (Vanilla), 20, 30 (Default), 50**.
+- Can be changed during gameplay and affects existing Shield Generators.
+- **Conflicts:** Mods that modify Shield Generator fuel capacity.
 
 ---
 
