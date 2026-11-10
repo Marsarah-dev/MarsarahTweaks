@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.8.3
+[b]Version:[/b] 1.8.4
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -199,6 +199,7 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Tool Rack (Workbench Extension):[/b] Obsidian → Coal (This will move this extension one biome earlier)
 - [b]Darkwood Gate:[/b] Iron → Black Metal
 - [b]Bath Tub:[/b] Iron → Black Metal
+- [b]Grausten Chest:[/b] Charred Warrior Trophy → Charred Skull (5 required)
 
 
 [size=4][b]🔧 Food and Mead Modifications[/b][/size]
@@ -411,7 +412,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 [size=4][b]🔧 Keep Crossbows Loaded[/b][/size]
 
-- Fully loaded crossbows and the Grappling Hook remain loaded when sheathed or switched to another weapon.
+- Fully loaded crossbows, Dundr and the Grappling Hook remain loaded when sheathed or switched to another weapon.
 - Each weapon remembers its own loaded state.
 - Partial reloads are not preserved when switching weapons.
 - Can be enabled/disabled during gameplay.
@@ -420,7 +421,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 [size=4][b]🔧 Crossbow Reload While Moving[/b][/size]
 
-- Crossbows and the Grappling Hook can continue reloading while sprinting or jumping instead of resetting.
+- Crossbows, Dundr and the Grappling Hook can continue reloading while sprinting or jumping instead of resetting.
 - Reloading proceeds at 50% of normal speed while sprinting or airborne and returns to normal speed afterward.
 - Can be enabled/disabled during gameplay.
 - [b]Conflicts:[/b] May conflict with mods that modify reload interruptions or weapon loading behavior.
@@ -632,6 +633,15 @@ They can be toggled mid-game, unless otherwise specified.
 &nbsp;&nbsp;&nbsp;- Standing lanterns are a bit brighter than the wall mount lanterns.
 - Toggling mid-game requires either [b]client[/b] relog or reloading area (moving/teleporting away from current zone and coming back).
 - [b]Conflicts:[/b]  Mods that modify Dverger Lanterns luminosity.
+
+
+[size=4][b]🔧 Less Brazier Smoke[/b][/size]
+
+- Reduces the visual size of smoke by [b]50%[/b], sets the emission interval to [b]2 seconds[/b], and reduces the initial rising speed by [b]33%[/b].
+- Affects vanilla standing and hanging braziers, including the custom braziers from [b]MarsarahBuildPieces[/b] when installed.
+- Existing custom braziers are supported even if Extra Lights is disabled in MarsarahBuildPieces.
+- Can be enabled/disabled during gameplay. Existing smoke dissipates normally.
+- [b]Conflicts:[/b] Automatically disabled when known conflicting smoke mods are detected, including Smoke Collision, Realistic Smoke Rework, NoSmokeSimplified, NoSmokeStayLit, BreatheEasy and InfiniteFire.
 
 
 [size=4][b]🔧 Station Extensions Changes[/b][/size]
@@ -881,6 +891,23 @@ Blaxxun-bloop - for ServerSync
 
 
 [size=5][b]📜 Version History[/b][/size]
+
+[size=4][b]v1.8.4[/b][/size]
+- [b]Updates:[/b]
+  - [b]Keep Crossbows Loaded[/b]
+    - Added support for Dundr, allowing it to retain its loaded state when sheathed or switched.
+  - [b]Crossbow Reload While Moving[/b]
+    - Added support for Dundr. Reloading continues at 50% speed while sprinting or jumping instead of resetting.
+  - [b]Food and Mead Modifications[/b]
+    - Anti-Sting Concoction: Reduced the Grouper requirement from 3 to 2.
+  - [b]Alternate Build Pieces Materials[/b]
+    - Grausten Chest: Replaced Charred Warrior Trophy with Charred Skull, retaining the original amount of 5.
+
+- [b]New Features:[/b]
+  - [b]Less Brazier Smoke[/b]
+    - Reduces smoke visual size by 50%, sets the emission interval to 2 seconds, and reduces initial rising speed by 33%.
+    - Supports vanilla standing and hanging braziers, including custom braziers from MarsarahBuildPieces when installed.
+    - Automatically disabled when known conflicting smoke mods are detected.
 
 [size=4][b]v1.8.3[/b][/size]
 - [b]Updates:[/b]

@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.8.3
+Marsarah Tweaks v1.8.4
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
@@ -1121,6 +1121,7 @@ MOD CONFIGS
 - Tool Rack (Workbench Extension): Obsidian → Coal (This will move this extension one biome earlier)
 - Darkwood Gate:                   Iron     → Black Metal
 - Bath Tub:                        Iron     → Black Metal
+- Grausten Chest:                  Charred Warrior Trophy → Charred Skull (5 required)
 
 
 ---------------- [Food And Mead Modifications] -----------------
@@ -1367,6 +1368,10 @@ MOD CONFIGS
 - Berserkir Mead Base
   • Mushroom:              10 → 5
   • Yellow Mushroom:       10 → 5
+
+- Mead Base: Anti-Sting Concoction
+  • Grouper:               3 → 2
+
 
 >> Food stacks <<
 The following foods have the stack size increased to 20
@@ -1799,7 +1804,7 @@ Ashlands:
 -------------------- [Keep Crossbows Loaded] -------------------
 
 ► Description:
-  Fully loaded crossbows and the Grappling Hook remain loaded when sheathed or switched to another weapon.
+  Fully loaded crossbows, Dundr and the Grappling Hook remain loaded when sheathed or switched to another weapon.
   Each weapon remembers its own loaded state.
   Partial reloads are not preserved when switching weapons.
 
@@ -1813,7 +1818,7 @@ Ashlands:
 ---------------- [Crossbow Reload While Moving] ----------------
 
 ► Description:
-  Crossbows and the Grappling Hook can continue reloading while sprinting or jumping instead of resetting.
+  Crossbows, Dundr and the Grappling Hook can continue reloading while sprinting or jumping instead of resetting.
   Reloading proceeds at 50% of normal speed while sprinting or airborne and returns to normal speed afterward.
 
 ► Mid-Game Toggling:
@@ -2278,6 +2283,45 @@ Ashlands:
   Incompatible with other mods that modify Dverger Lanterns luminosity.
 
 
+---------------------- [Less Brazier Smoke] --------------------
+
+► Description:
+  Reduces smoke from standing and hanging braziers without changing their fire or lighting effects.
+
+  Changes:
+  - Visual smoke size reduced by 50%.
+  - Smoke emission interval set to 2 seconds.
+  - Initial smoke rising speed reduced by 33%.
+  - Smoke collision size and lifetime remain unchanged.
+
+  Affects the following vanilla build pieces:
+  - Standing Brazier
+  - Blue Standing Brazier
+  - Hanging Brazier
+
+  Also supports the following pieces from MarsarahBuildPieces, if installed:
+  - Green Standing Brazier
+  - Silver Hanging Brazier
+  - Blue-burning Silver Hanging Brazier
+  - Green-burning Silver Hanging Brazier
+
+  Existing custom braziers remain supported even when Extra Lights is disabled in MarsarahBuildPieces.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+  The smoke emission interval updates immediately.
+  Smoke already emitted is not modified retroactively and will dissipate normally.
+
+► Conflicts:
+  Automatically disabled if any of the following mods are detected:
+  - Smoke Collision
+  - Enigma's Realistic Smoke Rework
+  - NoSmokeSimplified
+  - NoSmokeStayLit
+  - BreatheEasy
+  - ValheimInfiniteFire
+
+
 ----------------- [Station Extensions Changes] -----------------
 
 ► Description:
@@ -2671,6 +2715,23 @@ Ashlands:
 
 VERSION HISTORY
 ================================================================
+
+v1.8.4
+- Updates:
+  - Keep Crossbows Loaded
+    - Added support for Dundr, allowing it to retain its loaded state when sheathed or switched.
+  - Crossbow Reload While Moving
+    - Added support for Dundr. Reloading continues at 50% speed while sprinting or jumping instead of resetting.
+  - Food and Mead Modifications
+    - Anti-Sting Concoction: Reduced the Grouper requirement from 3 to 2.
+  - Alternate Build Pieces Materials
+    - Grausten Chest: Replaced Charred Warrior Trophy with Charred Skull, retaining the original amount of 5.
+
+- New Features:
+  - Less Brazier Smoke
+    - Reduces smoke visual size by 50%, sets the emission interval to 2 seconds, and reduces initial rising speed by 33%.
+    - Supports vanilla standing and hanging braziers, including custom braziers from MarsarahBuildPieces when installed.
+    - Automatically disabled when known conflicting smoke mods are detected.
 
 v1.8.3
 - Updates:

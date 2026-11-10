@@ -1,5 +1,22 @@
 ## <strong> 📜 Version History </strong>
 
+v1.8.4
+- **Updates:**
+  - **Keep Crossbows Loaded**
+    - Added support for Dundr, allowing it to retain its loaded state when sheathed or switched.
+  - **Crossbow Reload While Moving**
+    - Added support for Dundr. Reloading continues at 50% speed while sprinting or jumping instead of resetting.
+  - **Food and Mead Modifications**
+    - Anti-Sting Concoction: Reduced the Grouper requirement from 3 to 2.
+  - **Alternate Build Pieces Materials**
+    - Grausten Chest: Replaced Charred Warrior Trophy with Charred Skull, retaining the original amount of 5.
+
+- **New Features:**
+  - **Less Brazier Smoke**
+    - Reduces smoke visual size by 50%, sets the emission interval to 2 seconds, and reduces initial rising speed by 33%.
+    - Supports vanilla standing and hanging braziers, including custom braziers from MarsarahBuildPieces when installed.
+    - Automatically disabled when known conflicting smoke mods are detected.
+
 v1.8.3
 - **Updates:**
   - **Keep Crossbows Loaded**

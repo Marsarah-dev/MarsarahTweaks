@@ -27,7 +27,6 @@ E. Test
 
 F. In Progress
 ------------------------------
-* Less Braziers and chandeliers smoke with a configurable percentage.
 
 ============================================================
 TO IMPLEMENT

@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.8.3  
+**Version:** 1.8.4  
 **Author:** Marsarah
 
 ---
@@ -204,6 +204,7 @@ They can be toggled mid-game, unless otherwise specified.
 - **Tool Rack (Workbench Extension):** Obsidian → Coal (This will move this extension one biome earlier)
 - **Darkwood Gate:**                   Iron     → Black Metal
 - **Bath Tub:**                        Iron     → Black Metal
+- **Grausten Chest:**                  Charred Warrior Trophy → Charred Skull (5 required)
 
 ---
 
@@ -435,7 +436,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 ### <strong>🔧 Keep Crossbows Loaded</strong>
 
-- Fully loaded crossbows and the Grappling Hook remain loaded when sheathed or switched to another weapon.
+- Fully loaded crossbows, Dundr and the Grappling Hook remain loaded when sheathed or switched to another weapon.
 - Each weapon remembers its own loaded state.
 - Partial reloads are not preserved when switching weapons.
 - Can be enabled/disabled during gameplay.
@@ -445,7 +446,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 ### <strong>🔧 Crossbow Reload While Moving</strong>
 
-- Crossbows and the Grappling Hook can continue reloading while sprinting or jumping instead of resetting.
+- Crossbows, Dundr and the Grappling Hook can continue reloading while sprinting or jumping instead of resetting.
 - Reloading proceeds at 50% of normal speed while sprinting or airborne and returns to normal speed afterward.
 - Can be enabled/disabled during gameplay.
 - **Conflicts:** May conflict with mods that modify reload interruptions or weapon loading behavior.
@@ -669,6 +670,16 @@ They can be toggled mid-game, unless otherwise specified.
   - Standing lanterns are a bit brighter than the wall mount lanterns.
 - Toggling mid-game requires either **client** relog or reloading area (moving/teleporting away from current zone and coming back).
 - **Conflicts:**  Mods that modify Dverger Lanterns luminosity.
+
+---
+
+### <strong>🔧 Less Brazier Smoke</strong>
+
+- Reduces the visual size of smoke by **50%**, sets the emission interval to **2 seconds**, and reduces the initial rising speed by **33%**.
+- Affects vanilla standing and hanging braziers, including the custom braziers from **MarsarahBuildPieces** when installed.
+- Existing custom braziers are supported even if Extra Lights is disabled in MarsarahBuildPieces.
+- Can be enabled/disabled during gameplay. Existing smoke dissipates normally.
+- **Conflicts:** Automatically disabled when known conflicting smoke mods are detected, including Smoke Collision, Realistic Smoke Rework, NoSmokeSimplified, NoSmokeStayLit, BreatheEasy and InfiniteFire.
 
 ---
 
