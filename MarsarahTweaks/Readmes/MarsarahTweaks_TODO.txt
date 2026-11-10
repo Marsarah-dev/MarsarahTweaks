@@ -16,6 +16,8 @@ B. Updates
 
 C. New Features
 ------------------------------
+* Less Brazier Smoke
+  - Reduces smoke particle size for hanging and standing braziers by 50%, increases their spawn interval to 2s, and reduces the speed by 33%
 
 D. Others
 ------------------------------

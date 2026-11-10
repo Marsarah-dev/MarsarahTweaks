@@ -12,7 +12,7 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class LessStandingBrazierSmoke
 	{
-		private static readonly LogManager log = new LogManager("Less Brazier Smoke", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Less Brazier Smoke", LogManager.LogLevel.Warning);
 
 		private const float SmokeVisualScale = 0.5f;
 		private const float SmokeEmissionInterval = 2f;

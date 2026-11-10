@@ -49,6 +49,7 @@ namespace MarsarahTweaks.Managers
 		public static ConflictMod Seasonality = new ConflictMod("RustyMods.Seasonality");
 		public static ConflictMod Seasons = new ConflictMod("shudnal.Seasons");
 		public static ConflictMod ImFriendlyDammit = new ConflictMod("Azumatt.ImFRIENDLYDAMMIT");
+		// Hoe Mods
 		public static ConflictMod HoeRadius = new ConflictMod("aedenthorn.HoeRadius");
 		public static ConflictMod TerraHoe = new ConflictMod("terrahoe");
 		public static ConflictMod Treadwell = new ConflictMod("com.jstack424.treadwell");
@@ -97,6 +98,7 @@ namespace MarsarahTweaks.Managers
 			UpdateConflictMod(ref Seasonality);
 			UpdateConflictMod(ref Seasons);
 			UpdateConflictMod(ref ImFriendlyDammit);
+			// Hoe Mods
 			UpdateConflictMod(ref HoeRadius);
 			UpdateConflictMod(ref TerraHoe);
 			UpdateConflictMod(ref Treadwell);
