@@ -61,6 +61,13 @@ namespace MarsarahTweaks.Managers
 		public static ConflictMod PavedRoadNoLevel = new ConflictMod("DeathWizsh.PavedRoadNoLevel");
 		public static ConflictMod PathsideAssistance = new ConflictMod("com.orianaventure.mod.PathsideAssistance");
 		public static ConflictMod ShackBetterPaths = new ConflictMod("theshack.betterpaths");
+		// Smoke Mods
+		public static ConflictMod SmokeCollision = new ConflictMod("smoke_collision");
+		public static ConflictMod RealisticSmokeRework = new ConflictMod("EnigmaPrime.RealisticSmokeRework");
+		public static ConflictMod NoSmokeSimplified = new ConflictMod("TastyChickenLegs.NoSmokeSimplified");
+		public static ConflictMod NoSmokeStayLit = new ConflictMod("TastyChickenLegs.NoSmokeStayLit");
+		public static ConflictMod BreatheEasy = new ConflictMod("RandomSteve.BreatheEasy");
+		public static ConflictMod ValheimInfiniteFire = new ConflictMod("MidnightsFX.InfiniteFire");
 
 		// Initialize the manager
 		public static void Initialize()
@@ -102,6 +109,13 @@ namespace MarsarahTweaks.Managers
 			UpdateConflictMod(ref PavedRoadNoLevel);
 			UpdateConflictMod(ref PathsideAssistance);
 			UpdateConflictMod(ref ShackBetterPaths);
+			// Smoke Mods
+			UpdateConflictMod(ref SmokeCollision);
+			UpdateConflictMod(ref RealisticSmokeRework);
+			UpdateConflictMod(ref NoSmokeSimplified);
+			UpdateConflictMod(ref NoSmokeStayLit);
+			UpdateConflictMod(ref BreatheEasy);
+			UpdateConflictMod(ref ValheimInfiniteFire);
 		}
 
 		// Helper to update the Name and Loaded flag of a ConflictMod
@@ -193,6 +207,13 @@ namespace MarsarahTweaks.Managers
 			DisableIfIncompatible(PavedRoadNoLevel, ConfigManager.PavingEnabled);
 			DisableIfIncompatible(PathsideAssistance, ConfigManager.PavingEnabled);
 			DisableIfIncompatible(ShackBetterPaths, ConfigManager.PavingEnabled);
+			// Less Brazier Smoke
+			DisableIfIncompatible(SmokeCollision, ConfigManager.LessStandingBrazierSmokeEnabled);
+			DisableIfIncompatible(RealisticSmokeRework, ConfigManager.LessStandingBrazierSmokeEnabled);
+			DisableIfIncompatible(NoSmokeSimplified, ConfigManager.LessStandingBrazierSmokeEnabled);
+			DisableIfIncompatible(NoSmokeStayLit, ConfigManager.LessStandingBrazierSmokeEnabled);
+			DisableIfIncompatible(BreatheEasy, ConfigManager.LessStandingBrazierSmokeEnabled);
+			DisableIfIncompatible(ValheimInfiniteFire, ConfigManager.LessStandingBrazierSmokeEnabled);
 		}
 
 		// Optional: log all loaded mods for debugging
