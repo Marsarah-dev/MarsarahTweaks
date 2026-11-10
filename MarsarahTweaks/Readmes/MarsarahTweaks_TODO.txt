@@ -58,6 +58,7 @@ C. Features
 * Allow ships to be destroyed with the hammer.
 * Allow Boars to eat Yellow Mushrooms.
 * Player Inspector for players currently logged into the world.
+* Combine smaller potions into larger ones at the Mead Kettle.
 
 Trinkets:
 * Review new Trinket build costs:
