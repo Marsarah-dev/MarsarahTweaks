@@ -527,6 +527,11 @@ namespace MarsarahTweaks.Managers
 				case var name when name == Configs.RootForestDrops.Name:
 					RootForestDrops.UpdateRootForestDrops(ZNetScene.instance, true);
 					break;
+
+				case var name when name == Configs.MoreRareResources.Name:
+					RareResourceChanges.UpdateDeepNorthArmorMoulds(ZNetScene.instance);
+					break;
+
 			}
 		}
 	}

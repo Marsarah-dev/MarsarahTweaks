@@ -19,7 +19,6 @@ namespace MarsarahTweaks.Patches.Grind
 		private const float HexenArmorMouldChance = 0.25f;
 
 		private static readonly Dictionary<CharacterDrop.Drop, float> originalArmorMouldChances = new Dictionary<CharacterDrop.Drop, float>();
-		private static bool configEventRegistered;
 
 		private static readonly Dictionary<string, float> lootWeights = new Dictionary<string, float>
 		{
@@ -72,8 +71,8 @@ namespace MarsarahTweaks.Patches.Grind
 			private static void Postfix(ZNetScene __instance)
 			{
 				if (__instance == null) return;
-				if (ConfigManager.MoreRareResourcesEnabled?.Value != true) return;
 
+				originalArmorMouldChances.Clear();
 				UpdateDeepNorthArmorMoulds(__instance);
 			}
 		}
@@ -144,8 +143,10 @@ namespace MarsarahTweaks.Patches.Grind
 			log.Info("Applied More Rare Resources to Charred Fortress chest loot.");
 		}
 
-		private static void UpdateDeepNorthArmorMoulds(ZNetScene instance)
+		public static void UpdateDeepNorthArmorMoulds(ZNetScene instance)
 		{
+			if (instance == null) return;
+
 			UpdateCreatureArmorMoulds(instance, "JotunWarrior", krigenArmorMoulds, KrigenArmorMouldChance);
 			UpdateCreatureArmorMoulds(instance, "JotunWarriorDualWield", krigenArmorMoulds, KrigenArmorMouldChance);
 			UpdateCreatureArmorMoulds(instance, "JotunWitch", hexenArmorMoulds, HexenArmorMouldChance);
@@ -169,6 +170,7 @@ namespace MarsarahTweaks.Patches.Grind
 				return;
 			}
 
+			bool enabled = ConfigManager.MoreRareResourcesEnabled?.Value == true;
 			int modifiedCount = 0;
 
 			foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
@@ -178,20 +180,30 @@ namespace MarsarahTweaks.Patches.Grind
 				string itemName = drop.m_prefab.name;
 				if (!moulds.Contains(itemName)) continue;
 
-				float originalChance = drop.m_chance;
-				drop.m_chance = newChance;
-				modifiedCount++;
+				if (!originalArmorMouldChances.TryGetValue(drop, out float originalChance))
+				{
+					originalChance = drop.m_chance;
+					originalArmorMouldChances[drop] = originalChance;
+				}
 
-				log.Info($"[Deep North] {creatureName} | {itemName}: {originalChance * 100f:0.##}% -> {newChance * 100f:0.##}%");
+				float targetChance = enabled ? newChance : originalChance;
+
+				if (drop.m_chance != targetChance)
+				{
+					log.Info($"[Deep North] {creatureName} | {itemName}: {drop.m_chance * 100f:0.##}% -> {targetChance * 100f:0.##}%");
+					drop.m_chance = targetChance;
+				}
+
+				modifiedCount++;
 			}
 
 			if (modifiedCount != moulds.Count)
 			{
-				log.Warn($"[Deep North] {creatureName}: Updated {modifiedCount}/{moulds.Count} expected armor mould drops.");
+				log.Warn($"[Deep North] {creatureName}: Found {modifiedCount}/{moulds.Count} expected armor mould drops.");
 			}
 			else
 			{
-				log.Info($"[Deep North] {creatureName}: Updated all {modifiedCount} armor mould drop chances.");
+				log.Info($"[Deep North] {creatureName}: All {modifiedCount} armor moulds set to {(enabled ? "modified" : "original")} rates.");
 			}
 		}
 
