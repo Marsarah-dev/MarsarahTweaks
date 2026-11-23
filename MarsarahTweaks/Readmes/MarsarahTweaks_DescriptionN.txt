@@ -351,7 +351,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 - Gear from Meadows, Black Forest, Mistlands, Ashlands and Deep North can be upgraded to lvl 4 within their respective biomes.  
 - This is accomplished by reducing the crafting workstation level requirements for Leather Set, Troll Set, Bronze Set, all Mistlands sets, all Ashlands sets and all Deep North sets.  
-- Further reduced crafting station requirements for gemmed Ashlands weapons and Dyrnwyn, allowing quality 4 upgrades at a level 5 Black Forge (withing Ashlands progression).
+- Further reduced crafting station requirements for gemmed Ashlands weapons and Dyrnwyn, allowing quality 4 upgrades at a level 5 Black Forge (within Ashlands progression).
 - The Vilebone Set recipe is moved to the Workbench as a crafting station (from Forge).
 - Toggling mid-game requires the relevant crafting menu to be reopened.
 - [b]Conflicts:[/b] Mods that modify the required station level for the named sets.
@@ -460,6 +460,7 @@ They can be toggled mid-game, unless otherwise specified.
 [size=4][b]🔧 Reduced Crossbows Reload Time[/b][/size]
 
 - Crossbows Reload Time Reduced by 1s (3.5s → 2.5s).
+- Deep North Crossbows reduced by 0.5 s (3s → 2.5s).
 - Toggling mid-game requires [b]client[/b] relog.
 - [b]Conflicts:[/b] Mods that modify Crossbows reload time.
 
@@ -673,7 +674,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 [size=4][b]🔧 Clearer Weather[/b][/size]
 
-- Reduces chance for mist, rain and snowstorms in Meadows, Plains, Mountains and Deep North respectively.
+- Reduces the frequency of mist, rain and snowstorm weather conditions across several biomes, including Meadows, Black Forest, Mountains, Plains, Mistlands, Ashlands and Deep North.
 - For the Ocean biome, only the mist chance is reduced.
 - Preserves custom Alternative Biome weather behavior, such as Dark Meadows.
 - Toggling mid-game requires [b]client[/b] relog.

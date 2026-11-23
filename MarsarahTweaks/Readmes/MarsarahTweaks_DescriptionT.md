@@ -487,6 +487,7 @@ They can be toggled mid-game, unless otherwise specified.
 ### <strong>🔧 Reduced Crossbows Reload Time</strong>
 
 - Crossbows Reload Time Reduced by 1s (3.5s → 2.5s).
+- Deep North Crossbows reduced by 0.5 s (3s → 2.5s).
 - Toggling mid-game requires **client** relog.
 - **Conflicts:** Mods that modify Crossbows reload time.
 
@@ -545,7 +546,7 @@ They can be toggled mid-game, unless otherwise specified.
 ### <strong>🔧 Better Creature Drops</strong>
 
 - Modifies the drop rates and type of items for Fenring, Bat and Dverger.
-- - modifies drop quantities for Writhan, Barka and Hexen.
+- Increases drop quantities for Writhan, Barka and Hexen.
 - Toggling mid-game will only affect newly spawned creatures.
 - **Conflicts:** Incompatible with any mod that modifies creature drop rates and drop types.
 
@@ -713,7 +714,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 ### <strong>🔧 Clearer Weather</strong>
 
-- Reduces chance for mist, rain and snowstorms in Meadows, Plains, Mountains and Deep North respectively.
+- Reduces the frequency of mist, rain and snowstorm weather conditions across several biomes, including Meadows, Black Forest, Mountains, Plains, Mistlands, Ashlands and Deep North.
 - For the Ocean biome, only the mist chance is reduced.
 - Preserves custom Alternative Biome weather behavior, such as Dark Meadows.
 - Toggling mid-game requires **client** relog.

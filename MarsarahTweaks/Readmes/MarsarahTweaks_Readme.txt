@@ -1635,7 +1635,7 @@ Ashlands:
 ► Description:
   Renames Linen Cape to Fine Cape.
   Moves it to the Swamp biome.
-  Adds Posion resistance.
+  Adds Poison resistance.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay, but requires the crafting menu to be reopened to take effect.
@@ -1720,7 +1720,7 @@ Ashlands:
 ► Description:
   Gear from Meadows, Black Forest, Mistlands, Ashlands and Deep North can be upgraded to lvl 4 within their respective biomes.
   This is accomplished by reducing the required crafting station levels.
-  NOTE: Special Ashlands weapons that use gems can be crafted to lvl 3 (e.g. Klossen max level upgrade is 3 (from 2)).
+  Gemmed Ashlands weapons and Dyrnwyn can now reach quality level 4 at a level 5 Black Forge (within Ashlands progression).
 
   The Vilebone Set recipe is moved to the Workbench as a crafting station (from Forge).
   Gemmed Ashlands weapons, including Dyrnwyn can now reach level 4 at a level 5 Black Forge (within Ashlands progression).
@@ -2453,7 +2453,7 @@ Ashlands:
 ----------------------- [Clearer Weather] ----------------------
 
 ► Description:
-  Reduces chance for mist, rain and snowstorms in Meadows, Plains, Mountains, and Deep North respectively.
+  Reduces the frequency of mist, rain and snowstorm weather conditions across several biomes, including Meadows, Black Forest, Mountains, Plains, Mistlands, Ashlands and Deep North.
   For the Ocean biome, only the mist chance is reduced.
   Preserves custom Alternative Biome weather behavior, such as Dark Meadows.
 
