@@ -3,17 +3,23 @@ using HarmonyLib;
 using MarsarahTweaks.Managers;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using static DropTable;
 
 namespace MarsarahTweaks.Patches.Grind
 {
 	internal class RareResourceChanges
 	{
-		private static readonly LogManager log = new LogManager("Rare Resource Changes", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Rare Resource Changes", LogManager.LogLevel.Info);
 
 		private const string CharredFortressChest = "TreasureChest_charredfortress";
 		private const int GemMinAmount = 2;
 		private const int GemMaxAmount = 3;
+		private const float KrigenArmorMouldChance = 0.20f;
+		private const float HexenArmorMouldChance = 0.25f;
+
+		private static readonly Dictionary<CharacterDrop.Drop, float> originalArmorMouldChances = new Dictionary<CharacterDrop.Drop, float>();
+		private static bool configEventRegistered;
 
 		private static readonly Dictionary<string, float> lootWeights = new Dictionary<string, float>
 		{
@@ -28,6 +34,23 @@ namespace MarsarahTweaks.Patches.Grind
 			{ "Charredskull", 0.66f }
 		};
 
+		private static readonly HashSet<string> krigenArmorMoulds = new HashSet<string>
+		{
+			"MoldArmorGoldHelmet",
+			"MoldArmorGoldChest",
+			"MoldArmorGoldLegs",
+			"MoldArmorMediumHelmet",
+			"MoldArmormediumChest", // it's capitalized like this
+			"MoldArmorMediumLegs"
+		};
+
+		private static readonly HashSet<string> hexenArmorMoulds = new HashSet<string>
+		{
+			"MoldArmorMageHelmet",
+			"MoldArmorMageChest",
+			"MoldArmorMageLegs"
+		};
+
 		[HarmonyPatch(typeof(Container), "Awake")]
 		private static class Container_AwakePatch
 		{
@@ -40,6 +63,18 @@ namespace MarsarahTweaks.Patches.Grind
 					return;
 
 				UpdateCharredFortressLoot(__instance);
+			}
+		}
+
+		[HarmonyPatch(typeof(ZNetScene), "Awake")]
+		private static class ZNetScene_AwakePatch
+		{
+			private static void Postfix(ZNetScene __instance)
+			{
+				if (__instance == null) return;
+				if (ConfigManager.MoreRareResourcesEnabled?.Value != true) return;
+
+				UpdateDeepNorthArmorMoulds(__instance);
 			}
 		}
 
@@ -107,6 +142,57 @@ namespace MarsarahTweaks.Patches.Grind
 			chest.m_defaultItems = modifiedTable;
 
 			log.Info("Applied More Rare Resources to Charred Fortress chest loot.");
+		}
+
+		private static void UpdateDeepNorthArmorMoulds(ZNetScene instance)
+		{
+			UpdateCreatureArmorMoulds(instance, "JotunWarrior", krigenArmorMoulds, KrigenArmorMouldChance);
+			UpdateCreatureArmorMoulds(instance, "JotunWarriorDualWield", krigenArmorMoulds, KrigenArmorMouldChance);
+			UpdateCreatureArmorMoulds(instance, "JotunWitch", hexenArmorMoulds, HexenArmorMouldChance);
+		}
+
+		private static void UpdateCreatureArmorMoulds(ZNetScene instance, string creatureName, HashSet<string> moulds, float newChance)
+		{
+			GameObject prefab = instance.GetPrefab(creatureName);
+
+			if (prefab == null)
+			{
+				log.Warn($"Could not find creature prefab: {creatureName}");
+				return;
+			}
+
+			CharacterDrop characterDrop = prefab.GetComponent<CharacterDrop>();
+
+			if (characterDrop == null || characterDrop.m_drops == null)
+			{
+				log.Warn($"No valid CharacterDrop component found for {creatureName}");
+				return;
+			}
+
+			int modifiedCount = 0;
+
+			foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
+			{
+				if (drop?.m_prefab == null) continue;
+
+				string itemName = drop.m_prefab.name;
+				if (!moulds.Contains(itemName)) continue;
+
+				float originalChance = drop.m_chance;
+				drop.m_chance = newChance;
+				modifiedCount++;
+
+				log.Info($"[Deep North] {creatureName} | {itemName}: {originalChance * 100f:0.##}% -> {newChance * 100f:0.##}%");
+			}
+
+			if (modifiedCount != moulds.Count)
+			{
+				log.Warn($"[Deep North] {creatureName}: Updated {modifiedCount}/{moulds.Count} expected armor mould drops.");
+			}
+			else
+			{
+				log.Info($"[Deep North] {creatureName}: Updated all {modifiedCount} armor mould drop chances.");
+			}
 		}
 
 		private static bool IsGem(string prefabName)
