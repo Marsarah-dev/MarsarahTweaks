@@ -11,7 +11,7 @@ namespace MarsarahTweaks.Patches.Balance
 {
 	internal class TrophyDropsChanges
 	{
-		private static readonly LogManager log = new LogManager("Trophy Drops", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Trophy Drops", LogManager.LogLevel.Info);
 
 		// Eikthyr - Rancid Remains (10% -> 20%), Ghost (10% -> 20%), Bear (10% -> 20%)
 		// The Elder - Surtling (5% -> 10%), Draugr Elite (10% -> 20%), Wraith (5% -> 20%)
@@ -19,6 +19,7 @@ namespace MarsarahTweaks.Patches.Balance
 		// Moder - Deathsquito (5% -> 10%), Fuling Berserker (5% -> 10%), Vile (10% -> 20%)
 		// Yagluth - Tick (5% -> 10%), Dverger (5% -> 10%), Seeker Soldier (5% -> 20%)
 		// The Queen - Charred Warlock (5% -> 20%)
+		// Fader - Moose (10% -> 20%), Krigen (10% -> 15%), Hexen (10% -> 15%)
 
 		// Dictionaries
 		private static Dictionary<string, Dictionary<string, float>> originalTrophyDropRates = new Dictionary<string, Dictionary<string, float>>();
@@ -64,6 +65,14 @@ namespace MarsarahTweaks.Patches.Balance
 				{
 					("DvergerAshlands", "TrophyDvergr", 0.1f),
 					("Charred_Mage", "TrophyCharredMage", 0.2f)
+				}
+			},
+			{ "Fader", new List<(string, string, float)>
+				{
+					("Moose", "TrophyMoose", 0.2f),
+					("JotunWarrior", "TrophyJotunWarrior", 0.15f),
+					("JotunWarriorDualWield", "TrophyJotunWarrior", 0.15f),
+					("JotunWitch", "TrophyJotunWitch", 0.15f)
 				}
 			}
 		};
