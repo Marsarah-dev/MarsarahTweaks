@@ -126,10 +126,16 @@ B. Updates
   - Cape of the Caller: Minimum Galdr Table level 4 → 2.
 
   Ashlands Changes:
-  - Further reduced the minimum Black Forge requirement of all 21 gemmed Ashlands weapon recipes (Blood, Lightning and Nature) from level 3 → 2.
-  - This includes the Mace, Spear, Sword, Axe, Greatsword, Bow and Crossbow variants.
+  - Further reduced the minimum Black Forge requirement of all 21 gemmed Ashlands weapon recipes (Blood, Lightning and Nature) from level 3 → 2 (vanilla 4).
+  - This includes the Mace, Spear, Sword, Axe, Greatsword, Bow and Crossbow variants, as well as Dyrnwyn.
   - Both normal and gemmed Ashlands weapons can now reach quality level 4 using Black Forge level 5, available within Ashlands progression.
 
+* Clearer Weather
+  - Included Deep North weather in this section config.
+  - Reduced Twilight SnowStorm weight from 0.5 → 0.12.
+  - Snowstorm probability reduced from 20% → 5.66%, matching the modified Mountains probability.
+  - Snow and Clear weather weights remain unchanged.
+  
 
 C. New Features
 ------------------------------
@@ -178,6 +184,7 @@ C. Features
 * Change balance of wood dropped from trees that drop wood other than Wood (Core, Fine, Yggdrasil, Ashwood and Timber). Reduce normal Wood drops and increase the special version. Also Yggdrasil Shoots should drop Yggdrasil Wood instead of Wood.
 * Look at Better Creature Drops to include Barka and Writhan quantities of their respective loot. Also look into Nornathread drops too. 
 * Look into damage difference between Frostfire and Thunderblood weapon variants.
+* Look into Dyrnwyn stats. 
 
 Trinkets:
 * Review new Trinket build costs:

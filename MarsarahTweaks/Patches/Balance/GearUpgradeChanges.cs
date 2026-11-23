@@ -11,7 +11,7 @@ namespace MarsarahTweaks.Patches.Balance
 {
 	internal class GearUpgradeChanges
 	{
-		private static readonly LogManager log = new LogManager("Gear Upgrade", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Gear Upgrade", LogManager.LogLevel.Warning);
 
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearUpgradeUnlock_Patch
@@ -152,7 +152,7 @@ namespace MarsarahTweaks.Patches.Balance
 
 			// Ashlands
 			{ "Recipe_MaceEldner", 2 }, { "Recipe_SpearSplitner", 2 }, { "Recipe_SwordNiedhogg", 2 },
-			{ "Recipe_AxeBerzerkr", 2 }, { "Recipe_SwordSlayer", 2 }, { "Recipe_SwordFire", 3 }, // Dyrnwyn
+			{ "Recipe_AxeBerzerkr", 2 }, { "Recipe_SwordSlayer", 2 }, { "Recipe_SwordFire", 2 }, // Dyrnwyn
 						
 			// Ashlands - Elemental Variants
 			{ "Recipe_MaceEldner_Blood", 2 }, { "Recipe_MaceEldner_Lightning", 2 }, { "Recipe_MaceEldner_Nature", 2 },

@@ -31,6 +31,8 @@ namespace MarsarahTweaks.Patches.Features
 			{ (Heightmap.Biome.Mistlands, "Mistlands_clear"), 2f }, // 1.5
 
 			{ (Heightmap.Biome.AshLands, "Ashlands_ashrain"), 2f }, // 1.5
+
+			{ (Heightmap.Biome.DeepNorth, "Twilight_SnowStorm"), 0.12f }, // 0.5
 		};
 
 		// Original weather weights used for restoring config changes and Alt Biome weather
