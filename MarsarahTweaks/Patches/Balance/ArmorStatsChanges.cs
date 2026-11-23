@@ -88,6 +88,12 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "$item_helmet_medium_ashlands", (5, 8, 0) },
 			{ "$item_chest_medium_ashlands", (10, 12, 0) },
 			{ "$item_legs_medium_ashlands", (10, 10, 0) },
+			{ "$item_helmet_medium_deepnorth", (5, 12, 0) },
+			{ "$item_chest_medium_deepnorth", (10, 20, 0) },
+			{ "$item_legs_medium_deepnorth", (10, 18, 0) },
+			{ "$item_helmet_heavy_deepnorth", (20, 5, 0) },
+			{ "$item_chest_heavy_deepnorth", (30, 10, 0) },
+			{ "$item_legs_heavy_deepnorth", (25, 10, 0) },
 
 			// Light Armor (Stamina Bonus)
 			{ "$item_helmet_berserker", (0, 1, 0) },
@@ -115,7 +121,10 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "$item_legs_mage", (0, 0, 20) },
 			{ "$item_helmet_mage_ashlands", (0, 0, 15) },
 			{ "$item_chest_mage_ashlands", (0, 0, 30) },
-			{ "$item_legs_mage_ashlands", (0, 0, 30) }
+			{ "$item_legs_mage_ashlands", (0, 0, 30) },
+			{ "$item_helmet_mage_deepnorth", (0, 0, 20) },
+			{ "$item_chest_mage_deepnorth", (0, 0, 40) },
+			{ "$item_legs_mage_deepnorth", (0, 0, 40) }
 		};
 
 		private static void UpdateArmorStats(Player player)

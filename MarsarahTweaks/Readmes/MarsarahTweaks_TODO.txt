@@ -80,6 +80,28 @@ B. Updates
   - Nord Sledge: Movement speed penalty -20% → -10%.
   - Nord Sledge (Frostfire and Thunderblood): -20% → -10%.
 
+* Extra Armor Stats
+  - Included Deep North armor sets in this section config. Specific details:
+
+  Protector (Heavy Armor):
+  - Helmet of the Protector: +20 HP, +5 Stamina.
+  - Breastplate of the Protector: +30 HP, +10 Stamina.
+  - Trousers of the Protector: +25 HP, +10 Stamina.
+  - Full set bonus: +75 HP, +25 Stamina.
+
+  Vanguard (Medium Armor):
+  - Hood of the Vanguard: +5 HP, +12 Stamina.
+  - Chestpiece of the Vanguard: +10 HP, +20 Stamina.
+  - Trousers of the Vanguard: +10 HP, +18 Stamina.
+  - Full set bonus: +25 HP, +50 Stamina.
+
+  Caller (Mage Armor):
+  - Headdress of the Caller: +20 Eitr.
+  - Robes of the Caller: +40 Eitr.
+  - Trousers of the Caller: +40 Eitr.
+  - Full set bonus: +100 Eitr.
+
+
 C. New Features
 ------------------------------
 

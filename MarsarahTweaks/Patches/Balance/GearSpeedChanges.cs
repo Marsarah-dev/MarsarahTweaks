@@ -12,7 +12,7 @@ namespace MarsarahTweaks.Patches.Balance
 {
 	internal class GearSpeedChanges
 	{
-		private static readonly LogManager log = new LogManager("Gear Speed", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Gear Speed", LogManager.LogLevel.Warning);
 
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearSpeedChanges_Patch
