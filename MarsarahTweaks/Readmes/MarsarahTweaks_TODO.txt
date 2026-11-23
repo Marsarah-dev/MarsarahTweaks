@@ -20,6 +20,66 @@ B. Updates
     - Moose: 10% -> 20%
     - Krigen and Hexen: 10% -> 15%
 
+* Cheaper Gear Recipe Amounts
+  - Included Deep North gear in this section config. Specific details:
+
+  Weapons:
+  - Nord Sword: Bloodgold crafting 20 → 10, upgrades 10 → 5.
+  - Nord Axe: Bloodgold crafting 20 → 10, upgrades 10 → 5.
+  - Nord Mace: Bloodgold crafting 20 → 10, upgrades 10 → 5.
+  - Nord Spear: Bloodgold crafting 20 → 10, upgrades 10 → 5.
+  - Nord Dagger: Bloodgold crafting 20 → 10, upgrades 10 → 5.
+  - Nord Knucklechains: Bloodgold crafting 20 → 10, upgrades 10 → 5.
+  - Nord Greatsword: Bloodgold crafting 20 → 15, upgrades 10 → 7.
+  - Nord Greataxe: Bloodgold crafting 20 → 15, upgrades 10 → 7.
+  - Nord Sledge: Bloodgold crafting 20 → 15, upgrades 10 → 7.
+  - Nord Atgeir: Bloodgold crafting 20 → 15, upgrades 10 → 7.
+  - Nord Bow: Bloodgold crafting 20 → 10, upgrades 10 → 5.
+  - Nord Crossbow: Bloodgold crafting 20 → 10, upgrades 10 → 5.
+
+  Elemental Imbuements (Frostfire and Thunderblood):
+  - Sword, Axe, Mace, Spear, Dagger, Knucklechains, Bow and Crossbow: Bloodgold crafting 20 → 10, upgrades 10 → 5.
+  - Greatsword, Greataxe, Sledge and Atgeir: Bloodgold crafting 20 → 15, upgrades 10 → 7.
+
+  Shields:
+  - Nord Buckler: Bloodgold crafting 10 → 8, upgrades 5 → 4.
+  - Nord Round Shield: Bloodgold crafting 15 → 10, upgrades 8 → 5.
+  - Nord Tower Shield: Bloodgold crafting 20 → 15, upgrades 10 → 7.
+
+  Projectiles:
+  - Bloodgold Arrows: Timberwood crafting 8 → 5.
+  - Bloodgold Bolts: Timberwood crafting 8 → 5.
+  - Bloodgold Ballista Bolts: Timberwood crafting 10 → 5.
+
+  Armor:
+  - Vanguard Chestpiece: Bloodgold crafting 12 → 10, upgrades 6 → 5.
+  - Vanguard Trousers: Bloodgold crafting 12 → 10, upgrades 6 → 5.
+  - Protector Helmet: Bloodgold crafting 20 → 12, upgrades 15 → 6.
+  - Protector Breastplate: Bloodgold crafting 20 → 12, upgrades 15 → 6.
+  - Protector Trousers: Bloodgold crafting 20 → 12, upgrades 15 → 6.
+
+  Other Equipment:
+  - Cape of the Caller: Refined Eitr crafting 15 → 10.
+  - Snow Shovel: Flametal crafting 4 → 5, upgrades 10 → 5.
+
+  - All other materials, mould requirements, and staff recipes remain unchanged.
+
+* Gear Speed Modifications
+  - Included Deep North armor and weapons in this section config. Specific details:
+
+  Armor:
+  - Vanguard Chestpiece: Movement speed 0% → +3%.
+  - Vanguard Trousers: Movement speed 0% → +3%.
+  - Caller Robes: Movement speed -2% → 0%.
+  - Caller Trousers: Movement speed -2% → 0%.
+  - Protector armor remains unchanged at 0%.
+
+  Weapons:
+  - Nord Greataxe: Movement speed penalty -20% → -10%.
+  - Nord Greataxe (Frostfire and Thunderblood): -20% → -10%.
+  - Nord Sledge: Movement speed penalty -20% → -10%.
+  - Nord Sledge (Frostfire and Thunderblood): -20% → -10%.
+
 C. New Features
 ------------------------------
 

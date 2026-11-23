@@ -12,7 +12,7 @@ namespace MarsarahTweaks.Patches.Grind
 {
 	internal class GearRecipeChanges
 	{
-		private static readonly LogManager log = new LogManager("Gear Recipe Changes", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Gear Recipe Changes", LogManager.LogLevel.Warning);
 
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearRecipeModifications_Patch

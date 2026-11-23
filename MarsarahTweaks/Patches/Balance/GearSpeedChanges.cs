@@ -12,7 +12,7 @@ namespace MarsarahTweaks.Patches.Balance
 {
 	internal class GearSpeedChanges
 	{
-		private static readonly LogManager log = new LogManager("Gear Speed", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Gear Speed", LogManager.LogLevel.Info);
 
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearSpeedChanges_Patch
@@ -39,7 +39,8 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "ArmorMageChest", 0f }, { "ArmorMageChest_Ashlands", 0f },
 			{ "ArmorTrollLeatherChest", 0.02f }, { "ArmorAshlandsMediumChest", 0.02f },
 			{ "ArmorRootChest", 0.01f }, { "ArmorBerserkerChest", 0.02f }, { "ArmorBerserkerUndeadChest", 0.02f },
-			{ "ArmorLoxChest", 0.02f },
+			{ "ArmorLoxChest", 0.02f },	{ "ArmorDeepNorthMediumChest", 0.03f }, // Vanguard: 0% -> +3%
+			{ "ArmorDeepNorthMageChest", 0f }, // Caller: -2% -> 0%
 
 			// Legs
 			{ "ArmorBronzeLegs", 0f }, { "ArmorIronLegs", 0f }, { "ArmorWolfLegs", 0f },
@@ -47,11 +48,15 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "ArmorMageLegs", 0f }, { "ArmorMageLegs_Ashlands", 0f },
 			{ "ArmorTrollLeatherLegs", 0.02f }, { "ArmorAshlandsMediumlegs", 0.02f },
 			{ "ArmorRootLegs", 0.01f }, { "ArmorBerserkerLegs", 0.02f }, { "ArmorBerserkerUndeadLegs", 0.02f },
-			{ "ArmorLoxLegs", 0.02f },
+			{ "ArmorLoxLegs", 0.02f }, { "ArmorDeepNorthMediumlegs", 0.03f }, // Vanguard: 0% -> +3%
+			{ "ArmorDeepNorthMagelegs", 0f }, // Caller: -2% -> 0%
+
 
 			// Two-handed weapons
 			{ "Battleaxe", -0.10f }, { "BattleaxeCrystal", -0.10f }, { "BattleaxeBlackmetal", -0.10f }, { "BattleaxeSkullSplittur", -0.10f }, 
 			{ "SledgeStagbreaker", -0.10f }, { "SledgeIron", -0.10f }, { "SledgeDemolisher", -0.10f },
+			{ "BattleaxeGold", -0.10f }, { "BattleaxeGold_FrostFire", -0.10f }, { "BattleaxeGold_BloodLightning", -0.10f },
+			{ "SledgeGold", -0.10f }, { "SledgeGold_FrostFire", -0.10f }, { "SledgeGold_BloodLightning", -0.10f },
 
 			// Shields
 			/*{ "ShieldFlametalTower", -0.10f }, { "ShieldBlackmetalTower", -0.10f },
