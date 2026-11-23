@@ -101,6 +101,35 @@ B. Updates
   - Trousers of the Caller: +40 Eitr.
   - Full set bonus: +100 Eitr.
 
+* Gear Upgrade Unlock
+  - Included Deep North gear in this section config, allowing equipment to reach quality level 4 using crafting stations available in the Deep North. Specific details:
+
+  Weapons:
+  - All 12 Nord weapons: Minimum Black Forge level 4 → 3.
+  - All Frostfire and Thunderblood weapon variants: Minimum Black Forge level 4 → 3.
+  - Both normal and imbued weapons can now reach quality level 4.
+
+  Shields:
+  - Nord Buckler, Round Shield and Tower Shield: Minimum Black Forge level 4 → 3.
+
+  Armor:
+  - Protector set (Helmet, Breastplate, Trousers): Minimum Black Forge level 4 → 3.
+  - Vanguard set (Hood, Chestpiece, Trousers): Minimum Black Forge level 4 → 3.
+  - Caller set (Headdress, Robes, Trousers): Minimum Galdr Table level 3 → 2.
+
+  Staves:
+  - Spirit Caller, Frost Orbs, Frostfire Orb Staff and Thunderblood Staff: Minimum Galdr Table level 3 → 2.
+  - Included their separate upgrade recipes.
+
+  Capes:
+  - Deep North Cape: Minimum Black Forge level 4 → 3.
+  - Cape of the Caller: Minimum Galdr Table level 4 → 2.
+
+  Ashlands Changes:
+  - Further reduced the minimum Black Forge requirement of all 21 gemmed Ashlands weapon recipes (Blood, Lightning and Nature) from level 3 → 2.
+  - This includes the Mace, Spear, Sword, Axe, Greatsword, Bow and Crossbow variants.
+  - Both normal and gemmed Ashlands weapons can now reach quality level 4 using Black Forge level 5, available within Ashlands progression.
+
 
 C. New Features
 ------------------------------

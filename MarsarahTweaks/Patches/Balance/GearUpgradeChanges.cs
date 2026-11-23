@@ -153,13 +153,13 @@ namespace MarsarahTweaks.Patches.Balance
 			// Ashlands
 			{ "Recipe_MaceEldner", 2 }, { "Recipe_SpearSplitner", 2 }, { "Recipe_SwordNiedhogg", 2 },
 			{ "Recipe_AxeBerzerkr", 2 }, { "Recipe_SwordSlayer", 2 }, { "Recipe_SwordFire", 3 }, // Dyrnwyn
-
+						
 			// Ashlands - Elemental Variants
-			{ "Recipe_MaceEldner_Blood", 3 }, { "Recipe_MaceEldner_Lightning", 3 }, { "Recipe_MaceEldner_Nature", 3 },
-			{ "Recipe_SpearSplitner_Blood", 3 }, { "Recipe_SpearSplitner_Lightning", 3 }, { "Recipe_SpearSplitner_Nature", 3 },
-			{ "Recipe_SwordNiedhogg_Blood", 3 }, { "Recipe_SwordNiedhogg_Lightning", 3 }, { "Recipe_SwordNiedhogg_Nature", 3 },
-			{ "Recipe_AxeBerzerkr_Blood", 3 }, { "Recipe_AxeBerzerkr_Lightning", 3 }, { "Recipe_AxeBerzerkr_Nature", 3 },
-			{ "Recipe_SwordSlayer_Blood", 3 }, { "Recipe_SwordSlayer_Lightning", 3 }, { "Recipe_SwordSlayer_Nature", 3 },
+			{ "Recipe_MaceEldner_Blood", 2 }, { "Recipe_MaceEldner_Lightning", 2 }, { "Recipe_MaceEldner_Nature", 2 },
+			{ "Recipe_SpearSplitner_Blood", 2 }, { "Recipe_SpearSplitner_Lightning", 2 }, { "Recipe_SpearSplitner_Nature", 2 },
+			{ "Recipe_SwordNiedhogg_Blood", 2 }, { "Recipe_SwordNiedhogg_Lightning", 2 }, { "Recipe_SwordNiedhogg_Nature", 2 },
+			{ "Recipe_AxeBerzerkr_Blood", 2 }, { "Recipe_AxeBerzerkr_Lightning", 2 }, { "Recipe_AxeBerzerkr_Nature", 2 },
+			{ "Recipe_SwordSlayer_Blood", 2 }, { "Recipe_SwordSlayer_Lightning", 2 }, { "Recipe_SwordSlayer_Nature", 2 },
 
 			// Deep North
 			{ "Recipe_SwordGold", 3 }, { "Recipe_SwordGoldUncooked", 3 },
@@ -193,10 +193,10 @@ namespace MarsarahTweaks.Patches.Balance
 
 			// Ashlands
 			{ "Recipe_BowAshlands", 2 }, { "Recipe_CrossbowRipper", 2 },
-
+						
 			// Ashlands - Elemental Variants
-			{ "Recipe_BowAshlands_Blood", 3 }, { "Recipe_BowAshlands_Lightning", 3 }, { "Recipe_BowAshlands_Nature", 3 },
-			{ "Recipe_CrossbowRipper_Blood", 3 }, { "Recipe_CrossbowRipper_Lightning", 3 }, { "Recipe_CrossbowRipper_Nature", 3 },
+			{ "Recipe_BowAshlands_Blood", 2 }, { "Recipe_BowAshlands_Lightning", 2 }, { "Recipe_BowAshlands_Nature", 2 },
+			{ "Recipe_CrossbowRipper_Blood", 2 }, { "Recipe_CrossbowRipper_Lightning", 2 }, { "Recipe_CrossbowRipper_Nature", 2 },
 
 			// Deep North
 			{ "Recipe_BowGold", 3 }, { "Recipe_BowGoldUncooked", 3 },
