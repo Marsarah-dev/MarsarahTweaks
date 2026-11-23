@@ -1,5 +1,47 @@
 ## <strong> 📜 Version History </strong>
 
+v1.9.0
+- **Updates:**
+  - **More Rare Resources**
+    - Increased Deep North armor mould drop chances from 3% to 20% for both Krigen variants and from 5% to 25% for Hexen.
+  - **Better Trophy Drop Rates**
+    - Moose trophy chance increased from 10% to 20%.
+    - Krigen and Hexen trophy chances increased from 10% to 15%.
+  - **Cheaper Gear Recipe Amounts**
+    - Added Deep North weapons, Frostfire and Thunderblood variants, shields, armor, projectiles and other equipment.
+    - Reduced Bloodgold crafting and upgrade requirements for most weapons and armor, with additional adjustments to Timberwood, Refined Eitr and Flametal costs.
+    - Armor mould requirements and staff recipes remain unchanged.
+  - **Gear Speed Modifications**
+    - Vanguard chest and legs now provide +3% movement speed each.
+    - Removed the -2% movement penalty from Caller robes and trousers.
+    - Reduced Nord Greataxe and Sledge movement penalties from -20% to -10%, including elemental variants.
+  - **Extra Armor Stats**
+    - Added Deep North armor bonuses: Protector (+75 HP / +25 Stamina), Vanguard (+25 HP / +50 Stamina) and Caller (+100 Eitr) for full sets.
+  - **Gear Upgrade Unlock**
+    - Added Deep North equipment, allowing weapons, shields, armor, capes and staves to reach quality 4 using crafting stations available within the biome.
+    - Further reduced station requirements for gemmed Ashlands weapon recipes, allowing quality 4 upgrades within Ashlands progression.
+  - **Clearer Weather**
+    - Reduced Deep North Twilight SnowStorm weight from 0.5 to 0.12, lowering its probability from 20% to approximately 5.66%.
+  - **Lighter Metal Weight**
+    - Reduced Bloodgold and Petrified Tissue weight from 14 to 8.
+  - **Reduced Crossbows Reload Time**
+    - Added the Nord Crossbow and its Frostfire and Thunderblood variants, reducing reload time from 3 to 2.5 seconds.
+  - **Better Creature Drops**
+    - Writhan Roots and Barka Frozen Branch drops increased from 1 to 2.
+    - Hexen Nornathread drops increased to 2–4 from 1-3.
+
+- **New Features:**
+  - **Better Wood Yields**
+    - Changes half-log drops to 30% regular Wood and 70% specialty wood for Pine, Birch, Oak, Ashlands and Deep North trees.
+    - Total wood quantities remain unchanged. Standing trees, full logs, stumps and Yggdrasil Shoots are unaffected.
+  - **Improved Frostfire Damage**
+    - Rebalanced all 12 Frostfire weapons to 80 Frost / 40 Fire at quality 1, retaining their original upgrade scaling.
+  - **Improved Dyrnwyn**
+    - Increased base Fire damage from 10 to 20 and added +5 Fire damage per upgrade level. Slash damage remains unchanged.
+  - **Potion Upgrade**
+    - Added three Cauldron recipes to convert lower-tier recovery meads into stronger versions at a 3:1 ratio.
+    - Conversions require Cauldron levels 3, 4 or 5, depending on the recipe, without additional ingredients or fermentation.
+
 v1.8.5
 - **New Features:**
   - **More Rare Resources**

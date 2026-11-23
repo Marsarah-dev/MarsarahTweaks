@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.8.5
+Marsarah Tweaks v1.9.0
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
@@ -21,9 +21,9 @@ If updating from an older version of Marsarah Tweaks that still contained the cu
 DEVELOPMENT NOTES
 ================================================================
 DEEP NORTH / SPOILER NOTE:
-Deep North content is intentionally not included in Marsarah Tweaks yet. I want to experience the new biome and progression myself before digging through the game files so I can play through it without spoiling the experience for myself.
+Deep North support is being added progressively. Version 1.9.0 introduces changes to gear recipes, upgrades, armor stats, weapon balance, creature drops, trophy rates, weather and resources.
 
-After completing the Deep North, I plan to review the mod's existing systems for the new content, including gear and recipe changes, build-piece costs and materials, progression systems, creature balance, trophy drops, and other relevant tweaks.
+I am still playing through the new biome myself and want to experience the remaining content without spoiling it. Features such as build-piece costs, Automatic Progression Halt and Creature Unleveler will be reviewed for Deep North as I progress further.
 
 AI USAGE DISCLOSURE:
 Marsarah Tweaks grew out of my original MarsarahMod project, whose code I initially wrote myself. AI tools were later used to assist with porting that code into Marsarah Tweaks and are now used as part of my development workflow for tasks such as debugging, refactoring, compatibility updates, researching game API changes, and documentation.
@@ -705,6 +705,58 @@ MOD CONFIGS
 - Mechanical Spring
   • Craft (Iron):                3        → 1
 
+== Deep North ==
+
+- Nord Sword, Axe, Mace, Spear, Dagger, Knucklechains, Bow and Crossbow:
+  • Bloodgold Craft:            20 → 10
+  • Bloodgold Upgrade:          10 → 5 per level
+
+- Nord Greatsword, Greataxe, Sledge and Atgeir:
+  • Bloodgold Craft:            20 → 15
+  • Bloodgold Upgrade:          10 → 7 per level
+
+- Frostfire and Thunderblood variants:
+  • Sword, Axe, Mace, Spear, Dagger, Knucklechains, Bow and Crossbow:
+    Bloodgold Craft:            20 → 10
+    Bloodgold Upgrade:          10 → 5 per level
+  • Greatsword, Greataxe, Sledge and Atgeir:
+    Bloodgold Craft:            20 → 15
+    Bloodgold Upgrade:          10 → 7 per level
+
+- Nord Buckler:
+  • Bloodgold Craft:            10 → 8
+  • Bloodgold Upgrade:          5 → 4 per level
+
+- Nord Round Shield:
+  • Bloodgold Craft:            15 → 10
+  • Bloodgold Upgrade:          8 → 5 per level
+
+- Nord Tower Shield:
+  • Bloodgold Craft:            20 → 15
+  • Bloodgold Upgrade:          10 → 7 per level
+
+- Bloodgold Arrows and Bolts:
+  • Timberwood Craft:           8 → 5
+
+- Bloodgold Ballista Bolts:
+  • Timberwood Craft:           10 → 5
+
+- Vanguard Chestpiece and Trousers:
+  • Bloodgold Craft:            12 → 10
+  • Bloodgold Upgrade:          6 → 5 per level
+
+- Protector Helmet, Breastplate and Trousers:
+  • Bloodgold Craft:            20 → 12
+  • Bloodgold Upgrade:          15 → 6 per level
+
+- Cape of the Caller:
+  • Refined Eitr Craft:         15 → 10
+
+- Snow Shovel:
+  • Flametal Craft:             4 → 5
+  • Flametal Upgrade:           10 → 5 per level
+
+All other material requirements, armor mould costs and staff recipes remain unchanged.
 
 -------------- [Alternate Gear Recipe Materials] ---------------
 
@@ -1147,6 +1199,13 @@ MOD CONFIGS
   Other loot weights and quantities remain unchanged.
   Molten Core, Flametal Ore and Idol appearance probabilities remain approximately the same as vanilla.
 
+  Deep North armor mould drop chances (per mould):
+  - Krigen (both variants):   3% → 20%
+  - Hexen:                   5% → 25%
+
+  Original creature star scaling remains unchanged.
+  Drop changes affect newly spawned creatures.
+
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
   Changes apply when chest loot is first generated.
@@ -1154,6 +1213,31 @@ MOD CONFIGS
 
 ► Conflicts:
   May conflict with mods that modify Charred Fortress chest loot tables.
+
+
+--------------------- [Better Wood Yields] ---------------------
+
+► Description:
+  Changes half-log wood drops to 30% regular Wood and 70% specialty wood.
+  Total wood quantities remain unchanged.
+
+▼ Changes:
+  - Pine: Core Wood
+  - Birch and Oak: Fine Wood
+  - Ashlands trees: Ashwood
+  - Deep North trees: Timberwood
+
+  Only affects half-logs. Standing trees, full logs, stumps
+  and Yggdrasil Shoots remain unchanged.
+  Respects Automatic Progression Halt.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+  Changes affect newly spawned half-logs. Existing half-logs
+  may require reloading the area.
+
+► Conflicts:
+  May conflict with mods that modify the same wood drop tables.
 
 
 ---------------- [Food And Mead Modifications] -----------------
@@ -1516,6 +1600,33 @@ Ashlands:
 - Sparkling Shroomshake
 
 
+----------------------- [Potion Upgrade] -----------------------
+
+► Description:
+  Converts surplus lower-tier recovery meads into stronger versions
+  at the Cauldron, using a 3:1 conversion ratio.
+  No additional ingredients or fermentation are required.
+
+▼ New Recipes:
+  - 3 Minor Healing Meads → 1 Medium Healing Mead
+    • Required Cauldron Level: 3
+
+  - 3 Minor Stamina Meads → 1 Medium Stamina Mead
+    • Required Cauldron Level: 4
+
+  - 3 Medium Healing Meads → 1 Major Healing Mead
+    • Required Cauldron Level: 5
+
+  Normal mead recipes and brewing remain unchanged.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+  Reopen the Cauldron crafting menu to refresh the recipes.
+
+► Conflicts:
+  May conflict with mods that add equivalent conversion recipes.
+
+
 ========================= [Balance] ============================
 ► All configs in this section are synced with server.
 
@@ -1557,9 +1668,11 @@ Ashlands:
 - All mage chest and leg pieces speed penalty:                -2%  → 0%
 - Troll, Bear, Vilebone, Lox Fur & Ask chest/legs speed bonus: 0%  → 2%
 - Root armor chest and leg pieces speed bonus:                 0%  → 1%
+- Vanguard chest and leg pieces speed bonus:                   0%  → 3%
 - Battleaxes and Sledgehammers speed penalty:                 -15% → -10%
+- Nord Greataxe and Sledge:                                   -20% → -10%
 - Serpent Scale Shield speed modifier:                        -10% → -5%
-
+  
 
 ---------------------- [Extra Armor Stats] ---------------------
 
@@ -1576,41 +1689,92 @@ Ashlands:
   Compatible with custom armor mods, since this only modifies vanilla gear.
 
 ▼ Changes:
-- HP values:      total (head, chest, legs):
-  • Bronze set:   10    (2,    4,     4)
-  • Iron set:     20    (4,    8,     8)
-  • Silver set:   30    (8,    12,    10)
-  • Padded set:   40    (10,   16,    14)
-  • Carapace set: 50    (12,   20,    18)
-  • Flametal set: 60    (14,   24,    22)
-  • Ask set:      25    (5,    10,    10)
-- Stamina values: total (head, chest, legs):
-  • Troll set:    5     (1,    2,     2)
-  • Bear set:     5     (1,    2,     2)
-  • Root set:     10    (3,    4,     3)
-  • Fenris set:   15    (4,    6,     5)
-  • Vilebone set: 20    (5,    8,     7)
-  • Lox Fur set:  20    (5,    8,     7)
-  • Ask set:      30    (8,    12,    10)
-- Eitr values:    total (head, chest, legs):
-  • Eitr-Weave:   50    (10,   20,    20)
-  • Embla set:    75    (15,   30,    30)
+- HP values:       total (head, chest, legs):
+  • Bronze set:    10    (2,    4,     4)
+  • Iron set:      20    (4,    8,     8)
+  • Silver set:    30    (8,    12,    10)
+  • Padded set:    40    (10,   16,    14)
+  • Carapace set:  50    (12,   20,    18)
+  • Flametal set:  60    (14,   24,    22)
+  • Ask set:       25    (5,    10,    10)
+  • Protector set: 75    (20,   30,    25)
+  • Vanguard set:  25    (5,    10,    10)
+- Stamina values:  total (head, chest, legs):
+  • Troll set:     5     (1,    2,     2)
+  • Bear set:      5     (1,    2,     2)
+  • Root set:      10    (3,    4,     3)
+  • Fenris set:    15    (4,    6,     5)
+  • Vilebone set:  20    (5,    8,     7)
+  • Lox Fur set:   20    (5,    8,     7)
+  • Ask set:       30    (8,    12,    10)
+  • Protector set: 25    (5,    10,    10)
+  • Vanguard set:  50    (12,   20,    18)
+- Eitr values:     total (head, chest, legs):
+  • Eitr-Weave:    50    (10,   20,    20)
+  • Embla set:     75    (15,   30,    30)
+  • Caller set:    100   (20,   40,    40)
 
 
 -------------------- [Gear Upgrade Unlock] ---------------------
 
 ► Description:
-  Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to lvl 4 within their respective biomes.
-  This is accomplished by reducing the crafting workstation level requirements for Leather Set, Troll Set, Bronze Set, all Mistlands sets, and all Ashlands sets.
+  Gear from Meadows, Black Forest, Mistlands, Ashlands and Deep North can be upgraded to lvl 4 within their respective biomes.
+  This is accomplished by reducing the required crafting station levels.
   NOTE: Special Ashlands weapons that use gems can be crafted to lvl 3 (e.g. Klossen max level upgrade is 3 (from 2)).
 
   The Vilebone Set recipe is moved to the Workbench as a crafting station (from Forge).
+  Gemmed Ashlands weapons, including Dyrnwyn can now reach level 4 at a level 5 Black Forge (within Ashlands progression).
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay, but requires the relevant crafting menu to be reopened to take effect.
 
 ► Conflicts:
   Incompatible with other mods that modify the required station level for the named sets.
+
+
+------------------ [Improved Frostfire Damage] -----------------
+
+► Description:
+  Rebalances all 12 Deep North Frostfire weapons to provide more Fire damage while retaining most of their Frost damage.
+
+▼ Changes:
+  - Base Frost damage:       88 → 80
+  - Base Fire damage:        12 → 40
+  - Frostfire Dagger Fire:   10 → 40
+
+  Elemental upgrade scaling remains +3 Frost and +3 Fire per level.
+  Physical damage and other weapon stats remain unchanged.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+  Equipped weapons require a CLIENT relog.
+
+► Conflicts:
+  May conflict with mods that modify Frostfire weapon damage.
+
+
+--------------------- [Improved Dyrnwyn] -----------------------
+
+► Description:
+  Improves Dyrnwyn's Fire damage and adds Fire damage scaling when upgrading the weapon.
+
+▼ Changes:
+  - Base Fire damage:        10 → 20
+  - Fire damage per level:    0 → 5
+
+  Quality 1: 145 Slash + 20 Fire
+  Quality 2: 151 Slash + 25 Fire
+  Quality 3: 157 Slash + 30 Fire
+  Quality 4: 163 Slash + 35 Fire
+
+  Slash damage and its +6 per-level scaling remain unchanged.
+
+► Mid-Game Toggling:
+  Can be enabled/disabled during gameplay.
+  Equipped weapons require a CLIENT relog.
+
+► Conflicts:
+  May conflict with mods that modify Dyrnwyn's damage.
 
 
 -------------------- [Crown of Roots Changes] -------------------
@@ -1825,6 +1989,7 @@ Ashlands:
 
 ► Description:
   Crossbows Reload Time Reduced by 1s (3.5s → 2.5s).
+  Deep North Crossbows are reduced by 0.5 (3s → 2.5s).
 
 ► Mid-Game Toggling:
   Toggling mid-game requires CLIENT relog.
@@ -1889,12 +2054,16 @@ Ashlands:
 - Dverger:          5%  → 10% 
 - Seeker Soldier:   5%  → 20% 
 - Charred Warlock:  5%  → 20% 
+- Moose:            10% → 20%
+- Krigen:           10% → 15% (both variants)
+- Hexen:            10% → 15%
 
 
 -------------------- [Better Creature Drops] -------------------
 
 ► Description:
-  Modifies the drop rates and type of items for Fenring, Bat and Dverger
+  Modifies the drop rates and type of items for Fenring, Bat and Dverger.
+  modifies quantities of drops for Writhan, Barka and Hexen.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay, but the changes will only apply to newly spawned creatures.
@@ -1911,6 +2080,12 @@ Ashlands:
   - Added Blood Bag (50% chance drop, in addition to Leather Scraps)
 - Dverger Rogue, Mage and Ashlands Dvergr: 
   - Increased Soft Tissue drop chance to 100% (from 25%)
+- Writhan:
+  - Writhan Roots: 1 → 2 (retains creature level scaling)
+- Barka:
+  - Frozen Branch: 1 → 2
+- Hexen:
+  - Nornathread: 1–3 → 2–4
 
 
 ------------------- [Black Forest Root Drops] -------------------
@@ -2278,7 +2453,7 @@ Ashlands:
 ----------------------- [Clearer Weather] ----------------------
 
 ► Description:
-  Reduces chance for mist, rain and snowstorms in Meadows, Plains, and Mountains respectively.
+  Reduces chance for mist, rain and snowstorms in Meadows, Plains, Mountains, and Deep North respectively.
   For the Ocean biome, only the mist chance is reduced.
   Preserves custom Alternative Biome weather behavior, such as Dark Meadows.
 
@@ -2470,6 +2645,7 @@ Ashlands:
 
 - All Ores:   10 → 8
 - All Metals: 12 → 8
+- Deep North Petrified Tissue and Bloodgold: 14 → 8
 
 
 -------------------- [Larger Pickup Area] ----------------------
@@ -2767,6 +2943,40 @@ Ashlands:
 
 VERSION HISTORY
 ================================================================
+
+v1.9.0
+- Updates:
+  - More Rare Resources
+    - Krigen armor mould drop chances: 3% → 20%. Hexen: 5% → 25%.
+  - Better Trophy Drop Rates
+    - Moose: 10% → 20%. Krigen and Hexen: 10% → 15%.
+  - Cheaper Gear Recipe Amounts
+    - Added Deep North weapons, elemental variants, armor, shields, projectiles and equipment, with reduced Bloodgold and other material costs.
+  - Gear Speed Modifications
+    - Vanguard chest/legs: +3% each; Caller chest/legs: -2% → 0%; Nord Greataxe/Sledge: -20% → -10%.
+  - Extra Armor Stats
+    - Protector: +75 HP/+25 Stamina; Vanguard: +25 HP/+50 Stamina; Caller: +100 Eitr for full sets.
+  - Gear Upgrade Unlock
+    - Added Deep North equipment for quality 4 upgrades within the biome.
+    - Further reduced Ashlands gemmed weapon station requirements to allow quality 4.
+  - Clearer Weather
+    - Deep North Twilight SnowStorm weight: 0.5 → 0.12 (20% → 5.66%).
+  - Lighter Metal Weight
+    - Bloodgold and Petrified Tissue: 14 → 8.
+  - Reduced Crossbows Reload Time
+    - Nord Crossbow and elemental variants: 3 → 2.5 seconds.
+  - Better Creature Drops
+    - Writhan Roots and Barka Frozen Branch: 1 → 2; Hexen Nornathread: 1–3 → 2–4.
+
+- New Features:
+  - Better Wood Yields
+    - Half-log drops: 30% regular Wood / 70% specialty wood, with unchanged total quantities.
+  - Improved Frostfire Damage
+    - All 12 Frostfire weapons: 80 Frost / 40 Fire at quality 1.
+  - Improved Dyrnwyn
+    - Fire damage: 10 → 20, with +5 Fire per upgrade level.
+  - Potion Upgrade
+    - Added three 3:1 recovery-mead conversion recipes at Cauldron levels 3, 4 and 5.
 
 v1.8.5
 - New Features:

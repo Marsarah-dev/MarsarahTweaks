@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.8.5
+[b]Version:[/b] 1.9.0
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -24,10 +24,9 @@ If updating from an older version of Marsarah Tweaks that still contained the cu
 
 [size=4][b]Development Notes[/b][/size]
 
-[b]Deep North / Spoiler Note:[/b] Deep North content is intentionally not included in Marsarah Tweaks yet. 
-I want to experience the new biome, progression, gear, build pieces, and other content myself before digging through the game files, so I can play through it without spoiling the experience for myself. 
-Once I have played through the Deep North, I plan to update the mod to properly include its content across the relevant features, including things such as gear and recipe changes, 
-build-piece costs and materials, progression and balance adjustments, and any other existing tweaks that should apply to the new content.
+[b]Deep North / Spoiler Note:[/b] Version 1.9.0 introduces support for Deep North gear, resources, weather and creature drops across several existing features, along with new balance options.
+
+I am still playing through the biome myself and want to experience the remaining content without spoilers. More Deep North support, including build-piece adjustments and progression-related features, is planned as I continue my playthrough.
 
 [b]AI Usage Disclosure:[/b] Marsarah Tweaks grew out of my original MarsarahMod project, whose code I initially wrote myself. 
 AI tools were later used to assist with porting that code into Marsarah Tweaks and are now used as part of my development workflow for tasks such as debugging, refactoring, compatibility updates, researching game API changes, and documentation. 
@@ -113,9 +112,10 @@ They can be toggled mid-game, unless otherwise specified.
 [size=4][b]🔧 Cheaper Gear Recipe Amounts[/b][/size]
 
 - Reduces the [b]amount[/b] (not type) of resources needed to craft or upgrade vanilla gear.
-- Focused especially on metal for weapons and armor  
-- Rebalances the material amounts for some recipes (e.g. more wood or leather) for game balance  
-- Specific details can be found in the readme file in the [b]Docs[/b] tab 
+- Focused especially on metal for weapons and armor.  
+- Rebalances the material amounts for some recipes (e.g. more wood or leather) for game balance.  
+- Added Deep North gear, including all Nord weapons, Frostfire/Thunderblood variants, shields, armor and projectiles. 
+- Specific details can be found in the readme file in the [b]Docs[/b] tab. 
 - Toggling mid-game requires reopening the relevant crafting menu.
 - [b]Conflicts:[/b] Mods that change gear recipe ingredients.
 
@@ -208,7 +208,17 @@ They can be toggled mid-game, unless otherwise specified.
 - Gems now appear in quantities of [b]2–3[/b] instead of 1, with increased loot weights.
 - The chances of finding Molten Cores, Flametal Ore and Idols remain approximately unchanged.
 - Only affects newly generated chest loot. Existing contents are not modified.
+- Deep North armor mould drop chances increased from [b]3% to 20%[/b] for both Krigen variants and from [b]5% to 25%[/b] for Hexen. Original star scaling remains unchanged.
 - [b]Conflicts:[/b] Mods that modify Charred Fortress chest loot.
+
+
+[size=4][b]🔧 Better Wood Yields[/b][/size]
+
+- Changes half-log drops to [b]30% regular Wood and 70% specialty wood[/b] (Core Wood, Fine Wood, Ashwood and Timberwood).
+- Applies to Pine, Birch, Oak, Ashlands and Deep North trees.
+- Total wood quantities remain unchanged. Standing trees, full logs, stumps and Yggdrasil Shoots are unaffected.
+- Respects Automatic Progression Halt.
+- Can be toggled mid-game; existing half-logs may require reloading the area.
 
 
 [size=4][b]🔧 Food and Mead Modifications[/b][/size]
@@ -233,6 +243,17 @@ They can be toggled mid-game, unless otherwise specified.
 - Deep North foods and feasts are not modified.
 - Toggling mid-game requires a [b]client[/b] relog for food already in inventory.
 - [b]Conflicts:[/b] Mods that modify the duration of the same foods.
+
+
+[size=4][b]🔧 Potion Upgrade[/b][/size]
+
+- Converts lower-tier recovery meads into stronger versions at the Cauldron using a [b]3:1 ratio[/b].
+- [b]3 Minor Healing → 1 Medium Healing[/b] (Cauldron level 3).
+- [b]3 Minor Stamina → 1 Medium Stamina[/b] (Cauldron level 4).
+- [b]3 Medium Healing → 1 Major Healing[/b] (Cauldron level 5).
+- No additional ingredients or fermentation required. Normal brewing remains unchanged.
+- Supports mid-game toggling; reopen the Cauldron menu to refresh recipes.
+
 
 [line]
 
@@ -275,6 +296,9 @@ They can be toggled mid-game, unless otherwise specified.
 &nbsp;&nbsp;&nbsp;• Battleaxes & Sledgehammers: -15% → -10%
 - [b]Shield Penalties:[/b]
 &nbsp;&nbsp;&nbsp;• Serpent Scale Shield: -5%
+- [b]Deep North Vanguard:[/b] Chestpiece and Trousers now provide +3% movement speed each.
+- [b]Deep North Caller:[/b] Robes and Trousers movement penalty -2% → 0%.
+- [b]Nord Greataxe and Sledge:[/b] -20% → -10%, including Frostfire and Thunderblood variants.
 
 
 [size=4][b]🔧 Extra Armor Stats[/b][/size]
@@ -299,10 +323,12 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Carapace:[/b] 50 - 12 / 20 / 18
 - [b]Flametal:[/b] 60 - 14 / 24 / 22
 - [b]Ask:[/b] 25 - 5  / 10 / 10
+- [b]Protector:[/b] 75 - 20 / 30 / 25
+- [b]Vanguard:[/b] 25 - 5 / 10 / 10
 
 [b]Stamina (Light Armor):[/b]
 
-- [b]Set: Total HP - Breakdown (Head / Chest / Legs)[/b]
+- [b]Set: Total Stamina - Breakdown (Head / Chest / Legs)[/b]
 - [b]Troll:[/b] 5  - 1 / 2 / 2
 - [b]Bear:[/b] 5  - 1 / 2 / 2
 - [b]Root:[/b] 10 - 3 / 4 / 3
@@ -310,22 +336,41 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Vilebone:[/b] 20 - 5 / 8 / 7
 - [b]Lox Fur:[/b] 20 - 5 / 8 / 7
 - [b]Ask:[/b] 30 - 8 / 12 / 10
+- [b]Protector:[/b] 25 - 5 / 10 / 10
+- [b]Vanguard:[/b] 50 - 12 / 20 / 18
 
 [b]Eitr (Mage Armor):[/b]
 
-- [b]Set: Total HP - Breakdown (Head / Chest / Legs)[/b]
+- [b]Set: Total Eitr - Breakdown (Head / Chest / Legs)[/b]
 - [b]Eitr-Weave:[/b] 50 - 10 / 20 / 20
 - [b]Embla:[/b] 75 - 15 / 30 / 30
+- [b]Caller:[/b] 100 - 20 / 40 / 40
 
 
 [size=4][b]🔧 Gear Upgrade Unlock[/b][/size]
 
-- Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to lvl 4 within their respective biomes.  
-- This is accomplished by reducing the crafting workstation level requirements for Leather Set, Troll Set, Bronze Set, all Mistlands sets, and all Ashlands sets.  
-- [b]Note:[/b] Special Ashlands weapons that use gems can be crafted to lvl 3 (e.g. Klossen max level upgrade is 3 (from 2)).
+- Gear from Meadows, Black Forest, Mistlands, Ashlands and Deep North can be upgraded to lvl 4 within their respective biomes.  
+- This is accomplished by reducing the crafting workstation level requirements for Leather Set, Troll Set, Bronze Set, all Mistlands sets, all Ashlands sets and all Deep North sets.  
+- Further reduced crafting station requirements for gemmed Ashlands weapons and Dyrnwyn, allowing quality 4 upgrades at a level 5 Black Forge (withing Ashlands progression).
 - The Vilebone Set recipe is moved to the Workbench as a crafting station (from Forge).
 - Toggling mid-game requires the relevant crafting menu to be reopened.
 - [b]Conflicts:[/b] Mods that modify the required station level for the named sets.
+
+
+[size=4][b]🔧 Improved Frostfire Damage[/b][/size]
+
+- Rebalances all [b]12 Frostfire weapons[/b] to deal [b]80 Frost / 40 Fire[/b] at quality 1 (previously 88 Frost / 12 Fire, or 10 Fire for the Dagger).
+- Preserves physical damage and elemental upgrade scaling (+3 Frost / +3 Fire per level).
+- Toggling mid-game requires a [b]client relog[/b] for equipped weapons.
+- [b]Conflicts:[/b] Mods that modify Frostfire weapon damage.
+
+
+[size=4][b]🔧 Improved Dyrnwyn[/b][/size]
+
+- Increases Dyrnwyn's base Fire damage from [b]10 to 20[/b] and adds [b]+5 Fire per upgrade level[/b].
+- Slash damage and upgrade scaling remain unchanged.
+- Toggling mid-game requires a [b]client relog[/b] for equipped weapons.
+- [b]Conflicts:[/b] Mods that modify Dyrnwyn's damage.
 
 
 [size=4][b]🔧 Crown of Roots Changes[/b][/size]
@@ -460,11 +505,15 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Dverger:[/b] 5%  → 10%
 - [b]Seeker Soldier:[/b] 5%  → 20%
 - [b]Charred Warlock:[/b] 5%  → 20%
+- [b]Moose:[/b] 10% → 20%
+- [b]Krigen (both variants):[/b] 10% → 15%
+- [b]Hexen:[/b] 10% → 15%
 
 
 [size=4][b]🔧 Better Creature Drops[/b][/size]
 
 - Modifies the drop rates and type of items for Fenring, Bat and Dverger.
+- Increases quantities of drops for Writhan, Barka and Hexen.
 - Can be enabled/disabled during gameplay, but the changes will only apply to newly spawned creatures.
 - [b]Conflicts:[/b] Incompatible with any mod that modifies creature drop rates and drop types.
 
@@ -477,6 +526,9 @@ They can be toggled mid-game, unless otherwise specified.
 &nbsp;&nbsp;&nbsp;- Added Blood Bag (50% chance drop, in addition to Leather Scraps)
 - [b]Dverger Rogue, Mage and Ashlands Dvergr:[/b] 
 &nbsp;&nbsp;&nbsp;- Increased Soft Tissue drop chance to 100% (from 25%)
+- [b]Writhan:[/b] Writhan Roots 1 → 2.
+- [b]Barka:[/b] Frozen Branch 1 → 2.
+- [b]Hexen:[/b] Nornathread 1–3 → 2–4.
 
 
 [size=4][b]🔧 Black Forest Root Drops[/b][/size]
@@ -621,7 +673,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 [size=4][b]🔧 Clearer Weather[/b][/size]
 
-- Reduces chance for mist, rain and snowstorms in Meadows, Plains, and Mountains respectively.
+- Reduces chance for mist, rain and snowstorms in Meadows, Plains, Mountains and Deep North respectively.
 - For the Ocean biome, only the mist chance is reduced.
 - Preserves custom Alternative Biome weather behavior, such as Dark Meadows.
 - Toggling mid-game requires [b]client[/b] relog.
@@ -740,6 +792,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 - [b]All Ores:[/b] 10 → 8
 - [b]All Metals:[/b] 12 → 8
+- [b]Bloodgold and Petrified Tissue:[/b] 14 → 8.
 
 
 [size=4][b]🔧 Larger Pickup Area[/b][/size]
@@ -886,7 +939,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 Marsarah Tweaks will continue to receive new gameplay, balance, grind-reduction and quality-of-life options over time.
 
-Deep North content is intentionally deferred until I have completed my own playthrough. After that, existing features such as recipe changes, gear balance, Progression Halt, Creature Unleveler, trophy drops and other relevant systems will be reviewed for the new content.
+Deep North support will continue to expand as I progress through the biome, including build-piece costs, Automatic Progression Halt, Creature Unleveler and other relevant systems not yet covered by the mod.
 
 UI development will continue separately in [b]MarsarahUI[/b], while new custom build pieces and functional placeable objects will be developed in [b]MarsarahBuildPieces[/b].
 
@@ -908,6 +961,25 @@ Blaxxun-bloop - for ServerSync
 
 
 [size=5][b]📜 Version History[/b][/size]
+
+[size=4][b]v1.9.0[/b][/size]
+- [b]Updates:[/b]
+  - [b]More Rare Resources:[/b] Krigen armor moulds 3% → 20%; Hexen 5% → 25%.
+  - [b]Better Trophy Drop Rates:[/b] Moose 10% → 20%; Krigen and Hexen 10% → 15%.
+  - [b]Cheaper Gear Recipe Amounts:[/b] Added Deep North gear, with reduced Bloodgold and other resource requirements.
+  - [b]Gear Speed Modifications:[/b] Vanguard +3% per chest/legs; Caller -2% → 0%; Nord Greataxe/Sledge -20% → -10%.
+  - [b]Extra Armor Stats:[/b] Protector +75 HP/+25 Stamina; Vanguard +25 HP/+50 Stamina; Caller +100 Eitr.
+  - [b]Gear Upgrade Unlock:[/b] Added Deep North quality 4 upgrades and improved Ashlands gemmed weapon upgrade availability.
+  - [b]Clearer Weather:[/b] Deep North snowstorm probability 20% → 5.66%.
+  - [b]Lighter Metal Weight:[/b] Bloodgold and Petrified Tissue 14 → 8.
+  - [b]Reduced Crossbows Reload Time:[/b] Added Nord Crossbows at 2.5 seconds.
+  - [b]Better Creature Drops:[/b] Increased Writhan Roots, Frozen Branch and Nornathread quantities.
+
+- [b]New Features:[/b]
+  - [b]Better Wood Yields:[/b] 30% regular Wood / 70% specialty wood from half-logs.
+  - [b]Improved Frostfire Damage:[/b] 80 Frost / 40 Fire at quality 1.
+  - [b]Improved Dyrnwyn:[/b] 20 base Fire damage, +5 per upgrade level.
+  - [b]Potion Upgrade:[/b] Three 3:1 recovery-mead conversions at Cauldron levels 3–5.
 
 [size=4][b]v1.8.5[/b][/size]
 - [b]New Features:[/b]

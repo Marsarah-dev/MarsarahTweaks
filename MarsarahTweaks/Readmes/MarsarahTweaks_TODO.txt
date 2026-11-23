@@ -219,7 +219,6 @@ C. Features
 * Allow ships to be destroyed with the hammer.
 * Allow Boars to eat Yellow Mushrooms.
 * Player Inspector for players currently logged into the world.
-
 * Look into Hexen HP threshold that makes her go down.
 
 Trinkets:
