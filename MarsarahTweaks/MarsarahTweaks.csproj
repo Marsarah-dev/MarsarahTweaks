@@ -100,6 +100,7 @@
     <Compile Include="Patches\Features\HealStaff.cs" />
     <Compile Include="Patches\Features\LessBrazierSmoke.cs" />
     <Compile Include="Patches\Features\SerpentSpawnChanges.cs" />
+    <Compile Include="Patches\Grind\BetterWoodYields.cs" />
     <Compile Include="Patches\Grind\FoodDurationChanges.cs" />
     <Compile Include="Patches\Grind\RareResourceChanges.cs" />
     <Compile Include="Patches\QOL\HoeRadiusChanges.cs" />
