@@ -168,7 +168,12 @@ C. New Features
   - Added a new feature under Balance to improve Deep North Frostfire weapon damage across all 12 weapon variants.
   - Changed base elemental damage from 88 Frost / 12 Fire (10 Fire for Dagger) to **80 Frost / 40 Fire** at quality 1.
   - Preserved the existing physical damage and elemental upgrade scaling (+3 Frost / +3 Fire per quality level).
-  
+
+* Improved Dyrnwyn
+  - Added a new feature under Balance to improve Dyrnwyn's damage.
+  - Increased base Fire damage from 10 to 20 and added +5 Fire damage per upgrade level (previously 0).
+  - Preserved the original Slash damage and upgrade scaling.
+
 
 D. Others
 ------------------------------
