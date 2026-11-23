@@ -11,7 +11,7 @@ namespace MarsarahTweaks.Patches.Balance
 {
 	internal class TrophyDropsChanges
 	{
-		private static readonly LogManager log = new LogManager("Trophy Drops", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Trophy Drops", LogManager.LogLevel.Warning);
 
 		// Eikthyr - Rancid Remains (10% -> 20%), Ghost (10% -> 20%), Bear (10% -> 20%)
 		// The Elder - Surtling (5% -> 10%), Draugr Elite (10% -> 20%), Wraith (5% -> 20%)

@@ -12,7 +12,7 @@ namespace MarsarahTweaks.Patches.Grind
 {
 	internal class GearRecipeChanges
 	{
-		private static readonly LogManager log = new LogManager("Gear Recipe Changes", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Gear Recipe Changes", LogManager.LogLevel.Info);
 
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class GearRecipeModifications_Patch
@@ -673,6 +673,369 @@ namespace MarsarahTweaks.Patches.Grind
 				}
 			},
 
+			
+			// Deep North
+			// One-handed weapons
+			{
+				"Recipe_SwordGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_SwordGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_AxeGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_AxeGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_MaceGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_MaceGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_SpearGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_SpearGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_KnifeGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_KnifeGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_FistweaponGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_FistweaponGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+
+			// DN Two-handed weapons
+			{
+				"Recipe_THSwordGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_THSwordGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+			{
+				"Recipe_BattleaxeGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_BattleaxeGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+			{
+				"Recipe_SledgeGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_SledgeGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+			{
+				"Recipe_AtgeirGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_AtgeirGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+
+			// DN Shields
+			{
+				"Recipe_ShieldBucklerGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (8, null) } // 10, 10
+				}
+			},
+			{
+				"Recipe_ShieldBucklerGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (8, 4) } // 10, 5
+				}
+			},
+			{
+				"Recipe_ShieldRoundGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, null) } // 15, 10
+				}
+			},
+			{
+				"Recipe_ShieldRoundGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 15, 8
+				}
+			},
+			{
+				"Recipe_ShieldTowerGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, null) } // 20, 10
+				}
+			},
+			{
+				"Recipe_ShieldTowerGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+
+			// DN Bows and crossbows
+			{
+				"Recipe_BowGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_BowGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_CrossbowGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_CrossbowGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+
+			// DN Projectiles
+			{
+				"Recipe_ArrowBloodGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Frostwood", (5, null) } // 8, 1
+				}
+			},
+			{
+				"Recipe_BoltBloodGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Frostwood", (5, null) } // 8, 1
+				}
+			},
+			{
+				"Recipe_TurretBoltBloodGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Frostwood", (5, null) } // 10, 1
+				}
+			},
+
+			
+			// Deep North elemental imbuements
+			// One-handed weapons
+			{
+				"Recipe_SwordGold_FrostFire", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_SwordGold_BloodLightning", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_AxeGold_FrostFire", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_AxeGold_BloodLightning", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_MaceGold_FrostFire", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_MaceGold_BloodLightning", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_SpearGold_FrostFire", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_SpearGold_BloodLightning", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_KnifeGold_FrostFire", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_KnifeGold_BloodLightning", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_FistGold_FrostFire", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_FistGold_BloodLightning", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+
+			// DN Two-handed weapons elemental
+			{
+				"Recipe_THSwordGold_FrostFire", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+			{
+				"Recipe_THSwordGold_BloodLightning", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+			{
+				"Recipe_BattleaxeGold_FrostFire", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+			{
+				"Recipe_BattleaxeGold_BloodLightning", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+			{
+				"Recipe_SledgeGold_FrostFire", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+			{
+				"Recipe_SledgeGold_BloodLightning", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+			{
+				"Recipe_AtgeirGold_FrostFire", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+			{
+				"Recipe_AtgeirGold_BloodLightning", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (15, 7) } // 20, 10
+				}
+			},
+
+			// Bow and crossbow
+			{
+				"Recipe_BowGold_FrostFire", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_BowGold_BloodLightning", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_CrossbowGold_FrostFire", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+			{
+				"Recipe_CrossbowGold_BloodLightning", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 20, 10
+				}
+			},
+
+
 			// == Armor ==
 			// Rag
 			{
@@ -1017,6 +1380,86 @@ namespace MarsarahTweaks.Patches.Grind
 				"Recipe_CapeAsh", new Dictionary<string, (int?, int?)>
 				{
 					{ "FlametalNew", (0, null) } // 5, 0
+				}
+			},
+
+			
+			// Deep North armor
+			// Vanguard
+			{
+				"Recipe_ArmorGoldMediumChestUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, null) } // 12, 15
+				}
+			},
+			{
+				"Recipe_ArmorGoldMediumChest", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 12, 6
+				}
+			},
+			{
+				"Recipe_ArmorGoldMediumLegsUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, null) } // 12, 15
+				}
+			},
+			{
+				"Recipe_ArmorGoldMediumLegs", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (10, 5) } // 12, 6
+				}
+			},
+
+			// Protector
+			{
+				"Recipe_HelmetGoldUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (12, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_HelmetGold", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (12, 6) } // 20, 15
+				}
+			},
+			{
+				"Recipe_ArmorGoldChestUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (12, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_ArmorGoldChest", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (12, 6) } // 20, 15
+				}
+			},
+			{
+				"Recipe_ArmorGoldLegsUncooked", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (12, null) } // 20, 15
+				}
+			},
+			{
+				"Recipe_ArmorGoldLegs", new Dictionary<string, (int?, int?)>
+				{
+					{ "Gold", (12, 6) } // 20, 15
+				}
+			},
+
+			// Other Deep North equipment
+			{
+				"Recipe_CapeDeepNorthMage", new Dictionary<string, (int?, int?)>
+				{
+					{ "Eitr", (10, null) } // 15, 5
+				}
+			},
+			{
+				"Recipe_SnowShovel", new Dictionary<string, (int?, int?)>
+				{
+					{ "FlametalNew", (5, 5) } // 4, 10
 				}
 			}
 		};
