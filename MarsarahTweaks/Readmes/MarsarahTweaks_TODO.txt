@@ -164,6 +164,12 @@ C. New Features
   - Total wood quantities remain unchanged.
   - Respects Automatic Progression Halt.
 
+* Improved Frostfire Damage
+  - Added a new feature under Balance to improve Deep North Frostfire weapon damage across all 12 weapon variants.
+  - Changed base elemental damage from 88 Frost / 12 Fire (10 Fire for Dagger) to **80 Frost / 40 Fire** at quality 1.
+  - Preserved the existing physical damage and elemental upgrade scaling (+3 Frost / +3 Fire per quality level).
+  
+
 D. Others
 ------------------------------
 
@@ -184,14 +190,10 @@ TO IMPLEMENT
 
 A. Grind Reduction
 -------------------------------
-* Review new gear crafting and upgrade costs.
 * Review new build-piece costs.
 
 B. Balance
 -------------------------------
-* Review new gear speed values.
-* Review new gear HP / Stamina / Eitr stats.
-* Review new gear upgrade minimum station levels.
 * Staff of Fracturing: increase splinter blast radius.
 * Add improved gear set bonuses.
 
@@ -199,15 +201,15 @@ C. Features
 -------------------------------
 * Add/verify Progression Halt for Deep North.
 * Review Creature Unleveler handling Deep North.
-* Increase Scrap Iron drop amount from Muddy Scrap Piles (maybe).
 * Staff of Protection: add a secondary healing attack similar to the Dvergr Mage heal.
 * Better Roads: increase player movement speed on roads.
 * Allow ships to be destroyed with the hammer.
 * Allow Boars to eat Yellow Mushrooms.
 * Player Inspector for players currently logged into the world.
+
 * Combine smaller potions into larger ones at the Mead Kettle.
-* Look into damage difference between Frostfire and Thunderblood weapon variants.
 * Look into Dyrnwyn stats. 
+* Look into Hexen HP threshold that makes her go down.
 
 Trinkets:
 * Review new Trinket build costs:
@@ -246,7 +248,7 @@ E. Others
 * Replace selected bool-based tweaks with configurable values where appropriate:
   - Less Stamina Usage            -> Rename to Stamina Usage          -> Value controls stamina-use percentage.
   - Reduced Crossbows Reload Time -> Rename to Crossbows Reload Time  -> Set the desired reload value directly instead of adding/subtracting.
-  - Hildir Weight Rewards         ->                                  -> Configure extra carry weight per chest delivered
+  - Hildir Weight Rewards         ->                                  -> Configure extra carry weight per chest delivered.
   - Lighter Metal Weight          -> Rename to Metal Weight           -> Configure the common metal weight directly.
   - Larger Pickup Area            -> Rename to Pickup Area            -> Configure the desired pickup radius directly.
   - Larger Boat Explore Radius    -> Rename to Boat Explore Radius    -> Configure a multiplier or direct value.
@@ -269,5 +271,5 @@ E. Others
 
 F. Deep North / 1.0 Content
 ---------------------------
-[DEFERRED] Do this after playing the Deep North to avoid spoilers.
+[IN PROGRESS]
 
