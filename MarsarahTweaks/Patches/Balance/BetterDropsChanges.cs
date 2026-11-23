@@ -15,6 +15,8 @@ namespace MarsarahTweaks.Patches.Balance
 
 		// Eykthir - Ghost
 		// - Add Necklace: 1 (100% chance) - scrapped since update
+		// The Elder - Writhan
+		// - Writhan Roots 2x
 		// Bonemass - Fenring
 		// - Fenris Hair: between 1 - 2
 		// - Fenris Claw (remove Wolf Fang): 1 (100% chance)
@@ -22,6 +24,8 @@ namespace MarsarahTweaks.Patches.Balance
 		// - Add Blood Bag: 50%
 		// Yagluth - Dvergr Rogue, Mage
 		// - Soft Tissue: 100% chance (from 25%)
+		// Fader - Barka, Hexen
+		// Frozen Branch 2x, Nornathread 2-4 (from 1-3)
 
 		// Dictionaries
 		private static Dictionary<string, Dictionary<string, (int min, int max, float chance, bool removed, bool newlyAdded)>> originalDrops = new Dictionary<string, Dictionary<string, (int min, int max, float chance, bool removed, bool newlyAdded)>>();
@@ -34,6 +38,14 @@ namespace MarsarahTweaks.Patches.Balance
 					("SilverNecklace", 1, 1, 1f, false)
 				}
 			},*/
+
+			["The Elder"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
+			{
+				["Writhan"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				{
+					("WrithanRoots", 2, 2, 1f, false)
+				}
+			},
 
 			["Bonemass"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
 			{
@@ -67,6 +79,19 @@ namespace MarsarahTweaks.Patches.Balance
 				["DvergerAshlands"] = new List<(string item, int min, int max, float chance, bool remove)>()
 				{
 					("Softtissue", 1, 3, 1f, false)
+				}
+			},
+
+			["Fader"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
+			{
+				["Barka"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				{
+					("BarkaBranch", 2, 2, 1f, false)
+				},
+
+				["JotunWitch"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				{
+					("NornThread", 2, 4, 1f, false)
 				}
 			}
 		};
