@@ -104,6 +104,7 @@
     <Compile Include="Patches\Features\SerpentSpawnChanges.cs" />
     <Compile Include="Patches\Grind\BetterWoodYields.cs" />
     <Compile Include="Patches\Grind\FoodDurationChanges.cs" />
+    <Compile Include="Patches\Grind\PotionUpgradeChanges.cs" />
     <Compile Include="Patches\Grind\RareResourceChanges.cs" />
     <Compile Include="Patches\QOL\HoeRadiusChanges.cs" />
     <Compile Include="Patches\QOL\MoreUsableFuel.cs" />

@@ -89,6 +89,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata BetterWoodYields = new ConfigMetadata("Better Wood Yields", "Reduces regular Wood drops and increases specialty wood drops from trees that produce Core Wood, Fine Wood, Yggdrasil Wood, Ashwood and Timberwood. Yggdrasil Shoots are unaffected. (Toggling mid-game affects newly spawned half-logs. Existing half-logs may require reloading the area)", ConfigSections.GrindReduction, 14);
 			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("Food And Mead Modifications", "Modifies food and mead recipes costs, crafted amounts, stacks and stats. (Toggling mid-game requires CLIENT relog for food stacks and stats)", ConfigSections.GrindReduction, 10);
 			public static readonly ConfigMetadata StandardizedFoodDurations = new ConfigMetadata("Standardized Food Durations", "Standardizes food durations based on preparation type. Only increases durations. (Toggling mid-game requires CLIENT relog for food already in inventory)", ConfigSections.GrindReduction, 5);
+			public static readonly ConfigMetadata PotionUpgrade = new ConfigMetadata("Potion Upgrade", "Allows upgrading finished Healing and Stamina meads at the Cauldron using a 3:1 conversion ratio. Requires Cauldron levels 3-5 depending on the potion.", ConfigSections.GrindReduction, 4);
 
 			// Balance
 			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it. (Toggling mid-game requires CLIENT relog if the item is equipped)", ConfigSections.Balance, 140);
@@ -167,6 +168,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> BetterWoodYieldsEnabled;
 		public static ConfigEntry<bool> FoodAndMeadModificationsEnabled;
 		public static ConfigEntry<bool> StandardizedFoodDurationsEnabled;
+		public static ConfigEntry<bool> PotionUpgradeEnabled;
 
 		// Balance
 		public static ConfigEntry<bool> EarlyLinenCapeEnabled;
@@ -250,6 +252,7 @@ namespace MarsarahTweaks.Managers
 			BetterWoodYieldsEnabled = CreateConfig(Configs.BetterWoodYields, true);
 			FoodAndMeadModificationsEnabled = CreateConfig(Configs.FoodAndMeadModifications, true);
 			StandardizedFoodDurationsEnabled = CreateConfig(Configs.StandardizedFoodDurations, true);
+			PotionUpgradeEnabled = CreateConfig(Configs.PotionUpgrade, true);
 
 			// ===== Balance
 			EarlyLinenCapeEnabled = CreateConfig(Configs.LinenCapeModifications, true);
@@ -551,6 +554,10 @@ namespace MarsarahTweaks.Managers
 
 				case var name when name == Configs.DyrnwynDamageModifications.Name:
 					DyrnwynDamageChanges.UpdateDyrnwynDamage(ObjectDB.instance, true);
+					break;
+
+				case var name when name == Configs.PotionUpgrade.Name:
+					PotionUpgradeChanges.UpdatePotionUpgrade(ObjectDB.instance, true);
 					break;
 			}
 		}

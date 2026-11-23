@@ -8,7 +8,7 @@ namespace MarsarahTweaks.Patches.Balance
 {
 	internal class DyrnwynDamageChanges
 	{
-		private static readonly LogManager log = new LogManager("Dyrnwyn Damage", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Dyrnwyn Damage", LogManager.LogLevel.Warning);
 
 		private const string DyrnwynPrefab = "SwordDyrnwyn";
 		private const float NewFireDamage = 20f;
