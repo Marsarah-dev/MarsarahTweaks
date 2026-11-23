@@ -21,6 +21,9 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "CrossbowRipperBlood", 2.5f },
 			{ "CrossbowRipperLightning", 2.5f },
 			{ "CrossbowRipperNature", 2.5f },
+			{ "CrossbowGold", 2.5f },
+			{ "CrossbowGold_FrostFire", 2.5f },
+			{ "CrossbowGold_BloodLightning", 2.5f }
 		};
 
 		// Crossbow reload movement settings

@@ -49,7 +49,9 @@ namespace MarsarahTweaks.Patches.QOL
 			{ "Flametal", 8 },
 			{ "FlametalNew", 8 },
 			{ "FlametalOre", 8 },
-			{ "FlametalOreNew", 8 }
+			{ "FlametalOreNew", 8 },
+			{ "GoldOre", 8 },
+			{ "Gold", 8 }
 		};
 
 

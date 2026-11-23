@@ -136,6 +136,14 @@ B. Updates
   - Snowstorm probability reduced from 20% → 5.66%, matching the modified Mountains probability.
   - Snow and Clear weather weights remain unchanged.
   
+* Lighter Metal Weight
+  - Included Bloodgold and Petrified Tissue in this section config. Weight reduced from 14 → 8.
+  - Both materials now match the weight of the other metals modified by this feature.
+
+* Reduced Crossbows Reload Time
+  - Included Deep North crossbows in this section config, reducing the reload time to 2.5 seconds (from 3). Crossbows affected:
+  - Nord Crossbow, Frostfire Nord Crossbow and Thunderblood Nord Crossbow.
+  - No changes needed to: Keep Crossbows Loaded and Crossbow Reload While Moving as they were already including these.
 
 C. New Features
 ------------------------------
