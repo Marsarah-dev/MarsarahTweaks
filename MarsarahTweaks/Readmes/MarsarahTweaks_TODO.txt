@@ -54,25 +54,16 @@ B. Updates
   - Updated configuration description.
   - Balanced and verified through extensive in-game drop testing.
 
-* More Rare Resources
-  - Deep North Armor Moulds:
-    - Reduced Krigen armor mould drop chances from 20% to 15%.
-    - Retained Hexen armor mould drop chances at 25%.
-    - Standardized armor mould drops to five times their respective vanilla drop chances.
-    - Disabled star scaling for armor mould drops to ensure consistent acquisition across both creatures.
-    - Restores original drop chances and star scaling when the feature is disabled.
-  - Flesh piles found in Putrid Holes:
-    - Reduced Bone Fragments from 5-15 to 2-5 per loot roll.
-    - Increased Soft Tissue from 1-2 to 2-3 per loot roll.
-    - Loot weights, number of loot rolls and all other drops remain unchanged.
-    - Live toggling affects existing flesh piles that have not yet been destroyed.
-  - Balanced and verified through extensive in-game drop testing. 
-
 C. New Features
 ------------------------------
 * Larger Resource Stacks
-  - Increases maximum stack sizes of valuables to 50, Surtling Cores to 20, and all moulds to 30.
-  - WARNING: Disabling this feature while stacks exceed their vanilla maximum stack sizes will result in item loss. Split affected stacks before disabling.
+  - Increased maximum stack sizes for:
+    - Amber, Amber Pearl, Ruby, Silver Necklace, Draumyx, Veydris, Solryth and Grimvarn: 50.
+    - Surtling Cores: 20.
+    - All Weapon, Shield, Staff, Heavy Armor, Medium Armor, Mage Armor and Intricate Key Moulds: 30.
+  - Existing higher maximum stack sizes are not reduced.
+  - Supports mid-game toggling.
+  - WARNING: Disabling this feature while stacks exceed their original maximum stack sizes will result in item loss. Split affected stacks before disabling.
 
 D. Others
 ------------------------------

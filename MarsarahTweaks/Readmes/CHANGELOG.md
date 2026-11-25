@@ -1,5 +1,46 @@
 ## <strong> 📜 Version History </strong>
 
+v1.10.0
+- **Fixes:**
+  - **Better Creature Drops**
+    - Fixed Fenris Hair, Soft Tissue and Nornathread drop quantities to correctly include their intended maximum amounts.
+  - **Progression Halt**
+    - Fixed Better Creature Drops and Better Trophy Drop Rates not refreshing when Fader is defeated during gameplay.
+  - **Less Brazier Smoke**
+    - Fixed compatibility with Valheim 1.0.30.
+    - Smoke visual size, emission interval and rising speed modifications remain unchanged.
+
+- **Updates:**
+  - **Better Creature Drops**
+    - Increased Moose Hide drops to 3–5 from 2.
+    - Moved Deep North armor mould drop modifications from More Rare Resources to Better Creature Drops.
+    - Reduced Heavy and Medium Armor Mould drop chances for both Krigen variants from 20% to 15%.
+    - Mage Armor Mould drop chances for Hexen remain at 25%.
+    - Armor mould drop chances are now five times their respective vanilla values (3% for Krigen and 5% for Hexen).
+    - Disabled star scaling for armor mould drops. Original drop quantities remain unchanged.
+  - **More Rare Resources**
+    - Reduced Bone Fragment drops from Putrid Hole flesh piles from 5–15 to 2–5 per loot roll.
+    - Increased Soft Tissue drops from 1–2 to 2–3 per loot roll.
+    - Loot weights, number of loot rolls and all other drops remain unchanged.
+    - Changes also affect existing flesh piles that have not yet been destroyed.
+  - **More Usable Fuel**
+    - Ashwood and Timberwood can now be used as fuel for Kilns.
+
+- **New Features:**
+  - **Larger Resource Stacks**
+    - Increased Amber, Amber Pearl, Ruby, Silver Necklace, Draumyx, Veydris, Solryth and Grimvarn maximum stack sizes to 50.
+    - Increased Surtling Core maximum stack size to 20.
+    - Increased all Weapon, Shield, Staff, Armor and Intricate Key Mould maximum stack sizes to 30.
+    - Existing higher maximum stack sizes are not reduced.
+    - **WARNING:** Split oversized stacks to their original maximum stack sizes before disabling this feature to prevent item loss.
+
+- **Other Changes:**
+  - **Configuration Restructuring**
+    - Moved Better Creature Drops and Better Trophy Drop Rates from Balance to Grind Reduction.
+    - Moved Standardized Food Durations and Potion Upgrade from Grind Reduction to Balance.
+    - Reorganized configuration ordering.
+    - Relocated configuration entries are recreated with their default values.
+
 v1.9.0
 - **Updates:**
   - **More Rare Resources**

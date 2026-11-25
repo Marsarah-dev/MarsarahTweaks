@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.9.0  
+**Version:** 1.10.0  
 **Author:** Marsarah
 
 ---
@@ -25,7 +25,7 @@ If updating from an older version of Marsarah Tweaks that still contained the cu
 ## **Development Notes**
 
 
-**Deep North / Spoiler Note:** Version 1.9.0 introduces support for Deep North gear, resources, weather and creature drops across several existing features, along with new balance options.
+**Deep North / Spoiler Note:** Since version 1.9.0, the mod includes support for Deep North gear, resources, weather and creature drops across several existing features, along with new balance options.
 
 I am still playing through the biome myself and want to experience the remaining content without spoilers. More Deep North support, including build-piece adjustments and progression-related features, is planned as I continue my playthrough.
 
@@ -209,14 +209,82 @@ They can be toggled mid-game, unless otherwise specified.
 
 ---
 
+### <strong>🔧 Better Creature Drops</strong>
+
+- Modifies the drop rates and type of items for Fenring, Bat and Dverger.
+- Increases drop quantities for Writhan, Barka, Hexen and Moose.
+- Increases armor mould drop chances for Krigen and Hexen and disables star scaling for their armor mould drops.
+- Respects Automatic Progression Halt when enabled.
+- Toggling mid-game will only affect newly spawned creatures.
+- **Conflicts:** Incompatible with any mod that modifies creature drop rates and drop types.
+
+**🔹 Changes**
+- Fenring:
+  - Added Fenris Hair: (between 1 - 2 drops)
+  - Replaced Wolf Fang with Fenris Claw
+- Bat:
+  - Added Blood Bag (50% chance drop, in addition to Leather Scraps)
+- Dverger Rogue, Mage and Ashlands Dvergr:
+  - Increased Soft Tissue drop chance to 100% (from 25%)
+- Writhan: Writhan Roots 1 → 2.
+- Barka: Frozen Branch 1 → 2.
+- Moose: Moose Hide increased to 3–5 from 2.
+- Krigen (both variants):
+  - Heavy Armor Mould drop chances: **3% → 15%** per mould.
+  - Medium Armor Mould drop chances: **3% → 15%** per mould.
+- Hexen:
+  - Nornathread 1–3 → 2–4.
+  - Mage Armor Mould drop chances: **5% → 25%** per mould.
+
+Armor mould drop chances are increased to five times their respective vanilla values. Star scaling is disabled for armor mould drops, while original drop quantities remain unchanged. Star scaling for other creature resources remains unchanged.
+
+---
+
+### <strong>🔧 Better Trophy Drop Rates</strong>
+
+- Increases trophy drop rate for some creatures.
+- Toggling mid-game will only affect newly spawned creatures.
+- **Conflicts:** Incompatible with any mod that modifies creature drop rates.
+
+**🔹 Changes**
+| Creature      | Old Drop Chance | New Drop Chance           |
+|---------------|-----------------|---------------------------|
+| Rancid Remains | 10%            | 20%                       |
+| Ghost         | 10%             | 20%                       |
+| Bear          | 10%             | 20%                       |
+| Surtling      | 5%              | 10%                       |
+| Draugr Elite  | 10%             | 20%                       |
+| Wraith        | 5%              | 20%                       |
+| Cultist       | 10%             | 20%                       |
+| Fenring       | 10%             | 20%                       |
+| Stone Golem   | 5%              | 20%                       |
+| Deathsquito   | 5%              | 10%                       |
+| Fuling Berserker | 5%           | 10%                       |
+| Vile          | 10%             | 20%                       |
+| Tick          | 5%              | 10%                       |
+| Dverger       | 5%              | 10%                       |
+| Seeker Soldier | 5%             | 20%                       |
+| Charred Warlock | 5%            | 20%                       |
+| Moose         | 10%             | 20%                       |
+| Krigen        | 10%             | 15%                       |
+| Hexen         | 10%             | 15%                       |
+ 
+---
+
 ### <strong>🔧 More Rare Resources</strong>
 
 - Increases the amount and chance of finding **Jade, Iolite and Bloodstone** in Ashlands Charred Fortress chests.
 - Gems now appear in quantities of **2–3** instead of 1, with increased loot weights.
 - The chances of finding Molten Cores, Flametal Ore and Idols remain approximately unchanged.
-- Only affects newly generated chest loot. Existing contents are not modified.
-- Deep North armor mould drop chances increased from **3% to 20%** for both Krigen variants and from **5% to 25%** for Hexen. Original star scaling remains unchanged.
-- **Conflicts:** Mods that modify Charred Fortress chest loot.
+- Chest loot changes apply to newly spawned chests. Previously generated contents are not modified.
+- Reduces Bone Fragment drops and increases Soft Tissue drops from flesh piles found in Putrid Holes:
+  - **Bone Fragments:** 5–15 → 2–5 per loot roll.
+  - **Soft Tissue:** 1–2 → 2–3 per loot roll.
+  - Loot weights, number of loot rolls and all other drops remain unchanged.
+- Flesh pile changes also affect existing piles that have not yet been destroyed.
+- **Conflicts:** Mods that modify Charred Fortress chest loot or Putrid Hole flesh pile drops.
+
+---
 
 ---
 
@@ -239,31 +307,6 @@ They can be toggled mid-game, unless otherwise specified.
 - Toggling mid-game requires **client** relog. 
 - **Conflicts:** Mods that modify vanilla food or mead recipes.  
   - Does not modify new recipes added by other mods.
-
----
-
-### <strong>🔧 Standardized Food Durations</strong>
-
-- Increases the duration of selected foods based on preparation type and biome progression.
-- Raw edible ingredients last **15 minutes**.
-- Other simply cooked meats retain their vanilla durations.
-- Simply cooked Ashlands meats last **25 minutes**.
-- Prepared meals last **30 minutes**.
-- Only increases durations where needed. Food health, stamina, and Eitr stats remain unchanged.
-- Deep North foods and feasts are not modified.
-- Toggling mid-game requires a **client** relog for food already in inventory.
-- **Conflicts:** Mods that modify the duration of the same foods.
-
----
-
-### <strong>🔧 Potion Upgrade</strong>
-
-- Converts lower-tier recovery meads into stronger versions at the Cauldron using a **3:1 ratio**.
-- **3 Minor Healing → 1 Medium Healing** (Cauldron level 3).
-- **3 Minor Stamina → 1 Medium Stamina** (Cauldron level 4).
-- **3 Medium Healing → 1 Major Healing** (Cauldron level 5).
-- No additional ingredients or fermentation required. Normal brewing remains unchanged.
-- Supports mid-game toggling; reopen the Cauldron menu to refresh recipes.
 
 ---
 
@@ -512,57 +555,29 @@ They can be toggled mid-game, unless otherwise specified.
 
 ---
 
-### <strong>🔧 Better Trophy Drop Rates</strong>
+### <strong>🔧 Standardized Food Durations</strong>
 
-- Increases trophy drop rate for some creatures.
-- Toggling mid-game will only affect newly spawned creatures.
-- **Conflicts:** Incompatible with any mod that modifies creature drop rates.
-
-**🔹 Changes**
-| Creature      | Old Drop Chance | New Drop Chance           |
-|---------------|-----------------|---------------------------|
-| Rancid Remains | 10%            | 20%                       |
-| Ghost         | 10%             | 20%                       |
-| Bear          | 10%             | 20%                       |
-| Surtling      | 5%              | 10%                       |
-| Draugr Elite  | 10%             | 20%                       |
-| Wraith        | 5%              | 20%                       |
-| Cultist       | 10%             | 20%                       |
-| Fenring       | 10%             | 20%                       |
-| Stone Golem   | 5%              | 20%                       |
-| Deathsquito   | 5%              | 10%                       |
-| Fuling Berserker | 5%           | 10%                       |
-| Vile          | 10%             | 20%                       |
-| Tick          | 5%              | 10%                       |
-| Dverger       | 5%              | 10%                       |
-| Seeker Soldier | 5%             | 20%                       |
-| Charred Warlock | 5%            | 20%                       |
-| Moose         | 10%             | 20%                       |
-| Krigen        | 10%             | 15%                       |
-| Hexen         | 10%             | 15%                       |
+- Increases the duration of selected foods based on preparation type and biome progression.
+- Raw edible ingredients last **15 minutes**.
+- Other simply cooked meats retain their vanilla durations.
+- Simply cooked Ashlands meats last **25 minutes**.
+- Prepared meals last **30 minutes**.
+- Only increases durations where needed. Food health, stamina, and Eitr stats remain unchanged.
+- Deep North foods and feasts are not modified.
+- Toggling mid-game requires a **client** relog for food already in inventory.
+- **Conflicts:** Mods that modify the duration of the same foods.
 
 ---
 
-### <strong>🔧 Better Creature Drops</strong>
+### <strong>🔧 Potion Upgrade</strong>
 
-- Modifies the drop rates and type of items for Fenring, Bat and Dverger.
-- Increases drop quantities for Writhan, Barka and Hexen.
-- Toggling mid-game will only affect newly spawned creatures.
-- **Conflicts:** Incompatible with any mod that modifies creature drop rates and drop types.
-
-**🔹 Changes**
-- Fenring:    
-  - Added Fenris Hair: (between 1 - 2 drops)
-  - Replaced Wolf Fang with Fenris Claw
-- Bat: 
-  - Added Blood Bag (50% chance drop, in addition to Leather Scraps)
-- Dverger Rogue, Mage and Ashlands Dvergr: 
-  - Increased Soft Tissue drop chance to 100% (from 25%)
-- Writhan: Writhan Roots 1 → 2.
-- Barka: Frozen Branch 1 → 2.
-- Hexen: Nornathread 1–3 → 2–4.
-
-
+- Converts lower-tier recovery meads into stronger versions at the Cauldron using a **3:1 ratio**.
+- **3 Minor Healing → 1 Medium Healing** (Cauldron level 3).
+- **3 Minor Stamina → 1 Medium Stamina** (Cauldron level 4).
+- **3 Medium Healing → 1 Major Healing** (Cauldron level 5).
+- No additional ingredients or fermentation required. Normal brewing remains unchanged.
+- Supports mid-game toggling; reopen the Cauldron menu to refresh recipes.
+ 
 ---
 
 ### <strong>🔧 Black Forest Root Drops</strong>
@@ -844,6 +859,42 @@ They can be toggled mid-game, unless otherwise specified.
 
 ---
 
+### <strong>🔧 Larger Resource Stacks</strong>
+
+- Increases the maximum stack sizes of Amber, Amber Pearl, Ruby, Silver Necklace, Draumyx, Veydris, Solryth and Grimvarn to **50**.
+- Increases the maximum stack size of Surtling Cores to **20**.
+- Increases the maximum stack sizes of all Deep North moulds to **30**.
+- Existing higher maximum stack sizes are not reduced.
+- Can be enabled/disabled during gameplay.
+- **Conflicts:** May conflict with mods that modify the stack sizes of the same resources.
+
+**🔹 Changes:**
+
+| Resource | Maximum Stack Size |
+|----------|--------------------|
+| Amber | 50 |
+| Amber Pearl | 50 |
+| Ruby | 50 |
+| Silver Necklace | 50 |
+| Draumyx | 50 |
+| Veydris | 50 |
+| Solryth | 50 |
+| Grimvarn | 50 |
+| Surtling Core | 20 |
+| All Weapon Moulds | 30 |
+| All Shield Moulds | 30 |
+| All Staff Moulds | 30 |
+| All Heavy Armor Moulds | 30 |
+| All Medium Armor Moulds | 30 |
+| All Mage Armor Moulds | 30 |
+| Intricate Key Mould | 30 |
+
+All other resource stack sizes remain unchanged.
+
+⚠️ **WARNING:** Disabling this feature while items are stacked above their original maximum stack sizes will result in item loss. Split all affected stacks to their original maximum stack sizes **BEFORE** disabling this feature.
+
+---
+
 ### <strong>🔧 Larger Pickup Area</strong>
 
 - Item auto-pickup area radius increased from 2 to 3.
@@ -930,7 +981,7 @@ They can be toggled mid-game, unless otherwise specified.
 
 ### <strong>🔧 More Usable Fuel</strong>
 
-- Ancient Bark can be used as fuel for Kilns. Withered Bones can be used in Shield Generators.
+- Ancient Bark, Ashwood and Timberwood can be used as fuel for Kilns. Withered Bones can be used in Shield Generators.
 - **Conflicts:** No known conflicts.
 
 ---
