@@ -816,6 +816,7 @@ namespace MarsarahTweaks.Patches.Features
 			private static bool lastModerDefeated = GlobalKeyChecker.IsBossDefeated("Moder");
 			private static bool lastYagluthDefeated = GlobalKeyChecker.IsBossDefeated("Yagluth");
 			private static bool lastQueenDefeated = GlobalKeyChecker.IsBossDefeated("The Queen");
+			private static bool lastFaderDefeated = GlobalKeyChecker.IsBossDefeated("Fader");
 
 			private static bool lastProgressionHaltState = ConfigManager.AutomaticProgressionHaltEnabled.Value;
 			private static bool lastOceanElderProgressionHaltState = ConfigManager.HaltOceanBehindElderEnabled.Value;
@@ -858,6 +859,11 @@ namespace MarsarahTweaks.Patches.Features
 				if (GlobalKeyChecker.QueenDefeated != lastQueenDefeated)
 				{
 					lastQueenDefeated = GlobalKeyChecker.QueenDefeated;
+					bossStateChanged = true;
+				}
+				if (GlobalKeyChecker.FaderDefeated != lastFaderDefeated)
+				{
+					lastFaderDefeated = GlobalKeyChecker.FaderDefeated;
 					bossStateChanged = true;
 				}
 

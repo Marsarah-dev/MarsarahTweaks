@@ -11,21 +11,26 @@ namespace MarsarahTweaks.Patches.Grind
 {
 	internal class BetterDropsChanges
 	{
-		private static readonly LogManager log = new LogManager("Better Drops", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Better Drops", LogManager.LogLevel.Info);
 
-		// Eykthir - Ghost
-		// - Add Necklace: 1 (100% chance) - scrapped since update
-		// The Elder - Writhan
-		// - Writhan Roots 2x
-		// Bonemass - Fenring
-		// - Fenris Hair: between 1 - 2
-		// - Fenris Claw (remove Wolf Fang): 1 (100% chance)
-		// Bonemass - Bat
-		// - Add Blood Bag: 50%
-		// Yagluth - Dvergr Rogue, Mage
-		// - Soft Tissue: 100% chance (from 25%)
-		// Fader - Barka, Hexen, Moose
-		// Frozen Branch 2x, Nornathread 2-4 (from 1-3), Moose Hide 3-5 (from 2-4)
+		// Eykthir
+		// - Ghost - Add Necklace: 1 (100% chance) - scrapped since update
+		// The Elder
+		// - Writhan - Writhan Roots 2x
+		// Bonemass
+		// - Fenring - Fenris Hair: between 1 - 2
+		//			 - Fenris Claw (remove Wolf Fang): 1 (100% chance)
+		// Bonemass
+		// - Bat - Add Blood Bag: 50%
+		// Yagluth
+		// - Dvergr Rogue, Mage - Soft Tissue: 100% chance (from 25%)
+		// Fader
+		// - Barka - Frozen Branch 2x
+		// - Moose - Moose Hide 3-5 (from 2-4)
+		// - Hexen - Nornathread 2-4 (from 1-3)
+		//		   - Armor mould drop chances increased from 5% to 25%
+		// - Krigen - Armor mould drop chances increased from 3% to 15%
+		// - Armor mould star scaling disabled, original drop amounts preserved
 
 		// Dictionaries
 		private static Dictionary<string, Dictionary<string, (int min, int max, float chance, bool levelMultiplier, bool removed, bool newlyAdded)>> originalDrops = new Dictionary<string, Dictionary<string, (int min, int max, float chance, bool levelMultiplier, bool removed, bool newlyAdded)>>();
@@ -98,12 +103,43 @@ namespace MarsarahTweaks.Patches.Grind
 
 				["JotunWitch"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
 				{
-					("NornThread", 2, 5, 1f, false, null, false)
+					("NornThread", 2, 5, 1f, false, null, false),
+
+					// Mage armor moulds
+					("MoldArmorMageHelmet", null, null, 0.25f, false, false, true),
+					("MoldArmorMageChest", null, null, 0.25f, false, false, true),
+					("MoldArmorMageLegs", null, null, 0.25f, false, false, true)
 				},
 
 				["Moose"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
 				{
 					("MooseHide", 3, 6, 1f, false, null, false)
+				},
+
+				["JotunWarrior"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
+				{
+					// Heavy armor moulds
+					("MoldArmorGoldHelmet", null, null, 0.15f, false, false, true),
+					("MoldArmorGoldChest", null, null, 0.15f, false, false, true),
+					("MoldArmorGoldLegs", null, null, 0.15f, false, false, true),
+
+					// Medium armor moulds
+					("MoldArmorMediumHelmet", null, null, 0.15f, false, false, true),
+					("MoldArmormediumChest", null, null, 0.15f, false, false, true), // it's capitalized like this
+					("MoldArmorMediumLegs", null, null, 0.15f, false, false, true)
+				},
+
+				["JotunWarriorDualWield"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
+				{
+					// Heavy armor moulds
+					("MoldArmorGoldHelmet", null, null, 0.15f, false, false, true),
+					("MoldArmorGoldChest", null, null, 0.15f, false, false, true),
+					("MoldArmorGoldLegs", null, null, 0.15f, false, false, true),
+
+					// Medium armor moulds
+					("MoldArmorMediumHelmet", null, null, 0.15f, false, false, true),
+					("MoldArmormediumChest", null, null, 0.15f, false, false, true), // it's capitalized like this
+					("MoldArmorMediumLegs", null, null, 0.15f, false, false, true)
 				}
 			}
 		};
@@ -363,6 +399,51 @@ namespace MarsarahTweaks.Patches.Grind
 					}
 				}
 			}
+		}
+
+		private static void LogOriginalCreatureDrops(ZNetScene instance)
+		{
+			if (instance == null) return;
+
+			string[] creatureNames =
+			{
+				"JotunWarrior",
+				"JotunWarriorDualWield",
+				"JotunWitch",
+				"Moose"
+			};
+
+			log.Info("Original Creature Drop Tables", header: true);
+
+			foreach (string creatureName in creatureNames)
+			{
+				GameObject prefab = instance.GetPrefab(creatureName);
+
+				if (prefab == null)
+				{
+					log.Warn($"Could not find creature prefab: {creatureName}");
+					continue;
+				}
+
+				CharacterDrop characterDrop = prefab.GetComponent<CharacterDrop>();
+
+				if (characterDrop == null || characterDrop.m_drops == null)
+				{
+					log.Warn($"No valid CharacterDrop component found for {creatureName}");
+					continue;
+				}
+
+				log.Info($"Creature: {creatureName}");
+
+				foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
+				{
+					if (drop?.m_prefab == null) continue;
+
+					log.Info($"  {drop.m_prefab.name} | Min: {drop.m_amountMin} | Max: {drop.m_amountMax} | Chance: {drop.m_chance * 100f:0.##}% | LevelMultiplier: {drop.m_levelMultiplier} | DontScale: {drop.m_dontScale} | OnePerPlayer: {drop.m_onePerPlayer}");
+				}
+			}
+
+			log.Info("End of Creature Drop Tables", footer: true);
 		}
 	}
 }
