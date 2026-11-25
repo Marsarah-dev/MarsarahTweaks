@@ -1173,7 +1173,6 @@ All other material requirements, armor mould costs and staff recipes remain unch
 - Tool Rack (Workbench Extension): Obsidian → Coal (This will move this extension one biome earlier)
 - Darkwood Gate:                   Iron     → Black Metal
 - Bath Tub:                        Iron     → Black Metal
-- Grausten Chest:                  Charred Warrior Trophy → Charred Skull (5 required)
 
 
 -------------------- [Better Creature Drops] -------------------
@@ -1199,6 +1198,8 @@ All other material requirements, armor mould costs and staff recipes remain unch
   - Added Blood Bag (50% chance drop, in addition to Leather Scraps)
 - Dverger Rogue, Mage and Ashlands Dvergr:
   - Increased Soft Tissue drop chance to 100% (from 25%)
+  - Mistlands Dverger: 1–2 Soft Tissue
+  - Ashlands Dvergr: 1–3 Soft Tissue
 - Writhan:
   - Writhan Roots: 1 → 2 (retains creature level scaling)
 - Barka:
@@ -1764,25 +1765,6 @@ The following foods have the stack size increased to 20
   May conflict with mods that modify Dyrnwyn's damage.
 
 
--------------------- [Crown of Roots Changes] -------------------
-
-► Description:
-  Reduces the Crown of Roots purchase price and allows repairing it at a Workbench.
-
-► Mid-Game Toggling:
-  Can be enabled/disabled during gameplay.
-  Purchase prices are updated when interacting with the trader.
-
-► Conflicts:
-  Incompatible with other mods that modify the Crown of Roots purchase price or repair requirements.
-
-▼ Changes:
-
-- Crown of Roots
-  • Purchase Price: 3000 → 2000 Coins
-  • Repair Station: Level 3 Workbench
-
-
 ------------------ [Forsaken Powers Cooldowns] -----------------
 
 ► Description:
@@ -2326,52 +2308,6 @@ Ashlands:
 - Charred: Can spawn in the Plains biome
 
 
--------------------- [Less Ashlands Enemies] -------------------
-
-► Description:
-  Reduced the spawn rate and numbers of enemies in Ashlands.
-  NOTE: This does NOT modify enemy levels or levelup chances (starred enemies).
-
-► Mid-Game Toggling:
-  Toggling mid-game requires reloading area. This means moving to a new unloaded area will apply the new/old spawn values depending on the toggle. Areas that are currently active (having a player present) will retain the old config spawn data.
-  Teleporting or simply walking away for a certain distance will make changes take effect if this config is toggled mid-game.
-
-► Conflicts:
-  Incompatible with other mods that modify Ashlands enemy spawn data.
-
-▼ Changes (only modified creatures are listed):
-
-- Asksvin (day)
-  • Max spawned:    2 → 1
-  • Max group size: 3 → 2
-
-- Asksvin (night)
-  • Max spawned:    3 → 2
-
-- Volture
-  • Max spawned:    3 → 2
-
-- Charred Twitcher (day)
-  • Max spawned:    3 → 2
-  • Min group size: 2 → 1
-  • Max group size: 4 → 2
-
-- Charred Twitcher (night)
-  • Max spawned:    4 → 3
-  • Min group size: 3 → 2
-  • Max group size: 6 → 3
-
-- Charred Marksman
-  • Max spawned:    4 → 2
-
-- Charred Warrior
-  • Max spawned:    4 → 2
-
-- Lava Blob
-  • Max spawned:    2 → 1
-  • Max group size: 2 → 1
-
-
 -------------------- [More Serpent Spawns] ----------------------
 
 ► Description:
@@ -2389,16 +2325,16 @@ Ashlands:
 
 - Bonemass Defeated
   • Nighttime Serpents:
-    - Spawn chance:   5% → 10%
+    - Spawn chance:   5% → 8%
     - Spawn interval: 1000s → 800s
 
 - Moder Defeated
   • Nighttime Serpents:
-    - Spawn chance:   10% → 15%
+    - Spawn chance:   8% → 12%
     - Spawn interval: 800s → 700s
 
   • Rain and Storm Serpents:
-    - Spawn chance:   5% → 10%
+    - Spawn chance:   5% → 8%
     - Spawn interval: 1000s → 800s
 
 
@@ -2444,11 +2380,11 @@ Ashlands:
   • Spawn chance: 0% (disabled)
 
 - Bonemass Defeated
-  • Spawn chance:   5%
+  • Spawn chance:   4%
   • Spawn interval: 900s
 
 - Moder Defeated
-  • Spawn chance:   10%
+  • Spawn chance:   8%
   • Spawn interval: 700s
 
 
@@ -2533,8 +2469,9 @@ Ashlands:
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay.
-  The smoke emission interval updates immediately.
-  Smoke already emitted is not modified retroactively and will dissipate normally.
+  Smoke emission intervals update immediately.
+  Newly emitted smoke uses the applicable size and rising speed.
+  Previously modified smoke can return to its original visual size when the feature is disabled.
 
 ► Conflicts:
   Automatically disabled if any of the following mods are detected:
@@ -3013,41 +2950,68 @@ v1.10.0
 - Fixes:
   - Better Creature Drops
     - Fixed Fenris Hair, Soft Tissue and Nornathread drop quantities to correctly include their intended maximum amounts.
-  - Progression Halt
-    - Fixed Better Creature Drops and Better Trophy Drop Rates not refreshing when Fader is defeated during gameplay.
-    - Deep North Progression Halt is not yet implemented but will be in a future update. 
+  - Better Creature Drops / Better Trophy Drop Rates
+    - Fixed drop modifications not refreshing when Fader is defeated during gameplay.
   - Less Brazier Smoke
     - Fixed compatibility with Valheim 1.0.30. Smoke reduction settings remain unchanged.
+  - More Serpent Spawns
+    - Fixed incorrect restoration of vanilla Serpent spawn values after reloading a world.
 
 - Updates:
   - Better Creature Drops
-    - Increased Moose Hide drops to 3–5 from 2.
+    - Increased Moose Hide drops from 2 to 3–5.
     - Moved Deep North armor mould drop modifications from More Rare Resources to Better Creature Drops.
     - Reduced Heavy and Medium Armor Mould drop chances for both Krigen variants from 20% to 15%.
     - Mage Armor Mould drop chances for Hexen remain at 25%.
-    - Armor mould drop chances are now five times their respective vanilla values (3% for Krigen and 5% for Hexen).
+    - Armor mould drop chances are now five times their respective vanilla values.
     - Disabled star scaling for armor mould drops. Original drop quantities remain unchanged.
   - More Rare Resources
     - Reduced Bone Fragment drops from Putrid Hole flesh piles from 5–15 to 2–5 per loot roll.
     - Increased Soft Tissue drops from 1–2 to 2–3 per loot roll.
     - Loot weights, number of loot rolls and all other drops remain unchanged.
+    - Changes also affect existing flesh piles that have not yet been destroyed.
+    - Charred Fortress chest modifications remain unchanged.
   - More Usable Fuel
     - Ashwood and Timberwood can now be used as fuel for Kilns.
+  - More Serpent Spawns
+    - Reduced modified Serpent spawn chances by 20% following the vanilla spawning fixes introduced in Valheim 1.0.30.
+    - Nighttime Serpents after Bonemass: 10% → 8%.
+    - Nighttime Serpents after Moder: 15% → 12%.
+    - Rain and Storm Serpents after Moder: 10% → 8%.
+    - Spawn intervals remain unchanged.
+  - Small Serpent Spawns
+    - Reduced Sea Wyrm spawn chances by 20%.
+    - After Bonemass: 5% → 4%.
+    - After Moder: 10% → 8%.
+    - Spawn intervals, creature stats and drops remain unchanged.
 
 - New Features:
   - Larger Resource Stacks
-    - Increased Amber, Amber Pearl, Ruby, Silver Necklace, Draumyx, Veydris, Solryth and Grimvarn maximum stack sizes to 50.
+    - Increased maximum stack sizes for Amber, Amber Pearl, Ruby, Silver Necklace, Draumyx, Veydris, Solryth and Grimvarn to 50.
     - Increased Surtling Core maximum stack size to 20.
-    - Increased all Weapon, Shield, Staff, Armor and Intricate Key Mould maximum stack sizes to 30.
+    - Increased all Weapon, Shield, Staff, Heavy Armor, Medium Armor, Mage Armor and Intricate Key Mould maximum stack sizes to 30.
     - Existing higher maximum stack sizes are not reduced.
+    - Supports mid-game toggling.
     - WARNING: Split oversized stacks to their original maximum stack sizes before disabling this feature to prevent item loss.
 
 - Other Changes:
-  - Configuration restructuring
+  - Configuration Restructuring
     - Moved Better Creature Drops and Better Trophy Drop Rates from Balance to Grind Reduction.
     - Moved Standardized Food Durations and Potion Upgrade from Grind Reduction to Balance.
     - Reorganized configuration ordering.
-    - Relocated configurations are recreated with their default values.
+    - Relocated configuration entries are recreated with their default values. Review these settings after updating.
+  - Alternate Build Pieces Materials
+    - Removed the Grausten Chest modification, as Valheim 1.0.30 now requires Charred Skulls instead of Charred Warrior Trophies.
+  - Crown of Roots Changes
+    - Removed the feature, as the Crown of Roots can now be repaired at a level 1 Workbench in vanilla Valheim.
+    - Restored the vanilla purchase price of 3000 Coins.
+  - Less Ashlands Enemies
+    - Removed the feature following the significant vanilla enemy spawn rate reductions introduced in Valheim 1.0.
+    - Ashlands enemy spawning is now governed by vanilla population limits and group sizes.
+  - Automatic Progression Halt
+    - Confirmed compatibility with the new Thistle alternate biome in Black Forest and Swamp.
+    - Thistle harvesting remains restricted until Eikthyr is defeated.
+    - Deep North Progression Halt remains planned for a future update.
 
 v1.9.0
 - Updates:

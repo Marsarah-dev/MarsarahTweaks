@@ -205,7 +205,6 @@ They can be toggled mid-game, unless otherwise specified.
 - **Tool Rack (Workbench Extension):** Obsidian → Coal (This will move this extension one biome earlier)
 - **Darkwood Gate:**                   Iron     → Black Metal
 - **Bath Tub:**                        Iron     → Black Metal
-- **Grausten Chest:**                  Charred Warrior Trophy → Charred Skull (5 required)
 
 ---
 
@@ -225,7 +224,9 @@ They can be toggled mid-game, unless otherwise specified.
 - Bat:
   - Added Blood Bag (50% chance drop, in addition to Leather Scraps)
 - Dverger Rogue, Mage and Ashlands Dvergr:
-  - Increased Soft Tissue drop chance to 100% (from 25%)
+  - Increased Soft Tissue drop chance to 100% (from 25%).
+  - Mistlands Dverger: 1–2 Soft Tissue.
+  - Ashlands Dvergr: 1–3 Soft Tissue.
 - Writhan: Writhan Roots 1 → 2.
 - Barka: Frozen Branch 1 → 2.
 - Moose: Moose Hide increased to 3–5 from 2.
@@ -430,14 +431,6 @@ They can be toggled mid-game, unless otherwise specified.
 
 ---
 
-### <strong>🔧 Crown of Roots Changes</strong>
-
-- Reduces the **Crown of Roots** purchase price from **3,000** to **2,000 Coins**.
-- Allows the Crown of Roots to be repaired at a **level 3 Workbench**.
-- **Conflicts:** Mods that modify the Crown of Roots purchase price or repair requirements.
-
----
-
 ### <strong>🔧 Forsaken Powers Cooldowns</strong>
 
 - Adjusts **cooldowns** and **durations** of each Forsaken Power for more flexible usage.
@@ -555,15 +548,14 @@ They can be toggled mid-game, unless otherwise specified.
 
 ### <strong>🔧 Standardized Food Durations</strong>
 
-- Increases the duration of selected foods based on preparation type and biome progression.
-- Raw edible ingredients last **15 minutes**.
+- Increases food durations based on preparation type and biome progression.
+- Raspberries, Blueberries and Yellow Mushrooms last at least **15 minutes**.
+- Cooked Asksvin Meat and Cooked Volture Meat last at least **25 minutes**.
+- Prepared meals from Black Forest through Ashlands have a minimum target duration of **30 minutes**, where applicable.
 - Other simply cooked meats retain their vanilla durations.
-- Simply cooked Ashlands meats last **25 minutes**.
-- Prepared meals last **30 minutes**.
-- Only increases durations where needed. Food health, stamina, and Eitr stats remain unchanged.
+- Durations are only increased, never reduced. Food health, stamina and Eitr stats remain unchanged.
 - Deep North foods and feasts are not modified.
-- Toggling mid-game requires a **client** relog for food already in inventory.
-- **Conflicts:** Mods that modify the duration of the same foods.
+- The complete list of modified foods can be found in the readme file in the **Docs** tab of the **Nexusmods** page.
 
 ---
 
@@ -664,29 +656,18 @@ They can be toggled mid-game, unless otherwise specified.
 
 ---
 
-### <strong>🔧 Less Ashlands Enemies</strong>
-
-- Reduced the spawn rate and numbers of enemies in Ashlands.  
-- This does **not** modify enemy levels or levelup chances (starred enemies).
-- Specific details can be found in the **Docs** tab of the **Nexusmods** page.
-- Toggling mid-game requires reloading area. 
-  - This means moving to a new unloaded area will apply the new/old spawn values depending on the toggle. Areas that are currently active (having a player present) will retain the old config spawn data.  
-  - Teleporting or simply walking away for a certain distance will make changes take effect if this config is toggled mid-game.
-- **Conflicts:** Mods that modify Ashlands enemy spawn data.
-
----
-
 ### <strong>🔧 More Serpent Spawns</strong>
 
-- Increases the spawn frequency of regular **Serpents** as boss progression advances.
+- Increases the spawn frequency of regular **Ocean Serpents** as boss progression advances.
 - **After defeating Bonemass:**
-  - Nighttime Serpent spawn chance: **5% → 10%**.
+  - Nighttime Serpent spawn chance: **5% → 8%**.
   - Spawn interval: **1,000 → 800 seconds**.
 - **After defeating Moder:**
-  - Nighttime Serpent spawn chance: **15%**.
+  - Nighttime Serpent spawn chance: **12%**.
   - Nighttime spawn interval: **700 seconds**.
-  - Rain and storm Serpent spawn chance: **5% → 10%**.
+  - Rain and storm Serpent spawn chance: **5% → 8%**.
   - Rain and storm spawn interval: **1,000 → 800 seconds**.
+- Can be enabled/disabled during gameplay.
 - Changes apply automatically as bosses are defeated.
 - **Conflicts:** Mods that modify Ocean Serpent spawning.
 
@@ -708,8 +689,8 @@ They can be toggled mid-game, unless otherwise specified.
 
 **🔹 Spawn Progression:**
 - **Before Bonemass:** No Sea Wyrms.
-- **After Bonemass:** 5% spawn chance, 900-second interval.
-- **After Moder:** 10% spawn chance, 700-second interval.
+- **After Bonemass:** 4% spawn chance, 900-second interval.
+- **After Moder:** 8% spawn chance, 700-second interval.
 
 - **Conflicts:** Mods that modify Serpent spawning or add similar creatures.
 

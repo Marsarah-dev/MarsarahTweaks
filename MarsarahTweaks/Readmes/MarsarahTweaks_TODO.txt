@@ -145,9 +145,31 @@ E. Test
   - Confirmed that the Thistle modifier can coexist with other alternate biome modifiers (tested alongside Bog Swamp).
   - No gameplay or configuration changes required.
 
+* Grappling Hook / Crossbow Changes - PASSED
+  - Verified compatibility with the Valheim 1.0.30 Grappling Hook animation fix.
+  - Existing reload and loaded-state modifications work as intended.
+
+* Less Brazier Smoke - PASSED
+  - Verified smoke reduction compatibility with Valheim 1.0.30.
+  - Verified mid-game configuration toggling through visual testing.
+
+* Less Ashlands Enemies
+  - Verified current vanilla population limits, group sizes and spawn chances.
+  - Retired the feature following the vanilla enemy spawn rate reductions introduced in Valheim 1.0.
+
+* Valheim 1.0.30 Compatibility Audit - COMPLETED
+  - Reviewed overlapping vanilla and mod changes.
+  - Removed redundant Grausten Chest and Crown of Roots modifications.
+  - Retired Less Ashlands Enemies.
+  - Fixed Serpent spawn value restoration and rebalanced Serpent and Sea Wyrm spawn chances.
+  - Verified Charred Fortress loot compatibility.
+  - Verified Automatic Progression Halt compatibility with the Thistle alternate biome.
+  - Verified Grappling Hook and Less Brazier Smoke compatibility.
+  - Confirmed that the Thistle alternate biome modifier is available in both Black Forest and Swamp.
+
 F. In Progress
 ------------------------------
-* Check Valheim v1.0.30 relevant changes to my mod. Remove what is now vanilla that my mod does, or adjust for new additions. 
+
 
 ============================================================
 TO IMPLEMENT
@@ -170,7 +192,11 @@ C. Features
 -------------------------------
 * Add/verify Progression Halt for Deep North.
 * Review Creature Unleveler handling Deep North.
-* Forge of Potential - I will need to revise this thing heavily but only after i finish most of the DN updating. Extreme brainstorming needed.
+* Forge of Potential revamp
+  - Completely review and redesign the Forge of Potential mechanics.
+  - Begin only after completing all remaining Deep North updates across MarsarahTweaks, MarsarahUI and MarsarahBuildPieces.
+  - Deep North Automatic Progression Halt must be completed before beginning this feature.
+  - Requires a dedicated brainstorming and balancing phase before implementation.
 * Staff of Protection: add a secondary healing attack similar to the Dvergr Mage heal.
 * Better Roads: increase player movement speed on roads.
 * Allow ships to be destroyed with the hammer.
@@ -239,5 +265,3 @@ E. Others
 F. Deep North / 1.0 Content
 ---------------------------
 [IN PROGRESS]
-
-* Forge of Potential revamp

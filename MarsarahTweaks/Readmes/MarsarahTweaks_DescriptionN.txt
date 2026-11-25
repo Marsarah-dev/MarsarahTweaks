@@ -199,7 +199,6 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Tool Rack (Workbench Extension):[/b] Obsidian → Coal (This will move this extension one biome earlier)
 - [b]Darkwood Gate:[/b] Iron → Black Metal
 - [b]Bath Tub:[/b] Iron → Black Metal
-- [b]Grausten Chest:[/b] Charred Warrior Trophy → Charred Skull (5 required)
 
 
 [size=4][b]🔧 Better Creature Drops[/b][/size]
@@ -219,7 +218,9 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Bat:[/b]
 &nbsp;&nbsp;&nbsp;- Added Blood Bag (50% chance drop, in addition to Leather Scraps)
 - [b]Dverger Rogue, Mage and Ashlands Dvergr:[/b]
-&nbsp;&nbsp;&nbsp;- Increased Soft Tissue drop chance to 100% (from 25%)
+&nbsp;&nbsp;&nbsp;- Increased Soft Tissue drop chance to 100% (from 25%).
+&nbsp;&nbsp;&nbsp;- Mistlands Dverger: 1–2 Soft Tissue.
+&nbsp;&nbsp;&nbsp;- Ashlands Dvergr: 1–3 Soft Tissue.
 - [b]Writhan:[/b] Writhan Roots 1 → 2.
 - [b]Barka:[/b] Frozen Branch 1 → 2.
 - [b]Moose:[/b] Moose Hide increased to 3–5 from 2.
@@ -414,12 +415,6 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Conflicts:[/b] Mods that modify Dyrnwyn's damage.
 
 
-[size=4][b]🔧 Crown of Roots Changes[/b][/size]
-
-- Reduces the [b]Crown of Roots[/b] purchase price from [b]3,000[/b] to [b]2,000 Coins[/b].
-- Allows the Crown of Roots to be repaired at a [b]level 3 Workbench[/b].
-- [b]Conflicts:[/b] Mods that modify the Crown of Roots purchase price or repair requirements.
-
 [size=4][b]🔧 Forsaken Powers Cooldowns[/b][/size]
 
 - Adjusts [b]cooldowns[/b] and [b]durations[/b] of each Forsaken Power for more flexible usage.
@@ -525,15 +520,14 @@ They can be toggled mid-game, unless otherwise specified.
 
 [size=4][b]🔧 Standardized Food Durations[/b][/size]
 
-- Increases the duration of selected foods based on preparation type and biome progression.
-- Raw edible ingredients last [b]15 minutes[/b].
+- Increases food durations based on preparation type and biome progression.
+- Raspberries, Blueberries and Yellow Mushrooms last at least [b]15 minutes[/b].
+- Cooked Asksvin Meat and Cooked Volture Meat last at least [b]25 minutes[/b].
+- Prepared meals from Black Forest through Ashlands have a minimum target duration of [b]30 minutes[/b], where applicable.
 - Other simply cooked meats retain their vanilla durations.
-- Simply cooked Ashlands meats last [b]25 minutes[/b].
-- Prepared meals last [b]30 minutes[/b].
-- Only increases durations where needed. Food health, stamina, and Eitr stats remain unchanged.
+- Durations are only increased, never reduced. Food health, stamina and Eitr stats remain unchanged.
 - Deep North foods and feasts are not modified.
-- Toggling mid-game requires a [b]client[/b] relog for food already in inventory.
-- [b]Conflicts:[/b] Mods that modify the duration of the same foods.
+- The complete list of modified foods can be found in the readme file in the [b]Docs[/b] tab.
 
 
 [size=4][b]🔧 Potion Upgrade[/b][/size]
@@ -627,31 +621,21 @@ They can be toggled mid-game, unless otherwise specified.
 - Charred: Can spawn in the Plains biome
 
 
-[size=4][b]🔧 Less Ashlands Enemies[/b][/size]
-
-- Reduced the spawn rate and numbers of enemies in Ashlands.  
-- This does [b]not[/b] modify enemy levels or levelup chances (starred enemies).
-- Specific details can be found in the readme file in the [b]Docs[/b] tab 
-- Toggling mid-game requires reloading area. 
-&nbsp;&nbsp;&nbsp;- This means moving to a new unloaded area will apply the new/old spawn values depending on the toggle. Areas that are currently active (having a player present) will retain the old config spawn data.  
-&nbsp;&nbsp;&nbsp;- Teleporting or simply walking away for a certain distance will make changes take effect if this config is toggled mid-game.
-- [b]Conflicts:[/b] Mods that modify Ashlands enemy spawn data.
-
-
 [size=4][b]🔧 More Serpent Spawns[/b][/size]
 
 - Increases the spawn frequency of regular [b]Ocean Serpents[/b] as boss progression advances.
 
 [b]🔹 After defeating Bonemass:[/b]
-- Nighttime Serpent spawn chance: [b]5% → 10%[/b].
+- Nighttime Serpent spawn chance: [b]5% → 8%[/b].
 - Spawn interval: [b]1,000 → 800 seconds[/b].
 
 [b]🔹 After defeating Moder:[/b]
-- Nighttime Serpent spawn chance: [b]15%[/b].
+- Nighttime Serpent spawn chance: [b]12%[/b].
 - Nighttime spawn interval: [b]700 seconds[/b].
-- Rain and storm Serpent spawn chance: [b]5% → 10%[/b].
+- Rain and storm Serpent spawn chance: [b]5% → 8%[/b].
 - Rain and storm spawn interval: [b]1,000 → 800 seconds[/b].
 
+- Can be enabled/disabled during gameplay.
 - Changes apply automatically as bosses are defeated.
 - [b]Conflicts:[/b] Mods that modify Ocean Serpent spawning.
 
@@ -672,8 +656,8 @@ They can be toggled mid-game, unless otherwise specified.
 
 [b]🔹 Spawn Progression:[/b]
 - [b]Before Bonemass:[/b] No Sea Wyrms.
-- [b]After Bonemass:[/b] 5% spawn chance, 900-second interval.
-- [b]After Moder:[/b] 10% spawn chance, 700-second interval.
+- [b]After Bonemass:[/b] 4% spawn chance, 900-second interval.
+- [b]After Moder:[/b] 8% spawn chance, 700-second interval.
 
 - [b]Conflicts:[/b] Mods that modify Serpent spawning or add similar creatures.
 
@@ -1021,32 +1005,62 @@ Blaxxun-bloop - for ServerSync
 [size=4][b]v1.10.0[/b][/size]
 - [b]Fixes:[/b]
   - [b]Better Creature Drops:[/b] Fixed Fenris Hair, Soft Tissue and Nornathread drop quantities to correctly include their intended maximum amounts.
-  - [b]Progression Halt:[/b] Better Creature Drops and Better Trophy Drop Rates now refresh when Fader is defeated during gameplay. Deep North Progression Halt is not yet implemented but will be in a future update.
+  - [b]Better Creature Drops / Better Trophy Drop Rates:[/b] Fixed drop modifications not refreshing when Fader is defeated during gameplay.
   - [b]Less Brazier Smoke:[/b] Fixed compatibility with Valheim 1.0.30. Smoke reduction settings remain unchanged.
+  - [b]More Serpent Spawns:[/b] Fixed incorrect restoration of vanilla Serpent spawn values after reloading a world.
 
 - [b]Updates:[/b]
   - [b]Better Creature Drops:[/b]
-    - Increased Moose Hide drops to 3–5 from 2.
+    - Increased Moose Hide drops from 2 to 3–5.
     - Moved Deep North armor mould drop modifications from More Rare Resources to Better Creature Drops.
-    - Reduced Heavy and Medium Armor Mould drop chances for both Krigen variants from 20% to 15%. Hexen Mage Armor Mould drop chances remain at 25%.
+    - Reduced Heavy and Medium Armor Mould drop chances for both Krigen variants from 20% to 15%.
+    - Hexen Mage Armor Mould drop chances remain at 25%.
     - Armor mould drop chances are now five times their respective vanilla values.
     - Disabled armor mould star scaling. Original drop quantities remain unchanged.
-  - [b]More Rare Resources:[/b] Putrid Hole flesh piles now drop fewer Bone Fragments (5–15 → 2–5) and more Soft Tissue (1–2 → 2–3) per loot roll. Loot weights, number of loot rolls and all other drops remain unchanged.
+  - [b]More Rare Resources:[/b]
+    - Putrid Hole flesh piles now drop fewer Bone Fragments (5–15 → 2–5) and more Soft Tissue (1–2 → 2–3) per loot roll.
+    - Loot weights, number of loot rolls and all other drops remain unchanged.
+    - Changes also affect existing flesh piles that have not yet been destroyed.
+    - Charred Fortress chest modifications remain unchanged.
   - [b]More Usable Fuel:[/b] Ashwood and Timberwood can now be used as fuel for Kilns.
+  - [b]More Serpent Spawns:[/b]
+    - Reduced modified Serpent spawn chances by 20% following the vanilla spawning fixes introduced in Valheim 1.0.30.
+    - Nighttime Serpents after Bonemass: 10% → 8%.
+    - Nighttime Serpents after Moder: 15% → 12%.
+    - Rain and Storm Serpents after Moder: 10% → 8%.
+    - Spawn intervals remain unchanged.
+  - [b]Small Serpent Spawns:[/b]
+    - Reduced Sea Wyrm spawn chances by 20%.
+    - After Bonemass: 5% → 4%.
+    - After Moder: 10% → 8%.
+    - Spawn intervals, creature stats and drops remain unchanged.
 
 - [b]New Features:[/b]
   - [b]Larger Resource Stacks:[/b]
     - Amber, Amber Pearl, Ruby, Silver Necklace, Draumyx, Veydris, Solryth and Grimvarn now stack to 50.
     - Surtling Cores now stack to 20.
-    - All Weapon, Shield, Staff, Armor and Intricate Key Moulds now stack to 30.
+    - All Weapon, Shield, Staff, Heavy Armor, Medium Armor, Mage Armor and Intricate Key Moulds now stack to 30.
     - Existing higher maximum stack sizes are not reduced.
+    - Supports mid-game toggling.
     - [b]WARNING:[/b] Split oversized stacks to their original maximum stack sizes before disabling this feature to prevent item loss.
 
 - [b]Other Changes:[/b]
-  - Moved Better Creature Drops and Better Trophy Drop Rates from Balance to Grind Reduction.
-  - Moved Standardized Food Durations and Potion Upgrade from Grind Reduction to Balance.
-  - Reorganized configuration ordering.
-  - Relocated configuration entries are recreated with their default values.
+  - [b]Configuration Restructuring:[/b]
+    - Moved Better Creature Drops and Better Trophy Drop Rates from Balance to Grind Reduction.
+    - Moved Standardized Food Durations and Potion Upgrade from Grind Reduction to Balance.
+    - Reorganized configuration ordering.
+    - Relocated configuration entries are recreated with their default values. Review these settings after updating.
+  - [b]Alternate Build Pieces Materials:[/b] Removed the Grausten Chest modification, as Valheim 1.0.30 now requires Charred Skulls instead of Charred Warrior Trophies.
+  - [b]Crown of Roots Changes:[/b]
+    - Removed the feature, as the Crown of Roots can now be repaired at a level 1 Workbench in vanilla Valheim.
+    - Restored the vanilla purchase price of 3000 Coins.
+  - [b]Less Ashlands Enemies:[/b]
+    - Removed the feature following the significant vanilla enemy spawn rate reductions introduced in Valheim 1.0.
+    - Ashlands enemy spawning is now governed by vanilla population limits and group sizes.
+  - [b]Automatic Progression Halt:[/b]
+    - Confirmed compatibility with the new Thistle alternate biome in Black Forest and Swamp.
+    - Thistle harvesting remains restricted until Eikthyr is defeated.
+    - Deep North Progression Halt remains planned for a future update.
 
 [size=4][b]v1.9.0[/b][/size]
 - [b]Updates:[/b]
