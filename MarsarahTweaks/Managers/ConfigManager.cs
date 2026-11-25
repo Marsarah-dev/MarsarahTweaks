@@ -118,7 +118,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata CreatureUnleveler = new ConfigMetadata("Creature Unleveler By Boss", "Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss", ConfigSections.Features, 170);
 			public static readonly ConfigMetadata RaidsModifications = new ConfigMetadata("No End-game Raids in Early Biomes", "Mistlands and Ashlands raids do not occur in the first four biomes", ConfigSections.Features, 160);
 			public static readonly ConfigMetadata StopNighttimeInvasion = new ConfigMetadata("Stop Nighttime Invasion", "Fulings, Seeker and Charred no longer spawn in early biomes at night. (Fulings spawn in Mountains and Seeker and Charred spawn in Plains)", ConfigSections.Features, 150);
-			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("Less Ashlands Enemies", "Numbers and spawn chance reduced for Ashlands enemies. (Toggling mid-game requires reloading area)", ConfigSections.Features, 140);
+			//public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("Less Ashlands Enemies", "Numbers and spawn chance reduced for Ashlands enemies. (Toggling mid-game requires reloading area)", ConfigSections.Features, 140);
 			public static readonly ConfigMetadata MoreSerpentSpawns = new ConfigMetadata("More Serpent Spawns", "Increases Ocean Serpent spawn chances and reduces spawn intervals after defeating Bonemass and Moder.", ConfigSections.Features, 130);
 			public static readonly ConfigMetadata SmallSerpentSpawns = new ConfigMetadata("Small Serpent Spawns", "Adds smaller, weaker Sea Wyrms to deep Ocean and coastal waters after defeating Bonemass. They spawn during day and night in any weather, drop only Serpent Meat, and become more common after Moder.", ConfigSections.Features, 120);
 			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("Clear Mistlands after Queen", "Clear Mistlands mist after defeating the Queen. (Disabling mid-game requires CLIENT relog)", ConfigSections.Features, 110);
@@ -198,7 +198,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> CreatureUnlevelerEnabled;
 		public static ConfigEntry<bool> NoEndRaidsInEarlyBiomesEnabled;
 		public static ConfigEntry<bool> StopNighttimeInvasionEnabled;
-		public static ConfigEntry<bool> LessAshlandsEnemiesEnabled;
+		//public static ConfigEntry<bool> LessAshlandsEnemiesEnabled;
 		public static ConfigEntry<bool> MoreSerpentSpawnsEnabled;
 		public static ConfigEntry<bool> SmallSerpentSpawnsEnabled;
 		public static ConfigEntry<bool> ClearMistlandsEnabled;
@@ -282,7 +282,7 @@ namespace MarsarahTweaks.Managers
 			CreatureUnlevelerEnabled = CreateConfig(Configs.CreatureUnleveler, true);
 			NoEndRaidsInEarlyBiomesEnabled = CreateConfig(Configs.RaidsModifications, true);
 			StopNighttimeInvasionEnabled = CreateConfig(Configs.StopNighttimeInvasion, true);
-			LessAshlandsEnemiesEnabled = CreateConfig(Configs.AshlandsEnemiesModifications, true);
+			//LessAshlandsEnemiesEnabled = CreateConfig(Configs.AshlandsEnemiesModifications, true);
 			MoreSerpentSpawnsEnabled = CreateConfig(Configs.MoreSerpentSpawns, true);
 			SmallSerpentSpawnsEnabled = CreateConfig(Configs.SmallSerpentSpawns, true);
 			ClearMistlandsEnabled = CreateConfig(Configs.ClearMistlands, true);
@@ -495,12 +495,12 @@ namespace MarsarahTweaks.Managers
 			// Handle both client and server-side configs
 			switch (configName)
 			{
-				case var name when name == Configs.AshlandsEnemiesModifications.Name:
+				/*case var name when name == Configs.AshlandsEnemiesModifications.Name:
 					if (spawnSystem != null)
 					{
 						AshlandsEnemiesChanges.UpdateAshlandsSpawns(spawnSystem);
 					}
-					break;
+					break;*/
 
 				case var name when name == Configs.StopNighttimeInvasion.Name:
 					if (spawnSystem != null)

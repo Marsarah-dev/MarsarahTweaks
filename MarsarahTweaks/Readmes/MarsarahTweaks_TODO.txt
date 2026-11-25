@@ -104,6 +104,13 @@ D. Others
   - This will restore the vanilla purchase price of 3000 coins.
   - Removed all associated Harmony patches, configuration entries and configuration change handling.
 
+* Less Ashlands Enemies
+  - Removed the entire feature following the significant vanilla enemy spawn rate reductions introduced in Valheim 1.0.
+  - Verified current vanilla spawn chances, population limits and group sizes in Valheim 1.0.30.
+  - Extensive personal gameplay without this feature confirmed that additional enemy population reductions are no longer necessary.
+  - Removed all associated Harmony patches, spawn data modifications, configuration entries and configuration change handling.
+  - Ashlands enemy spawning will now follow vanilla balancing.
+
 E. Test
 ------------------------------
 * Better Creature Drops / Armor Mould Migration - PASSED
@@ -122,6 +129,21 @@ E. Test
   - Verified backup persistence and correct restoration after world reloads.
   - Verified Small Serpent spawn configuration across progression stages.
   - Verified Sea Wyrm prefab reference recovery after world reloads.
+
+* More Rare Resources / Valheim 1.0.30 Compatibility - PASSED
+  - Verified the complete vanilla Charred Fortress chest loot table.
+  - Confirmed that all six modified resources retain their original vanilla weights.
+  - Verified through probability calculations that Idol, Celestial Feather, Molten Core and Flametal Ore acquisition probabilities remain approximately unchanged by our modifications.
+  - Existing gemstone weight and quantity modifications remain appropriate.
+  - No balancing or gameplay changes required.
+
+* Automatic Progression Halt / Thistle Alternate Biome - PASSED
+  - Verified compatibility with the new Thistle alternate biome introduced in Valheim 1.0.30.
+  - Confirmed that naturally generated Thistles use the existing Pickable_Thistle prefab.
+  - Verified resource restrictions before Eikthyr and successful harvesting after Eikthyr.
+  - Verified mid-game configuration toggling and global key changes.
+  - Confirmed that the Thistle modifier can coexist with other alternate biome modifiers (tested alongside Bog Swamp).
+  - No gameplay or configuration changes required.
 
 F. In Progress
 ------------------------------
@@ -155,7 +177,6 @@ C. Features
 * Allow Boars to eat Yellow Mushrooms.
 * Player Inspector for players currently logged into the world.
 * Look into Hexen HP threshold that makes her go down.
-* See if Less Ashlands Enemies can be removed now. Since 1.0 there was not a reason for it. 
 
 Trinkets:
 * Review new Trinket build costs:

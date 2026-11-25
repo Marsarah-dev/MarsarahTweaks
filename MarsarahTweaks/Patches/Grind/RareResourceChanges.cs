@@ -269,5 +269,64 @@ namespace MarsarahTweaks.Patches.Grind
 
 			log.Info("End of Putrid Hole Pile Drop Table", footer: true);
 		}
+
+		private static void LogCharredFortressDrops(ZNetScene instance)
+		{
+			if (instance == null) return;
+
+			GameObject prefab = instance.GetPrefab(CharredFortressChest);
+
+			if (prefab == null)
+			{
+				log.Warn($"Could not find {CharredFortressChest} prefab.");
+				return;
+			}
+
+			Container container = prefab.GetComponent<Container>();
+
+			if (container == null)
+			{
+				log.Warn($"{CharredFortressChest} has no Container component.");
+				return;
+			}
+
+			DropTable dropTable = container.m_defaultItems;
+
+			if (dropTable == null || dropTable.m_drops == null)
+			{
+				log.Warn($"{CharredFortressChest} has no valid drop table.");
+				return;
+			}
+
+			float totalWeight = 0f;
+
+			foreach (DropData drop in dropTable.m_drops)
+			{
+				if (drop.m_item == null) continue;
+
+				totalWeight += drop.m_weight;
+			}
+
+			log.Info("Original Charred Fortress Chest Drop Table", header: true);
+
+			log.Info($"Prefab: {prefab.name}");
+			log.Info($"DropMin: {dropTable.m_dropMin}");
+			log.Info($"DropMax: {dropTable.m_dropMax}");
+			log.Info($"DropChance: {dropTable.m_dropChance * 100f:0.##}%");
+			log.Info($"OneOfEach: {dropTable.m_oneOfEach}");
+			log.Info($"Total Weight: {totalWeight}");
+			log.Info($"Total Entries: {dropTable.m_drops.Count}");
+
+			foreach (DropData drop in dropTable.m_drops)
+			{
+				if (drop.m_item == null) continue;
+
+				float probability = totalWeight > 0f ? drop.m_weight / totalWeight * 100f : 0f;
+
+				log.Info($"  {drop.m_item.name} | Min: {drop.m_stackMin} | Max: {drop.m_stackMax} | Weight: {drop.m_weight} | Initial Roll Probability: {probability:0.##}% | DontScale: {drop.m_dontScale}");
+			}
+
+			log.Info("End of Charred Fortress Chest Drop Table", footer: true);
+		}
 	}
 }
