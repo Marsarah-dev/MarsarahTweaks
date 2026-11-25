@@ -7,7 +7,7 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal static class MoreUsableFuel
 	{
-		private static readonly LogManager log = new LogManager("More Usable Fuel", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("More Usable Fuel", LogManager.LogLevel.Warning);
 
 		private static readonly string[] kilnFuelPrefabs =
 		{

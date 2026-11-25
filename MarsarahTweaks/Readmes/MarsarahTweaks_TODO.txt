@@ -18,6 +18,10 @@ C. New Features
 * Larger Resource Stacks
   - Increases maximum stack sizes of valuables to 50, Surtling Cores to 20, and all moulds to 30.
 
+* Better Creature Drops
+  - Increased Moose Hide drop amount from Moose to 3-5 from 2. 
+  - Fixed upper-bound numbers for the creatures modified by this mod to reflect the actual intended change. 
+
 D. Others
 ------------------------------
 

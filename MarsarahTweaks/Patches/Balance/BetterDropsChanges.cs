@@ -24,13 +24,17 @@ namespace MarsarahTweaks.Patches.Balance
 		// - Add Blood Bag: 50%
 		// Yagluth - Dvergr Rogue, Mage
 		// - Soft Tissue: 100% chance (from 25%)
-		// Fader - Barka, Hexen
-		// Frozen Branch 2x, Nornathread 2-4 (from 1-3)
+		// Fader - Barka, Hexen, Moose
+		// Frozen Branch 2x, Nornathread 2-4 (from 1-3), Moose Hide 4-5 (from 2-4)
 
 		// Dictionaries
 		private static Dictionary<string, Dictionary<string, (int min, int max, float chance, bool removed, bool newlyAdded)>> originalDrops = new Dictionary<string, Dictionary<string, (int min, int max, float chance, bool removed, bool newlyAdded)>>();
 		private static readonly Dictionary<string, Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>> bossDropMappings = new Dictionary<string, Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>>()
 		{
+			// Valheim uses an exclusive upper bound for randomized drop amounts.
+			// For an intended range of 2-4, use min: 2 and max: 5.
+			// For fixed drop amounts, min and max can remain identical.
+
 			/*["Eikthyr"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
 			{
 				["Ghost"] = new List<(string item, int min, int max, float chance, bool remove)>()
@@ -51,7 +55,7 @@ namespace MarsarahTweaks.Patches.Balance
 			{
 				["Fenring"] = new List<(string item, int min, int max, float chance, bool remove)>()
 				{
-					("WolfHairBundle", 1, 2, 1f, false),
+					("WolfHairBundle", 1, 3, 1f, false),
 					("WolfClaw", 1, 1, 1f, false),
 					("WolfFang", 1, 1, 1f, true)
 				},
@@ -66,11 +70,11 @@ namespace MarsarahTweaks.Patches.Balance
 			{
 				["Dverger"] = new List<(string item, int min, int max, float chance, bool remove)>()
 				{
-					("Softtissue", 1, 2, 1f, false)
+					("Softtissue", 1, 3, 1f, false)
 				},
 				["DvergerMage"] = new List<(string item, int min, int max, float chance, bool remove)>()
 				{
-					("Softtissue", 1, 2, 1f, false)
+					("Softtissue", 1, 3, 1f, false)
 				}
 			},
 
@@ -78,7 +82,7 @@ namespace MarsarahTweaks.Patches.Balance
 			{
 				["DvergerAshlands"] = new List<(string item, int min, int max, float chance, bool remove)>()
 				{
-					("Softtissue", 1, 3, 1f, false)
+					("Softtissue", 1, 4, 1f, false)
 				}
 			},
 
@@ -91,7 +95,12 @@ namespace MarsarahTweaks.Patches.Balance
 
 				["JotunWitch"] = new List<(string item, int min, int max, float chance, bool remove)>()
 				{
-					("NornThread", 2, 4, 1f, false)
+					("NornThread", 2, 5, 1f, false)
+				},
+
+				["Moose"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				{
+					("MooseHide", 3, 6, 1f, false)
 				}
 			}
 		};
@@ -177,7 +186,7 @@ namespace MarsarahTweaks.Patches.Balance
 							if (existingDrop != null)
 							{
 								BackupDrop(creatureName, dropInfo.item, existingDrop);
-								log.Info($"Updating drop {dropInfo.item} for {creatureName} (min:{dropInfo.min}, max:{dropInfo.max}, chance:{dropInfo.chance})");
+								log.Info($"Updating drop {dropInfo.item} for {creatureName}: Amount {existingDrop.m_amountMin}-{existingDrop.m_amountMax} -> {dropInfo.min}-{dropInfo.max}, Chance {existingDrop.m_chance * 100f:0.##}% -> {dropInfo.chance * 100f:0.##}%");
 
 								existingDrop.m_amountMin = dropInfo.min;
 								existingDrop.m_amountMax = dropInfo.max;
