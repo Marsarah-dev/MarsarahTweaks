@@ -10,6 +10,8 @@ A. Fixes
 
 B. Updates
 ------------------------------
+* More Usable Fuel
+  - Ashwood and Timberwood are now usable at the Kiln.
 
 C. New Features
 ------------------------------
@@ -24,7 +26,6 @@ E. Test
 
 F. In Progress
 ------------------------------
-* Make Timberwood (and Ashwood?) be usable at the Kiln
 * Increase Moose Hide drop amount. 
 * Reduce armor moulds drops to 15% / 20% in the More Rares Resource section (test out)
 * Reduce amount of bones from the jelly found in Putrid Holes and potentially increase the soft tissue it provides (check numbers first).

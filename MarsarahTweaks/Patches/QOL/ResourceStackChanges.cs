@@ -6,7 +6,7 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal class ResourceStackChanges
 	{
-		private static readonly LogManager log = new LogManager("Resource Stack Changes", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Resource Stack Changes", LogManager.LogLevel.Warning);
 
 		// Dictionaries
 		private static readonly Dictionary<ItemDrop.ItemData.SharedData, int> originalStacks = new Dictionary<ItemDrop.ItemData.SharedData, int>();

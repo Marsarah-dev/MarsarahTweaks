@@ -1,9 +1,5 @@
 ﻿using HarmonyLib;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using MarsarahTweaks.Managers;
 
@@ -11,14 +7,20 @@ namespace MarsarahTweaks.Patches.QOL
 {
 	internal static class MoreUsableFuel
 	{
-		private static readonly LogManager log = new LogManager("More Usable Fuel", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("More Usable Fuel", LogManager.LogLevel.Info);
+
+		private static readonly string[] kilnFuelPrefabs =
+		{
+			"ElderBark", // Ancient Bark
+			"Blackwood", // Ashwood
+			"Frostwood"  // Timberwood
+		};
 
 		[HarmonyPatch(typeof(Smelter), "Awake")]
-		public static class AddAncientBarkToKiln_Patch
+		public static class AddWoodToKiln_Patch
 		{
 			private static void Postfix(Smelter __instance)
 			{
-				//if (!ConfigManager.MoreUsableFuelEnabled.Value) return;
 				UpdateKiln(__instance);
 			}
 		}
@@ -28,15 +30,12 @@ namespace MarsarahTweaks.Patches.QOL
 		{
 			private static void Postfix(ShieldGenerator __instance)
 			{
-				//if (!ConfigManager.MoreUsableFuelEnabled.Value) return;
 				UpdateShieldGenerator(__instance);
 			}
 		}
 
 		public static void UpdateMoreUsableFuel()
 		{
-			//if (!ConfigManager.MoreUsableFuelEnabled.Value) return;
-
 			UpdateAllKilns();
 			UpdateAllShieldGenerators();
 		}
@@ -51,45 +50,68 @@ namespace MarsarahTweaks.Patches.QOL
 
 		private static void UpdateKiln(Smelter kiln)
 		{
-			//if (!kiln.m_conversion.Exists(conv => conv.m_to.name == "Coal")) return;
+			if (kiln == null || kiln.m_conversion == null) return;
+
+			// Only modify smelters that produce Coal.
 			if (!kiln.m_conversion.Exists(conv => conv.m_to != null && conv.m_to.name == "Coal")) return;
 
-			//if (kiln.m_conversion.Any(conv => conv.m_from.name == "ElderBark")) return;
-
-			var barkPrefab = ObjectDB.instance?.GetItemPrefab("ElderBark");
 			var coalPrefab = ObjectDB.instance?.GetItemPrefab("Coal");
 
-			if (!barkPrefab || !coalPrefab)
+			if (!coalPrefab)
 			{
-				log.Warn("Missing prefab: AncientBark or Coal.");
+				log.Warn("Coal prefab not found.");
 				return;
 			}
 
-			var barkDrop = barkPrefab.GetComponent<ItemDrop>();
 			var coalDrop = coalPrefab.GetComponent<ItemDrop>();
 
-			var witheredBoneConversion = kiln.m_conversion.FirstOrDefault(conv =>
-				conv.m_from == barkDrop && conv.m_to == coalDrop);
-
-			if (ConfigManager.MoreUsableFuelEnabled.Value)
+			if (!coalDrop)
 			{
-				if (witheredBoneConversion == null)
-				{
-					var newWitheredBoneConversion = new Smelter.ItemConversion
-					{
-						m_from = barkDrop,
-						m_to = coalDrop
-					};
-					kiln.m_conversion.Add(newWitheredBoneConversion);
-					log.Info("Added Ancient Bark as fuel for Kiln.");
-				}
+				log.Warn("Coal does not have ItemDrop component.");
+				return;
 			}
-			else
+
+			foreach (string fuelPrefabName in kilnFuelPrefabs)
 			{
-				if (witheredBoneConversion != null)
+				var fuelPrefab = ObjectDB.instance?.GetItemPrefab(fuelPrefabName);
+
+				if (!fuelPrefab)
 				{
-					kiln.m_conversion.Remove(witheredBoneConversion);
-					log.Info("Removed Ancient Bark as fuel from Kiln.");
+					log.Warn($"{fuelPrefabName} prefab not found.");
+					continue;
+				}
+
+				var fuelDrop = fuelPrefab.GetComponent<ItemDrop>();
+
+				if (!fuelDrop)
+				{
+					log.Warn($"{fuelPrefabName} does not have ItemDrop component.");
+					continue;
+				}
+
+				var existingConversion = kiln.m_conversion.FirstOrDefault(conv => conv.m_from == fuelDrop && conv.m_to == coalDrop);
+
+				if (ConfigManager.MoreUsableFuelEnabled.Value)
+				{
+					if (existingConversion == null)
+					{
+						var newConversion = new Smelter.ItemConversion
+						{
+							m_from = fuelDrop,
+							m_to = coalDrop
+						};
+
+						kiln.m_conversion.Add(newConversion);
+						log.Info($"Added {fuelPrefabName} as fuel for Kiln.");
+					}
+				}
+				else
+				{
+					if (existingConversion != null)
+					{
+						kiln.m_conversion.Remove(existingConversion);
+						log.Info($"Removed {fuelPrefabName} as fuel from Kiln.");
+					}
 				}
 			}
 		}
@@ -105,6 +127,7 @@ namespace MarsarahTweaks.Patches.QOL
 		private static void UpdateShieldGenerator(ShieldGenerator sg)
 		{
 			var prefab = ObjectDB.instance?.GetItemPrefab("WitheredBone");
+
 			if (!prefab)
 			{
 				log.Warn("WitheredBone prefab not found.");
@@ -112,6 +135,7 @@ namespace MarsarahTweaks.Patches.QOL
 			}
 
 			var itemDrop = prefab.GetComponent<ItemDrop>();
+
 			if (!itemDrop)
 			{
 				log.Warn("WitheredBone does not have ItemDrop component.");
@@ -133,8 +157,7 @@ namespace MarsarahTweaks.Patches.QOL
 					sg.m_fuelItems.Remove(itemDrop);
 					log.Info("Removed WitheredBone as fuel from Shield Generator.");
 				}
-			}			
+			}
 		}
 	}
 }
-
