@@ -25,7 +25,7 @@ namespace MarsarahTweaks.Patches.Balance
 		// Yagluth - Dvergr Rogue, Mage
 		// - Soft Tissue: 100% chance (from 25%)
 		// Fader - Barka, Hexen, Moose
-		// Frozen Branch 2x, Nornathread 2-4 (from 1-3), Moose Hide 4-5 (from 2-4)
+		// Frozen Branch 2x, Nornathread 2-4 (from 1-3), Moose Hide 3-5 (from 2-4)
 
 		// Dictionaries
 		private static Dictionary<string, Dictionary<string, (int min, int max, float chance, bool removed, bool newlyAdded)>> originalDrops = new Dictionary<string, Dictionary<string, (int min, int max, float chance, bool removed, bool newlyAdded)>>();

@@ -10,15 +10,15 @@ namespace MarsarahTweaks.Patches.Grind
 {
 	internal class RareResourceChanges
 	{
-		private static readonly LogManager log = new LogManager("Rare Resource Changes", LogManager.LogLevel.Warning);
+		private static readonly LogManager log = new LogManager("Rare Resource Changes", LogManager.LogLevel.Info);
 
 		private const string CharredFortressChest = "TreasureChest_charredfortress";
 		private const int GemMinAmount = 2;
 		private const int GemMaxAmount = 3;
-		private const float KrigenArmorMouldChance = 0.20f;
+		private const float KrigenArmorMouldChance = 0.15f;
 		private const float HexenArmorMouldChance = 0.25f;
 
-		private static readonly Dictionary<CharacterDrop.Drop, float> originalArmorMouldChances = new Dictionary<CharacterDrop.Drop, float>();
+		private static readonly Dictionary<CharacterDrop.Drop, (float chance, bool levelMultiplier)> originalArmorMouldDrops = new Dictionary<CharacterDrop.Drop, (float chance, bool levelMultiplier)>();
 
 		private static readonly Dictionary<string, float> lootWeights = new Dictionary<string, float>
 		{
@@ -72,7 +72,9 @@ namespace MarsarahTweaks.Patches.Grind
 			{
 				if (__instance == null) return;
 
-				originalArmorMouldChances.Clear();
+				originalArmorMouldDrops.Clear();
+
+				//LogOriginalCreatureDrops(__instance);
 				UpdateDeepNorthArmorMoulds(__instance);
 			}
 		}
@@ -143,6 +145,51 @@ namespace MarsarahTweaks.Patches.Grind
 			log.Info("Applied More Rare Resources to Charred Fortress chest loot.");
 		}
 
+		private static void LogOriginalCreatureDrops(ZNetScene instance)
+		{
+			if (instance == null) return;
+
+			string[] creatureNames =
+			{
+				"JotunWarrior",
+				"JotunWarriorDualWield",
+				"JotunWitch",
+				"Moose"
+			};
+
+			log.Info("Original Creature Drop Tables", header: true);
+
+			foreach (string creatureName in creatureNames)
+			{
+				GameObject prefab = instance.GetPrefab(creatureName);
+
+				if (prefab == null)
+				{
+					log.Warn($"Could not find creature prefab: {creatureName}");
+					continue;
+				}
+
+				CharacterDrop characterDrop = prefab.GetComponent<CharacterDrop>();
+
+				if (characterDrop == null || characterDrop.m_drops == null)
+				{
+					log.Warn($"No valid CharacterDrop component found for {creatureName}");
+					continue;
+				}
+
+				log.Info($"Creature: {creatureName}");
+
+				foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
+				{
+					if (drop?.m_prefab == null) continue;
+
+					log.Info($"  {drop.m_prefab.name} | Min: {drop.m_amountMin} | Max: {drop.m_amountMax} | Chance: {drop.m_chance * 100f:0.##}% | LevelMultiplier: {drop.m_levelMultiplier} | DontScale: {drop.m_dontScale} | OnePerPlayer: {drop.m_onePerPlayer}");
+				}
+			}
+
+			log.Info("End of Creature Drop Tables", footer: true);
+		}
+
 		public static void UpdateDeepNorthArmorMoulds(ZNetScene instance)
 		{
 			if (instance == null) return;
@@ -180,18 +227,23 @@ namespace MarsarahTweaks.Patches.Grind
 				string itemName = drop.m_prefab.name;
 				if (!moulds.Contains(itemName)) continue;
 
-				if (!originalArmorMouldChances.TryGetValue(drop, out float originalChance))
+				// Backup original drop values.
+				if (!originalArmorMouldDrops.TryGetValue(drop, out var original))
 				{
-					originalChance = drop.m_chance;
-					originalArmorMouldChances[drop] = originalChance;
+					original = (drop.m_chance, drop.m_levelMultiplier);
+					originalArmorMouldDrops[drop] = original;
 				}
 
-				float targetChance = enabled ? newChance : originalChance;
+				// Disable star scaling for all armor moulds when enabled.
+				float targetChance = enabled ? newChance : original.chance;
+				bool targetLevelMultiplier = enabled ? false : original.levelMultiplier;
 
-				if (drop.m_chance != targetChance)
+				if (drop.m_chance != targetChance || drop.m_levelMultiplier != targetLevelMultiplier)
 				{
-					log.Info($"[Deep North] {creatureName} | {itemName}: {drop.m_chance * 100f:0.##}% -> {targetChance * 100f:0.##}%");
+					log.Info($"[Deep North] {creatureName} | {itemName} | Chance: {drop.m_chance * 100f:0.##}% -> {targetChance * 100f:0.##}% | LevelMultiplier: {drop.m_levelMultiplier} -> {targetLevelMultiplier}");
+
 					drop.m_chance = targetChance;
+					drop.m_levelMultiplier = targetLevelMultiplier;
 				}
 
 				modifiedCount++;
@@ -203,7 +255,7 @@ namespace MarsarahTweaks.Patches.Grind
 			}
 			else
 			{
-				log.Info($"[Deep North] {creatureName}: All {modifiedCount} armor moulds set to {(enabled ? "modified" : "original")} rates.");
+				log.Info($"[Deep North] {creatureName}: All {modifiedCount} armor moulds set to {(enabled ? "modified" : "original")} values.");
 			}
 		}
 

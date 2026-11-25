@@ -7,20 +7,30 @@ IMPLEMENTED - NOT RELEASED
 
 A. Fixes
 ------------------------------
+* Better Creature Drops
+  - Fixed randomized drop amounts for Fenris Hair, Soft Tissue and Nornathread to correctly include the intended maximum drop amount.
 
 B. Updates
 ------------------------------
 * More Usable Fuel
   - Ashwood and Timberwood are now usable at the Kiln.
 
+* Better Creature Drops
+  - Increased Moose Hide drops to 3-5 from 2. 
+
+* More Rare Resources
+  - Reduced Krigen armor mould drop chances from 20% to 15%.
+  - Retained Hexen armor mould drop chances at 25%.
+  - Standardized armor mould drops to five times their respective vanilla drop chances.
+  - Disabled star scaling for armor mould drops to ensure consistent acquisition across both creatures.
+  - Restores original drop chances and star scaling when the feature is disabled.
+  - Balanced and verified through extensive in-game drop testing. 
+
 C. New Features
 ------------------------------
 * Larger Resource Stacks
   - Increases maximum stack sizes of valuables to 50, Surtling Cores to 20, and all moulds to 30.
-
-* Better Creature Drops
-  - Increased Moose Hide drop amount from Moose to 3-5 from 2. 
-  - Fixed upper-bound numbers for the creatures modified by this mod to reflect the actual intended change. 
+  - WARNING: Disabling this feature while stacks exceed their vanilla maximum stack sizes will result in item loss. Split affected stacks before disabling.
 
 D. Others
 ------------------------------
@@ -30,8 +40,6 @@ E. Test
 
 F. In Progress
 ------------------------------
-* Increase Moose Hide drop amount. 
-* Reduce armor moulds drops to 15% / 20% in the More Rares Resource section (test out)
 * Reduce amount of bones from the jelly found in Putrid Holes and potentially increase the soft tissue it provides (check numbers first).
 
 ============================================================
