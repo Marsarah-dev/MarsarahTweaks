@@ -6,6 +6,7 @@ v1.10.0
     - Fixed Fenris Hair, Soft Tissue and Nornathread drop quantities to correctly include their intended maximum amounts.
   - **Progression Halt**
     - Fixed Better Creature Drops and Better Trophy Drop Rates not refreshing when Fader is defeated during gameplay.
+    - Deep North Progression Halt is not yet implemented but will be in a future update.
   - **Less Brazier Smoke**
     - Fixed compatibility with Valheim 1.0.30.
     - Smoke visual size, emission interval and rising speed modifications remain unchanged.

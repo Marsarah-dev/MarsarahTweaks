@@ -76,6 +76,14 @@ D. Others
 
 E. Test
 ------------------------------
+* Better Creature Drops / Armor Mould Migration - PASSED
+  - Verified drop chances, quantities and star scaling for all 15 armor mould entries.
+  - Verified restoration of original drop properties.
+  - Verified repeated mid-game toggling.
+  - Verified independence between Better Creature Drops and More Rare Resources.
+  - Verified integration with Automatic Progression Halt.
+  - Regression tests for Bat, Fenring and Moose passed.
+  - All tested configuration combinations worked as intended.
 
 F. In Progress
 ------------------------------

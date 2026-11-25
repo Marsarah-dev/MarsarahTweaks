@@ -244,7 +244,7 @@ Armor mould drop chances are increased to five times their respective vanilla va
 
 - Increases trophy drop rate for some creatures.
 - Toggling mid-game will only affect newly spawned creatures.
-- **Conflicts:** Incompatible with any mod that modifies creature drop rates.
+- **Conflicts:** Incompatible with any mod that modifies creature trophy drop rates.
 
 **🔹 Changes**
 | Creature      | Old Drop Chance | New Drop Chance           |
@@ -283,8 +283,6 @@ Armor mould drop chances are increased to five times their respective vanilla va
   - Loot weights, number of loot rolls and all other drops remain unchanged.
 - Flesh pile changes also affect existing piles that have not yet been destroyed.
 - **Conflicts:** Mods that modify Charred Fortress chest loot or Putrid Hole flesh pile drops.
-
----
 
 ---
 

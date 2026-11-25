@@ -1021,7 +1021,7 @@ Blaxxun-bloop - for ServerSync
 [size=4][b]v1.10.0[/b][/size]
 - [b]Fixes:[/b]
   - [b]Better Creature Drops:[/b] Fixed Fenris Hair, Soft Tissue and Nornathread drop quantities to correctly include their intended maximum amounts.
-  - [b]Progression Halt:[/b] Better Creature Drops and Better Trophy Drop Rates now refresh when Fader is defeated during gameplay.
+  - [b]Progression Halt:[/b] Better Creature Drops and Better Trophy Drop Rates now refresh when Fader is defeated during gameplay. Deep North Progression Halt is not yet implemented but will be in a future update.
   - [b]Less Brazier Smoke:[/b] Fixed compatibility with Valheim 1.0.30. Smoke reduction settings remain unchanged.
 
 - [b]Updates:[/b]
