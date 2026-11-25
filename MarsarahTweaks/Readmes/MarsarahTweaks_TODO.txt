@@ -74,6 +74,9 @@ D. Others
   - Simplified selected config descriptions.
   - Relocated configs are recreated with their default values.
 
+* Alternate Build Pieces Materials
+  - Removed the Grausten Chest material modification, as Valheim 1.0.30 now uses the same recipe.
+
 E. Test
 ------------------------------
 * Better Creature Drops / Armor Mould Migration - PASSED
@@ -87,6 +90,7 @@ E. Test
 
 F. In Progress
 ------------------------------
+* Check Valheim v1.0.30 relevant changes to my mod. Remove what is now vanilla that my mod does, or adjust for new additions. 
 
 ============================================================
 TO IMPLEMENT
@@ -109,12 +113,14 @@ C. Features
 -------------------------------
 * Add/verify Progression Halt for Deep North.
 * Review Creature Unleveler handling Deep North.
+* Forge of Potential - I will need to revise this thing heavily but only after i finish most of the DN updating. Extreme brainstorming needed.
 * Staff of Protection: add a secondary healing attack similar to the Dvergr Mage heal.
 * Better Roads: increase player movement speed on roads.
 * Allow ships to be destroyed with the hammer.
 * Allow Boars to eat Yellow Mushrooms.
 * Player Inspector for players currently logged into the world.
 * Look into Hexen HP threshold that makes her go down.
+* See if Less Ashlands Enemies can be removed now. Since 1.0 there was not a reason for it. 
 
 Trinkets:
 * Review new Trinket build costs:
