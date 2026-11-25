@@ -10,6 +10,13 @@ A. Fixes
 * Better Creature Drops
   - Fixed randomized drop amounts for Fenris Hair, Soft Tissue and Nornathread to correctly include the intended maximum drop amount.
 
+* Less Brazier Smoke
+  - Fixed compatibility with the Valheim update released on November 25, 2026.
+  - Replaced the obsolete SmokeRenderer transpiler with a mesh-based visual scaling implementation.
+  - Preserved all existing smoke size, emission interval and rising speed modifications.
+  - Visual scaling does not affect smoke collision or physics dimensions.
+  - Improved implementation by caching and reusing scaled smoke meshes.
+  
 B. Updates
 ------------------------------
 * More Usable Fuel
