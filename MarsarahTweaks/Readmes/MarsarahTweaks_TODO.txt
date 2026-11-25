@@ -17,6 +17,12 @@ A. Fixes
   - Preserved all existing smoke size, emission interval and rising speed modifications.
   - Visual scaling does not affect smoke collision or physics dimensions.
   - Improved implementation by caching and reusing scaled smoke meshes.
+
+* More Serpent Spawns
+  - Fixed original spawn value backups being reset during world reloads, potentially causing modified spawn values to be captured as vanilla.
+  - Preserved spawn value backups across world sessions using the existing ConditionalWeakTable.
+  - Improved diagnostic logging to display original and current spawn values, including unchanged entries.
+  - Existing spawn chance and interval modifications remain unchanged.
   
 B. Updates
 ------------------------------
@@ -53,6 +59,22 @@ B. Updates
   - Charred Fortress chest modifications remain unchanged.
   - Updated configuration description.
   - Balanced and verified through extensive in-game drop testing.
+
+* More Serpent Spawns
+  - Reduced modified Serpent spawn chances by 20% following the vanilla spawning fixes introduced in Valheim 1.0.30.
+  - Nighttime Serpents:
+    - After Bonemass: 10% → 8%.
+    - After Moder: 15% → 12%.
+  - Rain/Storm Serpents:
+    - After Moder: 10% → 8%.
+  - Spawn intervals and progression requirements remain unchanged.
+  - Original vanilla spawn values remain unaffected.
+
+* Small Serpent Spawns
+  - Reduced Sea Wyrm spawn chances by 20%.
+    - After Bonemass: 5% → 4%.
+    - After Moder: 10% → 8%.
+  - Spawn intervals, spawn locations, progression requirements, creature stats and drops remain unchanged.
 
 C. New Features
 ------------------------------
@@ -92,6 +114,14 @@ E. Test
   - Verified integration with Automatic Progression Halt.
   - Regression tests for Bat, Fenring and Moose passed.
   - All tested configuration combinations worked as intended.
+
+* More Serpent Spawns / Small Serpent Spawns - PASSED
+  - Verified that vanilla Serpent spawn chances and intervals remain unchanged in Valheim 1.0.30.
+  - Verified spawn modifications before Bonemass, after Bonemass and after Moder.
+  - Verified restoration of vanilla values when disabling More Serpent Spawns.
+  - Verified backup persistence and correct restoration after world reloads.
+  - Verified Small Serpent spawn configuration across progression stages.
+  - Verified Sea Wyrm prefab reference recovery after world reloads.
 
 F. In Progress
 ------------------------------

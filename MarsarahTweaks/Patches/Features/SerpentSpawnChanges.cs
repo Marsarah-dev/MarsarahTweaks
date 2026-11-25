@@ -17,19 +17,19 @@ namespace MarsarahTweaks.Patches.Features
 		private const string SmallSerpentSpawnerName = "MSmallSerpent [Ocean]";
 		private const string BonemassGlobalKey = "defeated_bonemass";
 
-		private static readonly float serpentChanceNightBonemass = 10f;
+		private static readonly float serpentChanceNightBonemass = 8f;
 		private static readonly float serpentIntervalNightBonemass = 800f;
-		private static readonly float serpentChanceRainModer = 10f;
-		private static readonly float serpentChanceNightModer = 15f;
+		private static readonly float serpentChanceRainModer = 8f;
+		private static readonly float serpentChanceNightModer = 12f;
 		private static readonly float serpentIntervalRainModer = 800f;
 		private static readonly float serpentIntervalNightModer = 700f;
 
 		private static readonly float smallSerpentScale = 0.55f;
 		private static readonly float smallSerpentHealth = 200f;
 		private static readonly float smallSerpentDamageMultiplier = 0.5f;
-		private static readonly float smallSerpentChanceBonemass = 5f;
+		private static readonly float smallSerpentChanceBonemass = 4f;
 		private static readonly float smallSerpentIntervalBonemass = 900f;
-		private static readonly float smallSerpentChanceModer = 10f;
+		private static readonly float smallSerpentChanceModer = 8f;
 		private static readonly float smallSerpentIntervalModer = 700f;
 
 		private static readonly MethodInfo memberwiseClone = typeof(object).GetMethod("MemberwiseClone", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -61,7 +61,7 @@ namespace MarsarahTweaks.Patches.Features
 		private static ConditionalWeakTable<SpawnSystem.SpawnData, SmallSerpentSpawnGuardState> smallSerpentGuardStates = new ConditionalWeakTable<SpawnSystem.SpawnData, SmallSerpentSpawnGuardState>();
 
 		// Do not retain SpawnData from unloaded zones.
-		private static ConditionalWeakTable<SpawnSystem.SpawnData, OriginalSpawnValues> originalSpawnValues = new ConditionalWeakTable<SpawnSystem.SpawnData, OriginalSpawnValues>();
+		private static readonly ConditionalWeakTable<SpawnSystem.SpawnData, OriginalSpawnValues> originalSpawnValues = new ConditionalWeakTable<SpawnSystem.SpawnData, OriginalSpawnValues>();
 		private static ProgressionStage? lastCheckedStage;
 		private static bool? lastCheckedEnabled;
 		private static bool? lastCheckedSmallEnabled;
@@ -79,7 +79,6 @@ namespace MarsarahTweaks.Patches.Features
 		{
 			private static void Prefix()
 			{
-				originalSpawnValues = new ConditionalWeakTable<SpawnSystem.SpawnData, OriginalSpawnValues>();
 				smallSerpentGuardStates = new ConditionalWeakTable<SpawnSystem.SpawnData, SmallSerpentSpawnGuardState>();
 				lastCheckedStage = null;
 				lastCheckedEnabled = null;
@@ -247,15 +246,16 @@ namespace MarsarahTweaks.Patches.Features
 						}
 					}
 
-					if (spawner.m_spawnChance == chance && spawner.m_spawnInterval == interval) continue;
+					if (spawner.m_spawnChance != chance || spawner.m_spawnInterval != interval)
+					{
+						spawner.m_spawnChance = chance;
+						spawner.m_spawnInterval = interval;
+					}
 
 					if (reportStage)
 					{
-						log.Info($"{(isNightSpawner ? "Night" : "Rain/Storm")} Serpent: {spawner.m_spawnChance}% / {spawner.m_spawnInterval}s -> {chance}% / {interval}s");
+						log.Info($"{(isNightSpawner ? "Night" : "Rain/Storm")} Serpent: Vanilla: {original.Chance}% / {original.Interval}s | Current: {spawner.m_spawnChance}% / {spawner.m_spawnInterval}s | Enabled: {spawner.m_enabled}");
 					}
-
-					spawner.m_spawnChance = chance;
-					spawner.m_spawnInterval = interval;
 				}
 			}
 
