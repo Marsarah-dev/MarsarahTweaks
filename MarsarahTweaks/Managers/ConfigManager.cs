@@ -95,7 +95,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it. (Toggling mid-game requires CLIENT relog if the item is equipped)", ConfigSections.Balance, 140);
 			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("Gear Speed Modifications", "Removes speed penalty for heavy and mage armors; adds speed bonus to light armor. (Toggling mid-game requires CLIENT relog)", ConfigSections.Balance, 130);
 			public static readonly ConfigMetadata ExtraArmorStatsModifications = new ConfigMetadata("Extra Armor Stats", "Heavy armor provides extra HP, light armor provides extra stamina, mage armor provides extra eitr", ConfigSections.Balance, 120);
-			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands and Ashlands can be upgraded to max level within their respective biomes. Moves the Vilecage set to the Workbench", ConfigSections.Balance, 110);
+			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands, Ashlands and Deep North can be upgraded to max level within their respective biomes. Moves the Vilecage set to the Workbench", ConfigSections.Balance, 110);
 			public static readonly ConfigMetadata FrostfireDamageModifications = new ConfigMetadata("Improved Frostfire Damage", "Adjusts Deep North Frostfire weapons to deal 80 Frost and 40 Fire damage at quality 1, preserving their existing upgrade scaling. (Toggling mid-game requires CLIENT relog for equipped weapons)", ConfigSections.Balance, 109);
 			public static readonly ConfigMetadata DyrnwynDamageModifications = new ConfigMetadata("Improved Dyrnwyn", "Increases Dyrnwyn's base Fire damage from 10 to 20 and adds 5 Fire damage per upgrade level. Slash damage remains unchanged. (Toggling mid-game requires CLIENT relog for equipped weapons)", ConfigSections.Balance, 108);
 			public static readonly ConfigMetadata CrownOfRootsModifications = new ConfigMetadata("Crown of Roots Changes", "Reduces the Crown of Roots purchase price from 3000 to 2000 coins and allows repairing it at a level 3 Workbench.", ConfigSections.Balance, 105);
@@ -136,6 +136,7 @@ namespace MarsarahTweaks.Managers
 
 			// QOL
 			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("Lighter Metal Weight", "All metal ore and bars weight decreased to 8. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.QOL, 160);
+			public static readonly ConfigMetadata LargerResourceStacks = new ConfigMetadata("Larger Resource Stacks", "Increases maximum stack sizes of valuables to 50, Surtling Cores to 20, and all moulds to 30.", ConfigSections.QOL, 155);
 			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("Larger Pickup Area", "Item pickup area slightly increased", ConfigSections.QOL, 150);
 			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("No Skill Levels Loss On Death", "Skills won't go down the current level upon death (progress in that skill is still lost). (Toggling mid-game requires CLIENT relog)", ConfigSections.QOL, 140);
 			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("Larger Boat Explore Radius", "Double explore radius on a boat", ConfigSections.QOL, 130);
@@ -216,6 +217,7 @@ namespace MarsarahTweaks.Managers
 
 		// QOL
 		public static ConfigEntry<bool> LighterMetalWeightEnabled;
+		public static ConfigEntry<bool> LargerResourceStacksEnabled;
 		public static ConfigEntry<bool> LargerPickupAreaEnabled;
 		public static ConfigEntry<bool> NoSkillLowerOnDeathEnabled;
 		public static ConfigEntry<bool> LargerBoatExploreRadiusEnabled;
@@ -300,6 +302,7 @@ namespace MarsarahTweaks.Managers
 
 			// ===== QOL
 			LighterMetalWeightEnabled = CreateConfig(Configs.LighterMetalWeight, true);
+			LargerResourceStacksEnabled = CreateConfig(Configs.LargerResourceStacks, true);
 			LargerPickupAreaEnabled = CreateConfig(Configs.LargerPickupArea, true);
 			NoSkillLowerOnDeathEnabled = CreateConfig(Configs.NoSkillLoss, true);
 			LargerBoatExploreRadiusEnabled = CreateConfig(Configs.LargerBoatExploreRadius, true);
@@ -377,6 +380,10 @@ namespace MarsarahTweaks.Managers
 			if (configName == Configs.WeatherModifications.Name)
 			{
 				WeatherChanges.UpdateWeatherWeights(EnvMan.instance);
+			}
+			if (configName == Configs.LargerResourceStacks.Name)
+			{
+				ResourceStackChanges.UpdateResourceStacks(ObjectDB.instance);
 			}
 
 			if (ObjectDB.instance == null || ZNetScene.instance == null) return;

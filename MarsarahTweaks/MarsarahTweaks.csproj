@@ -148,6 +148,7 @@
     <Compile Include="Patches\Features\ProgressionHalt.cs" />
     <Compile Include="Patches\Balance\StatusEffectChanges.cs" />
     <Compile Include="Patches\QOL\PlayerLogoutAnnounce.cs" />
+    <Compile Include="Patches\QOL\ResourceStackChanges.cs" />
     <Compile Include="Patches\QOL\RestedDelay.cs" />
     <Compile Include="Patches\QOL\SailingCameraChanges.cs" />
     <Compile Include="Patches\QOL\ShieldGeneratorCapacity.cs" />
