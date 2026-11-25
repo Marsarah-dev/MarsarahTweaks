@@ -79,6 +79,13 @@ This mod requires **BepInEx for Valheim**, available here:  https://valheim.thun
 ⚠️ **Note:** All features are synced using ServerSync. 
 ⚠️ **Note:**  Players will be disconnected if their mod version differs from the server.
 
+**⚠️ Note for v1.10.0:**
+- **Crown of Roots Changes:** Removed as vanilla now allows repairs at a level 1 Workbench. Purchase price returns to 3000 Coins.
+- **Less Ashlands Enemies:** Removed following the vanilla spawn rate reductions in Valheim 1.0.
+- **Alternate Build Pieces Materials:** Grausten Chest modification removed as vanilla now uses the same recipe.
+
+Some configurations have been relocated and reset to their default values. Please review your settings after updating.
+
 ---
 
 ## <strong> 💰 Donations </strong>

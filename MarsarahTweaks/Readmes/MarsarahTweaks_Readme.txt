@@ -73,6 +73,13 @@ If you’re using another mod that changes similar gameplay elements, disable th
 
 This mod uses Server Sync. All clients need to have the same version as the server, otherwise they will be disconnected at login. All configs are synced between server and clients.
 
+NOTE FOR v1.10.0:
+- Crown of Roots Changes: Removed as vanilla now allows repairs at a level 1 Workbench. Purchase price returns to 3000 Coins.
+- Less Ashlands Enemies: Removed following the vanilla spawn rate reductions in Valheim 1.0.
+- Alternate Build Pieces Materials: Grausten Chest modification removed as vanilla now uses the same recipe.
+
+Some configurations have been relocated and reset to their default values. Please review your settings after updating.
+
 MOD CONFIGS
 ================================================================
 

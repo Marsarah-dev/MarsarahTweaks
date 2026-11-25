@@ -1,6 +1,6 @@
 # MarsarahTweaks
 
-**MarsarahTweaks** is a modular Valheim mod focused on gameplay balance, quality-of-life improvements, UI enhancements, and compatibility with other popular mods.
+**MarsarahTweaks** is a modular Valheim mod focused on gameplay balance, grind reduction, progression, quality-of-life improvements, and compatibility with other popular mods.
 
 The project is designed to be:
 - **Highly configurable** (per-feature toggles, mid-game safe where possible)
@@ -9,10 +9,13 @@ The project is designed to be:
 - **Actively maintained** with iterative fixes and feature additions
 
 ### Features include
-- Gameplay and progression balance tweaks
-- Crafting, gear, and resource adjustments
-- New build pieces and visual variants
+- Gameplay and boss-based progression adjustments
+- Crafting, gear, and resource balancing
+- Creature spawning and drop modifications
+- Quality-of-life improvements
 - Extensive mod compatibility handling
+
+Custom build pieces and UI enhancements are available separately through MarsarahBuildPieces and MarsarahUI. Neither mod is required to use MarsarahTweaks.
 
 ### Technical highlights
 - C# / Unity modding (Valheim)
