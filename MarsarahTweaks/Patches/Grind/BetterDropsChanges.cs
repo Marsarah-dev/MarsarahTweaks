@@ -28,79 +28,82 @@ namespace MarsarahTweaks.Patches.Grind
 		// Frozen Branch 2x, Nornathread 2-4 (from 1-3), Moose Hide 3-5 (from 2-4)
 
 		// Dictionaries
-		private static Dictionary<string, Dictionary<string, (int min, int max, float chance, bool removed, bool newlyAdded)>> originalDrops = new Dictionary<string, Dictionary<string, (int min, int max, float chance, bool removed, bool newlyAdded)>>();
-		private static readonly Dictionary<string, Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>> bossDropMappings = new Dictionary<string, Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>>()
+		private static Dictionary<string, Dictionary<string, (int min, int max, float chance, bool levelMultiplier, bool removed, bool newlyAdded)>> originalDrops = new Dictionary<string, Dictionary<string, (int min, int max, float chance, bool levelMultiplier, bool removed, bool newlyAdded)>>();
+		private static readonly Dictionary<string, Dictionary<string, List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>>> bossDropMappings = new Dictionary<string, Dictionary<string, List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>>>()
 		{
 			// Valheim uses an exclusive upper bound for randomized drop amounts.
 			// For an intended range of 2-4, use min: 2 and max: 5.
 			// For fixed drop amounts, min and max can remain identical.
+			// Null min/max preserves the original drop amount.
+			// Null levelMultiplier preserves the original star scaling.
+			// existingOnly prevents creating missing drop entries.
 
-			/*["Eikthyr"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
+			/*["Eikthyr"] = new Dictionary<string, List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>>()
 			{
-				["Ghost"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				["Ghost"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
 				{
-					("SilverNecklace", 1, 1, 1f, false)
+					("SilverNecklace", 1, 1, 1f, false, null, false)
 				}
 			},*/
 
-			["The Elder"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
+			["The Elder"] = new Dictionary<string, List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>>()
 			{
-				["Writhan"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				["Writhan"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
 				{
-					("WrithanRoots", 2, 2, 1f, false)
+					("WrithanRoots", 2, 2, 1f, false, null, false)
 				}
 			},
 
-			["Bonemass"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
+			["Bonemass"] = new Dictionary<string, List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>>()
 			{
-				["Fenring"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				["Fenring"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
 				{
-					("WolfHairBundle", 1, 3, 1f, false),
-					("WolfClaw", 1, 1, 1f, false),
-					("WolfFang", 1, 1, 1f, true)
+					("WolfHairBundle", 1, 3, 1f, false, null, false),
+					("WolfClaw", 1, 1, 1f, false, null, false),
+					("WolfFang", 1, 1, 1f, true, null, false)
 				},
 
-				["Bat"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				["Bat"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
 				{
-					("Bloodbag", 1, 1, 0.5f, false)
+					("Bloodbag", 1, 1, 0.5f, false, null, false)
 				}
 			},
 
-			["Yagluth"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
+			["Yagluth"] = new Dictionary<string, List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>>()
 			{
-				["Dverger"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				["Dverger"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
 				{
-					("Softtissue", 1, 3, 1f, false)
+					("Softtissue", 1, 3, 1f, false, null, false)
 				},
-				["DvergerMage"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				["DvergerMage"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
 				{
-					("Softtissue", 1, 3, 1f, false)
+					("Softtissue", 1, 3, 1f, false, null, false)
 				}
 			},
 
-			["The Queen"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
+			["The Queen"] = new Dictionary<string, List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>>()
 			{
-				["DvergerAshlands"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				["DvergerAshlands"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
 				{
-					("Softtissue", 1, 4, 1f, false)
+					("Softtissue", 1, 4, 1f, false, null, false)
 				}
 			},
 
-			["Fader"] = new Dictionary<string, List<(string item, int min, int max, float chance, bool remove)>>()
+			["Fader"] = new Dictionary<string, List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>>()
 			{
-				["Barka"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				["Barka"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
 				{
-					("BarkaBranch", 2, 2, 1f, false)
+					("BarkaBranch", 2, 2, 1f, false, null, false)
 				},
 
-				["JotunWitch"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				["JotunWitch"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
 				{
-					("NornThread", 2, 5, 1f, false)
+					("NornThread", 2, 5, 1f, false, null, false)
 				},
 
-				["Moose"] = new List<(string item, int min, int max, float chance, bool remove)>()
+				["Moose"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
 				{
-					("MooseHide", 3, 6, 1f, false)
+					("MooseHide", 3, 6, 1f, false, null, false)
 				}
 			}
 		};
@@ -109,11 +112,12 @@ namespace MarsarahTweaks.Patches.Grind
 		public static void BackupDrop(string creatureName, string item, CharacterDrop.Drop drop, bool removed = false, bool newlyAdded = false)
 		{
 			if (!originalDrops.ContainsKey(creatureName))
-				originalDrops[creatureName] = new Dictionary<string, (int, int, float, bool, bool)>();
+				originalDrops[creatureName] = new Dictionary<string, (int, int, float, bool, bool, bool)>();
+
 			if (!originalDrops[creatureName].ContainsKey(item))
 			{
-				originalDrops[creatureName][item] = (drop.m_amountMin, drop.m_amountMax, drop.m_chance, removed, newlyAdded);
-				log.Info($"Backing up drop {item} for {creatureName} (removed:{removed}, newlyAdded:{newlyAdded})");
+				originalDrops[creatureName][item] = (drop.m_amountMin, drop.m_amountMax, drop.m_chance, drop.m_levelMultiplier, removed, newlyAdded);
+				log.Info($"Backing up drop {item} for {creatureName} (removed:{removed}, newlyAdded:{newlyAdded}, levelMultiplier:{drop.m_levelMultiplier})");
 			}
 		}
 
@@ -160,20 +164,37 @@ namespace MarsarahTweaks.Patches.Grind
 								continue; // Skip adding or modifying this drop since it's marked for removal
 							}
 
-							// If drop doesn't exist, create it
+							// If drop doesn't exist, create it unless marked as existing only
 							if (existingDrop == null)
 							{
+								if (dropInfo.existingOnly)
+								{
+									log.Warn($"Expected drop {dropInfo.item} not found for {creatureName}. Skipping modification.");
+									continue;
+								}
+
+								if (!dropInfo.min.HasValue || !dropInfo.max.HasValue)
+								{
+									log.Warn($"Cannot create drop {dropInfo.item} for {creatureName} without valid drop amounts.");
+									continue;
+								}
+
 								GameObject dropPrefab = instance.GetPrefab(dropInfo.item);
+
 								if (dropPrefab == null) continue;
 
 								existingDrop = new CharacterDrop.Drop
 								{
 									m_prefab = dropPrefab,
-									m_amountMin = dropInfo.min,
-									m_amountMax = dropInfo.max,
+									m_amountMin = dropInfo.min.Value,
+									m_amountMax = dropInfo.max.Value,
 									m_chance = dropInfo.chance,
 									m_dontScale = false
 								};
+
+								if (dropInfo.levelMultiplier.HasValue)
+									existingDrop.m_levelMultiplier = dropInfo.levelMultiplier.Value;
+
 								creatureDrop.m_drops.Add(existingDrop);
 								log.Info($"Adding new drop {dropInfo.item} to {creatureName} (min:{dropInfo.min}, max:{dropInfo.max}, chance:{dropInfo.chance})");
 
@@ -186,11 +207,17 @@ namespace MarsarahTweaks.Patches.Grind
 							if (existingDrop != null)
 							{
 								BackupDrop(creatureName, dropInfo.item, existingDrop);
-								log.Info($"Updating drop {dropInfo.item} for {creatureName}: Amount {existingDrop.m_amountMin}-{existingDrop.m_amountMax} -> {dropInfo.min}-{dropInfo.max}, Chance {existingDrop.m_chance * 100f:0.##}% -> {dropInfo.chance * 100f:0.##}%");
 
-								existingDrop.m_amountMin = dropInfo.min;
-								existingDrop.m_amountMax = dropInfo.max;
+								int targetMin = dropInfo.min ?? existingDrop.m_amountMin;
+								int targetMax = dropInfo.max ?? existingDrop.m_amountMax;
+								bool targetLevelMultiplier = dropInfo.levelMultiplier ?? existingDrop.m_levelMultiplier;
+
+								log.Info($"Updating drop {dropInfo.item} for {creatureName}: Amount {existingDrop.m_amountMin}-{existingDrop.m_amountMax} -> {targetMin}-{targetMax}, Chance {existingDrop.m_chance * 100f:0.##}% -> {dropInfo.chance * 100f:0.##}%, LevelMultiplier {existingDrop.m_levelMultiplier} -> {targetLevelMultiplier}");
+
+								existingDrop.m_amountMin = targetMin;
+								existingDrop.m_amountMax = targetMax;
 								existingDrop.m_chance = dropInfo.chance;
+								existingDrop.m_levelMultiplier = targetLevelMultiplier;
 							}
 						}
 						else
@@ -219,6 +246,7 @@ namespace MarsarahTweaks.Patches.Grind
 												m_amountMin = original.min,
 												m_amountMax = original.max,
 												m_chance = original.chance,
+												m_levelMultiplier = original.levelMultiplier,
 												m_dontScale = false
 											};
 											creatureDrop.m_drops.Add(existingDrop);
@@ -233,7 +261,8 @@ namespace MarsarahTweaks.Patches.Grind
 										existingDrop.m_amountMin = original.min;
 										existingDrop.m_amountMax = original.max;
 										existingDrop.m_chance = original.chance;
-										log.Info($"Restored drop {dropInfo.item} for {creatureName} (min:{original.min}, max:{original.max}, chance:{original.chance})");
+										existingDrop.m_levelMultiplier = original.levelMultiplier;
+										log.Info($"Restored drop {dropInfo.item} for {creatureName} (min:{original.min}, max:{original.max}, chance:{original.chance}, levelMultiplier:{original.levelMultiplier})");
 									}
 								}
 
@@ -303,6 +332,7 @@ namespace MarsarahTweaks.Patches.Grind
 											m_amountMin = original.min,
 											m_amountMax = original.max,
 											m_chance = original.chance,
+											m_levelMultiplier = original.levelMultiplier,
 											m_dontScale = false
 										};
 										creatureDrop.m_drops.Add(existingDrop);
@@ -317,7 +347,8 @@ namespace MarsarahTweaks.Patches.Grind
 									existingDrop.m_amountMin = original.min;
 									existingDrop.m_amountMax = original.max;
 									existingDrop.m_chance = original.chance;
-									log.Info($"Restored drop {dropInfo.item} for {creatureName} (min:{original.min}, max:{original.max}, chance:{original.chance})");
+									existingDrop.m_levelMultiplier = original.levelMultiplier;
+									log.Info($"Restored drop {dropInfo.item} for {creatureName} (min:{original.min}, max:{original.max}, chance:{original.chance}, levelMultiplier:{original.levelMultiplier})");
 								}
 							}
 
