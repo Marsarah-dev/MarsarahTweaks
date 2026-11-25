@@ -98,7 +98,6 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands, Ashlands and Deep North can be upgraded to max level within their respective biomes. Moves the Vilecage set to the Workbench", ConfigSections.Balance, 170);
 			public static readonly ConfigMetadata FrostfireDamageModifications = new ConfigMetadata("Improved Frostfire Damage", "Adjusts Deep North Frostfire weapons to deal 80 Frost and 40 Fire damage at quality 1, preserving their existing upgrade scaling. (Toggling mid-game requires CLIENT relog for equipped weapons)", ConfigSections.Balance, 160);
 			public static readonly ConfigMetadata DyrnwynDamageModifications = new ConfigMetadata("Improved Dyrnwyn", "Increases Dyrnwyn's base Fire damage from 10 to 20 and adds 5 Fire damage per upgrade level. Slash damage remains unchanged. (Toggling mid-game requires CLIENT relog for equipped weapons)", ConfigSections.Balance, 150);
-			public static readonly ConfigMetadata CrownOfRootsModifications = new ConfigMetadata("Crown of Roots Changes", "Reduces the Crown of Roots purchase price from 3000 to 2000 coins and allows repairing it at a level 3 Workbench.", ConfigSections.Balance, 140);
 			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("Forsaken Powers Cooldowns", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)", ConfigSections.Balance, 130);
 			public static readonly ConfigMetadata CharacterSpeedModifications = new ConfigMetadata("Faster Character Speed", "Faster character jog, walk, swim and crouch speeds (run excluded)", ConfigSections.Balance, 120);
 			public static readonly ConfigMetadata StatusEffectsModifications = new ConfigMetadata("Shorter Wet And Potion Cooldowns", "Wet effect and potions cooldown timers reduced", ConfigSections.Balance, 110);
@@ -178,7 +177,6 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> GearUpgradeUnlockEnabled;
 		public static ConfigEntry<bool> ImprovedFrostfireDamageEnabled;
 		public static ConfigEntry<bool> ImprovedDyrnwynDamageEnabled;
-		public static ConfigEntry<bool> CrownOfRootsEnabled;
 		public static ConfigEntry<bool> LongerForsakenPowersEnabled;
 		public static ConfigEntry<bool> FasterCharacterSpeedEnabled;
 		public static ConfigEntry<bool> ShorterStatusEffectsEnabled;
@@ -263,7 +261,6 @@ namespace MarsarahTweaks.Managers
 			GearUpgradeUnlockEnabled = CreateConfig(Configs.GearUpgradeModifications, true);
 			ImprovedFrostfireDamageEnabled = CreateConfig(Configs.FrostfireDamageModifications, true);
 			ImprovedDyrnwynDamageEnabled = CreateConfig(Configs.DyrnwynDamageModifications, true);
-			CrownOfRootsEnabled = CreateConfig(Configs.CrownOfRootsModifications, true);
 			LongerForsakenPowersEnabled = CreateConfig(Configs.ForsakenPowersModifications, true);
 			FasterCharacterSpeedEnabled = CreateConfig(Configs.CharacterSpeedModifications, true);
 			ShorterStatusEffectsEnabled = CreateConfig(Configs.StatusEffectsModifications, true);
@@ -444,10 +441,6 @@ namespace MarsarahTweaks.Managers
 					case var name when name == Configs.GearUpgradeModifications.Name:
 						GearUpgradeChanges.UpdateGearRecipeUnlock(ObjectDB.instance, true);
 						GearUpgradeChanges.UpdateGearRecipeStations(ObjectDB.instance, true);
-						break;
-
-					case var name when name == Configs.CrownOfRootsModifications.Name:
-						CrownOfRootsChanges.UpdateTraderPrices();
 						break;
 
 					case var name when name == Configs.PermanentLightsModifications.Name:

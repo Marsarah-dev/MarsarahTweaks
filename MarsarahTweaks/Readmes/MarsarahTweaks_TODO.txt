@@ -77,6 +77,11 @@ D. Others
 * Alternate Build Pieces Materials
   - Removed the Grausten Chest material modification, as Valheim 1.0.30 now uses the same recipe.
 
+* Crown of Roots Changes
+  - Removed the entire feature, as Valheim 1.0.30 now allows repairing the Crown of Roots at a level 1 Workbench.
+  - This will restore the vanilla purchase price of 3000 coins.
+  - Removed all associated Harmony patches, configuration entries and configuration change handling.
+
 E. Test
 ------------------------------
 * Better Creature Drops / Armor Mould Migration - PASSED

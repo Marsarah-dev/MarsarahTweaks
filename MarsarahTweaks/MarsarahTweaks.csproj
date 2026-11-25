@@ -91,7 +91,6 @@
     <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\CompatibilityManager.cs" />
     <Compile Include="MarsarahTweaks.cs" />
-    <Compile Include="Patches\Balance\CrownOfRootsChanges.cs" />
     <Compile Include="Patches\Balance\DyrnwynDamageChanges.cs" />
     <Compile Include="Patches\Balance\FrostfireDamageChanges.cs" />
     <Compile Include="Patches\Balance\RootForestDrops.cs" />
