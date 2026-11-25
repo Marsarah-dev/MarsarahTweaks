@@ -17,6 +17,11 @@ namespace MarsarahTweaks.Patches.Grind
 		private const int GemMaxAmount = 3;
 		private const float KrigenArmorMouldChance = 0.15f;
 		private const float HexenArmorMouldChance = 0.25f;
+		private const string PutridHolePile = "morgenhole_pile";
+		private const int BoneFragmentsMinAmount = 2;
+		private const int BoneFragmentsMaxAmount = 5;
+		private const int SoftTissueMinAmount = 2;
+		private const int SoftTissueMaxAmount = 3;
 
 		private static readonly Dictionary<CharacterDrop.Drop, (float chance, bool levelMultiplier)> originalArmorMouldDrops = new Dictionary<CharacterDrop.Drop, (float chance, bool levelMultiplier)>();
 
@@ -75,7 +80,37 @@ namespace MarsarahTweaks.Patches.Grind
 				originalArmorMouldDrops.Clear();
 
 				//LogOriginalCreatureDrops(__instance);
+				//LogPutridHoleDrops(__instance);
+
 				UpdateDeepNorthArmorMoulds(__instance);
+			}
+		}
+
+		[HarmonyPatch(typeof(DropOnDestroyed), "OnDestroyed")]
+		private static class DropOnDestroyed_OnDestroyedPatch
+		{
+			private static void Prefix(DropOnDestroyed __instance, out DropTable __state)
+			{
+				__state = null;
+
+				if (__instance == null) return;
+				if (ConfigManager.MoreRareResourcesEnabled?.Value != true) return;
+				if (Utils.GetPrefabName(__instance.gameObject) != PutridHolePile) return;
+
+				DropTable originalTable = __instance.m_dropWhenDestroyed;
+				DropTable modifiedTable = GetModifiedPutridHoleLoot(originalTable);
+
+				if (modifiedTable == null) return;
+
+				__state = originalTable;
+				__instance.m_dropWhenDestroyed = modifiedTable;
+			}
+
+			private static void Postfix(DropOnDestroyed __instance, DropTable __state)
+			{
+				if (__instance == null || __state == null) return;
+
+				__instance.m_dropWhenDestroyed = __state;
 			}
 		}
 
@@ -145,49 +180,79 @@ namespace MarsarahTweaks.Patches.Grind
 			log.Info("Applied More Rare Resources to Charred Fortress chest loot.");
 		}
 
-		private static void LogOriginalCreatureDrops(ZNetScene instance)
+		private static DropTable GetModifiedPutridHoleLoot(DropTable originalTable)
 		{
-			if (instance == null) return;
-
-			string[] creatureNames =
+			if (originalTable == null || originalTable.m_drops == null)
 			{
-				"JotunWarrior",
-				"JotunWarriorDualWield",
-				"JotunWitch",
-				"Moose"
-			};
+				log.Warn("Putrid Hole pile has no valid loot table.");
+				return null;
+			}
 
-			log.Info("Original Creature Drop Tables", header: true);
+			// Verify that both expected resources exist.
+			HashSet<string> foundResources = new HashSet<string>();
 
-			foreach (string creatureName in creatureNames)
+			foreach (DropData drop in originalTable.m_drops)
 			{
-				GameObject prefab = instance.GetPrefab(creatureName);
+				if (drop.m_item == null) continue;
 
-				if (prefab == null)
+				if (drop.m_item.name == "BoneFragments" || drop.m_item.name == "Softtissue")
 				{
-					log.Warn($"Could not find creature prefab: {creatureName}");
-					continue;
-				}
-
-				CharacterDrop characterDrop = prefab.GetComponent<CharacterDrop>();
-
-				if (characterDrop == null || characterDrop.m_drops == null)
-				{
-					log.Warn($"No valid CharacterDrop component found for {creatureName}");
-					continue;
-				}
-
-				log.Info($"Creature: {creatureName}");
-
-				foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
-				{
-					if (drop?.m_prefab == null) continue;
-
-					log.Info($"  {drop.m_prefab.name} | Min: {drop.m_amountMin} | Max: {drop.m_amountMax} | Chance: {drop.m_chance * 100f:0.##}% | LevelMultiplier: {drop.m_levelMultiplier} | DontScale: {drop.m_dontScale} | OnePerPlayer: {drop.m_onePerPlayer}");
+					foundResources.Add(drop.m_item.name);
 				}
 			}
 
-			log.Info("End of Creature Drop Tables", footer: true);
+			if (foundResources.Count != 2)
+			{
+				log.Warn($"Putrid Hole pile loot table incomplete. Found {foundResources.Count}/2 expected resources. Changes skipped.");
+				return null;
+			}
+
+			// Create an independent copy to avoid modifying shared loot tables.
+			DropTable modifiedTable = new DropTable
+			{
+				m_dropMin = originalTable.m_dropMin,
+				m_dropMax = originalTable.m_dropMax,
+				m_dropChance = originalTable.m_dropChance,
+				m_oneOfEach = originalTable.m_oneOfEach,
+				m_drops = new List<DropData>(originalTable.m_drops.Count)
+			};
+
+			foreach (DropData originalDrop in originalTable.m_drops)
+			{
+				DropData modifiedDrop = new DropData
+				{
+					m_item = originalDrop.m_item,
+					m_weight = originalDrop.m_weight,
+					m_stackMin = originalDrop.m_stackMin,
+					m_stackMax = originalDrop.m_stackMax,
+					m_dontScale = originalDrop.m_dontScale
+				};
+
+				if (modifiedDrop.m_item != null)
+				{
+					switch (modifiedDrop.m_item.name)
+					{
+						case "BoneFragments":
+							modifiedDrop.m_stackMin = BoneFragmentsMinAmount;
+							modifiedDrop.m_stackMax = BoneFragmentsMaxAmount;
+							break;
+
+						case "Softtissue":
+							modifiedDrop.m_stackMin = SoftTissueMinAmount;
+							modifiedDrop.m_stackMax = SoftTissueMaxAmount;
+							break;
+					}
+
+					if (originalDrop.m_stackMin != modifiedDrop.m_stackMin || originalDrop.m_stackMax != modifiedDrop.m_stackMax)
+					{
+						log.Info($"[Putrid Hole] {modifiedDrop.m_item.name}: Amount {originalDrop.m_stackMin}-{originalDrop.m_stackMax} -> {modifiedDrop.m_stackMin}-{modifiedDrop.m_stackMax}");
+					}
+				}
+
+				modifiedTable.m_drops.Add(modifiedDrop);
+			}
+
+			return modifiedTable;
 		}
 
 		public static void UpdateDeepNorthArmorMoulds(ZNetScene instance)
@@ -264,6 +329,97 @@ namespace MarsarahTweaks.Patches.Grind
 			return prefabName == "GemstoneGreen"
 				|| prefabName == "GemstoneBlue"
 				|| prefabName == "GemstoneRed";
+		}
+
+		private static void LogOriginalCreatureDrops(ZNetScene instance)
+		{
+			if (instance == null) return;
+
+			string[] creatureNames =
+			{
+				"JotunWarrior",
+				"JotunWarriorDualWield",
+				"JotunWitch",
+				"Moose"
+			};
+
+			log.Info("Original Creature Drop Tables", header: true);
+
+			foreach (string creatureName in creatureNames)
+			{
+				GameObject prefab = instance.GetPrefab(creatureName);
+
+				if (prefab == null)
+				{
+					log.Warn($"Could not find creature prefab: {creatureName}");
+					continue;
+				}
+
+				CharacterDrop characterDrop = prefab.GetComponent<CharacterDrop>();
+
+				if (characterDrop == null || characterDrop.m_drops == null)
+				{
+					log.Warn($"No valid CharacterDrop component found for {creatureName}");
+					continue;
+				}
+
+				log.Info($"Creature: {creatureName}");
+
+				foreach (CharacterDrop.Drop drop in characterDrop.m_drops)
+				{
+					if (drop?.m_prefab == null) continue;
+
+					log.Info($"  {drop.m_prefab.name} | Min: {drop.m_amountMin} | Max: {drop.m_amountMax} | Chance: {drop.m_chance * 100f:0.##}% | LevelMultiplier: {drop.m_levelMultiplier} | DontScale: {drop.m_dontScale} | OnePerPlayer: {drop.m_onePerPlayer}");
+				}
+			}
+
+			log.Info("End of Creature Drop Tables", footer: true);
+		}
+
+		private static void LogPutridHoleDrops(ZNetScene instance)
+		{
+			if (instance == null) return;
+
+			GameObject prefab = instance.GetPrefab("morgenhole_pile");
+
+			if (prefab == null)
+			{
+				log.Warn("Could not find morgenhole_pile prefab.");
+				return;
+			}
+
+			DropOnDestroyed dropOnDestroyed = prefab.GetComponent<DropOnDestroyed>();
+
+			if (dropOnDestroyed == null)
+			{
+				log.Warn("morgenhole_pile has no DropOnDestroyed component.");
+				return;
+			}
+
+			DropTable dropTable = dropOnDestroyed.m_dropWhenDestroyed;
+
+			if (dropTable == null || dropTable.m_drops == null)
+			{
+				log.Warn("morgenhole_pile has no valid drop table.");
+				return;
+			}
+
+			log.Info("Original Putrid Hole Pile Drop Table", header: true);
+
+			log.Info($"Prefab: {prefab.name}");
+			log.Info($"DropMin: {dropTable.m_dropMin}");
+			log.Info($"DropMax: {dropTable.m_dropMax}");
+			log.Info($"DropChance: {dropTable.m_dropChance * 100f:0.##}%");
+			log.Info($"OneOfEach: {dropTable.m_oneOfEach}");
+
+			foreach (DropData drop in dropTable.m_drops)
+			{
+				if (drop.m_item == null) continue;
+
+				log.Info($"  {drop.m_item.name} | Min: {drop.m_stackMin} | Max: {drop.m_stackMax} | Weight: {drop.m_weight} | DontScale: {drop.m_dontScale}");
+			}
+
+			log.Info("End of Putrid Hole Pile Drop Table", footer: true);
 		}
 	}
 }

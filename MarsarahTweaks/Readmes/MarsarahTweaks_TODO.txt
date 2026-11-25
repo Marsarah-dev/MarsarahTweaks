@@ -19,11 +19,17 @@ B. Updates
   - Increased Moose Hide drops to 3-5 from 2. 
 
 * More Rare Resources
-  - Reduced Krigen armor mould drop chances from 20% to 15%.
-  - Retained Hexen armor mould drop chances at 25%.
-  - Standardized armor mould drops to five times their respective vanilla drop chances.
-  - Disabled star scaling for armor mould drops to ensure consistent acquisition across both creatures.
-  - Restores original drop chances and star scaling when the feature is disabled.
+  - Deep North Armor Moulds:
+    - Reduced Krigen armor mould drop chances from 20% to 15%.
+    - Retained Hexen armor mould drop chances at 25%.
+    - Standardized armor mould drops to five times their respective vanilla drop chances.
+    - Disabled star scaling for armor mould drops to ensure consistent acquisition across both creatures.
+    - Restores original drop chances and star scaling when the feature is disabled.
+  - Flesh piles found in Putrid Holes:
+    - Reduced Bone Fragments from 5-15 to 2-5 per loot roll.
+    - Increased Soft Tissue from 1-2 to 2-3 per loot roll.
+    - Loot weights, number of loot rolls and all other drops remain unchanged.
+    - Live toggling affects existing flesh piles that have not yet been destroyed.
   - Balanced and verified through extensive in-game drop testing. 
 
 C. New Features
@@ -40,7 +46,6 @@ E. Test
 
 F. In Progress
 ------------------------------
-* Reduce amount of bones from the jelly found in Putrid Holes and potentially increase the soft tissue it provides (check numbers first).
 
 ============================================================
 TO IMPLEMENT
