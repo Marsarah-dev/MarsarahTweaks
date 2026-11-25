@@ -98,13 +98,13 @@
     <Compile Include="Patches\Features\AIFleeChanges.cs" />
     <Compile Include="Patches\Balance\ArmorStatsChanges.cs" />
     <Compile Include="Patches\Features\AshlandsEnemiesChanges.cs" />
-    <Compile Include="Patches\Balance\BetterDropsChanges.cs" />
+    <Compile Include="Patches\Grind\BetterDropsChanges.cs" />
     <Compile Include="Patches\Features\HealStaff.cs" />
     <Compile Include="Patches\Features\LessBrazierSmoke.cs" />
     <Compile Include="Patches\Features\SerpentSpawnChanges.cs" />
     <Compile Include="Patches\Grind\BetterWoodYields.cs" />
-    <Compile Include="Patches\Grind\FoodDurationChanges.cs" />
-    <Compile Include="Patches\Grind\PotionUpgradeChanges.cs" />
+    <Compile Include="Patches\Balance\FoodDurationChanges.cs" />
+    <Compile Include="Patches\Balance\PotionUpgradeChanges.cs" />
     <Compile Include="Patches\Grind\RareResourceChanges.cs" />
     <Compile Include="Patches\QOL\HoeRadiusChanges.cs" />
     <Compile Include="Patches\QOL\MoreUsableFuel.cs" />
@@ -154,7 +154,7 @@
     <Compile Include="Patches\QOL\ShieldGeneratorCapacity.cs" />
     <Compile Include="Patches\TestJump.cs" />
     <Compile Include="Patches\Features\TougherShipsChanges.cs" />
-    <Compile Include="Patches\Balance\TrophyDropsChanges.cs" />
+    <Compile Include="Patches\Grind\TrophyDropsChanges.cs" />
     <Compile Include="Patches\WeaponStaminaChanges.cs" />
     <Compile Include="Patches\Features\WeatherChanges.cs" />
     <Compile Include="Patches\QOL\WispRadiusChanges.cs" />

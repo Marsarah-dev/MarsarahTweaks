@@ -7,7 +7,7 @@ using HarmonyLib;
 using UnityEngine;
 using MarsarahTweaks.Managers;
 
-namespace MarsarahTweaks.Patches.Balance
+namespace MarsarahTweaks.Patches.Grind
 {
 	internal class TrophyDropsChanges
 	{

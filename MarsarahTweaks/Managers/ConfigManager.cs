@@ -80,53 +80,53 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata ServerConfig = new ConfigMetadata("Lock Configuration", "If on, only server admins can change the configuration.", ConfigSections.Main, 10);
 
 			// Grind Reduction
-			public static readonly ConfigMetadata DoubleBronzeCrafting = new ConfigMetadata("Double Bronze Crafting", "Doubles the amount of crafted Bronze at the Forge", ConfigSections.GrindReduction, 60);
-			public static readonly ConfigMetadata GearRecipeAmountsModifications = new ConfigMetadata("Cheaper Gear Recipe Amounts", "Reduces costs for crafting and upgrading gear for metal. Balances other resources amounts", ConfigSections.GrindReduction, 50);
-			public static readonly ConfigMetadata GearRecipeMaterialsModifications = new ConfigMetadata("Alternate Gear Recipe Materials", "Modifies gear recipe materials for some items (more materials from current respective biomes)", ConfigSections.GrindReduction, 40);
-			public static readonly ConfigMetadata BuildPieceAmountsModifications = new ConfigMetadata("Cheaper Build Pieces Amounts", "Reduces costs for build pieces", ConfigSections.GrindReduction, 30);
-			public static readonly ConfigMetadata BuildPieceMaterialsModifications = new ConfigMetadata("Alternate Build Pieces Materials", "Modifies build pieces materials (This will move the Workbench Toolrack extension from Mountain to Swamp biome)", ConfigSections.GrindReduction, 20);
-			public static readonly ConfigMetadata MoreRareResources = new ConfigMetadata("More Rare Resources", "Increases gemstone yields from Charred Fortress chests and armor mould drop chances from Krigen and Hexen, disables armor mould star scaling, and improves resource yields from Putrid Hole flesh piles. (Mid-game toggling affects subsequent loot generation and newly spawned creatures)", ConfigSections.GrindReduction, 15);
-			public static readonly ConfigMetadata BetterWoodYields = new ConfigMetadata("Better Wood Yields", "Reduces regular Wood drops and increases specialty wood drops from trees that produce Core Wood, Fine Wood, Yggdrasil Wood, Ashwood and Timberwood. Yggdrasil Shoots are unaffected. (Toggling mid-game affects newly spawned half-logs. Existing half-logs may require reloading the area)", ConfigSections.GrindReduction, 14);
+			public static readonly ConfigMetadata DoubleBronzeCrafting = new ConfigMetadata("Double Bronze Crafting", "Doubles the amount of crafted Bronze at the Forge", ConfigSections.GrindReduction, 100);
+			public static readonly ConfigMetadata GearRecipeAmountsModifications = new ConfigMetadata("Cheaper Gear Recipe Amounts", "Reduces costs for crafting and upgrading gear for metal. Balances other resources amounts", ConfigSections.GrindReduction, 90);
+			public static readonly ConfigMetadata GearRecipeMaterialsModifications = new ConfigMetadata("Alternate Gear Recipe Materials", "Modifies gear recipe materials for some items (more materials from current respective biomes)", ConfigSections.GrindReduction, 80);
+			public static readonly ConfigMetadata BuildPieceAmountsModifications = new ConfigMetadata("Cheaper Build Pieces Amounts", "Reduces costs for build pieces", ConfigSections.GrindReduction, 70);
+			public static readonly ConfigMetadata BuildPieceMaterialsModifications = new ConfigMetadata("Alternate Build Pieces Materials", "Modifies build pieces materials (This will move the Workbench Toolrack extension from Mountain to Swamp biome)", ConfigSections.GrindReduction, 60);
+			public static readonly ConfigMetadata DropsModifications = new ConfigMetadata("Better Creature Drops", "Modifies creature drops: Fenring (adds Fenris Hair and Fenris Claw, removes Wolf Fang), Bat (adds 50% Bloodbag drop), Dvergr (increases Soft Tissue drop chance to 100%), Writhan (increases Writhan Roots to 2), Barka (increases Frozen Branch drops to 2), Hexen (increases Nornathread drops to 2-4), and Moose (increases Moose Hide drops to 3-5).", ConfigSections.GrindReduction, 50);
+			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("Better Trophy Drop Rates", "Increases trophy drop rates for Rancid Remains, Ghost, Bear, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Vile, Tick, Dverger, Seeker Soldier, Charred Warlock, Moose, Krigen and Hexen.", ConfigSections.GrindReduction, 40);
+			public static readonly ConfigMetadata MoreRareResources = new ConfigMetadata("More Rare Resources", "Increases gemstone yields from Charred Fortress chests and armor mould drop chances from Krigen and Hexen, disables armor mould star scaling, and improves resource yields from Putrid Hole flesh piles. (Mid-game toggling affects subsequent loot generation and newly spawned creatures)", ConfigSections.GrindReduction, 30);
+			public static readonly ConfigMetadata BetterWoodYields = new ConfigMetadata("Better Wood Yields", "Reduces regular Wood drops and increases specialty wood drops from trees that produce Core Wood, Fine Wood, Yggdrasil Wood, Ashwood and Timberwood. Yggdrasil Shoots are unaffected. (Toggling mid-game affects newly spawned half-logs. Existing half-logs may require reloading the area)", ConfigSections.GrindReduction, 20);
 			public static readonly ConfigMetadata FoodAndMeadModifications = new ConfigMetadata("Food And Mead Modifications", "Modifies food and mead recipes costs, crafted amounts, stacks and stats. (Toggling mid-game requires CLIENT relog for food stacks and stats)", ConfigSections.GrindReduction, 10);
-			public static readonly ConfigMetadata StandardizedFoodDurations = new ConfigMetadata("Standardized Food Durations", "Standardizes food durations based on preparation type. Only increases durations. (Toggling mid-game requires CLIENT relog for food already in inventory)", ConfigSections.GrindReduction, 5);
-			public static readonly ConfigMetadata PotionUpgrade = new ConfigMetadata("Potion Upgrade", "Allows upgrading finished Healing and Stamina meads at the Cauldron using a 3:1 conversion ratio. Requires Cauldron levels 3-5 depending on the potion.", ConfigSections.GrindReduction, 4);
-
+			
 			// Balance
-			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it. (Toggling mid-game requires CLIENT relog if the item is equipped)", ConfigSections.Balance, 140);
-			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("Gear Speed Modifications", "Removes speed penalty for heavy and mage armors; adds speed bonus to light armor. (Toggling mid-game requires CLIENT relog)", ConfigSections.Balance, 130);
-			public static readonly ConfigMetadata ExtraArmorStatsModifications = new ConfigMetadata("Extra Armor Stats", "Heavy armor provides extra HP, light armor provides extra stamina, mage armor provides extra eitr", ConfigSections.Balance, 120);
-			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands, Ashlands and Deep North can be upgraded to max level within their respective biomes. Moves the Vilecage set to the Workbench", ConfigSections.Balance, 110);
-			public static readonly ConfigMetadata FrostfireDamageModifications = new ConfigMetadata("Improved Frostfire Damage", "Adjusts Deep North Frostfire weapons to deal 80 Frost and 40 Fire damage at quality 1, preserving their existing upgrade scaling. (Toggling mid-game requires CLIENT relog for equipped weapons)", ConfigSections.Balance, 109);
-			public static readonly ConfigMetadata DyrnwynDamageModifications = new ConfigMetadata("Improved Dyrnwyn", "Increases Dyrnwyn's base Fire damage from 10 to 20 and adds 5 Fire damage per upgrade level. Slash damage remains unchanged. (Toggling mid-game requires CLIENT relog for equipped weapons)", ConfigSections.Balance, 108);
-			public static readonly ConfigMetadata CrownOfRootsModifications = new ConfigMetadata("Crown of Roots Changes", "Reduces the Crown of Roots purchase price from 3000 to 2000 coins and allows repairing it at a level 3 Workbench.", ConfigSections.Balance, 105);
-			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("Forsaken Powers Cooldowns", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)", ConfigSections.Balance, 100);
-			public static readonly ConfigMetadata CharacterSpeedModifications = new ConfigMetadata("Faster Character Speed", "Faster character jog, walk, swim and crouch speeds (run excluded)", ConfigSections.Balance, 90);
-			public static readonly ConfigMetadata StatusEffectsModifications = new ConfigMetadata("Shorter Wet And Potion Cooldowns", "Wet effect and potions cooldown timers reduced", ConfigSections.Balance, 80);
-			public static readonly ConfigMetadata LessStaminaModifications = new ConfigMetadata("Less Stamina Usage", "Stamina use of all actions is reduced by 15%", ConfigSections.Balance, 70);
-			public static readonly ConfigMetadata DeathRaiserModifications = new ConfigMetadata("Better Death Raiser", "Adds a secondary attack that spawns archer skeletons. Primary attack will only spawn melee skeletons", ConfigSections.Balance, 60);
-			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("Better Summoned Skeletons", "Increases summoned skeleton speed and add better looking gear according to Death Raiser level (stats not affected). (Toggling mid-game requires CLIENT relog for speed changes)", ConfigSections.Balance, 50);
-			public static readonly ConfigMetadata FrostStaffModifications = new ConfigMetadata("Better Frost Staff Accuracy", "Improves Staff of Frost Accuracy", ConfigSections.Balance, 40);
-			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("Reduced Crossbows Reload Time", "Crossbows Reload Time Reduced by 1s. (Toggling mid-game requires CLIENT relog)", ConfigSections.Balance, 30);
-			public static readonly ConfigMetadata KeepCrossbowsLoaded = new ConfigMetadata("Keep Crossbows Loaded", "Fully loaded crossbows, Dundr and the Grappling Hook remain loaded when sheathed or switched. Partial reloads are not preserved when switching weapons.", ConfigSections.Balance, 25);
-			public static readonly ConfigMetadata CrossbowReloadWhileMoving = new ConfigMetadata("Crossbow Reload While Moving", "Crossbows, Dundr and the Grappling Hook continue reloading at 50% speed while sprinting or jumping instead of resetting.", ConfigSections.Balance, 24);
-			public static readonly ConfigMetadata TrophyDropsModifications = new ConfigMetadata("Better Trophy Drop Rates", "Increases trophy drop rates for Rancid Remains, Ghost, Bear, Surtling, Draugr Elite, Wraith, Cultist, Fenring, Stone Golem, Deathsquito, Fuling Berserker, Vile, Tick, Dverger, Seeker Soldier, Charred Warlock, Moose, Krigen and Hexen.", ConfigSections.Balance, 20);
-			public static readonly ConfigMetadata DropsModifications = new ConfigMetadata("Better Creature Drops", "Modifies creature drops: Fenring (adds Fenris Hair and Fenris Claw, removes Wolf Fang), Bat (adds 50% Bloodbag drop), Dvergr (increases Soft Tissue drop chance to 100%), Writhan (increases Writhan Roots to 2, scaling with creature level), Barka (increases Frozen Branch drops to 2), Hexen (increases Nornathread drops to 2-4), and Moose (increases Moose Hide drops to 3-5).", ConfigSections.Balance, 10);
-			public static readonly ConfigMetadata RootForestDrops = new ConfigMetadata("Black Forest Root Drops", "Adds independent drop chances to Roots in the Root Black Forest alternate biome: 50% for 1 Wood, 50% for 1 Core Wood, and 20% for 1 Resin. Roots summoned by the Elder are unaffected.", ConfigSections.Balance, 5);
+			public static readonly ConfigMetadata LinenCapeModifications = new ConfigMetadata("Early Linen Cape", "Renames the Linen Cape to Fine Cape, moves it to the Swamp biome, and adds poison resist to it. (Toggling mid-game requires CLIENT relog if the item is equipped)", ConfigSections.Balance, 200);
+			public static readonly ConfigMetadata GearSpeedModifications = new ConfigMetadata("Gear Speed Modifications", "Removes speed penalty for heavy and mage armors; adds speed bonus to light armor. (Toggling mid-game requires CLIENT relog)", ConfigSections.Balance, 190);
+			public static readonly ConfigMetadata ExtraArmorStatsModifications = new ConfigMetadata("Extra Armor Stats", "Heavy armor provides extra HP, light armor provides extra stamina, mage armor provides extra eitr", ConfigSections.Balance, 180);
+			public static readonly ConfigMetadata GearUpgradeModifications = new ConfigMetadata("Gear Upgrade Unlock", "Gear from Meadows, Black Forest, Mistlands, Ashlands and Deep North can be upgraded to max level within their respective biomes. Moves the Vilecage set to the Workbench", ConfigSections.Balance, 170);
+			public static readonly ConfigMetadata FrostfireDamageModifications = new ConfigMetadata("Improved Frostfire Damage", "Adjusts Deep North Frostfire weapons to deal 80 Frost and 40 Fire damage at quality 1, preserving their existing upgrade scaling. (Toggling mid-game requires CLIENT relog for equipped weapons)", ConfigSections.Balance, 160);
+			public static readonly ConfigMetadata DyrnwynDamageModifications = new ConfigMetadata("Improved Dyrnwyn", "Increases Dyrnwyn's base Fire damage from 10 to 20 and adds 5 Fire damage per upgrade level. Slash damage remains unchanged. (Toggling mid-game requires CLIENT relog for equipped weapons)", ConfigSections.Balance, 150);
+			public static readonly ConfigMetadata CrownOfRootsModifications = new ConfigMetadata("Crown of Roots Changes", "Reduces the Crown of Roots purchase price from 3000 to 2000 coins and allows repairing it at a level 3 Workbench.", ConfigSections.Balance, 140);
+			public static readonly ConfigMetadata ForsakenPowersModifications = new ConfigMetadata("Forsaken Powers Cooldowns", "Reduce Forsaken Powers cooldowns and increase durations (different for each power)", ConfigSections.Balance, 130);
+			public static readonly ConfigMetadata CharacterSpeedModifications = new ConfigMetadata("Faster Character Speed", "Faster character jog, walk, swim and crouch speeds (run excluded)", ConfigSections.Balance, 120);
+			public static readonly ConfigMetadata StatusEffectsModifications = new ConfigMetadata("Shorter Wet And Potion Cooldowns", "Wet effect and potions cooldown timers reduced", ConfigSections.Balance, 110);
+			public static readonly ConfigMetadata LessStaminaModifications = new ConfigMetadata("Less Stamina Usage", "Stamina use of all actions is reduced by 15%", ConfigSections.Balance, 100);
+			public static readonly ConfigMetadata DeathRaiserModifications = new ConfigMetadata("Better Death Raiser", "Adds a secondary attack that spawns archer skeletons. Primary attack will only spawn melee skeletons", ConfigSections.Balance, 90);
+			public static readonly ConfigMetadata DeathRaiserSummonsModifications = new ConfigMetadata("Better Summoned Skeletons", "Increases summoned skeleton speed and add better looking gear according to Death Raiser level (stats not affected). (Toggling mid-game requires CLIENT relog for speed changes)", ConfigSections.Balance, 80);
+			public static readonly ConfigMetadata FrostStaffModifications = new ConfigMetadata("Better Frost Staff Accuracy", "Improves Staff of Frost Accuracy", ConfigSections.Balance, 70);
+			public static readonly ConfigMetadata CrossbowsReloadModifications = new ConfigMetadata("Reduced Crossbows Reload Time", "Crossbows Reload Time Reduced by 1s. (Toggling mid-game requires CLIENT relog)", ConfigSections.Balance, 60);
+			public static readonly ConfigMetadata KeepCrossbowsLoaded = new ConfigMetadata("Keep Crossbows Loaded", "Fully loaded crossbows, Dundr and the Grappling Hook remain loaded when sheathed or switched. Partial reloads are not preserved when switching weapons.", ConfigSections.Balance, 50);
+			public static readonly ConfigMetadata CrossbowReloadWhileMoving = new ConfigMetadata("Crossbow Reload While Moving", "Crossbows, Dundr and the Grappling Hook continue reloading at 50% speed while sprinting or jumping instead of resetting.", ConfigSections.Balance, 40);
+			public static readonly ConfigMetadata StandardizedFoodDurations = new ConfigMetadata("Standardized Food Durations", "Standardizes food durations based on preparation type. Only increases durations. (Toggling mid-game requires CLIENT relog for food already in inventory)", ConfigSections.Balance, 30);
+			public static readonly ConfigMetadata PotionUpgrade = new ConfigMetadata("Potion Upgrade", "Allows upgrading finished Healing and Stamina meads at the Cauldron using a 3:1 conversion ratio. Requires Cauldron levels 3-5 depending on the potion.", ConfigSections.Balance, 20);
+			public static readonly ConfigMetadata RootForestDrops = new ConfigMetadata("Black Forest Root Drops", "Adds independent drop chances to Roots in the Root Black Forest alternate biome: 50% for 1 Wood, 50% for 1 Core Wood, and 20% for 1 Resin. Roots summoned by the Elder are unaffected.", ConfigSections.Balance, 10);
 
 			// Features
-			public static readonly ConfigMetadata ProgressionHalt = new ConfigMetadata("Automatic Progression Halt", "Creatures and objects do not drop any items unless the previous biome boss has been defeated. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.Features, 160);
-			public static readonly ConfigMetadata ProgressionHaltOceanElder = new ConfigMetadata("Halt Ocean Behind Elder", "Ocean resources are halted by The Elder instead of the default Bonemass. Requires Progression Halt Enabled. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.Features, 150);
-			public static readonly ConfigMetadata CreatureUnleveler = new ConfigMetadata("Creature Unleveler By Boss", "Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss", ConfigSections.Features, 140);
-			public static readonly ConfigMetadata RaidsModifications = new ConfigMetadata("No End-game Raids in Early Biomes", "Mistlands and Ashlands raids do not occur in the first four biomes", ConfigSections.Features, 130);
-			public static readonly ConfigMetadata StopNighttimeInvasion = new ConfigMetadata("Stop Nighttime Invasion", "Fulings, Seeker and Charred no longer spawn in early biomes at night. (Fulings spawn in Mountains and Seeker and Charred spawn in Plains)", ConfigSections.Features, 120);
-			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("Less Ashlands Enemies", "Numbers and spawn chance reduced for Ashlands enemies. (Toggling mid-game requires reloading area)", ConfigSections.Features, 110);
-			public static readonly ConfigMetadata MoreSerpentSpawns = new ConfigMetadata("More Serpent Spawns", "Increases Ocean Serpent spawn chances and reduces spawn intervals after defeating Bonemass and Moder.", ConfigSections.Features, 109);
-			public static readonly ConfigMetadata SmallSerpentSpawns = new ConfigMetadata("Small Serpent Spawns", "Adds smaller, weaker Sea Wyrms to deep Ocean and coastal waters after defeating Bonemass. They spawn during day and night in any weather, drop only Serpent Meat, and become more common after Moder.", ConfigSections.Features, 108);
-			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("Clear Mistlands after Queen", "Clear Mistlands mist after defeating the Queen. (Disabling mid-game requires CLIENT relog)", ConfigSections.Features, 100);
-			public static readonly ConfigMetadata WeatherModifications = new ConfigMetadata("Clearer Weather", "Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively. (Toggling mid-game requires CLIENT relog)", ConfigSections.Features, 90);
-			public static readonly ConfigMetadata CraftableChain = new ConfigMetadata("Craftable Chain", "Chain craftable at Black Forge", ConfigSections.Features, 80);
-			public static readonly ConfigMetadata BrighterLanterns = new ConfigMetadata("Brighter Lanterns", "Dvergr lanterns are brighter. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.Features, 70);
-			public static readonly ConfigMetadata LessStandingBrazierSmoke = new ConfigMetadata("Less Brazier Smoke", "Reduces smoke size by 50%, sets the emission interval to 2 seconds, and reduces rising speed by 33% for vanilla braziers and MarsarahBuildPieces braziers when installed.", ConfigSections.Features, 65);
+			public static readonly ConfigMetadata ProgressionHalt = new ConfigMetadata("Automatic Progression Halt", "Creatures and objects do not drop any items unless the previous biome boss has been defeated. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.Features, 190);
+			public static readonly ConfigMetadata ProgressionHaltOceanElder = new ConfigMetadata("Halt Ocean Behind Elder", "Ocean resources are halted by The Elder instead of the default Bonemass. Requires Progression Halt Enabled. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.Features, 180);
+			public static readonly ConfigMetadata CreatureUnleveler = new ConfigMetadata("Creature Unleveler By Boss", "Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss", ConfigSections.Features, 170);
+			public static readonly ConfigMetadata RaidsModifications = new ConfigMetadata("No End-game Raids in Early Biomes", "Mistlands and Ashlands raids do not occur in the first four biomes", ConfigSections.Features, 160);
+			public static readonly ConfigMetadata StopNighttimeInvasion = new ConfigMetadata("Stop Nighttime Invasion", "Fulings, Seeker and Charred no longer spawn in early biomes at night. (Fulings spawn in Mountains and Seeker and Charred spawn in Plains)", ConfigSections.Features, 150);
+			public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("Less Ashlands Enemies", "Numbers and spawn chance reduced for Ashlands enemies. (Toggling mid-game requires reloading area)", ConfigSections.Features, 140);
+			public static readonly ConfigMetadata MoreSerpentSpawns = new ConfigMetadata("More Serpent Spawns", "Increases Ocean Serpent spawn chances and reduces spawn intervals after defeating Bonemass and Moder.", ConfigSections.Features, 130);
+			public static readonly ConfigMetadata SmallSerpentSpawns = new ConfigMetadata("Small Serpent Spawns", "Adds smaller, weaker Sea Wyrms to deep Ocean and coastal waters after defeating Bonemass. They spawn during day and night in any weather, drop only Serpent Meat, and become more common after Moder.", ConfigSections.Features, 120);
+			public static readonly ConfigMetadata ClearMistlands = new ConfigMetadata("Clear Mistlands after Queen", "Clear Mistlands mist after defeating the Queen. (Disabling mid-game requires CLIENT relog)", ConfigSections.Features, 110);
+			public static readonly ConfigMetadata WeatherModifications = new ConfigMetadata("Clearer Weather", "Reduces chance for mist and snowstorms in Meadows, Plains, Ocean and Mountains respectively. (Toggling mid-game requires CLIENT relog)", ConfigSections.Features, 100);
+			public static readonly ConfigMetadata CraftableChain = new ConfigMetadata("Craftable Chain", "Chain craftable at Black Forge", ConfigSections.Features, 90);
+			public static readonly ConfigMetadata BrighterLanterns = new ConfigMetadata("Brighter Lanterns", "Dvergr lanterns are brighter. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.Features, 80);
+			public static readonly ConfigMetadata LessStandingBrazierSmoke = new ConfigMetadata("Less Brazier Smoke", "Reduces smoke size by 50%, sets the emission interval to 2 seconds, and reduces rising speed by 33% for vanilla braziers and MarsarahBuildPieces braziers when installed.", ConfigSections.Features, 70);
 			public static readonly ConfigMetadata ExtensionsModifications = new ConfigMetadata("Station Extensions Changes", "Decreases space requirement for workstation extensions and increases build distance to workstations (This does not increase workstation radius)", ConfigSections.Features, 60);
 			public static readonly ConfigMetadata MinibossWeight = new ConfigMetadata("Hildir Weight Rewards", "Increases base carry weight by 25 when turning in Hildir chests (for each chest). (Toggling mid-game requires CLIENT relog)", ConfigSections.Features, 50);
 			public static readonly ConfigMetadata FleeAIModifications = new ConfigMetadata("Stop Running Away", "Boars and Necks won't flee when alerted. (Toggling mid-game only affects new creatures)", ConfigSections.Features, 40);
@@ -135,20 +135,20 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata OtherModifications = new ConfigMetadata("Other Section", "Tankard costs reduced and Iron Nails crafting output doubled", ConfigSections.Features, 10);
 
 			// QOL
-			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("Lighter Metal Weight", "All metal ore and bars weight decreased to 8. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.QOL, 160);
-			public static readonly ConfigMetadata LargerResourceStacks = new ConfigMetadata("Larger Resource Stacks", "Increases maximum stack sizes of valuables to 50, Surtling Cores to 20, and all moulds to 30.", ConfigSections.QOL, 155);
-			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("Larger Pickup Area", "Item pickup area slightly increased", ConfigSections.QOL, 150);
-			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("No Skill Levels Loss On Death", "Skills won't go down the current level upon death (progress in that skill is still lost). (Toggling mid-game requires CLIENT relog)", ConfigSections.QOL, 140);
-			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("Larger Boat Explore Radius", "Double explore radius on a boat", ConfigSections.QOL, 130);
-			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("Bigger Wisp Radius", "Increases wisp radius", ConfigSections.QOL, 120);
-			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("Friendly Ballistas", "Ballistas won't target players and tame animals", ConfigSections.QOL, 110);
-			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("Less Fall Damage", "Fall damage reduced by 40%", ConfigSections.QOL, 100);
-			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("Faster Resource Drops", "Enemies drop resources faster when dying", ConfigSections.QOL, 90);
-			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s). (Toggling mid-game requires CLIENT relog)", ConfigSections.QOL, 80);
-			public static readonly ConfigMetadata CameraSailingPosition = new ConfigMetadata("Move Camera Up While Sailing", "Moves the camera a bit upwards when sailing to better see in front of the boat", ConfigSections.QOL, 70);
-			public static readonly ConfigMetadata ShorterRestedDelay = new ConfigMetadata("Shorter Rested Delay", "Reduces the amount of time needed to get the rested buff from 20 to 10 seconds (Toggling mid-game requires re-entering the resting area)", ConfigSections.QOL, 60);
-			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("More Usable Fuel", "Ancient Bark, Ashwood and Timberwood can be used as fuel for Kilns, and Withered Bones for Shield Generators.", ConfigSections.QOL, 50);
-			public static readonly ConfigMetadata ShieldGeneratorCapacityChange = new ConfigMetadata("Shield Generator Capacity", "Sets the maximum fuel capacity of Shield Generators. 10 is the vanilla value.", ConfigSections.QOL, 45);
+			public static readonly ConfigMetadata LighterMetalWeight = new ConfigMetadata("Lighter Metal Weight", "All metal ore and bars weight decreased to 8. (Toggling mid-game requires CLIENT relog or reloading area)", ConfigSections.QOL, 180);
+			public static readonly ConfigMetadata LargerResourceStacks = new ConfigMetadata("Larger Resource Stacks", "Increases maximum stack sizes of valuables to 50, Surtling Cores to 20, and all moulds to 30.", ConfigSections.QOL, 170);
+			public static readonly ConfigMetadata LargerPickupArea = new ConfigMetadata("Larger Pickup Area", "Item pickup area slightly increased", ConfigSections.QOL, 160);
+			public static readonly ConfigMetadata NoSkillLoss = new ConfigMetadata("No Skill Levels Loss On Death", "Skills won't go down the current level upon death (progress in that skill is still lost). (Toggling mid-game requires CLIENT relog)", ConfigSections.QOL, 150);
+			public static readonly ConfigMetadata LargerBoatExploreRadius = new ConfigMetadata("Larger Boat Explore Radius", "Double explore radius on a boat", ConfigSections.QOL, 140);
+			public static readonly ConfigMetadata BiggerWispRadius = new ConfigMetadata("Bigger Wisp Radius", "Increases wisp radius", ConfigSections.QOL, 130);
+			public static readonly ConfigMetadata FriendlyBallistas = new ConfigMetadata("Friendly Ballistas", "Ballistas won't target players and tame animals", ConfigSections.QOL, 120);
+			public static readonly ConfigMetadata LessFallDamage = new ConfigMetadata("Less Fall Damage", "Fall damage reduced by 40%", ConfigSections.QOL, 110);
+			public static readonly ConfigMetadata FasterResourceDrops = new ConfigMetadata("Faster Resource Drops", "Enemies drop resources faster when dying", ConfigSections.QOL, 100);
+			public static readonly ConfigMetadata FasterEquip = new ConfigMetadata("Faster Equip", "Equipping weapons is instant. Armor equip timers reduced to 1s (from 1s/2s). (Toggling mid-game requires CLIENT relog)", ConfigSections.QOL, 90);
+			public static readonly ConfigMetadata CameraSailingPosition = new ConfigMetadata("Move Camera Up While Sailing", "Moves the camera a bit upwards when sailing to better see in front of the boat", ConfigSections.QOL, 80);
+			public static readonly ConfigMetadata ShorterRestedDelay = new ConfigMetadata("Shorter Rested Delay", "Reduces the amount of time needed to get the rested buff from 20 to 10 seconds (Toggling mid-game requires re-entering the resting area)", ConfigSections.QOL, 70);
+			public static readonly ConfigMetadata MoreUsableFuel = new ConfigMetadata("More Usable Fuel", "Ancient Bark, Ashwood and Timberwood can be used as fuel for Kilns, and Withered Bones for Shield Generators.", ConfigSections.QOL, 60);
+			public static readonly ConfigMetadata ShieldGeneratorCapacityChange = new ConfigMetadata("Shield Generator Capacity", "Sets the maximum fuel capacity of Shield Generators. 10 is the vanilla value.", ConfigSections.QOL, 50);
 			public static readonly ConfigMetadata PermanentLightsModifications = new ConfigMetadata("Permanent Lights", "Controls which supported lights, fires, and utility pieces consume fuel. Light and fire build costs are adjusted when included to use maximum amount of their respective fuel type.", ConfigSections.QOL, 40);
 			public static readonly ConfigMetadata PlayerLogoutAnnounce = new ConfigMetadata("Player Logout Announce", "Displays a message in the top-left corner and chat when a player logs out.", ConfigSections.QOL, 30);
 			public static readonly ConfigMetadata Paving = new ConfigMetadata("Paving Without Leveling", "Adds a Paving option to the Hoe that creates paved ground without leveling it. Costs 1 Stone and requires a Stonecutter.", ConfigSections.QOL, 20);
@@ -165,11 +165,11 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> GearRecipeMaterialsEnabled;
 		public static ConfigEntry<bool> BuildPieceAmountsEnabled;
 		public static ConfigEntry<bool> BuildPieceMaterialsEnabled;
+		public static ConfigEntry<bool> BetterDropsEnabled;
+		public static ConfigEntry<bool> BetterTrophyDropsEnabled;
 		public static ConfigEntry<bool> MoreRareResourcesEnabled;
 		public static ConfigEntry<bool> BetterWoodYieldsEnabled;
 		public static ConfigEntry<bool> FoodAndMeadModificationsEnabled;
-		public static ConfigEntry<bool> StandardizedFoodDurationsEnabled;
-		public static ConfigEntry<bool> PotionUpgradeEnabled;
 
 		// Balance
 		public static ConfigEntry<bool> EarlyLinenCapeEnabled;
@@ -190,8 +190,8 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> ReducedCrossbowsReloadTimeEnabled;
 		public static ConfigEntry<bool> KeepCrossbowsLoadedEnabled;
 		public static ConfigEntry<bool> CrossbowReloadWhileMovingEnabled;
-		public static ConfigEntry<bool> BetterTrophyDropsEnabled;
-		public static ConfigEntry<bool> BetterDropsEnabled;
+		public static ConfigEntry<bool> StandardizedFoodDurationsEnabled;
+		public static ConfigEntry<bool> PotionUpgradeEnabled;
 		public static ConfigEntry<bool> RootForestDropsEnabled;
 
 		// Features
@@ -250,11 +250,11 @@ namespace MarsarahTweaks.Managers
 			GearRecipeMaterialsEnabled = CreateConfig(Configs.GearRecipeMaterialsModifications, true);
 			BuildPieceAmountsEnabled = CreateConfig(Configs.BuildPieceAmountsModifications, true);
 			BuildPieceMaterialsEnabled = CreateConfig(Configs.BuildPieceMaterialsModifications, true);
+			BetterDropsEnabled = CreateConfig(Configs.DropsModifications, true);
+			BetterTrophyDropsEnabled = CreateConfig(Configs.TrophyDropsModifications, true);
 			MoreRareResourcesEnabled = CreateConfig(Configs.MoreRareResources, true);
 			BetterWoodYieldsEnabled = CreateConfig(Configs.BetterWoodYields, true);
 			FoodAndMeadModificationsEnabled = CreateConfig(Configs.FoodAndMeadModifications, true);
-			StandardizedFoodDurationsEnabled = CreateConfig(Configs.StandardizedFoodDurations, true);
-			PotionUpgradeEnabled = CreateConfig(Configs.PotionUpgrade, true);
 
 			// ===== Balance
 			EarlyLinenCapeEnabled = CreateConfig(Configs.LinenCapeModifications, true);
@@ -275,8 +275,8 @@ namespace MarsarahTweaks.Managers
 			ReducedCrossbowsReloadTimeEnabled = CreateConfig(Configs.CrossbowsReloadModifications, true);
 			KeepCrossbowsLoadedEnabled = CreateConfig(Configs.KeepCrossbowsLoaded, true);
 			CrossbowReloadWhileMovingEnabled = CreateConfig(Configs.CrossbowReloadWhileMoving, true);
-			BetterTrophyDropsEnabled = CreateConfig(Configs.TrophyDropsModifications, true);
-			BetterDropsEnabled = CreateConfig(Configs.DropsModifications, true);
+			StandardizedFoodDurationsEnabled = CreateConfig(Configs.StandardizedFoodDurations, true);
+			PotionUpgradeEnabled = CreateConfig(Configs.PotionUpgrade, true);
 			RootForestDropsEnabled = CreateConfig(Configs.RootForestDrops, true);
 
 			// ===== Features

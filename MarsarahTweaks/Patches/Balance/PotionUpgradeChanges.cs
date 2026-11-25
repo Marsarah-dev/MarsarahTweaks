@@ -4,7 +4,7 @@ using MarsarahTweaks.Managers;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MarsarahTweaks.Patches.Grind
+namespace MarsarahTweaks.Patches.Balance
 {
 	internal class PotionUpgradeChanges
 	{
