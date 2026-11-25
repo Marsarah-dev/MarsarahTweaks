@@ -9,6 +9,7 @@ A. Fixes
 ------------------------------
 * Better Creature Drops
   - Fixed randomized drop amounts for Fenris Hair, Soft Tissue and Nornathread to correctly include the intended maximum drop amount.
+  - Fixed missing Fader defeated-state detection, allowing Better Creature Drops and Better Trophy Drop Rates to refresh when Fader is defeated mid-game.
 
 * Less Brazier Smoke
   - Fixed compatibility with the Valheim update released on November 25, 2026.
@@ -24,6 +25,34 @@ B. Updates
 
 * Better Creature Drops
   - Increased Moose Hide drops to 3-5 from 2. 
+  - Deep North Armor Moulds:
+    - Relocated armor mould drop modifications from More Rare Resources to Better Creature Drops.
+    - Reduced Krigen armor mould drop chances from 20% to 15% (vanilla: 3%).
+    - Retained Hexen armor mould drop chances at 25% (vanilla: 5%).
+    - Standardized armor mould drops to five times their respective vanilla drop chances.
+    - Disabled star scaling for armor mould drops to ensure consistent acquisition across both creatures.
+    - Original drop amounts and all other drop properties remain unchanged.
+    - Includes both Krigen variants.
+  - Extended the generic creature drop modification system:
+    - Supports optional minimum and maximum drop amount overrides.
+    - Supports optional star scaling overrides.
+    - Supports modifications restricted to existing drop entries, preventing unintended addition of missing armor mould drops.
+    - Backs up and restores original star scaling alongside drop amounts and chances.
+    - Preserves existing star scaling behavior for all other creature drop modifications.
+  - Integrated armor mould modifications into the existing Fader progression mapping, preparing them for future Deep North Progression Halt implementation.
+  - Updated configuration description.
+
+* More Rare Resources
+  - Relocated creature-based armor mould modifications to Better Creature Drops.
+  - Removed obsolete creature drop modification logic, backup dictionary, Harmony patch and configuration change handler.
+  - Flesh piles found in Putrid Holes:
+    - Reduced Bone Fragments from 5-15 to 2-5 per loot roll.
+    - Increased Soft Tissue from 1-2 to 2-3 per loot roll.
+    - Loot weights, number of loot rolls and all other drops remain unchanged.
+    - Live toggling affects existing flesh piles that have not yet been destroyed.
+  - Charred Fortress chest modifications remain unchanged.
+  - Updated configuration description.
+  - Balanced and verified through extensive in-game drop testing.
 
 * More Rare Resources
   - Deep North Armor Moulds:

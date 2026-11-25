@@ -11,7 +11,7 @@ namespace MarsarahTweaks.Patches.Grind
 {
 	internal class BetterDropsChanges
 	{
-		private static readonly LogManager log = new LogManager("Better Drops", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Better Drops", LogManager.LogLevel.Warning);
 
 		// Eykthir
 		// - Ghost - Add Necklace: 1 (100% chance) - scrapped since update
@@ -26,7 +26,7 @@ namespace MarsarahTweaks.Patches.Grind
 		// - Dvergr Rogue, Mage - Soft Tissue: 100% chance (from 25%)
 		// Fader
 		// - Barka - Frozen Branch 2x
-		// - Moose - Moose Hide 3-5 (from 2-4)
+		// - Moose - Moose Hide 3-5 (from 2)
 		// - Hexen - Nornathread 2-4 (from 1-3)
 		//		   - Armor mould drop chances increased from 5% to 25%
 		// - Krigen - Armor mould drop chances increased from 3% to 15%
@@ -313,6 +313,9 @@ namespace MarsarahTweaks.Patches.Grind
 						}
 					}
 				}
+
+				// DEBUG - Verify creature drop tables after applying or restoring modifications
+				//LogCreatureDrops(instance);
 			}
 		}
 
@@ -399,9 +402,12 @@ namespace MarsarahTweaks.Patches.Grind
 					}
 				}
 			}
+
+			// DEBUG - Verify creature drop tables after restoring modifications for Progression Halt
+			//LogCreatureDrops(instance);
 		}
 
-		private static void LogOriginalCreatureDrops(ZNetScene instance)
+		private static void LogCreatureDrops(ZNetScene instance)
 		{
 			if (instance == null) return;
 
@@ -413,7 +419,7 @@ namespace MarsarahTweaks.Patches.Grind
 				"Moose"
 			};
 
-			log.Info("Original Creature Drop Tables", header: true);
+			log.Info($"Creature Drop Tables | Better Drops: {ConfigManager.BetterDropsEnabled.Value} | Progression Halt: {ConfigManager.AutomaticProgressionHaltEnabled.Value} | Fader Defeated: {GlobalKeyChecker.FaderDefeated}", header: true);
 
 			foreach (string creatureName in creatureNames)
 			{
