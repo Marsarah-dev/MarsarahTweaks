@@ -118,6 +118,7 @@ namespace MarsarahTweaks.Managers
 			public static readonly ConfigMetadata CreatureUnleveler = new ConfigMetadata("Creature Unleveler By Boss", "Increases chance of creatures to spawn with a star or two after defeating their relevant biome boss", ConfigSections.Features, 170);
 			public static readonly ConfigMetadata RaidsModifications = new ConfigMetadata("No End-game Raids in Early Biomes", "Mistlands and Ashlands raids do not occur in the first four biomes", ConfigSections.Features, 160);
 			public static readonly ConfigMetadata StopNighttimeInvasion = new ConfigMetadata("Stop Nighttime Invasion", "Fulings, Seeker and Charred no longer spawn in early biomes at night. (Fulings spawn in Mountains and Seeker and Charred spawn in Plains)", ConfigSections.Features, 150);
+			public static readonly ConfigMetadata NighttimeJotunSpawns = new ConfigMetadata("Nighttime Jotun Spawns", "Adds nighttime Krigen and Hexen patrols in the Deep North after defeating the first Jotun. Nighttime patrols have a 7% spawn chance and a 45-minute spawn interval, compared to the vanilla daytime values of 5% and 50 minutes.", ConfigSections.Features, 140);
 			//public static readonly ConfigMetadata AshlandsEnemiesModifications = new ConfigMetadata("Less Ashlands Enemies", "Numbers and spawn chance reduced for Ashlands enemies. (Toggling mid-game requires reloading area)", ConfigSections.Features, 140);
 			public static readonly ConfigMetadata MoreSerpentSpawns = new ConfigMetadata("More Serpent Spawns", "Increases Ocean Serpent spawn chances and reduces spawn intervals after defeating Bonemass and Moder.", ConfigSections.Features, 130);
 			public static readonly ConfigMetadata SmallSerpentSpawns = new ConfigMetadata("Small Serpent Spawns", "Adds smaller, weaker Sea Wyrms to deep Ocean and coastal waters after defeating Bonemass. They spawn during day and night in any weather, drop only Serpent Meat, and become more common after Moder.", ConfigSections.Features, 120);
@@ -198,6 +199,7 @@ namespace MarsarahTweaks.Managers
 		public static ConfigEntry<bool> CreatureUnlevelerEnabled;
 		public static ConfigEntry<bool> NoEndRaidsInEarlyBiomesEnabled;
 		public static ConfigEntry<bool> StopNighttimeInvasionEnabled;
+		public static ConfigEntry<bool> NighttimeJotunSpawnsEnabled;
 		//public static ConfigEntry<bool> LessAshlandsEnemiesEnabled;
 		public static ConfigEntry<bool> MoreSerpentSpawnsEnabled;
 		public static ConfigEntry<bool> SmallSerpentSpawnsEnabled;
@@ -282,6 +284,7 @@ namespace MarsarahTweaks.Managers
 			CreatureUnlevelerEnabled = CreateConfig(Configs.CreatureUnleveler, true);
 			NoEndRaidsInEarlyBiomesEnabled = CreateConfig(Configs.RaidsModifications, true);
 			StopNighttimeInvasionEnabled = CreateConfig(Configs.StopNighttimeInvasion, true);
+			NighttimeJotunSpawnsEnabled = CreateConfig(Configs.NighttimeJotunSpawns, true);
 			//LessAshlandsEnemiesEnabled = CreateConfig(Configs.AshlandsEnemiesModifications, true);
 			MoreSerpentSpawnsEnabled = CreateConfig(Configs.MoreSerpentSpawns, true);
 			SmallSerpentSpawnsEnabled = CreateConfig(Configs.SmallSerpentSpawns, true);
@@ -513,6 +516,13 @@ namespace MarsarahTweaks.Managers
 					if (spawnSystem != null)
 					{
 						CreatureUnleveler.ApplyCreatureLevelChanges(spawnSystem);
+					}
+					break;
+
+				case var name when name == Configs.NighttimeJotunSpawns.Name:
+					foreach (SpawnSystem system in Object.FindObjectsByType<SpawnSystem>(FindObjectsSortMode.None))
+					{
+						NighttimeJotunSpawns.UpdateNighttimeJotunSpawns(system);
 					}
 					break;
 
