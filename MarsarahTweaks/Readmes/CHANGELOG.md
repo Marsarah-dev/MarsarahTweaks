@@ -1,17 +1,42 @@
 ## <strong> 📜 Version History </strong>
 
 v1.11.0
+- **Fixes:**
+  - **Creature Unleveler By Boss**
+    - Fixed an issue where creature level-up changes from previously defeated bosses could be lost when loading into a world with advanced boss progression.
+    - Maximum creature levels and minimum level-up distances from earlier boss progression stages are now preserved.
+
 - **Updates:**
   - **Food and Mead Modifications**
     - Added Deep North food recipe and stack size modifications.
     - Increased the amount crafted from 1 to 2 for ten foods and from 3 to 4 for Pancakes.
-    - Adjusted ingredient requirements for several Deep North foods to balance crafting costs and reduce resource grind.
-    - Increased stack sizes from 10 to 20 for all 13 prepared Deep North foods and their uncooked variants.
+    - Adjusted ingredient requirements for several Deep North foods.
+    - Increased stack sizes from 10 to 20 for 16 Deep North food items, including uncooked variants.
     - Moved Oat Milk crafting from the Mead Kettil to the level 6 Cauldron.
+
   - **Standardized Food Durations**
     - Added Deep North foods.
-    - Increased the duration of seven prepared foods from 25 to 30 minutes.
+    - Increased seven prepared food durations from 25 to 30 minutes.
     - Increased Cooked Moose Meat and Cooked Seal Blubber durations from 20 to 25 minutes.
+
+  - **Better Creature Drops**
+    - Increased Memorial Coal drop chance from both Krigen variants from 20% to 30%.
+    - Increased Frostfire and Thunderblood Essence drop chances from Ancestors from 50% to 75% each.
+
+  - **Creature Unleveler By Boss**
+    - Further increased level-up chances for Mistlands creatures after defeating Fader.
+    - Seekers and Ticks: 30%.
+    - Seeker Soldiers: 25%.
+    - Hares, other-biome Seekers and Seeker Brood: 20%.
+    - Gjall: 15%.
+    - Increased level-up chances for Ashlands Charred Warriors, Marksmen, Twitchers and Asksvin to 15% after defeating Fader.
+    - Enabled one-star Voltures with a 10% level-up chance after defeating Fader.
+
+- **New Features:**
+  - **Nighttime Jotun Spawns**
+    - Krigen and Hexen can now spawn at night in the Deep North after defeating the first Jotun.
+    - Nighttime patrols have a 7% spawn chance and a 45-minute spawn interval.
+    - Daytime spawns remain unchanged.
 
 v1.10.0
 - **Fixes:**

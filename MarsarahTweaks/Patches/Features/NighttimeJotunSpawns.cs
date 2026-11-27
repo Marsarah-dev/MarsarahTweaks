@@ -104,7 +104,7 @@ namespace MarsarahTweaks.Patches.Features
 		}
 
 		// Debug logging for actual nighttime Jotun spawns
-		[HarmonyPatch(typeof(SpawnSystem), "Spawn")]
+		/*[HarmonyPatch(typeof(SpawnSystem), "Spawn")]
 		class NighttimeJotunSpawnLog_Patch
 		{
 			private static void Postfix(SpawnSystem.SpawnData critter, Vector3 spawnPoint, bool eventSpawner)
@@ -114,6 +114,6 @@ namespace MarsarahTweaks.Patches.Features
 
 				log.Info($"Spawned: {critter.m_prefab.name} | Spawner: {critter.m_name} | Position: {spawnPoint} | Night: {EnvMan.IsNight()}");
 			}
-		}
+		}/*
 	}
 }

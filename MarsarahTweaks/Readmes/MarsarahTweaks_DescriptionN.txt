@@ -213,6 +213,7 @@ They can be toggled mid-game, unless otherwise specified.
 - Modifies the drop rates and type of items for Fenring, Bat and Dverger.
 - Increases drop quantities for Writhan, Barka, Hexen and Moose.
 - Increases armor mould drop chances for Krigen and Hexen and disables star scaling for their armor mould drops.
+- Increases Memorial Coal drop chances from Krigen and Frostfire and Thunderblood Essence drop chances from Ancestors.
 - Respects Automatic Progression Halt when enabled.
 - Can be enabled/disabled during gameplay, but the changes will only apply to newly spawned creatures.
 - [b]Conflicts:[/b] Incompatible with any mod that modifies creature drop rates and drop types.
@@ -234,9 +235,13 @@ They can be toggled mid-game, unless otherwise specified.
 - [b]Krigen (both variants):[/b]
 &nbsp;&nbsp;&nbsp;- Heavy Armor Mould drop chances: [b]3% → 15%[/b] per mould.
 &nbsp;&nbsp;&nbsp;- Medium Armor Mould drop chances: [b]3% → 15%[/b] per mould.
+&nbsp;&nbsp;&nbsp;- Memorial Coal drop chance: [b]20% → 30%[/b].
 - [b]Hexen:[/b]
 &nbsp;&nbsp;&nbsp;- Nornathread 1–3 → 2–4.
 &nbsp;&nbsp;&nbsp;- Mage Armor Mould drop chances: [b]5% → 25%[/b] per mould.
+- [b]Ancestors (Fallen Warriors):[/b]
+&nbsp;&nbsp;&nbsp;- Frostfire Essence drop chance: [b]50% → 75%[/b].
+&nbsp;&nbsp;&nbsp;- Thunderblood Essence drop chance: [b]50% → 75%[/b].
 
 Armor mould drop chances are increased to five times their respective vanilla values. Star scaling is disabled for armor mould drops, while original drop quantities remain unchanged. Star scaling for other creature resources remains unchanged.
 
@@ -629,6 +634,20 @@ They can be toggled mid-game, unless otherwise specified.
 - Charred: Can spawn in the Plains biome
 
 
+[size=4][b]🔧 Nighttime Jotun Spawns[/b][/size]
+
+- Krigen and Hexen can now spawn at night in the Deep North after defeating the first Jotun.
+- Nighttime patrols have a slightly higher spawn chance and shorter spawn interval than daytime patrols.
+- Daytime spawns remain unchanged.
+- Nighttime patrols despawn when morning comes.
+- Can be enabled/disabled during gameplay. Disabling this feature does not remove existing patrols.
+- [b]Conflicts:[/b] May conflict with mods that modify Jotun spawning.
+
+[b]🔹 Nighttime Spawn Changes:[/b]
+- Spawn chance: [b]7%[/b] (compared to 5% during the day).
+- Spawn interval: [b]45 minutes[/b] (compared to 50 minutes during the day).
+
+
 [size=4][b]🔧 More Serpent Spawns[/b][/size]
 
 - Increases the spawn frequency of regular [b]Ocean Serpents[/b] as boss progression advances.
@@ -1011,6 +1030,11 @@ Blaxxun-bloop - for ServerSync
 [size=5][b]📜 Version History[/b][/size]
 
 [size=4][b]v1.11.0[/b][/size]
+- [b]Fixes:[/b]
+  - [b]Creature Unleveler By Boss:[/b]
+    - Fixed an issue where creature level-up changes from previously defeated bosses could be lost when loading into a world with advanced boss progression.
+    - Maximum creature levels and minimum level-up distances from earlier boss progression stages are now preserved.
+
 - [b]Updates:[/b]
   - [b]Food and Mead Modifications:[/b]
     - Added Deep North food recipe and stack size modifications.
@@ -1018,10 +1042,30 @@ Blaxxun-bloop - for ServerSync
     - Adjusted ingredient requirements for several Deep North foods.
     - Increased stack sizes from 10 to 20 for 16 Deep North food items, including uncooked variants.
     - Moved Oat Milk crafting from the Mead Kettil to the level 6 Cauldron.
+
   - [b]Standardized Food Durations:[/b]
     - Added Deep North foods.
     - Increased seven prepared food durations from 25 to 30 minutes.
     - Increased Cooked Moose Meat and Cooked Seal Blubber durations from 20 to 25 minutes.
+
+  - [b]Better Creature Drops:[/b]
+    - Increased Memorial Coal drop chance from both Krigen variants from 20% to 30%.
+    - Increased Frostfire and Thunderblood Essence drop chances from Ancestors from 50% to 75% each.
+
+  - [b]Creature Unleveler By Boss:[/b]
+    - Further increased level-up chances for Mistlands creatures after defeating Fader.
+    - Seekers and Ticks: 30%.
+    - Seeker Soldiers: 25%.
+    - Hares, other-biome Seekers and Seeker Brood: 20%.
+    - Gjall: 15%.
+    - Increased level-up chances for Ashlands Charred Warriors, Marksmen, Twitchers and Asksvin to 15% after defeating Fader.
+    - Enabled one-star Voltures with a 10% level-up chance after defeating Fader.
+
+- [b]New Features:[/b]
+  - [b]Nighttime Jotun Spawns:[/b]
+    - Krigen and Hexen can now spawn at night in the Deep North after defeating the first Jotun.
+    - Nighttime patrols have a 7% spawn chance and a 45-minute spawn interval.
+    - Daytime spawns remain unchanged.
 
 [size=4][b]v1.10.0[/b][/size]
 - [b]Fixes:[/b]

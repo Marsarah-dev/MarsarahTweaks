@@ -220,6 +220,7 @@ They can be toggled mid-game, unless otherwise specified.
 - Modifies the drop rates and type of items for Fenring, Bat and Dverger.
 - Increases drop quantities for Writhan, Barka, Hexen and Moose.
 - Increases armor mould drop chances for Krigen and Hexen and disables star scaling for their armor mould drops.
+- Increases Memorial Coal drop chances from Krigen and Frostfire and Thunderblood Essence drop chances from Ancestors.
 - Respects Automatic Progression Halt when enabled.
 - Toggling mid-game will only affect newly spawned creatures.
 - **Conflicts:** Incompatible with any mod that modifies creature drop rates and drop types.
@@ -240,9 +241,13 @@ They can be toggled mid-game, unless otherwise specified.
 - Krigen (both variants):
   - Heavy Armor Mould drop chances: **3% → 15%** per mould.
   - Medium Armor Mould drop chances: **3% → 15%** per mould.
+  - Memorial Coal drop chance: **20% → 30%**.
 - Hexen:
   - Nornathread 1–3 → 2–4.
   - Mage Armor Mould drop chances: **5% → 25%** per mould.
+- Ancestors (Fallen Warriors):
+  - Frostfire Essence drop chance: **50% → 75%**.
+  - Thunderblood Essence drop chance: **50% → 75%**.
 
 Armor mould drop chances are increased to five times their respective vanilla values. Star scaling is disabled for armor mould drops, while original drop quantities remain unchanged. Star scaling for other creature resources remains unchanged.
 
@@ -661,6 +666,21 @@ They can be toggled mid-game, unless otherwise specified.
 | Fulings       | Mountain               |
 | Seeker        | Plains                 |
 | Charred       | Plains                 |
+
+---
+
+### <strong>🔧 Nighttime Jotun Spawns</strong>
+
+- Krigen and Hexen can now spawn at night in the Deep North after defeating the first Jotun.
+- Nighttime patrols have a slightly higher spawn chance and shorter spawn interval than daytime patrols.
+- Daytime spawns remain unchanged.
+- Nighttime patrols despawn when morning comes.
+- Can be enabled/disabled during gameplay. Disabling this feature does not remove existing patrols.
+- **Conflicts:** May conflict with mods that modify Jotun spawning.
+
+**🔹 Nighttime Spawn Changes:**
+- Spawn chance: **7%** (compared to 5% during the day).
+- Spawn interval: **45 minutes** (compared to 50 minutes during the day).
 
 ---
 

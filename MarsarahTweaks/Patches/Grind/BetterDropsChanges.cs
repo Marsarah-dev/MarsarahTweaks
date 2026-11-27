@@ -360,7 +360,7 @@ namespace MarsarahTweaks.Patches.Grind
 			}
 
 			// DEBUG - Verify creature drop tables after applying or restoring modifications
-			LogCreatureDrops(instance);
+			//LogCreatureDrops(instance);
 		}
 
 		public static void RestoreBetterDrops(ZNetScene instance)
