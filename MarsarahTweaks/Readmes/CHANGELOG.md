@@ -1,5 +1,17 @@
 ## <strong> 📜 Version History </strong>
 
+v1.11.0
+  - **Food and Mead Modifications**
+    - Added Deep North food recipe and stack size modifications.
+    - Increased the amount crafted from 1 to 2 for ten foods and from 3 to 4 for Pancakes.
+    - Adjusted ingredient requirements for several Deep North foods to balance crafting costs and reduce resource grind.
+    - Increased stack sizes from 10 to 20 for all 13 prepared Deep North foods and their uncooked variants.
+    - Moved Oat Milk crafting from the Mead Kettil to the level 6 Cauldron.
+  - **Standardized Food Durations**
+    - Added Deep North foods.
+    - Increased the duration of seven prepared foods from 25 to 30 minutes.
+    - Increased Cooked Moose Meat and Cooked Seal Blubber durations from 20 to 25 minutes.
+
 v1.10.0
 - **Fixes:**
   - **Better Creature Drops**

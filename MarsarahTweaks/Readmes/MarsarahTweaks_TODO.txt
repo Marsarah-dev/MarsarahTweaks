@@ -10,6 +10,25 @@ A. Fixes
   
 B. Updates
 ------------------------------
+* Food And Mead Modifications
+  - Added Deep North food recipe modifications.
+  - Increased crafting outputs from 1 to 2 for ten foods and from 3 to 4 for Pancakes.
+  - Adjusted ingredient requirements for ten Deep North foods.
+  - Increased stack sizes from 10 to 20 for 16 food items, including uncooked variants.
+  - Moved Oat Milk crafting from Mead Kettil to Cauldron, requiring level 6.
+
+* Standardized Food Durations
+  - Increased the duration of the following foods from 25 to 30 minutes:
+    - Smoked Moose Meat
+    - Oat Milk
+    - Kale Chips
+    - Lingonberry Juice
+    - Meatballs and Poteitr
+    - Baked Poteitr
+    - Smoked Fish
+  - Increased the duration of the following foods from 20 to 25 minutes:
+    - Cooked Moose Meat
+    - Cooked Seal Blubber
 
 C. New Features
 ------------------------------
@@ -22,108 +41,6 @@ E. Test
 
 F. In Progress
 ------------------------------
-* Food And Mead Modifications
-
-(Current DN foods)
-- Food Prep Table:
-  - HP         None
-  - Stamina    Raw Kale Chips        (x4)
-  - Eitr       Unbaked Poteitr       (x1)
-               Oven Pancake Batter   (x1)
-- Cauldron:
-  - HP         Meat in Bread         (x2)
-               Seal Meat Soup        (x1)
-               Smoked Moose Meat     (x1)
-  - Stamina    Lingonberry Juice     (x1)
-               Pancakes              (x3)
-  - Eitr       Meatballs and Poteitr (x1)
-               Smoked Fish           (x1)
-               Fish Soup             (x1)
-  - Hybrid     Oatmeal (Stam + Eitr) (x1)
-- Mead Kettil: 
-  - Stamina    Oat Milk              (x1)
-
-(Planned Changes)
-  - Change Oat Milk crafting station from Mead Kettil to Cauldron (discuss)
-  - Increase amount crafted for the following foods from 1 to 2:
-    - Oat Milk
-    - Lingonberry Juice
-    - Meatballs and Poteitr
-    - Oatmeal
-    - Seal Meat Soup
-    - Smoked Fish
-    - Smoked Moose Meat
-    - Fish Soup
-    - Unbaked Poteitr
-    - Oven Pancake Batter
-
-  - Increase amount crafted for the following foods from 3 to 4:
-    - Pancakes
-
-  - Modify recipe costs for the following foods:
-    - Unbaked Poteitr:       Seal Blubber - 1 > 2
-                             Poteitr      - 1 > 2
-    - Oven Pancake Batter:   Moose Meat   - 1 > 2
-    - Meatballs and Poteitr: Moose Meat   - 1 > 2
-    - Meat in Bread:         Moose Meat   - 1 > 2
-                             Oat Flour    - 1 > 2
-    - Oatmeal                Oat Milk     - 1 > 2
-    - Pancakes               Oat Milk     - 1 > 2
-    - Seal Meat Soup         Seal Blubber - 2 > 3
-    - Smoked Fish            Raw Fish     - 1 > 2
-                             Kale         - 1 > 2
-                             Poteitr      - 1 > 2
-    - Smoked Moose Meat      Moose Meat   - 1 > 2
-    - Fish Soup              Raw Fish     - 3 > 2
-
-  - Food Stacks - standardize everything to 20 from 10
-    - Raw Kale Chips
-    - Kale Chips
-    - Unbaked Poteitr
-    - Baked Poteitr
-    - Oven Pancake Batter
-    - Oven Pancake
-    - Meat in Bread
-    - Seal Meat Soup
-    - Smoked Moose Meat
-    - Lingonberry Juice
-    - Pancakes
-    - Meatballs and Poteitr
-    - Smoked Fish
-    - Fish Soup
-    - Oatmeal
-    - Oat Milk
-
-* Standardized Food Durations
-
-(Current DN food durations)
-- Meat in Bread         (30min)
-- Seal Meat Soup        (30min)
-- Smoked Moose Meat     (25min)
-- Pancakes              (30min)
-- Oat Milk              (25min)
-- Kale Chips            (25min)
-- Lingonberry Juice     (25min)
-- Oatmeal               (30min)
-- Meatballs and Poteitr (25min)
-- Fish Soup             (30min)
-- Oven Pancake          (30min)
-- Baked Poteitr         (25min)
-- Smoked Fish           (25min)
-- Cooked Moose Meat     (20min)
-- Cooked Seal Blubber   (20min)
-
-(Planned Changes)
-- Increase DN food duration as follows:
-  - Smoked Moose Meat       25 > 30
-  - Oat Milk                25 > 30
-  - Kale Chips              25 > 30
-  - Lingonberry Juice       25 > 30
-  - Meatballs and Poteitr   25 > 30
-  - Baked Poteitr           25 > 30
-  - Smoked Fish             25 > 30
-  - Cooked Moose Meat       20 > 25
-  - Cooked Seal Blubber     20 > 25
 
 
 ============================================================

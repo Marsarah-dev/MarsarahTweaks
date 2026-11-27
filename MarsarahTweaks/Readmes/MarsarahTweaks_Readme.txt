@@ -1,4 +1,4 @@
-Marsarah Tweaks v1.10.0
+Marsarah Tweaks v1.11.0
 ================================================================
 This mod is a port of my previous project, MarsarahMod which is now deprecated. It features numerous code optimizations and fixes, along with ServerSync integration and several new features.
 This mod changes many aspects of the game so it's advised to look through and read the description or the config file, to decide which features to enable and which to turn off.  
@@ -1333,6 +1333,7 @@ All other material requirements, armor mould costs and staff recipes remain unch
 ► Description:
   Modifies recipe amounts, amounts crafted, and material requirements for some food and mead recipes.
   Changes the stack size of all foods to 20.
+  Moves Oat Milk crafting from the Mead Kettil to the level 6 Cauldron.
 
 ► Mid-Game Toggling:
   Toggling requires a CLIENT relog for food stack changes to fully take effect.
@@ -1508,6 +1509,67 @@ All other material requirements, armor mould costs and staff recipes remain unch
     - Volture Egg:         1  → 2
   • Amount crafted:        1  → 2
 
+- Unbaked Poteitr
+  • Resource amounts:
+    - Seal Blubber:        1  → 2
+    - Poteitr:             1  → 2
+  • Amount crafted:        1  → 2
+
+- Oven Pancake Batter
+  • Resource amounts:
+    - Moose Meat:          1  → 2
+  • Amount crafted:        1  → 2
+
+- Meat in Bread
+  • Resource amounts:
+    - Moose Meat:          1  → 2
+    - Oat Flour:           1  → 2
+
+- Seal Meat Soup
+  • Resource amounts:
+    - Seal Blubber:        2  → 3
+  • Amount crafted:        1  → 2
+
+- Smoked Moose Meat
+  • Resource amounts:
+    - Moose Meat:          1  → 2
+  • Amount crafted:        1  → 2
+
+- Lingonberry Juice
+  • Amount crafted:        1  → 2
+
+- Pancakes
+  • Resource amounts:
+    - Oat Milk:            1  → 2
+  • Amount crafted:        3  → 4
+
+- Meatballs and Poteitr
+  • Resource amounts:
+    - Moose Meat:          1  → 2
+  • Amount crafted:        1  → 2
+
+- Smoked Fish
+  • Resource amounts:
+    - Raw Fish:            1  → 2
+    - Kale:                1  → 2
+    - Poteitr:             1  → 2
+  • Amount crafted:        1  → 2
+
+- Fish Soup
+  • Resource amounts:
+    - Raw Fish:            3  → 2
+  • Amount crafted:        1  → 2
+
+- Oatmeal
+  • Resource amounts:
+    - Oat Milk:            1  → 2
+  • Amount crafted:        1  → 2
+
+- Oat Milk
+  • Amount crafted:        1  → 2
+  • Crafting Station:      Mead Kettil → Cauldron
+  • Required Cauldron Level: 6
+
 >> Mead <<
 
 - Mead Base: Lingering Eitr
@@ -1620,6 +1682,22 @@ The following foods have the stack size increased to 20
 - Uncooked Misthare Supreme
 - Uncooked Roasted Crust Pie
 - Uncooked Piquant Pie  
+- Unbaked Poteitr
+- Baked Poteitr
+- Raw Kale Chips
+- Kale Chips
+- Oven Pancake Batter
+- Oven Pancake
+- Meat in Bread
+- Seal Meat Soup
+- Smoked Moose Meat
+- Lingonberry Juice
+- Pancakes
+- Meatballs and Poteitr
+- Smoked Fish
+- Fish Soup
+- Oatmeal
+- Oat Milk
 
 
 ========================= [Balance] ============================
@@ -2007,7 +2085,7 @@ The following foods have the stack size increased to 20
   Increases the duration of foods based on preparation type and biome progression.
   Only increases durations where necessary. Foods already meeting or exceeding the target duration remain unchanged.
   Does not modify Health, Stamina, Eitr or Health Regeneration stats.
-  Deep North foods and feasts are not modified.
+  Feasts are not modified.
 
 ► Mid-Game Toggling:
   Can be enabled/disabled during gameplay, but requires a CLIENT relog for food already in inventory.
@@ -2023,10 +2101,12 @@ The following foods have the stack size increased to 20
 - Blueberries
 - Yellow Mushrooms
 
->> Simply Cooked Ashlands Meats: 25 Minutes <<
+>> Simply Cooked Ashlands and Deep North Meats: 25 Minutes <<
 
 - Cooked Asksvin Meat
 - Cooked Volture Meat
+- Cooked Moose Meat
+- Cooked Seal Blubber
 
 >> Prepared Meals: 30 Minutes <<
 
@@ -2065,6 +2145,15 @@ Ashlands:
 - Scorching Medley
 - Sizzling Berry Broth
 - Sparkling Shroomshake
+
+Deep North:
+- Smoked Moose Meat
+- Oat Milk
+- Kale Chips
+- Lingonberry Juice
+- Meatballs and Poteitr
+- Baked Poteitr
+- Smoked Fish
 
 
 ----------------------- [Potion Upgrade] -----------------------
@@ -2952,6 +3041,18 @@ All other resource stack sizes remain unchanged.
 
 VERSION HISTORY
 ================================================================
+
+v1.11.0
+  - Food and Mead Modifications
+    - Added Deep North food recipe and stack size modifications.
+    - Increased the amount crafted from 1 to 2 for ten foods and from 3 to 4 for Pancakes.
+    - Adjusted ingredient requirements for several Deep North foods.
+    - Increased stack sizes from 10 to 20 for all 13 prepared Deep North foods and their uncooked variants.
+    - Moved Oat Milk crafting from the Mead Kettil to the level 6 Cauldron.
+  - Standardized Food Durations
+    - Added Deep North foods.
+    - Increased seven prepared food durations from 25 to 30 minutes.
+    - Increased Cooked Moose Meat and Cooked Seal Blubber durations from 20 to 25 minutes.
 
 v1.10.0
 - Fixes:

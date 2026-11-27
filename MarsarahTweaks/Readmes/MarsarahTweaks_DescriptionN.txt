@@ -1,6 +1,6 @@
 [size=5][b]Marsarah Tweaks[/b][/size]
 
-[b]Version:[/b] 1.10.0
+[b]Version:[/b] 1.11.0
 [b]Author:[/b] Marsarah  
 
 [line]
@@ -297,6 +297,7 @@ Armor mould drop chances are increased to five times their respective vanilla va
 
 - Adjusts food and mead recipes.
 - Changes recipe amounts, outputs, and ingredients.
+- Moves Oat Milk crafting from the Mead Kettil to the level 6 Cauldron.
 - All food stack sizes increased to [b]20[/b]
 - Specific details can be found in the readme file in the [b]Docs[/b] tab 
 - Requires [b]client[/b] relog after toggling the config mid-game. 
@@ -529,11 +530,11 @@ They can be toggled mid-game, unless otherwise specified.
 
 - Increases food durations based on preparation type and biome progression.
 - Raspberries, Blueberries and Yellow Mushrooms last at least [b]15 minutes[/b].
-- Cooked Asksvin Meat and Cooked Volture Meat last at least [b]25 minutes[/b].
-- Prepared meals from Black Forest through Ashlands have a minimum target duration of [b]30 minutes[/b], where applicable.
+- Cooked Asksvin Meat, Cooked Volture Meat, Cooked Moose Meat and Cooked Seal Blubber last at least [b]25 minutes[/b].
+- Prepared meals from Black Forest through Deep North have a minimum target duration of [b]30 minutes[/b], where applicable.
 - Other simply cooked meats retain their vanilla durations.
 - Durations are only increased, never reduced. Food health, stamina and Eitr stats remain unchanged.
-- Deep North foods and feasts are not modified.
+- Feasts are not modified.
 - The complete list of modified foods can be found in the readme file in the [b]Docs[/b] tab.
 
 
@@ -1008,6 +1009,18 @@ Blaxxun-bloop - for ServerSync
 
 
 [size=5][b]📜 Version History[/b][/size]
+
+[size=4][b]v1.11.0[/b][/size]
+  - [b]Food and Mead Modifications:[/b]
+    - Added Deep North food recipe and stack size modifications.
+    - Increased the amount crafted from 1 to 2 for ten foods and from 3 to 4 for Pancakes.
+    - Adjusted ingredient requirements for several Deep North foods.
+    - Increased stack sizes from 10 to 20 for all 13 prepared Deep North foods and their uncooked variants.
+    - Moved Oat Milk crafting from the Mead Kettil to the level 6 Cauldron.
+  - [b]Standardized Food Durations:[/b]
+    - Added Deep North foods.
+    - Increased seven prepared food durations from 25 to 30 minutes.
+    - Increased Cooked Moose Meat and Cooked Seal Blubber durations from 20 to 25 minutes.
 
 [size=4][b]v1.10.0[/b][/size]
 - [b]Fixes:[/b]

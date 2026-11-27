@@ -1,6 +1,6 @@
 # <strong> Marsarah Tweaks </strong>
 
-**Version:** 1.10.0  
+**Version:** 1.11.0  
 **Author:** Marsarah
 
 ---
@@ -307,7 +307,8 @@ Armor mould drop chances are increased to five times their respective vanilla va
 ### <strong>🔧 Food and Mead Modifications</strong>
 
 - Adjusts food and mead recipes.
-- Changes recipe amounts, outputs, and ingredients.  
+- Changes recipe amounts, outputs, and ingredients.
+- Moves Oat Milk crafting from the Mead Kettil to the level 6 Cauldron.
 - All food stack sizes increased to **20**
 - Specific details can be found in the **Docs** tab of the **Nexusmods** page.
 - Toggling mid-game requires **client** relog. 
@@ -557,11 +558,11 @@ They can be toggled mid-game, unless otherwise specified.
 
 - Increases food durations based on preparation type and biome progression.
 - Raspberries, Blueberries and Yellow Mushrooms last at least **15 minutes**.
-- Cooked Asksvin Meat and Cooked Volture Meat last at least **25 minutes**.
-- Prepared meals from Black Forest through Ashlands have a minimum target duration of **30 minutes**, where applicable.
+- Cooked Asksvin Meat, Cooked Volture Meat, Cooked Moose Meat and Cooked Seal Blubber last at least **25 minutes**.
+- Prepared meals from Black Forest through Deep North have a minimum target duration of **30 minutes**, where applicable.
 - Other simply cooked meats retain their vanilla durations.
 - Durations are only increased, never reduced. Food health, stamina and Eitr stats remain unchanged.
-- Deep North foods and feasts are not modified.
+- Feasts are not modified.
 - The complete list of modified foods can be found in the readme file in the **Docs** tab of the **Nexusmods** page.
 
 ---
