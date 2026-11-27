@@ -1,7 +1,7 @@
-﻿using HarmonyLib;
-using MarsarahTweaks.Managers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using HarmonyLib;
 using UnityEngine;
+using MarsarahTweaks.Managers;
 
 namespace MarsarahTweaks.Patches.Balance
 {
@@ -93,10 +93,7 @@ namespace MarsarahTweaks.Patches.Balance
 				string prefabName = entry.Key;
 				GameObject prefab = objDB.m_items.Find(item => item != null && item.name == prefabName);
 
-				if (prefab == null)
-				{
-					continue;
-				}
+				if (prefab == null) continue;
 
 				ItemDrop itemDrop = prefab.GetComponent<ItemDrop>();
 				if (itemDrop == null || itemDrop.m_itemData == null) continue;

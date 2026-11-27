@@ -1,6 +1,6 @@
-﻿using HarmonyLib;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using HarmonyLib;
 using UnityEngine;
 using MarsarahTweaks.Managers;
 
@@ -11,9 +11,9 @@ namespace MarsarahTweaks.Patches.Grind
 		private static readonly LogManager log = new LogManager("Food And Mead", LogManager.LogLevel.Warning);
 
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
-		class FoodAndMeadChanges_Patch
+		private class FoodAndMeadChanges_Patch
 		{
-			static void Postfix(ref ObjectDB __instance)
+			private static void Postfix(ref ObjectDB __instance)
 			{
 				if (__instance == null) return;
 
@@ -48,7 +48,7 @@ namespace MarsarahTweaks.Patches.Grind
 		}
 
 		// Dictionaries
-		private static Dictionary<string, RecipeModification> foodRecipeModifications = new Dictionary<string, RecipeModification>
+		private static readonly Dictionary<string, RecipeModification> foodRecipeModifications = new Dictionary<string, RecipeModification>
 		{
 			{ "Recipe_QueensJam", new RecipeModification
 				{
@@ -308,7 +308,7 @@ namespace MarsarahTweaks.Patches.Grind
 				}
 			}
 		};
-		private static Dictionary<string, RecipeModification> meadAndWineModifications = new Dictionary<string, RecipeModification>()
+		private static readonly Dictionary<string, RecipeModification> meadAndWineModifications = new Dictionary<string, RecipeModification>()
 		{
 			{ "Recipe_MeadBaseEitrLingering", new RecipeModification
 				{
@@ -407,7 +407,7 @@ namespace MarsarahTweaks.Patches.Grind
 				}
 			},
 		};
-		private static Dictionary<string, int> foodStacksModifications = new Dictionary<string, int>()
+		private static readonly Dictionary<string, int> foodStacksModifications = new Dictionary<string, int>()
 		{
 			{ "QueensJam", 20 },
 			{ "CarrotSoup", 20 },
@@ -483,7 +483,7 @@ namespace MarsarahTweaks.Patches.Grind
 		{
 			if (recipeModifications == null)
 			{
-				recipeModifications = foodRecipeModifications;
+				recipeModifications = new Dictionary<string, RecipeModification>(foodRecipeModifications);
 
 				foreach (var entry in meadAndWineModifications)
 				{
@@ -495,8 +495,8 @@ namespace MarsarahTweaks.Patches.Grind
 		}
 
 		// Dictionary for original values
-		private static Dictionary<string, RecipeModification> originalRecipeValues = new Dictionary<string, RecipeModification>();
-		private static Dictionary<string, int> originalFoodStacks = new Dictionary<string, int>();
+		private static readonly Dictionary<string, RecipeModification> originalRecipeValues = new Dictionary<string, RecipeModification>();
+		private static readonly Dictionary<string, int> originalFoodStacks = new Dictionary<string, int>();
 		private static readonly Dictionary<string, FoodStatModification> originalFoodStats = new Dictionary<string, FoodStatModification>();
 
 		// Crafting station lookup helper
@@ -528,8 +528,6 @@ namespace MarsarahTweaks.Patches.Grind
 						log.Info($"Initial backup entry for {recipeName}");
 						originalRecipeValues[recipeName] = new RecipeModification()
 						{
-							ResourceChanges = new Dictionary<string, int>(),
-							ResourceReplacements = new Dictionary<string, string>(),
 							RecipeAmount = recipe.m_amount,
 							MinStationLevel = recipe.m_minStationLevel
 						};
@@ -571,13 +569,10 @@ namespace MarsarahTweaks.Patches.Grind
 					}
 
 					// Apply minimum crafting station level
-					if (craftingStationResolved && recipeModification.MinStationLevel.HasValue)
+					if (craftingStationResolved && recipeModification.MinStationLevel.HasValue && recipe.m_minStationLevel != recipeModification.MinStationLevel.Value)
 					{
-						if (recipe.m_minStationLevel != recipeModification.MinStationLevel.Value)
-						{
-							log.Info($"Apply new minimum station level for {recipeName}: {recipe.m_minStationLevel} -> {recipeModification.MinStationLevel.Value}");
-							recipe.m_minStationLevel = recipeModification.MinStationLevel.Value;
-						}
+						log.Info($"Apply new minimum station level for {recipeName}: {recipe.m_minStationLevel} -> {recipeModification.MinStationLevel.Value}");
+						recipe.m_minStationLevel = recipeModification.MinStationLevel.Value;
 					}
 
 					// Apply resource modifications
@@ -601,7 +596,7 @@ namespace MarsarahTweaks.Patches.Grind
 						if (recipeModification.ResourceReplacements.TryGetValue(req.m_resItem.name, out string newItemName))
 						{
 							// Backup original m_resItem if not already saved
-							if (!originalRecipeValues[recipeName].ResourceReplacements.ContainsKey(req.m_resItem.name))
+							if (!originalRecipeValues[recipeName].OriginalResourceReplacements.ContainsKey(req.m_resItem.name))
 							{
 								log.Info($"Backup resource material for {recipeName} - {req.m_resItem.name}");
 								originalRecipeValues[recipeName].OriginalResourceReplacements[req.m_resItem.name] = (req.m_resItem.name, newItemName);
@@ -722,23 +717,17 @@ namespace MarsarahTweaks.Patches.Grind
 					}
 
 					// Restore crafting station
-					if (recipeModificationOriginal.CraftingStationBackedUp)
+					if (recipeModificationOriginal.CraftingStationBackedUp && recipe.m_craftingStation != recipeModificationOriginal.OriginalCraftingStation)
 					{
-						if (recipe.m_craftingStation != recipeModificationOriginal.OriginalCraftingStation)
-						{
-							log.Info($"Restoring crafting station for {recipeName}: {recipe.m_craftingStation?.name ?? "None"} -> {recipeModificationOriginal.OriginalCraftingStation?.name ?? "None"}");
-							recipe.m_craftingStation = recipeModificationOriginal.OriginalCraftingStation;
-						}
+						log.Info($"Restoring crafting station for {recipeName}: {recipe.m_craftingStation?.name ?? "None"} -> {recipeModificationOriginal.OriginalCraftingStation?.name ?? "None"}");
+						recipe.m_craftingStation = recipeModificationOriginal.OriginalCraftingStation;
 					}
 
 					// Restore minimum crafting station level
-					if (recipeModificationOriginal.MinStationLevel.HasValue)
+					if (recipeModificationOriginal.MinStationLevel.HasValue && recipe.m_minStationLevel != recipeModificationOriginal.MinStationLevel.Value)
 					{
-						if (recipe.m_minStationLevel != recipeModificationOriginal.MinStationLevel.Value)
-						{
-							log.Info($"Restoring minimum station level for {recipeName}: {recipe.m_minStationLevel} -> {recipeModificationOriginal.MinStationLevel.Value}");
-							recipe.m_minStationLevel = recipeModificationOriginal.MinStationLevel.Value;
-						}
+						log.Info($"Restoring minimum station level for {recipeName}: {recipe.m_minStationLevel} -> {recipeModificationOriginal.MinStationLevel.Value}");
+						recipe.m_minStationLevel = recipeModificationOriginal.MinStationLevel.Value;
 					}
 
 					foreach (Piece.Requirement req in recipe.m_resources)
@@ -821,7 +810,7 @@ namespace MarsarahTweaks.Patches.Grind
 					}
 				}
 
-				log.Info($"(Cleanup) Removing backups");
+				log.Info("(Cleanup) Removing backups");
 				originalRecipeValues.Clear();
 				originalFoodStacks.Clear();
 				originalFoodStats.Clear();
