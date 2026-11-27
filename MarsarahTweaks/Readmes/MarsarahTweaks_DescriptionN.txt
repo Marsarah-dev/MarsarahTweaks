@@ -1011,11 +1011,12 @@ Blaxxun-bloop - for ServerSync
 [size=5][b]📜 Version History[/b][/size]
 
 [size=4][b]v1.11.0[/b][/size]
+- [b]Updates:[/b]
   - [b]Food and Mead Modifications:[/b]
     - Added Deep North food recipe and stack size modifications.
     - Increased the amount crafted from 1 to 2 for ten foods and from 3 to 4 for Pancakes.
     - Adjusted ingredient requirements for several Deep North foods.
-    - Increased stack sizes from 10 to 20 for all 13 prepared Deep North foods and their uncooked variants.
+    - Increased stack sizes from 10 to 20 for 16 Deep North food items, including uncooked variants.
     - Moved Oat Milk crafting from the Mead Kettil to the level 6 Cauldron.
   - [b]Standardized Food Durations:[/b]
     - Added Deep North foods.

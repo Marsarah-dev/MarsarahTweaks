@@ -1,6 +1,7 @@
 ## <strong> 📜 Version History </strong>
 
 v1.11.0
+- **Updates:**
   - **Food and Mead Modifications**
     - Added Deep North food recipe and stack size modifications.
     - Increased the amount crafted from 1 to 2 for ten foods and from 3 to 4 for Pancakes.

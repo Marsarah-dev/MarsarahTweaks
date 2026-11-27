@@ -1494,7 +1494,7 @@ All other material requirements, armor mould costs and staff recipes remain unch
 
 - Sparkling Shroomshake
   • Resource amounts:
-    - Sap:                 3  → 2
+    - Sap:                 4  → 2
   • Amount crafted:        1  → 2
 
 - Spicy Marmalade
@@ -1507,6 +1507,9 @@ All other material requirements, armor mould costs and staff recipes remain unch
 - Uncooked Roasted Crust Pie
   • Resource amounts:
     - Volture Egg:         1  → 2
+  • Amount crafted:        1  → 2
+
+- Uncooked Piquant Pie
   • Amount crafted:        1  → 2
 
 - Unbaked Poteitr
@@ -1623,7 +1626,7 @@ All other material requirements, armor mould costs and staff recipes remain unch
   • Honey:                 10 → 5
   • Cloudberries:          10 → 5
 
-- Mead Base: Minor Healing
+- Mead Base: Minor Stamina
   • Honey:                 10 → 5
   • Raspberries:           10 → 5
 
@@ -1646,6 +1649,7 @@ The following foods have the stack size increased to 20
 - Carrot Soup
 - Deer Stew
 - Turnip Stew
+- Pulled Bear
 - Black Soup
 - Eyescream
 - Muckshake
@@ -1658,7 +1662,6 @@ The following foods have the stack size increased to 20
 - Lox Pie
 - Mushroom Omelette
 - Yggdrasil Porridge
-- Cooked Egg
 - Salad
 - Seeker Aspic
 - Honey Glazed Chicken
@@ -3043,11 +3046,12 @@ VERSION HISTORY
 ================================================================
 
 v1.11.0
+- Updates:
   - Food and Mead Modifications
     - Added Deep North food recipe and stack size modifications.
     - Increased the amount crafted from 1 to 2 for ten foods and from 3 to 4 for Pancakes.
     - Adjusted ingredient requirements for several Deep North foods.
-    - Increased stack sizes from 10 to 20 for all 13 prepared Deep North foods and their uncooked variants.
+    - Increased stack sizes from 10 to 20 for 16 Deep North food items, including uncooked variants.
     - Moved Oat Milk crafting from the Mead Kettil to the level 6 Cauldron.
   - Standardized Food Durations
     - Added Deep North foods.
