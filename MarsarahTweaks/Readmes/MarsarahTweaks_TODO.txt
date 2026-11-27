@@ -7,6 +7,9 @@ IMPLEMENTED - NOT RELEASED
 
 A. Fixes
 ------------------------------
+* Creature Unleveler By Boss
+  - Fixed an issue where creature level modifications from previously defeated bosses could be lost when loading into a world with advanced boss progression.
+  - Boss-based modifications are now cumulative, ensuring that earlier maximum level and minimum spawn distance changes are preserved throughout progression.
   
 B. Updates
 ------------------------------

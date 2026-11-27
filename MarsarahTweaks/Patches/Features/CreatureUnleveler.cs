@@ -74,7 +74,7 @@ namespace MarsarahTweaks.Patches.Features
 					{ "Draugr", (3, 20f, null) },
 					{ "Draugr Elite", (3, 20f, null) },
 					{ "Marsh surtling", (3, 20f, null) },
-					{ "Surtling", (3, 20f, null) },
+					//{ "Surtling", (3, 20f, null) },
 					{ "Writhan", (null, 20f, null) }
 				}
 			},
@@ -90,7 +90,7 @@ namespace MarsarahTweaks.Patches.Features
 					{ "Draugr", (null, 30f, null) },
 					{ "Draugr Elite", (null, 30f, null) },
 					{ "Marsh surtling", (null, 30f, null) },
-					{ "Surtling", (null, 30f, null) },
+					//{ "Surtling", (null, 30f, null) },
 					{ "Writhan", (null, 30f, null) },
 
 					// Mountain
@@ -241,89 +241,81 @@ namespace MarsarahTweaks.Patches.Features
 
 		public static void ApplyCreatureLevelChanges(SpawnSystem __instance)
 		{
+			if (__instance == null) return;
+
+			bool enabled = ConfigManager.CreatureUnlevelerEnabled.Value;
+
+			// Get all defeated bosses in progression order
+			List<string> defeatedBosses = BossProgressionOrder
+				.Where(boss => enabled && GlobalKeyChecker.IsBossDefeated(boss))
+				.ToList();
+
 			foreach (SpawnSystemList spawnList in __instance.m_spawnLists)
 			{
+				if (spawnList == null) continue;
+
 				foreach (SpawnSystem.SpawnData spawner in spawnList.m_spawners)
 				{
+					if (spawner == null) continue;
+
 					string spawnerName = spawner.m_name;
-					/*string prefabName = spawner.m_prefab != null ? spawner.m_prefab.name : "NULL";
 
-					log.Info(
-						$"Spawner: {spawner.m_name} | " +
-						$"Prefab: {prefabName} | " +
-						$"Biome: {spawner.m_biome} | " +
-						$"Max Level: {spawner.m_maxLevel} | " +
-						$"Level Chance: {spawner.m_overrideLevelupChance}% | " +
-						$"Min Distance: {spawner.m_levelUpMinCenterDistance} | " +
-						$"Required Key: {spawner.m_requiredGlobalKey}"
-					);*/
+					// Get the original values, or use the current values if no backup exists
+					bool hasBackup = creatureSpawnBackups.TryGetValue(spawner, out var original);
 
-					// Find all bosses that define changes for this creature
-					List<string> affectingBosses = creatureSpawnChanges
-						.Where(kvp => kvp.Value.ContainsKey(spawnerName))
-						.Select(kvp => kvp.Key)
-						.ToList();
-
-					if (affectingBosses.Count == 0) continue;
-
-					// Sort by progression order
-					affectingBosses.Sort((a, b) => BossProgressionOrder.IndexOf(a).CompareTo(BossProgressionOrder.IndexOf(b)));
-
-					// Find the highest defeated boss
-					string highestDefeatedBoss = affectingBosses.LastOrDefault(GlobalKeyChecker.IsBossDefeated);
-
-					if (ConfigManager.CreatureUnlevelerEnabled.Value)
+					if (!hasBackup)
 					{
-						if (highestDefeatedBoss != null && highestDefeatedBoss != "")
-						{
-							log.Info($"Applying changes to: {spawnerName} - defeated boss: {highestDefeatedBoss}");
-							var changes = creatureSpawnChanges[highestDefeatedBoss][spawnerName];
+						original = (
+							spawner.m_maxLevel,
+							spawner.m_overrideLevelupChance,
+							spawner.m_levelUpMinCenterDistance
+						);
+					}
 
-							if (!creatureSpawnBackups.ContainsKey(spawner))
-							{
-								creatureSpawnBackups[spawner] = (
-									spawner.m_maxLevel,
-									spawner.m_overrideLevelupChance,
-									spawner.m_levelUpMinCenterDistance
-								);
-							}
+					// Start from the original values
+					int maxLevel = original.maxLevel ?? spawner.m_maxLevel;
+					float levelUpChance = original.levelUpChance ?? spawner.m_overrideLevelupChance;
+					float levelUpMinCenterDistance = original.levelUpMinCenterDistance ?? spawner.m_levelUpMinCenterDistance;
 
-							if (changes.levelUpChance.HasValue)
-								spawner.m_overrideLevelupChance = changes.levelUpChance.Value;
+					string highestDefeatedBoss = null;
 
-							if (changes.levelUpMinCenterDistance.HasValue)
-								spawner.m_levelUpMinCenterDistance = changes.levelUpMinCenterDistance.Value;
+					// Apply cumulative changes in boss progression order
+					foreach (string boss in defeatedBosses)
+					{
+						if (!creatureSpawnChanges.TryGetValue(boss, out var bossChanges)) continue;
+						if (!bossChanges.TryGetValue(spawnerName, out var changes)) continue;
 
-							if (changes.maxLevel.HasValue)
-								spawner.m_maxLevel = changes.maxLevel.Value;
+						maxLevel = changes.maxLevel ?? maxLevel;
+						levelUpChance = changes.levelUpChance ?? levelUpChance;
+						levelUpMinCenterDistance = changes.levelUpMinCenterDistance ?? levelUpMinCenterDistance;
 
-							var original = creatureSpawnBackups[spawner];
-							log.Info($"Spawner: {spawnerName} | Biome: {spawner.m_biome} | Boss: {highestDefeatedBoss} | Max Level: {original.maxLevel} -> {spawner.m_maxLevel} | Level Chance: {original.levelUpChance}% -> {spawner.m_overrideLevelupChance}% | Min Distance: {original.levelUpMinCenterDistance} -> {spawner.m_levelUpMinCenterDistance}");
-						}
-						else
-						{
-							if (creatureSpawnBackups.TryGetValue(spawner, out var backup))
-							{
-								log.Info($"(Enabled) Restoring changes for: {spawnerName} - defeated boss: {highestDefeatedBoss}");
-								spawner.m_maxLevel = backup.maxLevel ?? spawner.m_maxLevel;
-								spawner.m_overrideLevelupChance = backup.levelUpChance ?? spawner.m_overrideLevelupChance;
-								spawner.m_levelUpMinCenterDistance = backup.levelUpMinCenterDistance ?? spawner.m_levelUpMinCenterDistance;
+						highestDefeatedBoss = boss;
+					}
 
-								creatureSpawnBackups.Remove(spawner);
-							}
-						}
+					// No applicable changes and nothing to restore
+					if (highestDefeatedBoss == null && !hasBackup) continue;
+
+					// Backup original values before applying changes
+					if (highestDefeatedBoss != null && !hasBackup)
+					{
+						creatureSpawnBackups[spawner] = original;
+					}
+
+					// Apply the final calculated values
+					spawner.m_maxLevel = maxLevel;
+					spawner.m_overrideLevelupChance = levelUpChance;
+					spawner.m_levelUpMinCenterDistance = levelUpMinCenterDistance;
+
+					if (highestDefeatedBoss != null)
+					{
+						log.Info($"Spawner: {spawnerName} | Biome: {spawner.m_biome} | Boss: {highestDefeatedBoss} | Max Level: {original.maxLevel} -> {spawner.m_maxLevel} | Level Chance: {original.levelUpChance}% -> {spawner.m_overrideLevelupChance}% | Min Distance: {original.levelUpMinCenterDistance} -> {spawner.m_levelUpMinCenterDistance}");
 					}
 					else
 					{
-						if (creatureSpawnBackups.TryGetValue(spawner, out var backup))
-						{
-							log.Info($"(Disabled) Restoring changes for: {spawnerName} - defeated boss: {highestDefeatedBoss}");
-							spawner.m_maxLevel = backup.maxLevel ?? spawner.m_maxLevel;
-							spawner.m_overrideLevelupChance = backup.levelUpChance ?? spawner.m_overrideLevelupChance;
-							spawner.m_levelUpMinCenterDistance = backup.levelUpMinCenterDistance ?? spawner.m_levelUpMinCenterDistance;
+						// Restore original values when disabled or no relevant boss is defeated
+						creatureSpawnBackups.Remove(spawner);
 
-							creatureSpawnBackups.Remove(spawner);
-						}
+						log.Info($"Restored spawner: {spawnerName} | Biome: {spawner.m_biome} | Max Level: {spawner.m_maxLevel} | Level Chance: {spawner.m_overrideLevelupChance}% | Min Distance: {spawner.m_levelUpMinCenterDistance}");
 					}
 				}
 			}
