@@ -28,8 +28,10 @@ namespace MarsarahTweaks.Patches.Grind
 		// - Barka - Frozen Branch 2x
 		// - Moose - Moose Hide 3-5 (from 2)
 		// - Hexen - Nornathread 2-4 (from 1-3)
-		//		   - Armor mould drop chances increased from 5% to 25%
+		//         - Armor mould drop chances increased from 5% to 25%
 		// - Krigen - Armor mould drop chances increased from 3% to 15%
+		//          - Memorial Coal drop chance increased from 20% to 30%
+		// - Fallen Warrior - Frostfire and Thunderblood Essence drop chances increased from 50% to 75%
 		// - Armor mould star scaling disabled, original drop amounts preserved
 
 		// Dictionaries
@@ -126,7 +128,10 @@ namespace MarsarahTweaks.Patches.Grind
 					// Medium armor moulds
 					("MoldArmorMediumHelmet", null, null, 0.15f, false, false, true),
 					("MoldArmormediumChest", null, null, 0.15f, false, false, true), // it's capitalized like this
-					("MoldArmorMediumLegs", null, null, 0.15f, false, false, true)
+					("MoldArmorMediumLegs", null, null, 0.15f, false, false, true),
+
+					// Memorial Coal
+					("MemorialCoal", null, null, 0.30f, false, null, true)
 				},
 
 				["JotunWarriorDualWield"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
@@ -139,7 +144,16 @@ namespace MarsarahTweaks.Patches.Grind
 					// Medium armor moulds
 					("MoldArmorMediumHelmet", null, null, 0.15f, false, false, true),
 					("MoldArmormediumChest", null, null, 0.15f, false, false, true), // it's capitalized like this
-					("MoldArmorMediumLegs", null, null, 0.15f, false, false, true)
+					("MoldArmorMediumLegs", null, null, 0.15f, false, false, true),
+
+					// Memorial Coal
+					("MemorialCoal", null, null, 0.30f, false, null, true)
+				},
+
+				["FallenWarrior"] = new List<(string item, int? min, int? max, float chance, bool remove, bool? levelMultiplier, bool existingOnly)>()
+				{
+					("OrbFrostFire", null, null, 0.75f, false, null, true),
+					("OrbThunderBlood", null, null, 0.75f, false, null, true)
 				}
 			}
 		};
@@ -313,10 +327,10 @@ namespace MarsarahTweaks.Patches.Grind
 						}
 					}
 				}
-
-				// DEBUG - Verify creature drop tables after applying or restoring modifications
-				//LogCreatureDrops(instance);
 			}
+
+			// DEBUG - Verify creature drop tables after applying or restoring modifications
+			LogCreatureDrops(instance);
 		}
 
 		public static void RestoreBetterDrops(ZNetScene instance)
@@ -416,7 +430,8 @@ namespace MarsarahTweaks.Patches.Grind
 				"JotunWarrior",
 				"JotunWarriorDualWield",
 				"JotunWitch",
-				"Moose"
+				"Moose",
+				"FallenWarrior"
 			};
 
 			log.Info($"Creature Drop Tables | Better Drops: {ConfigManager.BetterDropsEnabled.Value} | Progression Halt: {ConfigManager.AutomaticProgressionHaltEnabled.Value} | Fader Defeated: {GlobalKeyChecker.FaderDefeated}", header: true);

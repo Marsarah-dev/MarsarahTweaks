@@ -30,8 +30,14 @@ B. Updates
     - Cooked Moose Meat
     - Cooked Seal Blubber
 
+* Better Creature Drops
+  - 
+
 C. New Features
 ------------------------------
+* Nighttime Jotun Spawns
+  - Krigen and Hexen can now spawn at night. 
+  - 7% spawn chance and 45 minutes interval
 
 D. Others
 ------------------------------
@@ -41,7 +47,6 @@ E. Test
 
 F. In Progress
 ------------------------------
-* Nighttime Jotun Spawns
 * Creature Unleveler
 * Station Extention changes - check the two new extensions for Black Forge and Galrd Table
 * Frostfire and Thunderblood Essences - see if I either reduce the ancestor summon to 2 memorial coal from 3, or increase the dropchance of essences from ancestors

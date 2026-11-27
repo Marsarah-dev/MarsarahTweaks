@@ -7,7 +7,7 @@ namespace MarsarahTweaks.Patches.Features
 {
 	internal class NighttimeJotunSpawns
 	{
-		private static readonly LogManager log = new LogManager("Nighttime Jotun Spawns", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Nighttime Jotun Spawns", LogManager.LogLevel.Warning);
 
 		private const float NighttimeSpawnChance = 7f;
 		private const float NighttimeSpawnInterval = 2700f;
