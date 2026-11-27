@@ -138,7 +138,26 @@ namespace MarsarahTweaks.Patches.Features
 			},
 			{ "Fader", new Dictionary<string, (int? maxLevel, float? levelUpChance, float? levelUpMinCenterDistance)>
 				{
+					// Mistlands
 					{ "Dverger", (null, 30f, null) },
+					{ "Seeker", (3, 30f, null) },
+					{ "Seeker Brute", (null, 25f, null) },
+					{ "Gjall", (null, 15f, null) },
+					{ "Hare", (null, 20f, null) },
+					{ "Tick defeated queen other biomes", (null, 30f, null) },
+					{ "Seeker defeated queen other biomes", (2, 20f, null) },
+					{ "SeekerBrood  defeated queen other biomes", (2, 20f, null) },
+
+					// Ashlands
+					{ "Charred Melee", (null, 15f, null) },
+					{ "Charred Archer", (null, 15f, null) },
+					{ "Charred Twitcher [DAY]", (null, 15f, null) },
+					{ "Charred Twitcher [NIGHT]", (null, 15f, null) },
+					{ "Asksvin [DAY]", (null, 15f, null) },
+					{ "Asksvin [NIGHT]", (null, 15f, null) },
+					{ "Volture", (2, 10f, null) },
+
+					// Other biomes
 					{ "Charred Melee [Other biomes when Fader is defeated]", (2, 10f, null) },
 					{ "Charred Archer [Other biomes when Fader is defeated]", (2, 10f, null) }
 				}
@@ -277,6 +296,9 @@ namespace MarsarahTweaks.Patches.Features
 
 							if (changes.maxLevel.HasValue)
 								spawner.m_maxLevel = changes.maxLevel.Value;
+
+							var original = creatureSpawnBackups[spawner];
+							log.Info($"Spawner: {spawnerName} | Biome: {spawner.m_biome} | Boss: {highestDefeatedBoss} | Max Level: {original.maxLevel} -> {spawner.m_maxLevel} | Level Chance: {original.levelUpChance}% -> {spawner.m_overrideLevelupChance}% | Min Distance: {original.levelUpMinCenterDistance} -> {spawner.m_levelUpMinCenterDistance}");
 						}
 						else
 						{
