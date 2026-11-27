@@ -7,168 +7,95 @@ IMPLEMENTED - NOT RELEASED
 
 A. Fixes
 ------------------------------
-* Better Creature Drops
-  - Fixed randomized drop amounts for Fenris Hair, Soft Tissue and Nornathread to correctly include the intended maximum drop amount.
-  - Fixed missing Fader defeated-state detection, allowing Better Creature Drops and Better Trophy Drop Rates to refresh when Fader is defeated mid-game.
-
-* Less Brazier Smoke
-  - Fixed compatibility with the Valheim update released on November 25, 2026.
-  - Replaced the obsolete SmokeRenderer transpiler with a mesh-based visual scaling implementation.
-  - Preserved all existing smoke size, emission interval and rising speed modifications.
-  - Visual scaling does not affect smoke collision or physics dimensions.
-  - Improved implementation by caching and reusing scaled smoke meshes.
-
-* More Serpent Spawns
-  - Fixed original spawn value backups being reset during world reloads, potentially causing modified spawn values to be captured as vanilla.
-  - Preserved spawn value backups across world sessions using the existing ConditionalWeakTable.
-  - Improved diagnostic logging to display original and current spawn values, including unchanged entries.
-  - Existing spawn chance and interval modifications remain unchanged.
   
 B. Updates
 ------------------------------
-* More Usable Fuel
-  - Ashwood and Timberwood are now usable at the Kiln.
-
-* Better Creature Drops
-  - Increased Moose Hide drops to 3-5 from 2. 
-  - Deep North Armor Moulds:
-    - Relocated armor mould drop modifications from More Rare Resources to Better Creature Drops.
-    - Reduced Krigen armor mould drop chances from 20% to 15% (vanilla: 3%).
-    - Retained Hexen armor mould drop chances at 25% (vanilla: 5%).
-    - Standardized armor mould drops to five times their respective vanilla drop chances.
-    - Disabled star scaling for armor mould drops to ensure consistent acquisition across both creatures.
-    - Original drop amounts and all other drop properties remain unchanged.
-    - Includes both Krigen variants.
-  - Extended the generic creature drop modification system:
-    - Supports optional minimum and maximum drop amount overrides.
-    - Supports optional star scaling overrides.
-    - Supports modifications restricted to existing drop entries, preventing unintended addition of missing armor mould drops.
-    - Backs up and restores original star scaling alongside drop amounts and chances.
-    - Preserves existing star scaling behavior for all other creature drop modifications.
-  - Integrated armor mould modifications into the existing Fader progression mapping, preparing them for future Deep North Progression Halt implementation.
-  - Updated configuration description.
-
-* More Rare Resources
-  - Relocated creature-based armor mould modifications to Better Creature Drops.
-  - Removed obsolete creature drop modification logic, backup dictionary, Harmony patch and configuration change handler.
-  - Flesh piles found in Putrid Holes:
-    - Reduced Bone Fragments from 5-15 to 2-5 per loot roll.
-    - Increased Soft Tissue from 1-2 to 2-3 per loot roll.
-    - Loot weights, number of loot rolls and all other drops remain unchanged.
-    - Live toggling affects existing flesh piles that have not yet been destroyed.
-  - Charred Fortress chest modifications remain unchanged.
-  - Updated configuration description.
-  - Balanced and verified through extensive in-game drop testing.
-
-* More Serpent Spawns
-  - Reduced modified Serpent spawn chances by 20% following the vanilla spawning fixes introduced in Valheim 1.0.30.
-  - Nighttime Serpents:
-    - After Bonemass: 10% → 8%.
-    - After Moder: 15% → 12%.
-  - Rain/Storm Serpents:
-    - After Moder: 10% → 8%.
-  - Spawn intervals and progression requirements remain unchanged.
-  - Original vanilla spawn values remain unaffected.
-
-* Small Serpent Spawns
-  - Reduced Sea Wyrm spawn chances by 20%.
-    - After Bonemass: 5% → 4%.
-    - After Moder: 10% → 8%.
-  - Spawn intervals, spawn locations, progression requirements, creature stats and drops remain unchanged.
 
 C. New Features
 ------------------------------
-* Larger Resource Stacks
-  - Increased maximum stack sizes for:
-    - Amber, Amber Pearl, Ruby, Silver Necklace, Draumyx, Veydris, Solryth and Grimvarn: 50.
-    - Surtling Cores: 20.
-    - All Weapon, Shield, Staff, Heavy Armor, Medium Armor, Mage Armor and Intricate Key Moulds: 30.
-  - Existing higher maximum stack sizes are not reduced.
-  - Supports mid-game toggling.
-  - WARNING: Disabling this feature while stacks exceed their original maximum stack sizes will result in item loss. Split affected stacks before disabling.
 
 D. Others
 ------------------------------
-* Configuration restructuring
-  - Moved Better Creature Drops and Better Trophy Drop Rates from Balance to Grind Reduction.
-  - Moved Standardized Food Durations and Potion Upgrade from Grind Reduction to Balance.
-  - Reorganized config ordering, source files and namespaces to reflect their respective categories.
-  - Simplified selected config descriptions.
-  - Relocated configs are recreated with their default values.
-
-* Alternate Build Pieces Materials
-  - Removed the Grausten Chest material modification, as Valheim 1.0.30 now uses the same recipe.
-
-* Crown of Roots Changes
-  - Removed the entire feature, as Valheim 1.0.30 now allows repairing the Crown of Roots at a level 1 Workbench.
-  - This will restore the vanilla purchase price of 3000 coins.
-  - Removed all associated Harmony patches, configuration entries and configuration change handling.
-
-* Less Ashlands Enemies
-  - Removed the entire feature following the significant vanilla enemy spawn rate reductions introduced in Valheim 1.0.
-  - Verified current vanilla spawn chances, population limits and group sizes in Valheim 1.0.30.
-  - Extensive personal gameplay without this feature confirmed that additional enemy population reductions are no longer necessary.
-  - Removed all associated Harmony patches, spawn data modifications, configuration entries and configuration change handling.
-  - Ashlands enemy spawning will now follow vanilla balancing.
 
 E. Test
 ------------------------------
-* Better Creature Drops / Armor Mould Migration - PASSED
-  - Verified drop chances, quantities and star scaling for all 15 armor mould entries.
-  - Verified restoration of original drop properties.
-  - Verified repeated mid-game toggling.
-  - Verified independence between Better Creature Drops and More Rare Resources.
-  - Verified integration with Automatic Progression Halt.
-  - Regression tests for Bat, Fenring and Moose passed.
-  - All tested configuration combinations worked as intended.
-
-* More Serpent Spawns / Small Serpent Spawns - PASSED
-  - Verified that vanilla Serpent spawn chances and intervals remain unchanged in Valheim 1.0.30.
-  - Verified spawn modifications before Bonemass, after Bonemass and after Moder.
-  - Verified restoration of vanilla values when disabling More Serpent Spawns.
-  - Verified backup persistence and correct restoration after world reloads.
-  - Verified Small Serpent spawn configuration across progression stages.
-  - Verified Sea Wyrm prefab reference recovery after world reloads.
-
-* More Rare Resources / Valheim 1.0.30 Compatibility - PASSED
-  - Verified the complete vanilla Charred Fortress chest loot table.
-  - Confirmed that all six modified resources retain their original vanilla weights.
-  - Verified through probability calculations that Idol, Celestial Feather, Molten Core and Flametal Ore acquisition probabilities remain approximately unchanged by our modifications.
-  - Existing gemstone weight and quantity modifications remain appropriate.
-  - No balancing or gameplay changes required.
-
-* Automatic Progression Halt / Thistle Alternate Biome - PASSED
-  - Verified compatibility with the new Thistle alternate biome introduced in Valheim 1.0.30.
-  - Confirmed that naturally generated Thistles use the existing Pickable_Thistle prefab.
-  - Verified resource restrictions before Eikthyr and successful harvesting after Eikthyr.
-  - Verified mid-game configuration toggling and global key changes.
-  - Confirmed that the Thistle modifier can coexist with other alternate biome modifiers (tested alongside Bog Swamp).
-  - No gameplay or configuration changes required.
-
-* Grappling Hook / Crossbow Changes - PASSED
-  - Verified compatibility with the Valheim 1.0.30 Grappling Hook animation fix.
-  - Existing reload and loaded-state modifications work as intended.
-
-* Less Brazier Smoke - PASSED
-  - Verified smoke reduction compatibility with Valheim 1.0.30.
-  - Verified mid-game configuration toggling through visual testing.
-
-* Less Ashlands Enemies
-  - Verified current vanilla population limits, group sizes and spawn chances.
-  - Retired the feature following the vanilla enemy spawn rate reductions introduced in Valheim 1.0.
-
-* Valheim 1.0.30 Compatibility Audit - COMPLETED
-  - Reviewed overlapping vanilla and mod changes.
-  - Removed redundant Grausten Chest and Crown of Roots modifications.
-  - Retired Less Ashlands Enemies.
-  - Fixed Serpent spawn value restoration and rebalanced Serpent and Sea Wyrm spawn chances.
-  - Verified Charred Fortress loot compatibility.
-  - Verified Automatic Progression Halt compatibility with the Thistle alternate biome.
-  - Verified Grappling Hook and Less Brazier Smoke compatibility.
-  - Confirmed that the Thistle alternate biome modifier is available in both Black Forest and Swamp.
 
 F. In Progress
 ------------------------------
+* Food And Mead Modifications
+
+(Current DN foods)
+- Food Prep Table:
+  - HP         None
+  - Stamina    Raw Kale Chips        (x4)
+  - Eitr       Unbaked Poteitr       (x1)
+               Oven Pancake Batter   (x1)
+- Cauldron:
+  - HP         Meat in Bread         (x2)
+               Seal Meat Soup        (x1)
+               Smoked Moose Meat     (x1)
+  - Stamina    Lingonberry Juice     (x1)
+               Pancakes              (x3)
+  - Eitr       Meatballs and Poteitr (x1)
+               Smoked Fish           (x1)
+               Fish Soup             (x1)
+  - Hybrid     Oatmeal (Stam + Eitr) (x1)
+- Mead Kettil: 
+  - Stamina    Oat Milk              (x1)
+
+(Planned Changes)
+  - Change Oat Milk crafting station from Mead Kettil to Cauldron (discuss)
+  - Increase amount crafted for the following foods from 1 to 2:
+    - Oat Milk
+    - Lingonberry Juice
+    - Meatballs and Poteitr
+    - Oatmeal
+    - Seal Meat Soup
+    - Smoked Fish
+    - Smoked Moose Meat
+    - Fish Soup
+    - Unbaked Poteitr
+    - Oven Pancake Batter
+
+  - Increase amount crafted for the following foods from 3 to 4:
+    - Pancakes
+
+  - Modify recipe costs for the following foods:
+    - Unbaked Poteitr:       Seal Blubber - 1 > 2
+                             Poteitr      - 1 > 2
+    - Oven Pancake Batter:   Moose Meat   - 1 > 2
+    - Meatballs and Poteitr: Moose Meat   - 1 > 2
+    - Meat in Bread:         Moose Meat   - 1 > 2
+                             Oat Flour    - 1 > 2
+    - Oatmeal                Oat Milk     - 1 > 2
+    - Pancakes               Oat Milk     - 1 > 2
+    - Seal Meat Soup         Seal Blubber - 2 > 3
+    - Smoked Fish            Raw Fish     - 1 > 2
+                             Kale         - 1 > 2
+                             Poteitr      - 1 > 2
+    - Smoked Moose Meat      Moose Meat   - 1 > 2
+    - Fish Soup              Raw Fish     - 3 > 2
+
+  - Food Stacks - standardize everything to 20 from 10
+    - Raw Kale Chips
+    - Kale Chips
+    - Unbaked Poteitr
+    - Baked Poteitr
+    - Oven Pancake Batter
+    - Oven Pancake
+    - Meat in Bread
+    - Seal Meat Soup
+    - Smoked Moose Meat
+    - Lingonberry Juice
+    - Pancakes
+    - Meatballs and Poteitr
+    - Smoked Fish
+    - Fish Soup
+    - Oatmeal
+    - Oat Milk
+
+* Standardized Food Durations
+- Not investigated yet
 
 
 ============================================================
@@ -202,7 +129,8 @@ C. Features
 * Allow ships to be destroyed with the hammer.
 * Allow Boars to eat Yellow Mushrooms.
 * Player Inspector for players currently logged into the world.
-* Look into Hexen HP threshold that makes her go down.
+* Look into Hexen HP threshold that makes her go down. (I don't think this is a thing)
+* Create more potion tiers. We have Major Health, but not Major Stamina or Eitr.
 
 Trinkets:
 * Review new Trinket build costs:
@@ -227,6 +155,7 @@ Trinkets:
   - Brimstone
 
 * Maybe make them passive bonuses and nerf the stats.
+* Or better, make the effect scale from the start with the current adrenaline value, up to a max.
 
 
 D. QOL
@@ -265,3 +194,5 @@ E. Others
 F. Deep North / 1.0 Content
 ---------------------------
 [IN PROGRESS]
+
+* Station Extention changes - check the two new extensions for Black Forge and Galrd Table
