@@ -10,7 +10,7 @@ namespace MarsarahTweaks.Patches.Balance
 		private static readonly LogManager log = new LogManager("Food Durations", LogManager.LogLevel.Warning);
 
 		// Only foods whose duration differs from vanilla are listed here.
-		// Values are minutes. No Deep North foods or feasts are modified.
+		// Values are minutes. Feasts are not modified.
 		private static readonly Dictionary<string, int> foodDurations = new Dictionary<string, int>()
 		{
 			// Meadows: directly edible ingredients -> 15 minutes
@@ -54,7 +54,18 @@ namespace MarsarahTweaks.Patches.Balance
 			{ "SpicyMarmalade", 30 },
 			{ "ScorchingMedley", 30 },
 			{ "SizzlingBerryBroth", 30 },
-			{ "SparklingShroomshake", 30 }
+			{ "SparklingShroomshake", 30 },
+
+			// Deep North: simply cooked meat -> 25; prepared dishes -> 30
+			{ "CookedMooseMeat", 25 },
+			{ "CookedSealBlubber", 25 },
+			{ "SmokedMooseMeat", 30 },
+			{ "OatMilk", 30 },
+			{ "KaleChips", 30 },
+			{ "Lingondricka", 30 },
+			{ "MeatballsMashedPoteitr", 30 },
+			{ "BakedPoteitr", 30 },
+			{ "SmokedFish", 30 }
 		};
 
 		private static readonly Dictionary<string, float> originalFoodDurations = new Dictionary<string, float>();

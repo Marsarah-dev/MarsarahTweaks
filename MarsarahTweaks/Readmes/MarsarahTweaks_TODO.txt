@@ -95,7 +95,35 @@ F. In Progress
     - Oat Milk
 
 * Standardized Food Durations
-- Not investigated yet
+
+(Current DN food durations)
+- Meat in Bread         (30min)
+- Seal Meat Soup        (30min)
+- Smoked Moose Meat     (25min)
+- Pancakes              (30min)
+- Oat Milk              (25min)
+- Kale Chips            (25min)
+- Lingonberry Juice     (25min)
+- Oatmeal               (30min)
+- Meatballs and Poteitr (25min)
+- Fish Soup             (30min)
+- Oven Pancake          (30min)
+- Baked Poteitr         (25min)
+- Smoked Fish           (25min)
+- Cooked Moose Meat     (20min)
+- Cooked Seal Blubber   (20min)
+
+(Planned Changes)
+- Increase DN food duration as follows:
+  - Smoked Moose Meat       25 > 30
+  - Oat Milk                25 > 30
+  - Kale Chips              25 > 30
+  - Lingonberry Juice       25 > 30
+  - Meatballs and Poteitr   25 > 30
+  - Baked Poteitr           25 > 30
+  - Smoked Fish             25 > 30
+  - Cooked Moose Meat       20 > 25
+  - Cooked Seal Blubber     20 > 25
 
 
 ============================================================

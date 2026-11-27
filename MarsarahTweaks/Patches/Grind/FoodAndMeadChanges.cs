@@ -8,7 +8,7 @@ namespace MarsarahTweaks.Patches.Grind
 {
 	internal class FoodAndMeadChanges
 	{
-		private static readonly LogManager log = new LogManager("Food And Mead", LogManager.LogLevel.Info);
+		private static readonly LogManager log = new LogManager("Food And Mead", LogManager.LogLevel.Warning);
 
 		[HarmonyPatch(typeof(ObjectDB), "Awake")]
 		class FoodAndMeadChanges_Patch
