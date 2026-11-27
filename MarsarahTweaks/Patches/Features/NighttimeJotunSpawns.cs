@@ -114,6 +114,6 @@ namespace MarsarahTweaks.Patches.Features
 
 				log.Info($"Spawned: {critter.m_prefab.name} | Spawner: {critter.m_name} | Position: {spawnPoint} | Night: {EnvMan.IsNight()}");
 			}
-		}/*
+		}*/
 	}
 }
