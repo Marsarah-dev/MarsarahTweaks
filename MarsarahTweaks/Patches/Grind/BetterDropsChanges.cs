@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using static CharacterDrop;
+using HarmonyLib;
 
 namespace MarsarahTweaks.Patches.Grind
 {
@@ -157,6 +158,35 @@ namespace MarsarahTweaks.Patches.Grind
 				}
 			}
 		};
+
+		// Apply drop modifications to altar-summoned Fallen Warriors
+		[HarmonyPatch(typeof(CharacterDrop), "Start")]
+		class FallenWarriorDrops_Patch
+		{
+			private static void Postfix(CharacterDrop __instance)
+			{
+				if (__instance == null) return;
+				if (Utils.GetPrefabName(__instance.gameObject) != "FallenWarrior") return;
+				if (!ConfigManager.BetterDropsEnabled.Value) return;
+
+				if (ConfigManager.AutomaticProgressionHaltEnabled.Value && !GlobalKeyChecker.IsBossDefeated("Fader")) return;
+
+				foreach (var dropInfo in bossDropMappings["Fader"]["FallenWarrior"])
+				{
+					CharacterDrop.Drop existingDrop = __instance.m_drops.Find(d => d.m_prefab != null && d.m_prefab.name == dropInfo.item);
+
+					if (existingDrop == null)
+					{
+						log.Warn($"Expected drop {dropInfo.item} not found on summoned Fallen Warrior.");
+						continue;
+					}
+
+					log.Info($"Updating summoned Fallen Warrior drop {dropInfo.item}: Chance {existingDrop.m_chance * 100f:0.##}% -> {dropInfo.chance * 100f:0.##}%");
+
+					existingDrop.m_chance = dropInfo.chance;
+				}
+			}
+		}
 
 		// Helper to backup a drop outside of UpdateBetterDrops
 		public static void BackupDrop(string creatureName, string item, CharacterDrop.Drop drop, bool removed = false, bool newlyAdded = false)

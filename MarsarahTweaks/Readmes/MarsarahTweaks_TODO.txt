@@ -61,8 +61,6 @@ E. Test
 
 F. In Progress
 ------------------------------
-* Increase stats of Ancestors
-* Creature Unleveler
 
 ============================================================
 TO IMPLEMENT
